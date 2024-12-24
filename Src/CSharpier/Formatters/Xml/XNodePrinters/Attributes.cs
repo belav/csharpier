@@ -135,6 +135,13 @@ internal static class Attributes
             return valueBuilder.ToString();
         }
 
-        return Doc.Concat(attribute.Name.ToString(), "=", "\"", GetAttributeValue(), "\"");
+        var name = attribute.Name.LocalName;
+        var prefix = attribute.Parent!.GetPrefixOfNamespace(attribute.Name.Namespace);
+        if (!string.IsNullOrEmpty(prefix))
+        {
+            name = $"{prefix}:{name}";
+        }
+
+        return $"{name}=\"{GetAttributeValue()}\"";
     }
 }

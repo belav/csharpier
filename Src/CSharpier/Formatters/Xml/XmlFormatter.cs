@@ -64,6 +64,10 @@ internal static class XmlFormatter
         }
 
         var index = 0;
+        if (xmlNode.ChildNodes[0] is XmlDeclaration)
+        {
+            index++;
+        }
         foreach (var xChild in xContainer.Nodes())
         {
             if (index > xmlNode.ChildNodes.Count)

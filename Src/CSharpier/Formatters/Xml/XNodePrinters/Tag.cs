@@ -80,19 +80,7 @@ internal static class Tag
 
     public static Doc PrintClosingTagStartMarker(XElement element)
     {
-        // if (shouldNotPrintClosingTag(node)) {
-        //     return "";
-        // }
-        // switch (node.type) {
-        //     case "ieConditionalComment":
-        //         return "<!";
-        //     case "element":
-        //         if (node.hasHtmComponentClosingTag) {
-        //             return "<//";
-        //         }
-        //     // fall through
-        //     default:
-        return "</" + element.Name.LocalName;
+        return $"</{GetPrefixedElementName(element)}";
     }
 
     public static Doc PrintClosingTagEnd(XElement node)
@@ -126,26 +114,6 @@ internal static class Tag
 
     public static Doc PrintClosingTagEndMarker(XElement node)
     {
-        // if (shouldNotPrintClosingTag(node, options)) {
-        //     return "";
-        // }
-        // switch (node.type) {
-        //     case "ieConditionalComment":
-        //     case "ieConditionalEndComment":
-        //         return "[endif]-->";
-        //     case "ieConditionalStartComment":
-        //         return "]><!-->";
-        //     case "interpolation":
-        //         return "}}";
-        //     case "angularIcuExpression":
-        //         return "}";
-        //     case "element":
-        //         if (node.isSelfClosing) {
-        //             return "/>";
-        //         }
-        //     // fall through
-        //     default:
-
         return node.IsEmpty ? "/>" : ">";
     }
 
@@ -160,25 +128,23 @@ internal static class Tag
 
     private static Doc PrintOpeningTagStartMarker(XNode node)
     {
-        // switch (node.type) {
-        // case "ieConditionalComment":
-        // case "ieConditionalStartComment":
-        //     return `<!--[if ${node.condition}`;
-        // case "ieConditionalEndComment":
-        //     return "<!--<!";
-        // case "interpolation":
-        //     return "{{";
-        // case "docType":
-        //     return node.value === "html" ? "<!doctype" : "<!DOCTYPE";
-        // case "angularIcuExpression":
-        //     return "{";
-        // case "element":
-        //     if (node.condition) {
-        //         return `<!--[if ${node.condition}]><!--><${node.rawName}`;
-        //     }
-        // // fall through
-        // default:
-        return $"<{(node is XElement element ? element.Name.LocalName : node.ToString())}";
+        if (node is not XElement element)
+        {
+            return "<" + node;
+        }
+
+        return $"<{GetPrefixedElementName(element)}";
+    }
+
+    private static string GetPrefixedElementName(XElement element)
+    {
+        var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
+        if (string.IsNullOrEmpty(prefix))
+        {
+            return element.Name.LocalName;
+        }
+
+        return $"{prefix}:{element.Name.LocalName}";
     }
 
     private static bool NeedsToBorrowNextOpeningTagStartMarker(XNode node)
