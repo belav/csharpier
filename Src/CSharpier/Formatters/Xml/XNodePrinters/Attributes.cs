@@ -82,9 +82,10 @@ internal static class Attributes
 
     private static Doc PrintAttribute(XAttribute attribute, XmlAttribute xmlAttribute)
     {
-        // XAttribute mostly gets us what we want, but it removes new lines
+        // XAttribute mostly gets us what we want, but it removes new lines (per spec)
         // XmlAttribute gives us those new lines
         // this makes use of both values to get the final value we want to display
+        // we want the new lines because it is common to add them with long conditions in csproj files
         string GetAttributeValue()
         {
             // this gives us the attribute value with everything encoded after we remove the name + quotes

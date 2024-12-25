@@ -31,20 +31,20 @@ internal static class XmlFormatter
         var mapping = new Dictionary<XNode, XmlNode>();
         CreateMapping(xDocument, xmlDocument, mapping);
 
-        // TODO #819 lots of new errors when formatting a second time
-        // TODO #819 Error ./efcore/eng/sdl-tsa-vars.config - Threw exception while formatting.
-        // Data at the root level is invalid. Line 1, position 1 - just ignore these?
-        // not all configs are xml, should we try to detect that?
-
+        /* TODO #819 Error
+         efcore?
+         
+         */
         /* TODO #819 Review
          aspnetcore - https://github.com/belav/csharpier-repos/pull/121/files
-         
+         runtime - https://github.com/belav/csharpier-repos/pull/122
+         efcore - https://github.com/belav/csharpier-repos/pull/123
+         - https://github.com/belav/csharpier-repos/pull/123/files#diff-9193fb0473a296510e5dfcecc173d53be487a9ea112a8b80514046ad0a9b2594
+         - this does some weird stuff with encoding inside of XText
+         roslyn - https://github.com/belav/csharpier-repos/pull/124/files
+         - probably good
          */
 
-        /* TODO #819 Errors
-         runtime
-         
-         */
 
         var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
         var printingContext = new XmlPrintingContext

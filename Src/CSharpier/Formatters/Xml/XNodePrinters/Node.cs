@@ -54,12 +54,12 @@ internal static class Node
             return Doc.Concat(doc);
         }
 
-        if (xNode is XComment)
+        if (xNode is XComment or XProcessingInstruction)
         {
             return xNode.ToString();
         }
 
-        throw new Exception("Need to handle + " + xNode);
+        throw new Exception("Need to handle + " + xNode.GetType());
     }
 
     private static Doc GetEncodedTextValue(XText xText)
