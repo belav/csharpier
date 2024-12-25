@@ -1,9 +1,12 @@
 namespace CSharpier.SyntaxPrinter;
 
+// TODO #819 make this change in main so that the PR is easier to review
+// TODO #819 also move around the namespaces in main
+
 internal class PrintingContext
 {
     public required PrintingContextOptions Options { get; init; }
-    public PrintingContextState State { get; init; } = new();
+    public PrintingContextState State { get; } = new();
 
     private readonly Dictionary<string, int> groupNumberByValue = new();
 
