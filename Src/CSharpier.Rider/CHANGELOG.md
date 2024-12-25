@@ -2,7 +2,7 @@
 
 # csharpier-rider Changelog
 
-## [1.8.3]
+## [1.8.5]
 - Don't notify about installing csharpier globally for files in the directory '\'
 
 ## [1.8.2]

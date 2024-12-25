@@ -7,6 +7,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import com.intellij.util.system.OS;
 import org.apache.commons.lang.SystemUtils;
 
 public class CustomPathInstaller {
@@ -107,7 +109,7 @@ public class CustomPathInstaller {
             return this.customPath;
         }
 
-        if (SystemUtils.IS_OS_WINDOWS) {
+        if (OS.CURRENT == OS.Windows) {
             return Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version).toString();
         }
 
