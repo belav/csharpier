@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -86,10 +87,10 @@ internal static class Attributes
         // this makes use of both values to get the final value we want to display
         string GetAttributeValue()
         {
-            var xValue = attribute
-                .Value.Replace("\"", "&quot;")
-                .Replace("\r\n", "&#010;")
-                .Replace("\n", "&#010;");
+            // this gives us the attribute value with everything encoded after we remove the name + quotes
+            var xValue = attribute.ToString();
+            xValue = xValue[(xValue.IndexOf('=') + 2)..];
+            xValue = xValue[..^1];
             var xmlValue = xmlAttribute.Value;
 
             if (xValue == xmlValue)
@@ -112,11 +113,6 @@ internal static class Attributes
                     xmlChar = xmlValue[xmlIndex];
                 }
 
-                if (xChar == xmlChar || (xChar == ' ' && xmlChar == '\n'))
-                {
-                    valueBuilder.Append(xmlChar);
-                }
-
                 if (xChar == '&')
                 {
                     do
@@ -126,6 +122,11 @@ internal static class Attributes
                         xChar = xValue[xIndex];
                     } while (xChar != ';');
                     valueBuilder.Append(xChar);
+                }
+
+                if (xChar == xmlChar || (xChar == ' ' && xmlChar == '\n'))
+                {
+                    valueBuilder.Append(xmlChar);
                 }
 
                 xIndex++;

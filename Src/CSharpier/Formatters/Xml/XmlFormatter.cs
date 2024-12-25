@@ -13,15 +13,38 @@ internal static class XmlFormatter
         // with xmlDocument we can't get the proper encoded values in an attribute
         // with xDocument we can't retain any newlines in attributes
         // so let's just use them both
-        var xDocument = XDocument.Parse(xml);
+        XDocument xDocument;
+        try
+        {
+            xDocument = XDocument.Parse(xml);
+        }
+        catch (XmlException)
+        {
+            return new CodeFormatterResult
+            {
+                Code = xml,
+                WarningMessage = "Appeared to be invalid xml so was not formatted.",
+            };
+        }
         var xmlDocument = new XmlDocument();
         xmlDocument.LoadXml(xml);
         var mapping = new Dictionary<XNode, XmlNode>();
         CreateMapping(xDocument, xmlDocument, mapping);
 
+        // TODO #819 lots of new errors when formatting a second time
         // TODO #819 Error ./efcore/eng/sdl-tsa-vars.config - Threw exception while formatting.
-        // Data at the root level is invalid. Line 1, position 1.
+        // Data at the root level is invalid. Line 1, position 1 - just ignore these?
         // not all configs are xml, should we try to detect that?
+
+        /* TODO #819 Review
+         aspnetcore - https://github.com/belav/csharpier-repos/pull/121/files
+         
+         */
+
+        /* TODO #819 Errors
+         runtime
+         
+         */
 
         var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
         var printingContext = new XmlPrintingContext

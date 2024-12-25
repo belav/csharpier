@@ -400,6 +400,7 @@ internal static class CommandLineFormatter
             return;
         }
 
+        // TODO #819 can probably clean up how we get errors/warnings back here
         if (codeFormattingResult.CompilationErrors.Any())
         {
             var errorMessage = new StringBuilder();
@@ -419,6 +420,12 @@ internal static class CommandLineFormatter
             }
 
             Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
+            return;
+        }
+
+        if (!codeFormattingResult.WarningMessage.IsBlank())
+        {
+            fileIssueLogger.WriteWarning(codeFormattingResult.WarningMessage);
             return;
         }
 
