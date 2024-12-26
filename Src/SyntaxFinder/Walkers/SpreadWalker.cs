@@ -3,16 +3,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SyntaxFinder.Walkers;
 
-public class SpreadWalker : CSharpSyntaxWalker
+public class SpreadWalker(string file) : CSharpSyntaxWalker
 {
     private static int total;
     private static int matching;
-    private readonly string file;
-
-    public SpreadWalker(string file)
-    {
-        this.file = file;
-    }
+    private readonly string file = file;
 
     public override void VisitSpreadElement(SpreadElementSyntax node)
     {

@@ -70,6 +70,6 @@ internal static class Element
     {
         var childNode = node.Nodes().Count() == 1 ? node.Nodes().First() : null;
 
-        return childNode is not null && childNode is XCData or not XText;
+        return childNode is not null and (XCData or not XText);
     }
 }

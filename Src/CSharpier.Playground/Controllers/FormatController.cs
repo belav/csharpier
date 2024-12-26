@@ -23,13 +23,6 @@ public class FormatError
 [Route("[controller]")]
 public class FormatController : ControllerBase
 {
-    private readonly ILogger logger;
-
-    public FormatController(ILogger<FormatController> logger)
-    {
-        this.logger = logger;
-    }
-
     public class PostModel
     {
         public string Code { get; set; } = string.Empty;
@@ -88,27 +81,5 @@ public class FormatController : ControllerBase
     {
         var lineSpan = diagnostic.Location.SourceTree!.GetLineSpan(diagnostic.Location.SourceSpan);
         return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString() };
-    }
-
-    public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
-    {
-        var processStartInfo = new ProcessStartInfo(pathToExe, args)
-        {
-            UseShellExecute = false,
-            RedirectStandardError = true,
-            WindowStyle = ProcessWindowStyle.Hidden,
-            WorkingDirectory = workingDirectory,
-            CreateNoWindow = true,
-        };
-
-        var process = Process.Start(processStartInfo);
-        var output = process!.StandardError.ReadToEnd();
-        process.WaitForExit();
-
-        this.logger.LogInformation(
-            "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output
-        );
-
-        return output;
     }
 }
