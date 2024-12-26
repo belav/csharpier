@@ -3,11 +3,10 @@ using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
+using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
-
-using Microsoft.CodeAnalysis;
 
 internal static class CommandLineFormatter
 {

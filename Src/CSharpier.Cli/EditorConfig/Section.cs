@@ -1,28 +1,17 @@
-namespace CSharpier.Cli.EditorConfig;
-
 using IniParser.Model;
 
-internal class Section
+namespace CSharpier.Cli.EditorConfig;
+
+internal class Section(SectionData section, string directory)
 {
-    private readonly GlobMatcher matcher;
+    private readonly GlobMatcher matcher = Globber.Create(section.SectionName, directory);
 
-    public string? IndentStyle { get; }
-    public string? IndentSize { get; }
-    public string? TabWidth { get; }
-    public string? MaxLineLength { get; }
-    public string? EndOfLine { get; }
-    public string? Formatter { get; }
-
-    public Section(SectionData section, string directory)
-    {
-        this.matcher = Globber.Create(section.SectionName, directory);
-        this.IndentStyle = section.Keys["indent_style"];
-        this.IndentSize = section.Keys["indent_size"];
-        this.TabWidth = section.Keys["tab_width"];
-        this.MaxLineLength = section.Keys["max_line_length"];
-        this.EndOfLine = section.Keys["end_of_line"];
-        this.Formatter = section.Keys["csharpier_formatter"];
-    }
+    public string? IndentStyle { get; } = section.Keys["indent_style"];
+    public string? IndentSize { get; } = section.Keys["indent_size"];
+    public string? TabWidth { get; } = section.Keys["tab_width"];
+    public string? MaxLineLength { get; } = section.Keys["max_line_length"];
+    public string? EndOfLine { get; } = section.Keys["end_of_line"];
+    public string? Formatter { get; } = section.Keys["csharpier_formatter"];
 
     public bool IsMatch(string fileName)
     {

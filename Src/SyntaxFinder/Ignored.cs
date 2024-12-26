@@ -7,8 +7,8 @@ public static class Ignored
         return ignored.Any(file.Replace("\\", "/").Contains);
     }
 
-    private static string[] ignored = new[]
-    {
+    private static string[] ignored =
+    [
         "roslyn/src/Compilers/Test/Core/Assert/ConditionalFactAttribute.cs",
         "roslyn/src/Compilers/Test/Core/Compilation/RuntimeUtilities.cs",
         "runtime/src/libraries/System.Net.Primitives/tests/FunctionalTests/SocketAddressTest.cs",
@@ -81,5 +81,5 @@ public static class Ignored
         "runtime/src/tests/Loader/classloader/generics/Instantiation/Nesting/NestedGenericClasses.cs",
         "runtime/src/tests/Loader/classloader/generics/Instantiation/Nesting/NestedGenericTypesMix.cs",
         "runtime/src/tests/Loader/classloader/generics/Instantiation/Nesting/NestedGenericStructs.cs",
-    };
+    ];
 }

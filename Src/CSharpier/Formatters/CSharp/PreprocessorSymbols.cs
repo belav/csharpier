@@ -2,8 +2,8 @@ namespace CSharpier.Formatters.CSharp;
 
 internal class PreprocessorSymbols : CSharpSyntaxWalker
 {
-    private readonly List<string[]> symbolSets = new();
-    private readonly HashSet<string> squashedSymbolSets = new();
+    private readonly List<string[]> symbolSets = [];
+    private readonly HashSet<string> squashedSymbolSets = [];
     private SymbolContext CurrentContext = new()
     {
         ParentContext = new SymbolContext { ParentContext = null! },
@@ -136,7 +136,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
         );
 
         return possibleParameters == null
-            ? Array.Empty<string>()
+            ? []
             : possibleParameters.Where(o => o.Value).Select(o => o.Key).OrderBy(o => o).ToArray();
     }
 
@@ -154,7 +154,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
     {
         if (!parameterNames.Any())
         {
-            return new List<Dictionary<string, bool>> { new() };
+            return [new()];
         }
 
         var subCombinations = GenerateCombinations(parameterNames.Skip(1).ToList());
@@ -181,6 +181,6 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
     private class SymbolContext
     {
         public required SymbolContext ParentContext { get; init; }
-        public List<BooleanExpression> booleanExpressions { get; } = new();
+        public List<BooleanExpression> booleanExpressions { get; } = [];
     }
 }

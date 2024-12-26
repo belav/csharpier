@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class WithExpression
 {
-    public static Doc Print(WithExpressionSyntax node, FormattingContext context)
+    public static Doc Print(WithExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Expression, context),

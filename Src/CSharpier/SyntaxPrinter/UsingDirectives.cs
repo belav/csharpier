@@ -6,7 +6,7 @@ internal static class UsingDirectives
 
     public static Doc PrintWithSorting(
         SyntaxList<UsingDirectiveSyntax> usings,
-        FormattingContext context,
+        PrintingContext context,
         bool printExtraLines
     )
     {
@@ -35,8 +35,9 @@ internal static class UsingDirectives
                 break;
             }
             if (
-                leadingTrivia.RawSyntaxKind() == SyntaxKind.DefineDirectiveTrivia
-                || leadingTrivia.RawSyntaxKind() == SyntaxKind.UndefDirectiveTrivia
+                leadingTrivia.RawSyntaxKind()
+                is SyntaxKind.DefineDirectiveTrivia
+                    or SyntaxKind.UndefDirectiveTrivia
             )
             {
                 initialComments = usings.First().GetLeadingTrivia().ToList();
@@ -122,7 +123,7 @@ internal static class UsingDirectives
 
         if (reorderedDirectives && usings.Any(o => o.ToFullString().Contains("#endif")))
         {
-            context.ReorderedUsingsWithDisabledText = true;
+            context.State.ReorderedUsingsWithDisabledText = true;
         }
 
         return Doc.Concat(docs);
@@ -131,7 +132,7 @@ internal static class UsingDirectives
     private static IEnumerable<List<UsingData>> GroupUsings(
         List<UsingDirectiveSyntax> usings,
         SyntaxTriviaList triviaOnFirstUsing,
-        FormattingContext context
+        PrintingContext context
     )
     {
         var globalSystemUsings = new List<UsingData>();

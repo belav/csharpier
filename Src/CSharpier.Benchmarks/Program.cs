@@ -2,10 +2,9 @@
 using System.Threading;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Benchmarks;
-
-using Microsoft.CodeAnalysis;
 
 [MemoryDiagnoser]
 public class Benchmarks

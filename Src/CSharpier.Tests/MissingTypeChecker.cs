@@ -70,8 +70,8 @@ public class MissingTypeChecker
         missingTypes.Should().BeEmpty();
     }
 
-    private readonly HashSet<string> ignored = new()
-    {
+    private readonly HashSet<string> ignored =
+    [
         "AccessorDeclarationSyntax",
         "AccessorListSyntax",
         "AttributeArgumentListSyntax",
@@ -113,5 +113,5 @@ public class MissingTypeChecker
         "XmlNameSyntax",
         "XmlPrefixSyntax",
         "XmlTextAttributeSyntax",
-    };
+    ];
 }

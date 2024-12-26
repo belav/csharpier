@@ -1,8 +1,8 @@
-namespace CSharpier.Cli;
-
 using System.IO.Abstractions;
 using System.Text;
 using Microsoft.Extensions.Logging;
+
+namespace CSharpier.Cli;
 
 internal static class PipeMultipleFilesFormatter
 {
@@ -52,16 +52,16 @@ internal static class PipeMultipleFilesFormatter
             {
                 var commandLineOptions = new CommandLineOptions
                 {
-                    DirectoryOrFilePaths = new[]
-                    {
+                    DirectoryOrFilePaths =
+                    [
                         Path.Combine(Directory.GetCurrentDirectory(), fileName),
-                    },
-                    OriginalDirectoryOrFilePaths = new[]
-                    {
+                    ],
+                    OriginalDirectoryOrFilePaths =
+                    [
                         Path.IsPathRooted(fileName) ? fileName
                         : fileName.StartsWith(".") ? fileName
                         : "./" + fileName,
-                    },
+                    ],
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
                     WriteStdout = true,

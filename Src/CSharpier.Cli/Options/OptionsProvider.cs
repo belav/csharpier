@@ -1,9 +1,9 @@
-namespace CSharpier.Cli.Options;
-
 using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
 using Microsoft.Extensions.Logging;
+
+namespace CSharpier.Cli.Options;
 
 internal class OptionsProvider
 {

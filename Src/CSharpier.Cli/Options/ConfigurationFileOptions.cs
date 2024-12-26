@@ -1,7 +1,7 @@
-namespace CSharpier.Cli.Options;
-
 using System.Text.Json.Serialization;
 using CSharpier.Cli.EditorConfig;
+
+namespace CSharpier.Cli.Options;
 
 internal class ConfigurationFileOptions
 {

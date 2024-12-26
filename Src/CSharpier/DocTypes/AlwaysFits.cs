@@ -1,11 +1,6 @@
 namespace CSharpier.DocTypes;
 
-internal class AlwaysFits : Doc
+internal class AlwaysFits(Doc printedTrivia) : Doc
 {
-    public readonly Doc Contents;
-
-    public AlwaysFits(Doc printedTrivia)
-    {
-        this.Contents = printedTrivia;
-    }
+    public readonly Doc Contents = printedTrivia;
 }

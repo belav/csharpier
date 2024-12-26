@@ -5,13 +5,13 @@ internal static class NamespaceLikePrinter
     public static void Print(
         BaseNamespaceDeclarationSyntax node,
         List<Doc> docs,
-        FormattingContext context
+        PrintingContext context
     )
     {
         Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }
 
-    public static void Print(CompilationUnitSyntax node, List<Doc> docs, FormattingContext context)
+    public static void Print(CompilationUnitSyntax node, List<Doc> docs, PrintingContext context)
     {
         Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }
@@ -22,7 +22,7 @@ internal static class NamespaceLikePrinter
         SyntaxList<UsingDirectiveSyntax> usings,
         SyntaxList<MemberDeclarationSyntax> members,
         List<Doc> docs,
-        FormattingContext context
+        PrintingContext context
     )
     {
         if (externs.Count > 0)
