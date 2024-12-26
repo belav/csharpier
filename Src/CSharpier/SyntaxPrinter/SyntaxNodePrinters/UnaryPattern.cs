@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class UnaryPattern
 {
-    public static Doc Print(UnaryPatternSyntax node, FormattingContext context)
+    public static Doc Print(UnaryPatternSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.OperatorToken, " ", context),

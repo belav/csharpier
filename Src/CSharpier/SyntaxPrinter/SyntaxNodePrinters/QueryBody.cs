@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class QueryBody
 {
-    public static Doc Print(QueryBodySyntax node, FormattingContext context)
+    public static Doc Print(QueryBodySyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {

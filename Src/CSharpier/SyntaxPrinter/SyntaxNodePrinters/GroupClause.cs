@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class GroupClause
 {
-    public static Doc Print(GroupClauseSyntax node, FormattingContext context)
+    public static Doc Print(GroupClauseSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

@@ -1,9 +1,9 @@
-namespace CSharpier;
-
 using System.Text;
 using System.Text.Json;
 using CSharpier.Formatters.CSharp;
 using CSharpier.SyntaxPrinter;
+
+namespace CSharpier;
 
 internal class CSharpScriptFormatter : CSharpFormatter { }
 
@@ -120,17 +120,22 @@ internal class CSharpFormatter : IFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var formattingContext = new FormattingContext
+            var PrintingContext = new PrintingContext
             {
-                LineEnding = lineEnding,
-                IndentSize = printerOptions.IndentSize,
-                UseTabs = printerOptions.UseTabs,
+                Options = new PrintingContext.PrintingContextOptions
+                {
+                    LineEnding = lineEnding,
+                    IndentSize = printerOptions.IndentSize,
+                    UseTabs = printerOptions.UseTabs,
+                },
             };
-            var document = Node.Print(rootNode, formattingContext);
+            var document = Node.Print(rootNode, PrintingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-            var reorderedModifiers = formattingContext.ReorderedModifiers;
-            var reorderedUsingsWithDisabledText = formattingContext.ReorderedUsingsWithDisabledText;
-            var movedTrailingTrivia = formattingContext.MovedTrailingTrivia;
+            var reorderedModifiers = PrintingContext.State.ReorderedModifiers;
+            var reorderedUsingsWithDisabledText = PrintingContext
+                .State
+                .ReorderedUsingsWithDisabledText;
+            var movedTrailingTrivia = PrintingContext.State.MovedTrailingTrivia;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
@@ -141,22 +146,27 @@ internal class CSharpFormatter : IFormatter
                     return result;
                 }
 
-                var formattingContext2 = new FormattingContext
+                var PrintingContext2 = new PrintingContext
                 {
-                    LineEnding = lineEnding,
-                    IndentSize = printerOptions.IndentSize,
-                    UseTabs = printerOptions.UseTabs,
+                    Options = new PrintingContext.PrintingContextOptions
+                    {
+                        LineEnding = lineEnding,
+                        IndentSize = printerOptions.IndentSize,
+                        UseTabs = printerOptions.UseTabs,
+                    },
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
-                    formattingContext2
+                    PrintingContext2
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-                reorderedModifiers = reorderedModifiers || formattingContext2.ReorderedModifiers;
+                reorderedModifiers =
+                    reorderedModifiers || PrintingContext2.State.ReorderedModifiers;
                 reorderedUsingsWithDisabledText =
                     reorderedUsingsWithDisabledText
-                    || formattingContext2.ReorderedUsingsWithDisabledText;
-                movedTrailingTrivia = movedTrailingTrivia || formattingContext2.MovedTrailingTrivia;
+                    || PrintingContext2.State.ReorderedUsingsWithDisabledText;
+                movedTrailingTrivia =
+                    movedTrailingTrivia || PrintingContext2.State.MovedTrailingTrivia;
             }
 
             return new CodeFormatterResult

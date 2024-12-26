@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CatchClause
 {
-    public static Doc Print(CatchClauseSyntax node, FormattingContext context)
+    public static Doc Print(CatchClauseSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.CatchKeyword, context),

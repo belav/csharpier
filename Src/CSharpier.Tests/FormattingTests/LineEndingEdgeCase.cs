@@ -1,8 +1,8 @@
-namespace CSharpier.Tests.FormattingTests;
-
 using System.Text;
 using FluentAssertions;
 using NUnit.Framework;
+
+namespace CSharpier.Tests.FormattingTests;
 
 [TestFixture]
 internal class LineEndingEdgeCase

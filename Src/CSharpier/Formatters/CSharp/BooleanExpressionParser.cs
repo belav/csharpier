@@ -1,7 +1,7 @@
-namespace CSharpier.Formatters.CSharp;
-
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
+
+namespace CSharpier.Formatters.CSharp;
 
 internal abstract class BooleanExpressionParser
 {

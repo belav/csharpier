@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class VariableDeclarator
 {
-    public static Doc Print(VariableDeclaratorSyntax node, FormattingContext context)
+    public static Doc Print(VariableDeclaratorSyntax node, PrintingContext context)
     {
         var docs = new List<Doc> { Token.Print(node.Identifier, context) };
         if (node.ArgumentList != null)

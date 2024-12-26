@@ -2,11 +2,10 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO.Abstractions;
 using System.Text;
+using CSharpier.Cli.Server;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
-
-using CSharpier.Cli.Server;
 
 internal class Program
 {

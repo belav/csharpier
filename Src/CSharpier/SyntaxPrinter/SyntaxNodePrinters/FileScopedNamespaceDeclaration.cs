@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class FileScopedNamespaceDeclaration
 {
-    public static Doc Print(FileScopedNamespaceDeclarationSyntax node, FormattingContext context)
+    public static Doc Print(FileScopedNamespaceDeclarationSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {
