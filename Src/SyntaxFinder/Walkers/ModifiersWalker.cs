@@ -2,11 +2,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SyntaxFinder.Walkers;
 
-public class ModifiersWalker : SyntaxFinderWalker
+public class ModifiersWalker(string file) : SyntaxFinderWalker(file)
 {
-    public ModifiersWalker(string file)
-        : base(file) { }
-
     public override void VisitParenthesizedLambdaExpression(
         ParenthesizedLambdaExpressionSyntax node
     )

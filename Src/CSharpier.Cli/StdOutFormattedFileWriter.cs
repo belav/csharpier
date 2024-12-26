@@ -1,16 +1,9 @@
 namespace CSharpier.Cli;
 
-internal class StdOutFormattedFileWriter : IFormattedFileWriter
+internal class StdOutFormattedFileWriter(IConsole console) : IFormattedFileWriter
 {
-    private readonly IConsole console;
-
-    public StdOutFormattedFileWriter(IConsole console)
-    {
-        this.console = console;
-    }
-
     public void WriteResult(CodeFormatterResult result, FileToFormatInfo fileToFormatInfo)
     {
-        this.console.Write(result.Code);
+        console.Write(result.Code);
     }
 }

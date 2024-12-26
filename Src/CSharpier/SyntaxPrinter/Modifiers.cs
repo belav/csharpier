@@ -6,7 +6,7 @@ internal static class Modifiers
     {
         // use the default order from https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036
         private static readonly string[] DefaultOrdered =
-        {
+        [
             "public",
             "private",
             "protected",
@@ -24,7 +24,7 @@ internal static class Modifiers
             "required",
             "volatile",
             "async",
-        };
+        ];
 
         public int Compare(string? x, string? y)
         {

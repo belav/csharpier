@@ -3,18 +3,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace SyntaxFinder.Walkers;
 
-public class ObjectInitializerWalker : CSharpSyntaxWalker
+public class ObjectInitializerWalker(string file) : CSharpSyntaxWalker
 {
     private static int total;
     private static int matching;
     private static double totalExpressions;
-    private readonly string file;
     private static HashSet<string> matchingFiles = new();
-
-    public ObjectInitializerWalker(string file)
-    {
-        this.file = file;
-    }
 
     public override void VisitInitializerExpression(InitializerExpressionSyntax node)
     {
@@ -40,7 +34,7 @@ public class ObjectInitializerWalker : CSharpSyntaxWalker
         {
             Interlocked.Increment(ref matching);
             matchingFiles.Add(
-                node.SyntaxTree.GetLineSpan(node.Span).StartLinePosition.Line + " - " + this.file
+                node.SyntaxTree.GetLineSpan(node.Span).StartLinePosition.Line + " - " + file
             );
         }
     }

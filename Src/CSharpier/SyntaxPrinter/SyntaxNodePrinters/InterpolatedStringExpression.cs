@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class InterpolatedStringExpression
 {
-    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
+    internal static readonly string[] lineSeparators = ["\r\n", "\r", "\n"];
 
     public static Doc Print(InterpolatedStringExpressionSyntax node, PrintingContext context)
     {

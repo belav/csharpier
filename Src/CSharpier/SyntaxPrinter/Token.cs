@@ -29,7 +29,7 @@ internal static class Token
         return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
 
-    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
+    internal static readonly string[] lineSeparators = ["\r\n", "\r", "\n"];
 
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
