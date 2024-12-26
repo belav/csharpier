@@ -23,14 +23,9 @@ internal class AlignType : IIndentType
     public int Width { get; init; }
 }
 
-internal class Indenter
+internal class Indenter(PrinterOptions printerOptions)
 {
-    protected readonly PrinterOptions PrinterOptions;
-
-    public Indenter(PrinterOptions printerOptions)
-    {
-        this.PrinterOptions = printerOptions;
-    }
+    protected readonly PrinterOptions PrinterOptions = printerOptions;
 
     public static Indent GenerateRoot()
     {
@@ -88,7 +83,7 @@ internal class Indenter
         // if it doesn't exist yet, then all values on it are regular indents, not aligns
         if (indent.TypesForTabs == null)
         {
-            types = new List<IIndentType>();
+            types = [];
             for (var x = 0; x < indent.Value.Length; x++)
             {
                 types.Add(IndentType.Instance);
@@ -99,7 +94,7 @@ internal class Indenter
         else
         {
             var placeTab = false;
-            types = new List<IIndentType>(indent.TypesForTabs) { nextIndentType };
+            types = [.. indent.TypesForTabs, nextIndentType];
             for (var x = types.Count - 1; x >= 0; x--)
             {
                 if (types[x] == IndentType.Instance)

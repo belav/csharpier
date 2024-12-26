@@ -35,8 +35,9 @@ internal static class UsingDirectives
                 break;
             }
             if (
-                leadingTrivia.RawSyntaxKind() == SyntaxKind.DefineDirectiveTrivia
-                || leadingTrivia.RawSyntaxKind() == SyntaxKind.UndefDirectiveTrivia
+                leadingTrivia.RawSyntaxKind()
+                is SyntaxKind.DefineDirectiveTrivia
+                    or SyntaxKind.UndefDirectiveTrivia
             )
             {
                 initialComments = usings.First().GetLeadingTrivia().ToList();

@@ -511,7 +511,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(
             context,
-            directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
+            directoryOrFilePaths: [unformattedFilePath1, unformattedFilePath2]
         );
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
@@ -530,7 +530,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(
             context,
-            directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
+            directoryOrFilePaths: [unformattedFilePath1, unformattedFilePath2]
         );
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
@@ -730,8 +730,8 @@ class ClassName
         var originalDirectoryOrFilePaths = directoryOrFilePaths;
         if (directoryOrFilePaths.Length == 0)
         {
-            directoryOrFilePaths = new[] { context.GetRootPath() };
-            originalDirectoryOrFilePaths = new[] { "." };
+            directoryOrFilePaths = [context.GetRootPath()];
+            originalDirectoryOrFilePaths = ["."];
         }
         else
         {
@@ -801,8 +801,8 @@ class ClassName
 
     private class TestConsole : IConsole
     {
-        private readonly List<string> lines = new();
-        private readonly List<string> errorLines = new();
+        private readonly List<string> lines = [];
+        private readonly List<string> errorLines = [];
 
         public List<string> GetLines()
         {

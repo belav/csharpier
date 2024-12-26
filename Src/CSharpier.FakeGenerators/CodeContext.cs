@@ -1,13 +1,8 @@
 namespace CSharpier.FakeGenerators;
 
-public class CodeContext
+public class CodeContext(string folder)
 {
-    public string Folder { get; set; }
-
-    public CodeContext(string folder)
-    {
-        this.Folder = folder;
-    }
+    public string Folder { get; set; } = folder;
 
     public void AddSource(string name, string source)
     {

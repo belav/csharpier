@@ -88,37 +88,26 @@ internal static class FormattingCacheFactory
         return new FormattingCache(optionsProvider, CacheFilePath, cacheDictionary, fileSystem);
     }
 
-    private class FormattingCache : IFormattingCache
+    private class FormattingCache(
+        OptionsProvider optionsProvider,
+        string cacheFile,
+        ConcurrentDictionary<string, string> cacheDictionary,
+        IFileSystem fileSystem
+    ) : IFormattingCache
     {
-        private readonly string optionsHash;
-        private readonly string cacheFile;
-        private readonly ConcurrentDictionary<string, string> cacheDictionary;
-        private readonly IFileSystem fileSystem;
-
-        public FormattingCache(
-            OptionsProvider optionsProvider,
-            string cacheFile,
-            ConcurrentDictionary<string, string> cacheDictionary,
-            IFileSystem fileSystem
-        )
-        {
-            this.optionsHash = GetOptionsHash(optionsProvider);
-            this.cacheFile = cacheFile;
-            this.cacheDictionary = cacheDictionary;
-            this.fileSystem = fileSystem;
-        }
+        private readonly string optionsHash = GetOptionsHash(optionsProvider);
 
         public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
         {
             var currentHash = Hash(fileToFormatInfo.FileContents) + this.optionsHash;
-            if (this.cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
+            if (cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
                 if (currentHash == cachedHash)
                 {
                     return true;
                 }
 
-                this.cacheDictionary.TryRemove(fileToFormatInfo.Path, out _);
+                cacheDictionary.TryRemove(fileToFormatInfo.Path, out _);
             }
 
             return false;
@@ -126,7 +115,7 @@ internal static class FormattingCacheFactory
 
         public void CacheResult(string code, FileToFormatInfo fileToFormatInfo)
         {
-            this.cacheDictionary[fileToFormatInfo.Path] = Hash(code) + this.optionsHash;
+            cacheDictionary[fileToFormatInfo.Path] = Hash(code) + this.optionsHash;
         }
 
         private static string GetOptionsHash(OptionsProvider optionsProvider)
@@ -143,12 +132,12 @@ internal static class FormattingCacheFactory
 
         public async Task ResolveAsync(CancellationToken cancellationToken)
         {
-            this.fileSystem.FileInfo.New(this.cacheFile).EnsureDirectoryExists();
+            fileSystem.FileInfo.New(cacheFile).EnsureDirectoryExists();
 
             async Task WriteFile()
             {
-                await using var fileStream = this.fileSystem.File.Open(
-                    this.cacheFile,
+                await using var fileStream = fileSystem.File.Open(
+                    cacheFile,
                     FileMode.OpenOrCreate,
                     FileAccess.ReadWrite,
                     FileShare.None
@@ -156,7 +145,7 @@ internal static class FormattingCacheFactory
                 await using var streamWriter = new StreamWriter(fileStream);
                 await streamWriter.WriteAsync(
                     JsonSerializer.Serialize(
-                        this.cacheDictionary
+                        cacheDictionary
 #if DEBUG
                         ,
                         new JsonSerializerOptions { WriteIndented = true }

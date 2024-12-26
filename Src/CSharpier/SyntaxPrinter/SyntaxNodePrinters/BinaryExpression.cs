@@ -52,7 +52,7 @@ internal static class BinaryExpression
     {
         if (node is not BinaryExpressionSyntax binaryExpressionSyntax)
         {
-            return new List<Doc> { Doc.Group(Node.Print(node, context)) };
+            return [Doc.Group(Node.Print(node, context))];
         }
 
         if (context.State.PrintingDepth > 200)
@@ -112,9 +112,7 @@ internal static class BinaryExpression
 
             if (binaryOnTheRight)
             {
-                return shouldGroup
-                    ? new List<Doc> { docs[0], Doc.Group(docs.Skip(1).ToList()) }
-                    : docs;
+                return shouldGroup ? [docs[0], Doc.Group(docs.Skip(1).ToList())] : docs;
             }
 
             var right = Doc.Concat(

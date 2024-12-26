@@ -52,16 +52,16 @@ internal static class PipeMultipleFilesFormatter
             {
                 var commandLineOptions = new CommandLineOptions
                 {
-                    DirectoryOrFilePaths = new[]
-                    {
+                    DirectoryOrFilePaths =
+                    [
                         Path.Combine(Directory.GetCurrentDirectory(), fileName),
-                    },
-                    OriginalDirectoryOrFilePaths = new[]
-                    {
+                    ],
+                    OriginalDirectoryOrFilePaths =
+                    [
                         Path.IsPathRooted(fileName) ? fileName
                         : fileName.StartsWith(".") ? fileName
                         : "./" + fileName,
-                    },
+                    ],
                     StandardInFileContents = stringBuilder.ToString(),
                     Fast = true,
                     WriteStdout = true,
