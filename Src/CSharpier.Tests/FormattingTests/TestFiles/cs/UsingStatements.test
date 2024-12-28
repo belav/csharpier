@@ -66,5 +66,7 @@ class ClassName
         {
             return;
         }
+
+        using unsafe NvapiQueryInterface = delegate* unmanaged[Cdecl]<uint, nint>;
     }
 }
