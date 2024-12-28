@@ -9,7 +9,7 @@ internal static class StringBuilderExtensions
         for (var index = 1; index <= stringBuilder.Length; index++)
         {
             var next = stringBuilder[^index];
-            if (next == ' ' || next == '\t')
+            if (next is ' ' or '\t')
             {
                 continue;
             }
@@ -36,7 +36,7 @@ internal static class StringBuilderExtensions
         var trimmed = 0;
         for (; trimmed < stringBuilder.Length; trimmed++)
         {
-            if (stringBuilder[^(trimmed + 1)] != ' ' && stringBuilder[^(trimmed + 1)] != '\t')
+            if (stringBuilder[^(trimmed + 1)] is not ' ' and not '\t')
             {
                 break;
             }

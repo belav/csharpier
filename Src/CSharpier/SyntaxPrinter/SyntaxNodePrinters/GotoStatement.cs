@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class GotoStatement
 {
-    public static Doc Print(GotoStatementSyntax node, FormattingContext context)
+    public static Doc Print(GotoStatementSyntax node, PrintingContext context)
     {
         var expression =
             node.Expression != null

@@ -4,7 +4,7 @@ internal static class UsingDirective
 {
     public static Doc Print(
         UsingDirectiveSyntax node,
-        FormattingContext context,
+        PrintingContext context,
         bool printExtraLines = true
     )
     {

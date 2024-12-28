@@ -1,12 +1,7 @@
 namespace CSharpier.DocTypes;
 
-internal class Region : Doc
+internal class Region(string text) : Doc
 {
-    public Region(string text)
-    {
-        this.Text = text;
-    }
-
-    public string Text { get; }
+    public string Text { get; } = text;
     public bool IsEnd { get; init; }
 }

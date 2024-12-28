@@ -14,13 +14,12 @@ namespace CSharpier.VisualStudio
 
         private readonly DTE dte;
         private readonly FormattingService formattingService;
+        private readonly CSharpierProcessProvider cSharpierProcessProvider;
 
         public static ReformatWithCSharpier Instance { get; private set; } = default!;
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
-
             var commandService =
                 await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 
@@ -42,6 +41,7 @@ namespace CSharpier.VisualStudio
             menuItem.BeforeQueryStatus += this.QueryStatus;
             commandService.AddCommand(menuItem);
             this.formattingService = FormattingService.GetInstance(package);
+            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
         }
 
         private void QueryStatus(object sender, EventArgs e)
@@ -49,10 +49,22 @@ namespace CSharpier.VisualStudio
             ThreadHelper.ThrowIfNotOnUIThread();
             var button = (OleMenuCommand)sender;
 
-            button.Visible = this.dte.ActiveDocument.Name.EndsWith(".cs");
-            button.Enabled = this.formattingService.ProcessSupportsFormatting(
-                this.dte.ActiveDocument
+            var hasWarmedProcess = this.cSharpierProcessProvider.HasWarmedProcessFor(
+                this.dte.ActiveDocument.FullName
             );
+            button.Visible = this.dte.ActiveDocument.Name.EndsWith(".cs");
+
+            if (!hasWarmedProcess)
+            {
+                // default to assuming they can format, that way if they do format we can start everything up properly
+                button.Enabled = true;
+            }
+            else
+            {
+                button.Enabled = this.formattingService.ProcessSupportsFormatting(
+                    this.dte.ActiveDocument
+                );
+            }
         }
 
         private void Execute(object sender, EventArgs e)

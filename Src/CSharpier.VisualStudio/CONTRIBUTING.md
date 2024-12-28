@@ -7,7 +7,6 @@ Uninstalling both csharpier and csharpier 2019 from the test instance and restar
 Publishing
 - Update version in BOTH files at CSharpier.VisualStudio[2019]/source.extension.vsixmanifest
 - Update ChangeLog.md
-- build solution in release (can this happen via command line?)
 - use cli
   - CSH-PublishVS [AccessToken] 
 - old way

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseFieldDeclaration
 {
-    public static Doc Print(BaseFieldDeclarationSyntax node, FormattingContext context)
+    public static Doc Print(BaseFieldDeclarationSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {

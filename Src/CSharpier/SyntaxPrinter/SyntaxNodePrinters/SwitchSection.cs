@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SwitchSection
 {
-    public static Doc Print(SwitchSectionSyntax node, FormattingContext context)
+    public static Doc Print(SwitchSectionSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {

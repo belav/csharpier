@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CompilationUnit
 {
-    public static Doc Print(CompilationUnitSyntax node, FormattingContext context)
+    public static Doc Print(CompilationUnitSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>();
 

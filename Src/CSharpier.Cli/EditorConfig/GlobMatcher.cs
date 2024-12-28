@@ -5,9 +5,6 @@
  * From https://github.com/SLaks/Minimatch
  */
 
-#nullable disable
-
-namespace CSharpier.Cli.EditorConfig;
 
 using System;
 using System.Collections.Generic;
@@ -15,6 +12,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+
+#nullable disable
+
+namespace CSharpier.Cli.EditorConfig;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -86,8 +87,8 @@ internal class GlobMatcher
         this.myEmpty = empty;
     }
 
-    private static readonly char[] ourUnixPathSeparators = { '/' };
-    private static readonly char[] ourWinPathSeparators = { '/', '\\' };
+    private static readonly char[] ourUnixPathSeparators = ['/'];
+    private static readonly char[] ourWinPathSeparators = ['/', '\\'];
 
     ///<summary>Checks whether a given string matches this pattern.</summary>
     public bool IsMatch(string input)
@@ -645,7 +646,7 @@ internal class GlobMatcher
             for (var i = 0; i < this.Count; i++)
             {
                 var item = this[i];
-                if (item is PathSeparator || item is DoubleAsterisk)
+                if (item is PathSeparator or DoubleAsterisk)
                 {
                     this.HasPathSeparators = true;
                 }
@@ -696,27 +697,19 @@ internal class GlobMatcher
 
     private interface IPatternElement { }
 
-    private class Literal : IPatternElement
+    private class Literal(string source) : IPatternElement
     {
-        public Literal(string source) => this.Source = source;
-
-        public string Source { get; }
+        public string Source { get; } = source;
     }
 
-    private class OneChar : IPatternElement
+    private class OneChar(string possibleChars, bool negate) : IPatternElement
     {
         static OneChar() { }
 
         public static readonly OneChar EmptyInstance = new OneChar(null, false);
 
-        public OneChar(string possibleChars, bool negate)
-        {
-            this.PossibleChars = possibleChars;
-            this.Negate = negate;
-        }
-
-        private string PossibleChars { get; }
-        private bool Negate { get; }
+        private string PossibleChars { get; } = possibleChars;
+        private bool Negate { get; } = negate;
 
         public bool CheckChar(GlobMatcherOptions options, char c, StringComparison comparison)
         {
@@ -847,7 +840,7 @@ internal class GlobMatcher
         if (options.NoBrace || !ourHasBraces.IsMatch(pattern))
         {
             // shortcut. no need to expand.
-            return new[] { pattern };
+            return [pattern];
         }
 
         var escaping = false;
@@ -893,7 +886,7 @@ internal class GlobMatcher
             if (prefix == null)
             {
                 // console.error("no sets")
-                return new[] { pattern };
+                return [pattern];
             }
 
             var braceExpand = BraceExpand(pattern.Substring(i), options);
@@ -1050,7 +1043,7 @@ internal class GlobMatcher
     private static PatternCase Parse(GlobMatcherOptions options, string pattern)
     {
         if (pattern == "")
-            return new PatternCase();
+            return [];
 
         var result = new PatternCase();
         var sb = new StringBuilder();
@@ -1122,7 +1115,7 @@ internal class GlobMatcher
 
                             FinishLiteral();
 
-                            if (!(result.LastOrDefault() is PathSeparator))
+                            if (result.LastOrDefault() is not PathSeparator)
                             {
                                 result.Add(PathSeparator.Instance);
                             }
@@ -1174,7 +1167,7 @@ internal class GlobMatcher
                                 result.RemoveAt(result.Count - 1);
                                 result.Add(new DoubleAsterisk());
                             }
-                            else if (!(result.LastOrDefault() is SimpleAsterisk))
+                            else if (result.LastOrDefault() is not SimpleAsterisk)
                             {
                                 result.Add(new SimpleAsterisk());
                             }

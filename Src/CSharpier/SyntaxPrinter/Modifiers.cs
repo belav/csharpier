@@ -6,7 +6,7 @@ internal static class Modifiers
     {
         // use the default order from https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036
         private static readonly string[] DefaultOrdered =
-        {
+        [
             "public",
             "private",
             "protected",
@@ -24,7 +24,7 @@ internal static class Modifiers
             "required",
             "volatile",
             "async",
-        };
+        ];
 
         public int Compare(string? x, string? y)
         {
@@ -40,7 +40,7 @@ internal static class Modifiers
 
     private static readonly DefaultOrder Comparer = new();
 
-    public static Doc Print(SyntaxTokenList modifiers, FormattingContext context)
+    public static Doc Print(SyntaxTokenList modifiers, PrintingContext context)
     {
         if (modifiers.Count == 0)
         {
@@ -50,7 +50,7 @@ internal static class Modifiers
         return Doc.Group(Doc.Join(" ", modifiers.Select(o => Token.Print(o, context))), " ");
     }
 
-    public static Doc PrintSorted(SyntaxTokenList modifiers, FormattingContext context)
+    public static Doc PrintSorted(SyntaxTokenList modifiers, PrintingContext context)
     {
         return PrintWithSortedModifiers(
             modifiers,
@@ -62,7 +62,7 @@ internal static class Modifiers
 
     public static Doc PrintSorterWithoutLeadingTrivia(
         SyntaxTokenList modifiers,
-        FormattingContext context
+        PrintingContext context
     )
     {
         return PrintWithSortedModifiers(
@@ -86,7 +86,7 @@ internal static class Modifiers
 
     private static Doc PrintWithSortedModifiers(
         SyntaxTokenList modifiers,
-        FormattingContext context,
+        PrintingContext context,
         Func<IReadOnlyList<SyntaxToken>, Doc> print
     )
     {
@@ -111,7 +111,7 @@ internal static class Modifiers
             && sortedModifiers.Zip(modifiers, (original, sorted) => original != sorted).Any()
         )
         {
-            context.ReorderedModifiers = true;
+            context.State.ReorderedModifiers = true;
         }
 
         return print(sortedModifiers.ToArray());

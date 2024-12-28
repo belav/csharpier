@@ -4,7 +4,7 @@ internal static class ConstraintClauses
 {
     public static Doc Print(
         IEnumerable<TypeParameterConstraintClauseSyntax> constraintClauses,
-        FormattingContext context
+        PrintingContext context
     )
     {
         var constraintClausesList = constraintClauses.ToList();
