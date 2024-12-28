@@ -4,6 +4,8 @@ using A; // trailing
 using // another trailing
 B;
 
+using unsafe NvapiQueryInterface = delegate* unmanaged[Cdecl]<uint, nint>;
+
 namespace Namespace
 {
     using One.Two.Three;
