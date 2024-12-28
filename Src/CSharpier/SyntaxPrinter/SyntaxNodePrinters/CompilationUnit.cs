@@ -18,7 +18,8 @@ internal static class CompilationUnit
             if (
                 finalTrivia is Concat { Contents.Count: > 1 } list
                 && list.Contents[1] is LeadingComment
-                && docs[^1] is Concat previousList
+                && docs.Count > 0
+                && docs[^1] is Concat { Contents.Count: > 1 } previousList
                 && previousList.Contents[^1] is HardLine
                 && previousList.Contents[^2] is HardLine
             )
