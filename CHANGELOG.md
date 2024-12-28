@@ -28,7 +28,7 @@ namespace MyCompany.MyNamespace;
 // Comment block
 ```
 
-**Full Changelog**: https://github.com/belav/csharpier/compare/30.0.4...0.30.4
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.3...0.30.4
 # 0.30.3
 ## What's Changed
 ### CSharpier.MsBuild doesn't fail the github action anymore [#1357](https://github.com/belav/csharpier/issues/1357)
