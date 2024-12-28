@@ -1,11 +1,11 @@
 ---
 hide_table_of_contents: true
 ---
-Use the `dotnet csharpier` command to run CSharpier from the command line.
+Use the `csharpier` command to run CSharpier from the command line.
 
 In practice, it will look something like:
 ```shell
-dotnet csharpier .
+csharpier .
 ```
 This command will format all c# files in the current directory and its children.
 
@@ -14,7 +14,7 @@ You may want to set up an [ignore file](Ignore.md) or [configuration file](Confi
 ### Command Line Options
 ```console
 Usage:
-  dotnet-csharpier [options] [<directoryOrFile>]
+  csharpier [options] [<directoryOrFile>]
 
 Arguments:
   <directoryOrFile>    One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin.
@@ -117,7 +117,7 @@ public class ClassName
 ```
 *shell*
 ```bash
-$ cat TestFile.cs | dotnet csharpier
+$ cat TestFile.cs | csharpier
 public class ClassName
 {
     public string Field;
@@ -132,7 +132,7 @@ The input is a '\u0003' delimited list of file names followed by file contents.
 The results are written to stdout delimited by \u0003.  
 For an example of implementing this in code see [this example](https://github.com/belav/csharpier/blob/main/Src/CSharpier.VSCode/src/CSharpierProcessPipeMultipleFiles.ts)
 ```bash
-$ [FullPathToFile]\u0003[FileContents]\u0003[FullPathToFile]\u0003[FileContents]\u0003 | dotnet csharpier --pipe-multiple-files
+$ [FullPathToFile]\u0003[FileContents]\u0003[FullPathToFile]\u0003[FileContents]\u0003 | csharpier --pipe-multiple-files
 public class ClassName
 {
     public string Field;
@@ -149,8 +149,8 @@ _First available in 0.23.0_
 If your configuration file lives in a location that CSharpier would not normally resolve it (such as in a config folder) 
 you can pass the path for the configuration file to CSharpier.
 ```bash
-dotnet csharpier . --config-path "./config/.csharpierrc"
+csharpier . --config-path "./config/.csharpierrc"
 
 # also supports any name for the config file
-dotnet csharpier . --config-path "./config/csharpier.yaml"
+csharpier . --config-path "./config/csharpier.yaml"
 ```

@@ -29,7 +29,7 @@
     <EmbeddedResource Remove="App_Data\Uploads\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
+    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <Exec Command="node --version" ContinueOnError="true">

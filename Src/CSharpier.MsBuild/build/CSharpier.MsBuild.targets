@@ -3,7 +3,7 @@
     <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == '' and $([MSBuild]::VersionGreaterThanOrEquals($(NETCoreSdkVersion), '9.0'))">net9.0</CSharpier_FrameworkVersion>
     <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == '' and $([MSBuild]::VersionGreaterThanOrEquals($(NETCoreSdkVersion), '8.0'))">net8.0</CSharpier_FrameworkVersion>
     <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''" Label="Fallback">net8.0</CSharpier_FrameworkVersion>
-    <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/dotnet-csharpier.dll</CSharpierDllPath>
+    <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/CSharpier.dll</CSharpierDllPath>
     <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">$(DOTNET_HOST_PATH)</CSharpier_dotnet_Path>
     <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">dotnet</CSharpier_dotnet_Path>
     <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'">$(CSharpierArgs) --check</CSharpierArgs>
