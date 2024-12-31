@@ -69,8 +69,8 @@ public class CliTests
         (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
-    [TestCase("format Subdirectory")]
-    [TestCase("format ./Subdirectory")]
+    [TestCase("Subdirectory")]
+    [TestCase("./Subdirectory")]
     public async Task Should_Format_Subdirectory(string subdirectory)
     {
         var formattedContent = "public class ClassName { }\n";
@@ -78,7 +78,9 @@ public class CliTests
 
         await this.WriteFileAsync("Subdirectory/BasicFile.cs", unformattedContent);
 
-        var result = await new CsharpierProcess().WithArguments(subdirectory).ExecuteAsync();
+        var result = await new CsharpierProcess()
+            .WithArguments($"format {subdirectory}")
+            .ExecuteAsync();
 
         result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
@@ -93,10 +95,13 @@ public class CliTests
         await this.WriteFileAsync(filePath, unformattedContent);
         await this.WriteFileAsync(".csharpierignore", filePath);
 
-        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        var result = await this.ReadAllTextAsync(filePath);
+        var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
+        result.Output.Should().StartWith("Formatted 0 files in ");
+        var fileContents = await this.ReadAllTextAsync(filePath);
 
-        result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
+        fileContents
+            .Should()
+            .Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
 
     [Test]
@@ -124,7 +129,7 @@ public class CliTests
             return;
         }
 
-        var result = await new CsharpierProcess().ExecuteAsync();
+        var result = await new CsharpierProcess().WithArguments("format").ExecuteAsync();
 
         result.ExitCode.Should().Be(1);
         result
