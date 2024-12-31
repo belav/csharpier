@@ -123,8 +123,6 @@ internal class Program
         return await ServerFormatter.StartServer(serverPort, logger, actualConfigPath);
     }
 
-    // TODO at some point (1.0?) the options should be cleaned up
-    // and use sub commands
     public static async Task<int> Run(
         string[]? directoryOrFile,
         bool check,
