@@ -1,4 +1,7 @@
-﻿## [1.9.3]
+﻿## [1.9.4]
+- Fix so that extension works with older versions of VS, we don't want to require the latest
+
+## [1.9.3]
 - Remove eagerly warming csharpier at startup. Optimize right click menu so it doesn't have noticeable delay on initial file that is open at startup.
 
 ## [1.9.1]

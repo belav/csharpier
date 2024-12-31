@@ -1,4 +1,35 @@
-﻿# 0.30.3
+﻿# 0.30.4
+## What's Changed
+### Formatting deletes `unsafe` modifier [#1416](https://github.com/belav/csharpier/issues/1416)
+Formatting a using directive with an unsafe modifier resulted in the lose of the unsafe keyword
+```c#
+// input & expected output
+using unsafe NvapiQueryInterface = delegate* unmanaged[Cdecl]<uint, nint>;
+
+// 0.30.3
+using NvapiQueryInterface = delegate* unmanaged[Cdecl]<uint, nint>;
+```
+### CSharpier keeps adding a newline every time a file is formatted [#1408](https://github.com/belav/csharpier/issues/1408)
+In some cases if a file ended with a comment, CSharpier would add a new extra blank line above the comment each time it formatted the file
+```c#
+// input & expected outpet
+using System;
+
+namespace MyCompany.MyNamespace;
+
+// Comment block
+
+// 0.30.3
+using System;
+
+namespace MyCompany.MyNamespace;
+
+
+// Comment block
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.3...0.30.4
+# 0.30.3
 ## What's Changed
 ### CSharpier.MsBuild doesn't fail the github action anymore [#1357](https://github.com/belav/csharpier/issues/1357)
 The changes for [1311](https://github.com/belav/csharpier/pull/1311) caused CSharpier.MsBuild to not report unformatted files as errors on linux.
@@ -2814,6 +2845,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 

@@ -1,3 +1,7 @@
+## 1.9.2
+- Add option for diagnostic level, default to warning
+- Modify behavior of diagnostics so that new ones only appear on file save, not as a user types.
+
 ## 1.9.1
 - Add option for disabling diagnostics.
 
