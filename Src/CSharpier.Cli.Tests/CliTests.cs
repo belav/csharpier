@@ -577,6 +577,18 @@ max_line_length = 10"
         {
             var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
 
+            if (!File.Exists(path))
+            {
+                var message = new StringBuilder();
+                message.AppendLine("No file found at " + path);
+                foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
+                {
+                    message.AppendLine(Path.GetFileName(file));
+                }
+
+                throw new Exception(message.ToString());
+            }
+
             this.command = CliWrap
                 .Cli.Wrap("dotnet")
                 .WithArguments(path)
