@@ -579,14 +579,7 @@ max_line_length = 10"
 
             if (!File.Exists(path))
             {
-                var message = new StringBuilder();
-                message.AppendLine("No file found at " + path);
-                foreach (var file in Directory.GetFiles(Directory.GetCurrentDirectory()))
-                {
-                    message.AppendLine(Path.GetFileName(file));
-                }
-
-                throw new Exception(message.ToString());
+                throw new Exception("No file found at " + path);
             }
 
             this.command = CliWrap
