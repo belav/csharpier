@@ -64,8 +64,8 @@ Modify the file at `.husky/task-runner.json`
 {
     "tasks": [{
         "name": "Run csharpier",
-        "command": "dotnet",
-        "args": [ "csharpier", "${staged}" ],
+        "command": "csharpier",
+        "args": [ "format", "${staged}" ],
         "include": [ "**/*.cs" ]
     }]
 }

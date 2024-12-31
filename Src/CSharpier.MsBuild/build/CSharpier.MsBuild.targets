@@ -6,6 +6,7 @@
     <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/CSharpier.dll</CSharpierDllPath>
     <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">$(DOTNET_HOST_PATH)</CSharpier_dotnet_Path>
     <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">dotnet</CSharpier_dotnet_Path>
+    TODO doc - this is wrong, is it not getting tested anywhere?
     <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'">$(CSharpierArgs) --check</CSharpierArgs>
     <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''">$(CSharpierArgs) --loglevel $(CSharpier_LogLevel)</CSharpierArgs>
     <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
