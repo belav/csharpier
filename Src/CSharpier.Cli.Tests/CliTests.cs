@@ -1,5 +1,3 @@
-namespace CSharpier.Cli.Tests;
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +5,8 @@ using CliWrap;
 using CliWrap.Buffered;
 using FluentAssertions;
 using NUnit.Framework;
+
+namespace CSharpier.Cli.Tests;
 
 // these tests are kind of nice as c# because they run in the same place.
 // except the one test that has issues with console input redirection

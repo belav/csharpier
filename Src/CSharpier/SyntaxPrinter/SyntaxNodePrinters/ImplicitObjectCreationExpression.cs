@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ImplicitObjectCreationExpression
 {
-    public static Doc Print(ImplicitObjectCreationExpressionSyntax node, FormattingContext context)
+    public static Doc Print(ImplicitObjectCreationExpressionSyntax node, PrintingContext context)
     {
         return ObjectCreationExpression.BreakParentIfNested(
             node,

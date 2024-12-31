@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeArgumentList
 {
-    public static Doc Print(TypeArgumentListSyntax node, FormattingContext context)
+    public static Doc Print(TypeArgumentListSyntax node, PrintingContext context)
     {
         Doc separator =
             node.Arguments.FirstOrDefault() is not OmittedTypeArgumentSyntax

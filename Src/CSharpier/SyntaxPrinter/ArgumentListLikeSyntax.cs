@@ -6,7 +6,7 @@ internal static class ArgumentListLike
         SyntaxToken openParenToken,
         SeparatedSyntaxList<ArgumentSyntax> arguments,
         SyntaxToken closeParenToken,
-        FormattingContext context
+        PrintingContext context
     )
     {
         var lambdaId = Guid.NewGuid();

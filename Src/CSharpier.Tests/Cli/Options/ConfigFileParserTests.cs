@@ -1,8 +1,8 @@
-namespace CSharpier.Tests.Cli.Options;
-
 using CSharpier.Cli.Options;
 using FluentAssertions;
 using NUnit.Framework;
+
+namespace CSharpier.Tests.Cli.Options;
 
 [TestFixture]
 public class ConfigFileParserTests

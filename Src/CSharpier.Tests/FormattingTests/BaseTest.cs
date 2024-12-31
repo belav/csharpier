@@ -2,13 +2,12 @@ using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli;
 using CSharpier.SyntaxPrinter;
+using CSharpier.Utilities;
 using DiffEngine;
 using FluentAssertions;
+using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Tests.FormattingTests;
-
-using CSharpier.Utilities;
-using Microsoft.CodeAnalysis;
 
 public class BaseTest
 {
@@ -61,6 +60,7 @@ public class BaseTest
         var comparer = new SyntaxNodeComparer(
             expectedCode,
             normalizedCode,
+            false,
             false,
             false,
             SourceCodeKind.Regular,

@@ -3,6 +3,7 @@ using A; // trailing
 // leading with space
 using // another trailing
 B;
+using unsafe NvapiQueryInterface = delegate* unmanaged[Cdecl]<uint, nint>;
 
 namespace Namespace
 {

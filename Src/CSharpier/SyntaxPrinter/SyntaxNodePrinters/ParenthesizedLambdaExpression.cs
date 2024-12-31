@@ -4,12 +4,12 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ParenthesizedLambdaExpression
 {
-    public static Doc Print(ParenthesizedLambdaExpressionSyntax node, FormattingContext context)
+    public static Doc Print(ParenthesizedLambdaExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(PrintHead(node, context), PrintBody(node, context));
     }
 
-    public static Doc PrintHead(ParenthesizedLambdaExpressionSyntax node, FormattingContext context)
+    public static Doc PrintHead(ParenthesizedLambdaExpressionSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             AttributeLists.Print(node, node.AttributeLists, context),
@@ -23,7 +23,7 @@ internal static class ParenthesizedLambdaExpression
         );
     }
 
-    public static Doc PrintBody(ParenthesizedLambdaExpressionSyntax node, FormattingContext context)
+    public static Doc PrintBody(ParenthesizedLambdaExpressionSyntax node, PrintingContext context)
     {
         return node.Body switch
         {

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CollectionExpression
 {
-    public static Doc Print(CollectionExpressionSyntax node, FormattingContext context)
+    public static Doc Print(CollectionExpressionSyntax node, PrintingContext context)
     {
         Doc separator = node.Parent
             is ArgumentSyntax { NameColon: null }
@@ -10,6 +10,7 @@ internal static class CollectionExpression
                 or ArrowExpressionClauseSyntax
                 or CastExpressionSyntax
                 or ExpressionElementSyntax
+                or InitializerExpressionSyntax
                 or SimpleLambdaExpressionSyntax
                 or AssignmentExpressionSyntax
                 {

@@ -1,6 +1,6 @@
-namespace CSharpier.Cli.Server;
-
 using System.Text.Json.Serialization;
+
+namespace CSharpier.Cli.Server;
 
 public class FormatFileResult(Status status)
 {

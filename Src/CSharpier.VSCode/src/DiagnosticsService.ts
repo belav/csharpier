@@ -3,6 +3,7 @@ import { Difference, generateDifferences, showInvisibles } from "prettier-linter
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
 import { Logger } from "./Logger";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";
+import { workspace } from "vscode";
 
 const DIAGNOSTICS_ID = "csharpier";
 const DIAGNOSTICS_SOURCE_ID = "diagnostic";
@@ -14,9 +15,10 @@ export interface CsharpierDiff {
 }
 
 export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Disposable {
-    public static readonly quickFixCodeActionKind =
+    private static readonly quickFixCodeActionKind =
         vscode.CodeActionKind.QuickFix.append(DIAGNOSTICS_ID);
-    public static metadata: vscode.CodeActionProviderMetadata = {
+
+    private static metadata: vscode.CodeActionProviderMetadata = {
         providedCodeActionKinds: [DiagnosticsService.quickFixCodeActionKind],
     };
 
@@ -47,59 +49,77 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         this.codeActionsProvider.dispose();
     }
 
-    private handleChangeTextDocument(document: vscode.TextDocument): void {
-        void this.runDiagnostics(document);
-    }
-
-    public async runDiagnostics(document: vscode.TextDocument): Promise<void> {
-        const shouldRunDiagnostics =
-            this.documentSelector.some(selector => selector.language === document.languageId) &&
-            !!vscode.workspace.getWorkspaceFolder(document.uri);
-        if (shouldRunDiagnostics) {
-            try {
-                const diff = await this.getDiff(document);
-                this.updateDiagnostics(document, diff);
-            } catch (e) {
-                this.logger.error(`Unable to provide diagnostics: ${(e as Error).message}`);
-            }
-        }
-    }
-
-    public updateDiagnostics(document: vscode.TextDocument, diff: CsharpierDiff): void {
-        const diagnostics = this.getDiagnostics(document, diff);
-        this.diagnosticCollection.set(document.uri, diagnostics);
-    }
-
     private registerEditorEvents(): void {
         const activeDocument = vscode.window.activeTextEditor?.document;
         if (activeDocument) {
             void this.runDiagnostics(activeDocument);
         }
 
-        const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(
-            (e: vscode.TextDocumentChangeEvent) => {
-                if (
-                    e.contentChanges.length &&
-                    vscode.window.activeTextEditor?.document === e.document
-                ) {
-                    this.handleChangeTextDocument(e.document);
-                }
-            },
-        );
+        const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(e => {
+            if (
+                e.contentChanges.length &&
+                vscode.window.activeTextEditor?.document === e.document
+            ) {
+                // when editing don't pop up any new diagnostics, but if someone cleans up one then allow that update
+                void this.runDiagnostics(e.document, true);
+            }
+        });
 
-        const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(
-            (editor?: vscode.TextEditor) => {
-                if (editor) {
-                    void this.runDiagnostics(editor.document);
-                }
-            },
-        );
+        const onDidSaveTextDocument = vscode.workspace.onDidSaveTextDocument(document => {
+            if (vscode.window.activeTextEditor?.document === document) {
+                void this.runDiagnostics(document);
+            }
+        });
+
+        const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(editor => {
+            if (editor) {
+                void this.runDiagnostics(editor.document);
+            }
+        });
 
         this.disposables.push(
             onDidChangeTextDocument,
+            onDidSaveTextDocument,
             onDidChangeActiveTextEditor,
             this.diagnosticCollection,
         );
+    }
+
+    public async runDiagnostics(
+        document: vscode.TextDocument,
+        onlyAllowLessDiagnostics = false,
+    ): Promise<void> {
+        const shouldRunDiagnostics =
+            this.documentSelector.some(selector => selector.language === document.languageId) &&
+            !!vscode.workspace.getWorkspaceFolder(document.uri) &&
+            (workspace.getConfiguration("csharpier").get<boolean>("enableDiagnostics") ?? true);
+        if (!shouldRunDiagnostics) {
+            this.diagnosticCollection.set(document.uri, []);
+            return;
+        }
+
+        try {
+            const source = document.getText();
+            const formattedSource =
+                (await this.formatDocumentProvider.formatDocument(document)) ?? source;
+            const differences = generateDifferences(source, formattedSource);
+            const diff = {
+                source,
+                formattedSource,
+                differences,
+            };
+            const diagnostics = this.getDiagnostics(document, diff);
+            if (onlyAllowLessDiagnostics) {
+                let currentDiagnostics = this.diagnosticCollection.get(document.uri);
+                let currentCount = !currentDiagnostics ? 0 : currentDiagnostics.length;
+                if (diagnostics.length >= currentCount) {
+                    return;
+                }
+            }
+            this.diagnosticCollection.set(document.uri, diagnostics);
+        } catch (e) {
+            this.logger.error(`Unable to provide diagnostics: ${(e as Error).message}`);
+        }
     }
 
     private getDiagnostics(
@@ -108,23 +128,19 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
     ): vscode.Diagnostic[] {
         const diagnostics: vscode.Diagnostic[] = [];
         for (const difference of diff.differences) {
-            const diagnostic = this.getDiagnostic(document, difference);
+            let range = this.getRange(document, difference);
+            let message = this.getMessage(difference);
+            let diagnostic = new vscode.Diagnostic(range, message);
+            diagnostic.source = DIAGNOSTICS_ID;
+            diagnostic.code = DIAGNOSTICS_SOURCE_ID;
+            diagnostic.severity = parseInt(
+                workspace.getConfiguration("csharpier").get<string>("diagnosticsLevel") ?? "1",
+                10,
+            );
             this.diagnosticDifferenceMap.set(diagnostic, difference);
             diagnostics.push(diagnostic);
         }
         return diagnostics;
-    }
-
-    private getDiagnostic(
-        document: vscode.TextDocument,
-        difference: Difference,
-    ): vscode.Diagnostic {
-        const range = this.getRange(document, difference);
-        const message = this.getMessage(difference);
-        const diagnostic = new vscode.Diagnostic(range, message);
-        diagnostic.source = DIAGNOSTICS_ID;
-        diagnostic.code = DIAGNOSTICS_SOURCE_ID;
-        return diagnostic;
     }
 
     private getMessage(difference: Difference): string {
@@ -150,18 +166,6 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         const start = document.positionAt(difference.offset);
         const end = document.positionAt(difference.offset + difference.deleteText!.length);
         return new vscode.Range(start.line, start.character, end.line, end.character);
-    }
-
-    private async getDiff(document: vscode.TextDocument): Promise<CsharpierDiff> {
-        const source = document.getText();
-        const formattedSource =
-            (await this.formatDocumentProvider.formatDocument(document)) ?? source;
-        const differences = generateDifferences(source, formattedSource);
-        return {
-            source,
-            formattedSource,
-            differences,
-        };
     }
 
     public provideCodeActions(

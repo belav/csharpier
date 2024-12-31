@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class WhereClause
 {
-    public static Doc Print(WhereClauseSyntax node, FormattingContext context)
+    public static Doc Print(WhereClauseSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

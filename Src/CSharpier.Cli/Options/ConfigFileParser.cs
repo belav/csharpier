@@ -1,14 +1,14 @@
-namespace CSharpier.Cli.Options;
-
 using System.IO.Abstractions;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
+namespace CSharpier.Cli.Options;
+
 internal static class ConfigFileParser
 {
-    private static readonly string[] validExtensions = { ".csharpierrc", ".json", ".yml", ".yaml" };
+    private static readonly string[] validExtensions = [".csharpierrc", ".json", ".yml", ".yaml"];
 
     /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
     internal static List<CSharpierConfigData> FindForDirectoryName(

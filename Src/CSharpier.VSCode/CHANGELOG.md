@@ -1,3 +1,14 @@
+## 1.9.2
+- Add option for diagnostic level, default to warning
+- Modify behavior of diagnostics so that new ones only appear on file save, not as a user types.
+
+## 1.9.1
+- Add option for disabling diagnostics.
+
+## 1.9.0
+- Support format selection
+- Support for inline highlighting of formatting issues + code actions to format them
+
 ## 1.8.0
 - Use `dotnet tool list` to look for both local and global installs of csharpier
 - Only show the "you need to install csharpier" notification once per run

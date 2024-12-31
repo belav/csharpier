@@ -2,11 +2,10 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
-
-using Microsoft.Extensions.Logging;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
@@ -512,7 +511,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(
             context,
-            directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
+            directoryOrFilePaths: [unformattedFilePath1, unformattedFilePath2]
         );
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
@@ -531,7 +530,7 @@ public class CommandLineFormatterTests
 
         var result = this.Format(
             context,
-            directoryOrFilePaths: new[] { unformattedFilePath1, unformattedFilePath2 }
+            directoryOrFilePaths: [unformattedFilePath1, unformattedFilePath2]
         );
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
@@ -679,6 +678,26 @@ class ClassName
         result.OutputLines.First().Should().StartWith("Formatted 1 files in");
     }
 
+    [Test]
+    public void File_With_Added_Trailing_Comma_Before_Comment_Should_Pass_Validation()
+    {
+        var context = new TestContext();
+
+        var fileContents = """
+            var someObject = new SomeObject()
+            {
+                Property1 = 1,
+                Property2 = 2 // Trailing Comment
+            };
+            """;
+        context.WhenAFileExists("file1.cs", fileContents);
+
+        var result = this.Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+    }
+
     [TestCase(".csharpierrc")]
     [TestCase(".csharpierrc.json")]
     [TestCase(".csharpierrc.yaml")]
@@ -711,8 +730,8 @@ class ClassName
         var originalDirectoryOrFilePaths = directoryOrFilePaths;
         if (directoryOrFilePaths.Length == 0)
         {
-            directoryOrFilePaths = new[] { context.GetRootPath() };
-            originalDirectoryOrFilePaths = new[] { "." };
+            directoryOrFilePaths = [context.GetRootPath()];
+            originalDirectoryOrFilePaths = ["."];
         }
         else
         {
@@ -782,8 +801,8 @@ class ClassName
 
     private class TestConsole : IConsole
     {
-        private readonly List<string> lines = new();
-        private readonly List<string> errorLines = new();
+        private readonly List<string> lines = [];
+        private readonly List<string> errorLines = [];
 
         public List<string> GetLines()
         {

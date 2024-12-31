@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class FunctionPointerType
 {
-    public static Doc Print(FunctionPointerTypeSyntax node, FormattingContext context)
+    public static Doc Print(FunctionPointerTypeSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.DelegateKeyword, context),
@@ -33,7 +33,7 @@ internal static class FunctionPointerType
 
     private static Doc PrintCallingConvention(
         FunctionPointerCallingConventionSyntax node,
-        FormattingContext context
+        PrintingContext context
     )
     {
         return Doc.Concat(

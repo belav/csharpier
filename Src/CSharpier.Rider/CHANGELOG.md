@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.8.3]
+- Don't notify about installing csharpier globally for files in the directory '\'
+
 ## [1.8.2]
 - Possible fix for issue with OSX not being able to run dotnet tool list command
 - Better handling of error when validating custom install of csharpier

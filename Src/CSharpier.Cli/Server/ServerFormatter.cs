@@ -1,5 +1,3 @@
-namespace CSharpier.Cli.Server;
-
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NReco.Logging.File;
+
+namespace CSharpier.Cli.Server;
 
 internal static class ServerFormatter
 {

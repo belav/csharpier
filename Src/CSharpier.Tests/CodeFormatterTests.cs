@@ -1,10 +1,9 @@
+using CSharpier.Utilities;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
-
-using CSharpier.Utilities;
 
 // TODO xml move these around
 [TestFixture]

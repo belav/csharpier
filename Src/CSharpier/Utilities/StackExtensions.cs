@@ -1,6 +1,6 @@
-namespace CSharpier.Utilities;
-
 using System.Diagnostics.CodeAnalysis;
+
+namespace CSharpier.Utilities;
 
 internal static class StackExtensions
 {

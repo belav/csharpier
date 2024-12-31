@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using CSharpier.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Playground.Controllers;
-
-using CSharpier.Utilities;
 
 public class FormatResult
 {
@@ -28,20 +27,9 @@ public class FormatError
 
 [ApiController]
 [Route("[controller]")]
-public class FormatController : ControllerBase
+public class FormatController() : ControllerBase
 {
-    private readonly IWebHostEnvironment webHostEnvironment;
-    private readonly ILogger logger;
-
     // ReSharper disable once SuggestBaseTypeForParameter
-    public FormatController(
-        IWebHostEnvironment webHostEnvironment,
-        ILogger<FormatController> logger
-    )
-    {
-        this.webHostEnvironment = webHostEnvironment;
-        this.logger = logger;
-    }
 
     public class PostModel
     {
@@ -80,6 +68,7 @@ public class FormatController : ControllerBase
             result.Code,
             result.ReorderedModifiers,
             result.ReorderedUsingsWithDisabledText,
+            result.MovedTrailingTrivia,
             sourceCodeKind,
             cancellationToken
         );
@@ -98,27 +87,5 @@ public class FormatController : ControllerBase
     {
         var lineSpan = diagnostic.Location.SourceTree!.GetLineSpan(diagnostic.Location.SourceSpan);
         return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString() };
-    }
-
-    public string ExecuteApplication(string pathToExe, string workingDirectory, string args)
-    {
-        var processStartInfo = new ProcessStartInfo(pathToExe, args)
-        {
-            UseShellExecute = false,
-            RedirectStandardError = true,
-            WindowStyle = ProcessWindowStyle.Hidden,
-            WorkingDirectory = workingDirectory,
-            CreateNoWindow = true,
-        };
-
-        var process = Process.Start(processStartInfo);
-        var output = process!.StandardError.ReadToEnd();
-        process.WaitForExit();
-
-        this.logger.LogInformation(
-            "Output from '" + pathToExe + " " + args + "' was: " + Environment.NewLine + output
-        );
-
-        return output;
     }
 }
