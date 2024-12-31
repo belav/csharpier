@@ -13,7 +13,7 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
            "csharpier": {
               "version": "[SpecificVersion]",
               "commands": [
-                  "dotnet-csharpier"
+                  "csharpier"
               ]
           }
        }
@@ -22,7 +22,7 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
 2. Use your preferred CI/CD tool to run the following commands.
    ```bash
    dotnet tool restore
-   dotnet csharpier --check .
+   csharpier --check .
    ```   
    An example Github Actions workflow to accomplish this
    ```yaml
@@ -38,6 +38,6 @@ Normally when using a code formatter like CSharpier, you'll want to ensure that 
          - uses: actions/checkout@v2
          - run: |
              dotnet tool restore
-             dotnet csharpier --check .
+             csharpier --check .
    
    ```

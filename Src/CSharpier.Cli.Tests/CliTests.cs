@@ -575,7 +575,7 @@ max_line_length = 10"
 
         public CsharpierProcess()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "csharpier.dll");
 
             if (!File.Exists(path))
             {
