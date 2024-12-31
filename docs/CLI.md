@@ -5,11 +5,13 @@ Use the `csharpier` command to run CSharpier from the command line.
 
 In practice, it will look something like:
 ```shell
-csharpier .
+csharpier format .
 ```
 This command will format all c# files in the current directory and its children.
 
 You may want to set up an [ignore file](Ignore.md) or [configuration file](Configuration.md).
+
+TODO doc - a whole lot of this needs to be updated
 
 ### Command Line Options
 ```console

@@ -16,7 +16,7 @@ By default this will
 
 ### Check
 
-You can control when `--check` is used with the following Property
+You can control when `check` is used with the following Property
 ```xml
   <PropertyGroup>
     <CSharpier_Check>false</CSharpier_Check>
