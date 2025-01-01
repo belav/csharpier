@@ -1,13 +1,20 @@
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace CSharpier;
 
 internal class DebugLogger
 {
-    private static object lockObject = new();
+    private static readonly object lockObject = new();
 
     [Conditional("DEBUG")]
     public static void Log(object message)
+    {
+        Log(JsonSerializer.Serialize(message));
+    }
+
+    [Conditional("DEBUG")]
+    public static void Log(string message)
     {
         lock (lockObject)
         {
