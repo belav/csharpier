@@ -6,8 +6,8 @@
     <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/CSharpier.dll</CSharpierDllPath>
     <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">$(DOTNET_HOST_PATH)</CSharpier_dotnet_Path>
     <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">dotnet</CSharpier_dotnet_Path>
-    TODO doc - this is wrong, is it not getting tested anywhere?
-    <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'">$(CSharpierArgs) --check</CSharpierArgs>
+    <CSharpierCommand>format</CSharpierCommand>
+    <CSharpierCommand Condition="'$(CSharpier_Check)' == 'true'">check</CSharpierCommand>
     <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''">$(CSharpierArgs) --loglevel $(CSharpier_LogLevel)</CSharpierArgs>
     <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
     <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
@@ -28,7 +28,7 @@
       IgnoreExitCode="true"
       IgnoreStandardErrorWarningFormat="true"
       CustomErrorRegularExpression="^Error "
-      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
+      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierCommand) $(CSharpierArgs) --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) " />
   </Target>
 
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
