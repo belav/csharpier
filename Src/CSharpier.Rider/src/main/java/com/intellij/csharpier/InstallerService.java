@@ -63,6 +63,7 @@ public class InstallerService {
         return (
                 StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/DecompilerCache") ||
                         StringUtils.containsIgnoreCase(normalizedPath, "resharper-host/SourcesCache") ||
+                        StringUtils.containsIgnoreCase(normalizedPath, "Temp/SourceGeneratedDocuments") ||
                         directoryThatContainsFile.equals("/") ||
                         directoryThatContainsFile.equals("\\")
         );
