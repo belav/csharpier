@@ -16,7 +16,7 @@ JSON
 {
     "printWidth": 100,
     "useTabs": false,
-    "tabWidth": 4,
+    "indentSize": 4,
     "endOfLine": "auto"
 }
 ```
@@ -24,7 +24,7 @@ YAML
 ```yaml
 printWidth: 100
 useTabs: false
-tabWidth: 4
+indentSize: 4
 endOfLine: auto
 ```
 
@@ -33,20 +33,15 @@ Specify at what point the printer will wrap content. This is not a hard limit. S
 
 Default `100`
 #### Use Tabs
-_First available in 0.17.0_
-
 Indent lines with tabs instead of spaces.
 
 Default `false`
-#### Tab Width
-_First available in 0.17.0_
-
+#### Indent Size
 Specify the number of spaces used per indentation level.
 
 Default `4`
 
 #### End of Line
-_First available in 0.26.0_
 
 Valid options:
 
@@ -56,32 +51,7 @@ Valid options:
 
 Default `auto`
 
-
-#### Preprocessor Symbol Sets
-_Removed in 0.25.0_
-
-Currently CSharpier only has basic support for understanding how to format code inside of `#if` directives.
-It will attempt to determine which sets of preprocessor symbols are needed for roslyn to parse all the code in each file.
-
-For example in the following code block, the following symbol sets would be needed ["FIRST", "SECOND,THIRD", ""]
-```csharp
-#if FIRST
-// some code
-#elif SECOND && THIRD
-// some code
-#else
-// some code
-#endif
-
-```
-
-When supplying symbol sets, they will be used for all files being formatted. This will slow down formatting, and determining all symbol sets needed across all files won't be straight forward.
-
-The long term plan is to improve Csharpier's ability to determine the symbol sets itself and to allow specifying them for individual files.
-
 ### Configuration Overrides ###
-_First available in 0.29.0_
-
 Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
 
 ```json
@@ -90,7 +60,7 @@ Overrides allows you to specify different configuration options based on glob pa
         {
            "files": ["*.cst"],
            "formatter": "csharp",
-           "tabWidth": 2,
+           "indentSize": 2,
            "useTabs": true,
            "printWidth": 10,
            "endOfLine": "LF"
@@ -103,15 +73,13 @@ Overrides allows you to specify different configuration options based on glob pa
 overrides:
     - files: "*.cst"
       formatter: "csharp"
-      tabWidth: 2
+      indentSize: 2
       useTabs: true
       printWidth: 10
       endOfLine: "LF"
 ```
 
 ### EditorConfig
-_First available in 0.26.0_
-
 CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` file in the same directory will take priority.
 
 ```ini
@@ -129,8 +97,6 @@ indent_style = space
 indent_size = 4
 max_line_length = 100
 ```
-
-_First available in 0.29.2_
 
 Formatting non-standard file extensions using csharpier can be accomplished with the `csharpier_formatter` option
 ```ini
