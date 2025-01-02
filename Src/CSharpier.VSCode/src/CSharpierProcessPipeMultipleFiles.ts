@@ -3,6 +3,7 @@ import { Logger } from "./Logger";
 import { ICSharpierProcess } from "./ICSharpierProcess";
 import { getDotNetRoot } from "./DotNetProvider";
 import * as process from "process";
+import * as semver from "semver";
 
 export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private process: ChildProcessWithoutNullStreams;
@@ -29,7 +30,13 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        const csharpierProcess = spawn(csharpierPath, ["--pipe-multiple-files"], {
+        // TODO test this
+        let newCommandsVersion = "1.0.0";
+        let argument = semver.gte(this.version, newCommandsVersion)
+            ? "pipe-files"
+            : "--pipe-multiple-files";
+
+        const csharpierProcess = spawn(csharpierPath, [argument], {
             stdio: "pipe",
             cwd: workingDirectory,
             env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },

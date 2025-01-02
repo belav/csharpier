@@ -4,6 +4,7 @@ import * as fs from "fs";
 import { workspace } from "vscode";
 import { getDotNetRoot, execDotNet } from "./DotNetProvider";
 import { execSync } from "child_process";
+import * as semver from "semver";
 
 export class CustomPathInstaller {
     logger: Logger;
@@ -92,6 +93,8 @@ export class CustomPathInstaller {
     }
 
     public getPathForVersion(version: string) {
-        return path.resolve(this.getDirectoryForVersion(version), "dotnet-csharpier");
+        let newCommandsVersion = "1.0.0";
+        let filename = semver.gte(version, newCommandsVersion) ? "CSharpier" : "dotnet-csharpier";
+        return path.resolve(this.getDirectoryForVersion(version), filename);
     }
 }

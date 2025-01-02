@@ -1,3 +1,6 @@
+## 2.0.0
+- Adding support for CSharpier 1.0.0
+
 ## 1.9.2
 - Add option for diagnostic level, default to warning
 - Modify behavior of diagnostics so that new ones only appear on file save, not as a user types.

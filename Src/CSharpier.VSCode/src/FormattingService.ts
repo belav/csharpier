@@ -12,6 +12,12 @@ import { FormatDocumentProvider } from "./FormatDocumentProvider";
 
 export class FormattingService {
     constructor(private readonly formatDocumentProvider: FormatDocumentProvider) {
+        // TODO will this cover all the actual xml files, maybe we need to use patterns?
+        // { pattern: '**/*.{props,csproj}' }
+
+        languages.registerDocumentFormattingEditProvider("xml", {
+            provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
+        });
         languages.registerDocumentFormattingEditProvider("csharp", {
             provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
         });

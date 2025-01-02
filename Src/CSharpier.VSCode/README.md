@@ -2,8 +2,8 @@
 
 This extension makes use of the dotnet tool [CSharpier](https://github.com/belav/csharpier) to format your code and is versioned independently.
 
-CSharpier is an opinionated code formatter for c#.
-It uses Roslyn to parse your code and re-prints it using its own rules.
+CSharpier is an opinionated code formatter for c# and xml.
+It provides very few options and provides a deterministic way to enforce formatting of your code.
 The printing process was ported from [prettier](https://prettier.io) but has evolved over time.
 
 ## Installation
@@ -27,12 +27,15 @@ The extension makes use of `dotnet` commands and uses the following logic to loc
 - For non-windows - Try running `sh -c "dotnet --info"` to see if `dotnet` is on the PATH
 
 ## Default Formatter
-To ensure that CSharpier is used to format c# files, be sure to set it as the default formatter.
+To ensure that CSharpier is used to format files, be sure to set it as the default formatter.
 
 ```json
   "[csharp]": {
     "editor.defaultFormatter": "csharpier.csharpier-vscode"
-  }
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode"
+  },
 ```
 
 ## Usage
@@ -56,6 +59,9 @@ You can turn on format-on-save on a per-language basis by scoping the setting:
 "editor.formatOnSave": false,
 // Enable per-language
 "[csharp]": {
+    "editor.formatOnSave": true
+},
+"[xml]": {
     "editor.formatOnSave": true
 }
 ```
