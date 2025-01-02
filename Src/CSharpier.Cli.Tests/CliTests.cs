@@ -241,9 +241,21 @@ max_line_length = 10"
     [TestCase("BasicFile.cs")]
     [TestCase("./BasicFile.cs")]
     [TestCase("/BasicFile.cs")]
-    public async Task Format_Print_NotFound(string path)
+    public async Task Format_Should_Print_NotFound(string path)
     {
         var result = await new CsharpierProcess().WithArguments($"format {path}").ExecuteAsync();
+
+        result.Output.Should().BeEmpty();
+        result.ErrorOutput.Should().StartWith("There was no file or directory found at " + path);
+        result.ExitCode.Should().Be(1);
+    }
+
+    [TestCase("BasicFile.cs")]
+    [TestCase("./BasicFile.cs")]
+    [TestCase("/BasicFile.cs")]
+    public async Task Check_Should_Print_NotFound(string path)
+    {
+        var result = await new CsharpierProcess().WithArguments($"check {path}").ExecuteAsync();
 
         result.Output.Should().BeEmpty();
         result.ErrorOutput.Should().StartWith("There was no file or directory found at " + path);
@@ -257,6 +269,21 @@ max_line_length = 10"
 
         var result = await new CsharpierProcess()
             .WithArguments("format")
+            .WithPipedInput(invalidFile)
+            .ExecuteAsync();
+
+        result.Output.Should().BeEmpty();
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
+    }
+
+    [Test]
+    public async Task Check_Should_Write_To_StdError_For_Piped_Invalid_File()
+    {
+        const string invalidFile = "public class ClassName { ";
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check")
             .WithPipedInput(invalidFile)
             .ExecuteAsync();
 
@@ -433,6 +460,27 @@ max_line_length = 10"
     }
 
     [Test]
+    public async Task Check_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check --no-msbuild-check .")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().StartWith("Formatted 0 files in ");
+    }
+
+    [Test]
     public async Task Format_Should_Fail_On_Mismatched_MSBuild()
     {
         await this.WriteFileAsync(
@@ -445,6 +493,26 @@ max_line_length = 10"
         );
 
         var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
+
+        result
+            .ErrorOutput.Should()
+            .Contain("uses version 99 of CSharpier.MsBuild which is a mismatch with version");
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
+    public async Task Check_Should_Fail_On_Mismatched_MSBuild()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess().WithArguments("check .").ExecuteAsync();
 
         result
             .ErrorOutput.Should()

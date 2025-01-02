@@ -1,12 +1,10 @@
 using System.CommandLine;
-using System.CommandLine.Parsing;
 using System.IO.Abstractions;
-using CSharpier.Cli.Server;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal static class FormatingCommands
+internal static class FormattingCommands
 {
     public static Command CreateFormatCommand()
     {
