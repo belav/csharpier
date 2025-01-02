@@ -10,11 +10,31 @@ internal class FileSystemFormattedFileWriter(IFileSystem fileSystem) : IFormatte
     {
         if (result.Code != fileToFormatInfo.FileContents)
         {
-            this.FileSystem.File.WriteAllText(
-                fileToFormatInfo.Path,
-                result.Code,
-                fileToFormatInfo.Encoding
-            );
+            const int maxTries = 5;
+            var tries = 1;
+            // TODO #819 this started happening on the EFcore folder, is it related to the msbuild check somehow?
+            while (tries <= maxTries)
+            {
+                try
+                {
+                    this.FileSystem.File.WriteAllText(
+                        fileToFormatInfo.Path,
+                        result.Code,
+                        fileToFormatInfo.Encoding
+                    );
+                    return;
+                }
+                catch (IOException)
+                {
+                    if (tries == maxTries)
+                    {
+                        throw;
+                    }
+
+                    Thread.Sleep(TimeSpan.FromMilliseconds(50));
+                    tries++;
+                }
+            }
         }
     }
 }

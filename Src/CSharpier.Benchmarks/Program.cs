@@ -12,7 +12,10 @@ public class Benchmarks
     [Benchmark]
     public void Default_CodeFormatter()
     {
-        CSharpFormatter.FormatAsync(this.largeCode, new PrinterOptions()).GetAwaiter().GetResult();
+        CSharpFormatter
+            .FormatAsync(this.largeCode, new PrinterOptions(Formatter.CSharp))
+            .GetAwaiter()
+            .GetResult();
     }
 
     [Benchmark]

@@ -199,8 +199,6 @@ public class PreprocessorSymbolsTests
 #endif
 #endif
 ",
-            // TODO because the second is a subset of the first, we don't actually need it
-            // but it's more work to figure that out for now
             "ONE,TWO",
             "ONE"
         );

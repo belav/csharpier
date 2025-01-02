@@ -4,13 +4,14 @@ import "codemirror/mode/clike/clike";
 import { SyntaxTree } from "./SyntaxTree";
 import { DocTree } from "./DocTree";
 import { Header } from "./Header";
-import { useAppContext } from "./AppContext";
 import { CodeEditor } from "./CodeEditor";
 import { FormattedCode } from "./FormattedCode";
 import { Controls } from "./Controls";
 import "./Layout.scss";
+import { useAppContext } from "./AppContext";
+import { observer } from "mobx-react-lite";
 
-export const Layout = () => {
+export const Layout = observer(() => {
     const { showDoc, showAst } = useAppContext();
     const width = showDoc && showAst ? 25 : showDoc || showAst ? 33 : 50;
     return (
@@ -32,4 +33,4 @@ export const Layout = () => {
             <div className="footer" />
         </div>
     );
-};
+});

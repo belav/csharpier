@@ -379,18 +379,13 @@ internal static class CommandLineFormatter
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        CodeFormatterResult codeFormattingResult;
-
-        var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
-            ? SourceCodeKind.Script
-            : SourceCodeKind.Regular;
+        CodeFormatterResult? codeFormattingResult;
 
         try
         {
-            codeFormattingResult = await CSharpFormatter.FormatAsync(
+            codeFormattingResult = await CodeFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
                 printerOptions,
-                sourceCodeKind,
                 cancellationToken
             );
         }
@@ -427,6 +422,12 @@ internal static class CommandLineFormatter
             return;
         }
 
+        if (!codeFormattingResult.WarningMessage.IsBlank())
+        {
+            fileIssueLogger.WriteWarning(codeFormattingResult.WarningMessage);
+            return;
+        }
+
         if (!codeFormattingResult.FailureMessage.IsBlank())
         {
             fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
@@ -435,35 +436,45 @@ internal static class CommandLineFormatter
 
         if (!commandLineOptions.Fast)
         {
-            var syntaxNodeComparer = new SyntaxNodeComparer(
-                fileToFormatInfo.FileContents,
-                codeFormattingResult.Code,
-                codeFormattingResult.ReorderedModifiers,
-                codeFormattingResult.ReorderedUsingsWithDisabledText,
-                codeFormattingResult.MovedTrailingTrivia,
-                sourceCodeKind,
-                cancellationToken
-            );
-
-            try
+            if (printerOptions.Formatter is Formatter.CSharp or Formatter.CSharpScript)
             {
-                var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
-                if (!string.IsNullOrEmpty(failure))
+                var sourceCodeKind =
+                    printerOptions.Formatter is Formatter.CSharpScript
+                        ? SourceCodeKind.Script
+                        : SourceCodeKind.Regular;
+
+                var syntaxNodeComparer = new SyntaxNodeComparer(
+                    fileToFormatInfo.FileContents,
+                    codeFormattingResult.Code,
+                    codeFormattingResult.ReorderedModifiers,
+                    codeFormattingResult.ReorderedUsingsWithDisabledText,
+                    codeFormattingResult.MovedTrailingTrivia,
+                    sourceCodeKind,
+                    cancellationToken
+                );
+
+                try
+                {
+                    var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
+                    if (!string.IsNullOrEmpty(failure))
+                    {
+                        Interlocked.Increment(
+                            ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                        );
+                        fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
+                    }
+                }
+                catch (Exception ex)
                 {
                     Interlocked.Increment(
-                        ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                        ref commandLineFormatterResult.ExceptionsValidatingSource
                     );
-                    fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Interlocked.Increment(ref commandLineFormatterResult.ExceptionsValidatingSource);
 
-                fileIssueLogger.WriteError(
-                    "Failed with exception during syntax tree validation.",
-                    ex
-                );
+                    fileIssueLogger.WriteError(
+                        "Failed with exception during syntax tree validation.",
+                        ex
+                    );
+                }
             }
         }
 

@@ -2,11 +2,17 @@ let gutters: any[] = [];
 let marks: any[] = [];
 let editor: any = undefined;
 
-export const formatCode = async (code: string, printWidth: number, indentSize: number, useTabs: boolean, parser: string) => {
+export const formatCode = async (
+    code: string,
+    printWidth: number,
+    indentSize: number,
+    useTabs: boolean,
+    formatter: string,
+) => {
     const makeRequest = async () => {
         const response = await fetch("/Format", {
             method: "POST",
-            body: JSON.stringify({ code, printWidth, indentSize, useTabs, parser }),
+            body: JSON.stringify({ code, printWidth, indentSize, useTabs, formatter }),
             headers: {
                 "Content-Type": "application/json",
                 "cache-control": "no-cache",
@@ -20,7 +26,7 @@ export const formatCode = async (code: string, printWidth: number, indentSize: n
             }, 100);
 
             return {
-                syntaxTree: JSON.parse(data.json),
+                syntaxTree: !data.json ? undefined : JSON.parse(data.json),
                 formattedCode: data.code,
                 doc: data.doc,
                 hasErrors: !!data.errors.length,

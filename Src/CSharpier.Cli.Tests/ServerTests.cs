@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Net.Http.Json;
-using System.Text;
 using CliWrap;
 using CliWrap.EventStream;
 using CSharpier.Cli.Server;
