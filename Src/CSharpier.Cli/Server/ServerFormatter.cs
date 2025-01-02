@@ -11,11 +11,7 @@ namespace CSharpier.Cli.Server;
 
 internal static class ServerFormatter
 {
-    public static async Task<int> StartServer(
-        int? port,
-        ConsoleLogger logger,
-        string? actualConfigPath
-    )
+    public static async Task<int> StartServer(int? port, ConsoleLogger logger)
     {
         var builder = WebApplication.CreateBuilder();
         builder.WebHost.ConfigureKestrel(
@@ -64,7 +60,6 @@ internal static class ServerFormatter
             }
         });
         var service = new CSharpierServiceImplementation(
-            actualConfigPath,
             // we want any further logging to happen in the file log, not out to the console
             app.Services.GetRequiredService<ILogger<CSharpierServiceImplementation>>()
         );
