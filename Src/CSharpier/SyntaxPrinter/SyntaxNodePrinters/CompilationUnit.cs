@@ -8,6 +8,8 @@ internal static class CompilationUnit
 
         NamespaceLikePrinter.Print(node, docs, context);
 
+        // this is what ends up adding multiple HardLineSkipBreakIfFirstInGroup, but it is needed for some cases
+        // and trying to change the logic in there to not print multiple lines was taking me down a rabbit hole
         var finalTrivia = Token.PrintLeadingTriviaWithNewLines(
             node.EndOfFileToken.LeadingTrivia,
             context
@@ -17,14 +19,16 @@ internal static class CompilationUnit
             // really ugly code to prevent a comment at the end of a file from continually inserting new blank lines
             if (
                 finalTrivia is Concat { Contents.Count: > 1 } list
-                && list.Contents[1] is LeadingComment
                 && docs.Count > 0
                 && docs[^1] is Concat { Contents.Count: > 1 } previousList
                 && previousList.Contents[^1] is HardLine
                 && previousList.Contents[^2] is HardLine
             )
             {
-                list.Contents.RemoveAt(0);
+                while (list.Contents[0] is HardLine { SkipBreakIfFirstInGroup: true })
+                {
+                    list.Contents.RemoveAt(0);
+                }
 
                 docs.Add(finalTrivia);
             }
