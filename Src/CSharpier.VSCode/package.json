@@ -28,7 +28,8 @@
         "Formatters"
     ],
     "activationEvents": [
-        "onLanguage:csharp"
+        "onLanguage:csharp",
+        "onLanguage:xml"
     ],
     "icon": "logo.png",
     "main": "./build/Extension.js",

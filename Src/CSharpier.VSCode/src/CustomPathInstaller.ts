@@ -46,14 +46,15 @@ export class CustomPathInstaller {
     }
 
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
+        let pathForVersion = this.getPathForVersion(version);
         try {
-            const output = execSync(`"${this.getPathForVersion(version)}" --version`, {
+            const output = execSync(`"${pathForVersion}" --version`, {
                 env: { ...process.env, DOTNET_ROOT: getDotNetRoot() },
             })
                 .toString()
                 .trim();
 
-            this.logger.debug(`"${this.getPathForVersion(version)}" --version output: ${output}`);
+            this.logger.debug(`"${pathForVersion}" --version output: ${output}`);
             const versionWithoutHash = output.split("+")[0];
             this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
 
@@ -70,11 +71,7 @@ export class CustomPathInstaller {
             }
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
-            this.logger.warn(
-                "Exception while running 'dotnet-csharpier --version' in " +
-                    pathToDirectoryForVersion,
-                message,
-            );
+            this.logger.warn(`Exception while running '${pathForVersion} --version'`, message);
         }
 
         return false;
@@ -88,7 +85,10 @@ export class CustomPathInstaller {
         const result =
             process.platform !== "win32"
                 ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
-                : path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
+                : // TODO use two copies of the repo to figure out why csharpier thinks props is not supported
+
+                  // TODO this is just csharpier.exe on windows, will linux have all lower case too?
+                  path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
         return result.toString();
     }
 

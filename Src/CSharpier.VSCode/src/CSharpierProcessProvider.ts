@@ -94,7 +94,6 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private getDirectoryOfFile = (filePath: string) => {
-        this.logger.debug(__dirname);
         let directory = path.parse(filePath).dir;
         if (directory) {
             return directory;
@@ -281,10 +280,10 @@ export class CSharpierProcessProvider implements Disposable {
             }
 
             return csharpierProcess;
-        } catch (ex: any) {
-            this.logger.error(ex.output.toString());
-            this.logger.debug(
+        } catch (error: any) {
+            this.logger.error(
                 `returning NullCSharpierProcess because of the previous error when trying to set up a csharpier process`,
+                error,
             );
             return NullCSharpierProcess.instance;
         }

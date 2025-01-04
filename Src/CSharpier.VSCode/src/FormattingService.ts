@@ -9,6 +9,7 @@ import {
 } from "vscode";
 import { Difference, generateDifferences } from "prettier-linter-helpers";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";
+import { Logger } from "./Logger";
 
 export class FormattingService {
     constructor(private readonly formatDocumentProvider: FormatDocumentProvider) {

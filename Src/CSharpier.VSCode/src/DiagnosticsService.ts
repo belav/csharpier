@@ -101,7 +101,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         try {
             const source = document.getText();
             const formattedSource =
-                (await this.formatDocumentProvider.formatDocument(document)) ?? source;
+                (await this.formatDocumentProvider.formatDocument(document, false)) ?? source;
             const differences = generateDifferences(source, formattedSource);
             const diff = {
                 source,
@@ -117,8 +117,8 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
                 }
             }
             this.diagnosticCollection.set(document.uri, diagnostics);
-        } catch (e) {
-            this.logger.error(`Unable to provide diagnostics: ${(e as Error).message}`);
+        } catch (error) {
+            this.logger.error(`Exception while trying to provide diagnostics`, error);
         }
     }
 

@@ -14,8 +14,8 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
 
     constructor(logger: Logger, csharpierPath: string, workingDirectory: string, version: string) {
         this.logger = logger;
-        this.spawnProcess(csharpierPath, workingDirectory);
         this.version = version;
+        this.spawnProcess(csharpierPath, workingDirectory);
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -30,7 +30,6 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
     }
 
     private spawnProcess(csharpierPath: string, workingDirectory: string) {
-        // TODO test this
         let newCommandsVersion = "1.0.0";
         let argument = semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
 

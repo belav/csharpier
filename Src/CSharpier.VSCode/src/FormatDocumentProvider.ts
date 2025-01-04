@@ -9,7 +9,10 @@ export class FormatDocumentProvider {
         private csharpierProcessProvider: CSharpierProcessProvider,
     ) {}
 
-    async formatDocument(document: TextDocument): Promise<string | null> {
+    async formatDocument(
+        document: TextDocument,
+        writeLogs: boolean = true,
+    ): Promise<string | null> {
         const csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
         const text = document.getText();
         const startTime = performance.now();
@@ -21,7 +24,9 @@ export class FormatDocumentProvider {
             };
             const result = await csharpierProcess.formatFile2(parameter);
 
-            this.logger.info("Formatted in " + (performance.now() - startTime) + "ms");
+            if (writeLogs) {
+                this.logger.info("Formatted in " + (performance.now() - startTime) + "ms");
+            }
 
             if (result == null) {
                 return null;
@@ -31,28 +36,45 @@ export class FormatDocumentProvider {
                 case "Formatted":
                     return result.formattedFile;
                 case "Ignored":
-                    this.logger.info("File is ignored by csharpier cli.");
+                    if (writeLogs) {
+                        this.logger.info("File is ignored by csharpier cli.");
+                    }
                     break;
                 case "Failed":
-                    this.logger.warn(
-                        "CSharpier cli failed to format the file and returned the following error: " +
-                            result.errorMessage,
-                    );
+                    if (writeLogs) {
+                        this.logger.warn(
+                            "CSharpier cli failed to format the file and returned the following error: " +
+                                result.errorMessage,
+                        );
+                    }
+                    break;
+                case "UnsupportedFile":
+                    if (writeLogs) {
+                        this.logger.debug(
+                            "CSharpier does not support formatting the file " + document.fileName,
+                        );
+                    }
                     break;
                 default:
-                    this.logger.warn("Didn't handle " + result.status);
+                    if (writeLogs) {
+                        this.logger.warn("Didn't handle " + result.status);
+                    }
                     break;
             }
         } else {
             const newText = await csharpierProcess.formatFile(text, document.fileName);
             const endTime = performance.now();
-            this.logger.info("Formatted in " + (endTime - startTime) + "ms");
+            if (writeLogs) {
+                this.logger.info("Formatted in " + (endTime - startTime) + "ms");
+            }
             if (!newText || newText === text) {
-                this.logger.debug(
-                    "Skipping write because " + !newText
-                        ? "result is empty"
-                        : "current document equals result",
-                );
+                if (writeLogs) {
+                    this.logger.debug(
+                        "Skipping write because " + !newText
+                            ? "result is empty"
+                            : "current document equals result",
+                    );
+                }
                 return null;
             }
 
