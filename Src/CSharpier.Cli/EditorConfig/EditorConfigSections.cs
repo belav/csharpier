@@ -15,12 +15,7 @@ internal class EditorConfigSections
         var resolvedConfiguration = new ResolvedConfiguration(sections);
 
         var formatter =
-            resolvedConfiguration.Formatter
-            ?? (
-                filePath.EndsWith(".cs") ? "CSharp"
-                : filePath.EndsWith(".csx") ? "CSharpScript"
-                : null
-            );
+            resolvedConfiguration.Formatter ?? PrinterOptions.GetFormatter(filePath).ToString();
 
         if (!Enum.TryParse<Formatter>(formatter, ignoreCase: true, out var parsedFormatter))
         {
