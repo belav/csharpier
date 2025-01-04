@@ -13,9 +13,6 @@ import { Logger } from "./Logger";
 
 export class FormattingService {
     constructor(private readonly formatDocumentProvider: FormatDocumentProvider) {
-        // TODO will this cover all the actual xml files, maybe we need to use patterns?
-        // { pattern: '**/*.{props,csproj}' }
-
         languages.registerDocumentFormattingEditProvider("xml", {
             provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
         });
