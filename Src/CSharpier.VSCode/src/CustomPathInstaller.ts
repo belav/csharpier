@@ -85,9 +85,8 @@ export class CustomPathInstaller {
         const result =
             process.platform !== "win32"
                 ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
-                : // TODO use two copies of the repo to figure out why csharpier thinks props is not supported
-
-                  // TODO this is just csharpier.exe on windows, will linux have all lower case too?
+                : // TODO this is just csharpier.exe on windows, will linux have all lower case too?
+                  // TODO test this with older csharpier to see what it does with xml files, maybe log something to tell the user
                   path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
         return result.toString();
     }

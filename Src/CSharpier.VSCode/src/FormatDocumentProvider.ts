@@ -11,6 +11,7 @@ export class FormatDocumentProvider {
 
     async formatDocument(
         document: TextDocument,
+        // the diagnostic service calls format on almost every keypress, avoid logging those formats so we don't spawn the output
         writeLogs: boolean = true,
     ): Promise<string | null> {
         const csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
