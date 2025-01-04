@@ -1,4 +1,29 @@
-﻿# 0.30.4
+﻿# 0.30.5
+## What's Changed
+### Extra blank line added to file each time csharpier runs on this file [#1426](https://github.com/belav/csharpier/issues/1426)
+When a file ended in a comment and that comment had multiple blank lines before it, a new blank line was being added each time it was formatted.
+// input
+```c#
+// input
+namespace MyCompany.MyNamespace;
+
+
+// Comment block
+
+// 0.30.4
+namespace MyCompany.MyNamespace;
+
+
+
+// Comment block
+
+// 0.30.5
+namespace MyCompany.MyNamespace;
+
+// Comment block
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.4...0.30.5
+# 0.30.4
 ## What's Changed
 ### Formatting deletes `unsafe` modifier [#1416](https://github.com/belav/csharpier/issues/1416)
 Formatting a using directive with an unsafe modifier resulted in the lose of the unsafe keyword
