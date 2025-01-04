@@ -12,23 +12,35 @@ internal class Program
     public static async Task<int> Main(string[] args)
     {
         var rootCommand = CommandLineOptions.Create();
+        var formatCommand = CommandLineOptions.CreateFormatCommand();
+        var checkCommand = CommandLineOptions.CreateCheckCommand();
+        var pipeCommand = CommandLineOptions.CreatePipeCommand();
+        var serverCommand = CommandLineOptions.CreateServerCommand();
 
-        rootCommand.Handler = CommandHandler.Create(new CommandLineOptions.Handler(Run));
+        rootCommand.AddCommand(formatCommand);
+        formatCommand.Handler = CommandHandler.Create(
+            new CommandLineOptions.FormatHandler(RunFormat)
+        );
+
+        rootCommand.AddCommand(checkCommand);
+        checkCommand.Handler = CommandHandler.Create(new CommandLineOptions.CheckHandler(RunCheck));
+
+        rootCommand.AddCommand(pipeCommand);
+        pipeCommand.Handler = CommandHandler.Create(new CommandLineOptions.PipeHandler(RunPipe));
+
+        rootCommand.AddCommand(serverCommand);
+        serverCommand.Handler = CommandHandler.Create(
+            new CommandLineOptions.ServerHandler(RunServer)
+        );
 
         return await rootCommand.InvokeAsync(args);
     }
 
-    // TODO at some point (1.0?) the options should be cleaned up
-    // and use sub commands
-    public static async Task<int> Run(
+    public static Task<int> RunFormat(
         string[]? directoryOrFile,
-        bool check,
         bool fast,
         bool skipWrite,
         bool writeStdout,
-        bool pipeMultipleFiles,
-        bool server,
-        int? serverPort,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -38,26 +50,98 @@ internal class Program
         CancellationToken cancellationToken
     )
     {
-        // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
-        var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
+        return Run(
+            directoryOrFile,
+            false,
+            fast,
+            skipWrite,
+            writeStdout,
+            noCache,
+            noMSBuildCheck,
+            includeGenerated,
+            compilationErrorsAsWarnings,
+            configPath,
+            logLevel,
+            cancellationToken
+        );
+    }
 
-        var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel);
+    public static Task<int> RunCheck(
+        string[]? directoryOrFile,
+        string configPath,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        return Run(
+            directoryOrFile,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            configPath,
+            logLevel,
+            cancellationToken
+        );
+    }
 
-        if (pipeMultipleFiles)
-        {
-            return await PipeMultipleFilesFormatter.StartServer(
-                console,
-                logger,
-                actualConfigPath,
-                cancellationToken
-            );
-        }
+    public static async Task<int> RunPipe(
+        string configPath,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        var (actualConfigPath, console, logger) = CreateConsoleLoggerAndActualPath(
+            configPath,
+            logLevel
+        );
 
-        if (server)
-        {
-            return await ServerFormatter.StartServer(serverPort, logger, actualConfigPath);
-        }
+        return await PipeMultipleFilesFormatter.StartServer(
+            console,
+            logger,
+            actualConfigPath,
+            cancellationToken
+        );
+    }
+
+    public static async Task<int> RunServer(
+        string configPath,
+        int? serverPort,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        var (actualConfigPath, console, logger) = CreateConsoleLoggerAndActualPath(
+            configPath,
+            logLevel
+        );
+
+        return await ServerFormatter.StartServer(serverPort, logger, actualConfigPath);
+    }
+
+    public static async Task<int> Run(
+        string[]? directoryOrFile,
+        bool check,
+        bool fast,
+        bool skipWrite,
+        bool writeStdout,
+        bool noCache,
+        bool noMSBuildCheck,
+        bool includeGenerated,
+        bool compilationErrorsAsWarnings,
+        string configPath,
+        LogLevel logLevel,
+        CancellationToken cancellationToken
+    )
+    {
+        var (actualConfigPath, console, logger) = CreateConsoleLoggerAndActualPath(
+            configPath,
+            logLevel
+        );
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;
@@ -106,5 +190,19 @@ internal class Program
             logger,
             cancellationToken
         );
+    }
+
+    private static (
+        string? actualConfigPath,
+        SystemConsole console,
+        ConsoleLogger logger
+    ) CreateConsoleLoggerAndActualPath(string configPath, LogLevel logLevel)
+    {
+        // System.CommandLine passes string.empty instead of null when this isn't supplied even if we use string?
+        var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
+
+        var console = new SystemConsole();
+        var logger = new ConsoleLogger(console, logLevel);
+        return (actualConfigPath, console, logger);
     }
 }

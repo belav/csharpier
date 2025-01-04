@@ -8,7 +8,7 @@ Local Testing
 Publishing
 - Update version in package.json
 - run `npx vsce package`
-- run `npx vsce publish`
+- run `npx vsce publish -p <token>` an old one is stored and I haven't been able to unstore it
 - run 'npx ovsx publish -p <token>'
 
 https://marketplace.visualstudio.com/manage/publishers/csharpier
