@@ -85,9 +85,7 @@ export class CustomPathInstaller {
         const result =
             process.platform !== "win32"
                 ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
-                : // TODO this is just csharpier.exe on windows, will linux have all lower case too?
-                  // TODO test this with older csharpier to see what it does with xml files, maybe log something to tell the user
-                  path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
+                : path.resolve(process.env.LOCALAPPDATA!, "csharpier", version);
         return result.toString();
     }
 
