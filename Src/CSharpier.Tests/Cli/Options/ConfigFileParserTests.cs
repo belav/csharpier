@@ -15,7 +15,7 @@ public class ConfigFileParserTests
             overrides:
                 - files: "*.cst"
                   formatter: "csharp"
-                  tabWidth: 2
+                  indentSize: 2
                   useTabs: true
                   printWidth: 10
                   endOfLine: "LF"
@@ -25,7 +25,7 @@ public class ConfigFileParserTests
         options.Overrides.Should().HaveCount(1);
         options.Overrides.First().Files.Should().Be("*.cst");
         options.Overrides.First().Formatter.Should().Be("csharp");
-        options.Overrides.First().TabWidth.Should().Be(2);
+        options.Overrides.First().IndentSize.Should().Be(2);
         options.Overrides.First().UseTabs.Should().Be(true);
         options.Overrides.First().PrintWidth.Should().Be(10);
         options.Overrides.First().EndOfLine.Should().Be(EndOfLine.LF);
@@ -41,7 +41,7 @@ public class ConfigFileParserTests
                     {
                        "files": "*.cst",
                        "formatter": "csharp",
-                       "tabWidth": 2,
+                       "indentSize": 2,
                        "useTabs": true,
                        "printWidth": 10,
                        "endOfLine": "LF"
@@ -54,7 +54,7 @@ public class ConfigFileParserTests
         options.Overrides.Should().HaveCount(1);
         options.Overrides.First().Files.Should().Be("*.cst");
         options.Overrides.First().Formatter.Should().Be("csharp");
-        options.Overrides.First().TabWidth.Should().Be(2);
+        options.Overrides.First().IndentSize.Should().Be(2);
         options.Overrides.First().UseTabs.Should().Be(true);
         options.Overrides.First().PrintWidth.Should().Be(10);
         options.Overrides.First().EndOfLine.Should().Be(EndOfLine.LF);
