@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "1.9.2",
+    "version": "2.0.0",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
@@ -28,7 +28,8 @@
         "Formatters"
     ],
     "activationEvents": [
-        "onLanguage:csharp"
+        "onLanguage:csharp",
+        "onLanguage:xml"
     ],
     "icon": "logo.png",
     "main": "./build/Extension.js",
@@ -50,8 +51,18 @@
                     },
                     "csharpier.diagnosticsLevel": {
                         "type": "string",
-                        "enum": ["0", "1", "2", "3"],
-                        "enumItemLabels": ["Error", "Warning", "Information", "Hint"],
+                        "enum": [
+                            "0",
+                            "1",
+                            "2",
+                            "3"
+                        ],
+                        "enumItemLabels": [
+                            "Error",
+                            "Warning",
+                            "Information",
+                            "Hint"
+                        ],
                         "default": "1",
                         "description": "Determines the severity level of diagnostics if they are enabled."
                     },
@@ -90,7 +101,7 @@
         "@types/prettier-linter-helpers": "^1.0.4",
         "@types/semver": "7.3.9",
         "@types/vscode": "1.60.0",
-        "@vscode/vsce": "^2.6.3",
+        "@vscode/vsce": "3.2.1",
         "prettier": "2.4.1",
         "rimraf": "3.0.2",
         "semver": "7.6.0",
@@ -103,5 +114,8 @@
     "dependencies": {
         "node-fetch": "^2.7.0",
         "prettier-linter-helpers": "^1.0.0"
+    },
+    "volta": {
+        "node": "22.13.0"
     }
 }

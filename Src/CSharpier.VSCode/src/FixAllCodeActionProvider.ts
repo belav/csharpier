@@ -13,9 +13,9 @@ export class FixAllCodeActionProvider implements vscode.CodeActionProvider, vsco
 
     private readonly codeActionsProvider: vscode.Disposable;
 
-    constructor(private readonly documentSelector: vscode.DocumentSelector) {
+    constructor(private readonly supportedLanguageIds: string[]) {
         this.codeActionsProvider = vscode.languages.registerCodeActionsProvider(
-            this.documentSelector,
+            this.supportedLanguageIds,
             this,
             FixAllCodeActionProvider.metadata,
         );

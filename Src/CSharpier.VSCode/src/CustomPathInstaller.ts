@@ -4,6 +4,7 @@ import * as fs from "fs";
 import { workspace } from "vscode";
 import { getDotNetRoot, execDotNet } from "./DotNetProvider";
 import { execSync } from "child_process";
+import * as semver from "semver";
 
 export class CustomPathInstaller {
     logger: Logger;
@@ -45,14 +46,15 @@ export class CustomPathInstaller {
     }
 
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
+        let pathForVersion = this.getPathForVersion(version);
         try {
-            const output = execSync(`"${this.getPathForVersion(version)}" --version`, {
+            const output = execSync(`"${pathForVersion}" --version`, {
                 env: { ...process.env, DOTNET_ROOT: getDotNetRoot() },
             })
                 .toString()
                 .trim();
 
-            this.logger.debug(`"${this.getPathForVersion(version)}" --version output: ${output}`);
+            this.logger.debug(`"${pathForVersion}" --version output: ${output}`);
             const versionWithoutHash = output.split("+")[0];
             this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
 
@@ -69,11 +71,7 @@ export class CustomPathInstaller {
             }
         } catch (error: any) {
             const message = !error.stderr ? error.toString() : error.stderr.toString();
-            this.logger.warn(
-                "Exception while running 'dotnet-csharpier --version' in " +
-                    pathToDirectoryForVersion,
-                message,
-            );
+            this.logger.warn(`Exception while running '${pathForVersion} --version'`, message);
         }
 
         return false;
@@ -87,11 +85,13 @@ export class CustomPathInstaller {
         const result =
             process.platform !== "win32"
                 ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
-                : path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
+                : path.resolve(process.env.LOCALAPPDATA!, "csharpier", version);
         return result.toString();
     }
 
     public getPathForVersion(version: string) {
-        return path.resolve(this.getDirectoryForVersion(version), "dotnet-csharpier");
+        let newCommandsVersion = "1.0.0";
+        let filename = semver.gte(version, newCommandsVersion) ? "CSharpier" : "dotnet-csharpier";
+        return path.resolve(this.getDirectoryForVersion(version), filename);
     }
 }

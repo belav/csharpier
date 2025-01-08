@@ -21,4 +21,4 @@ export interface FormatFileResult {
     errorMessage: string;
 }
 
-export type Status = "Formatted" | "Ignored" | "Failed";
+export type Status = "Formatted" | "Ignored" | "Failed" | "UnsupportedFile";
