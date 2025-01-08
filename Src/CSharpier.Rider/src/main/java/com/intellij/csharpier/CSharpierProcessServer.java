@@ -6,6 +6,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -90,7 +91,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         var url = "http://127.0.0.1:" + this.port + "/format";
 
         try {
-            var url1 = new URL(url);
+            var url1 = URI.create(url).toURL();
 
             var connection = (HttpURLConnection) url1.openConnection();
 
