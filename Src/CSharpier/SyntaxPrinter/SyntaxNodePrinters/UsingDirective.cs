@@ -4,7 +4,7 @@ internal static class UsingDirective
 {
     public static Doc Print(
         UsingDirectiveSyntax node,
-        FormattingContext context,
+        PrintingContext context,
         bool printExtraLines = true
     )
     {
@@ -12,6 +12,7 @@ internal static class UsingDirective
             printExtraLines ? ExtraNewLines.Print(node) : Doc.Null,
             Token.PrintWithSuffix(node.GlobalKeyword, " ", context, skipLeadingTrivia: true),
             Token.PrintWithSuffix(node.UsingKeyword, " ", context, skipLeadingTrivia: true),
+            Token.PrintWithSuffix(node.UnsafeKeyword, " ", context, skipLeadingTrivia: true),
             Token.PrintWithSuffix(node.StaticKeyword, " ", context, skipLeadingTrivia: true),
             node.Alias == null ? Doc.Null : NameEquals.Print(node.Alias, context),
             Node.Print(node.NamespaceOrType, context),

@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArrowExpressionClause
 {
-    public static Doc Print(ArrowExpressionClauseSyntax node, FormattingContext context)
+    public static Doc Print(ArrowExpressionClauseSyntax node, PrintingContext context)
     {
         return Doc.Group(
             Doc.Indent(

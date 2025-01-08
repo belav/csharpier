@@ -4,7 +4,7 @@ internal static class TrailingComma
 {
     public static Doc Print(
         SyntaxToken closingToken,
-        FormattingContext context,
+        PrintingContext context,
         bool skipIfBreak = false
     )
     {

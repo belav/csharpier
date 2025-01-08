@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class EnumMemberDeclaration
 {
-    public static Doc Print(EnumMemberDeclarationSyntax node, FormattingContext context)
+    public static Doc Print(EnumMemberDeclarationSyntax node, PrintingContext context)
     {
         var docs = new List<Doc>
         {

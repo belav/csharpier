@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RelationalPattern
 {
-    public static Doc Print(RelationalPatternSyntax node, FormattingContext context)
+    public static Doc Print(RelationalPatternSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.OperatorToken, " ", context),

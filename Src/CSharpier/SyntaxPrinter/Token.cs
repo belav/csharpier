@@ -1,20 +1,20 @@
-namespace CSharpier.SyntaxPrinter;
-
 using System.Text.RegularExpressions;
+
+namespace CSharpier.SyntaxPrinter;
 
 internal static class Token
 {
-    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
+    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
     }
 
-    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, FormattingContext context)
+    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, PrintingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context, skipTrailingTrivia: true);
     }
 
-    public static Doc Print(SyntaxToken syntaxToken, FormattingContext context)
+    public static Doc Print(SyntaxToken syntaxToken, PrintingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context);
     }
@@ -22,18 +22,18 @@ internal static class Token
     public static Doc PrintWithSuffix(
         SyntaxToken syntaxToken,
         Doc suffixDoc,
-        FormattingContext context,
+        PrintingContext context,
         bool skipLeadingTrivia = false
     )
     {
         return PrintSyntaxToken(syntaxToken, context, suffixDoc, skipLeadingTrivia);
     }
 
-    internal static readonly string[] lineSeparators = new[] { "\r\n", "\r", "\n" };
+    internal static readonly string[] lineSeparators = ["\r\n", "\r", "\n"];
 
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
-        FormattingContext context,
+        PrintingContext context,
         Doc? suffixDoc = null,
         bool skipLeadingTrivia = false,
         bool skipTrailingTrivia = false
@@ -45,7 +45,7 @@ internal static class Token
         }
 
         var docs = new List<Doc>();
-        if (!skipLeadingTrivia && !context.SkipNextLeadingTrivia)
+        if (!skipLeadingTrivia && !context.State.SkipNextLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -54,7 +54,7 @@ internal static class Token
             }
         }
 
-        context.SkipNextLeadingTrivia = false;
+        context.State.SkipNextLeadingTrivia = false;
 
         if (
             (
@@ -126,14 +126,14 @@ internal static class Token
             if (trailingTrivia != Doc.Null)
             {
                 if (
-                    context.TrailingComma is not null
+                    context.State.TrailingComma is not null
                     && syntaxToken.TrailingTrivia.FirstOrDefault(o => o.IsComment())
-                        == context.TrailingComma.TrailingComment
+                        == context.State.TrailingComma.TrailingComment
                 )
                 {
-                    docs.Add(context.TrailingComma.PrintedTrailingComma);
-                    context.MovedTrailingTrivia = true;
-                    context.TrailingComma = null;
+                    docs.Add(context.State.TrailingComma.PrintedTrailingComma);
+                    context.State.MovedTrailingTrivia = true;
+                    context.State.TrailingComma = null;
                 }
 
                 docs.Add(trailingTrivia);
@@ -153,7 +153,7 @@ internal static class Token
         };
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, FormattingContext context)
+    public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
     {
         var isClosingBrace =
             syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
@@ -204,14 +204,14 @@ internal static class Token
             : printedTrivia;
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, FormattingContext context)
+    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, PrintingContext context)
     {
         return PrivatePrintLeadingTrivia(leadingTrivia, context);
     }
 
     public static Doc PrintLeadingTriviaWithNewLines(
         SyntaxTriviaList leadingTrivia,
-        FormattingContext context
+        PrintingContext context
     )
     {
         return PrivatePrintLeadingTrivia(leadingTrivia, context, includeInitialNewLines: true);
@@ -219,7 +219,7 @@ internal static class Token
 
     private static Doc PrivatePrintLeadingTrivia(
         SyntaxTriviaList leadingTrivia,
-        FormattingContext context,
+        PrintingContext context,
         bool includeInitialNewLines = false,
         bool skipLastHardline = false
     )
@@ -322,7 +322,7 @@ internal static class Token
             docs.RemoveAt(docs.Count - 1);
         }
 
-        if (context.NextTriviaNeedsLine)
+        if (context.State.NextTriviaNeedsLine)
         {
             if (leadingTrivia.Any(o => o.RawSyntaxKind() is SyntaxKind.IfDirectiveTrivia))
             {
@@ -348,7 +348,7 @@ internal static class Token
                     docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
                 }
             }
-            context.NextTriviaNeedsLine = false;
+            context.State.NextTriviaNeedsLine = false;
         }
 
         return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;

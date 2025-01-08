@@ -6,11 +6,7 @@ internal class IgnoreFile
 {
     protected Ignore.Ignore Ignore { get; }
     protected string IgnoreBaseDirectoryPath { get; }
-    private static readonly string[] alwaysIgnored =
-    {
-        "**/node_modules/**/*.cs",
-        "**/obj/**/*.cs",
-    };
+    private static readonly string[] alwaysIgnored = ["**/node_modules/**/*.cs", "**/obj/**/*.cs"];
 
     protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
     {
@@ -105,8 +101,5 @@ internal class IgnoreFile
     }
 }
 
-internal class InvalidIgnoreFileException : Exception
-{
-    public InvalidIgnoreFileException(string message, Exception exception)
-        : base(message, exception) { }
-}
+internal class InvalidIgnoreFileException(string message, Exception exception)
+    : Exception(message, exception);

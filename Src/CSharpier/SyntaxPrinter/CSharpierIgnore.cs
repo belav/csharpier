@@ -1,7 +1,7 @@
-namespace CSharpier.SyntaxPrinter;
-
 using System.Text;
 using System.Text.RegularExpressions;
+
+namespace CSharpier.SyntaxPrinter;
 
 internal static class CSharpierIgnore
 {
@@ -36,7 +36,7 @@ internal static class CSharpierIgnore
 
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
         SyntaxList<T> list,
-        FormattingContext context
+        PrintingContext context
     )
         where T : SyntaxNode
     {
@@ -75,14 +75,14 @@ internal static class CSharpierIgnore
         return statements;
     }
 
-    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, FormattingContext context)
+    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, PrintingContext context)
     {
         return PrintWithoutFormatting(syntaxNode.GetText().ToString(), context);
     }
 
-    public static string PrintWithoutFormatting(string code, FormattingContext context)
+    public static string PrintWithoutFormatting(string code, PrintingContext context)
     {
         // trim trailing whitespace + replace only existing line endings
-        return Regex.Replace(code, @"[\t\v\f ]*(\r\n?|\n)", context.LineEnding);
+        return Regex.Replace(code, @"[\t\v\f ]*(\r\n?|\n)", context.Options.LineEnding);
     }
 }

@@ -1,8 +1,8 @@
-namespace CSharpier.Tests.Formatters.CSharp;
-
 using CSharpier.Formatters.CSharp;
 using FluentAssertions;
 using NUnit.Framework;
+
+namespace CSharpier.Tests.Formatters.CSharp;
 
 [TestFixture]
 public class PreprocessorSymbolsTests

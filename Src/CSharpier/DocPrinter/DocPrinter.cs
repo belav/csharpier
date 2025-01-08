@@ -56,7 +56,7 @@ internal class DocPrinter
         var trimmed = 0;
         for (; trimmed < this.Output.Length; trimmed++)
         {
-            if (this.Output[^(trimmed + 1)] != '\r' && this.Output[^(trimmed + 1)] != '\n')
+            if (this.Output[^(trimmed + 1)] is not '\r' and not '\n')
             {
                 break;
             }

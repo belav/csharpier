@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class UnsafeStatement
 {
-    public static Doc Print(UnsafeStatementSyntax node, FormattingContext context)
+    public static Doc Print(UnsafeStatementSyntax node, PrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

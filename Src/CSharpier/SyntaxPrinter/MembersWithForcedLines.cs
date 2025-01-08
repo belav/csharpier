@@ -1,15 +1,14 @@
 using System.Collections.Immutable;
+using System.Text;
 
 namespace CSharpier.SyntaxPrinter;
-
-using System.Text;
 
 internal static class MembersWithForcedLines
 {
     public static List<Doc> Print<T>(
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
-        FormattingContext context,
+        PrintingContext context,
         bool skipFirstHardLine = false
     )
         where T : MemberDeclarationSyntax
@@ -191,7 +190,7 @@ internal static class MembersWithForcedLines
                 )
             )
             {
-                context.NextTriviaNeedsLine = true;
+                context.State.NextTriviaNeedsLine = true;
             }
 
             result.Add(Doc.HardLine, Node.Print(member, context));

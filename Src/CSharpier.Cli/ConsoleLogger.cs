@@ -2,18 +2,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal class ConsoleLogger : ILogger
+internal class ConsoleLogger(IConsole console, LogLevel loggingLevel) : ILogger
 {
     private static readonly object ConsoleLock = new();
-
-    private readonly IConsole console;
-    private readonly LogLevel loggingLevel;
-
-    public ConsoleLogger(IConsole console, LogLevel loggingLevel)
-    {
-        this.console = console;
-        this.loggingLevel = loggingLevel;
-    }
 
     public virtual void Log<TState>(
         LogLevel logLevel,
@@ -23,7 +14,7 @@ internal class ConsoleLogger : ILogger
         Func<TState, Exception, string> formatter
     )
     {
-        if (logLevel < this.loggingLevel)
+        if (logLevel < loggingLevel)
         {
             return;
         }
@@ -32,11 +23,11 @@ internal class ConsoleLogger : ILogger
         {
             if (logLevel >= LogLevel.Error)
             {
-                this.console.WriteError(value);
+                console.WriteError(value);
             }
             else
             {
-                this.console.Write(value);
+                console.Write(value);
             }
         }
 
@@ -44,11 +35,11 @@ internal class ConsoleLogger : ILogger
         {
             if (logLevel >= LogLevel.Error)
             {
-                this.console.WriteErrorLine(value);
+                console.WriteErrorLine(value);
             }
             else
             {
-                this.console.WriteLine(value);
+                console.WriteLine(value);
             }
         }
 
@@ -63,9 +54,9 @@ internal class ConsoleLogger : ILogger
 
             if (logLevel >= LogLevel.Warning)
             {
-                this.console.ForegroundColor = GetColorLevel(logLevel);
+                console.ForegroundColor = GetColorLevel(logLevel);
                 Write($"{logLevel} ");
-                this.console.ResetColor();
+                console.ResetColor();
             }
 
             var stringReader = new StringReader(message);
