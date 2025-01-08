@@ -29,12 +29,12 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
 
     constructor(
         private readonly formatDocumentProvider: FormatDocumentProvider,
-        private readonly documentSelector: Array<vscode.DocumentFilter>,
+        private readonly supportedLanguageIds: string[],
         private readonly logger: Logger,
     ) {
         this.diagnosticCollection = vscode.languages.createDiagnosticCollection(DIAGNOSTICS_ID);
         this.codeActionsProvider = vscode.languages.registerCodeActionsProvider(
-            this.documentSelector,
+            this.supportedLanguageIds,
             this,
             DiagnosticsService.metadata,
         );
@@ -49,6 +49,8 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         this.codeActionsProvider.dispose();
     }
 
+    private onChangeTimeout: NodeJS.Timeout | undefined;
+
     private registerEditorEvents(): void {
         const activeDocument = vscode.window.activeTextEditor?.document;
         if (activeDocument) {
@@ -58,10 +60,14 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(e => {
             if (
                 e.contentChanges.length &&
-                vscode.window.activeTextEditor?.document === e.document
+                vscode.window.activeTextEditor?.document === e.document &&
+                this.supportedLanguageIds.includes(e.document.languageId)
             ) {
-                // when editing don't pop up any new diagnostics, but if someone cleans up one then allow that update
-                void this.runDiagnostics(e.document, true);
+                clearTimeout(this.onChangeTimeout);
+                this.onChangeTimeout = setTimeout(() => {
+                    // when editing don't pop up any new diagnostics, but if someone cleans up one then allow that update
+                    void this.runDiagnostics(e.document, true);
+                }, 100);
             }
         });
 
@@ -90,10 +96,15 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         onlyAllowLessDiagnostics = false,
     ): Promise<void> {
         const shouldRunDiagnostics =
-            this.documentSelector.some(selector => selector.language === document.languageId) &&
             !!vscode.workspace.getWorkspaceFolder(document.uri) &&
             (workspace.getConfiguration("csharpier").get<boolean>("enableDiagnostics") ?? true);
-        if (!shouldRunDiagnostics) {
+
+        let currentDiagnostics = this.diagnosticCollection.get(document.uri);
+
+        if (
+            !shouldRunDiagnostics ||
+            (currentDiagnostics?.length === 0 && onlyAllowLessDiagnostics)
+        ) {
             this.diagnosticCollection.set(document.uri, []);
             return;
         }
@@ -110,7 +121,6 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
             };
             const diagnostics = this.getDiagnostics(document, diff);
             if (onlyAllowLessDiagnostics) {
-                let currentDiagnostics = this.diagnosticCollection.get(document.uri);
                 let currentCount = !currentDiagnostics ? 0 : currentDiagnostics.length;
                 if (diagnostics.length >= currentCount) {
                     return;

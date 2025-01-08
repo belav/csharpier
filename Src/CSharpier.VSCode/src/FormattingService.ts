@@ -12,17 +12,19 @@ import { FormatDocumentProvider } from "./FormatDocumentProvider";
 import { Logger } from "./Logger";
 
 export class FormattingService {
-    constructor(private readonly formatDocumentProvider: FormatDocumentProvider) {
-        languages.registerDocumentFormattingEditProvider("xml", {
-            provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
-        });
-        languages.registerDocumentFormattingEditProvider("csharp", {
-            provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
-        });
+    constructor(
+        private readonly formatDocumentProvider: FormatDocumentProvider,
+        supportedLanguageIds: string[],
+    ) {
+        for (let languageId of supportedLanguageIds) {
+            languages.registerDocumentFormattingEditProvider(languageId, {
+                provideDocumentFormattingEdits: this.provideDocumentFormattingEdits,
+            });
 
-        languages.registerDocumentRangeFormattingEditProvider("csharp", {
-            provideDocumentRangeFormattingEdits: this.provideDocumentRangeFormattingEdits,
-        });
+            languages.registerDocumentRangeFormattingEditProvider(languageId, {
+                provideDocumentRangeFormattingEdits: this.provideDocumentRangeFormattingEdits,
+            });
+        }
     }
 
     private provideDocumentRangeFormattingEdits = async (
