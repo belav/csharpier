@@ -50,24 +50,45 @@ internal static class MembersWithForcedLines
                 continue;
             }
 
-            void AddSeparatorIfNeeded()
+            Doc GetSeparatorIfNeeded()
             {
-                if (members is SeparatedSyntaxList<T> list)
+                if (members is not SeparatedSyntaxList<T> list)
                 {
-                    if (memberIndex < list.SeparatorCount)
+                    return Doc.Null;
+                }
+
+                if (memberIndex < list.SeparatorCount)
+                {
+                    return Token.Print(list.GetSeparator(memberIndex), context);
+                }
+
+                if (
+                    node is EnumDeclarationSyntax enumDeclarationSyntax
+                    && member is EnumMemberDeclarationSyntax
+                )
+                {
+                    var firstTrailingComment = list[memberIndex]
+                        .GetTrailingTrivia()
+                        .FirstOrDefault(o => o.IsComment());
+
+                    if (firstTrailingComment != default)
                     {
-                        result.Add(Token.Print(list.GetSeparator(memberIndex), context));
-                    }
-                    else if (
-                        node is EnumDeclarationSyntax enumDeclarationSyntax
-                        && member is EnumMemberDeclarationSyntax
-                    )
-                    {
-                        result.Add(
-                            TrailingComma.Print(enumDeclarationSyntax.CloseBraceToken, context)
+                        context.WithTrailingComma(
+                            firstTrailingComment,
+                            TrailingComma.Print(
+                                enumDeclarationSyntax.CloseBraceToken,
+                                context,
+                                true
+                            )
                         );
                     }
+                    else
+                    {
+                        return TrailingComma.Print(enumDeclarationSyntax.CloseBraceToken, context);
+                    }
                 }
+
+                return Doc.Null;
             }
 
             var blankLineIsForced = (
@@ -104,7 +125,8 @@ internal static class MembersWithForcedLines
             {
                 lastMemberForcedBlankLine = blankLineIsForced;
                 result.Add(Node.Print(member, context));
-                AddSeparatorIfNeeded();
+                result.AddIfNotNull(GetSeparatorIfNeeded());
+
                 continue;
             }
 
@@ -193,8 +215,10 @@ internal static class MembersWithForcedLines
                 context.State.NextTriviaNeedsLine = true;
             }
 
+            // this has a side effect (yuck) that fixes the trailing comma + trailing comment issue so we have to call it first
+            var separator = GetSeparatorIfNeeded();
             result.Add(Doc.HardLine, Node.Print(member, context));
-            AddSeparatorIfNeeded();
+            result.AddIfNotNull(separator);
 
             lastMemberForcedBlankLine = blankLineIsForced;
         }
