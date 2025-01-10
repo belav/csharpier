@@ -2,13 +2,12 @@ package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.system.OS;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import com.intellij.util.system.OS;
 import org.apache.commons.lang.SystemUtils;
 
 public class CustomPathInstaller {
@@ -61,10 +60,12 @@ public class CustomPathInstaller {
     }
 
     private boolean validateInstall(String pathToDirectoryForVersion, String version) {
+        var pathForVersion = "";
         try {
             var env = Map.of("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
 
-            var command = List.of(this.getPathForVersion(version), "--version");
+            pathForVersion = this.getPathForVersion(version);
+            var command = List.of(pathForVersion, "--version");
             var output = ProcessHelper.executeCommand(
                 command,
                 env,
@@ -75,7 +76,7 @@ public class CustomPathInstaller {
                 return false;
             }
 
-            this.logger.debug(this.getPathForVersion(version) + "--version output: " + version);
+            this.logger.debug(pathForVersion + "--version output: " + version);
             var versionWithoutHash = output.trim().split(Pattern.quote("+"))[0];
             this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
@@ -85,7 +86,9 @@ public class CustomPathInstaller {
             }
         } catch (Exception ex) {
             this.logger.warn(
-                    "Exception while running 'dotnet csharpier --version' in " +
+                    "Exception while running '" +
+                    pathForVersion +
+                    " --version' in " +
                     pathToDirectoryForVersion,
                     ex
                 );
@@ -122,7 +125,9 @@ public class CustomPathInstaller {
     }
 
     public String getPathForVersion(String version) throws Exception {
-        var path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
+        var newCommandsVersion = "1.0.0";
+        var filename = Semver.gte(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
+        var path = Path.of(getDirectoryForVersion(version), filename);
         return path.toString();
     }
 }

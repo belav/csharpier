@@ -26,11 +26,9 @@ public class FormattingService {
             return;
         }
 
-        if (
-            !(psiFile.getLanguage().getID().equals("C#") ||
-                // while testing in intellij it doesn't know about c#
-                (psiFile.getLanguage().getID().equals("TEXT") && psiFile.getName().endsWith(".cs")))
-        ) {
+        // TODO xml add supported languages
+        // TODO xml update the readme
+        if (!(psiFile.getLanguage().getID().equals("C#"))) {
             this.logger.debug(
                     "Skipping formatting because language was " +
                     psiFile.getLanguage().getDisplayName()

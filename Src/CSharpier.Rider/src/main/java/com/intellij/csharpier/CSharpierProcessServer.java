@@ -40,8 +40,10 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     }
 
     private boolean startProcess() {
+        var newCommandsVersion = "1.0.0";
+        var argument = Semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
         try {
-            var processBuilder = new ProcessBuilder(this.csharpierPath, "--server");
+            var processBuilder = new ProcessBuilder(this.csharpierPath, argument);
             processBuilder.redirectErrorStream(true);
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
@@ -54,6 +56,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
 
             String output;
             try {
+                // TODO xml this times out too fast
                 output = future.get(2, TimeUnit.SECONDS);
             } catch (TimeoutException e) {
                 this.logger.warn(

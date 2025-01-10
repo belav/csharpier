@@ -1,7 +1,5 @@
 package com.intellij.csharpier;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.Disposable;
@@ -10,16 +8,14 @@ import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import java.io.File;
-import java.nio.file.Files;
+import java.lang.Runtime.Version;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -258,21 +254,20 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             // ComparableVersion was unhappy in rider 2023, this code should probably just go away
             // but there are still 0.12 and 0.14 downloads happening
-            var installedVersion = version.split("\\.");
-            var versionWeCareAbout = Integer.parseInt(installedVersion[1]);
-            var serverVersion = 29;
+            var installedVersion = Version.parse(version);
+            var serverVersion = Version.parse("0.29.0");
 
             ICSharpierProcess csharpierProcess;
             if (
-                versionWeCareAbout >= serverVersion &&
+                installedVersion.compareTo(serverVersion) >= 0 &&
                 !CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
             ) {
                 csharpierProcess = new CSharpierProcessServer(customPath, version, this.project);
-            } else if (versionWeCareAbout >= 12) {
-                var useUtf8 = versionWeCareAbout >= 14;
+            } else if (installedVersion.compareTo(Version.parse("0.12.0")) >= 0) {
+                var useUtf8 = installedVersion.compareTo(Version.parse("0.14.")) >= 0;
 
                 if (
-                    versionWeCareAbout >= serverVersion &&
+                    installedVersion.compareTo(serverVersion) >= 0 &&
                     CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
                 ) {
                     this.logger.debug(
