@@ -2,13 +2,12 @@ package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.system.OS;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
-import com.intellij.util.system.OS;
 import org.apache.commons.lang.SystemUtils;
 
 public class CustomPathInstaller {
