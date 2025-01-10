@@ -1,3 +1,6 @@
+## 2.0.1
+- fix bug with running csharpier 1.0.0 on non-windows systems
+
 ## 2.0.0
 - Adding support for CSharpier 1.0.0 which includes the ability to format xml files.
 
