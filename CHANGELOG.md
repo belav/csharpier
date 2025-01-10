@@ -1,4 +1,32 @@
-﻿# 0.30.5
+﻿# 0.30.6
+## What's Changed
+### Trailing comma is placed on new line if last enum value is followed by a comment [#1429](https://github.com/belav/csharpier/issues/1429)
+```c#
+// input
+enum MyEnum
+{
+    First,
+    Second // the second value
+}
+
+// 0.30.5
+enum MyEnum
+{
+    First,
+    Second // the second value
+    ,
+}
+
+// 0.30.6
+enum MyEnum
+{
+    First,
+    Second, // the second value
+}
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.5...0.30.6
+# 0.30.5
 ## What's Changed
 ### Extra blank line added to file each time csharpier runs on this file [#1426](https://github.com/belav/csharpier/issues/1426)
 When a file ended in a comment and that comment had multiple blank lines before it, a new blank line was being added each time it was formatted.
@@ -2870,6 +2898,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
