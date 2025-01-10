@@ -10,7 +10,6 @@ import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
 import java.io.File;
-import java.lang.Runtime.Version;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Arrays;
@@ -252,22 +251,19 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
             this.logger.debug("Adding new version " + version + " process for " + directory);
 
-            // ComparableVersion was unhappy in rider 2023, this code should probably just go away
-            // but there are still 0.12 and 0.14 downloads happening
-            var installedVersion = Version.parse(version);
-            var serverVersion = Version.parse("0.29.0");
+            var serverVersion = "0.29.0";
 
             ICSharpierProcess csharpierProcess;
             if (
-                installedVersion.compareTo(serverVersion) >= 0 &&
+                Semver.gte(version, serverVersion) &&
                 !CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
             ) {
                 csharpierProcess = new CSharpierProcessServer(customPath, version, this.project);
-            } else if (installedVersion.compareTo(Version.parse("0.12.0")) >= 0) {
-                var useUtf8 = installedVersion.compareTo(Version.parse("0.14.")) >= 0;
+            } else if (Semver.gte(version, "0.12.0")) {
+                var useUtf8 = Semver.gte(version, "0.14.0");
 
                 if (
-                    installedVersion.compareTo(serverVersion) >= 0 &&
+                    Semver.gte(version, serverVersion) &&
                     CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
                 ) {
                     this.logger.debug(
