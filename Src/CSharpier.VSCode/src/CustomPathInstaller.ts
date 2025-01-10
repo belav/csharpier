@@ -85,13 +85,13 @@ export class CustomPathInstaller {
         const result =
             process.platform !== "win32"
                 ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
-                : path.resolve(process.env.LOCALAPPDATA!, "csharpier", version);
+                : path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
         return result.toString();
     }
 
     public getPathForVersion(version: string) {
         let newCommandsVersion = "1.0.0";
-        let filename = semver.gte(version, newCommandsVersion) ? "CSharpier" : "dotnet-csharpier";
+        let filename = semver.gte(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
         return path.resolve(this.getDirectoryForVersion(version), filename);
     }
 }
