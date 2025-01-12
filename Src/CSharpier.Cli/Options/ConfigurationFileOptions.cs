@@ -6,7 +6,7 @@ namespace CSharpier.Cli.Options;
 internal class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
-    public int? IndentSize { get; init; } = 4;
+    public int? IndentSize { get; init; }
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]

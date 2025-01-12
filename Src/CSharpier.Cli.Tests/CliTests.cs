@@ -93,8 +93,7 @@ public class CliTests
         await this.WriteFileAsync(filePath, unformattedContent);
         await this.WriteFileAsync(".csharpierignore", filePath);
 
-        var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
-        result.Output.Should().StartWith("Formatted 0 files in ");
+        await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
         var fileContents = await this.ReadAllTextAsync(filePath);
 
         fileContents
@@ -393,7 +392,7 @@ max_line_length = 10"
 
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Formatted 0 files in ");
+        result.Output.Should().StartWith("Formatted 1 files in ");
     }
 
     [Test]
