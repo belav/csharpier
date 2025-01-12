@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDocumentManager;
 import org.jetbrains.annotations.NotNull;
 
 public class ReformatWithCSharpierAction extends AnAction {
@@ -49,12 +50,16 @@ public class ReformatWithCSharpierAction extends AnAction {
             return;
         }
 
-        var file = virtualFileString.substring(filePrefix.length());
-        var isCSharpFile = file.toLowerCase().endsWith(".cs");
-        e.getPresentation().setVisible(isCSharpFile);
+        var editor = e.getData(PlatformDataKeys.EDITOR);
+        var document = editor.getDocument();
+        var psiFile = PsiDocumentManager.getInstance(e.getProject()).getPsiFile(document);
+        var languageId = psiFile.getLanguage().getID();
+        var filePath = virtualFileString.substring(filePrefix.length());
+        this.logger.debug(languageId);
+
         var canFormat =
-            isCSharpFile &&
-            FormattingService.getInstance(e.getProject()).getCanFormat(file, e.getProject());
+            FormattingService.isSupportedLanguageId(languageId) &&
+            FormattingService.getInstance(e.getProject()).getCanFormat(filePath, e.getProject());
         e.getPresentation().setEnabled(canFormat);
     }
 

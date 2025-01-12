@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import org.jetbrains.annotations.NotNull;
 
+// TODO XML why doesn't this run?
 public class ReformatWithCSharpierOnSaveListener implements FileDocumentManagerListener {
 
     Logger logger = CSharpierLogger.getInstance();

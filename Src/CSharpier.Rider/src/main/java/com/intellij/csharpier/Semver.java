@@ -1,9 +1,15 @@
 package com.intellij.csharpier;
 
-import java.lang.Runtime.Version;
+import java.lang.module.ModuleDescriptor;
 
 public class Semver {
+
     public static boolean gte(String version, String otherVersion) {
-        return Version.parse(version).compareTo(Version.parse(otherVersion)) >= 0;
+        return (
+            ModuleDescriptor.Version.parse(version).compareTo(
+                ModuleDescriptor.Version.parse(otherVersion)
+            ) >=
+            0
+        );
     }
 }

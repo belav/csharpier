@@ -20,19 +20,29 @@ public class FormattingService {
         return project.getService(FormattingService.class);
     }
 
+    static boolean isSupportedLanguageId(String languageId) {
+        return languageId.equals("C#") || languageId.equals("MSBuild") || languageId.equals("XML");
+    }
+
     public void format(@NotNull Document document, @NotNull Project project) {
         var psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
         if (psiFile == null) {
             return;
         }
 
-        // TODO xml add supported languages
+        /*
+
+        2025-01-11T10:54:09.9275893-06:00	INFO	[CSharpier.Cli.Server.CSharpierServiceImplementation]	[0]	Received request to format /Temp/Test.cs
+2025-01-11T10:54:10.5043820-06:00	FAIL	[CSharpier.Cli.Server.CSharpierServiceImplementation]	[0]	Failure parsing editorconfig files for \TempSystem.Exception: The filePath of C:\Temp\UpdateRepos\aspnetcore\.editorconfig does not start with the ignoreBaseDirectoryPath of /Temp
+   at CSharpier.Cli.IgnoreFile.IsIgnored(String filePath) in C:\projects\csharpier\Src\CSharpier.Cli\IgnoreFile.cs:line 22
+
+
+         */
+
         // TODO xml update the readme
-        if (!(psiFile.getLanguage().getID().equals("C#"))) {
-            this.logger.debug(
-                    "Skipping formatting because language was " +
-                    psiFile.getLanguage().getDisplayName()
-                );
+        var languageId = psiFile.getLanguage().getID();
+        if (!isSupportedLanguageId(languageId)) {
+            this.logger.debug("Skipping formatting because language was " + languageId);
             return;
         }
 
@@ -71,6 +81,7 @@ public class FormattingService {
             var result = csharpierProcess2.formatFile(parameter);
 
             var end = Instant.now();
+            // TODO this should move into the switch probably
             this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
             if (result != null) {
@@ -86,6 +97,7 @@ public class FormattingService {
                             "CSharpier cli failed to format the file and returned the following error: " +
                             result.errorMessage
                         );
+                    // TODO don't handle unsupported and dont' warn about unhandled enums
                 }
             }
         } else {
