@@ -1,0 +1,25 @@
+name: Publish Beta
+on:
+  push:
+    branches: [ 1.0.0 ]
+jobs:
+  publish_beta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v3
+      - uses: gittools/actions/gitversion/setup@v3.1.1
+        with:
+          versionSpec: '6.0.x'
+      - id: determine_version
+        uses: gittools/actions/gitversion/execute@v3.1.1
+      - name: Publish beta CSharpier dotnet tool on push
+        uses: alirezanet/publish-nuget@v3.0.4
+        with:
+          VERSION_STATIC: ${{ env.branchName }}-beta${{ env.commitsSinceVersionSource }}
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
+          TAG_FORMAT: "*"
+          RESTORE_TOOLS: 0
