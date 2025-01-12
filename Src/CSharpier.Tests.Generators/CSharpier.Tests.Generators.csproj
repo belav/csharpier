@@ -14,9 +14,4 @@
   <ItemGroup>
     <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CSharpier.Generators\TemplatedGenerator.cs">
-      <Link>TemplatedGenerator.cs</Link>
-    </Compile>
-  </ItemGroup>
 </Project>

@@ -31,6 +31,12 @@
     margin-top: 10px;
 }
 
+.controlsWrapper select {
+    width: 100%;
+    margin-top: 10px;
+    padding: 3px 4px;
+}
+
 .smallButton {
     background-color: #ccc;
     border-radius: 4px;

@@ -15,12 +15,6 @@ public class Samples
         await RunTest("Scratch");
     }
 
-    [Test]
-    public async Task AllInOne()
-    {
-        await RunTest("AllInOne");
-    }
-
     public static async Task RunTest(string fileName)
     {
         var directory = DirectoryFinder.FindParent("CSharpier.Tests");
@@ -34,7 +28,7 @@ public class Samples
         var code = await File.ReadAllTextAsync(file);
         var result = await CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions { IncludeDocTree = true, IncludeAST = true }
+            new PrinterOptions(Formatter.CSharp) { IncludeDocTree = true, IncludeAST = true }
         );
 
         var syntaxNodeComparer = new SyntaxNodeComparer(

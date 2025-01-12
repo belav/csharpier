@@ -1194,7 +1194,7 @@ host.AddSection(
     tags: Tags.SamplesUsed,
     tasks:
     [
-    // TODO: Add any used third party instruments below as you discover them.
+    // TO-DO: Add any used third party instruments below as you discover them.
     ]
 );
 
@@ -1204,7 +1204,7 @@ host.AddSection(
     tags: Tags.SamplesUsed,
     tasks:
     [
-        // TODO: Add any used third party instruments below as you discover them.
+        // TO-DO: Add any used third party instruments below as you discover them.
     ]
 );
 ```
