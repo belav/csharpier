@@ -183,10 +183,10 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_With_Json()
+    public async Task Should_Return_IndentSize_With_Json()
     {
         var context = new TestContext();
-        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
+        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"indentSize\": 10 }");
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
@@ -216,10 +216,10 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_With_Yaml()
+    public async Task Should_Return_IndentSize_With_Yaml()
     {
         var context = new TestContext();
-        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 10");
+        context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 10");
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
@@ -238,7 +238,7 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_For_Override()
+    public async Task Should_Return_IndentSize_For_Override()
     {
         var context = new TestContext();
         context.WhenAFileExists(
@@ -247,7 +247,7 @@ endOfLine: crlf
             overrides:
                 - files: "*.override"
                   formatter: "csharp"
-                  tabWidth: 2
+                  indentSize: 2
             """
         );
 
@@ -645,7 +645,7 @@ indent_size = 2
 indent_size = 2
 "
         );
-        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 1");
+        context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
         var result = await context.CreateProviderAndGetOptionsFor(
             "c:/test/subfolder",
@@ -665,7 +665,7 @@ indent_size = 2
 indent_size = 2
 "
         );
-        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 1");
+        context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
         var result = await context.CreateProviderAndGetOptionsFor(
             "c:/test",
@@ -732,7 +732,7 @@ INVALID
 indent_size = 2
 "
         );
-        context.WhenAFileExists("c:/test/subfolder/.csharpierrc", "tabWidth: 1");
+        context.WhenAFileExists("c:/test/subfolder/.csharpierrc", "indentSize: 1");
 
         var result = await context.CreateProviderAndGetOptionsFor(
             "c:/test",
@@ -771,7 +771,7 @@ indent_size = 2
             "c:/test/subfolder/.csharpierrc",
             @"
     [*]
-    tabWidth: 1
+    indentSize: 1
     "
         );
 

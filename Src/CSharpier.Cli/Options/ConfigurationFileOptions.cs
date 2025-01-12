@@ -6,7 +6,7 @@ namespace CSharpier.Cli.Options;
 internal class ConfigurationFileOptions
 {
     public int PrintWidth { get; init; } = 100;
-    public int? TabWidth { get; init; }
+    public int? IndentSize { get; init; } = 4;
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
@@ -33,7 +33,7 @@ internal class ConfigurationFileOptions
 
             return new PrinterOptions(parsedFormatter)
             {
-                IndentSize = matchingOverride.TabWidth,
+                IndentSize = matchingOverride.IndentSize,
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
@@ -45,7 +45,7 @@ internal class ConfigurationFileOptions
         {
             return new PrinterOptions(formatter)
             {
-                IndentSize = this.TabWidth ?? (formatter == Formatter.XML ? 2 : 4),
+                IndentSize = this.IndentSize ?? (formatter == Formatter.XML ? 2 : 4),
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
@@ -69,7 +69,7 @@ internal class Override
     private GlobMatcher? matcher;
 
     public int PrintWidth { get; init; } = 100;
-    public int TabWidth { get; init; } = 4;
+    public int IndentSize { get; init; } = 4;
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
