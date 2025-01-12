@@ -44,8 +44,4 @@
       <Link>logo.png</Link>
     </None>
   </ItemGroup>
-  <Target Name="RestoreTools" BeforeTargets="Restore;CollectPackageReferences" Condition="'$(RESTORE_TOOLS)' != 0 and '$(IsCrossTargetingBuild)' == 'true'">
-    <Exec Command="dotnet tool restore" StandardOutputImportance="Low" StandardErrorImportance="High" />
-    <Exec Command="dotnet husky install" StandardOutputImportance="Low" StandardErrorImportance="High" WorkingDirectory="../../" />
-  </Target>
 </Project>
