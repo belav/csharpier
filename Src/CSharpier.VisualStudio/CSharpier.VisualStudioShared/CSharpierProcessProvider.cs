@@ -223,7 +223,7 @@ namespace CSharpier.VisualStudio
 
             try
             {
-                if (!this.customPathInstaller.EnsureVersionInstalled(version))
+                if (!this.customPathInstaller.EnsureVersionInstalled(version, directory))
                 {
                     this.DisplayFailureMessage();
                     return NullCSharpierProcess.Instance;
