@@ -21,7 +21,6 @@ WORKDIR /build
 COPY ./Directory.Build.props ./Directory.Packages.props ./
 COPY ./Src/CSharpier.Playground/CSharpier.Playground.csproj Src/CSharpier.Playground/
 COPY ./Src/CSharpier/CSharpier.csproj Src/CSharpier/
-ARG RESTORE_TOOLS=0
 RUN dotnet restore "Src/CSharpier.Playground/CSharpier.Playground.csproj"
 
 COPY ./Src/CSharpier.Playground/ClientApp/package.json Src/CSharpier.Playground/ClientApp/
@@ -35,7 +34,6 @@ WORKDIR /build
 COPY . .
 
 FROM build AS publish
-ARG RESTORE_TOOLS=0
 RUN dotnet publish "Src/CSharpier.Playground/CSharpier.Playground.csproj" -c Release -o /app/publish
 
 FROM base AS final
