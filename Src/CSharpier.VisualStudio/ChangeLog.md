@@ -1,4 +1,7 @@
-﻿## [1.9.4]
+﻿## [1.9.5]
+- Use working directory to install csharpier so it respects a projects NuGet.config
+
+## [1.9.4]
 - Fix so that extension works with older versions of VS, we don't want to require the latest
 
 ## [1.9.3]

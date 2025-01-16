@@ -1,3 +1,6 @@
+## 2.0.2
+- Use working directory to install csharpier so it respects a projects NuGet.config
+
 ## 2.0.1
 - fix bug with running csharpier 1.0.0 on non-windows systems
 
