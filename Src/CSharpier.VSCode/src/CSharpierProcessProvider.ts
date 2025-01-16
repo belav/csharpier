@@ -234,7 +234,7 @@ export class CSharpierProcessProvider implements Disposable {
                 return NullCSharpierProcess.instance;
             }
 
-            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+            if (!this.customPathInstaller.ensureVersionInstalled(version, directory)) {
                 this.logger.debug(`Unable to validate install of version ${version}`);
                 this.displayFailureMessage();
                 return NullCSharpierProcess.instance;
