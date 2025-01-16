@@ -22,7 +22,7 @@ namespace CSharpier.VisualStudio
             this.customPath = CSharpierOptions.Instance.CustomPath ?? string.Empty;
         }
 
-        public bool EnsureVersionInstalled(string version)
+        public bool EnsureVersionInstalled(string version, string directory)
         {
             if (string.IsNullOrEmpty(version))
             {
@@ -52,7 +52,7 @@ namespace CSharpier.VisualStudio
 
             var arguments =
                 $"tool install csharpier --version {version} --tool-path \"{pathToDirectoryForVersion}\" ";
-            ProcessHelper.ExecuteCommand("dotnet", arguments);
+            ProcessHelper.ExecuteCommand("dotnet", arguments, null, directory);
 
             return this.ValidateInstall(pathToDirectoryForVersion, version);
         }
