@@ -6,7 +6,7 @@ internal class IgnoreFile
 {
     protected Ignore.Ignore Ignore { get; }
     protected string IgnoreBaseDirectoryPath { get; }
-    private static readonly string[] alwaysIgnored = ["**/node_modules/**/*.cs", "**/obj/**/*.cs"];
+    private static readonly string[] alwaysIgnored = ["**/node_modules", "**/obj", "**/.git"];
 
     protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
     {
