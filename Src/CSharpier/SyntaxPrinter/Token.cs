@@ -237,6 +237,10 @@ internal static class Token
 
             if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
             {
+                if (docs.Count > 0 && docs[^1] == Doc.HardLineSkipBreakIfFirstInGroup)
+                {
+                    printNewLines = false;
+                }
                 docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
             }
             if (kind is not (SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia))
@@ -317,7 +321,7 @@ internal static class Token
             }
         }
 
-        while (skipLastHardline && docs.Any() && docs.Last() is HardLine or NullDoc)
+        while (skipLastHardline && docs.Count != 0 && docs.Last() is HardLine or NullDoc)
         {
             docs.RemoveAt(docs.Count - 1);
         }

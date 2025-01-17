@@ -13,7 +13,6 @@ string formatMe;
 string keepNewLine;
 // csharpier-ignore-end
 
-
 // csharpier-ignore-start
 string removeNewLine;
 // csharpier-ignore-end
