@@ -125,7 +125,7 @@ public class CustomPathInstaller {
     }
 
     public String getPathForVersion(String version) throws Exception {
-        var newCommandsVersion = "1.0.0";
+        var newCommandsVersion = "1.0.0-alpha1";
         var filename = Semver.gte(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
         var path = Path.of(getDirectoryForVersion(version), filename);
         return path.toString();

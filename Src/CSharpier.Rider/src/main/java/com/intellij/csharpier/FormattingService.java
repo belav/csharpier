@@ -39,7 +39,7 @@ public class FormattingService {
 
          */
 
-        // TODO xml update the readme
+        // TODO #1433 update the readme
         var languageId = psiFile.getLanguage().getID();
         if (!isSupportedLanguageId(languageId)) {
             this.logger.debug("Skipping formatting because language was " + languageId);
@@ -81,7 +81,7 @@ public class FormattingService {
             var result = csharpierProcess2.formatFile(parameter);
 
             var end = Instant.now();
-            // TODO this should move into the switch probably
+            // TODO #1433 this should move into the switch probably
             this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
             if (result != null) {
@@ -97,7 +97,9 @@ public class FormattingService {
                             "CSharpier cli failed to format the file and returned the following error: " +
                             result.errorMessage
                         );
-                    // TODO don't handle unsupported and dont' warn about unhandled enums
+                    // TODO #1433 handle unsupported
+                    default -> this.logger.error("Unable to handle for status of " + result.status);
+
                 }
             }
         } else {
