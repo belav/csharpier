@@ -21,7 +21,7 @@ public class CustomPathInstaller {
         this.dotNetProvider = DotNetProvider.getInstance(project);
     }
 
-    public boolean ensureVersionInstalled(String version) throws Exception {
+    public boolean ensureVersionInstalled(String version, String directory) throws Exception {
         if (version == null || version.equals("")) {
             return true;
         }
@@ -54,7 +54,7 @@ public class CustomPathInstaller {
             "--tool-path",
             pathToDirectoryForVersion
         );
-        this.dotNetProvider.execDotNet(command, null);
+        this.dotNetProvider.execDotNet(command, new File(directory));
 
         return this.validateInstall(pathToDirectoryForVersion, version);
     }

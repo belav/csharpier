@@ -242,7 +242,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         }
 
         try {
-            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+            if (!this.customPathInstaller.ensureVersionInstalled(version, directory)) {
                 this.displayFailureMessage();
                 return NullCSharpierProcess.Instance;
             }

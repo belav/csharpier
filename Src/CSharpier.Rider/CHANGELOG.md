@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [1.8.4]
+- Use working directory to install csharpier so it respects a projects NuGet.config
+
 ## [1.8.3]
 - Don't notify about installing csharpier globally for files in the directory '\'
 

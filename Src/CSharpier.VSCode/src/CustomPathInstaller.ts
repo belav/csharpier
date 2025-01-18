@@ -16,7 +16,7 @@ export class CustomPathInstaller {
             workspace.getConfiguration("csharpier").get<string>("dev.customPath") ?? "";
     }
 
-    public ensureVersionInstalled(version: string): boolean {
+    public ensureVersionInstalled(version: string, directory: string): boolean {
         if (!version) {
             return false;
         }
@@ -40,7 +40,7 @@ export class CustomPathInstaller {
 
         const command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
         this.logger.debug("Running " + command);
-        execDotNet(command);
+        execDotNet(command, directory);
 
         return this.validateInstall(pathToDirectoryForVersion, version);
     }
