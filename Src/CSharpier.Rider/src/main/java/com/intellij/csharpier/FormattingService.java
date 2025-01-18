@@ -81,25 +81,24 @@ public class FormattingService {
             var result = csharpierProcess2.formatFile(parameter);
 
             var end = Instant.now();
-            // TODO #1433 this should move into the switch probably
-            this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
 
             if (result != null) {
                 switch (result.status) {
-                    case Formatted -> updateText(
-                        document,
-                        project,
-                        result.formattedFile,
-                        currentDocumentText
-                    );
+                    case Formatted -> {
+                        this.logger.info(
+                                "Formatted in " + (Duration.between(start, end).toMillis()) + "ms"
+                            );
+                        updateText(document, project, result.formattedFile, currentDocumentText);
+                    }
                     case Ignored -> this.logger.info("File is ignored by csharpier cli.");
                     case Failed -> this.logger.warn(
                             "CSharpier cli failed to format the file and returned the following error: " +
                             result.errorMessage
                         );
-                    // TODO #1433 handle unsupported
+                    case UnsupportedFile -> this.logger.warn(
+                            "CSharpier does not support formatting the file " + filePath
+                        );
                     default -> this.logger.error("Unable to handle for status of " + result.status);
-
                 }
             }
         } else {

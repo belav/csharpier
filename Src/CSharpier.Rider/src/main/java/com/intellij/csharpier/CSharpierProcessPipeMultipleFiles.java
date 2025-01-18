@@ -39,7 +39,7 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     }
 
     private void startProcess() {
-        var newCommandsVersion = "1.0.0";
+        var newCommandsVersion = "1.0.0-alpha1";
         var argument = Semver.gte(this.version, newCommandsVersion)
             ? "pipe-files"
             : "--pipe-multiple-files";
