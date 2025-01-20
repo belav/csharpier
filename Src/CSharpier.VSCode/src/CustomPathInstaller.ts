@@ -90,7 +90,7 @@ export class CustomPathInstaller {
     }
 
     public getPathForVersion(version: string) {
-        let newCommandsVersion = "1.0.0";
+        let newCommandsVersion = "1.0.0-alpha1";
         let filename = semver.gte(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
         return path.resolve(this.getDirectoryForVersion(version), filename);
     }
