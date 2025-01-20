@@ -29,4 +29,5 @@ enum Status {
     Formatted,
     Ignored,
     Failed,
+    UnsupportedFile,
 }

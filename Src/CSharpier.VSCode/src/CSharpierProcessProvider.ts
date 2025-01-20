@@ -17,7 +17,6 @@ import { runFunctionsUntilResultFound } from "./RunFunctionsUntilResultFound";
 
 export class CSharpierProcessProvider implements Disposable {
     warnedForOldVersion = false;
-    logger: Logger;
     customPathInstaller: CustomPathInstaller;
     installerService: InstallerService;
     warmingByDirectory: Record<string, boolean | undefined> = {};
@@ -28,9 +27,12 @@ export class CSharpierProcessProvider implements Disposable {
     > = {};
     disableCSharpierServer: boolean;
 
-    constructor(logger: Logger, extension: Extension<unknown>) {
-        this.logger = logger;
-        this.customPathInstaller = new CustomPathInstaller(logger);
+    constructor(
+        private readonly logger: Logger,
+        extension: Extension<unknown>,
+        private readonly supportedLanguageIds: string[],
+    ) {
+        this.customPathInstaller = new CustomPathInstaller(this.logger);
         this.installerService = new InstallerService(
             this.logger,
             this.killRunningProcesses,
@@ -42,10 +44,11 @@ export class CSharpierProcessProvider implements Disposable {
             false;
 
         window.onDidChangeActiveTextEditor((event: TextEditor | undefined) => {
-            if (event?.document?.languageId !== "csharp") {
+            let languageId = event?.document?.languageId;
+            if (!languageId || !this.supportedLanguageIds.includes(languageId)) {
                 return;
             }
-            this.findAndWarmProcess(event.document.fileName);
+            this.findAndWarmProcess(event!.document.fileName);
         });
     }
 
@@ -94,7 +97,6 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private getDirectoryOfFile = (filePath: string) => {
-        this.logger.debug(__dirname);
         let directory = path.parse(filePath).dir;
         if (directory) {
             return directory;
@@ -232,7 +234,7 @@ export class CSharpierProcessProvider implements Disposable {
                 return NullCSharpierProcess.instance;
             }
 
-            if (!this.customPathInstaller.ensureVersionInstalled(version)) {
+            if (!this.customPathInstaller.ensureVersionInstalled(version, directory)) {
                 this.logger.debug(`Unable to validate install of version ${version}`);
                 this.displayFailureMessage();
                 return NullCSharpierProcess.instance;
@@ -281,10 +283,10 @@ export class CSharpierProcessProvider implements Disposable {
             }
 
             return csharpierProcess;
-        } catch (ex: any) {
-            this.logger.error(ex.output.toString());
-            this.logger.debug(
+        } catch (error: any) {
+            this.logger.error(
                 `returning NullCSharpierProcess because of the previous error when trying to set up a csharpier process`,
+                error,
             );
             return NullCSharpierProcess.instance;
         }

@@ -83,7 +83,7 @@ overrides:
 CSharpier supports configuration via an `.editorconfig` file. A `.csharpierrc*` file in the same directory will take priority.
 
 ```ini
-[*.{cs|csx}]
+[*.{cs,csx}]
 # Non-configurable behaviors
 charset = utf-8
 insert_final_newline = true

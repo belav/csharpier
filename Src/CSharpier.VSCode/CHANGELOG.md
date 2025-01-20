@@ -1,3 +1,15 @@
+## 2.0.3
+- Get things working with the alpha version of 1.0.0
+
+## 2.0.2
+- Use working directory to install csharpier so it respects a projects NuGet.config
+
+## 2.0.1
+- fix bug with running csharpier 1.0.0 on non-windows systems
+
+## 2.0.0
+- Adding support for CSharpier 1.0.0 which includes the ability to format xml files.
+
 ## 1.9.2
 - Add option for diagnostic level, default to warning
 - Modify behavior of diagnostics so that new ones only appear on file save, not as a user types.

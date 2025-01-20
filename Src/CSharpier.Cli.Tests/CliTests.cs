@@ -101,6 +101,24 @@ public class CliTests
             .Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
 
+    [TestCase(".git")]
+    [TestCase("subdirectory/.git")]
+    [TestCase("node_modules")]
+    [TestCase("subdirectory/node_modules")]
+    [TestCase("obj")]
+    [TestCase("subdirectory/obj")]
+    public async Task Should_Ignore_Special_Case_Files(string path)
+    {
+        var unformattedContent = "public class Unformatted {     }";
+        var filePath = $"{path}/IgnoredFile.cs";
+        await this.WriteFileAsync(filePath, unformattedContent);
+
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var result = await this.ReadAllTextAsync(filePath);
+
+        result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
+    }
+
     [Test]
     public async Task Should_Support_Config_Path()
     {

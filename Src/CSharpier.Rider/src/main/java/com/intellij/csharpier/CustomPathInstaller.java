@@ -2,6 +2,7 @@ package com.intellij.csharpier;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.system.OS;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
@@ -16,11 +17,14 @@ public class CustomPathInstaller {
     String customPath;
 
     public CustomPathInstaller(Project project) {
-        this.customPath = CSharpierSettings.getInstance(project).getCustomPath();
+        if (CSharpierSettings.getInstance(project).getUseCustomPath()) {
+            this.customPath = CSharpierSettings.getInstance(project).getCustomPath();
+        }
+
         this.dotNetProvider = DotNetProvider.getInstance(project);
     }
 
-    public boolean ensureVersionInstalled(String version) throws Exception {
+    public boolean ensureVersionInstalled(String version, String directory) throws Exception {
         if (version == null || version.equals("")) {
             return true;
         }
@@ -53,16 +57,18 @@ public class CustomPathInstaller {
             "--tool-path",
             pathToDirectoryForVersion
         );
-        this.dotNetProvider.execDotNet(command, null);
+        this.dotNetProvider.execDotNet(command, new File(directory));
 
         return this.validateInstall(pathToDirectoryForVersion, version);
     }
 
     private boolean validateInstall(String pathToDirectoryForVersion, String version) {
+        var pathForVersion = "";
         try {
             var env = Map.of("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
 
-            var command = List.of(this.getPathForVersion(version), "--version");
+            pathForVersion = this.getPathForVersion(version);
+            var command = List.of(pathForVersion, "--version");
             var output = ProcessHelper.executeCommand(
                 command,
                 env,
@@ -73,7 +79,7 @@ public class CustomPathInstaller {
                 return false;
             }
 
-            this.logger.debug(this.getPathForVersion(version) + "--version output: " + version);
+            this.logger.debug(pathForVersion + "--version output: " + version);
             var versionWithoutHash = output.trim().split(Pattern.quote("+"))[0];
             this.logger.debug("Using " + versionWithoutHash + " as the version number.");
 
@@ -83,7 +89,9 @@ public class CustomPathInstaller {
             }
         } catch (Exception ex) {
             this.logger.warn(
-                    "Exception while running 'dotnet csharpier --version' in " +
+                    "Exception while running '" +
+                    pathForVersion +
+                    " --version' in " +
                     pathToDirectoryForVersion,
                     ex
                 );
@@ -107,7 +115,7 @@ public class CustomPathInstaller {
             return this.customPath;
         }
 
-        if (SystemUtils.IS_OS_WINDOWS) {
+        if (OS.CURRENT == OS.Windows) {
             return Path.of(System.getenv("LOCALAPPDATA"), "CSharpier", version).toString();
         }
 
@@ -120,7 +128,9 @@ public class CustomPathInstaller {
     }
 
     public String getPathForVersion(String version) throws Exception {
-        var path = Path.of(getDirectoryForVersion(version), "dotnet-csharpier");
+        var newCommandsVersion = "1.0.0-alpha1";
+        var filename = Semver.gte(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
+        var path = Path.of(getDirectoryForVersion(version), filename);
         return path.toString();
     }
 }

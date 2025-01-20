@@ -19,6 +19,8 @@ export async function activate(context: ExtensionContext) {
     await initPlugin(context);
 }
 
+export const supportedLanguageIds = ["csharp", "xml"];
+
 const initPlugin = async (context: ExtensionContext) => {
     const enableDebugLogs =
         workspace.getConfiguration("csharpier").get<boolean>("enableDebugLogs") ?? false;
@@ -40,22 +42,21 @@ const initPlugin = async (context: ExtensionContext) => {
 
     NullCSharpierProcess.create(logger);
 
-    const csharpierProcessProvider = new CSharpierProcessProvider(logger, context.extension);
+    const csharpierProcessProvider = new CSharpierProcessProvider(
+        logger,
+        context.extension,
+        supportedLanguageIds,
+    );
     const formatDocumentProvider = new FormatDocumentProvider(logger, csharpierProcessProvider);
-    const diagnosticsDocumentSelector: DocumentFilter[] = [
-        {
-            language: "csharp",
-            scheme: "file",
-        },
-    ];
+
     const diagnosticsService = new DiagnosticsService(
         formatDocumentProvider,
-        diagnosticsDocumentSelector,
+        supportedLanguageIds,
         logger,
     );
-    const fixAllCodeActionProvider = new FixAllCodeActionProvider(diagnosticsDocumentSelector);
+    const fixAllCodeActionProvider = new FixAllCodeActionProvider(supportedLanguageIds);
 
-    new FormattingService(formatDocumentProvider);
+    new FormattingService(formatDocumentProvider, supportedLanguageIds);
     new FixAllCodeActionsCommand(context, formatDocumentProvider, logger);
 
     context.subscriptions.push(

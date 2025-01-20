@@ -3,6 +3,7 @@ import { Logger } from "./Logger";
 import { ICSharpierProcess } from "./ICSharpierProcess";
 import { getDotNetRoot } from "./DotNetProvider";
 import * as process from "process";
+import * as semver from "semver";
 
 export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     private process: ChildProcessWithoutNullStreams;
@@ -14,8 +15,8 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
 
     constructor(logger: Logger, csharpierPath: string, workingDirectory: string, version: string) {
         this.logger = logger;
-        this.process = this.spawnProcess(csharpierPath, workingDirectory);
         this.version = version;
+        this.process = this.spawnProcess(csharpierPath, workingDirectory);
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -29,7 +30,12 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        const csharpierProcess = spawn(csharpierPath, ["--pipe-multiple-files"], {
+        let newCommandsVersion = "1.0.0-alpha1";
+        let argument = semver.gte(this.version, newCommandsVersion)
+            ? "pipe-files"
+            : "--pipe-multiple-files";
+
+        const csharpierProcess = spawn(csharpierPath, [argument], {
             stdio: "pipe",
             cwd: workingDirectory,
             env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
@@ -57,11 +63,9 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
         });
 
         csharpierProcess.stdout.on("data", chunk => {
-            this.logger.debug("Got chunk of size " + chunk.length);
             this.nextFile += chunk;
             let number = this.nextFile.indexOf("\u0003");
             while (number >= 0) {
-                this.logger.debug("Got last chunk with ETX at " + number);
                 const result = this.nextFile.substring(0, number);
                 this.nextFile = this.nextFile.substring(number + 1);
                 const callback = this.callbacks.shift();

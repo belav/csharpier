@@ -50,3 +50,8 @@ The following can help track down issues with the extension being unable to inst
 4. If the installation appears to be corrupt, delete the directory and install CSharpier there yourself<br/>
    `dotnet tool install csharpier --version [CSharpierVersion] --tool-path [PathFromStep2]`
 5. Repeat step 3 to validate the install
+
+## Known Issues
+`Spawning the csharpier server timed out. Formatting cannot occur.`
+
+The new CSharpier Server has caused issues with some users. There is an option `Disable CSharpier Server` to have the extension make use of the older method of communicating with csharpier.
