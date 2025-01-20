@@ -1,5 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Verifications" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration
+    default="false"
+    name="Run Verifications"
+    type="GradleRunConfiguration"
+    factoryName="Gradle"
+  >
     <log_file alias="idea.log" path="$PROJECT_DIR$/build/idea-sandbox/system/log/idea.log" />
     <ExternalSystemSettings>
       <option name="executionName" />
@@ -20,7 +25,14 @@
     <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
     <DebugAllEnabled>false</DebugAllEnabled>
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="clean" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      <option
+        name="Gradle.BeforeRunTask"
+        enabled="true"
+        tasks="clean"
+        externalProjectPath="$PROJECT_DIR$"
+        vmOptions=""
+        scriptParameters=""
+      />
     </method>
   </configuration>
 </component>

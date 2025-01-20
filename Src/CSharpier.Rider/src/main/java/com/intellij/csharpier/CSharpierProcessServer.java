@@ -28,10 +28,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         this.dotNetProvider = DotNetProvider.getInstance(project);
         this.version = version;
 
-        if (!this.startProcess()) {
-            this.processFailedToStart = true;
-            return;
-        }
+        this.startProcess();
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -39,51 +36,78 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         this.formatFile("public class ClassName { }", "/Temp/Test.cs");
     }
 
-    private boolean startProcess() {
+    private void startProcess() {
+        var newCommandsVersion = "1.0.0-alpha1";
+        var argument = Semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
         try {
-            var processBuilder = new ProcessBuilder(this.csharpierPath, "--server");
-            processBuilder.redirectErrorStream(true);
+            var processBuilder = new ProcessBuilder(this.csharpierPath, argument);
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
-            this.process = processBuilder.start();
+            var csharpierProcess = processBuilder.start();
 
-            var reader = new BufferedReader(new InputStreamReader(this.process.getInputStream()));
+            var stdoutThread = new Thread(() -> {
+                try (
+                    var reader = new BufferedReader(
+                        new InputStreamReader(csharpierProcess.getInputStream())
+                    )
+                ) {
+                    var line = reader.readLine();
+                    if (line == null) {
+                        return;
+                    }
 
-            var executor = Executors.newSingleThreadExecutor();
-            var future = executor.submit(() -> reader.readLine());
+                    var portString = line.replace("Started on ", "");
+                    this.port = Integer.parseInt(portString);
 
-            String output;
-            try {
-                output = future.get(2, TimeUnit.SECONDS);
-            } catch (TimeoutException e) {
-                this.logger.warn(
-                        "Spawning the csharpier server timed out. Formatting cannot occur."
-                    );
-                this.process.destroy();
-                return false;
-            }
+                    this.logger.debug("Connecting via port " + portString);
+                    this.process = csharpierProcess;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            stdoutThread.start();
+            stdoutThread.join();
 
-            if (!this.process.isAlive()) {
-                this.logger.warn(
-                        "Spawning the csharpier server failed because it exited. " + output
-                    );
-                return false;
-            }
+            csharpierProcess
+                .onExit()
+                .thenAccept(p -> {
+                    try (
+                        var errorReader = new BufferedReader(
+                            new InputStreamReader(csharpierProcess.getErrorStream())
+                        )
+                    ) {
+                        var error = new StringBuilder();
+                        errorReader.lines().forEach(o -> error.append(o + "\n"));
+                        this.logger.error("Process failed to start with " + error);
+                    } catch (Exception e) {
+                        this.logger.error("Process failed to start with " + e);
+                    }
 
-            var portString = output.replace("Started on ", "");
-            this.port = Integer.parseInt(portString);
-
-            this.logger.debug("Connecting via port " + portString);
-            return true;
+                    this.processFailedToStart = true;
+                });
         } catch (Exception e) {
             this.logger.warn("Failed to spawn the needed csharpier server.", e);
-            return false;
+            this.processFailedToStart = true;
         }
     }
 
     @Override
     public FormatFileResult formatFile(FormatFileParameter parameter) {
         if (this.processFailedToStart) {
+            this.logger.warn("CSharpier process failed to start. Formatting cannot occur.");
+            return null;
+        }
+
+        var timeWaited = 0;
+        while (this.process == null && timeWaited < 15000) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+
+            timeWaited += 100;
+        }
+
+        if (this.processFailedToStart || this.process == null) {
             this.logger.warn("CSharpier process failed to start. Formatting cannot occur.");
             return null;
         }

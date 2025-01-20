@@ -9,6 +9,10 @@ import com.intellij.psi.PsiDocumentManager;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
 
 public class FormattingService {
@@ -20,21 +24,20 @@ public class FormattingService {
         return project.getService(FormattingService.class);
     }
 
+    static boolean isSupportedLanguageId(String languageId) {
+        return languageId.equals("C#") || languageId.equals("MSBuild") || languageId.equals("XML");
+    }
+
     public void format(@NotNull Document document, @NotNull Project project) {
         var psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
         if (psiFile == null) {
             return;
         }
 
-        if (
-            !(psiFile.getLanguage().getID().equals("C#") ||
-                // while testing in intellij it doesn't know about c#
-                (psiFile.getLanguage().getID().equals("TEXT") && psiFile.getName().endsWith(".cs")))
-        ) {
-            this.logger.debug(
-                    "Skipping formatting because language was " +
-                    psiFile.getLanguage().getDisplayName()
-                );
+        // TODO #1433 update the readme
+        var languageId = psiFile.getLanguage().getID();
+        if (!isSupportedLanguageId(languageId)) {
+            this.logger.debug("Skipping formatting because language was " + languageId);
             return;
         }
 
@@ -70,25 +73,42 @@ public class FormattingService {
             var parameter = new FormatFileParameter();
             parameter.fileContents = currentDocumentText;
             parameter.fileName = filePath;
-            var result = csharpierProcess2.formatFile(parameter);
 
-            var end = Instant.now();
-            this.logger.info("Formatted in " + (Duration.between(start, end).toMillis()) + "ms");
+            var executor = Executors.newSingleThreadExecutor();
+            FormatFileResult result = null;
 
-            if (result != null) {
-                switch (result.status) {
-                    case Formatted -> updateText(
-                        document,
-                        project,
-                        result.formattedFile,
-                        currentDocumentText
-                    );
-                    case Ignored -> this.logger.info("File is ignored by csharpier cli.");
-                    case Failed -> this.logger.warn(
-                            "CSharpier cli failed to format the file and returned the following error: " +
-                            result.errorMessage
+            Callable<FormatFileResult> task = () -> csharpierProcess2.formatFile(parameter);
+
+            var future = executor.submit(task);
+
+            try {
+                result = future.get(2000, TimeUnit.MILLISECONDS);
+            } catch (Exception e) {
+                this.logger.warn("Took more than two seconds or something went wrong " + e);
+                future.cancel(true);
+            }
+
+            if (result == null) {
+                return;
+            }
+
+            switch (result.status) {
+                case Formatted -> {
+                    var end = Instant.now();
+                    this.logger.info(
+                            "Formatted in " + (Duration.between(start, end).toMillis()) + "ms"
                         );
+                    updateText(document, project, result.formattedFile, currentDocumentText);
                 }
+                case Ignored -> this.logger.info("File is ignored by csharpier cli.");
+                case Failed -> this.logger.warn(
+                        "CSharpier cli failed to format the file and returned the following error: " +
+                        result.errorMessage
+                    );
+                case UnsupportedFile -> this.logger.warn(
+                        "CSharpier does not support formatting the file " + filePath
+                    );
+                default -> this.logger.error("Unable to handle for status of " + result.status);
             }
         } else {
             var result = csharpierProcess.formatFile(currentDocumentText, filePath);

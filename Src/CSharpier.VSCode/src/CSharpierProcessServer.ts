@@ -30,7 +30,7 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
     }
 
     private spawnProcess(csharpierPath: string, workingDirectory: string) {
-        let newCommandsVersion = "1.0.0";
+        let newCommandsVersion = "1.0.0-alpha1";
         let argument = semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
 
         const csharpierProcess = spawn(csharpierPath, [argument], {

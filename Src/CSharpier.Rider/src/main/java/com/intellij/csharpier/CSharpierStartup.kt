@@ -19,7 +19,6 @@ class CSharpierStartup : StartupActivity, DumbAware {
     private val lifetimeDefinition = LifetimeDefinition()
     private val lifetime: Lifetime = lifetimeDefinition
 
-
     override fun runActivity(project: Project) {
         // this ensures we meet the conditions of isProjectModelReady "Must be executed on UI thread or background threads with special permissions"
         application.invokeLater {
