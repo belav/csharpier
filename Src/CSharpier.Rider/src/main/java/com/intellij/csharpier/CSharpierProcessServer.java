@@ -41,16 +41,20 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         var argument = Semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, argument);
-            processBuilder.redirectErrorStream(true);
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             var csharpierProcess = processBuilder.start();
 
             var stdoutThread = new Thread(() -> {
                 try (
-                    var reader = new BufferedReader(new InputStreamReader(csharpierProcess.getInputStream()))
+                    var reader = new BufferedReader(
+                        new InputStreamReader(csharpierProcess.getInputStream())
+                    )
                 ) {
                     var line = reader.readLine();
+                    if (line == null) {
+                        return;
+                    }
 
                     var portString = line.replace("Started on ", "");
                     this.port = Integer.parseInt(portString);
@@ -64,19 +68,23 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
             stdoutThread.start();
             stdoutThread.join();
 
-            // TODO #1433 test this when the process errors out
-            csharpierProcess.onExit().thenAccept(p -> {
-                try (var errorReader = new BufferedReader(new InputStreamReader(csharpierProcess.getErrorStream()))) {
-                    var error = new StringBuilder();
-                    errorReader.lines().forEach(o -> error.append(o + "\n"));
-                    this.logger.error("Process failed to start with " + error);
-                } catch (Exception e) {
-                    this.logger.error("Process failed to start with " + e);
-                }
+            csharpierProcess
+                .onExit()
+                .thenAccept(p -> {
+                    try (
+                        var errorReader = new BufferedReader(
+                            new InputStreamReader(csharpierProcess.getErrorStream())
+                        )
+                    ) {
+                        var error = new StringBuilder();
+                        errorReader.lines().forEach(o -> error.append(o + "\n"));
+                        this.logger.error("Process failed to start with " + error);
+                    } catch (Exception e) {
+                        this.logger.error("Process failed to start with " + e);
+                    }
 
-                this.processFailedToStart = true;
-            });
-
+                    this.processFailedToStart = true;
+                });
         } catch (Exception e) {
             this.logger.warn("Failed to spawn the needed csharpier server.", e);
             this.processFailedToStart = true;
@@ -94,10 +102,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         while (this.process == null && timeWaited < 15000) {
             try {
                 Thread.sleep(100);
-            }
-            catch (InterruptedException e) {
-
-            }
+            } catch (InterruptedException e) {}
 
             timeWaited += 100;
         }

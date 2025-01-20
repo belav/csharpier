@@ -9,6 +9,10 @@ import com.intellij.psi.PsiDocumentManager;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.jetbrains.annotations.NotNull;
 
 public class FormattingService {
@@ -29,15 +33,6 @@ public class FormattingService {
         if (psiFile == null) {
             return;
         }
-
-        /*
-
-        2025-01-11T10:54:09.9275893-06:00	INFO	[CSharpier.Cli.Server.CSharpierServiceImplementation]	[0]	Received request to format /Temp/Test.cs
-2025-01-11T10:54:10.5043820-06:00	FAIL	[CSharpier.Cli.Server.CSharpierServiceImplementation]	[0]	Failure parsing editorconfig files for \TempSystem.Exception: The filePath of C:\Temp\UpdateRepos\aspnetcore\.editorconfig does not start with the ignoreBaseDirectoryPath of /Temp
-   at CSharpier.Cli.IgnoreFile.IsIgnored(String filePath) in C:\projects\csharpier\Src\CSharpier.Cli\IgnoreFile.cs:line 22
-
-
-         */
 
         // TODO #1433 update the readme
         var languageId = psiFile.getLanguage().getID();
@@ -78,28 +73,42 @@ public class FormattingService {
             var parameter = new FormatFileParameter();
             parameter.fileContents = currentDocumentText;
             parameter.fileName = filePath;
-            var result = csharpierProcess2.formatFile(parameter);
 
-            var end = Instant.now();
+            var executor = Executors.newSingleThreadExecutor();
+            FormatFileResult result = null;
 
-            if (result != null) {
-                switch (result.status) {
-                    case Formatted -> {
-                        this.logger.info(
-                                "Formatted in " + (Duration.between(start, end).toMillis()) + "ms"
-                            );
-                        updateText(document, project, result.formattedFile, currentDocumentText);
-                    }
-                    case Ignored -> this.logger.info("File is ignored by csharpier cli.");
-                    case Failed -> this.logger.warn(
-                            "CSharpier cli failed to format the file and returned the following error: " +
-                            result.errorMessage
+            Callable<FormatFileResult> task = () -> csharpierProcess2.formatFile(parameter);
+
+            var future = executor.submit(task);
+
+            try {
+                result = future.get(2000, TimeUnit.MILLISECONDS);
+            } catch (Exception e) {
+                this.logger.warn("Took more than two seconds or something went wrong " + e);
+                future.cancel(true);
+            }
+
+            if (result == null) {
+                return;
+            }
+
+            switch (result.status) {
+                case Formatted -> {
+                    var end = Instant.now();
+                    this.logger.info(
+                            "Formatted in " + (Duration.between(start, end).toMillis()) + "ms"
                         );
-                    case UnsupportedFile -> this.logger.warn(
-                            "CSharpier does not support formatting the file " + filePath
-                        );
-                    default -> this.logger.error("Unable to handle for status of " + result.status);
+                    updateText(document, project, result.formattedFile, currentDocumentText);
                 }
+                case Ignored -> this.logger.info("File is ignored by csharpier cli.");
+                case Failed -> this.logger.warn(
+                        "CSharpier cli failed to format the file and returned the following error: " +
+                        result.errorMessage
+                    );
+                case UnsupportedFile -> this.logger.warn(
+                        "CSharpier does not support formatting the file " + filePath
+                    );
+                default -> this.logger.error("Unable to handle for status of " + result.status);
             }
         } else {
             var result = csharpierProcess.formatFile(currentDocumentText, filePath);

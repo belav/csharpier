@@ -59,6 +59,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             return;
         }
         var filePath = file.getPath();
+
         this.findAndWarmProcess(filePath);
     }
 
@@ -88,10 +89,16 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         }
 
         if (!this.csharpierProcessesByVersion.containsKey(version)) {
-            this.csharpierProcessesByVersion.put(
-                    version,
-                    this.setupCSharpierProcess(directory, version)
-                );
+            var finalVersion = version;
+            Runnable task = () -> {
+                this.csharpierProcessesByVersion.put(
+                        finalVersion,
+                        this.setupCSharpierProcess(directory, finalVersion)
+                    );
+            };
+
+            var thread = new Thread(task);
+            thread.start();
         }
     }
 

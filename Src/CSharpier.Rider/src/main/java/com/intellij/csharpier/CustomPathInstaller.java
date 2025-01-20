@@ -17,7 +17,10 @@ public class CustomPathInstaller {
     String customPath;
 
     public CustomPathInstaller(Project project) {
-        this.customPath = CSharpierSettings.getInstance(project).getCustomPath();
+        if (CSharpierSettings.getInstance(project).getUseCustomPath()) {
+            this.customPath = CSharpierSettings.getInstance(project).getCustomPath();
+        }
+
         this.dotNetProvider = DotNetProvider.getInstance(project);
     }
 

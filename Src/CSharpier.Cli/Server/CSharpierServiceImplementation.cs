@@ -16,6 +16,14 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
         try
         {
             logger.LogInformation("Received request to format " + formatFileParameter.fileName);
+            if (formatFileParameter.fileContents.StartsWith("// csh-slow"))
+            {
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
+            if (formatFileParameter.fileContents.StartsWith("// csh-throw"))
+            {
+                throw new Exception("Throwing because of // csh-throw comment");
+            }
             var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileParameter.fileName);
             DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
