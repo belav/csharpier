@@ -25,7 +25,7 @@ jobs:
       - run: |
           rm -r -f ./Tests/CSharpier.MsBuild.Test
           dotnet tool restore
-          dotnet csharpier . --check
+          dotnet csharpier check .
   test_msbuild:
     strategy:
       matrix:
