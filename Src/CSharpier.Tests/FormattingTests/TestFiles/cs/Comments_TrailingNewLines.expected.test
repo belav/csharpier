@@ -1,0 +1,5 @@
+var x = 1;
+
+// condense down to just a single extra line
+
+var y = 2;
