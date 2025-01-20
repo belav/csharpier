@@ -1,29 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../../Nuget/Build.props"/>
-    <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-        <PackageId>CSharpier.MsBuild</PackageId>
-        <DevelopmentDependency>true</DevelopmentDependency>
-        <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/$(TargetFramework)</CSharpierOutputDir>
-    </PropertyGroup>
-
-    <!--
+  <Import Project="../../Nuget/Build.props" />
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <PackageId>CSharpier.MsBuild</PackageId>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <CSharpierOutputDir>../CSharpier.Cli/bin/$(Configuration)/$(TargetFramework)</CSharpierOutputDir>
+  </PropertyGroup>
+  <!--
         Note: There is no <ProjectReference /> here because that would cause msbuild to
         make it a dependency in the output package, which causes all sorts of issues as
         CSharpier is a net9.0 project with <PackAsTool> and this is neither.
     -->
-    <Target Name="BuildCSharpier" BeforeTargets="Restore">
-      <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
-    </Target>
-
-    <ItemGroup>
-        <None Include="..\..\logo.png" Pack="true" PackagePath="">
-            <Link>logo.png</Link>
-        </None>
-    </ItemGroup>
-    
-    <ItemGroup>
-        <Content Include="build/*" PackagePath="build/" />
-        <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
-    </ItemGroup>
+  <Target Name="BuildCSharpier" BeforeTargets="Restore">
+    <Exec command="dotnet build -c $(Configuration)" WorkingDirectory="../CSharpier.Cli" />
+  </Target>
+  <ItemGroup>
+    <None Include="..\..\logo.png" Pack="true" PackagePath="">
+      <Link>logo.png</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="build/*" PackagePath="build/" />
+    <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
+  </ItemGroup>
 </Project>
