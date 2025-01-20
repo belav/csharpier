@@ -25,6 +25,16 @@ public class CSharpierSettings implements PersistentStateComponent<CSharpierSett
         this.runOnSave = value;
     }
 
+    private boolean useCustomPath;
+
+    public boolean getUseCustomPath() {
+        return this.useCustomPath;
+    }
+
+    public void setUseCustomPath(boolean value) {
+        this.useCustomPath = value;
+    }
+
     private String customPath;
 
     public String getCustomPath() {

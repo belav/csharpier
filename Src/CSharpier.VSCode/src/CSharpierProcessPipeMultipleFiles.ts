@@ -30,7 +30,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
     }
 
     private spawnProcess = (csharpierPath: string, workingDirectory: string) => {
-        let newCommandsVersion = "1.0.0";
+        let newCommandsVersion = "1.0.0-alpha1";
         let argument = semver.gte(this.version, newCommandsVersion)
             ? "pipe-files"
             : "--pipe-multiple-files";

@@ -4,6 +4,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import java.io.*;
+import java.lang.Runtime.Version;
 import java.nio.charset.Charset;
 
 public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Disposable {
@@ -38,8 +39,12 @@ public class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess, Dis
     }
 
     private void startProcess() {
+        var newCommandsVersion = "1.0.0-alpha1";
+        var argument = Semver.gte(this.version, newCommandsVersion)
+            ? "pipe-files"
+            : "--pipe-multiple-files";
         try {
-            var processBuilder = new ProcessBuilder(this.csharpierPath, "--pipe-multiple-files");
+            var processBuilder = new ProcessBuilder(this.csharpierPath, argument);
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             this.process = processBuilder.start();

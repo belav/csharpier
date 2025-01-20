@@ -2,6 +2,12 @@
 
 # csharpier-rider Changelog
 
+## [2.0.0]
+- Adding support for CSharpier 1.0.0 which includes the ability to format xml files.
+- Improving logic around starting up CSharpier to minimize UI lag.
+- Wait at most two seconds to format a file on save.
+- Wait longer than two seconds to start CSharpier Server, on some systems it is talking 8+ seconds.
+
 ## [1.8.4]
 - Use working directory to install csharpier so it respects a projects NuGet.config
 

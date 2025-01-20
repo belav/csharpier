@@ -1,3 +1,6 @@
+## 2.0.3
+- Get things working with the alpha version of 1.0.0
+
 ## 2.0.2
 - Use working directory to install csharpier so it respects a projects NuGet.config
 
