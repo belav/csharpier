@@ -1,7 +1,7 @@
 <Project>
-    <PropertyGroup Condition=" '$(CSharpier_Check)' == '' ">
-        <!-- Setting default value here, so it can be overwritten by caller -->
-        <CSharpier_Check>false</CSharpier_Check>
-        <CSharpier_Check Condition=" '$(Configuration)' == 'Release' ">true</CSharpier_Check>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(CSharpier_Check)' == '' ">
+    <!-- Setting default value here, so it can be overwritten by caller -->
+    <CSharpier_Check>false</CSharpier_Check>
+    <CSharpier_Check Condition=" '$(Configuration)' == 'Release' ">true</CSharpier_Check>
+  </PropertyGroup>
 </Project>

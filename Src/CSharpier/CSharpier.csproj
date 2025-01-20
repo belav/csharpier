@@ -37,7 +37,11 @@
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier.Generators\CSharpier.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference
+      Include="..\CSharpier.Generators\CSharpier.Generators.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\logo.png" Pack="true" PackagePath="">

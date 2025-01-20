@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.Build.NoTargets/3.1.0">
-    <ItemGroup>
-        <Content Include="..\CHANGELOG.md">
-            <Link>CHANGELOG.md</Link>
-        </Content>
-        <Content Include="..\CONTRIBUTING.md">
-            <Link>CONTRIBUTING.md</Link>
-        </Content>
-        <Content Include="..\README.md">
-            <Link>README.md</Link>
-        </Content>
-    </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\CHANGELOG.md">
+      <Link>CHANGELOG.md</Link>
+    </Content>
+    <Content Include="..\CONTRIBUTING.md">
+      <Link>CONTRIBUTING.md</Link>
+    </Content>
+    <Content Include="..\README.md">
+      <Link>README.md</Link>
+    </Content>
+  </ItemGroup>
 </Project>
