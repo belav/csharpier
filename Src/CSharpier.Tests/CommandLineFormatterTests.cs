@@ -109,6 +109,20 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Format_Does_Not_Write_Unsupported_With_EditorConfig()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(".editorconfig", "");
+        context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
+
+        var result = this.Format(context);
+
+        result
+            .ErrorOutputLines.Should()
+            .NotContain("Error ./Unsupported.js - Is an unsupported file type.");
+    }
+
+    [Test]
     public void Format_Does_Not_Write_Unsupported_When_Formatting_Directory()
     {
         var context = new TestContext();

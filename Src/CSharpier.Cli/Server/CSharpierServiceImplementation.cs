@@ -42,7 +42,7 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
             }
 
             var printerOptions = optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName);
-            if (printerOptions == null)
+            if (printerOptions == null || printerOptions.Formatter is Formatter.Unknown)
             {
                 return new FormatFileResult(Status.UnsupportedFile);
             }

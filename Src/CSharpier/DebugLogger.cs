@@ -4,7 +4,7 @@ namespace CSharpier;
 
 internal class DebugLogger
 {
-    private static object lockObject = new();
+    private static readonly object lockObject = new();
 
     [Conditional("DEBUG")]
     public static void Log(object message)
@@ -20,5 +20,16 @@ internal class DebugLogger
                 // we don't care if this fails
             }
         }
+    }
+
+    [Conditional("DEBUG")]
+    public static void LogIf(bool condition, object message)
+    {
+        if (!condition)
+        {
+            return;
+        }
+
+        Log(message);
     }
 }
