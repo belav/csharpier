@@ -106,7 +106,6 @@ internal class OptionsProvider
 
         if (resolvedEditorConfig is not null)
         {
-            DebugLogger.Log("has editorconfig");
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
         }
 

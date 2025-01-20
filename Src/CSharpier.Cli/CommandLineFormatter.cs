@@ -64,7 +64,7 @@ internal static class CommandLineFormatter
                     );
 
                     var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
-                    if (printerOptions is not null)
+                    if (printerOptions is { Formatter: not Formatter.Unknown })
                     {
                         printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
@@ -213,7 +213,7 @@ internal static class CommandLineFormatter
 
                 var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
 
-                if (printerOptions is not null)
+                if (printerOptions is { Formatter: not Formatter.Unknown })
                 {
                     printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
                     await FormatPhysicalFile(
