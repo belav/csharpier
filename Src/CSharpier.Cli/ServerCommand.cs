@@ -20,7 +20,6 @@ internal static class ServerCommand
 
         serverCommand.SetHandler(async context =>
         {
-            // TODO do these options even do anything??
             var logLevel = LogLevel.Information;
 
             var serverPort = context.ParseResult.GetValueForOption(serverPortOption);
