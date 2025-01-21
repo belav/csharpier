@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli.Server;
 
-internal class CSharpierServiceImplementation(string? configPath, ILogger logger)
+internal class CSharpierServiceImplementation(ILogger logger)
 {
     private readonly IFileSystem fileSystem = new FileSystem();
 
@@ -35,7 +35,7 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
 
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
-                configPath,
+                configPath: null,
                 this.fileSystem,
                 logger,
                 cancellationToken

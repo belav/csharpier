@@ -50,7 +50,7 @@ public class CliTests
 
     [TestCase("\n")]
     [TestCase("\r\n")]
-    public async Task Should_Format_Basic_File(string lineEnding)
+    public async Task Format_Should_Format_Basic_File(string lineEnding)
     {
         var formattedContent = "public class ClassName { }" + lineEnding;
         var unformattedContent = $"public class ClassName {{{lineEnding}{lineEnding}}}";
@@ -69,7 +69,7 @@ public class CliTests
 
     [TestCase("Subdirectory")]
     [TestCase("./Subdirectory")]
-    public async Task Should_Format_Subdirectory(string subdirectory)
+    public async Task Format_Should_Format_Subdirectory(string subdirectory)
     {
         var formattedContent = "public class ClassName { }\n";
         var unformattedContent = "public class ClassName {\n\n}";
@@ -86,7 +86,7 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Respect_Ignore_File_With_Subdirectory_When_DirectorOrFile_Is_Dot()
+    public async Task Format_Should_Respect_Ignore_File_With_Subdirectory_When_DirectorOrFile_Is_Dot()
     {
         var unformattedContent = "public class Unformatted {     }";
         var filePath = "Subdirectory/IgnoredFile.cs";
@@ -120,7 +120,7 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Support_Config_Path()
+    public async Task Format_Should_Support_Config_Path()
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = "TooWide.cs";
@@ -137,7 +137,23 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
+    public async Task Check_Should_Support_Config_Path()
+    {
+        const string fileContent = "var myVariable = someLongValue;\n";
+        var fileName = "TooWide.cs";
+        await this.WriteFileAsync(fileName, fileContent);
+        await this.WriteFileAsync("config/.csharpierrc", "printWidth: 10");
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check --config-path config/.csharpierrc . ")
+            .ExecuteAsync();
+
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().StartWith("Error ./TooWide.cs - Was not formatted.");
+    }
+
+    [Test]
+    public async Task Format_Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
         if (CannotRunTestWithRedirectedInput())
         {
@@ -154,7 +170,7 @@ public class CliTests
 
     [TestCase("\n")]
     [TestCase("\r\n")]
-    public async Task Should_Format_Piped_File(string lineEnding)
+    public async Task Format_Should_Format_Piped_File(string lineEnding)
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var unformattedContent1 = $"public class ClassName1 {{{lineEnding}{lineEnding}}}";
@@ -169,7 +185,7 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Format_Piped_File_With_Config()
+    public async Task Format_Should_Format_Piped_File_With_Config()
     {
         await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
 
@@ -186,7 +202,7 @@ public class CliTests
     }
 
     [Test]
-    public async Task Should_Format_Piped_File_With_EditorConfig()
+    public async Task Format_Should_Format_Piped_File_With_EditorConfig()
     {
         await this.WriteFileAsync(
             ".editorconfig",
@@ -207,7 +223,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Format_Unicode()
+    public async Task Format_Should_Handle_Unicode()
     {
         // use the \u so that we don't accidentally reformat this to be '?'
         var unicodeContent = $"var test = '{'\u3002'}';\n";
@@ -225,7 +241,7 @@ max_line_length = 10"
     [TestCase("BasicFile.cs")]
     [TestCase("./BasicFile.cs")]
     [TestCase("/BasicFile.cs")]
-    public async Task Should_Print_NotFound(string path)
+    public async Task Format_Should_Print_NotFound(string path)
     {
         var result = await new CsharpierProcess().WithArguments($"format {path}").ExecuteAsync();
 
@@ -234,8 +250,20 @@ max_line_length = 10"
         result.ExitCode.Should().Be(1);
     }
 
+    [TestCase("BasicFile.cs")]
+    [TestCase("./BasicFile.cs")]
+    [TestCase("/BasicFile.cs")]
+    public async Task Check_Should_Print_NotFound(string path)
+    {
+        var result = await new CsharpierProcess().WithArguments($"check {path}").ExecuteAsync();
+
+        result.Output.Should().BeEmpty();
+        result.ErrorOutput.Should().StartWith("There was no file or directory found at " + path);
+        result.ExitCode.Should().Be(1);
+    }
+
     [Test]
-    public async Task Should_Write_To_StdError_For_Piped_Invalid_File()
+    public async Task Format_Should_Write_To_StdError_For_Piped_Invalid_File()
     {
         const string invalidFile = "public class ClassName { ";
 
@@ -250,7 +278,22 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task With_Check_Should_Write_Unformatted_File()
+    public async Task Check_Should_Write_To_StdError_For_Piped_Invalid_File()
+    {
+        const string invalidFile = "public class ClassName { ";
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check")
+            .WithPipedInput(invalidFile)
+            .ExecuteAsync();
+
+        result.Output.Should().BeEmpty();
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
+    }
+
+    [Test]
+    public async Task Check_Should_Write_Unformatted_File()
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
@@ -270,7 +313,7 @@ max_line_length = 10"
     // TODO overrides tests for piping files
     [TestCase("\n")]
     [TestCase("\r\n")]
-    public async Task Should_Format_Multiple_Piped_Files(string lineEnding)
+    public async Task PipeFiles_Should_Format_Multiple_Piped_Files(string lineEnding)
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
         var formattedContent2 = "public class ClassName2 { }" + lineEnding;
@@ -295,7 +338,10 @@ max_line_length = 10"
 
     [TestCase("InvalidFile.cs", "./InvalidFile.cs")]
     [TestCase("./InvalidFile.cs", "./InvalidFile.cs")]
-    public async Task Should_Write_Error_With_Multiple_Piped_Files(string input, string output)
+    public async Task PipeFiles_Should_Write_Error_With_Multiple_Piped_Files(
+        string input,
+        string output
+    )
     {
         const string invalidFile = "public class ClassName { ";
 
@@ -313,7 +359,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Ignore_Piped_File_With_Multiple_Piped_Files()
+    public async Task PipeFiles_Should_Ignore_Piped_File_With_Multiple_Piped_Files()
     {
         const string ignoredFile = "public class ClassName {     }";
         var fileName = Path.Combine(testFileDirectory, "Ignored.cs");
@@ -329,7 +375,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Support_Config_With_Multiple_Piped_Files()
+    public async Task PipeFiles_Should_Support_Config_With_Multiple_Piped_Files()
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = Path.Combine(testFileDirectory, "TooWide.cs");
@@ -345,7 +391,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Support_Override_Config_With_Multiple_Piped_Files()
+    public async Task PipeFiles_Should_Support_Override_Config_With_Multiple_Piped_Files()
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = Path.Combine(testFileDirectory, "TooWide.cst");
@@ -369,7 +415,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Not_Fail_On_Empty_File()
+    public async Task Format_Should_Not_Fail_On_Empty_File()
     {
         await this.WriteFileAsync("BasicFile.cs", "");
 
@@ -381,7 +427,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Not_Fail_On_Bad_Csproj()
+    public async Task Format_Should_Not_Fail_On_Bad_Csproj()
     {
         await this.WriteFileAsync("Empty.csproj", "");
 
@@ -393,7 +439,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
+    public async Task Format_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
         await this.WriteFileAsync(
             "Test.csproj",
@@ -414,7 +460,31 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Fail_On_Mismatched_MSBuild()
+    public async Task Check_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            """
+            <Project Sdk="Microsoft.NET.Sdk">
+              <ItemGroup>
+                <PackageReference Include="CSharpier.MsBuild" Version="99" />
+              </ItemGroup>
+            </Project>
+
+            """
+        );
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check --no-msbuild-check .")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().StartWith("Formatted 1 files in ");
+    }
+
+    [Test]
+    public async Task Format_Should_Fail_On_Mismatched_MSBuild()
     {
         await this.WriteFileAsync(
             "Test.csproj",
@@ -434,7 +504,27 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Cache_And_Validate_Too_Many_Things()
+    public async Task Check_Should_Fail_On_Mismatched_MSBuild()
+    {
+        await this.WriteFileAsync(
+            "Test.csproj",
+            @"<Project Sdk=""Microsoft.NET.Sdk"">
+    <ItemGroup>
+        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
+    </ItemGroup>
+</Project>"
+        );
+
+        var result = await new CsharpierProcess().WithArguments("check .").ExecuteAsync();
+
+        result
+            .ErrorOutput.Should()
+            .Contain("uses version 99 of CSharpier.MsBuild which is a mismatch with version");
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
+    public async Task Format_Should_Cache_And_Validate_Too_Many_Things()
     {
         var unformattedContent = "public class ClassName {     }\n";
         var formattedContent = "public class ClassName { }\n";
@@ -457,7 +547,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Should_Reformat_When_Options_Change_With_Cache()
+    public async Task Format_Should_Reformat_When_Options_Change_With_Cache()
     {
         var unformattedContent = "public class ClassName { \n// break\n }\n";
 
@@ -471,7 +561,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public void Should_Handle_Concurrent_Processes()
+    public void Format_Should_Handle_Concurrent_Processes()
     {
         var unformattedContent = "public class ClassName {     }\n";
         var totalFolders = 10;
@@ -509,7 +599,7 @@ max_line_length = 10"
     [Ignore(
         "This is somewhat useful for testing locally, but doesn't reliably reproduce a problem and takes a while to run. Commenting out the delete cache file line helps to reproduce problems"
     )]
-    public async Task Should_Handle_Concurrent_Processes_2()
+    public async Task Format_Should_Handle_Concurrent_Processes_2()
     {
         var unformattedContent = "public class ClassName {     }\n";
         var filesPerFolder = 1000;

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace CSharpier;
 
@@ -8,6 +9,12 @@ internal class DebugLogger
 
     [Conditional("DEBUG")]
     public static void Log(object message)
+    {
+        Log(JsonSerializer.Serialize(message));
+    }
+
+    [Conditional("DEBUG")]
+    public static void Log(string message)
     {
         lock (lockObject)
         {
