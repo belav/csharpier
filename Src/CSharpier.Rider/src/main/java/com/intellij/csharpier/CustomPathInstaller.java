@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.SystemUtils;
 
 public class CustomPathInstaller {
 
@@ -124,7 +123,10 @@ public class CustomPathInstaller {
             throw new Exception("There was no user.home property and the OS was not windows");
         }
 
-        return Path.of(userHome, ".cache/csharpier", version).toString();
+        var path = Path.of(userHome, ".cache/csharpier", version).toString();
+
+        var arch = this.dotNetProvider.getArchitecture();
+        return arch.map(x -> Path.of(path, x).toString()).orElse(path);
     }
 
     public String getPathForVersion(String version) throws Exception {

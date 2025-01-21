@@ -3,6 +3,7 @@
     "prettier": "prettier ./**/*.java --write"
   },
   "devDependencies": {
+    "prettier": "^3.4.2",
     "prettier-plugin-java": "^2.6.4"
   }
 }
