@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using CliWrap;
@@ -140,11 +141,28 @@ public class CliTests
             return;
         }
 
-        var result = await new CsharpierProcess().ExecuteAsync();
+        // Console.IsInputRedirected is always true when commands are
+        // executed via CliWrap. This is because CliWrap initializes ProcessStartInfo with
+        // the parameter `RedirectStandardInput = true`, which interferes
+        // with this test.
+        var startInfo = new ProcessStartInfo("dotnet")
+        {
+            ArgumentList =
+            {
+                Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll"),
+            },
+            RedirectStandardInput = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        using var process = Process.Start(startInfo) ?? throw new InvalidOperationException();
+        await process.WaitForExitAsync();
+        var errorOutput = await process.StandardError.ReadToEndAsync();
 
-        result.ExitCode.Should().Be(1);
-        result
-            .ErrorOutput.Should()
+        process.ExitCode.Should().Be(1);
+        errorOutput
+            .Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
