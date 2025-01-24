@@ -136,9 +136,11 @@ public class CliTests
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
-        if (CannotRunTestWithRedirectedInput())
+        if (Console.IsInputRedirected)
         {
-            return;
+            Assert.Ignore(
+                "This test cannot run if Console.IsInputRedirected is true. Running it from the command line is required. See https://github.com/dotnet/runtime/issues/1147\""
+            );
         }
 
         // Console.IsInputRedirected is always true when commands are
@@ -542,14 +544,6 @@ max_line_length = 10"
 
         var formatTasks = newFiles.Select(FormatFile).ToArray();
         Task.WaitAll(formatTasks);
-    }
-
-    private static bool CannotRunTestWithRedirectedInput()
-    {
-        // This test cannot run if Console.IsInputRedirected is true.
-        // Running it from the command line is required.
-        // See https://github.com/dotnet/runtime/issues/1147"
-        return Console.IsInputRedirected;
     }
 
     private DateTime GetLastWriteTime(string path)
