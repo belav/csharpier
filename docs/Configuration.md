@@ -5,7 +5,7 @@ hide_table_of_contents: true
 CSharpier has support for a configuration file. You can use any of the following files
 - A ```.csharpierrc``` file in JSON or YAML.
 - A ```.csharpierrc.json``` or ```.csharpierrc.yaml``` file.
-- A ```.editorconfig``` file. See EditorConfig section below.
+- A ```.editorconfig``` file. See [EditorConfig](#editorconfig) section below.
 
 The configuration file will be resolved based on the location of the file being formatted.
 - If a `.csharpierrc` file exists somewhere at or above the given file, that will be used.
