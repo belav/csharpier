@@ -37,11 +37,21 @@ internal class OptionsProvider
         bool limitConfigSearch = false
     )
     {
-        var specifiedConfigFile = configPath is not null
-            ? ConfigFileParser.Create(configPath, fileSystem, logger)
+        var filename = configPath is not null ? Path.GetFileName(configPath) : null;
+        var csharpierConfigPath = configPath;
+        string? editorConfigPath = null;
+
+        if (configPath is not null && Path.GetFileName(configPath) == ".editorconfig")
+        {
+            csharpierConfigPath = null;
+            editorConfigPath = configPath;
+        }
+
+        var specifiedConfigFile = csharpierConfigPath is not null
+            ? ConfigFileParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var csharpierConfigs = configPath is null
+        var csharpierConfigs = csharpierConfigPath is null
             ? ConfigFileParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
@@ -56,12 +66,24 @@ internal class OptionsProvider
 
         try
         {
-            editorConfigSections = EditorConfigParser.FindForDirectoryName(
-                directoryName,
-                fileSystem,
-                limitConfigSearch,
-                ignoreFile
-            );
+            // TODO #1456 can probably add tests to OptionsProviderTests instead of the other two spots
+            // TODO #1456 because there is a specified file, we should always be using that one
+            // kind of like above it passes a "specifiedConfigFile"
+            // right how this just uses the specified one to get the list, but then later
+            // the files that we format don't exist in the same directory so aren't formatted with it
+            editorConfigSections = editorConfigPath is null
+                ? EditorConfigParser.FindForDirectoryName(
+                    directoryName,
+                    fileSystem,
+                    limitConfigSearch,
+                    ignoreFile
+                )
+                : EditorConfigParser.FindForDirectoryName(
+                    Path.GetDirectoryName(editorConfigPath)!,
+                    fileSystem,
+                    true,
+                    ignoreFile
+                );
         }
         catch (Exception ex)
         {

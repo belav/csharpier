@@ -134,6 +134,29 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Support_Config_Path_With_Editorconfig()
+    {
+        const string fileContent = "var myVariable = someLongValue;";
+        var fileName = "TooWide.cs";
+        await this.WriteFileAsync(fileName, fileContent);
+        await this.WriteFileAsync(
+            "config/.editorconfig",
+            """
+            [*]
+            max_line_length = 10"
+            """
+        );
+
+        await new CsharpierProcess()
+            .WithArguments("--config-path config/.editorconfig . ")
+            .ExecuteAsync();
+
+        var result = await this.ReadAllTextAsync(fileName);
+
+        result.Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
         if (Console.IsInputRedirected)
