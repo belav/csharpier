@@ -143,7 +143,7 @@ public class CliTests
             "config/.editorconfig",
             """
             [*]
-            max_line_length = 10"
+            max_line_length = 10
             """
         );
 

@@ -11,6 +11,7 @@ internal class OptionsProvider
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
     private readonly ConfigurationFileOptions? specifiedConfigFile;
+    private readonly bool hasSpecificEditorConfig;
     private readonly IFileSystem fileSystem;
 
     private OptionsProvider(
@@ -18,6 +19,7 @@ internal class OptionsProvider
         List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
         ConfigurationFileOptions? specifiedPrinterOptions,
+        bool hasSpecificEditorConfig,
         IFileSystem fileSystem
     )
     {
@@ -25,6 +27,7 @@ internal class OptionsProvider
         this.csharpierConfigs = csharpierConfigs;
         this.ignoreFile = ignoreFile;
         this.specifiedConfigFile = specifiedPrinterOptions;
+        this.hasSpecificEditorConfig = hasSpecificEditorConfig;
         this.fileSystem = fileSystem;
     }
 
@@ -37,7 +40,6 @@ internal class OptionsProvider
         bool limitConfigSearch = false
     )
     {
-        var filename = configPath is not null ? Path.GetFileName(configPath) : null;
         var csharpierConfigPath = configPath;
         string? editorConfigPath = null;
 
@@ -66,11 +68,6 @@ internal class OptionsProvider
 
         try
         {
-            // TODO #1456 can probably add tests to OptionsProviderTests instead of the other two spots
-            // TODO #1456 because there is a specified file, we should always be using that one
-            // kind of like above it passes a "specifiedConfigFile"
-            // right how this just uses the specified one to get the list, but then later
-            // the files that we format don't exist in the same directory so aren't formatted with it
             editorConfigSections = editorConfigPath is null
                 ? EditorConfigParser.FindForDirectoryName(
                     directoryName,
@@ -99,6 +96,7 @@ internal class OptionsProvider
             csharpierConfigs,
             ignoreFile,
             specifiedConfigFile,
+            hasSpecificEditorConfig: editorConfigPath is not null,
             fileSystem
         );
     }
@@ -108,6 +106,11 @@ internal class OptionsProvider
         if (this.specifiedConfigFile is not null)
         {
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
+        }
+
+        if (this.hasSpecificEditorConfig)
+        {
+            return this.editorConfigs.First().ConvertToPrinterOptions(filePath, true);
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
@@ -128,8 +131,7 @@ internal class OptionsProvider
 
         if (resolvedEditorConfig is not null)
         {
-            DebugLogger.Log("has editorconfig");
-            return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
+            return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
         }
 
         if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
@@ -151,8 +153,8 @@ internal class OptionsProvider
             new
             {
                 specified = this.specifiedConfigFile,
-                csharpierConfigs = this.csharpierConfigs,
-                editorConfigs = this.editorConfigs,
+                this.csharpierConfigs,
+                this.editorConfigs,
             }
         );
     }

@@ -736,7 +736,7 @@ class ClassName
             "config/.editorconfig",
             """
             [*]
-            max_line_length = 10"
+            max_line_length = 10
             """
         );
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
