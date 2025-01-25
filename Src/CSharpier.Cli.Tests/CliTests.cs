@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using CliWrap;
@@ -135,16 +136,35 @@ public class CliTests
     [Test]
     public async Task Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
-        if (CannotRunTestWithRedirectedInput())
+        if (Console.IsInputRedirected)
         {
-            return;
+            Assert.Ignore(
+                "This test cannot run if Console.IsInputRedirected is true. Running it from the command line is required. See https://github.com/dotnet/runtime/issues/1147\""
+            );
         }
 
-        var result = await new CsharpierProcess().ExecuteAsync();
+        // Console.IsInputRedirected is always true when commands are
+        // executed via CliWrap. This is because CliWrap initializes ProcessStartInfo with
+        // the parameter `RedirectStandardInput = true`, which interferes
+        // with this test.
+        var startInfo = new ProcessStartInfo("dotnet")
+        {
+            ArgumentList =
+            {
+                Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll"),
+            },
+            RedirectStandardInput = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        using var process = Process.Start(startInfo) ?? throw new InvalidOperationException();
+        await process.WaitForExitAsync();
+        var errorOutput = await process.StandardError.ReadToEndAsync();
 
-        result.ExitCode.Should().Be(1);
-        result
-            .ErrorOutput.Should()
+        process.ExitCode.Should().Be(1);
+        errorOutput
+            .Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
@@ -524,14 +544,6 @@ max_line_length = 10"
 
         var formatTasks = newFiles.Select(FormatFile).ToArray();
         Task.WaitAll(formatTasks);
-    }
-
-    private static bool CannotRunTestWithRedirectedInput()
-    {
-        // This test cannot run if Console.IsInputRedirected is true.
-        // Running it from the command line is required.
-        // See https://github.com/dotnet/runtime/issues/1147"
-        return Console.IsInputRedirected;
     }
 
     private DateTime GetLastWriteTime(string path)
