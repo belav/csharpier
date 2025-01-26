@@ -3,6 +3,8 @@ using EnvDTE;
 
 namespace CSharpier.VisualStudio
 {
+    using System.Runtime.CompilerServices;
+
     public class FormattingService
     {
         private readonly Logger logger;
@@ -10,22 +12,27 @@ namespace CSharpier.VisualStudio
 
         private static FormattingService? instance;
 
-        public static FormattingService GetInstance(CSharpierPackage package)
+        public static FormattingService GetInstance()
         {
-            return instance ??= new FormattingService(package);
+            return instance ??= new FormattingService();
         }
 
-        private FormattingService(CSharpierPackage package)
+        private FormattingService()
         {
             this.logger = Logger.Instance;
-            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
+            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance();
         }
 
+        public static bool IsSupportedLanguage(string language)
+        {
+            return language is "CSharp" or "XML";
+        }
+        
         public void Format(Document document)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (!this.ProcessSupportsFormatting(document))
+            if (!this.ProcessSupportsFormatting(document.FullName))
             {
                 this.logger.Debug(
                     "Skipping formatting because process does not support formatting."
@@ -33,13 +40,13 @@ namespace CSharpier.VisualStudio
                 return;
             }
 
-            if (document.Language != "CSharp")
+            if (!IsSupportedLanguage(document.Language))
             {
                 this.logger.Debug("Skipping formatting because language was " + document.Language);
                 return;
             }
 
-            if (!(document.Object("TextDocument") is TextDocument textDocument))
+            if (document.Object("TextDocument") is not TextDocument textDocument)
             {
                 this.logger.Debug("There was no TextDocument for the current Document");
                 return;
@@ -124,8 +131,8 @@ namespace CSharpier.VisualStudio
             }
         }
 
-        public bool ProcessSupportsFormatting(Document document) =>
-            this.cSharpierProcessProvider.GetProcessFor(document.FullName)
+        public bool ProcessSupportsFormatting(string filePath) =>
+            this.cSharpierProcessProvider.GetProcessFor(filePath)
                 is not NullCSharpierProcess;
     }
 }

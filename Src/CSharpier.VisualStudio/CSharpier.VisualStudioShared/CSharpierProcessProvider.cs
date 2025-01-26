@@ -8,10 +8,11 @@ using System.Xml;
 
 namespace CSharpier.VisualStudio
 {
+    using NuGet.Versioning;
+
     public class CSharpierProcessProvider : IProcessKiller
     {
         private readonly CustomPathInstaller customPathInstaller;
-        private readonly CSharpierPackage package;
         private readonly Logger logger;
 
         private bool warnedForOldVersion;
@@ -22,16 +23,15 @@ namespace CSharpier.VisualStudio
 
         private static CSharpierProcessProvider? instance;
 
-        public static CSharpierProcessProvider GetInstance(CSharpierPackage package)
+        public static CSharpierProcessProvider GetInstance()
         {
-            return instance ??= new CSharpierProcessProvider(package);
+            return instance ??= new CSharpierProcessProvider();
         }
 
-        private CSharpierProcessProvider(CSharpierPackage package)
+        private CSharpierProcessProvider()
         {
             this.logger = Logger.Instance;
-            this.customPathInstaller = CustomPathInstaller.GetInstance(package);
-            this.package = package;
+            this.customPathInstaller = CustomPathInstaller.GetInstance();
         }
 
         public void FindAndWarmProcess(string filePath)
@@ -231,22 +231,19 @@ namespace CSharpier.VisualStudio
                 var customPath = this.customPathInstaller.GetPathForVersion(version);
 
                 this.logger.Debug($"Adding new version {version} process for {directory}");
-                var installedVersion = this.GetInstalledVersion(version);
-                var pipeFilesVersion = new Version("0.12.0");
-                var serverVersion = new Version("0.29.0");
+                const string serverVersion = "0.29.0";
                 ICSharpierProcess cSharpierProcess;
 
-                if (
-                    installedVersion.CompareTo(serverVersion) >= 0
+                if (Semver.GTE(version, serverVersion)
                     && !CSharpierOptions.Instance.DisableCSharpierServer
                 )
                 {
                     cSharpierProcess = new CSharpierProcessServer(customPath, version, this.logger);
                 }
-                else if (installedVersion.CompareTo(pipeFilesVersion) >= 0)
+                else if (Semver.GTE(version, "0.12.0"))
                 {
                     if (
-                        installedVersion.CompareTo(serverVersion) >= 0
+                        Semver.GTE(version, serverVersion)
                         && CSharpierOptions.Instance.DisableCSharpierServer
                     )
                     {
@@ -292,27 +289,6 @@ namespace CSharpier.VisualStudio
             }
 
             return NullCSharpierProcess.Instance;
-        }
-
-        private Version GetInstalledVersion(string version)
-        {
-            if (Version.TryParse(version, out var installedVersion) && installedVersion != null)
-            {
-                return installedVersion;
-            }
-
-            // handle semver versions
-            // regex from https://semver.org/#is-there-a-suggested-regular-expression-regex-to-check-a-semver-string
-            var regex = Regex.Match(
-                version,
-                @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
-            );
-            if (regex.Success && regex.Groups.Count > 3)
-            {
-                return new Version($"{regex.Groups[1]}.{regex.Groups[2]}.{regex.Groups[3]}");
-            }
-
-            throw new ArgumentException($"Unable to parse version '{version}'", nameof(version));
         }
 
         private void DisplayFailureMessage()

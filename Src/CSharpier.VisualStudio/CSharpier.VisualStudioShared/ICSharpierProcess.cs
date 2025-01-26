@@ -31,5 +31,6 @@ namespace CSharpier.VisualStudio
         Formatted,
         Ignored,
         Failed,
+        UnsupportedFile,
     }
 }

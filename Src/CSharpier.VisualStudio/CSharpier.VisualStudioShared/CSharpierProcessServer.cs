@@ -42,11 +42,14 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
     {
         try
         {
-            const string arguments = "--server";
+            var newCommandsVersion = "1.0.0-alpha1";
+            var argument = Semver.GTE(this.Version, newCommandsVersion)
+                ? "server"
+                : "--server";
 
             this.logger.Debug("Running " + this.csharpierPath + " --server");
 
-            var processStartInfo = new ProcessStartInfo(this.csharpierPath, arguments)
+            var processStartInfo = new ProcessStartInfo(this.csharpierPath, argument)
             {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

@@ -7,19 +7,22 @@ namespace CSharpier.VisualStudio
     public class CustomPathInstaller
     {
         private readonly Logger logger;
-        private readonly string customPath;
+        private readonly string customPath = string.Empty;
 
         private static CustomPathInstaller? instance;
 
-        public static CustomPathInstaller GetInstance(CSharpierPackage package)
+        public static CustomPathInstaller GetInstance()
         {
-            return instance ??= new CustomPathInstaller(package);
+            return instance ??= new CustomPathInstaller();
         }
 
-        private CustomPathInstaller(CSharpierPackage package)
+        private CustomPathInstaller()
         {
             this.logger = Logger.Instance;
-            this.customPath = CSharpierOptions.Instance.CustomPath ?? string.Empty;
+            if (CSharpierOptions.Instance.UseCustomPath is true)
+            {
+                this.customPath = CSharpierOptions.Instance.CustomPath ?? string.Empty;    
+            }
         }
 
         public bool EnsureVersionInstalled(string version, string directory)
@@ -59,17 +62,18 @@ namespace CSharpier.VisualStudio
 
         private bool ValidateInstall(string pathToDirectoryForVersion, string version)
         {
+            var pathForVersion = this.GetPathForVersion(version);
             try
             {
                 var env = new Dictionary<string, string> { { "DOTNET_NOLOGO", "1" } };
 
                 var output = ProcessHelper.ExecuteCommand(
-                    this.GetPathForVersion(version),
+                    pathForVersion,
                     "--version",
                     env
                 );
 
-                this.logger.Debug("dotnet csharpier --version output: " + output);
+                this.logger.Debug($"{pathForVersion} --version output: {output}");
                 var versionWithoutHash = output.Split('+')[0];
                 this.logger.Debug("Using " + versionWithoutHash + " as the version number.");
 
@@ -84,8 +88,7 @@ namespace CSharpier.VisualStudio
             catch (Exception ex)
             {
                 this.logger.Warn(
-                    "Exception while running 'dotnet csharpier --version' in "
-                        + pathToDirectoryForVersion
+                    $"Exception while running '{pathForVersion} --version' in {pathToDirectoryForVersion}"
                 );
                 this.logger.Error(ex);
             }
@@ -95,7 +98,10 @@ namespace CSharpier.VisualStudio
 
         public string GetPathForVersion(string version)
         {
-            return Path.Combine(this.GetDirectoryForVersion(version), "dotnet-csharpier");
+            var newCommandsVersion = "1.0.0-alpha1";
+            var filename = Semver.GTE(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
+            
+            return Path.Combine(this.GetDirectoryForVersion(version), filename);
         }
 
         private string GetDirectoryForVersion(string version)
