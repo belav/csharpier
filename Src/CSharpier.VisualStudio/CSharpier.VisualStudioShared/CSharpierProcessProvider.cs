@@ -234,7 +234,8 @@ namespace CSharpier.VisualStudio
                 const string serverVersion = "0.29.0";
                 ICSharpierProcess cSharpierProcess;
 
-                if (Semver.GTE(version, serverVersion)
+                if (
+                    Semver.GTE(version, serverVersion)
                     && !CSharpierOptions.Instance.DisableCSharpierServer
                 )
                 {

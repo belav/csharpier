@@ -3,8 +3,6 @@ using EnvDTE;
 
 namespace CSharpier.VisualStudio
 {
-    using System.Runtime.CompilerServices;
-
     public class FormattingService
     {
         private readonly Logger logger;
@@ -27,7 +25,7 @@ namespace CSharpier.VisualStudio
         {
             return language is "CSharp" or "XML";
         }
-        
+
         public void Format(Document document)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
@@ -84,8 +82,6 @@ namespace CSharpier.VisualStudio
                 };
                 var result = csharpierProcess2.formatFile(parameter);
 
-                this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
-
                 if (result == null)
                 {
                     return;
@@ -94,6 +90,7 @@ namespace CSharpier.VisualStudio
                 switch (result.status)
                 {
                     case Status.Formatted:
+                        this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
                         UpdateText(result.formattedFile);
                         break;
                     case Status.Ignored:
@@ -104,6 +101,14 @@ namespace CSharpier.VisualStudio
                             "CSharpier cli failed to format the file and returned the following error: "
                                 + result.errorMessage
                         );
+                        break;
+                    case Status.UnsupportedFile:    
+                        this.logger.Warn(
+                            "CSharpier does not support formatting the file " + document.FullName
+                        );
+                        break;
+                    default:
+                        this.logger.Warn("Unable to handle the status of " + result.status);
                         break;
                 }
             }
@@ -132,7 +137,6 @@ namespace CSharpier.VisualStudio
         }
 
         public bool ProcessSupportsFormatting(string filePath) =>
-            this.cSharpierProcessProvider.GetProcessFor(filePath)
-                is not NullCSharpierProcess;
+            this.cSharpierProcessProvider.GetProcessFor(filePath) is not NullCSharpierProcess;
     }
 }

@@ -43,11 +43,8 @@ namespace CSharpier.VisualStudio
                 var argument = Semver.GTE(this.Version, newCommandsVersion)
                     ? "pipe-files"
                     : "--pipe-multiple-files";
-                
-                var processStartInfo = new ProcessStartInfo(
-                    this.csharpierPath,
-                    $" {argument}"
-                )
+
+                var processStartInfo = new ProcessStartInfo(this.csharpierPath, $" {argument}")
                 {
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,

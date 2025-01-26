@@ -42,10 +42,8 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
     {
         try
         {
-            var newCommandsVersion = "1.0.0-alpha1";
-            var argument = Semver.GTE(this.Version, newCommandsVersion)
-                ? "server"
-                : "--server";
+            const string newCommandsVersion = "1.0.0-alpha1";
+            var argument = Semver.GTE(this.Version, newCommandsVersion) ? "server" : "--server";
 
             this.logger.Debug("Running " + this.csharpierPath + " --server");
 

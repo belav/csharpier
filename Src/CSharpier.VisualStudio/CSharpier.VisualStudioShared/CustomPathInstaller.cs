@@ -21,7 +21,7 @@ namespace CSharpier.VisualStudio
             this.logger = Logger.Instance;
             if (CSharpierOptions.Instance.UseCustomPath is true)
             {
-                this.customPath = CSharpierOptions.Instance.CustomPath ?? string.Empty;    
+                this.customPath = CSharpierOptions.Instance.CustomPath ?? string.Empty;
             }
         }
 
@@ -67,11 +67,7 @@ namespace CSharpier.VisualStudio
             {
                 var env = new Dictionary<string, string> { { "DOTNET_NOLOGO", "1" } };
 
-                var output = ProcessHelper.ExecuteCommand(
-                    pathForVersion,
-                    "--version",
-                    env
-                );
+                var output = ProcessHelper.ExecuteCommand(pathForVersion, "--version", env);
 
                 this.logger.Debug($"{pathForVersion} --version output: {output}");
                 var versionWithoutHash = output.Split('+')[0];
@@ -98,9 +94,11 @@ namespace CSharpier.VisualStudio
 
         public string GetPathForVersion(string version)
         {
-            var newCommandsVersion = "1.0.0-alpha1";
-            var filename = Semver.GTE(version, newCommandsVersion) ? "csharpier" : "dotnet-csharpier";
-            
+            const string newCommandsVersion = "1.0.0-alpha1";
+            var filename = Semver.GTE(version, newCommandsVersion)
+                ? "csharpier"
+                : "dotnet-csharpier";
+
             return Path.Combine(this.GetDirectoryForVersion(version), filename);
         }
 

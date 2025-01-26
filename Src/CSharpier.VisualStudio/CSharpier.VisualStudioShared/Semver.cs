@@ -7,7 +7,8 @@
     {
         public static bool GTE(string version, string otherVersion)
         {
-            return SemanticVersion.Parse(version).CompareTo(SemanticVersion.Parse(otherVersion)) >= 0;
+            return SemanticVersion.Parse(version).CompareTo(SemanticVersion.Parse(otherVersion))
+                >= 0;
         }
     }
 }

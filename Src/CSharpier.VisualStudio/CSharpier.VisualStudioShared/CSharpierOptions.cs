@@ -35,7 +35,7 @@
         [Category("CSharpier - Developer")]
         [DisplayName("Directory of custom CSharpier executable")]
         public string? CustomPath { get; set; }
-        
+
         [Category("CSharpier - Developer")]
         [DisplayName("Override CSharpier Executable")]
         public bool? UseCustomPath { get; set; }

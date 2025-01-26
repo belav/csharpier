@@ -28,10 +28,7 @@ namespace CSharpier.VisualStudio
             Instance = new ReformatWithCSharpier(commandService!, dte!);
         }
 
-        private ReformatWithCSharpier(
-            IMenuCommandService commandService,
-            DTE dte
-        )
+        private ReformatWithCSharpier(IMenuCommandService commandService, DTE dte)
         {
             this.dte = dte;
 
@@ -51,7 +48,9 @@ namespace CSharpier.VisualStudio
             var hasWarmedProcess = this.cSharpierProcessProvider.HasWarmedProcessFor(
                 this.dte.ActiveDocument.FullName
             );
-            button.Visible = FormattingService.IsSupportedLanguage(this.dte.ActiveDocument.Language);
+            button.Visible = FormattingService.IsSupportedLanguage(
+                this.dte.ActiveDocument.Language
+            );
 
             if (!hasWarmedProcess)
             {
