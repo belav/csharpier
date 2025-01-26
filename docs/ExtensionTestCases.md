@@ -12,7 +12,7 @@
   - should format after
 - Bad Install
   - Leave directory at C:\Users\[User]\AppData\Local\CSharpier\X, restart plugin
-  - Replace CSharpier at C:\Users\[User]\AppData\Local\CSharpier\X with bad file, restart plugin
+  - Replace dotnet-csharpier at C:\Users\[User]\AppData\Local\CSharpier\X with bad file, restart plugin
   - Repeat with ~/.cache/csharpier/X on ubuntu
 - Formatting
   - Existing open documents get warmed
