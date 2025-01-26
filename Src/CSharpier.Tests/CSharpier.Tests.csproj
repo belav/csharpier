@@ -18,6 +18,12 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj" />
+    <ProjectReference
+      Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
+    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="FormattingTests\TestFiles\**\*.test" />
@@ -29,11 +35,5 @@
     <Content Include="FormattingTests\TestFiles\**\*.expected.test">
       <DependentUpon>$([System.String]::Copy(%(Filename)).Replace('.expected', '.test'))</DependentUpon>
     </Content>
-    <ProjectReference
-      Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false"
-    />
-    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
   </ItemGroup>
 </Project>

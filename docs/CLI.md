@@ -1,11 +1,11 @@
 ---
 hide_table_of_contents: true
 ---
-Use the `dotnet-csharpier` command to run CSharpier from the command line.
+Use the `csharpier` command to run CSharpier from the command line.
 
 In practice, it will look something like:
 ```shell
-dotnet-csharpier format .
+csharpier format .
 ```
 This command will format all c# files in the current directory and its children.
 
@@ -13,7 +13,7 @@ You may want to set up an [ignore file](Ignore.md) or [configuration file](Confi
 
 ## Commands
 ### Format
-`dotnet-csharpier format [<directoryOrFile\>]`
+`csharpier format [<directoryOrFile\>]`
 
 If a list of paths is supplied
 - if the path points to an existing file, CSharpier will format that file
@@ -105,7 +105,7 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     ```
     *shell*
     ```bash
-$ cat TestFile.cs | dotnet csharpier
+    $ cat TestFile.cs | csharpier
     public class ClassName
     {
         public string Field;
@@ -128,7 +128,7 @@ $ cat TestFile.cs | dotnet csharpier
     Treat compilation errors from files as warnings instead of errors.
 
 ### Check
-`dotnet-csharpier check [<directoryOrFile\>]`
+`csharpier check [<directoryOrFile\>]`
 
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
 This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
@@ -142,7 +142,7 @@ See the `format` command for descriptions of these options
 - `--loglevel`
 
 ### Server
-`dotnet-csharpier server`
+`csharpier server`
 
 Running csharpier to format a single file is slow because of the overhead of starting up dotnet.
 This option starts up an http server with an endpoint for formatting files. This is mainly used by IDE plugins
@@ -154,7 +154,7 @@ to drastically improve formatting time.
     Specify the port that CSharpier should start on. Defaults to a random unused port.
 
 ### Pipe Files
-`dotnet-csharpier pipe-files`
+`csharpier pipe-files`
 
 Running csharpier to format a single file is slow because of the overhead of starting up dotnet.
 This option keeps csharpier running so that multiple files can be formatted by piping input to the running process. This is mainly used by IDE plugins
@@ -163,7 +163,7 @@ The input is a '\u0003' delimited list of file names followed by file contents.
 The results are written to stdout delimited by \u0003.  
 For an example of implementing this in code see [this example](https://github.com/belav/csharpier/blob/main/Src/CSharpier.VSCode/src/CSharpierProcessPipeMultipleFiles.ts)
 ```bash
-$ [FullPathToFile]\u0003[FileContents]\u0003[FullPathToFile]\u0003[FileContents]\u0003 | dotnet csharpier --pipe-multiple-files
+$ [FullPathToFile]\u0003[FileContents]\u0003[FullPathToFile]\u0003[FileContents]\u0003 | csharpier --pipe-multiple-files
 public class ClassName
 {
     public string Field;

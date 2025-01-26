@@ -16,7 +16,7 @@ dotnet tool install csharpier
 ```
 Then format the contents of the project
 ```bash
-dotnet-csharpier format .
+csharpier format .
 ```
 
 See [Install a local tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) and [CLI Usage](https://csharpier.com/docs/CLI) for more information

@@ -9,8 +9,8 @@ Install-Package CSharpier.MSBuild
 ```
 
 By default this will 
-- In Debug - on build will run `dotnet csharpier` in the project folder to format all files in the project.
-- In Release - on build will run `dotnet csharpier --check` in the project folder to validate that all files in the project have already been formatted.
+- In Debug - on build will run `csharpier` in the project folder to format all files in the project.
+- In Release - on build will run `csharpier --check` in the project folder to validate that all files in the project have already been formatted.
 
 ## Properties
 

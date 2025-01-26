@@ -3,9 +3,10 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <PackageId>CSharpier</PackageId>
-    <AssemblyName>dotnet-csharpier</AssemblyName>
+    <AssemblyName>CSharpier</AssemblyName>
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
+    <ToolCommandName>csharpier</ToolCommandName>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
     <RollForward>Major</RollForward>
     <SignAssembly>True</SignAssembly>

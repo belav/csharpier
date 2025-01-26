@@ -20,7 +20,7 @@ RUN set -uex \
 WORKDIR /build
 COPY ./Directory.Build.props ./Directory.Packages.props ./
 COPY ./Src/CSharpier.Playground/CSharpier.Playground.csproj Src/CSharpier.Playground/
-COPY ./Src/CSharpier/CSharpier.Core.csproj Src/CSharpier/
+COPY ./Src/CSharpier/CSharpier.csproj Src/CSharpier/
 RUN dotnet restore "Src/CSharpier.Playground/CSharpier.Playground.csproj"
 
 COPY ./Src/CSharpier.Playground/ClientApp/package.json Src/CSharpier.Playground/ClientApp/
