@@ -9,6 +9,6 @@
     <PackageReference Include="BenchmarkDotNet.Annotations" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
+    <ProjectReference Include="..\CSharpier\CSharpier.csproj" />
   </ItemGroup>
 </Project>
