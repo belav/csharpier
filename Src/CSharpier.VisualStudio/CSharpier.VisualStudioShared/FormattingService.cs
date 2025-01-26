@@ -102,7 +102,7 @@ namespace CSharpier.VisualStudio
                                 + result.errorMessage
                         );
                         break;
-                    case Status.UnsupportedFile:    
+                    case Status.UnsupportedFile:
                         this.logger.Warn(
                             "CSharpier does not support formatting the file " + document.FullName
                         );
