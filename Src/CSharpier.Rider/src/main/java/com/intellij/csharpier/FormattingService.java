@@ -34,7 +34,6 @@ public class FormattingService {
             return;
         }
 
-        // TODO #1433 update the readme
         var languageId = psiFile.getLanguage().getID();
         if (!isSupportedLanguageId(languageId)) {
             this.logger.debug("Skipping formatting because language was " + languageId);

@@ -10,22 +10,27 @@ namespace CSharpier.VisualStudio
 
         private static FormattingService? instance;
 
-        public static FormattingService GetInstance(CSharpierPackage package)
+        public static FormattingService GetInstance()
         {
-            return instance ??= new FormattingService(package);
+            return instance ??= new FormattingService();
         }
 
-        private FormattingService(CSharpierPackage package)
+        private FormattingService()
         {
             this.logger = Logger.Instance;
-            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
+            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance();
+        }
+
+        public static bool IsSupportedLanguage(string language)
+        {
+            return language is "CSharp" or "XML";
         }
 
         public void Format(Document document)
         {
             Microsoft.VisualStudio.Shell.ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (!this.ProcessSupportsFormatting(document))
+            if (!this.ProcessSupportsFormatting(document.FullName))
             {
                 this.logger.Debug(
                     "Skipping formatting because process does not support formatting."
@@ -33,13 +38,13 @@ namespace CSharpier.VisualStudio
                 return;
             }
 
-            if (document.Language != "CSharp")
+            if (!IsSupportedLanguage(document.Language))
             {
                 this.logger.Debug("Skipping formatting because language was " + document.Language);
                 return;
             }
 
-            if (!(document.Object("TextDocument") is TextDocument textDocument))
+            if (document.Object("TextDocument") is not TextDocument textDocument)
             {
                 this.logger.Debug("There was no TextDocument for the current Document");
                 return;
@@ -77,8 +82,6 @@ namespace CSharpier.VisualStudio
                 };
                 var result = csharpierProcess2.formatFile(parameter);
 
-                this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
-
                 if (result == null)
                 {
                     return;
@@ -87,6 +90,7 @@ namespace CSharpier.VisualStudio
                 switch (result.status)
                 {
                     case Status.Formatted:
+                        this.logger.Info("Formatted in " + stopwatch.ElapsedMilliseconds + "ms");
                         UpdateText(result.formattedFile);
                         break;
                     case Status.Ignored:
@@ -97,6 +101,14 @@ namespace CSharpier.VisualStudio
                             "CSharpier cli failed to format the file and returned the following error: "
                                 + result.errorMessage
                         );
+                        break;
+                    case Status.UnsupportedFile:
+                        this.logger.Warn(
+                            "CSharpier does not support formatting the file " + document.FullName
+                        );
+                        break;
+                    default:
+                        this.logger.Warn("Unable to handle the status of " + result.status);
                         break;
                 }
             }
@@ -124,8 +136,7 @@ namespace CSharpier.VisualStudio
             }
         }
 
-        public bool ProcessSupportsFormatting(Document document) =>
-            this.cSharpierProcessProvider.GetProcessFor(document.FullName)
-                is not NullCSharpierProcess;
+        public bool ProcessSupportsFormatting(string filePath) =>
+            this.cSharpierProcessProvider.GetProcessFor(filePath) is not NullCSharpierProcess;
     }
 }

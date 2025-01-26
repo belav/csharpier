@@ -18,8 +18,8 @@ namespace CSharpier.VisualStudio
         {
             this.dte = dte;
             this.runningDocumentTable = new RunningDocumentTable(package);
-            this.formattingService = FormattingService.GetInstance(package);
-            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
+            this.formattingService = FormattingService.GetInstance();
+            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance();
 
             this.runningDocumentTable.Advise(this);
         }
@@ -58,6 +58,7 @@ namespace CSharpier.VisualStudio
 
         public int OnBeforeDocumentWindowShow(uint docCookie, int fFirstShow, IVsWindowFrame pFrame)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             var document = this.FindDocument(docCookie);
 
             if (document != null)
