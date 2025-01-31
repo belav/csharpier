@@ -5,6 +5,7 @@ namespace CSharpier.Cli.EditorConfig;
 internal class Section(SectionData section, string directory)
 {
     private readonly GlobMatcher matcher = Globber.Create(section.SectionName, directory);
+    private readonly GlobMatcher noDirectoryMatcher = Globber.Create(section.SectionName, null);
 
     public string? IndentStyle { get; } = section.Keys["indent_style"];
     public string? IndentSize { get; } = section.Keys["indent_size"];
@@ -13,8 +14,10 @@ internal class Section(SectionData section, string directory)
     public string? EndOfLine { get; } = section.Keys["end_of_line"];
     public string? Formatter { get; } = section.Keys["csharpier_formatter"];
 
-    public bool IsMatch(string fileName)
+    public bool IsMatch(string fileName, bool ignoreDirectory)
     {
-        return this.matcher.IsMatch(fileName);
+        return ignoreDirectory
+            ? this.noDirectoryMatcher.IsMatch(fileName)
+            : this.matcher.IsMatch(fileName);
     }
 }

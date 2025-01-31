@@ -10,13 +10,13 @@ internal static class Globber
         AllowSingleBraceSets = true,
     };
 
-    public static GlobMatcher Create(string files, string directory)
+    public static GlobMatcher Create(string files, string? directory)
     {
         var pattern = FixGlob(files, directory);
         return GlobMatcher.Create(pattern, globOptions);
     }
 
-    private static string FixGlob(string glob, string directory)
+    private static string FixGlob(string glob, string? directory)
     {
         glob = glob.IndexOf('/') switch
         {
@@ -24,6 +24,12 @@ internal static class Globber
             0 => glob[1..],
             _ => glob,
         };
+
+        if (directory is null)
+        {
+            return glob;
+        }
+
         directory = directory.Replace(@"\", "/");
         if (!directory.EndsWith("/"))
         {

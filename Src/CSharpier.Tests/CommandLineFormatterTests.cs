@@ -716,6 +716,36 @@ class ClassName
             .Be($"Warning The configuration file at {configPath} was empty.");
     }
 
+    [Test]
+    public void Should_Support_Config_Path()
+    {
+        var context = new TestContext();
+        var configPath = context.WhenAFileExists("config/.csharpierrc", "printWidth: 10");
+        context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
+
+        this.Format(context, configPath: configPath);
+
+        context.GetFileContent("file1.cs").Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
+    public void Should_Support_Config_Path_With_Editor_Config()
+    {
+        var context = new TestContext();
+        var configPath = context.WhenAFileExists(
+            "config/.editorconfig",
+            """
+            [*]
+            max_line_length = 10
+            """
+        );
+        var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
+
+        this.Format(context, configPath: configPath);
+
+        context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
     private FormatResult Format(
         TestContext context,
         bool skipWrite = false,
@@ -724,6 +754,7 @@ class ClassName
         bool includeGenerated = false,
         bool compilationErrorsAsWarnings = false,
         string? standardInFileContents = null,
+        string? configPath = null,
         params string[] directoryOrFilePaths
     )
     {
@@ -746,6 +777,7 @@ class ClassName
             .Format(
                 new CommandLineOptions
                 {
+                    ConfigPath = configPath,
                     DirectoryOrFilePaths = directoryOrFilePaths,
                     OriginalDirectoryOrFilePaths = originalDirectoryOrFilePaths,
                     SkipWrite = skipWrite,
