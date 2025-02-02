@@ -27,17 +27,17 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
       - name: Publish CSharpier.Core library on version change
-        uses: alirezanet/publish-nuget@v3.0.4
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
           TAG_FORMAT: "*"
       - name: Publish CSharpier dotnet tool on version change
-        uses: alirezanet/publish-nuget@v3.0.4
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
           TAG_FORMAT: "*"
       - name: Publish CSharpier.MsBuild library on version change
-        uses: alirezanet/publish-nuget@v3.0.4
+        uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
           TAG_FORMAT: "*"

@@ -11,6 +11,7 @@ internal class OptionsProvider
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
     private readonly ConfigurationFileOptions? specifiedConfigFile;
+    private readonly bool hasSpecificEditorConfig;
     private readonly IFileSystem fileSystem;
 
     private OptionsProvider(
@@ -18,6 +19,7 @@ internal class OptionsProvider
         List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
         ConfigurationFileOptions? specifiedPrinterOptions,
+        bool hasSpecificEditorConfig,
         IFileSystem fileSystem
     )
     {
@@ -25,6 +27,7 @@ internal class OptionsProvider
         this.csharpierConfigs = csharpierConfigs;
         this.ignoreFile = ignoreFile;
         this.specifiedConfigFile = specifiedPrinterOptions;
+        this.hasSpecificEditorConfig = hasSpecificEditorConfig;
         this.fileSystem = fileSystem;
     }
 
@@ -37,11 +40,20 @@ internal class OptionsProvider
         bool limitConfigSearch = false
     )
     {
-        var specifiedConfigFile = configPath is not null
-            ? ConfigFileParser.Create(configPath, fileSystem, logger)
+        var csharpierConfigPath = configPath;
+        string? editorConfigPath = null;
+
+        if (configPath is not null && Path.GetFileName(configPath) == ".editorconfig")
+        {
+            csharpierConfigPath = null;
+            editorConfigPath = configPath;
+        }
+
+        var specifiedConfigFile = csharpierConfigPath is not null
+            ? ConfigFileParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var csharpierConfigs = configPath is null
+        var csharpierConfigs = csharpierConfigPath is null
             ? ConfigFileParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
@@ -56,12 +68,19 @@ internal class OptionsProvider
 
         try
         {
-            editorConfigSections = EditorConfigParser.FindForDirectoryName(
-                directoryName,
-                fileSystem,
-                limitConfigSearch,
-                ignoreFile
-            );
+            editorConfigSections = editorConfigPath is null
+                ? EditorConfigParser.FindForDirectoryName(
+                    directoryName,
+                    fileSystem,
+                    limitConfigSearch,
+                    ignoreFile
+                )
+                : EditorConfigParser.FindForDirectoryName(
+                    Path.GetDirectoryName(editorConfigPath)!,
+                    fileSystem,
+                    true,
+                    ignoreFile
+                );
         }
         catch (Exception ex)
         {
@@ -77,6 +96,7 @@ internal class OptionsProvider
             csharpierConfigs,
             ignoreFile,
             specifiedConfigFile,
+            hasSpecificEditorConfig: editorConfigPath is not null,
             fileSystem
         );
     }
@@ -86,6 +106,11 @@ internal class OptionsProvider
         if (this.specifiedConfigFile is not null)
         {
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
+        }
+
+        if (this.hasSpecificEditorConfig)
+        {
+            return this.editorConfigs.First().ConvertToPrinterOptions(filePath, true);
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
@@ -106,7 +131,7 @@ internal class OptionsProvider
 
         if (resolvedEditorConfig is not null)
         {
-            return resolvedEditorConfig.ConvertToPrinterOptions(filePath);
+            return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
         }
 
         var formatter = PrinterOptions.GetFormatter(filePath);
@@ -124,8 +149,8 @@ internal class OptionsProvider
             new
             {
                 specified = this.specifiedConfigFile,
-                csharpierConfigs = this.csharpierConfigs,
-                editorConfigs = this.editorConfigs,
+                this.csharpierConfigs,
+                this.editorConfigs,
             }
         );
     }

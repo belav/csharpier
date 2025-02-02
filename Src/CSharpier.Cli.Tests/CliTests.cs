@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using CliWrap;
 using CliWrap.Buffered;
@@ -137,6 +138,29 @@ public class CliTests
     }
 
     [Test]
+    public async Task Should_Support_Config_Path_With_Editorconfig()
+    {
+        const string fileContent = "var myVariable = someLongValue;";
+        var fileName = "TooWide.cs";
+        await this.WriteFileAsync(fileName, fileContent);
+        await this.WriteFileAsync(
+            "config/.editorconfig",
+            """
+            [*]
+            max_line_length = 10
+            """
+        );
+
+        await new CsharpierProcess()
+            .WithArguments("--config-path config/.editorconfig . ")
+            .ExecuteAsync();
+
+        var result = await this.ReadAllTextAsync(fileName);
+
+        result.Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
     public async Task Check_Should_Support_Config_Path()
     {
         const string fileContent = "var myVariable = someLongValue;\n";
@@ -155,16 +179,36 @@ public class CliTests
     [Test]
     public async Task Format_Should_Return_Error_When_No_DirectoryOrFile_And_Not_Piping_StdIn()
     {
-        if (CannotRunTestWithRedirectedInput())
+        if (Console.IsInputRedirected)
         {
-            return;
+            Assert.Ignore(
+                "This test cannot run if Console.IsInputRedirected is true. Running it from the command line is required. See https://github.com/dotnet/runtime/issues/1147\""
+            );
         }
 
-        var result = await new CsharpierProcess().WithArguments("format").ExecuteAsync();
+        // Console.IsInputRedirected is always true when commands are
+        // executed via CliWrap. This is because CliWrap initializes ProcessStartInfo with
+        // the parameter `RedirectStandardInput = true`, which interferes
+        // with this test.
+        var startInfo = new ProcessStartInfo("dotnet")
+        {
+            ArgumentList =
+            {
+                Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll"),
+                "format"
+            },
+            RedirectStandardInput = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+        };
+        using var process = Process.Start(startInfo) ?? throw new InvalidOperationException();
+        await process.WaitForExitAsync();
+        var errorOutput = await process.StandardError.ReadToEndAsync();
 
-        result.ExitCode.Should().Be(1);
-        result
-            .ErrorOutput.Should()
+        process.ExitCode.Should().Be(1);
+        errorOutput
+            .Should()
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
@@ -629,14 +673,6 @@ max_line_length = 10"
 
         var formatTasks = newFiles.Select(FormatFile).ToArray();
         Task.WaitAll(formatTasks);
-    }
-
-    private static bool CannotRunTestWithRedirectedInput()
-    {
-        // This test cannot run if Console.IsInputRedirected is true.
-        // Running it from the command line is required.
-        // See https://github.com/dotnet/runtime/issues/1147"
-        return Console.IsInputRedirected;
     }
 
     private DateTime GetLastWriteTime(string path)

@@ -1,4 +1,7 @@
-﻿## [1.9.5]
+﻿## [2.0.0]
+- Adding support for csharpier 1.0.0
+
+## [1.9.5]
 - Use working directory to install csharpier so it respects a projects NuGet.config
 
 ## [1.9.4]

@@ -15,15 +15,15 @@ namespace CSharpier.VisualStudio
 
     public class FormatFileParameter
     {
-        public string fileContents;
-        public string fileName;
+        public string fileContents = string.Empty;
+        public string fileName = string.Empty;
     }
 
     public class FormatFileResult
     {
-        public string formattedFile;
+        public string formattedFile = string.Empty;
         public Status status;
-        public string errorMessage;
+        public string errorMessage = string.Empty;
     }
 
     public enum Status
@@ -31,5 +31,6 @@ namespace CSharpier.VisualStudio
         Formatted,
         Ignored,
         Failed,
+        UnsupportedFile,
     }
 }

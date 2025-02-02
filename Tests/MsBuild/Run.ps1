@@ -97,7 +97,9 @@ if ($failureMessages.Length -ne 0) {
 class TestHelper {
     static [string] RunTestCase([string] $testCase, [bool] $expectErrorCode) {
         $output = (& dotnet build -c Release ./TestCases/$($testCase)/Project.csproj) | Out-String
-        Write-Host $output
+        # because we can't disable gh showing annotations on these files -- https://github.com/actions/toolkit/issues/457
+        # replace error with something GH doesn't look for which essentially disables those annotations
+        Write-Host $output.Replace("error ", "érror ")
         
         $expectedExitCode = 0
         if ($expectErrorCode -eq $true) {

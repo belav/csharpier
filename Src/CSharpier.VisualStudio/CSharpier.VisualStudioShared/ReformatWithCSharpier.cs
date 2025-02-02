@@ -16,7 +16,7 @@ namespace CSharpier.VisualStudio
         private readonly FormattingService formattingService;
         private readonly CSharpierProcessProvider cSharpierProcessProvider;
 
-        public static ReformatWithCSharpier Instance { get; private set; } = default!;
+        public static ReformatWithCSharpier Instance { get; private set; } = null!;
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
@@ -25,14 +25,10 @@ namespace CSharpier.VisualStudio
 
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
 
-            Instance = new ReformatWithCSharpier(package, commandService!, dte!);
+            Instance = new ReformatWithCSharpier(commandService!, dte!);
         }
 
-        private ReformatWithCSharpier(
-            CSharpierPackage package,
-            IMenuCommandService commandService,
-            DTE dte
-        )
+        private ReformatWithCSharpier(IMenuCommandService commandService, DTE dte)
         {
             this.dte = dte;
 
@@ -40,8 +36,8 @@ namespace CSharpier.VisualStudio
             var menuItem = new OleMenuCommand(this.Execute, menuCommandId);
             menuItem.BeforeQueryStatus += this.QueryStatus;
             commandService.AddCommand(menuItem);
-            this.formattingService = FormattingService.GetInstance(package);
-            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance(package);
+            this.formattingService = FormattingService.GetInstance();
+            this.cSharpierProcessProvider = CSharpierProcessProvider.GetInstance();
         }
 
         private void QueryStatus(object sender, EventArgs e)
@@ -52,7 +48,9 @@ namespace CSharpier.VisualStudio
             var hasWarmedProcess = this.cSharpierProcessProvider.HasWarmedProcessFor(
                 this.dte.ActiveDocument.FullName
             );
-            button.Visible = this.dte.ActiveDocument.Name.EndsWith(".cs");
+            button.Visible = FormattingService.IsSupportedLanguage(
+                this.dte.ActiveDocument.Language
+            );
 
             if (!hasWarmedProcess)
             {
@@ -62,7 +60,7 @@ namespace CSharpier.VisualStudio
             else
             {
                 button.Enabled = this.formattingService.ProcessSupportsFormatting(
-                    this.dte.ActiveDocument
+                    this.dte.ActiveDocument.FullName
                 );
             }
         }

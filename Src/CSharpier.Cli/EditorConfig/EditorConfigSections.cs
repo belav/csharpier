@@ -9,9 +9,11 @@ internal class EditorConfigSections
     public required string DirectoryName { get; init; }
     public required IReadOnlyCollection<Section> SectionsIncludingParentFiles { get; init; }
 
-    public PrinterOptions? ConvertToPrinterOptions(string filePath)
+    public PrinterOptions? ConvertToPrinterOptions(string filePath, bool ignoreDirectory)
     {
-        var sections = this.SectionsIncludingParentFiles.Where(o => o.IsMatch(filePath)).ToList();
+        var sections = this
+            .SectionsIncludingParentFiles.Where(o => o.IsMatch(filePath, ignoreDirectory))
+            .ToList();
         var resolvedConfiguration = new ResolvedConfiguration(sections);
 
         var formatter =

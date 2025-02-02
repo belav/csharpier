@@ -94,6 +94,7 @@
       ExcludeAssets="runtime"
     />
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="16.11.69" />
+    <PackageReference Include="NuGet.Versioning" Version="6.12.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

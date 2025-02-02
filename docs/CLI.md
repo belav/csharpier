@@ -31,6 +31,9 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     
     # also supports any name for the config file
     dotnet csharpier format . --config-path "./config/csharpier.yaml"
+
+    # allows passing in a path to an editorconfig
+    dotnet csharpier . --config-path "./config/.editorconfig"
     ```
 
 
