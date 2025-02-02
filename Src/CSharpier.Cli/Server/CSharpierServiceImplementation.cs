@@ -16,6 +16,7 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
         try
         {
             logger.LogInformation("Received request to format " + formatFileParameter.fileName);
+            var fileName = this.fileSystem.Path.GetFullPath(formatFileParameter.fileName);
             if (formatFileParameter.fileContents.StartsWith("// csh-slow"))
             {
                 Thread.Sleep(TimeSpan.FromSeconds(5));
@@ -24,7 +25,7 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
             {
                 throw new Exception("Throwing because of // csh-throw comment");
             }
-            var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileParameter.fileName);
+            var directoryName = this.fileSystem.Path.GetDirectoryName(fileName);
             DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
             {
@@ -42,14 +43,14 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
             );
 
             if (
-                GeneratedCodeUtilities.IsGeneratedCodeFile(formatFileParameter.fileName)
-                || optionsProvider.IsIgnored(formatFileParameter.fileName)
+                GeneratedCodeUtilities.IsGeneratedCodeFile(fileName)
+                || optionsProvider.IsIgnored(fileName)
             )
             {
                 return new FormatFileResult(Status.Ignored);
             }
 
-            var printerOptions = optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName);
+            var printerOptions = optionsProvider.GetPrinterOptionsFor(fileName);
             if (printerOptions == null)
             {
                 return new FormatFileResult(Status.UnsupportedFile);
