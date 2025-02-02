@@ -39,3 +39,4 @@ jobs:
           GithubOS: ${{matrix.os}}
         run: |
           pwsh ./Tests/MsBuild/Run.ps1
+          echo blah
