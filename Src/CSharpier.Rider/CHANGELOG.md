@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [2.1.0]
+- Improved support for users that work with multiple dotnet architectures by splitting out installs of csharpier based on the architecture they were installed with. Thanks go to @letientai299 for the contribution
+
 ## [2.0.0]
 - Adding support for CSharpier 1.0.0 which includes the ability to format xml files.
 - Improving logic around starting up CSharpier to minimize UI lag.

@@ -7,7 +7,10 @@ import com.intellij.openapi.project.Project;
 import com.jetbrains.rider.runtime.RiderDotNetActiveRuntimeHost;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
 public class DotNetProvider {
@@ -62,6 +65,34 @@ public class DotNetProvider {
 
             return false;
         }
+    }
+
+    /// Detects the .Net SDK architecture by running `dotnet --info` and looks for the relevant
+    /// line, for example.
+    ///
+    /// ```
+    /// ...
+    /// Host:
+    ///   Version:      9.0.1
+    ///   Architecture: arm64
+    ///   Commit:       c8acea2262
+    /// ...
+    /// ```
+    ///
+    /// The use case is to help {@link CustomPathInstaller} installs csharpier into different
+    /// location per architecture. So that users who need to use multiple SDKs of different
+    /// architectures doesn't need to reinstall it everytime.
+    ///
+    /// @return e.g. x64, arm64, x86, ...
+    public Optional<String> getArchitecture() {
+        String[] lines = execDotNet(List.of("--info"), null).split(System.lineSeparator());
+        for (String line : lines) {
+            if (line.contains(" Architecture: ")) {
+                var parts = line.split(":");
+                return Optional.of(parts.length > 1 ? parts[1].trim() : line);
+            }
+        }
+        return Optional.empty();
     }
 
     public String execDotNet(List<String> command, File workingDirectory) {

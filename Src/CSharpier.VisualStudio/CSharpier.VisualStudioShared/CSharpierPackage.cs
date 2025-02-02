@@ -45,7 +45,7 @@ namespace CSharpier.VisualStudio
 
         protected override void Dispose(bool disposing)
         {
-            CSharpierProcessProvider.GetInstance(this).KillRunningProcesses();
+            CSharpierProcessProvider.GetInstance().KillRunningProcesses();
             base.Dispose(disposing);
         }
     }

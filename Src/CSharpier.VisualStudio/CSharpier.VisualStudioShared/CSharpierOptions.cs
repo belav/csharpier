@@ -33,11 +33,12 @@
         public bool GlobalLogDebugMessages { get; set; }
 
         [Category("CSharpier - Developer")]
-        [DisplayName("Custom Path")]
-        [Description(
-            "Custom Path - Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
-        )]
+        [DisplayName("Directory of custom CSharpier executable")]
         public string? CustomPath { get; set; }
+
+        [Category("CSharpier - Developer")]
+        [DisplayName("Override CSharpier Executable")]
+        public bool? UseCustomPath { get; set; }
 
         [Category("CSharpier - Developer")]
         [DisplayName("Disable CSharpier Server")]
@@ -52,6 +53,7 @@
             this.GlobalRunOnSave = newInstance.GlobalRunOnSave;
             this.GlobalLogDebugMessages = newInstance.GlobalLogDebugMessages;
             this.CustomPath = newInstance.CustomPath;
+            this.UseCustomPath = newInstance.UseCustomPath;
             this.DisableCSharpierServer = newInstance.DisableCSharpierServer;
         }
 
@@ -131,6 +133,7 @@
                     newInstance.GlobalRunOnSave = o.RunOnSave;
                     newInstance.GlobalLogDebugMessages = o.LogDebugMessages;
                     newInstance.CustomPath = o.CustomPath;
+                    newInstance.UseCustomPath = o.UseCustomPath;
                     newInstance.DisableCSharpierServer = o.DisableCSharpierServer;
                 }
             );
@@ -186,6 +189,7 @@
                     RunOnSave = this.GlobalRunOnSave,
                     LogDebugMessages = this.GlobalLogDebugMessages,
                     CustomPath = this.CustomPath,
+                    UseCustomPath = this.UseCustomPath,
                     DisableCSharpierServer = this.DisableCSharpierServer,
                 }
             );
@@ -253,6 +257,7 @@
             public bool? RunOnSave { get; set; }
             public bool LogDebugMessages { get; set; }
             public string? CustomPath { get; set; }
+            public bool? UseCustomPath { get; set; }
             public bool DisableCSharpierServer { get; set; }
         }
     }
