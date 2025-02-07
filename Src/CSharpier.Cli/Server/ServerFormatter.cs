@@ -17,7 +17,21 @@ internal static class ServerFormatter
         string? actualConfigPath
     )
     {
-        var builder = WebApplication.CreateBuilder();
+        // Editor plugins, like the Rider extension, run the server in the root directory
+        // of a solution. Using the root directory as the content root for an ASP.NET application
+        // is a bad idea, because the default host setup installs a recursive file system watch on the entire
+        // directory. This file system watch does not honor any ignore files and will quickly exhaust OS resource
+        // with large solutions/multiple server processes.
+        // We thus configure the server to run against a temporary, empty directory instead. This also means that
+        // the server won't pick up the default appsettings.json files in the working directory.
+        // We probably don't want this anyway because these appsettings could be intended for the user's solution,
+        // not for csharpier.
+        var emptyContentRoot = Directory.CreateTempSubdirectory("csharpier-empty-content-root");
+        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+            Directory.Delete(emptyContentRoot.FullName, true);
+        var builder = WebApplication.CreateBuilder(
+            new WebApplicationOptions { ContentRootPath = emptyContentRoot.FullName }
+        );
         builder.WebHost.ConfigureKestrel(
             (_, serverOptions) =>
             {
