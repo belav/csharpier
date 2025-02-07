@@ -22,7 +22,7 @@ internal static class PipeCommand
 
         pipeMultipleFilesCommand.SetHandler(async context =>
         {
-            // TODO do these options even do anything??
+            // TODO #819 do these options even do anything??
             var logLevel = LogLevel.Information;
 
             var console = new SystemConsole();
