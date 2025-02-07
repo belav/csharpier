@@ -1,4 +1,7 @@
-﻿## [2.0.0]
+﻿## [2.0.1]
+- Set working directory for CSharpier Server to the directory that contains CSharpier. Fixes an issue with a recursive file watch being run on the project root.
+
+## [2.0.0]
 - Adding support for csharpier 1.0.0
 
 ## [1.9.5]

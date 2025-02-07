@@ -41,6 +41,11 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
         var argument = Semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
         try {
             var processBuilder = new ProcessBuilder(this.csharpierPath, argument);
+
+            // Setting the working directory is important because older versions of csharpier will accidentally
+            // install a recursive file system watch on the entire working directory. If this is the repository root
+            // it will include extremely large and unnecessary directories like .git, .idea, bin, obj, node_modules.
+            processBuilder.directory(new File(this.csharpierPath).getParentFile());
             processBuilder.environment().put("DOTNET_NOLOGO", "1");
             processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             var csharpierProcess = processBuilder.start();

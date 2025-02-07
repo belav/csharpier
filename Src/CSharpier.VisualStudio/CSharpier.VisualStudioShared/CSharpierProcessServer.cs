@@ -49,6 +49,7 @@ public class CSharpierProcessServer : ICSharpierProcess2, IDisposable
 
             var processStartInfo = new ProcessStartInfo(this.csharpierPath, argument)
             {
+                WorkingDirectory = Path.GetDirectoryName(this.csharpierPath),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
