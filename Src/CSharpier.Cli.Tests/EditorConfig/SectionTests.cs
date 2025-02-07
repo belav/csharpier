@@ -9,28 +9,28 @@ namespace CSharpier.Cli.Tests.EditorConfig;
 public class SectionTests
 {
     [Test]
-    public void Test1()
+    public void BasicWildcardGlob()
     {
         var path = "/test/test.cs";
-        var result = new Section(new SectionData("*.cs"), "/test").IsMatch(path);
+        var result = new Section(new SectionData("*.cs"), "/test").IsMatch(path, false);
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void Test2()
+    public void BasicGroupGlob()
     {
         var path = "/test/test.cs";
-        var result = new Section(new SectionData("*.{cs}"), "/test").IsMatch(path);
+        var result = new Section(new SectionData("*.{cs}"), "/test").IsMatch(path, false);
 
         result.Should().BeTrue();
     }
 
     [Test]
-    public void Test3()
+    public void GroupWithTwoOptionsGlob()
     {
         var path = "/test/test.cs";
-        var result = new Section(new SectionData("*.{csx,cs}"), "/test").IsMatch(path);
+        var result = new Section(new SectionData("*.{csx,cs}"), "/test").IsMatch(path, false);
 
         result.Should().BeTrue();
     }

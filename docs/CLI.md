@@ -153,4 +153,7 @@ dotnet csharpier . --config-path "./config/.csharpierrc"
 
 # also supports any name for the config file
 dotnet csharpier . --config-path "./config/csharpier.yaml"
+
+# as of 0.31.0 supports .editorconfig
+dotnet csharpier . --config-path "./config/.editorconfig"
 ```
