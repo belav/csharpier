@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 using CSharpier.SyntaxPrinter;
@@ -31,20 +32,13 @@ internal static class XmlFormatter
         var mapping = new Dictionary<XNode, XmlNode>();
         CreateMapping(xDocument, xmlDocument, mapping);
 
-        /* TODO #819 Error
-         efcore?
+        /* TODO #819 it screws with the contents of these, is this valid?
          
+    <PropertyGroup>
+      <_runtimeHostConfigurationOptionsString>@(_switchesAsItems->'&lt;RuntimeHostConfigurationOption Include=&quot;%(Identity)&quot; Value=&quot;%(Value)&quot; Trim=&quot;true&quot; /&gt;', '%0a    ')</_runtimeHostConfigurationOptionsString>
+      <_additionalPropertiesString>@(_propertiesAsItems->'&lt;%(Identity)&gt;%(Value)&lt;/%(Identity)&gt;', '%0a    ')</_additionalPropertiesString>
+    </PropertyGroup>
          */
-        /* TODO #819 Review
-         aspnetcore - https://github.com/belav/csharpier-repos/pull/121/files
-         runtime - https://github.com/belav/csharpier-repos/pull/122
-         efcore - https://github.com/belav/csharpier-repos/pull/123
-         - https://github.com/belav/csharpier-repos/pull/123/files#diff-9193fb0473a296510e5dfcecc173d53be487a9ea112a8b80514046ad0a9b2594
-         - this does some weird stuff with encoding inside of XText
-         roslyn - https://github.com/belav/csharpier-repos/pull/124/files
-         - probably good
-         */
-
 
         var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
         var printingContext = new XmlPrintingContext
@@ -64,7 +58,12 @@ internal static class XmlFormatter
         {
             Code = formattedXml,
             DocTree = printerOptions.IncludeDocTree ? DocSerializer.Serialize(doc) : string.Empty,
-            AST = string.Empty, // TODO #819 printerOptions.IncludeAST ? JsonSerializer.Serialize(xDocument) : string.Empty,
+            AST = printerOptions.IncludeAST
+                ? JsonSerializer.Serialize(
+                    xDocument,
+                    new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }
+                )
+                : string.Empty,
         };
     }
 
