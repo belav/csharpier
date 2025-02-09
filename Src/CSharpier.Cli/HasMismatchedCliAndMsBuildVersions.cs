@@ -28,7 +28,7 @@ internal static class HasMismatchedCliAndMsBuildVersions
                     XElement packagesXElement;
                     try
                     {
-                        packagesXElement = XElement.Load(fileSystem.File.OpenRead(filePath));
+                        packagesXElement = XElement.Parse(fileSystem.File.ReadAllText(filePath));
                     }
                     catch (Exception ex)
                     {
@@ -58,7 +58,7 @@ internal static class HasMismatchedCliAndMsBuildVersions
             XElement csProjXElement;
             try
             {
-                csProjXElement = XElement.Load(fileSystem.File.OpenRead(pathToCsProj));
+                csProjXElement = XElement.Parse(fileSystem.File.ReadAllText(pathToCsProj));
             }
             catch (Exception ex)
             {

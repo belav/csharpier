@@ -55,12 +55,20 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 return new FormatFileResult(Status.UnsupportedFile);
             }
 
-            // TODO if compilation errors we still return whatever was here
+            // TODO #819 if there are compilation errors we need to do something here
             var result = await CodeFormatter.FormatAsync(
                 formatFileParameter.fileContents,
                 printerOptions,
                 cancellationToken
             );
+
+            if (result.CompilationErrors.Any())
+            {
+                return new FormatFileResult(Status.Failed)
+                {
+                    errorMessage = "File had compilation errors and could not be formatted",
+                };
+            }
 
             return new FormatFileResult(Status.Formatted) { formattedFile = result.Code };
         }
