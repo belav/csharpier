@@ -54,7 +54,7 @@ internal static class CommandLineFormatter
                     (
                         commandLineOptions.IncludeGenerated
                         || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    ) && !optionsProvider.IsIgnored(filePath)
+                    ) && !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -62,7 +62,10 @@ internal static class CommandLineFormatter
                         logger
                     );
 
-                    var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
+                    var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                        filePath,
+                        cancellationToken
+                    );
                     if (printerOptions is { Formatter: not Formatter.Unknown })
                     {
                         printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
@@ -204,13 +207,16 @@ internal static class CommandLineFormatter
                     (
                         !commandLineOptions.IncludeGenerated
                         && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    ) || optionsProvider.IsIgnored(actualFilePath)
+                    ) || await optionsProvider.IsIgnoredAsync(actualFilePath, cancellationToken)
                 )
                 {
                     return;
                 }
 
-                var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
+                var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                    actualFilePath,
+                    cancellationToken
+                );
 
                 if (printerOptions is { Formatter: not Formatter.Unknown })
                 {

@@ -788,7 +788,10 @@ indent_size = 2
                 CancellationToken.None
             );
 
-            var printerOptions = provider.GetPrinterOptionsFor(filePath);
+            var printerOptions = await provider.GetPrinterOptionsForAsync(
+                filePath,
+                CancellationToken.None
+            );
 
             if (printerOptions is null)
             {

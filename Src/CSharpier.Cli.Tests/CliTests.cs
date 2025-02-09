@@ -15,10 +15,9 @@ namespace CSharpier.Cli.Tests;
 // are written properly
 public class CliTests
 {
-    private static readonly string testFileDirectory = Path.Combine(
-        Directory.GetCurrentDirectory(),
-        "TestFiles"
-    );
+    private static readonly string testFileDirectory = Directory
+        .CreateTempSubdirectory("CsharpierTestFies")
+        .FullName;
 
     [SetUp]
     public void BeforeEachTest()

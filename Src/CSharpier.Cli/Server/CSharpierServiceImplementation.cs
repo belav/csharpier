@@ -51,13 +51,16 @@ internal class CSharpierServiceImplementation(ILogger logger)
 
             if (
                 GeneratedCodeUtilities.IsGeneratedCodeFile(fileName)
-                || optionsProvider.IsIgnored(fileName)
+                || await optionsProvider.IsIgnoredAsync(fileName, cancellationToken)
             )
             {
                 return new FormatFileResult(Status.Ignored);
             }
 
-            var printerOptions = optionsProvider.GetPrinterOptionsFor(formatFileParameter.fileName);
+            var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                formatFileParameter.fileName,
+                cancellationToken
+            );
             if (printerOptions == null || printerOptions.Formatter is Formatter.Unknown)
             {
                 return new FormatFileResult(Status.UnsupportedFile);

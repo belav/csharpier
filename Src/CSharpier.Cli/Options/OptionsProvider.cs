@@ -14,21 +14,19 @@ internal class OptionsProvider
         string,
         CSharpierConfigData?
     > csharpierConfigsByDirectory = new();
-    private readonly IgnoreFile ignoreFile;
+    private readonly ConcurrentDictionary<string, IgnoreFile> ignoreFilesByDirectory = new();
     private readonly ConfigurationFileOptions? specifiedConfigFile;
     private readonly EditorConfigSections? specifiedEditorConfig;
     private readonly IFileSystem fileSystem;
     private readonly ILogger logger;
 
     private OptionsProvider(
-        IgnoreFile ignoreFile,
         ConfigurationFileOptions? specifiedPrinterOptions,
         EditorConfigSections? specifiedEditorConfig,
         IFileSystem fileSystem,
         ILogger logger
     )
     {
-        this.ignoreFile = ignoreFile;
         this.specifiedConfigFile = specifiedPrinterOptions;
         this.specifiedEditorConfig = specifiedEditorConfig;
         this.fileSystem = fileSystem;
@@ -56,7 +54,7 @@ internal class OptionsProvider
             ? CSharpierConfigParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
+        var ignoreFile = await IgnoreFile.CreateAsync(directoryName, fileSystem, cancellationToken);
 
         var specifiedEditorConfig = editorConfigPath is not null
             ? EditorConfigLocator.FindForDirectoryName(
@@ -67,7 +65,6 @@ internal class OptionsProvider
             : null;
 
         var optionsProvider = new OptionsProvider(
-            ignoreFile,
             specifiedConfigFile,
             specifiedEditorConfig,
             fileSystem,
@@ -86,10 +83,19 @@ internal class OptionsProvider
                 EditorConfigLocator.FindForDirectoryName(directoryName, fileSystem, ignoreFile);
         }
 
+        optionsProvider.ignoreFilesByDirectory[directoryName] = await IgnoreFile.CreateAsync(
+            directoryName,
+            fileSystem,
+            cancellationToken
+        );
+
         return optionsProvider;
     }
 
-    public PrinterOptions? GetPrinterOptionsFor(string filePath)
+    public async Task<PrinterOptions?> GetPrinterOptionsForAsync(
+        string filePath,
+        CancellationToken cancellationToken
+    )
     {
         if (this.specifiedConfigFile is not null)
         {
@@ -111,7 +117,10 @@ internal class OptionsProvider
             return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
         }
 
-        var resolvedEditorConfig = this.FindEditorConfig(directoryName);
+        var resolvedEditorConfig = await this.FindEditorConfigAsync(
+            directoryName,
+            cancellationToken
+        );
         if (resolvedEditorConfig is not null)
         {
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
@@ -175,7 +184,10 @@ internal class OptionsProvider
         return resolvedCSharpierConfig;
     }
 
-    private EditorConfigSections? FindEditorConfig(string directoryName)
+    private async Task<EditorConfigSections?> FindEditorConfigAsync(
+        string directoryName,
+        CancellationToken cancellationToken
+    )
     {
         if (this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
         {
@@ -202,7 +214,10 @@ internal class OptionsProvider
                     EditorConfigLocator.FindForDirectoryName(
                         searchingDirectory.FullName,
                         this.fileSystem,
-                        this.ignoreFile
+                        await this.FindIgnoreFileAsync(
+                            searchingDirectory.FullName,
+                            cancellationToken
+                        )
                     );
                 break;
             }
@@ -219,9 +234,68 @@ internal class OptionsProvider
         return resolvedEditorConfig;
     }
 
-    public bool IsIgnored(string actualFilePath)
+    private async Task<IgnoreFile> FindIgnoreFileAsync(
+        string directoryName,
+        CancellationToken cancellationToken
+    )
     {
-        return this.ignoreFile.IsIgnored(actualFilePath);
+        if (this.ignoreFilesByDirectory.TryGetValue(directoryName, out var ignoreFile))
+        {
+            return ignoreFile;
+        }
+
+        var directoriesToSet = new List<string>();
+        var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
+        while (
+            searchingDirectory is not null
+            && !this.ignoreFilesByDirectory.TryGetValue(searchingDirectory.FullName, out ignoreFile)
+        )
+        {
+            if (
+                this.fileSystem.File.Exists(Path.Combine(searchingDirectory.FullName, ".gitignore"))
+                || this.fileSystem.File.Exists(
+                    Path.Combine(searchingDirectory.FullName, ".csharpierignore")
+                )
+            )
+            {
+                this.ignoreFilesByDirectory[searchingDirectory.FullName] = ignoreFile =
+                    await IgnoreFile.CreateAsync(
+                        searchingDirectory.FullName,
+                        this.fileSystem,
+                        cancellationToken
+                    );
+                break;
+            }
+
+            directoriesToSet.Add(searchingDirectory.FullName);
+            searchingDirectory = searchingDirectory.Parent;
+        }
+
+        if (ignoreFile is null)
+        {
+            // should never happen
+            throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
+        }
+
+        foreach (var directoryToSet in directoriesToSet)
+        {
+            this.ignoreFilesByDirectory[directoryToSet] = ignoreFile;
+        }
+
+        return ignoreFile;
+    }
+
+    public async Task<bool> IsIgnoredAsync(
+        string actualFilePath,
+        CancellationToken cancellationToken
+    )
+    {
+        return (
+            await this.FindIgnoreFileAsync(
+                Path.GetDirectoryName(actualFilePath)!,
+                cancellationToken
+            )
+        ).IsIgnored(actualFilePath);
     }
 
     public string Serialize()
