@@ -1,3 +1,6 @@
+## 2.0.6
+- Clean up some logging
+
 ## 2.0.5
 - Add option for "use custom path"
 

@@ -25,16 +25,15 @@ export class FormatDocumentProvider {
             };
             const result = await csharpierProcess.formatFile2(parameter);
 
-            if (writeLogs) {
-                this.logger.info("Formatted in " + (performance.now() - startTime) + "ms");
-            }
-
             if (result == null) {
                 return null;
             }
 
             switch (result.status) {
                 case "Formatted":
+                    if (writeLogs) {
+                        this.logger.info("Formatted in " + (performance.now() - startTime) + "ms");
+                    }
                     return result.formattedFile;
                 case "Ignored":
                     if (writeLogs) {
