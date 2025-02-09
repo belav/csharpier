@@ -64,6 +64,16 @@ internal class OptionsProvider
 
         IList<EditorConfigSections>? editorConfigSections = null;
 
+        // TODO #631 prettier doesn't look through the directories to find an ignore path
+        // so when they implemented this, they just modified the default ignorePath to be [./.gitignore, ./.prettierignore]
+        // we look for it in the file structure, and .gitignore could exist at a lower level while the csharpierignore may only exist at the root
+        // with another .gitignore at the root
+        // can we merge all those possible files together?
+        // what if something is ignored in git but they want it formatted?
+        // can the csharpierignore exclude files?
+        // maybe priority is .csharpierignore if exists - make sure it supports excludes
+        // then follow .gitignore rules, which are closest ignore file takes priority if it has rules
+
         var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
         try
