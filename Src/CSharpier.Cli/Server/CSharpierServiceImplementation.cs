@@ -66,7 +66,7 @@ internal class CSharpierServiceImplementation(ILogger logger)
             {
                 return new FormatFileResult(Status.Failed)
                 {
-                    errorMessage = "File had compilation errors and could not be formatted"
+                    errorMessage = "File had compilation errors and could not be formatted",
                 };
             }
 

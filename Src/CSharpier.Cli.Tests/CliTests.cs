@@ -195,7 +195,7 @@ public class CliTests
             ArgumentList =
             {
                 Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll"),
-                "format"
+                "format",
             },
             RedirectStandardInput = false,
             RedirectStandardOutput = true,
