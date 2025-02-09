@@ -152,7 +152,7 @@ public class CliTests
         );
 
         await new CsharpierProcess()
-            .WithArguments("--config-path config/.editorconfig . ")
+            .WithArguments("format --config-path config/.editorconfig . ")
             .ExecuteAsync();
 
         var result = await this.ReadAllTextAsync(fileName);
