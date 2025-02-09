@@ -32,14 +32,6 @@ internal static class XmlFormatter
         var mapping = new Dictionary<XNode, XmlNode>();
         CreateMapping(xDocument, xmlDocument, mapping);
 
-        /* TODO #819 it screws with the contents of these, is this valid?
-         
-    <PropertyGroup>
-      <_runtimeHostConfigurationOptionsString>@(_switchesAsItems->'&lt;RuntimeHostConfigurationOption Include=&quot;%(Identity)&quot; Value=&quot;%(Value)&quot; Trim=&quot;true&quot; /&gt;', '%0a    ')</_runtimeHostConfigurationOptionsString>
-      <_additionalPropertiesString>@(_propertiesAsItems->'&lt;%(Identity)&gt;%(Value)&lt;/%(Identity)&gt;', '%0a    ')</_additionalPropertiesString>
-    </PropertyGroup>
-         */
-
         var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
         var printingContext = new XmlPrintingContext
         {

@@ -62,6 +62,14 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 cancellationToken
             );
 
+            if (result.CompilationErrors.Any())
+            {
+                return new FormatFileResult(Status.Failed)
+                {
+                    errorMessage = "File had compilation errors and could not be formatted"
+                };
+            }
+
             return new FormatFileResult(Status.Formatted) { formattedFile = result.Code };
         }
         catch (Exception ex)
