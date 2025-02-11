@@ -41,9 +41,9 @@ export default function Home() {
                     <h4>Why adopt CSharpier?</h4>
                     <ul>
                         <li>It is fast.</li>
-                        <li>Provides a single option to debate - width</li>
+                        <li>Provides only basic options</li>
                         <li>Integrates with the major c# IDEs</li>
-                        <li>Works with c# &lt;= 12</li>
+                        <li>Works with c# &lt;= 13</li>
                         <li>Supports validating the changes it makes.</li>
                     </ul>
                 </div>
