@@ -51,13 +51,15 @@ internal static class XmlFormatter
             Code = formattedXml,
             DocTree = printerOptions.IncludeDocTree ? DocSerializer.Serialize(doc) : string.Empty,
             AST = printerOptions.IncludeAST
-                ? JsonSerializer.Serialize(
-                    xDocument,
-                    new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }
-                )
+                ? JsonSerializer.Serialize(xDocument, XmlFormatterJsonSerializerOptions)
                 : string.Empty,
         };
     }
+
+    private static readonly JsonSerializerOptions XmlFormatterJsonSerializerOptions = new()
+    {
+        ReferenceHandler = ReferenceHandler.Preserve,
+    };
 
     private static void CreateMapping(
         XNode? xNode,

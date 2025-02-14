@@ -165,8 +165,8 @@ public class CliTests
     {
         const string fileContent = "var myVariable = someLongValue;\n";
         var fileName = "TooWide.cs";
-        await this.WriteFileAsync(fileName, fileContent);
-        await this.WriteFileAsync("config/.csharpierrc", "printWidth: 10");
+        await WriteFileAsync(fileName, fileContent);
+        await WriteFileAsync("config/.csharpierrc", "printWidth: 10");
 
         var result = await new CsharpierProcess()
             .WithArguments("check --config-path config/.csharpierrc . ")
@@ -506,7 +506,7 @@ max_line_length = 10"
     [Test]
     public async Task Check_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
-        await this.WriteFileAsync(
+        await WriteFileAsync(
             "Test.csproj",
             """
             <Project Sdk="Microsoft.NET.Sdk">
@@ -530,7 +530,7 @@ max_line_length = 10"
     [Test]
     public async Task Format_Should_Fail_On_Mismatched_MSBuild()
     {
-        await this.WriteFileAsync(
+        await WriteFileAsync(
             "Test.csproj",
             @"<Project Sdk=""Microsoft.NET.Sdk"">
     <ItemGroup>

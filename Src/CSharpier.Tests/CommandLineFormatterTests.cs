@@ -115,7 +115,7 @@ public class CommandLineFormatterTests
         context.WhenAFileExists(".editorconfig", "");
         context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
 
-        var result = this.Format(context);
+        var result = Format(context);
 
         result
             .ErrorOutputLines.Should()

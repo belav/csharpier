@@ -37,13 +37,13 @@ internal class PrinterOptions(Formatter formatter)
     public static Formatter GetFormatter(string filePath)
     {
         var formatter =
-            filePath.EndsWith(".cs") ? Formatter.CSharp
-            : filePath.EndsWith(".csx") ? Formatter.CSharpScript
-            : filePath.EndsWith(".csproj")
-            || filePath.EndsWith(".props")
-            || filePath.EndsWith(".targets")
-            || filePath.EndsWith(".xml")
-            || filePath.EndsWith(".config")
+            filePath.EndsWith(".cs", StringComparison.Ordinal) ? Formatter.CSharp
+            : filePath.EndsWith(".csx", StringComparison.Ordinal) ? Formatter.CSharpScript
+            : filePath.EndsWith(".csproj", StringComparison.Ordinal)
+            || filePath.EndsWith(".props", StringComparison.Ordinal)
+            || filePath.EndsWith(".targets", StringComparison.Ordinal)
+            || filePath.EndsWith(".xml", StringComparison.Ordinal)
+            || filePath.EndsWith(".config", StringComparison.Ordinal)
                 ? Formatter.XML
             : Formatter.Unknown;
         return formatter;
