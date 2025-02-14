@@ -596,6 +596,48 @@ public class CommandLineFormatterTests
         result.ErrorOutputLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
     }
 
+    // TODO #631
+    // .csharpierignore is priority if exists - make sure it supports excludes
+    // then follow .gitignore rules, which are closest ignore file takes priority if it has rules
+
+    // TODO #631 test cases
+    /*
+        subgit      rootgit     csharpier   result
+        ignore      not ignore  -           ignore
+        not ignore  ignore      -           not ignore
+        ignore      -           not ignore  not ignore
+        not ignore  -           ignore      ignore
+     */
+
+    [TestCase("File.cs", "File.cs", "!File.cs", false)]
+    [TestCase("File.cs", "", "File.cs", true)]
+    [TestCase("File.cs", "!File.cs", "File.cs", true)]
+    [TestCase("File.cs", "File.cs", "", true)]
+    public void File_In_Ignore_Skips_Formatting(
+        string fileName,
+        string gitIgnoreContents,
+        string csharpierIgnoreContents,
+        bool isIgnored
+    )
+    {
+        var context = new TestContext();
+        var unformattedFilePath = fileName;
+        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+        context.WhenAFileExists(".csharpierignore", csharpierIgnoreContents);
+        context.WhenAFileExists(".gitignore", gitIgnoreContents);
+
+        var result = Format(context);
+
+        if (isIgnored)
+        {
+            result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        }
+        else
+        {
+            result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+        }
+    }
+
     [Test]
     public void Write_Stdout_Should_Only_Write_File()
     {
