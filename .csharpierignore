@@ -3,3 +3,5 @@ build
 Uploads/
 
 Tests/MsBuild/TestCases/
+
+Src/CSharpier.Benchmarks/CodeSamples/
