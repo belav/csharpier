@@ -5,7 +5,7 @@ namespace CSharpier.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class PrinterOptionsTests
+internal sealed class PrinterOptionsTests
 {
     [TestCase(EndOfLine.LF, "\n")]
     [TestCase(EndOfLine.CRLF, "\r\n")]
