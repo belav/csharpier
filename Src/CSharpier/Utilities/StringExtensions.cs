@@ -7,12 +7,7 @@ internal static class StringExtensions
 {
     public static bool EqualsIgnoreCase(this string value, string otherValue)
     {
-        return string.Compare(value, otherValue, StringComparison.OrdinalIgnoreCase) == 0;
-    }
-
-    public static bool ContainsIgnoreCase(this string value, string otherValue)
-    {
-        return value.ToLower().Contains(otherValue.ToLower());
+        return string.Equals(value, otherValue, StringComparison.OrdinalIgnoreCase);
     }
 
     public static bool StartsWithIgnoreCase(this string value, string otherValue)
@@ -25,10 +20,22 @@ internal static class StringExtensions
         return value.EndsWith(otherValue, StringComparison.OrdinalIgnoreCase);
     }
 
-    public static bool IsBlank(this string? value)
+#if NETSTANDARD2_0
+    public static bool StartsWith(this string value, char otherValue)
     {
-        return value == null || string.IsNullOrEmpty(value.Trim());
+        return value.StartsWith(otherValue.ToString());
     }
+
+    public static bool EndsWith(this string value, char otherValue)
+    {
+        return value.EndsWith(otherValue.ToString());
+    }
+
+    public static int IndexOf(this string value, char otherValue)
+    {
+        return value.IndexOf(otherValue.ToString(), StringComparison.Ordinal);
+    }
+#endif
 
     // some unicode characters should be considered size of 2 when calculating how big this string will be when printed
     public static int GetPrintedWidth(this string value)

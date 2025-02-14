@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -58,7 +59,11 @@ internal static class ServerFormatter
                     // at the same time they won't crash
                     o.HandleFileError = _ => { };
                     o.FormatLogFileName = name =>
-                        string.Format(name, currentPort == 0 ? string.Empty : currentPort);
+                        string.Format(
+                            CultureInfo.InvariantCulture,
+                            name,
+                            currentPort == 0 ? string.Empty : currentPort
+                        );
                 }
             );
         });

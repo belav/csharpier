@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace CSharpier;
@@ -104,11 +105,14 @@ internal static class DocSerializer
         else if (doc is Group group)
         {
             AppendIndent();
-            result.AppendLine($"Doc.Group{(group.GroupId != null ? "WithId" : string.Empty)}(");
+            result.AppendLine(
+                CultureInfo.InvariantCulture,
+                $"Doc.Group{(group.GroupId != null ? "WithId" : string.Empty)}("
+            );
             if (group.GroupId != null)
             {
                 AppendNextIndent();
-                result.AppendLine($"\"{group.GroupId}\",");
+                result.AppendLine(CultureInfo.InvariantCulture, $"\"{group.GroupId}\",");
             }
             Serialize(group.Contents, result, indent + 1, group);
             result.AppendLine();
@@ -149,7 +153,10 @@ internal static class DocSerializer
         else if (doc is IHasContents hasContents)
         {
             AppendIndent();
-            result.AppendLine($"Doc.{(doc is IndentDoc ? "Indent" : doc.GetType().Name)}(");
+            result.AppendLine(
+                CultureInfo.InvariantCulture,
+                $"Doc.{(doc is IndentDoc ? "Indent" : doc.GetType().Name)}("
+            );
             if (doc is Align align)
             {
                 AppendNextIndent();
@@ -169,7 +176,7 @@ internal static class DocSerializer
 
             result.AppendLine(",");
             AppendNextIndent();
-            result.Append($"\"{indentIfBreak.GroupId}\"");
+            result.Append(CultureInfo.InvariantCulture, $"\"{indentIfBreak.GroupId}\"");
 
             result.AppendLine();
             AppendIndent();
@@ -188,7 +195,7 @@ internal static class DocSerializer
             {
                 result.AppendLine(",");
                 AppendNextIndent();
-                result.Append($"\"{ifBreak.GroupId}\"");
+                result.Append(CultureInfo.InvariantCulture, $"\"{ifBreak.GroupId}\"");
             }
 
             result.AppendLine();
@@ -199,6 +206,7 @@ internal static class DocSerializer
         {
             AppendIndent();
             result.Append(
+                CultureInfo.InvariantCulture,
                 $"Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{leadingComment.Type})"
             );
         }
@@ -206,6 +214,7 @@ internal static class DocSerializer
         {
             AppendIndent();
             result.Append(
+                CultureInfo.InvariantCulture,
                 $"Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{trailingComment.Type})"
             );
         }
@@ -214,11 +223,14 @@ internal static class DocSerializer
             AppendIndent();
             if (region.IsEnd)
             {
-                result.Append($"""Doc.EndRegion("{region.Text}")""");
+                result.Append(CultureInfo.InvariantCulture, $"""Doc.EndRegion("{region.Text}")""");
             }
             else
             {
-                result.Append($"""Doc.BeginRegion("{region.Text}")""");
+                result.Append(
+                    CultureInfo.InvariantCulture,
+                    $"""Doc.BeginRegion("{region.Text}")"""
+                );
             }
         }
         else

@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests.FormattingTests;
 
 [TestFixture]
-internal class LineEndingEdgeCase
+internal sealed class LineEndingEdgeCase
 {
     [TestCase("\n", EndOfLine.LF)]
     [TestCase("\r\n", EndOfLine.LF)]

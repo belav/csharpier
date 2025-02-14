@@ -96,7 +96,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
     public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
     {
         var parentSymbols = Array.Empty<string>();
-        if (this.CurrentContext.ParentContext.booleanExpressions.Any())
+        if (this.CurrentContext.ParentContext.booleanExpressions.Count != 0)
         {
             parentSymbols = GetSymbols(this.CurrentContext.ParentContext.booleanExpressions.Last());
         }
@@ -124,7 +124,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
         this.CurrentContext = this.CurrentContext.ParentContext;
     }
 
-    private string[] GetSymbols(BooleanExpression booleanExpression)
+    private static string[] GetSymbols(BooleanExpression booleanExpression)
     {
         // TODO some type of caching on finding the symbols from the expression would speed things up
         // maybe we can solve these when constructing them, so they are all stored in the same spot
@@ -142,9 +142,10 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
     private void ParseExpression(string expression)
     {
-        if (expression.IndexOf("/") > 0)
+        var indexOf = expression.IndexOf('/');
+        if (indexOf > 0)
         {
-            expression = expression[..expression.IndexOf("/")];
+            expression = expression[..indexOf];
         }
         var booleanExpression = BooleanExpressionParser.Parse(expression);
         this.CurrentContext.booleanExpressions.Add(booleanExpression);
@@ -152,7 +153,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
     private static List<Dictionary<string, bool>> GenerateCombinations(List<string> parameterNames)
     {
-        if (!parameterNames.Any())
+        if (parameterNames.Count == 0)
         {
             return [new()];
         }

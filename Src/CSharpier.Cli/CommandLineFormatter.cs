@@ -189,7 +189,7 @@ internal static class CommandLineFormatter
 
             if (!Path.IsPathRooted(originalDirectoryOrFile))
             {
-                if (!originalDirectoryOrFile.StartsWith("."))
+                if (!originalDirectoryOrFile.StartsWith('.'))
                 {
                     originalDirectoryOrFile = "./" + originalDirectoryOrFile;
                 }
@@ -427,7 +427,7 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (!codeFormattingResult.FailureMessage.IsBlank())
+        if (!string.IsNullOrEmpty(codeFormattingResult.FailureMessage))
         {
             fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
             return;

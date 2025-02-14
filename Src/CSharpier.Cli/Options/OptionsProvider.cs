@@ -118,10 +118,10 @@ internal class OptionsProvider
         ArgumentNullException.ThrowIfNull(directoryName);
 
         var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(o =>
-            directoryName.StartsWith(o.DirectoryName)
+            directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
         );
         var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(o =>
-            directoryName.StartsWith(o.DirectoryName)
+            directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
         );
 
         if (resolvedCSharpierConfig is not null)
@@ -134,7 +134,10 @@ internal class OptionsProvider
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
         }
 
-        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        if (
+            filePath.EndsWith(".cs", StringComparison.Ordinal)
+            || filePath.EndsWith(".csx", StringComparison.Ordinal)
+        )
         {
             return new PrinterOptions { Formatter = "csharp" };
         }

@@ -13,13 +13,13 @@ public class SpreadWalker(string file) : CSharpSyntaxWalker
     {
         if (node.Kind() is SyntaxKind.SpreadElement)
         {
-            this.VisitNode(node);
+            VisitNode(node);
         }
 
         base.VisitSpreadElement(node);
     }
 
-    private void VisitNode(SpreadElementSyntax node)
+    private static void VisitNode(SpreadElementSyntax node)
     {
         Console.WriteLine(node.Parent!.SyntaxTree.GetText().ToString(node.Parent!.FullSpan));
         Interlocked.Increment(ref total);

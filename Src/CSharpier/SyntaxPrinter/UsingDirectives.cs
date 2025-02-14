@@ -26,7 +26,10 @@ internal static class UsingDirectives
         {
             if (
                 leadingTrivia.RawSyntaxKind() == SyntaxKind.DisabledTextTrivia
-                && leadingTrivia.ToFullString().TrimStart().StartsWith("extern alias")
+                && leadingTrivia
+                    .ToFullString()
+                    .TrimStart()
+                    .StartsWith("extern alias", StringComparison.Ordinal)
             )
             {
                 initialComments = usings[0].GetLeadingTrivia().ToList();
@@ -62,7 +65,7 @@ internal static class UsingDirectives
         docs.Add(Token.PrintLeadingTrivia(new SyntaxTriviaList(initialComments), context));
         if (keepUsingsUntilEndIf)
         {
-            while (usingList.Any())
+            while (usingList.Count != 0)
             {
                 var firstUsing = usingList.First();
 
@@ -293,14 +296,18 @@ internal static class UsingDirectives
                 return string.Compare(
                     x.Alias.ToFullString(),
                     y.Alias.ToFullString(),
+#pragma warning disable CA1309
                     StringComparison.InvariantCultureIgnoreCase
+#pragma warning restore CA1309
                 );
             }
 
             return string.Compare(
                 x?.Name?.ToFullString(),
                 y?.Name?.ToFullString(),
+#pragma warning disable CA1309
                 StringComparison.InvariantCultureIgnoreCase
+#pragma warning restore CA1309
             );
         }
     }

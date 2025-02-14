@@ -90,8 +90,9 @@ internal static class DocFitter
                 case IfBreak ifBreak:
                 {
                     var ifBreakMode =
-                        ifBreak.GroupId != null && groupModeMap!.ContainsKey(ifBreak.GroupId)
-                            ? groupModeMap[ifBreak.GroupId]
+                        ifBreak.GroupId != null
+                        && groupModeMap.TryGetValue(ifBreak.GroupId, out var groupMode)
+                            ? groupMode
                             : currentMode;
 
                     var contents =

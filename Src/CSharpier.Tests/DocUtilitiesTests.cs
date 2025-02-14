@@ -43,7 +43,7 @@ public class DocUtilitiesTests
     [Test]
     public void RemoveInitialDoubleHardLine_Should_Not_Remove_Concated_HardLine()
     {
-        var concat = this.ActualConcat(Doc.HardLine);
+        var concat = ActualConcat(Doc.HardLine);
         var doc = new List<Doc> { concat };
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
@@ -54,19 +54,19 @@ public class DocUtilitiesTests
     [Test]
     public void RemoveInitialDoubleHardLine_Should_Remove_Concated_HardLine()
     {
-        var concat = this.ActualConcat(Doc.HardLine, Doc.HardLine);
+        var concat = ActualConcat(Doc.HardLine, Doc.HardLine);
         var doc = new List<Doc> { concat };
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-        concat.Should().BeEquivalentTo(this.ActualConcat(Doc.HardLine, Doc.Null));
+        concat.Should().BeEquivalentTo(ActualConcat(Doc.HardLine, Doc.Null));
     }
 
     [Test]
     public void RemoveInitialDoubleHardLine_Should_Not_Remove_Deep_Concated_HardLine()
     {
-        var concat = this.ActualConcat(Doc.HardLine);
-        var doc = new List<Doc> { this.ActualConcat(concat) };
+        var concat = ActualConcat(Doc.HardLine);
+        var doc = new List<Doc> { ActualConcat(concat) };
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
@@ -76,8 +76,8 @@ public class DocUtilitiesTests
     [Test]
     public void RemoveInitialDoubleHardLine_Should_Remove_Deep_Concated_HardLine()
     {
-        var concat = this.ActualConcat(Doc.HardLine, Doc.HardLine);
-        var doc = new List<Doc> { this.ActualConcat(concat) };
+        var concat = ActualConcat(Doc.HardLine, Doc.HardLine);
+        var doc = new List<Doc> { ActualConcat(concat) };
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
@@ -87,8 +87,8 @@ public class DocUtilitiesTests
     [Test]
     public void RemoveInitialDoubleHardLine_Should_Remove_Single_HardLine()
     {
-        var concat = this.ActualConcat(Doc.HardLine, Doc.HardLine, Doc.HardLine);
-        var doc = new List<Doc> { this.ActualConcat(concat) };
+        var concat = ActualConcat(Doc.HardLine, Doc.HardLine, Doc.HardLine);
+        var doc = new List<Doc> { ActualConcat(concat) };
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
@@ -144,17 +144,17 @@ public class DocUtilitiesTests
     [Test]
     public void RemoveInitialDoubleHardLine_Should_Only_Remove_Initial_HardLines()
     {
-        var doc = this.ActualConcat("1", Doc.HardLine, Doc.HardLine);
+        var doc = ActualConcat("1", Doc.HardLine, Doc.HardLine);
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
-        doc.Should().BeEquivalentTo(this.ActualConcat("1", Doc.HardLine, Doc.HardLine));
+        doc.Should().BeEquivalentTo(ActualConcat("1", Doc.HardLine, Doc.HardLine));
     }
 
     [Test]
     public void RemoveInitialDoubleHardLine_Work_With_Doc_Null_Before_String()
     {
-        var doc = this.ActualConcat(Doc.HardLine, Doc.Null, "1", Doc.HardLine, "2");
+        var doc = ActualConcat(Doc.HardLine, Doc.Null, "1", Doc.HardLine, "2");
 
         DocUtilities.RemoveInitialDoubleHardLine(doc);
 
@@ -163,12 +163,12 @@ public class DocUtilitiesTests
             .Should()
             .Be(
                 DocSerializer.Serialize(
-                    this.ActualConcat(Doc.HardLine, Doc.Null, "1", Doc.HardLine, "2")
+                    ActualConcat(Doc.HardLine, Doc.Null, "1", Doc.HardLine, "2")
                 )
             );
     }
 
-    private Concat ActualConcat(params Doc[] contents)
+    private static Concat ActualConcat(params Doc[] contents)
     {
         return new Concat(contents.ToList());
     }

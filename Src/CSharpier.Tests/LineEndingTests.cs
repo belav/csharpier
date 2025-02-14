@@ -5,7 +5,7 @@ namespace CSharpier.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class LineEndingTests
+internal sealed class LineEndingTests
 {
     [Test]
     public async Task LineEndings_Should_Not_Affect_Printed_Output_With_Verbatim_String()

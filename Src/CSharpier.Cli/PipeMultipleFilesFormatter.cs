@@ -62,7 +62,7 @@ internal static class PipeMultipleFilesFormatter
                     OriginalDirectoryOrFilePaths =
                     [
                         Path.IsPathRooted(fileName) ? fileName
-                        : fileName.StartsWith(".") ? fileName
+                        : fileName.StartsWith('.') ? fileName
                         : "./" + fileName,
                     ],
                     StandardInFileContents = stringBuilder.ToString(),

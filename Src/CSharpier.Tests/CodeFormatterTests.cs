@@ -8,7 +8,7 @@ namespace CSharpier.Tests;
 // TODO xml move these around
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class CodeFormatterTests
+internal sealed class CodeFormatterTests
 {
     [TestCase(EndOfLine.LF, "\n")]
     [TestCase(EndOfLine.CRLF, "\r\n")]

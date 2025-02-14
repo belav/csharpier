@@ -146,10 +146,6 @@ internal static class FormattingCacheFactory
                 await streamWriter.WriteAsync(
                     JsonSerializer.Serialize(
                         cacheDictionary
-#if DEBUG
-                        ,
-                        new JsonSerializerOptions { WriteIndented = true }
-#endif
                     )
                 );
 

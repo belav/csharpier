@@ -6,7 +6,7 @@ namespace CSharpier.Cli.Server;
 
 internal class CSharpierServiceImplementation(string? configPath, ILogger logger)
 {
-    private readonly IFileSystem fileSystem = new FileSystem();
+    private readonly FileSystem fileSystem = new();
 
     public async Task<FormatFileResult> FormatFile(
         FormatFileParameter formatFileParameter,
@@ -17,11 +17,18 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
         {
             logger.LogInformation("Received request to format " + formatFileParameter.fileName);
             var fileName = this.fileSystem.Path.GetFullPath(formatFileParameter.fileName);
-            if (formatFileParameter.fileContents.StartsWith("// csh-slow"))
+            if (
+                formatFileParameter.fileContents.StartsWith("// csh-slow", StringComparison.Ordinal)
+            )
             {
                 Thread.Sleep(TimeSpan.FromSeconds(5));
             }
-            if (formatFileParameter.fileContents.StartsWith("// csh-throw"))
+            if (
+                formatFileParameter.fileContents.StartsWith(
+                    "// csh-throw",
+                    StringComparison.Ordinal
+                )
+            )
             {
                 throw new Exception("Throwing because of // csh-throw comment");
             }

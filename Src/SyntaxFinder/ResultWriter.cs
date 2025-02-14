@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace SyntaxFinder;
 
 public static class ResultWriter
@@ -14,9 +16,13 @@ public static class ResultWriter
             Console.WriteLine("Matching was > than Total, so you did something wrong.");
         }
 
-        WriteResult("Matching", matching.ToString("n0"));
-        WriteResult("Total", total.ToString("n0"));
-        WriteResult("Percent", (Convert.ToDecimal(matching) / total * 100).ToString("n") + "%");
+        WriteResult("Matching", matching.ToString("n0", CultureInfo.InvariantCulture));
+        WriteResult("Total", total.ToString("n0", CultureInfo.InvariantCulture));
+        WriteResult(
+            "Percent",
+            (Convert.ToDecimal(matching) / total * 100).ToString("n", CultureInfo.InvariantCulture)
+                + "%"
+        );
     }
 
     public static void WriteResult(string label, string value)

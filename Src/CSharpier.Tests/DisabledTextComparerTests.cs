@@ -156,7 +156,7 @@ public class DisabledTextComparerTests
         return TestableDisabledTextComparer.TestSquash(value);
     }
 
-    private class TestableDisabledTextComparer : DisabledTextComparer
+    private sealed class TestableDisabledTextComparer : DisabledTextComparer
     {
         public static string TestSquash(string value)
         {
