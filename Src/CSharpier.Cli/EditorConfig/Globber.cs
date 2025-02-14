@@ -31,7 +31,7 @@ internal static class Globber
         }
 
         directory = directory.Replace(@"\", "/");
-        if (!directory.EndsWith("/"))
+        if (!directory.EndsWith('/'))
         {
             directory += "/";
         }

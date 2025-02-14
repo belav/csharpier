@@ -61,7 +61,7 @@ public string Example
         result.Should().Be(testCode);
     }
 
-    private string PrintWithoutFormatting(string code)
+    private static string PrintWithoutFormatting(string code)
     {
         return CSharpierIgnore
             .PrintWithoutFormatting(

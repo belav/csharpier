@@ -30,7 +30,10 @@ internal class ConfigurationFileOptions
             };
         }
 
-        if (filePath.EndsWith(".cs") || filePath.EndsWith(".csx"))
+        if (
+            filePath.EndsWith(".cs", StringComparison.Ordinal)
+            || filePath.EndsWith(".csx", StringComparison.Ordinal)
+        )
         {
             return new PrinterOptions
             {

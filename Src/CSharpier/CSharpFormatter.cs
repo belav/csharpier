@@ -9,6 +9,7 @@ internal class CSharpScriptFormatter : CSharpFormatter { }
 
 internal class CSharpFormatter : IFormatter
 {
+    private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
     internal static readonly LanguageVersion LanguageVersion = LanguageVersion.Preview;
 
     Task<CodeFormatterResult> IFormatter.FormatAsync(
@@ -96,7 +97,7 @@ internal class CSharpFormatter : IFormatter
                 .GetDiagnostics(cancellationToken)
                 .Where(o => o.Severity == DiagnosticSeverity.Error && o.Id != "CS1029")
                 .ToList();
-            if (diagnostics.Any())
+            if (diagnostics.Count != 0)
             {
                 compilationResult = new CodeFormatterResult
                 {
@@ -199,17 +200,14 @@ internal class CSharpFormatter : IFormatter
             // SyntaxNodeJsonWriter doesn't write things indented, so this cleans it up for us
             return JsonSerializer.Serialize(
                 JsonSerializer.Deserialize<object>(stringBuilder.ToString()),
-                new JsonSerializerOptions { WriteIndented = false }
+                IndentedJson
             );
         }
         // in some cases with new unsupported c# language features
         // SyntaxNodeJsonWriter will not produce valid json
         catch (JsonException ex)
         {
-            return JsonSerializer.Serialize(
-                new { exception = ex.ToString() },
-                new JsonSerializerOptions { WriteIndented = false }
-            );
+            return JsonSerializer.Serialize(new { exception = ex.ToString() }, IndentedJson);
         }
     }
 }

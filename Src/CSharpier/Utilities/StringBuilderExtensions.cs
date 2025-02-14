@@ -1,9 +1,26 @@
+using System.Globalization;
 using System.Text;
 
 namespace CSharpier.Utilities;
 
 internal static class StringBuilderExtensions
 {
+#if NETSTANDARD2_0
+    public static void AppendLine(
+        this StringBuilder value,
+        CultureInfo cultureInfo,
+        string otherValue
+    )
+    {
+        value.AppendLine(otherValue);
+    }
+
+    public static void Append(this StringBuilder value, CultureInfo cultureInfo, string otherValue)
+    {
+        value.Append(otherValue);
+    }
+#endif
+
     public static bool EndsWithNewLineAndWhitespace(this StringBuilder stringBuilder)
     {
         for (var index = 1; index <= stringBuilder.Length; index++)

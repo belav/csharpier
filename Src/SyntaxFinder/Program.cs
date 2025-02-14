@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp;
 using SyntaxFinder;
 
@@ -16,7 +17,7 @@ foreach (var type in typeof(SyntaxFinderWalker).Assembly.GetTypes())
 {
     if (typeof(CSharpSyntaxWalker).IsAssignableFrom(type) && !type.IsAbstract)
     {
-        typesByName.Add(x.ToString(), type);
+        typesByName.Add(x.ToString(CultureInfo.InvariantCulture), type);
         Console.WriteLine(x + " " + type.Name);
         x++;
     }

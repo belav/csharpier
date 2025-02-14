@@ -13,7 +13,7 @@
 // CSharpier will not compile
 
 var directory = new DirectoryInfo(Directory.GetCurrentDirectory());
-while (!directory.Name.Equals("Src"))
+while (!directory.Name.Equals("Src", StringComparison.Ordinal))
 {
     directory = directory.Parent;
     if (directory == null)
@@ -26,5 +26,5 @@ while (!directory.Name.Equals("Src"))
 }
 
 var codeContext = new CodeContext(Path.Combine(directory.FullName, "CSharpier"));
-new SyntaxNodeComparerGenerator().Execute(codeContext);
+SyntaxNodeComparerGenerator.Execute(codeContext);
 new SyntaxNodeJsonWriterGenerator().Execute(codeContext);

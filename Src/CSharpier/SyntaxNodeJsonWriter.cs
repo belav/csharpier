@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 
 namespace CSharpier;
@@ -24,6 +25,6 @@ internal static partial class SyntaxNodeJsonWriter
     private static string GetNodeType(Type type)
     {
         var name = type.Name;
-        return name.EndsWith("Syntax") ? name[..^"Syntax".Length] : name;
+        return name.EndsWith("Syntax", StringComparison.Ordinal) ? name[..^"Syntax".Length] : name;
     }
 }

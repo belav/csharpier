@@ -58,14 +58,14 @@ public class CliTests
         var formattedContent = "public class ClassName { }" + lineEnding;
         var unformattedContent = $"public class ClassName {{{lineEnding}{lineEnding}}}";
 
-        await this.WriteFileAsync("BasicFile.cs", unformattedContent);
+        await WriteFileAsync("BasicFile.cs", unformattedContent);
 
         var result = await new CsharpierProcess().WithArguments("BasicFile.cs").ExecuteAsync();
 
         result.ErrorOutput.Should().BeNullOrEmpty();
         result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
-        (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
+        (await ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
     [TestCase("Subdirectory")]
@@ -75,13 +75,13 @@ public class CliTests
         var formattedContent = "public class ClassName { }\n";
         var unformattedContent = "public class ClassName {\n\n}";
 
-        await this.WriteFileAsync("Subdirectory/BasicFile.cs", unformattedContent);
+        await WriteFileAsync("Subdirectory/BasicFile.cs", unformattedContent);
 
         var result = await new CsharpierProcess().WithArguments(subdirectory).ExecuteAsync();
 
         result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
-        (await this.ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
+        (await ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
     }
 
     [Test]
@@ -89,11 +89,11 @@ public class CliTests
     {
         var unformattedContent = "public class Unformatted {     }";
         var filePath = "Subdirectory/IgnoredFile.cs";
-        await this.WriteFileAsync(filePath, unformattedContent);
-        await this.WriteFileAsync(".csharpierignore", filePath);
+        await WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(".csharpierignore", filePath);
 
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        var result = await this.ReadAllTextAsync(filePath);
+        var result = await ReadAllTextAsync(filePath);
 
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
@@ -108,10 +108,10 @@ public class CliTests
     {
         var unformattedContent = "public class Unformatted {     }";
         var filePath = $"{path}/IgnoredFile.cs";
-        await this.WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(filePath, unformattedContent);
 
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        var result = await this.ReadAllTextAsync(filePath);
+        var result = await ReadAllTextAsync(filePath);
 
         result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
@@ -121,14 +121,14 @@ public class CliTests
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = "TooWide.cs";
-        await this.WriteFileAsync(fileName, fileContent);
-        await this.WriteFileAsync("config/.csharpierrc", "printWidth: 10");
+        await WriteFileAsync(fileName, fileContent);
+        await WriteFileAsync("config/.csharpierrc", "printWidth: 10");
 
         await new CsharpierProcess()
             .WithArguments("--config-path config/.csharpierrc . ")
             .ExecuteAsync();
 
-        var result = await this.ReadAllTextAsync(fileName);
+        var result = await ReadAllTextAsync(fileName);
 
         result.Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -138,8 +138,8 @@ public class CliTests
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = "TooWide.cs";
-        await this.WriteFileAsync(fileName, fileContent);
-        await this.WriteFileAsync(
+        await WriteFileAsync(fileName, fileContent);
+        await WriteFileAsync(
             "config/.editorconfig",
             """
             [*]
@@ -151,7 +151,7 @@ public class CliTests
             .WithArguments("--config-path config/.editorconfig . ")
             .ExecuteAsync();
 
-        var result = await this.ReadAllTextAsync(fileName);
+        var result = await ReadAllTextAsync(fileName);
 
         result.Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -209,7 +209,7 @@ public class CliTests
     [Test]
     public async Task Should_Format_Piped_File_With_Config()
     {
-        await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
+        await WriteFileAsync(".csharpierrc", "printWidth: 10");
 
         var formattedContent1 = "var x =\n    _________________longName;\n";
         var unformattedContent1 = "var x = _________________longName;\n";
@@ -225,7 +225,7 @@ public class CliTests
     [Test]
     public async Task Should_Format_Piped_File_With_EditorConfig()
     {
-        await this.WriteFileAsync(
+        await WriteFileAsync(
             ".editorconfig",
             @"[*]
 max_line_length = 10"
@@ -284,7 +284,7 @@ max_line_length = 10"
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
-        await this.WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
 
         var result = await new CsharpierProcess()
             .WithArguments("CheckUnformatted.cs --check")
@@ -347,7 +347,7 @@ max_line_length = 10"
     {
         const string ignoredFile = "public class ClassName {     }";
         var fileName = Path.Combine(testFileDirectory, "Ignored.cs");
-        await this.WriteFileAsync(".csharpierignore", "Ignored.cs");
+        await WriteFileAsync(".csharpierignore", "Ignored.cs");
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
@@ -363,7 +363,7 @@ max_line_length = 10"
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = Path.Combine(testFileDirectory, "TooWide.cs");
-        await this.WriteFileAsync(".csharpierrc", "printWidth: 10");
+        await WriteFileAsync(".csharpierrc", "printWidth: 10");
 
         var result = await new CsharpierProcess()
             .WithArguments("--pipe-multiple-files")
@@ -379,7 +379,7 @@ max_line_length = 10"
     {
         const string fileContent = "var myVariable = someLongValue;";
         var fileName = Path.Combine(testFileDirectory, "TooWide.cst");
-        await this.WriteFileAsync(
+        await WriteFileAsync(
             ".csharpierrc",
             """
             overrides:
@@ -401,7 +401,7 @@ max_line_length = 10"
     [Test]
     public async Task Should_Not_Fail_On_Empty_File()
     {
-        await this.WriteFileAsync("BasicFile.cs", "");
+        await WriteFileAsync("BasicFile.cs", "");
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
@@ -413,7 +413,7 @@ max_line_length = 10"
     [Test]
     public async Task Should_Not_Fail_On_Bad_Csproj()
     {
-        await this.WriteFileAsync("Empty.csproj", "");
+        await WriteFileAsync("Empty.csproj", "");
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
@@ -425,7 +425,7 @@ max_line_length = 10"
     [Test]
     public async Task Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
-        await this.WriteFileAsync(
+        await WriteFileAsync(
             "Test.csproj",
             @"<Project Sdk=""Microsoft.NET.Sdk"">
     <ItemGroup>
@@ -446,7 +446,7 @@ max_line_length = 10"
     [Test]
     public async Task Should_Fail_On_Mismatched_MSBuild()
     {
-        await this.WriteFileAsync(
+        await WriteFileAsync(
             "Test.csproj",
             @"<Project Sdk=""Microsoft.NET.Sdk"">
     <ItemGroup>
@@ -469,13 +469,13 @@ max_line_length = 10"
         var unformattedContent = "public class ClassName {     }\n";
         var formattedContent = "public class ClassName { }\n";
         var filePath = "Unformatted.cs";
-        await this.WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(filePath, unformattedContent);
 
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
         var firstModifiedDate = GetLastWriteTime(filePath);
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
         var secondModifiedDate = GetLastWriteTime(filePath);
-        await this.WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(filePath, unformattedContent);
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
         var thirdModifiedDate = GetLastWriteTime(filePath);
 
@@ -483,7 +483,7 @@ max_line_length = 10"
         firstModifiedDate.Should().Be(secondModifiedDate);
         secondModifiedDate.Should().BeBefore(thirdModifiedDate);
 
-        (await this.ReadAllTextAsync(filePath)).Should().Be(formattedContent);
+        (await ReadAllTextAsync(filePath)).Should().Be(formattedContent);
     }
 
     [Test]
@@ -491,12 +491,12 @@ max_line_length = 10"
     {
         var unformattedContent = "public class ClassName { \n// break\n }\n";
 
-        await this.WriteFileAsync("Unformatted.cs", unformattedContent);
+        await WriteFileAsync("Unformatted.cs", unformattedContent);
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
-        await this.WriteFileAsync(".csharpierrc", "useTabs: true");
+        await WriteFileAsync(".csharpierrc", "useTabs: true");
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
 
-        var result = await this.ReadAllTextAsync("Unformatted.cs");
+        var result = await ReadAllTextAsync("Unformatted.cs");
         result.Should().Contain("\n\t// break\n");
     }
 
@@ -516,7 +516,7 @@ max_line_length = 10"
         {
             for (var y = 0; y < filesPerFolder; y++)
             {
-                await this.WriteFileAsync($"{folder}/File{y}.cs", unformattedContent);
+                await WriteFileAsync($"{folder}/File{y}.cs", unformattedContent);
             }
         }
 
@@ -544,7 +544,7 @@ max_line_length = 10"
 
         for (var x = 0; x < filesPerFolder; x++)
         {
-            await this.WriteFileAsync($"{Guid.NewGuid()}.cs", unformattedContent);
+            await WriteFileAsync($"{Guid.NewGuid()}.cs", unformattedContent);
         }
 
         var result = await new CsharpierProcess().WithArguments(".").ExecuteAsync();
@@ -555,7 +555,7 @@ max_line_length = 10"
         for (var x = 0; x < 100; x++)
         {
             var fileName = Guid.NewGuid() + ".cs";
-            await this.WriteFileAsync(fileName, unformattedContent);
+            await WriteFileAsync(fileName, unformattedContent);
             newFiles.Add(fileName);
         }
 
@@ -569,29 +569,29 @@ max_line_length = 10"
         Task.WaitAll(formatTasks);
     }
 
-    private DateTime GetLastWriteTime(string path)
+    private static DateTime GetLastWriteTime(string path)
     {
         return File.GetLastWriteTime(Path.Combine(testFileDirectory, path));
     }
 
-    private async Task WriteFileAsync(string path, string content)
+    private static async Task WriteFileAsync(string path, string content)
     {
         var fileInfo = new FileInfo(Path.Combine(testFileDirectory, path));
-        this.EnsureExists(fileInfo.Directory!);
+        EnsureExists(fileInfo.Directory!);
 
         await File.WriteAllTextAsync(fileInfo.FullName, content);
     }
 
-    private async Task<string> ReadAllTextAsync(string path)
+    private static async Task<string> ReadAllTextAsync(string path)
     {
         return await File.ReadAllTextAsync(Path.Combine(testFileDirectory, path));
     }
 
-    private void EnsureExists(DirectoryInfo directoryInfo)
+    private static void EnsureExists(DirectoryInfo directoryInfo)
     {
         if (directoryInfo.Parent != null)
         {
-            this.EnsureExists(directoryInfo.Parent);
+            EnsureExists(directoryInfo.Parent);
         }
 
         if (!directoryInfo.Exists)
@@ -600,7 +600,7 @@ max_line_length = 10"
         }
     }
 
-    private class CsharpierProcess
+    private sealed class CsharpierProcess
     {
         private readonly StringBuilder output = new();
         private readonly StringBuilder errorOutput = new();
@@ -646,6 +646,6 @@ max_line_length = 10"
             );
         }
 
-        public record ProcessResult(string Output, string ErrorOutput, int ExitCode);
+        public sealed record ProcessResult(string Output, string ErrorOutput, int ExitCode);
     }
 }

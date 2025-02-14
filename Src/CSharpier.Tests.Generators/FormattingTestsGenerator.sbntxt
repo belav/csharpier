@@ -1,3 +1,5 @@
+#pragma warning disable CA1707
+
 using NUnit.Framework;
 
 namespace CSharpier.Tests.FormattingTests

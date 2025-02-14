@@ -13,11 +13,14 @@ public class ExampleWalker(string file) : SyntaxFinderWalker(file)
 
     public override void VisitCompilationUnit(CompilationUnitSyntax node)
     {
-        this.VisitType(node, node.Members);
+        VisitType(node, node.Members);
         base.VisitCompilationUnit(node);
     }
 
-    private void VisitType(CSharpSyntaxNode node, SyntaxList<MemberDeclarationSyntax> members)
+    private static void VisitType(
+        CSharpSyntaxNode node,
+        SyntaxList<MemberDeclarationSyntax> members
+    )
     {
         foreach (var member in members)
         {

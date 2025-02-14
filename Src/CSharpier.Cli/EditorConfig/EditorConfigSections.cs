@@ -18,7 +18,12 @@ internal class EditorConfigSections
 
         var formatter =
             resolvedConfiguration.Formatter
-            ?? (filePath.EndsWith(".cs") || filePath.EndsWith(".csx") ? "csharp" : null);
+            ?? (
+                filePath.EndsWith(".cs", StringComparison.Ordinal)
+                || filePath.EndsWith(".csx", StringComparison.Ordinal)
+                    ? "csharp"
+                    : null
+            );
 
         if (formatter == null)
         {

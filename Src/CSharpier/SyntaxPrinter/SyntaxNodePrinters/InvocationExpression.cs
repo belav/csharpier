@@ -93,7 +93,7 @@ internal static class InvocationExpression
                     Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
                 )
                 : Doc.Null,
-            PrintIndentedGroup(node, groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
+            PrintIndentedGroup(groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
         );
 
         return
@@ -328,7 +328,7 @@ internal static class InvocationExpression
             currentGroup.Add(printedNodes[index]);
         }
 
-        if (currentGroup.Any())
+        if (currentGroup.Count != 0)
         {
             groups.Add(currentGroup);
         }
@@ -336,7 +336,7 @@ internal static class InvocationExpression
         return groups;
     }
 
-    private static Doc PrintIndentedGroup(ExpressionSyntax node, IList<List<PrintedNode>> groups)
+    private static Doc PrintIndentedGroup(List<List<PrintedNode>> groups)
     {
         if (groups.Count == 0)
         {

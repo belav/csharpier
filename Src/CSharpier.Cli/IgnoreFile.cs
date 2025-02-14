@@ -17,7 +17,7 @@ internal class IgnoreFile
     public bool IsIgnored(string filePath)
     {
         var normalizedFilePath = filePath.Replace('\\', '/');
-        if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath))
+        if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath, StringComparison.Ordinal))
         {
             throw new Exception(
                 "The filePath of "

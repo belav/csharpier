@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace CSharpier.Utilities;
 
@@ -42,6 +43,7 @@ internal static class StringDiffer
             }
 
             stringBuilder.AppendLine(
+                CultureInfo.InvariantCulture,
                 $"----------------------------- Expected: Around Line {line} -----------------------------"
             );
             if (previousExpectedLine != null)
@@ -57,6 +59,7 @@ internal static class StringDiffer
             }
 
             stringBuilder.AppendLine(
+                CultureInfo.InvariantCulture,
                 $"----------------------------- Actual: Around Line {line} -----------------------------"
             );
             if (previousActualLine != null)
@@ -98,8 +101,15 @@ internal static class StringDiffer
 
     private static bool EndsWithExactlyOneNewline(string value)
     {
-        return (!value.EndsWith("\r\n") && value.EndsWith("\n") && !value.EndsWith("\n\n"))
-            || (value.EndsWith("\r\n") && !value.EndsWith("\r\n\r\n"));
+        return (
+                !value.EndsWith("\r\n", StringComparison.Ordinal)
+                && value.EndsWith('\n')
+                && !value.EndsWith("\n\n", StringComparison.Ordinal)
+            )
+            || (
+                value.EndsWith("\r\n", StringComparison.Ordinal)
+                && !value.EndsWith("\r\n\r\n", StringComparison.Ordinal)
+            );
     }
 
     private static int FindIndexOfNonWhitespace(string input)

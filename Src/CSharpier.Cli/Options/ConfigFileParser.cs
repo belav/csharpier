@@ -9,6 +9,10 @@ namespace CSharpier.Cli.Options;
 internal static class ConfigFileParser
 {
     private static readonly string[] validExtensions = [".csharpierrc", ".json", ".yml", ".yaml"];
+    private static readonly JsonSerializerOptions CaseInsensitiveJson = new()
+    {
+        PropertyNameCaseInsensitive = true,
+    };
 
     /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
     internal static List<CSharpierConfigData> FindForDirectoryName(
@@ -96,15 +100,13 @@ internal static class ConfigFileParser
 
     internal static ConfigurationFileOptions CreateFromContent(string content)
     {
-        return content.TrimStart().StartsWith("{") ? ReadJson(content) : ReadYaml(content);
+        return content.TrimStart().StartsWith('{') ? ReadJson(content) : ReadYaml(content);
     }
 
     private static ConfigurationFileOptions ReadJson(string contents)
     {
-        return JsonSerializer.Deserialize<ConfigurationFileOptions>(
-                contents,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-            ) ?? new();
+        return JsonSerializer.Deserialize<ConfigurationFileOptions>(contents, CaseInsensitiveJson)
+            ?? new();
     }
 
     private static ConfigurationFileOptions ReadYaml(string contents)

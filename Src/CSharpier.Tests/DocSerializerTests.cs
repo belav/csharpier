@@ -6,7 +6,7 @@ namespace CSharpier.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class DocSerializerTests
+internal sealed class DocSerializerTests
 {
     [Test]
     public void Should_Format_Directive()

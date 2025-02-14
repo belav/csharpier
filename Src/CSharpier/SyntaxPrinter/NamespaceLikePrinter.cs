@@ -82,7 +82,7 @@ internal static class NamespaceLikePrinter
         {
             var directiveTrivia = members[0].GetLeadingTrivia().Where(o => o.IsDirective).ToArray();
 
-            if (directiveTrivia.Any())
+            if (directiveTrivia.Length != 0)
             {
                 if (
                     (

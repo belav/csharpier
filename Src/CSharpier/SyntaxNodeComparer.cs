@@ -12,7 +12,9 @@ internal partial class SyntaxNodeComparer
     protected bool ReorderedUsingsWithDisabledText { get; }
     protected bool MovedTrailingTrivia { get; }
 
+#pragma warning disable CA1805
     private static readonly CompareResult Equal = new();
+#pragma warning restore CA1805
 
     public SyntaxNodeComparer(
         string originalSourceCode,
