@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Net.Http.Json;
 using CliWrap;
 using CliWrap.EventStream;
@@ -43,7 +44,7 @@ public class ServerTests
                 "Started on ",
                 string.Empty
             );
-            var port = int.Parse(portString);
+            var port = int.Parse(portString, CultureInfo.InvariantCulture);
             var data = new FormatFileParameter
             {
                 fileName = "/Temp/test.cs",

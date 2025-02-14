@@ -32,7 +32,6 @@ internal static class PipeMultipleFilesFormatter
                     return exitCode;
                 }
                 var character = Convert.ToChar(value);
-                DebugLogger.Log("Got " + character);
                 if (character == '\u0003')
                 {
                     DebugLogger.Log("Got EOF");
@@ -53,12 +52,16 @@ internal static class PipeMultipleFilesFormatter
                 {
                     DirectoryOrFilePaths =
                     [
+                        // we pass in c:/projects/test.cs
+                        // if you use combine on c:/projects and c:/projects/test.cs then you get c:/projects/test.cs
+                        // this combine should probably not exist, but I don't know if removing it would cause more problems
+                        // as long as the extensions don't change the working directory when they setup pipe-files, then I think this is okay
                         Path.Combine(Directory.GetCurrentDirectory(), fileName),
                     ],
                     OriginalDirectoryOrFilePaths =
                     [
                         Path.IsPathRooted(fileName) ? fileName
-                        : fileName.StartsWith(".") ? fileName
+                        : fileName.StartsWith('.') ? fileName
                         : "./" + fileName,
                     ],
                     StandardInFileContents = stringBuilder.ToString(),

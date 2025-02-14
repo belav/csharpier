@@ -821,7 +821,7 @@ indent_size = 2
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
     }
 
-    private class TestContext
+    private sealed class TestContext
     {
         private readonly MockFileSystem fileSystem = new();
 

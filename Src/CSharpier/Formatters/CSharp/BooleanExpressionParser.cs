@@ -140,7 +140,7 @@ internal abstract class BooleanExpressionParser
                     operators.Pop();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidOperationException("Did not handle type " + token.Type);
             }
         }
 

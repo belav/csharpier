@@ -6,7 +6,7 @@ namespace CSharpier.Cli.Server;
 
 internal class CSharpierServiceImplementation(ILogger logger)
 {
-    private readonly IFileSystem fileSystem = new FileSystem();
+    private readonly FileSystem fileSystem = new();
 
     public async Task<FormatFileResult> FormatFile(
         FormatFileParameter formatFileParameter,
@@ -16,15 +16,23 @@ internal class CSharpierServiceImplementation(ILogger logger)
         try
         {
             logger.LogInformation("Received request to format " + formatFileParameter.fileName);
-            if (formatFileParameter.fileContents.StartsWith("// csh-slow"))
+            var fileName = this.fileSystem.Path.GetFullPath(formatFileParameter.fileName);
+            if (
+                formatFileParameter.fileContents.StartsWith("// csh-slow", StringComparison.Ordinal)
+            )
             {
                 Thread.Sleep(TimeSpan.FromSeconds(5));
             }
-            if (formatFileParameter.fileContents.StartsWith("// csh-throw"))
+            if (
+                formatFileParameter.fileContents.StartsWith(
+                    "// csh-throw",
+                    StringComparison.Ordinal
+                )
+            )
             {
                 throw new Exception("Throwing because of // csh-throw comment");
             }
-            var directoryName = this.fileSystem.Path.GetDirectoryName(formatFileParameter.fileName);
+            var directoryName = this.fileSystem.Path.GetDirectoryName(fileName);
             DebugLogger.Log(directoryName ?? string.Empty);
             if (directoryName == null)
             {
@@ -42,8 +50,8 @@ internal class CSharpierServiceImplementation(ILogger logger)
             );
 
             if (
-                GeneratedCodeUtilities.IsGeneratedCodeFile(formatFileParameter.fileName)
-                || optionsProvider.IsIgnored(formatFileParameter.fileName)
+                GeneratedCodeUtilities.IsGeneratedCodeFile(fileName)
+                || optionsProvider.IsIgnored(fileName)
             )
             {
                 return new FormatFileResult(Status.Ignored);

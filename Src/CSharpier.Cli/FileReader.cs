@@ -33,7 +33,7 @@ internal static class FileReader
                 new UTF8Encoding(encoderShouldEmitUTF8Identifier: false)
             );
 
-            var fileContents = await streamReader.ReadToEndAsync();
+            var fileContents = await streamReader.ReadToEndAsync(cancellationToken);
 
             return new FileReaderResult(
                 streamReader.CurrentEncoding,

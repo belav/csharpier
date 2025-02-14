@@ -7,13 +7,15 @@ import { execSync } from "child_process";
 import * as semver from "semver";
 
 export class CustomPathInstaller {
-    logger: Logger;
-    customPath: string;
+    private readonly logger: Logger;
+    private readonly customPath: string = "";
 
     constructor(logger: Logger) {
         this.logger = logger;
-        this.customPath =
-            workspace.getConfiguration("csharpier").get<string>("dev.customPath") ?? "";
+        if (workspace.getConfiguration("csharpier").get<boolean>("dev.useCustomPath")) {
+            this.customPath =
+                workspace.getConfiguration("csharpier").get<string>("dev.customPath") ?? "";
+        }
     }
 
     public ensureVersionInstalled(version: string, directory: string): boolean {

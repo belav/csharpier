@@ -59,7 +59,7 @@ internal static class Token
         if (
             (
                 syntaxToken.RawSyntaxKind() == SyntaxKind.StringLiteralToken
-                && syntaxToken.Text.StartsWith("@")
+                && syntaxToken.Text.StartsWith('@')
             )
             || (
                 syntaxToken.RawSyntaxKind() == SyntaxKind.InterpolatedStringTextToken

@@ -118,10 +118,10 @@ internal class OptionsProvider
         ArgumentNullException.ThrowIfNull(directoryName);
 
         var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(o =>
-            directoryName.StartsWith(o.DirectoryName)
+            directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
         );
         var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(o =>
-            directoryName.StartsWith(o.DirectoryName)
+            directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
         );
 
         if (resolvedCSharpierConfig is not null)

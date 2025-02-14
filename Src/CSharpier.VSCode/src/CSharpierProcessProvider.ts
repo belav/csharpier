@@ -252,7 +252,6 @@ export class CSharpierProcessProvider implements Disposable {
                 csharpierProcess = new CSharpierProcessServer(
                     this.logger,
                     customPath,
-                    directory,
                     version,
                 );
             } else if (semver.gte(version, "0.12.0")) {

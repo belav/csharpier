@@ -11,4 +11,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="CodeSamples/*.*" />
+    <None Include="CodeSamples/*.*" />
+  </ItemGroup>
 </Project>

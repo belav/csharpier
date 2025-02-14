@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -5,11 +6,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.FakeGenerators;
 
-public class SyntaxNodeComparerGenerator
+public static class SyntaxNodeComparerGenerator
 {
     // this would probably be easier to understand as a scriban template but is a lot of effort
     // to switch and doesn't really change at this point
-    public void Execute(CodeContext context)
+    public static void Execute(CodeContext context)
     {
         context.AddSource("SyntaxNodeComparer.generated", GenerateSource());
     }
@@ -67,11 +68,13 @@ namespace CSharpier
         foreach (var syntaxNodeType in syntaxNodeTypes)
         {
             var lowerCaseName =
-                syntaxNodeType.Name[0].ToString().ToLower() + syntaxNodeType.Name[1..];
+                syntaxNodeType.Name[0].ToString().ToLower(CultureInfo.InvariantCulture)
+                + syntaxNodeType.Name[1..];
 
             if (syntaxNodeType == typeof(UsingDirectiveSyntax))
             {
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"""
                 case {syntaxNodeType.Name} {lowerCaseName}:
                     if (this.ReorderedUsingsWithDisabledText)
@@ -83,6 +86,7 @@ namespace CSharpier
             else
             {
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"""
              case {syntaxNodeType.Name} {lowerCaseName}:
                  return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});
@@ -121,6 +125,7 @@ namespace CSharpier
     private static void GenerateMethod(StringBuilder sourceBuilder, Type type)
     {
         sourceBuilder.AppendLine(
+            CultureInfo.InvariantCulture,
             $$"""
       private CompareResult Compare{{type.Name}}({{type.Name}} originalNode, {{type.Name}} formattedNode)
       {
@@ -164,12 +169,14 @@ namespace CSharpier
             if (propertyType == typeof(bool) || propertyType == typeof(Int32))
             {
                 sourceBuilder.AppendLine(
-                    $@"            if (originalNode.{propertyName} != formattedNode.{propertyName}) return NotEqual(originalNode, formattedNode);"
+                    CultureInfo.InvariantCulture,
+                    $"            if (originalNode.{propertyName} != formattedNode.{propertyName}) return NotEqual(originalNode, formattedNode);"
                 );
             }
             else if (propertyType == typeof(SyntaxToken))
             {
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"            result = this.Compare(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
                 );
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
@@ -177,16 +184,19 @@ namespace CSharpier
             else if (propertyType == typeof(SyntaxTrivia))
             {
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"            result = this.Compare(originalNode.{propertyName}, formattedNode.{propertyName});"
                 );
-                sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
+                sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
             }
             else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType))
             {
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"            originalStack.Push((originalNode.{propertyName}, originalNode));"
                 );
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"            formattedStack.Push((formattedNode.{propertyName}, formattedNode));"
                 );
             }
@@ -204,6 +214,7 @@ namespace CSharpier
                 )
                 {
                     sourceBuilder.AppendLine(
+                        CultureInfo.InvariantCulture,
                         $"            result = this.CompareUsingDirectives(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
                     );
                 }
@@ -215,6 +226,7 @@ namespace CSharpier
                         propertyName += ".OrderBy(o => o.Text).ToList()";
                     }
                     sourceBuilder.AppendLine(
+                        CultureInfo.InvariantCulture,
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );
                 }
@@ -227,12 +239,14 @@ namespace CSharpier
             )
             {
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
 
                 // Omit the last separator when comparing the original node with the formatted node, as it legitimately may be added or removed
                 sourceBuilder.AppendLine(
+                    CultureInfo.InvariantCulture,
                     $"            result = this.CompareLists(originalNode.{propertyName}.GetSeparators().Take(originalNode.{propertyName}.Count() - 1).ToList(), formattedNode.{propertyName}.GetSeparators().Take(formattedNode.{propertyName}.Count() - 1).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
@@ -244,6 +258,6 @@ namespace CSharpier
 
     private static string CamelCaseName(string name)
     {
-        return name.ToLower()[0] + name[1..];
+        return name.ToLower(CultureInfo.InvariantCulture)[0] + name[1..];
     }
 }

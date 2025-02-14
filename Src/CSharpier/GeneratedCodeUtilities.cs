@@ -11,7 +11,7 @@ internal static class GeneratedCodeUtilities
         }
 
         var extension = Path.GetExtension(fileName);
-        if (extension.IsBlank())
+        if (string.IsNullOrEmpty(extension))
         {
             return false;
         }

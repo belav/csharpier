@@ -91,8 +91,8 @@ internal static class DocFitter
                 {
                     var ifBreakMode =
                         ifBreak.GroupId != null
-                        && groupModeMap.TryGetValue(ifBreak.GroupId, out var value)
-                            ? value
+                        && groupModeMap.TryGetValue(ifBreak.GroupId, out var groupMode)
+                            ? groupMode
                             : currentMode;
 
                     var contents =

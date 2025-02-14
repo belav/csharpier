@@ -4,6 +4,7 @@ import { FormatFileParameter, FormatFileResult, ICSharpierProcess2 } from "./ICS
 import fetch from "node-fetch";
 import { getDotNetRoot } from "./DotNetProvider";
 import * as semver from "semver";
+import * as path from "path";
 
 export class CSharpierProcessServer implements ICSharpierProcess2 {
     private logger: Logger;
@@ -12,10 +13,10 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
     private processFailedToStart = false;
     private version: string;
 
-    constructor(logger: Logger, csharpierPath: string, workingDirectory: string, version: string) {
+    constructor(logger: Logger, csharpierPath: string, version: string) {
         this.logger = logger;
         this.version = version;
-        this.spawnProcess(csharpierPath, workingDirectory);
+        this.spawnProcess(csharpierPath);
 
         this.logger.debug("Warm CSharpier with initial format");
         // warm by formatting a file twice, the 3rd time is when it gets really fast
@@ -29,13 +30,14 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         return this.processFailedToStart;
     }
 
-    private spawnProcess(csharpierPath: string, workingDirectory: string) {
+    private spawnProcess(csharpierPath: string) {
+        this.logger.debug(path.dirname(csharpierPath));
         let newCommandsVersion = "1.0.0-alpha1";
         let argument = semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
 
         const csharpierProcess = spawn(csharpierPath, [argument], {
             stdio: "pipe",
-            cwd: workingDirectory,
+            cwd: path.dirname(csharpierPath),
             env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
         });
 

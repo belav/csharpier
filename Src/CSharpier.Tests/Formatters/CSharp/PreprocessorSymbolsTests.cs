@@ -12,7 +12,7 @@ public class PreprocessorSymbolsTests
     [TestCase("NET48_OR_GREATER")]
     public void GetSets_Should_Handle_Basic_If(string symbol)
     {
-        this.RunTest(
+        RunTest(
             $@"#if {symbol}
 // {symbol}
 #endif
@@ -24,7 +24,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_And()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE && TWO
 // ONE,TWO
 #endif
@@ -36,7 +36,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Or()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE || TWO
 // ONE
 #endif
@@ -48,7 +48,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Basic_Not_If()
     {
-        this.RunTest(
+        RunTest(
             @"#if !DEBUG
 //
 #endif
@@ -59,7 +59,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Basic_If_With_Else()
     {
-        this.RunTest(
+        RunTest(
             @"#if DEBUG
 // DEBUG
 #else
@@ -73,7 +73,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Basic_If_With_ElseIf()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE
 // ONE
 #elif TWO
@@ -88,7 +88,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Parens()
     {
-        this.RunTest(
+        RunTest(
             @"#if (ONE || TWO) && THREE
 // ONE,THREE
 #endif
@@ -100,7 +100,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Equals_True()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE == true
 // ONE
 #endif
@@ -112,7 +112,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Equals_False()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE == false
 //
 #endif
@@ -123,7 +123,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_NotEquals_True()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE != true
 //
 #endif
@@ -134,7 +134,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_NotEquals_False()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE != false
 // ONE
 #endif
@@ -146,7 +146,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Else()
     {
-        this.RunTest(
+        RunTest(
             @"#if !ONE
 //
 #else
@@ -160,7 +160,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Else_If()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE
 // ONE
 #elif TWO
@@ -175,7 +175,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Else_If_And_Else()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE
 // ONE
 #elif !TWO
@@ -192,7 +192,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Nested_If()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE
 #if TWO
 // ONE,TWO
@@ -207,7 +207,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Duplicate_If()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE
 // ONE
 #endif
@@ -222,7 +222,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_Comments()
     {
-        this.RunTest(
+        RunTest(
             @"#if ONE // comment
 // ONE
 #endif
@@ -234,7 +234,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_true()
     {
-        this.RunTest(
+        RunTest(
             @"#if true
 //
 #endif
@@ -245,7 +245,7 @@ public class PreprocessorSymbolsTests
     [Test]
     public void GetSets_Should_Handle_And_With_Not()
     {
-        this.RunTest(
+        RunTest(
             @"
 #if ONE && !TWO
 // ONE
@@ -255,7 +255,7 @@ public class PreprocessorSymbolsTests
         );
     }
 
-    private void RunTest(string code, params string[] symbolSets)
+    private static void RunTest(string code, params string[] symbolSets)
     {
         var result = PreprocessorSymbols.GetSets(code);
 

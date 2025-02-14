@@ -143,15 +143,7 @@ internal static class FormattingCacheFactory
                     FileShare.None
                 );
                 await using var streamWriter = new StreamWriter(fileStream);
-                await streamWriter.WriteAsync(
-                    JsonSerializer.Serialize(
-                        cacheDictionary
-#if DEBUG
-                        ,
-                        new JsonSerializerOptions { WriteIndented = true }
-#endif
-                    )
-                );
+                await streamWriter.WriteAsync(JsonSerializer.Serialize(cacheDictionary));
 
                 await fileStream.FlushAsync(cancellationToken);
             }

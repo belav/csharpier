@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [2.1.1]
+- Set working directory for CSharpier Server to the directory that contains CSharpier. Fixes an issue with a recursive file watch being run on the project root.
+
 ## [2.1.0]
 - Improved support for users that work with multiple dotnet architectures by splitting out installs of csharpier based on the architecture they were installed with. Thanks go to @letientai299 for the contribution
 

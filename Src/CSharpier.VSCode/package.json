@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "2.0.3",
+    "version": "2.0.6",
     "publisher": "csharpier",
     "author": "CSharpier",
     "homepage": "https://marketplace.visualstudio.com/items?itemName=csharpier.csharpier-vscode",
@@ -72,8 +72,14 @@
                         "description": "Enable diagnostics that highlight code that is not formatted with CSharpier."
                     },
                     "csharpier.dev.customPath": {
+                        "title": "blah",
                         "type": "string",
                         "default": "",
+                        "description": "Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
+                    },
+                    "csharpier.dev.useCustomPath": {
+                        "type": "boolean",
+                        "default": false,
                         "description": "Path to directory containing dotnet-csharpier - used for testing the extension with new versions of csharpier."
                     },
                     "csharpier.dev.disableCSharpierServer": {
@@ -101,7 +107,7 @@
         "@types/prettier-linter-helpers": "^1.0.4",
         "@types/semver": "7.3.9",
         "@types/vscode": "1.60.0",
-        "@vscode/vsce": "3.2.1",
+        "@vscode/vsce": "3.2.2",
         "prettier": "2.4.1",
         "rimraf": "3.0.2",
         "semver": "7.6.0",

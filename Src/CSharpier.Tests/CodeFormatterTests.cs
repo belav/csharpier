@@ -6,7 +6,7 @@ namespace CSharpier.Tests;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
-internal class CodeFormatterTests
+internal sealed class CodeFormatterTests
 {
     [Test]
     public void Format_Should_Use_Default_Width()

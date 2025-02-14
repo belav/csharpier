@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -45,7 +46,10 @@ public class ObjectInitializerWalker(string file) : CSharpSyntaxWalker
         {
             Console.WriteLine(file);
         }
-        ResultWriter.WriteResult("Avg Expressions", (totalExpressions / total).ToString());
+        ResultWriter.WriteResult(
+            "Avg Expressions",
+            (totalExpressions / total).ToString(CultureInfo.InvariantCulture)
+        );
 
         ResultWriter.WriteMatching(total, matching);
     }

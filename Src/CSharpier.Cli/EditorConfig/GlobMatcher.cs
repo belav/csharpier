@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -717,7 +718,7 @@ internal class GlobMatcher
 
             if (this.PossibleChars != null)
             {
-                return (this.PossibleChars.IndexOf(c.ToString(), comparison) != -1) != this.Negate;
+                return this.PossibleChars.Contains(c.ToString(), comparison) != this.Negate;
             }
 
             return true;
@@ -747,10 +748,9 @@ internal class GlobMatcher
     ///<summary>Creates a new GlobMatcher instance, parsing the pattern into a regex.</summary>
     public static GlobMatcher Create(string pattern, GlobMatcherOptions options = null)
     {
-        if (pattern == null)
-            throw new ArgumentNullException(nameof(pattern));
+        ArgumentNullException.ThrowIfNull(pattern);
 
-        options = options ?? new GlobMatcherOptions();
+        options ??= new GlobMatcherOptions();
         pattern = pattern.Trim();
         if (options.AllowWindowsPathsInPatterns)
             pattern = pattern.Replace('\\', '/');
@@ -910,8 +910,8 @@ internal class GlobMatcher
         {
             // console.error("numset", numset[1], numset[2])
             var suf = BraceExpand(pattern.Substring(numset.Length), options).ToList();
-            int start = int.Parse(numset.Groups[1].Value),
-                end = int.Parse(numset.Groups[2].Value),
+            int start = int.Parse(numset.Groups[1].Value, CultureInfo.InvariantCulture),
+                end = int.Parse(numset.Groups[2].Value, CultureInfo.InvariantCulture),
                 inc = start > end ? -1 : 1;
 
             var retVal = new List<string>(Math.Abs(end + inc - start) * suf.Count);
@@ -920,7 +920,7 @@ internal class GlobMatcher
                 // append all the suffixes
                 foreach (var t in suf)
                 {
-                    retVal.Add(w.ToString() + t);
+                    retVal.Add(w + t);
                 }
             }
 

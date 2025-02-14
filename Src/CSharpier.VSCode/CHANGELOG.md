@@ -1,3 +1,12 @@
+## 2.0.6
+- Clean up some logging
+
+## 2.0.5
+- Add option for "use custom path"
+
+## 2.0.4
+- Set working directory for CSharpier Server to the directory that contains CSharpier. Fixes an issue with a recursive file watch being run on the project root.
+
 ## 2.0.3
 - Get things working with the alpha version of 1.0.0
 
