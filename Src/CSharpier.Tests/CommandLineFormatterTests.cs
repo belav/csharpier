@@ -596,6 +596,29 @@ public class CommandLineFormatterTests
         result.ErrorOutputLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
     }
 
+    [TestCase("File.cs", "!File.cs", false)]
+    [TestCase("", "File.cs", true)]
+    [TestCase("!File.cs", "File.cs", true)]
+    [TestCase("File.cs", "", true)]
+    public void CSharpier_Ignore_And_Git_Ignore_Root_Level(
+        string gitIgnoreContents,
+        string csharpierIgnoreContents,
+        bool isIgnored
+    )
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("File.cs", UnformattedClassContent);
+        context.WhenAFileExists(".csharpierignore", csharpierIgnoreContents);
+        context.WhenAFileExists(".gitignore", gitIgnoreContents);
+
+        var result = Format(context);
+
+        result
+            .OutputLines.FirstOrDefault()
+            .Should()
+            .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
+    }
+
     // TODO #631
     // .csharpierignore is priority if exists - make sure it supports excludes
     // then follow .gitignore rules, which are closest ignore file takes priority if it has rules
@@ -603,39 +626,31 @@ public class CommandLineFormatterTests
     // TODO #631 test cases
     /*
         subgit      rootgit     csharpier   result
-        ignore      not ignore  -           ignore
-        not ignore  ignore      -           not ignore
         ignore      -           not ignore  not ignore
         not ignore  -           ignore      ignore
      */
 
-    [TestCase("File.cs", "File.cs", "!File.cs", false)]
-    [TestCase("File.cs", "", "File.cs", true)]
-    [TestCase("File.cs", "!File.cs", "File.cs", true)]
-    [TestCase("File.cs", "File.cs", "", true)]
-    public void File_In_Ignore_Skips_Formatting(
-        string fileName,
-        string gitIgnoreContents,
-        string csharpierIgnoreContents,
+    [TestCase("File.cs", "!File.cs", false)]
+    [TestCase("", "File.cs", true)]
+    [TestCase("!File.cs", "File.cs", true)]
+    [TestCase("File.cs", "", true)]
+    public void Two_Git_Ignores(
+        string rootGitIgnoreContents,
+        string subGitIgnoreContents,
         bool isIgnored
     )
     {
         var context = new TestContext();
-        var unformattedFilePath = fileName;
-        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
-        context.WhenAFileExists(".csharpierignore", csharpierIgnoreContents);
-        context.WhenAFileExists(".gitignore", gitIgnoreContents);
+        context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
+        context.WhenAFileExists(".gitignore", rootGitIgnoreContents);
+        context.WhenAFileExists("Sub/.gitignore", subGitIgnoreContents);
 
         var result = Format(context);
 
-        if (isIgnored)
-        {
-            result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
-        }
-        else
-        {
-            result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
-        }
+        result
+            .OutputLines.FirstOrDefault()
+            .Should()
+            .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
     }
 
     [Test]

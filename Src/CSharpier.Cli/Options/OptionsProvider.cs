@@ -9,6 +9,9 @@ internal class OptionsProvider
 {
     private readonly IList<EditorConfigSections> editorConfigs;
     private readonly List<CSharpierConfigData> csharpierConfigs;
+
+    // TODO #631 we need a dictionary of these but looking for editorconfigs also needs to take them into account
+    // maybe I need to make that editorconfig change first, ugh
     private readonly IgnoreFile ignoreFile;
     private readonly ConfigurationFileOptions? specifiedConfigFile;
     private readonly bool hasSpecificEditorConfig;
