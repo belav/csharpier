@@ -7,7 +7,8 @@ namespace CSharpier.Cli.Options;
 
 internal class OptionsProvider
 {
-    private readonly IList<EditorConfigSections> editorConfigs;
+    // TODO #1228 we are probably storing more than we need, if the directory doesn't contain an editorconfig, we can use the parent one
+    private readonly Dictionary<string, EditorConfigSections?> editorConfigByDirectory = new();
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
     private readonly ConfigurationFileOptions? specifiedConfigFile;
@@ -15,7 +16,6 @@ internal class OptionsProvider
     private readonly IFileSystem fileSystem;
 
     private OptionsProvider(
-        IList<EditorConfigSections> editorConfigs,
         List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
         ConfigurationFileOptions? specifiedPrinterOptions,
@@ -23,7 +23,6 @@ internal class OptionsProvider
         IFileSystem fileSystem
     )
     {
-        this.editorConfigs = editorConfigs;
         this.csharpierConfigs = csharpierConfigs;
         this.ignoreFile = ignoreFile;
         this.specifiedConfigFile = specifiedPrinterOptions;
@@ -50,11 +49,11 @@ internal class OptionsProvider
         }
 
         var specifiedConfigFile = csharpierConfigPath is not null
-            ? ConfigFileParser.Create(csharpierConfigPath, fileSystem, logger)
+            ? CSharpierConfigParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
         var csharpierConfigs = csharpierConfigPath is null
-            ? ConfigFileParser.FindForDirectoryName(
+            ? CSharpierConfigParser.FindForDirectoryName(
                 directoryName,
                 fileSystem,
                 logger,
@@ -62,43 +61,30 @@ internal class OptionsProvider
             )
             : [];
 
-        IList<EditorConfigSections>? editorConfigSections = null;
-
         var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
-        try
-        {
-            editorConfigSections = editorConfigPath is null
-                ? EditorConfigParser.FindForDirectoryName(
-                    directoryName,
-                    fileSystem,
-                    limitConfigSearch,
-                    ignoreFile
-                )
-                : EditorConfigParser.FindForDirectoryName(
-                    Path.GetDirectoryName(editorConfigPath)!,
-                    fileSystem,
-                    true,
-                    ignoreFile
-                );
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(
-                ex,
-                "Failure parsing editorconfig files for {DirectoryName}",
-                directoryName
-            );
-        }
-
-        return new OptionsProvider(
-            editorConfigSections ?? Array.Empty<EditorConfigSections>(),
+        var optionsProvider = new OptionsProvider(
             csharpierConfigs,
             ignoreFile,
             specifiedConfigFile,
             hasSpecificEditorConfig: editorConfigPath is not null,
             fileSystem
         );
+
+        if (editorConfigPath is not null)
+        {
+            optionsProvider.editorConfigByDirectory[directoryName] = EditorConfigParser
+                .FindForDirectoryName(
+                    Path.GetDirectoryName(editorConfigPath)!,
+                    fileSystem,
+                    ignoreFile
+                )
+                .First();
+        }
+        // # TODO 1228 we should find the editorconfig here that DOES go up directories when searching
+
+
+        return optionsProvider;
     }
 
     public PrinterOptions? GetPrinterOptionsFor(string filePath)
@@ -110,16 +96,57 @@ internal class OptionsProvider
 
         if (this.hasSpecificEditorConfig)
         {
-            return this.editorConfigs.First().ConvertToPrinterOptions(filePath, true);
+            return this
+                .editorConfigByDirectory.Values.First()!
+                .ConvertToPrinterOptions(filePath, true);
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
 
         ArgumentNullException.ThrowIfNull(directoryName);
 
-        var resolvedEditorConfig = this.editorConfigs.FirstOrDefault(o =>
-            directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
-        );
+        if (!this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
+        {
+            this.editorConfigByDirectory[directoryName] = resolvedEditorConfig = EditorConfigParser
+                .FindForDirectoryName(directoryName, this.fileSystem, this.ignoreFile)
+                .FirstOrDefault();
+        }
+
+        // TODO #1228 the above probably does more parsing than it needs to, the below version
+        // attempts to be smarter, but has issues. Maybe it isn't worth trying to get working
+        // var searchingDirectory = new DirectoryInfo(directoryName);
+        // EditorConfigSections? resolvedEditorConfig;
+        // while (
+        //     !this.editorConfigByDirectory.TryGetValue(
+        //         searchingDirectory.FullName,
+        //         out resolvedEditorConfig
+        //     )
+        // )
+        // {
+        //     if (
+        //         this.fileSystem.File.Exists(
+        //             Path.Combine(searchingDirectory.FullName, ".editorconfig")
+        //         )
+        //     )
+        //     {
+        //         this.editorConfigByDirectory[searchingDirectory.FullName] = resolvedEditorConfig =
+        //             EditorConfigParser
+        //                 .FindForDirectoryName(
+        //                     searchingDirectory.FullName,
+        //                     this.fileSystem,
+        //                     this.ignoreFile
+        //                 )
+        //                 .FirstOrDefault();
+        //         break;
+        //     }
+        //
+        //     searchingDirectory = searchingDirectory.Parent;
+        //     if (searchingDirectory is null)
+        //     {
+        //         break;
+        //     }
+        // }
+
         var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(o =>
             directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
         );
@@ -150,7 +177,7 @@ internal class OptionsProvider
             {
                 specified = this.specifiedConfigFile,
                 this.csharpierConfigs,
-                this.editorConfigs,
+                this.editorConfigByDirectory,
             }
         );
     }

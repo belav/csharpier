@@ -5,12 +5,12 @@ using NUnit.Framework;
 namespace CSharpier.Tests.Cli.Options;
 
 [TestFixture]
-public class ConfigFileParserTests
+public class CSharpierConfigParserTests
 {
     [Test]
     public void Should_Parse_Yaml_With_Overrides()
     {
-        var options = ConfigFileParser.CreateFromContent(
+        var options = CSharpierConfigParser.CreateFromContent(
             """
             overrides:
                 - files: "*.cst"
@@ -34,7 +34,7 @@ public class ConfigFileParserTests
     [Test]
     public void Should_Parse_Json_With_Overrides()
     {
-        var options = ConfigFileParser.CreateFromContent(
+        var options = CSharpierConfigParser.CreateFromContent(
             """
             {
                 "overrides": [

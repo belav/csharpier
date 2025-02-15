@@ -6,7 +6,7 @@ using IniParser.Parser;
 
 namespace CSharpier.Cli.EditorConfig;
 
-internal static class ConfigFileParser
+internal static class CSharpierConfigParser
 {
     // According to https://spec.editorconfig.org/#file-format
     // "Comment: starts with a ; or a #."

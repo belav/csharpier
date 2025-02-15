@@ -6,7 +6,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace CSharpier.Cli.Options;
 
-internal static class ConfigFileParser
+internal static class CSharpierConfigParser
 {
     private static readonly string[] validExtensions = [".csharpierrc", ".json", ".yml", ".yaml"];
     private static readonly JsonSerializerOptions CaseInsensitiveJson = new()
@@ -19,7 +19,8 @@ internal static class ConfigFileParser
         string directoryName,
         IFileSystem fileSystem,
         ILogger logger,
-        bool limitEditorConfigSearch
+        // TODO #1228 why do we ever want to limit this? should the csharpierconfig stuff change like the editorconfig did?
+        bool limitConfigSearch
     )
     {
         var results = new List<CSharpierConfigData>();
@@ -28,9 +29,7 @@ internal static class ConfigFileParser
         var filesByDirectory = directoryInfo
             .EnumerateFiles(
                 ".csharpierrc*",
-                limitEditorConfigSearch
-                    ? SearchOption.TopDirectoryOnly
-                    : SearchOption.AllDirectories
+                limitConfigSearch ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories
             )
             .GroupBy(o => o.DirectoryName);
 

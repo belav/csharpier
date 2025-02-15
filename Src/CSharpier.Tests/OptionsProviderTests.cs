@@ -647,10 +647,7 @@ indent_size = 2
         );
         context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/subfolder",
-            "c:/test/test.cs"
-        );
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
         result.IndentSize.Should().Be(1);
     }
 
