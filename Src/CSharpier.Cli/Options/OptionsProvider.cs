@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
@@ -7,8 +8,8 @@ namespace CSharpier.Cli.Options;
 
 internal class OptionsProvider
 {
-    // TODO #1228 we are probably storing more than we need, if the directory doesn't contain an editorconfig, we can use the parent one
-    private readonly Dictionary<string, EditorConfigSections?> editorConfigByDirectory = new();
+    private readonly ConcurrentDictionary<string, EditorConfigSections?> editorConfigByDirectory =
+        new();
     private readonly List<CSharpierConfigData> csharpierConfigs;
     private readonly IgnoreFile ignoreFile;
     private readonly ConfigurationFileOptions? specifiedConfigFile;
@@ -73,17 +74,18 @@ internal class OptionsProvider
 
         if (editorConfigPath is not null)
         {
-            optionsProvider.editorConfigByDirectory[directoryName] = EditorConfigParser
-                .FindForDirectoryName(
+            optionsProvider.editorConfigByDirectory[directoryName] =
+                EditorConfigLocator.FindForDirectoryName(
                     Path.GetDirectoryName(editorConfigPath)!,
                     fileSystem,
                     ignoreFile
-                )
-                .First();
+                );
         }
-        // # TODO 1228 we should find the editorconfig here that DOES go up directories when searching
-
-
+        else
+        {
+            optionsProvider.editorConfigByDirectory[directoryName] =
+                EditorConfigLocator.FindForDirectoryName(directoryName, fileSystem, ignoreFile);
+        }
         return optionsProvider;
     }
 
@@ -105,47 +107,51 @@ internal class OptionsProvider
 
         ArgumentNullException.ThrowIfNull(directoryName);
 
-        if (!this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
+        // if (!this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
+        // {
+        //     DebugLogger.Log("Missing EditorConfig entry for " + directoryName);
+        //     this.editorConfigByDirectory[directoryName] = resolvedEditorConfig = EditorConfigLocator
+        //         .FindForDirectoryName(directoryName, this.fileSystem, this.ignoreFile)
+        //         .FirstOrDefault();
+        // }
+
+        var searchingDirectory = new DirectoryInfo(directoryName);
+        EditorConfigSections? resolvedEditorConfig;
+        var directoriesToSet = new List<string>();
+        while (
+            !this.editorConfigByDirectory.TryGetValue(
+                searchingDirectory.FullName,
+                out resolvedEditorConfig
+            )
+        )
         {
-            this.editorConfigByDirectory[directoryName] = resolvedEditorConfig = EditorConfigParser
-                .FindForDirectoryName(directoryName, this.fileSystem, this.ignoreFile)
-                .FirstOrDefault();
+            if (
+                this.fileSystem.File.Exists(
+                    Path.Combine(searchingDirectory.FullName, ".editorconfig")
+                )
+            )
+            {
+                this.editorConfigByDirectory[searchingDirectory.FullName] = resolvedEditorConfig =
+                    EditorConfigLocator.FindForDirectoryName(
+                        searchingDirectory.FullName,
+                        this.fileSystem,
+                        this.ignoreFile
+                    );
+                break;
+            }
+
+            directoriesToSet.Add(searchingDirectory.FullName);
+            searchingDirectory = searchingDirectory.Parent;
+            if (searchingDirectory is null)
+            {
+                break;
+            }
         }
 
-        // TODO #1228 the above probably does more parsing than it needs to, the below version
-        // attempts to be smarter, but has issues. Maybe it isn't worth trying to get working
-        // var searchingDirectory = new DirectoryInfo(directoryName);
-        // EditorConfigSections? resolvedEditorConfig;
-        // while (
-        //     !this.editorConfigByDirectory.TryGetValue(
-        //         searchingDirectory.FullName,
-        //         out resolvedEditorConfig
-        //     )
-        // )
-        // {
-        //     if (
-        //         this.fileSystem.File.Exists(
-        //             Path.Combine(searchingDirectory.FullName, ".editorconfig")
-        //         )
-        //     )
-        //     {
-        //         this.editorConfigByDirectory[searchingDirectory.FullName] = resolvedEditorConfig =
-        //             EditorConfigParser
-        //                 .FindForDirectoryName(
-        //                     searchingDirectory.FullName,
-        //                     this.fileSystem,
-        //                     this.ignoreFile
-        //                 )
-        //                 .FirstOrDefault();
-        //         break;
-        //     }
-        //
-        //     searchingDirectory = searchingDirectory.Parent;
-        //     if (searchingDirectory is null)
-        //     {
-        //         break;
-        //     }
-        // }
+        foreach (var directoryToSet in directoriesToSet)
+        {
+            this.editorConfigByDirectory[directoryToSet] = resolvedEditorConfig;
+        }
 
         var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(o =>
             directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)

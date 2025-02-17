@@ -738,70 +738,6 @@ indent_size = 2
         result.IndentSize.Should().Be(1);
     }
 
-    [Test]
-    public async Task Should_Not_Look_For_Subfolders_EditorConfig_When_Limited()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/subfolder/.editorconfig",
-            @"
-    [*]
-    indent_size = 1
-    "
-        );
-
-        // this shouldn't happen in the real world, but validates we correctly limit
-        // the search to the top directory only
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/",
-            "c:/test/subfolder/test.cs",
-            limitEditorConfigSearch: true
-        );
-        result.IndentSize.Should().Be(4);
-    }
-
-    [Test]
-    public async Task Should_Not_Look_For_Subfolders_CSharpierRc_When_Limited()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/subfolder/.csharpierrc",
-            @"
-    [*]
-    indentSize: 1
-    "
-        );
-
-        // this shouldn't happen in the real world, but validates we correctly limit
-        // the search to the top directory only
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/",
-            "c:/test/subfolder/test.cs",
-            limitEditorConfigSearch: true
-        );
-        result.IndentSize.Should().Be(4);
-    }
-
-    [Test]
-    public async Task Should_Look_For_Subfolders_When_Limited()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_size = 1
-    "
-        );
-
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/subfolder",
-            "c:/test/subfolder/test.cs",
-            limitEditorConfigSearch: true
-        );
-        result.IndentSize.Should().Be(1);
-    }
-
     private static void ShouldHaveDefaultCSharpOptions(PrinterOptions printerOptions)
     {
         printerOptions.Width.Should().Be(100);
@@ -834,8 +770,7 @@ indent_size = 2
 
         public async Task<PrinterOptions> CreateProviderAndGetOptionsFor(
             string directoryName,
-            string filePath,
-            bool limitEditorConfigSearch = false
+            string filePath
         )
         {
             if (!OperatingSystem.IsWindows())
@@ -850,8 +785,7 @@ indent_size = 2
                 null,
                 this.fileSystem,
                 NullLogger.Instance,
-                CancellationToken.None,
-                limitEditorConfigSearch
+                CancellationToken.None
             );
 
             var printerOptions = provider.GetPrinterOptionsFor(filePath);

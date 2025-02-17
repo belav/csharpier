@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests.Cli.Options;
 
 [TestFixture]
-public class CSharpierConfigParserTests
+public class EditorConfigFileParserTests
 {
     [Test]
     public void Should_Parse_Yaml_With_Overrides()

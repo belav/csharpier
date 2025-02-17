@@ -2,9 +2,9 @@ using System.IO.Abstractions;
 
 namespace CSharpier.Cli.EditorConfig;
 
-internal static class EditorConfigParser
+internal static class EditorConfigLocator
 {
-    public static List<EditorConfigSections> FindForDirectoryName(
+    public static EditorConfigSections? FindForDirectoryName(
         string directoryName,
         IFileSystem fileSystem,
         IgnoreFile ignoreFile
@@ -12,44 +12,32 @@ internal static class EditorConfigParser
     {
         if (directoryName is "")
         {
-            return [];
+            return null;
         }
 
         var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
-        var editorConfigFiles = directoryInfo
-            .EnumerateFiles(".editorconfig", SearchOption.TopDirectoryOnly)
-            .Where(x => !ignoreFile.IsIgnored(x.FullName))
-            .ToList();
 
-        // need to also search the parent directories for any above the given directory
-        directoryInfo = directoryInfo.Parent;
         while (directoryInfo is not null)
         {
             var file = fileSystem.FileInfo.New(
                 fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig")
             );
-            if (file.Exists)
+            if (file.Exists && !ignoreFile.IsIgnored(file.FullName))
             {
-                editorConfigFiles.Add(file);
-            }
-
-            directoryInfo = directoryInfo.Parent;
-        }
-
-        return editorConfigFiles
-            .Select(o =>
-            {
-                var dirName = fileSystem.Path.GetDirectoryName(o.FullName);
+                var dirName = fileSystem.Path.GetDirectoryName(file.FullName);
                 ArgumentNullException.ThrowIfNull(dirName);
 
                 return new EditorConfigSections
                 {
                     DirectoryName = dirName,
-                    SectionsIncludingParentFiles = FindSections(o.FullName, fileSystem),
+                    SectionsIncludingParentFiles = FindSections(file.FullName, fileSystem),
                 };
-            })
-            .OrderByDescending(o => o.DirectoryName.Length)
-            .ToList();
+            }
+
+            directoryInfo = directoryInfo.Parent;
+        }
+
+        return null;
     }
 
     private static List<Section> FindSections(string filePath, IFileSystem fileSystem)
@@ -60,7 +48,7 @@ internal static class EditorConfigParser
             .ToList();
     }
 
-    private static IEnumerable<ConfigFile> ParseConfigFiles(
+    private static IEnumerable<EditorConfigFile> ParseConfigFiles(
         string directoryPath,
         IFileSystem fileSystem
     )
@@ -71,7 +59,7 @@ internal static class EditorConfigParser
             var potentialPath = fileSystem.Path.Combine(directory.FullName, ".editorconfig");
             if (fileSystem.File.Exists(potentialPath))
             {
-                var configFile = CSharpierConfigParser.Parse(potentialPath, fileSystem);
+                var configFile = EditorConfigFileParser.Parse(potentialPath, fileSystem);
 
                 yield return configFile;
                 if (configFile.IsRoot)
