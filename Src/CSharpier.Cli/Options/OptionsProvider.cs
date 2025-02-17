@@ -10,25 +10,29 @@ internal class OptionsProvider
 {
     private readonly ConcurrentDictionary<string, EditorConfigSections?> editorConfigByDirectory =
         new();
-    private readonly List<CSharpierConfigData> csharpierConfigs;
+    private readonly ConcurrentDictionary<
+        string,
+        CSharpierConfigData?
+    > csharpierConfigsByDirectory = new();
     private readonly IgnoreFile ignoreFile;
     private readonly ConfigurationFileOptions? specifiedConfigFile;
-    private readonly bool hasSpecificEditorConfig;
+    private readonly EditorConfigSections? specifiedEditorConfig;
     private readonly IFileSystem fileSystem;
+    private readonly ILogger logger;
 
     private OptionsProvider(
-        List<CSharpierConfigData> csharpierConfigs,
         IgnoreFile ignoreFile,
         ConfigurationFileOptions? specifiedPrinterOptions,
-        bool hasSpecificEditorConfig,
-        IFileSystem fileSystem
+        EditorConfigSections? specifiedEditorConfig,
+        IFileSystem fileSystem,
+        ILogger logger
     )
     {
-        this.csharpierConfigs = csharpierConfigs;
         this.ignoreFile = ignoreFile;
         this.specifiedConfigFile = specifiedPrinterOptions;
-        this.hasSpecificEditorConfig = hasSpecificEditorConfig;
+        this.specifiedEditorConfig = specifiedEditorConfig;
         this.fileSystem = fileSystem;
+        this.logger = logger;
     }
 
     public static async Task<OptionsProvider> Create(
@@ -36,8 +40,7 @@ internal class OptionsProvider
         string? configPath,
         IFileSystem fileSystem,
         ILogger logger,
-        CancellationToken cancellationToken,
-        bool limitConfigSearch = false
+        CancellationToken cancellationToken
     )
     {
         var csharpierConfigPath = configPath;
@@ -53,39 +56,36 @@ internal class OptionsProvider
             ? CSharpierConfigParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var csharpierConfigs = csharpierConfigPath is null
-            ? CSharpierConfigParser.FindForDirectoryName(
-                directoryName,
-                fileSystem,
-                logger,
-                limitConfigSearch
-            )
-            : [];
-
         var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
 
+        var specifiedEditorConfig = editorConfigPath is not null
+            ? EditorConfigLocator.FindForDirectoryName(
+                Path.GetDirectoryName(editorConfigPath)!,
+                fileSystem,
+                ignoreFile
+            )
+            : null;
+
         var optionsProvider = new OptionsProvider(
-            csharpierConfigs,
             ignoreFile,
             specifiedConfigFile,
-            hasSpecificEditorConfig: editorConfigPath is not null,
-            fileSystem
+            specifiedEditorConfig,
+            fileSystem,
+            logger
         );
 
-        if (editorConfigPath is not null)
+        if (csharpierConfigPath is null)
         {
-            optionsProvider.editorConfigByDirectory[directoryName] =
-                EditorConfigLocator.FindForDirectoryName(
-                    Path.GetDirectoryName(editorConfigPath)!,
-                    fileSystem,
-                    ignoreFile
-                );
+            optionsProvider.csharpierConfigsByDirectory[directoryName] =
+                CSharpierConfigParser.FindForDirectoryName(directoryName, fileSystem, logger);
         }
-        else
+
+        if (editorConfigPath is null)
         {
             optionsProvider.editorConfigByDirectory[directoryName] =
                 EditorConfigLocator.FindForDirectoryName(directoryName, fileSystem, ignoreFile);
         }
+
         return optionsProvider;
     }
 
@@ -96,28 +96,61 @@ internal class OptionsProvider
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
         }
 
-        if (this.hasSpecificEditorConfig)
+        if (this.specifiedEditorConfig is not null)
         {
-            return this
-                .editorConfigByDirectory.Values.First()!
-                .ConvertToPrinterOptions(filePath, true);
+            return this.specifiedEditorConfig.ConvertToPrinterOptions(filePath, true);
         }
 
         var directoryName = this.fileSystem.Path.GetDirectoryName(filePath);
 
         ArgumentNullException.ThrowIfNull(directoryName);
 
-        // if (!this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
-        // {
-        //     DebugLogger.Log("Missing EditorConfig entry for " + directoryName);
-        //     this.editorConfigByDirectory[directoryName] = resolvedEditorConfig = EditorConfigLocator
-        //         .FindForDirectoryName(directoryName, this.fileSystem, this.ignoreFile)
-        //         .FirstOrDefault();
-        // }
-
-        var searchingDirectory = new DirectoryInfo(directoryName);
-        EditorConfigSections? resolvedEditorConfig;
+        var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
+        CSharpierConfigData? resolvedCSharpierConfig;
         var directoriesToSet = new List<string>();
+        while (
+            !this.csharpierConfigsByDirectory.TryGetValue(
+                searchingDirectory.FullName,
+                out resolvedCSharpierConfig
+            )
+        )
+        {
+            if (
+                searchingDirectory
+                    .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
+                    .Any()
+            )
+            {
+                this.csharpierConfigsByDirectory[searchingDirectory.FullName] =
+                    resolvedCSharpierConfig = CSharpierConfigParser.FindForDirectoryName(
+                        directoryName,
+                        this.fileSystem,
+                        this.logger
+                    );
+                break;
+            }
+
+            directoriesToSet.Add(searchingDirectory.FullName);
+            searchingDirectory = searchingDirectory.Parent;
+            if (searchingDirectory is null)
+            {
+                break;
+            }
+        }
+
+        foreach (var directoryToSet in directoriesToSet)
+        {
+            this.csharpierConfigsByDirectory[directoryToSet] = resolvedCSharpierConfig;
+        }
+
+        if (resolvedCSharpierConfig is not null)
+        {
+            return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
+        }
+
+        searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
+        EditorConfigSections? resolvedEditorConfig;
+        directoriesToSet = new List<string>();
         while (
             !this.editorConfigByDirectory.TryGetValue(
                 searchingDirectory.FullName,
@@ -153,15 +186,6 @@ internal class OptionsProvider
             this.editorConfigByDirectory[directoryToSet] = resolvedEditorConfig;
         }
 
-        var resolvedCSharpierConfig = this.csharpierConfigs.FirstOrDefault(o =>
-            directoryName.StartsWith(o.DirectoryName, StringComparison.Ordinal)
-        );
-
-        if (resolvedCSharpierConfig is not null)
-        {
-            return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
-        }
-
         if (resolvedEditorConfig is not null)
         {
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
@@ -182,7 +206,7 @@ internal class OptionsProvider
             new
             {
                 specified = this.specifiedConfigFile,
-                this.csharpierConfigs,
+                this.csharpierConfigsByDirectory,
                 this.editorConfigByDirectory,
             }
         );

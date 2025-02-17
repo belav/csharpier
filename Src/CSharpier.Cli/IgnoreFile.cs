@@ -16,10 +16,6 @@ internal class IgnoreFile
 
     public bool IsIgnored(string filePath)
     {
-        // the ignore file was created for /test/subfolder
-        // and we are checking if /test/.editorconfig is ignored, which it CAN'T be
-        // what happened in here on main?
-
         var pathRelativeToIgnoreFile = filePath.Replace('\\', '/');
         if (
             !pathRelativeToIgnoreFile.StartsWith(
@@ -28,9 +24,16 @@ internal class IgnoreFile
             )
         )
         {
-            throw new Exception(
-                $"The filePath of {filePath} does not start with the ignoreBaseDirectoryPath of {this.IgnoreBaseDirectoryPath}"
-            );
+            // TODO #631
+            // the ignore file was created for /test/subfolder
+            // and we are checking if /test/.editorconfig is ignored, which it CAN'T be
+            // in main, we did not check if parent folder editorconfigs were ignored, which is probably a bug
+            // we need to figure out a better way to deal with ignorefiles, which will come in the PR for 631
+
+            return false;
+            // throw new Exception(
+            //     $"The filePath of {filePath} does not start with the ignoreBaseDirectoryPath of {this.IgnoreBaseDirectoryPath}"
+            // );
         }
 
         pathRelativeToIgnoreFile =

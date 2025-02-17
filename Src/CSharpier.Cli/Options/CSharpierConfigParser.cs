@@ -14,44 +14,13 @@ internal static class CSharpierConfigParser
         PropertyNameCaseInsensitive = true,
     };
 
-    /// <summary>Finds all configs above the given directory as well as within the subtree of this directory</summary>
-    internal static List<CSharpierConfigData> FindForDirectoryName(
+    internal static CSharpierConfigData? FindForDirectoryName(
         string directoryName,
         IFileSystem fileSystem,
-        ILogger logger,
-        // TODO #1228 why do we ever want to limit this? should the csharpierconfig stuff change like the editorconfig did?
-        bool limitConfigSearch
+        ILogger logger
     )
     {
-        var results = new List<CSharpierConfigData>();
         var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
-
-        var filesByDirectory = directoryInfo
-            .EnumerateFiles(
-                ".csharpierrc*",
-                limitConfigSearch ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories
-            )
-            .GroupBy(o => o.DirectoryName);
-
-        foreach (var group in filesByDirectory)
-        {
-            var firstFile = group
-                .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
-                .MinBy(o => o.Extension);
-
-            if (firstFile != null)
-            {
-                results.Add(
-                    new CSharpierConfigData(
-                        firstFile.DirectoryName!,
-                        Create(firstFile.FullName, fileSystem, logger)
-                    )
-                );
-            }
-        }
-
-        // already found any in this directory above
-        directoryInfo = directoryInfo.Parent;
 
         while (directoryInfo is not null)
         {
@@ -62,18 +31,16 @@ internal static class CSharpierConfigParser
 
             if (file != null)
             {
-                results.Add(
-                    new CSharpierConfigData(
-                        file.DirectoryName!,
-                        Create(file.FullName, fileSystem, logger)
-                    )
+                return new CSharpierConfigData(
+                    file.DirectoryName!,
+                    Create(file.FullName, fileSystem, logger)
                 );
             }
 
             directoryInfo = directoryInfo.Parent;
         }
 
-        return results.OrderByDescending(o => o.DirectoryName.Length).ToList();
+        return null;
     }
 
     internal static ConfigurationFileOptions Create(
