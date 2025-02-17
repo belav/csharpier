@@ -105,11 +105,44 @@ internal class OptionsProvider
 
         ArgumentNullException.ThrowIfNull(directoryName);
 
+        var resolvedCSharpierConfig = this.FindCSharpierConfig(directoryName);
+        if (resolvedCSharpierConfig is not null)
+        {
+            return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
+        }
+
+        var resolvedEditorConfig = this.FindEditorConfig(directoryName);
+        if (resolvedEditorConfig is not null)
+        {
+            return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
+        }
+
+        var formatter = PrinterOptions.GetFormatter(filePath);
+        return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
+    }
+
+    /// <summary>
+    /// this is a type of lazy lookup. We preload a csharpierconfig for the initial directory of the format command
+    /// For a file in a given subdirectory if we've already found the appropriate cshapierconfig return it
+    /// otherwise track it down (parsing if we need to) and set the references for any parent directories
+    /// </summary>
+    private CSharpierConfigData? FindCSharpierConfig(string directoryName)
+    {
+        if (
+            this.csharpierConfigsByDirectory.TryGetValue(
+                directoryName,
+                out var resolvedCSharpierConfig
+            )
+        )
+        {
+            return resolvedCSharpierConfig;
+        }
+
         var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
-        CSharpierConfigData? resolvedCSharpierConfig;
         var directoriesToSet = new List<string>();
         while (
-            !this.csharpierConfigsByDirectory.TryGetValue(
+            searchingDirectory is not null
+            && !this.csharpierConfigsByDirectory.TryGetValue(
                 searchingDirectory.FullName,
                 out resolvedCSharpierConfig
             )
@@ -132,10 +165,6 @@ internal class OptionsProvider
 
             directoriesToSet.Add(searchingDirectory.FullName);
             searchingDirectory = searchingDirectory.Parent;
-            if (searchingDirectory is null)
-            {
-                break;
-            }
         }
 
         foreach (var directoryToSet in directoriesToSet)
@@ -143,16 +172,21 @@ internal class OptionsProvider
             this.csharpierConfigsByDirectory[directoryToSet] = resolvedCSharpierConfig;
         }
 
-        if (resolvedCSharpierConfig is not null)
+        return resolvedCSharpierConfig;
+    }
+
+    private EditorConfigSections? FindEditorConfig(string directoryName)
+    {
+        if (this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
         {
-            return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
+            return resolvedEditorConfig;
         }
 
-        searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
-        EditorConfigSections? resolvedEditorConfig;
-        directoriesToSet = new List<string>();
+        var directoriesToSet = new List<string>();
+        var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
         while (
-            !this.editorConfigByDirectory.TryGetValue(
+            searchingDirectory is not null
+            && !this.editorConfigByDirectory.TryGetValue(
                 searchingDirectory.FullName,
                 out resolvedEditorConfig
             )
@@ -175,10 +209,6 @@ internal class OptionsProvider
 
             directoriesToSet.Add(searchingDirectory.FullName);
             searchingDirectory = searchingDirectory.Parent;
-            if (searchingDirectory is null)
-            {
-                break;
-            }
         }
 
         foreach (var directoryToSet in directoriesToSet)
@@ -186,13 +216,7 @@ internal class OptionsProvider
             this.editorConfigByDirectory[directoryToSet] = resolvedEditorConfig;
         }
 
-        if (resolvedEditorConfig is not null)
-        {
-            return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
-        }
-
-        var formatter = PrinterOptions.GetFormatter(filePath);
-        return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
+        return resolvedEditorConfig;
     }
 
     public bool IsIgnored(string actualFilePath)
