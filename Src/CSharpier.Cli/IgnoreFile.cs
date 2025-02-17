@@ -48,12 +48,13 @@ internal class IgnoreFile
             ignore.Add(name);
         }
 
-        var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
-        if (ignoreFilePath == null)
+        var ignoreFilePaths = FindIgnorePath(baseDirectoryPath, fileSystem);
+        if (ignoreFilePaths.Count == 0)
         {
             return new IgnoreFile(ignore, baseDirectoryPath);
         }
 
+        foreach (var ignoreFilePath in ignoreFilePaths)
         foreach (
             var line in await fileSystem.File.ReadAllLinesAsync(ignoreFilePath, cancellationToken)
         )
@@ -73,31 +74,50 @@ internal class IgnoreFile
             }
         }
 
-        var directoryName = fileSystem.Path.GetDirectoryName(ignoreFilePath);
+        // TODO #631 htf is this going to work? each ignorefile needs one, ugh
+        var directoryName = fileSystem.Path.GetDirectoryName(ignoreFilePaths.Last());
 
         ArgumentNullException.ThrowIfNull(directoryName);
 
         return new IgnoreFile(ignore, directoryName);
     }
 
-    private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
+    // this will return the ignore paths with the priority path coming last, which means the rules from the last entry will take
+    // priority. .csharpierignore comes last, gitignore come before
+    private static List<string> FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
     {
+        var result = new List<string>();
+        string? foundCSharpierIgnoreFilePath = null;
         var directoryInfo = fileSystem.DirectoryInfo.New(baseDirectoryPath);
         while (directoryInfo != null)
         {
-            var ignoreFilePath = fileSystem.Path.Combine(
-                directoryInfo.FullName,
-                ".csharpierignore"
-            );
-            if (fileSystem.File.Exists(ignoreFilePath))
+            if (foundCSharpierIgnoreFilePath is null)
             {
-                return ignoreFilePath;
+                var csharpierIgnoreFilePath = fileSystem.Path.Combine(
+                    directoryInfo.FullName,
+                    ".csharpierignore"
+                );
+                if (fileSystem.File.Exists(csharpierIgnoreFilePath))
+                {
+                    foundCSharpierIgnoreFilePath = csharpierIgnoreFilePath;
+                }
+            }
+
+            var gitIgnoreFilePath = fileSystem.Path.Combine(directoryInfo.FullName, ".gitignore");
+            if (fileSystem.File.Exists(gitIgnoreFilePath))
+            {
+                result.Insert(0, gitIgnoreFilePath);
             }
 
             directoryInfo = directoryInfo.Parent;
         }
 
-        return null;
+        if (foundCSharpierIgnoreFilePath is not null)
+        {
+            result.Add(foundCSharpierIgnoreFilePath);
+        }
+
+        return result;
     }
 }
 
