@@ -40,7 +40,14 @@ internal static class StringExtensions
     // some unicode characters should be considered size of 2 when calculating how big this string will be when printed
     public static int GetPrintedWidth(this string value)
     {
-        return value.Sum(CharacterSizeCalculator.CalculateWidth);
+        var sum = 0;
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var character in value)
+        {
+            sum += CharacterSizeCalculator.CalculateWidth(character);
+        }
+
+        return sum;
     }
 
     public static int CalculateCurrentLeadingIndentation(this string line, int indentSize)
