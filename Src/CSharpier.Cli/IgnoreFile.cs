@@ -16,23 +16,32 @@ internal class IgnoreFile
 
     public bool IsIgnored(string filePath)
     {
-        var normalizedFilePath = filePath.Replace('\\', '/');
-        if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath, StringComparison.Ordinal))
+        var pathRelativeToIgnoreFile = filePath.Replace('\\', '/');
+        if (
+            !pathRelativeToIgnoreFile.StartsWith(
+                this.IgnoreBaseDirectoryPath,
+                StringComparison.Ordinal
+            )
+        )
         {
-            throw new Exception(
-                "The filePath of "
-                    + filePath
-                    + " does not start with the ignoreBaseDirectoryPath of "
-                    + this.IgnoreBaseDirectoryPath
-            );
+            // TODO #631
+            // the ignore file was created for /test/subfolder
+            // and we are checking if /test/.editorconfig is ignored, which it CAN'T be
+            // in main, we did not check if parent folder editorconfigs were ignored, which is probably a bug
+            // we need to figure out a better way to deal with ignorefiles, which will come in the PR for 631
+
+            return false;
+            // throw new Exception(
+            //     $"The filePath of {filePath} does not start with the ignoreBaseDirectoryPath of {this.IgnoreBaseDirectoryPath}"
+            // );
         }
 
-        normalizedFilePath =
-            normalizedFilePath.Length > this.IgnoreBaseDirectoryPath.Length
-                ? normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..]
+        pathRelativeToIgnoreFile =
+            pathRelativeToIgnoreFile.Length > this.IgnoreBaseDirectoryPath.Length
+                ? pathRelativeToIgnoreFile[(this.IgnoreBaseDirectoryPath.Length + 1)..]
                 : string.Empty;
 
-        return this.Ignore.IsIgnored(normalizedFilePath);
+        return this.Ignore.IsIgnored(pathRelativeToIgnoreFile);
     }
 
     public static async Task<IgnoreFile> Create(
