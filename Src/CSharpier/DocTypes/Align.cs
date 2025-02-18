@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes;
 
-internal class Align : Doc, IHasContents
+internal sealed class Align : Doc, IHasContents
 {
     public int Width { get; }
     public Doc Contents { get; }
