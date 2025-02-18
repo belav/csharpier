@@ -18,4 +18,19 @@ internal static class ListExtensions
             value.Add(doc);
         }
     }
+
+    // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
+    public static bool Any(this in SyntaxTriviaList triviaList, Func<SyntaxTrivia, bool> predicate)
+    {
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var trivia in triviaList)
+        {
+            if (predicate(trivia))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
