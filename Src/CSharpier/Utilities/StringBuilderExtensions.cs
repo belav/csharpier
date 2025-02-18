@@ -62,4 +62,24 @@ internal static class StringBuilderExtensions
         stringBuilder.Length -= trimmed;
         return trimmed;
     }
+
+    public static int TrimTrailingWhitespace(this ref ValueStringBuilder stringBuilder)
+    {
+        if (stringBuilder.Length == 0)
+        {
+            return 0;
+        }
+
+        var trimmed = 0;
+        for (; trimmed < stringBuilder.Length; trimmed++)
+        {
+            if (stringBuilder[^(trimmed + 1)] is not ' ' and not '\t')
+            {
+                break;
+            }
+        }
+
+        stringBuilder.Length -= trimmed;
+        return trimmed;
+    }
 }
