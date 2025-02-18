@@ -14,8 +14,10 @@ internal abstract class Doc
 
     public static implicit operator Doc(string value)
     {
-        return new StringDoc(value);
+        return value is " " ? SpaceString : new StringDoc(value);
     }
+
+    private static readonly StringDoc SpaceString = new(" ");
 
     public static NullDoc Null => NullDoc.Instance;
 
