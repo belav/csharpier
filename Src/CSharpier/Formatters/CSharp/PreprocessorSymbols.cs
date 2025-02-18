@@ -36,17 +36,19 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
             return;
         }
 
-        foreach (
-            var syntaxTrivia in token.LeadingTrivia.Where(syntaxTrivia =>
-                syntaxTrivia.RawSyntaxKind()
-                    is SyntaxKind.IfDirectiveTrivia
-                        or SyntaxKind.ElifDirectiveTrivia
-                        or SyntaxKind.ElseDirectiveTrivia
-                        or SyntaxKind.EndIfDirectiveTrivia
-            )
-        )
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var syntaxTrivia in token.LeadingTrivia)
         {
-            this.Visit((CSharpSyntaxNode)syntaxTrivia.GetStructure()!);
+            if (
+                syntaxTrivia.RawSyntaxKind()
+                is SyntaxKind.IfDirectiveTrivia
+                    or SyntaxKind.ElifDirectiveTrivia
+                    or SyntaxKind.ElseDirectiveTrivia
+                    or SyntaxKind.EndIfDirectiveTrivia
+            )
+            {
+                this.Visit((CSharpSyntaxNode)syntaxTrivia.GetStructure()!);
+            }
         }
     }
 
