@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes;
 
-internal class LeadingComment : Doc
+internal sealed class LeadingComment : Doc
 {
     public CommentType Type { get; init; }
     public string Comment { get; init; } = string.Empty;
