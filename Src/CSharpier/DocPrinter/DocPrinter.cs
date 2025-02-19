@@ -16,6 +16,10 @@ internal class DocPrinter
     protected readonly Indenter Indenter;
     protected readonly Stack<Indent> RegionIndents = new();
 
+    // Reusable collection types for use in DocFitter
+    protected readonly Stack<PrintCommand> DocFitterNewCommands = new();
+    protected readonly StringBuilder DocFitterOutput = new();
+
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
         this.EndOfLine = endOfLine;
@@ -389,7 +393,9 @@ internal class DocPrinter
             this.RemainingCommands,
             this.PrinterOptions.Width - this.CurrentWidth,
             this.GroupModeMap,
-            this.Indenter
+            this.Indenter,
+            this.DocFitterNewCommands,
+            this.DocFitterOutput
         );
     }
 
