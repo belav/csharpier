@@ -374,8 +374,13 @@ internal static class Token
         return PrintTrailingTrivia(node.TrailingTrivia);
     }
 
-    private static Doc PrintTrailingTrivia(SyntaxTriviaList trailingTrivia)
+    private static Doc PrintTrailingTrivia(in SyntaxTriviaList trailingTrivia)
     {
+        if (trailingTrivia.Count == 0)
+        {
+            return Doc.Null;
+        }
+
         var docs = new List<Doc>();
         foreach (var trivia in trailingTrivia)
         {
