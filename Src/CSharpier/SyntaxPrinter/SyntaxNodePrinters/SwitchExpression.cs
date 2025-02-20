@@ -40,7 +40,7 @@ internal static class SwitchExpression
             o.IsComment()
         );
 
-        var groupId2 = Guid.NewGuid().ToString();
+        var groupId2 = arrowHasComment ? string.Empty : Guid.NewGuid().ToString();
         var innerContents = arrowHasComment
             ? Doc.Indent(
                 Doc.Concat(
