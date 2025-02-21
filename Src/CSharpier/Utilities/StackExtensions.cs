@@ -19,4 +19,20 @@ internal static class StackExtensions
         }
     }
 #endif
+
+    // Overload for IEnumerable.ElementAt, prevents allocating Stack<T>.Enumerator
+    public static T ElementAt<T>(this Stack<T> collection, int index)
+    {
+        foreach (var item in collection)
+        {
+            if (index == 0)
+            {
+                return item;
+            }
+
+            index--;
+        }
+
+        throw new ArgumentOutOfRangeException(nameof(index));
+    }
 }
