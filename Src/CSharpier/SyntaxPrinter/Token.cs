@@ -379,8 +379,13 @@ internal static class Token
         return PrintTrailingTrivia(node.TrailingTrivia);
     }
 
-    private static Doc PrintTrailingTrivia(SyntaxTriviaList trailingTrivia)
+    private static Doc PrintTrailingTrivia(in SyntaxTriviaList trailingTrivia)
     {
+        if (trailingTrivia.Count == 0)
+        {
+            return Doc.Null;
+        }
+
         var docs = new List<Doc>();
         foreach (var trivia in trailingTrivia)
         {
@@ -409,11 +414,17 @@ internal static class Token
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
-        return node.GetLeadingTrivia()
-            .Any(o =>
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var o in node.GetLeadingTrivia())
+        {
+            if (
                 o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
                 && regex.IsMatch(o.ToString())
-            );
+            )
+                return true;
+        }
+
+        return false;
     }
 
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
