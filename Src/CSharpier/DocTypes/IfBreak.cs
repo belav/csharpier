@@ -7,7 +7,7 @@ internal class IfBreak : Doc
     public string? GroupId { get; set; }
 }
 
-internal class IndentIfBreak : IfBreak
+internal sealed class IndentIfBreak : IfBreak
 {
     public IndentIfBreak(Doc contents, string groupId)
     {

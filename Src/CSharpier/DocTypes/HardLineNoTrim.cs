@@ -1,3 +1,3 @@
 namespace CSharpier.DocTypes;
 
-internal class HardLineNoTrim : HardLine { }
+internal sealed class HardLineNoTrim : HardLine { }
