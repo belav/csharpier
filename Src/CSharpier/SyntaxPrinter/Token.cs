@@ -409,11 +409,17 @@ internal static class Token
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
-        return node.GetLeadingTrivia()
-            .Any(o =>
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var o in node.GetLeadingTrivia())
+        {
+            if (
                 o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
                 && regex.IsMatch(o.ToString())
-            );
+            )
+                return true;
+        }
+
+        return false;
     }
 
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
