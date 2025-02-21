@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 
 namespace CSharpier;
@@ -20,7 +21,10 @@ internal class DebugLogger
         {
             try
             {
-                File.AppendAllText(@"C:\projects\csharpier\debug.txt", message + "\n");
+                File.AppendAllText(
+                    @"C:\projects\csharpier\debug.txt",
+                    $"{DateTime.Now.ToString("HH:mm:ss.fff", CultureInfo.InvariantCulture)} {message}\n"
+                );
             }
             catch (Exception)
             {

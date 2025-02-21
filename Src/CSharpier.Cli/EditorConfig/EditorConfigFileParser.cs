@@ -6,7 +6,7 @@ using IniParser.Parser;
 
 namespace CSharpier.Cli.EditorConfig;
 
-internal static class ConfigFileParser
+internal static class EditorConfigFileParser
 {
     // According to https://spec.editorconfig.org/#file-format
     // "Comment: starts with a ; or a #."
@@ -22,8 +22,9 @@ internal static class ConfigFileParser
         ThrowExceptionsOnError = false,
     };
 
-    public static ConfigFile Parse(string filePath, IFileSystem fileSystem)
+    public static EditorConfigFile Parse(string filePath, IFileSystem fileSystem)
     {
+        DebugLogger.Log("Reading file at " + filePath);
         var directory = fileSystem.Path.GetDirectoryName(filePath);
 
         ArgumentNullException.ThrowIfNull(directory);
@@ -40,7 +41,7 @@ internal static class ConfigFileParser
             sections.AddRange(configData.Sections.Select(s => new Section(s, directory)));
         }
 
-        return new ConfigFile
+        return new EditorConfigFile
         {
             IsRoot = configData?.Global["root"] == "true",
             Sections = sections,

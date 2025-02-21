@@ -19,7 +19,7 @@ internal static class HasMismatchedCliAndMsBuildVersions
 
         string? GetPackagesVersion(string pathToCsProj)
         {
-            var directory = new DirectoryInfo(Path.GetDirectoryName(pathToCsProj)!);
+            var directory = fileSystem.DirectoryInfo.New(Path.GetDirectoryName(pathToCsProj)!);
             while (directory != null)
             {
                 var filePath = Path.Combine(directory.FullName, "Directory.Packages.props");
