@@ -224,6 +224,11 @@ internal static class Token
         bool skipLastHardline = false
     )
     {
+        if (leadingTrivia.Count == 0)
+        {
+            return Doc.Null;
+        }
+
         var docs = new List<Doc>();
 
         // we don't print any new lines until we run into a comment or directive
