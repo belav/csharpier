@@ -32,7 +32,7 @@ internal static class SeparatedSyntaxList
     // sometimes there are trailing commas with calls to Print (some patterns do that)
     // and if you pass null to PrintWithTrailingComma it won't add a trailing comma if there isn't one
     private static Doc Print<T>(
-        SeparatedSyntaxList<T> list,
+        in SeparatedSyntaxList<T> list,
         Func<T, PrintingContext, Doc> printFunc,
         Doc afterSeparator,
         PrintingContext context,

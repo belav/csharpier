@@ -33,4 +33,23 @@ internal static class ListExtensions
 
         return false;
     }
+
+    public static SyntaxTrivia FirstOrDefault(
+        this in SyntaxTriviaList source,
+        Func<SyntaxTrivia, bool> predicate
+    )
+    {
+        var first = new SyntaxTrivia();
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var trivia in source)
+        {
+            if (predicate(trivia))
+            {
+                first = trivia;
+                break;
+            }
+        }
+
+        return first;
+    }
 }
