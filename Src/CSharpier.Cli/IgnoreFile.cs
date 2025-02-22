@@ -15,6 +15,7 @@ internal class IgnoreFile
 
     public bool IsIgnored(string filePath)
     {
+        filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
         foreach (var ignore in this.ignores)
         {
             // when using one of the ignore files to determine if a given file is ignored or not

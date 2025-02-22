@@ -578,9 +578,10 @@ public class CommandLineFormatterTests
     public void Ignore_Should_Deal_With_Inconsistent_Slashes()
     {
         var context = new TestContext();
-        var unformattedFilePath1 = @"SubFolder\1\File1.cs";
+        var altSlash = Path.AltDirectorySeparatorChar;
+        var unformattedFilePath1 = $"Child{altSlash}GrandChild{altSlash}File1.cs";
         context.WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
-        context.WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
+        context.WhenAFileExists("Child/GrandChild/.csharpierignore", "File1.cs");
 
         var result = Format(context, directoryOrFilePaths: unformattedFilePath1);
 
