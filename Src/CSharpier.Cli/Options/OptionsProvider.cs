@@ -201,8 +201,8 @@ internal class OptionsProvider
     }
 
     /// <summary>
-    /// this is a type of lazy lookup. We preload a csharpierconfig for the initial directory of the format command
-    /// For a file in a given subdirectory if we've already found the appropriate cshapierconfig return it
+    /// this is a type of lazy lookup. We preload file type for the initial directory of the format command
+    /// When trying to format a file in a given subdirectory if we've already found the appropriate file type then return it
     /// otherwise track it down (parsing if we need to) and set the references for any parent directories
     /// </summary>
     private async Task<T?> FindFileAsync<T>(

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
 using Ignore;
 
@@ -63,20 +64,21 @@ internal class IgnoreFile
                 )
             )
             {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
                 try
                 {
-                    if (string.IsNullOrWhiteSpace(line))
-                    {
-                        continue;
-                    }
                     ignore.Add(line);
                 }
                 catch (Exception ex)
                 {
                     throw new InvalidIgnoreFileException(
-                        @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
-{line}
-",
+                        $"""
+                        The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
+                        {line}
+                        """,
                         ex
                     );
                 }
