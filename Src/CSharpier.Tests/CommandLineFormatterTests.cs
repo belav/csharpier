@@ -25,6 +25,7 @@ public class CommandLineFormatterTests
 
         result
             .ErrorOutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
 
@@ -41,6 +42,7 @@ public class CommandLineFormatterTests
 
         result
             .OutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
 
@@ -57,6 +59,7 @@ public class CommandLineFormatterTests
 
         result
             .ErrorOutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be("Error ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -74,6 +77,7 @@ public class CommandLineFormatterTests
 
         result
             .ErrorOutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be(
                 $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Failed to compile so was not formatted."
@@ -90,6 +94,7 @@ public class CommandLineFormatterTests
 
         result
             .ErrorOutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be("Error ./Directory/Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -104,6 +109,7 @@ public class CommandLineFormatterTests
 
         result
             .OutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be("Warning ./Unsupported.js - Is an unsupported file type.");
     }
@@ -372,6 +378,7 @@ public class CommandLineFormatterTests
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
         result
             .ErrorOutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .StartWith("Error ./Unformatted.cs - Was not formatted.");
     }
@@ -535,10 +542,14 @@ public class CommandLineFormatterTests
     public void Multiple_Files_Should_Use_Multiple_Ignores()
     {
         var context = new TestContext();
-        var unformattedFilePath1 = "SubFolder/1/File1.cs";
-        var unformattedFilePath2 = "SubFolder/2/File2.cs";
-        context.WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
-        context.WhenAFileExists(unformattedFilePath2, UnformattedClassContent);
+        var unformattedFilePath1 = context.WhenAFileExists(
+            "SubFolder/1/File1.cs",
+            UnformattedClassContent
+        );
+        var unformattedFilePath2 = context.WhenAFileExists(
+            "SubFolder/2/File2.cs",
+            UnformattedClassContent
+        );
         context.WhenAFileExists("SubFolder/1/.csharpierignore", "File1.cs");
         context.WhenAFileExists("SubFolder/2/.csharpierignore", "File2.cs");
 
@@ -588,7 +599,6 @@ public class CommandLineFormatterTests
         result.ExitCode.Should().Be(1);
         result
             .ErrorOutputLines.First()
-            .Replace("\\", "/")
             .Should()
             .Contain(
                 $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
@@ -717,6 +727,7 @@ public class CommandLineFormatterTests
         context.GetFileContent("Invalid.cs").Should().Be(contents);
         result
             .ErrorOutputLines.First()
+            .Replace('\\', '/')
             .Should()
             .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
     }
@@ -794,7 +805,6 @@ class ClassName
 
         result
             .OutputLines.First()
-            .Replace("\\", "/")
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");
     }
@@ -896,7 +906,9 @@ class ClassName
 
         public string WhenAFileExists(string path, string contents)
         {
-            path = this.FileSystem.Path.Combine(GetRootPath(), path).Replace('\\', '/');
+            path = this
+                .FileSystem.Path.Combine(GetRootPath(), path)
+                .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             this.FileSystem.AddFile(path, new MockFileData(contents));
             return path;
         }

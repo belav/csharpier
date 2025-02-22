@@ -151,7 +151,7 @@ internal static class CommandLineFormatter
 
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
-            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
+            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x];
             var isFile = fileSystem.File.Exists(directoryOrFilePath);
             var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
 
@@ -178,9 +178,7 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions
-                .OriginalDirectoryOrFilePaths[x]
-                .Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[x];
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -193,7 +191,8 @@ internal static class CommandLineFormatter
             {
                 if (!originalDirectoryOrFile.StartsWith('.'))
                 {
-                    originalDirectoryOrFile = "./" + originalDirectoryOrFile;
+                    originalDirectoryOrFile =
+                        "." + Path.DirectorySeparatorChar + originalDirectoryOrFile;
                 }
             }
 
@@ -266,13 +265,8 @@ internal static class CommandLineFormatter
                         SearchOption.AllDirectories
                     )
                     .Select(o =>
-                    {
-                        var normalizedPath = o.Replace("\\", "/");
-                        return FormatFile(
-                            normalizedPath,
-                            normalizedPath.Replace(directoryOrFilePath, originalDirectoryOrFile)
-                        );
-                    })
+                        FormatFile(o, o.Replace(directoryOrFilePath, originalDirectoryOrFile))
+                    )
                     .ToArray();
                 try
                 {

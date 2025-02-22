@@ -41,6 +41,12 @@ internal class OptionsProvider
         CancellationToken cancellationToken
     )
     {
+        while (!System.Diagnostics.Debugger.IsAttached)
+        {
+            Thread.Sleep(100);
+        }
+
+        DebugLogger.Log("Create " + directoryName);
         var csharpierConfigPath = configPath;
         string? editorConfigPath = null;
 
@@ -71,6 +77,8 @@ internal class OptionsProvider
             logger
         );
 
+        optionsProvider.ignoreFilesByDirectory[directoryName] = ignoreFile;
+
         if (csharpierConfigPath is null)
         {
             optionsProvider.csharpierConfigsByDirectory[directoryName] =
@@ -83,12 +91,6 @@ internal class OptionsProvider
                 EditorConfigLocator.FindForDirectoryName(directoryName, fileSystem, ignoreFile);
         }
 
-        optionsProvider.ignoreFilesByDirectory[directoryName] = await IgnoreFile.CreateAsync(
-            directoryName,
-            fileSystem,
-            cancellationToken
-        );
-
         return optionsProvider;
     }
 
@@ -97,6 +99,7 @@ internal class OptionsProvider
         CancellationToken cancellationToken
     )
     {
+        DebugLogger.Log("GetPrinterOptionsForAsync " + filePath);
         if (this.specifiedConfigFile is not null)
         {
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
@@ -239,6 +242,7 @@ internal class OptionsProvider
         CancellationToken cancellationToken
     )
     {
+        DebugLogger.Log("FindIgnoreFileAsync " + directoryName);
         if (this.ignoreFilesByDirectory.TryGetValue(directoryName, out var ignoreFile))
         {
             return ignoreFile;

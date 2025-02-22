@@ -779,6 +779,15 @@ indent_size = 2
                 filePath = filePath.Replace("c:", string.Empty);
             }
 
+            directoryName = directoryName.Replace(
+                Path.AltDirectorySeparatorChar,
+                Path.DirectorySeparatorChar
+            );
+            filePath = filePath.Replace(
+                Path.AltDirectorySeparatorChar,
+                Path.DirectorySeparatorChar
+            );
+
             this.fileSystem.AddDirectory(directoryName);
             var provider = await OptionsProvider.Create(
                 directoryName,

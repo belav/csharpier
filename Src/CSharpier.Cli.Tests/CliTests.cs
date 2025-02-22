@@ -27,6 +27,12 @@ public class CliTests
             File.Delete(FormattingCacheFactory.CacheFilePath);
         }
 
+        Directory.CreateDirectory(testFileDirectory);
+    }
+
+    [TearDown]
+    public void AfterEachTest()
+    {
         void DeleteDirectory()
         {
             if (Directory.Exists(testFileDirectory))
@@ -44,8 +50,6 @@ public class CliTests
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
             DeleteDirectory();
         }
-
-        Directory.CreateDirectory(testFileDirectory);
     }
 
     [TestCase("\n")]
@@ -172,7 +176,10 @@ public class CliTests
             .ExecuteAsync();
 
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput.Should().StartWith("Error ./TooWide.cs - Was not formatted.");
+        result
+            .ErrorOutput.Replace('\\', '/')
+            .Should()
+            .StartWith("Error ./TooWide.cs - Was not formatted.");
     }
 
     [Test]
@@ -347,7 +354,7 @@ max_line_length = 10"
             .ExecuteAsync();
 
         result
-            .ErrorOutput.Replace("\\", "/")
+            .ErrorOutput.Replace('\\', '/')
             .Should()
             .StartWith("Error ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(1);

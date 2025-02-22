@@ -1,66 +1,15 @@
 using System.Diagnostics;
 using System.IO.Abstractions;
-using System.Reflection;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using Ignore;
 
 namespace CSharpier.Cli;
 
-internal class IgnoreWithBasePath(string basePath)
-{
-    public string BasePath => basePath;
-    public readonly List<IgnoreRule> Rules = new();
-
-    public bool TryIsIgnored(string path, out bool isIgnored)
-    {
-        isIgnored = false;
-        var pathRelativeToIgnoreFile = path.Replace('\\', '/');
-        if (!pathRelativeToIgnoreFile.StartsWith(basePath, StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        pathRelativeToIgnoreFile =
-            pathRelativeToIgnoreFile.Length > basePath.Length
-                ? pathRelativeToIgnoreFile[(basePath.Length + 1)..]
-                : string.Empty;
-
-        var hasMatchingRule = false;
-        foreach (var rule in this.Rules)
-        {
-            var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
-            if (isMatch)
-            {
-                hasMatchingRule = true;
-            }
-            if (rule.Negate)
-            {
-                if (isIgnored && isMatch)
-                {
-                    isIgnored = false;
-                }
-            }
-            else if (!isIgnored && isMatch)
-            {
-                isIgnored = true;
-            }
-        }
-        return hasMatchingRule;
-    }
-
-    public void Add(string rule)
-    {
-        this.Rules.Add(new IgnoreRule(rule));
-    }
-}
-
 internal class IgnoreFile
 {
-    protected List<IgnoreWithBasePath> ignores { get; }
+    private List<IgnoreWithBasePath> ignores { get; }
     private static readonly string[] alwaysIgnored = ["**/node_modules", "**/obj", "**/.git"];
 
-    protected IgnoreFile(List<IgnoreWithBasePath> ignores)
+    private IgnoreFile(List<IgnoreWithBasePath> ignores)
     {
         this.ignores = ignores;
     }
@@ -69,11 +18,12 @@ internal class IgnoreFile
     {
         foreach (var ignore in this.ignores)
         {
-            if (ignore.TryIsIgnored(filePath, out var result))
+            // when using one of the ignore files to determine if a given file is ignored or not
+            // we can only consider that file if it actually has a matching rule for the filePath
+            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath);
+            if (hasMatchingRule)
             {
-                DebugLogger.Log(ignore);
-                DebugLogger.Log($"{filePath} {result}");
-                return result;
+                return isIgnored;
             }
         }
 
@@ -86,10 +36,10 @@ internal class IgnoreFile
         CancellationToken cancellationToken
     )
     {
-        var ignoreFilePaths = FindIgnorePath(baseDirectoryPath, fileSystem);
+        var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
         if (ignoreFilePaths.Count == 0)
         {
-            var ignore = new IgnoreWithBasePath(baseDirectoryPath.Replace('\\', '/'));
+            var ignore = new IgnoreWithBasePath(baseDirectoryPath);
             foreach (var name in alwaysIgnored)
             {
                 ignore.Add(name);
@@ -100,10 +50,8 @@ internal class IgnoreFile
         var ignores = new List<IgnoreWithBasePath>();
         foreach (var ignoreFilePath in ignoreFilePaths)
         {
-            var ignore = new IgnoreWithBasePath(
-                Path.GetDirectoryName(ignoreFilePath)!.Replace('\\', '/')
-            );
-            ignores.Insert(0, ignore);
+            var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
+            ignores.Add(ignore);
             foreach (var name in alwaysIgnored)
             {
                 ignore.Add(name);
@@ -138,9 +86,10 @@ internal class IgnoreFile
         return new IgnoreFile(ignores);
     }
 
-    // this will return the ignore paths with the priority path coming last, which means the rules from the last entry will take
-    // priority. .csharpierignore comes last, gitignore come before
-    private static List<string> FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
+    // this will return the ignore paths in order of priority
+    // the first csharpierignore it finds at or above the path
+    // and then all .gitignores (at or above) it finds in order from closest to further away
+    private static List<string> FindIgnorePaths(string baseDirectoryPath, IFileSystem fileSystem)
     {
         var result = new List<string>();
         string? foundCSharpierIgnoreFilePath = null;
@@ -162,7 +111,7 @@ internal class IgnoreFile
             var gitIgnoreFilePath = fileSystem.Path.Combine(directoryInfo.FullName, ".gitignore");
             if (fileSystem.File.Exists(gitIgnoreFilePath))
             {
-                result.Insert(0, gitIgnoreFilePath);
+                result.Add(gitIgnoreFilePath);
             }
 
             directoryInfo = directoryInfo.Parent;
@@ -170,10 +119,59 @@ internal class IgnoreFile
 
         if (foundCSharpierIgnoreFilePath is not null)
         {
-            result.Add(foundCSharpierIgnoreFilePath);
+            result.Insert(0, foundCSharpierIgnoreFilePath);
         }
 
         return result;
+    }
+
+    // modified from the nuget library to include the directory
+    // that the ignore file exists at
+    // and to return if this ignore file has a rule for a given path
+    private class IgnoreWithBasePath(string basePath)
+    {
+        private readonly List<IgnoreRule> Rules = new();
+
+        public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
+        {
+            if (!path.StartsWith(basePath, StringComparison.Ordinal))
+            {
+                return (false, false);
+            }
+
+            var pathRelativeToIgnoreFile =
+                path.Length > basePath.Length
+                    ? path[(basePath.Length + 1)..].Replace('\\', '/')
+                    : string.Empty;
+
+            var isIgnored = false;
+            var hasMatchingRule = false;
+            foreach (var rule in this.Rules)
+            {
+                var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
+                if (isMatch)
+                {
+                    hasMatchingRule = true;
+                }
+                if (rule.Negate)
+                {
+                    if (isIgnored && isMatch)
+                    {
+                        isIgnored = false;
+                    }
+                }
+                else if (!isIgnored && isMatch)
+                {
+                    isIgnored = true;
+                }
+            }
+            return (hasMatchingRule, isIgnored);
+        }
+
+        public void Add(string rule)
+        {
+            this.Rules.Add(new IgnoreRule(rule));
+        }
     }
 }
 
