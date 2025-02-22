@@ -3,7 +3,7 @@
   "isRoot": true,
   "tools": {
     "csharpier": {
-      "version": "1.0.0-alpha32",
+      "version": "1.0.0-alpha45",
       "commands": [
         "csharpier"
       ]
