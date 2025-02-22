@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO.Abstractions;
 using Ignore;
 
@@ -30,7 +29,7 @@ internal class IgnoreFile
         return false;
     }
 
-    public static async Task<IgnoreFile> CreateAsync(
+    public static async Task<IgnoreFile?> CreateAsync(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
