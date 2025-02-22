@@ -174,6 +174,11 @@ internal class IgnoreFile
         {
             this.Rules.Add(new IgnoreRule(rule));
         }
+
+        public override string ToString()
+        {
+            return "BasePath = " + basePath;
+        }
     }
 }
 

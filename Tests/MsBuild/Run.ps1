@@ -36,7 +36,7 @@ foreach ($scenario in $scenarios) {
 WORKDIR /app
 COPY ./nupkg ./nupkg
 COPY ./nuget.config ./nuget.config
-COPY ./.csharpierignore ./.csharpierignore
+COPY ./not_csharpierignore ./.csharpierignore
 COPY ./GeneratedScenarios/$($scenario.name)/Project.csproj ./
 RUN dotnet build -c Release
 "
