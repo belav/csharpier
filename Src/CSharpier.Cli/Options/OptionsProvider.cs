@@ -14,21 +14,19 @@ internal class OptionsProvider
         string,
         CSharpierConfigData?
     > csharpierConfigsByDirectory = new();
-    private readonly IgnoreFile ignoreFile;
+    private readonly ConcurrentDictionary<string, IgnoreFile?> ignoreFilesByDirectory = new();
     private readonly ConfigurationFileOptions? specifiedConfigFile;
     private readonly EditorConfigSections? specifiedEditorConfig;
     private readonly IFileSystem fileSystem;
     private readonly ILogger logger;
 
     private OptionsProvider(
-        IgnoreFile ignoreFile,
         ConfigurationFileOptions? specifiedPrinterOptions,
         EditorConfigSections? specifiedEditorConfig,
         IFileSystem fileSystem,
         ILogger logger
     )
     {
-        this.ignoreFile = ignoreFile;
         this.specifiedConfigFile = specifiedPrinterOptions;
         this.specifiedEditorConfig = specifiedEditorConfig;
         this.fileSystem = fileSystem;
@@ -56,7 +54,13 @@ internal class OptionsProvider
             ? CSharpierConfigParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var ignoreFile = await IgnoreFile.Create(directoryName, fileSystem, cancellationToken);
+        var ignoreFile = await IgnoreFile.CreateAsync(directoryName, fileSystem, cancellationToken);
+
+        if (ignoreFile is null)
+        {
+            // should never happen
+            throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
+        }
 
         var specifiedEditorConfig = editorConfigPath is not null
             ? EditorConfigLocator.FindForDirectoryName(
@@ -67,12 +71,13 @@ internal class OptionsProvider
             : null;
 
         var optionsProvider = new OptionsProvider(
-            ignoreFile,
             specifiedConfigFile,
             specifiedEditorConfig,
             fileSystem,
             logger
         );
+
+        optionsProvider.ignoreFilesByDirectory[directoryName] = ignoreFile;
 
         if (csharpierConfigPath is null)
         {
@@ -89,7 +94,10 @@ internal class OptionsProvider
         return optionsProvider;
     }
 
-    public PrinterOptions? GetPrinterOptionsFor(string filePath)
+    public async Task<PrinterOptions?> GetPrinterOptionsForAsync(
+        string filePath,
+        CancellationToken cancellationToken
+    )
     {
         if (this.specifiedConfigFile is not null)
         {
@@ -105,13 +113,16 @@ internal class OptionsProvider
 
         ArgumentNullException.ThrowIfNull(directoryName);
 
-        var resolvedCSharpierConfig = this.FindCSharpierConfig(directoryName);
+        var resolvedCSharpierConfig = await this.FindCSharpierConfigAsync(directoryName);
         if (resolvedCSharpierConfig is not null)
         {
             return resolvedCSharpierConfig.CSharpierConfig.ConvertToPrinterOptions(filePath);
         }
 
-        var resolvedEditorConfig = this.FindEditorConfig(directoryName);
+        var resolvedEditorConfig = await this.FindEditorConfigAsync(
+            directoryName,
+            cancellationToken
+        );
         if (resolvedEditorConfig is not null)
         {
             return resolvedEditorConfig.ConvertToPrinterOptions(filePath, false);
@@ -121,89 +132,103 @@ internal class OptionsProvider
         return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
     }
 
-    /// <summary>
-    /// this is a type of lazy lookup. We preload a csharpierconfig for the initial directory of the format command
-    /// For a file in a given subdirectory if we've already found the appropriate cshapierconfig return it
-    /// otherwise track it down (parsing if we need to) and set the references for any parent directories
-    /// </summary>
-    private CSharpierConfigData? FindCSharpierConfig(string directoryName)
+    private Task<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)
     {
-        if (
-            this.csharpierConfigsByDirectory.TryGetValue(
-                directoryName,
-                out var resolvedCSharpierConfig
-            )
-        )
-        {
-            return resolvedCSharpierConfig;
-        }
-
-        var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
-        var directoriesToSet = new List<string>();
-        while (
-            searchingDirectory is not null
-            && !this.csharpierConfigsByDirectory.TryGetValue(
-                searchingDirectory.FullName,
-                out resolvedCSharpierConfig
-            )
-        )
-        {
-            if (
-                searchingDirectory
-                    .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
-                    .Any()
-            )
-            {
-                this.csharpierConfigsByDirectory[searchingDirectory.FullName] =
-                    resolvedCSharpierConfig = CSharpierConfigParser.FindForDirectoryName(
-                        directoryName,
+        return this.FindFileAsync(
+            directoryName,
+            this.csharpierConfigsByDirectory,
+            searchingDirectory =>
+                this.fileSystem.Directory.EnumerateFiles(
+                        searchingDirectory,
+                        ".csharpierrc*",
+                        SearchOption.TopDirectoryOnly
+                    )
+                    .Any(),
+            searchingDirectory =>
+                Task.FromResult(
+                    CSharpierConfigParser.FindForDirectoryName(
+                        searchingDirectory,
                         this.fileSystem,
                         this.logger
-                    );
-                break;
-            }
-
-            directoriesToSet.Add(searchingDirectory.FullName);
-            searchingDirectory = searchingDirectory.Parent;
-        }
-
-        foreach (var directoryToSet in directoriesToSet)
-        {
-            this.csharpierConfigsByDirectory[directoryToSet] = resolvedCSharpierConfig;
-        }
-
-        return resolvedCSharpierConfig;
+                    )
+                )
+        );
     }
 
-    private EditorConfigSections? FindEditorConfig(string directoryName)
+    private async Task<EditorConfigSections?> FindEditorConfigAsync(
+        string directoryName,
+        CancellationToken cancellationToken
+    )
     {
-        if (this.editorConfigByDirectory.TryGetValue(directoryName, out var resolvedEditorConfig))
+        return await this.FindFileAsync(
+            directoryName,
+            this.editorConfigByDirectory,
+            searchingDirectory =>
+                this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".editorconfig")),
+            async searchingDirectory =>
+                EditorConfigLocator.FindForDirectoryName(
+                    searchingDirectory,
+                    this.fileSystem,
+                    await this.FindIgnoreFileAsync(searchingDirectory, cancellationToken)
+                )
+        );
+    }
+
+    private async Task<IgnoreFile> FindIgnoreFileAsync(
+        string directoryName,
+        CancellationToken cancellationToken
+    )
+    {
+        var ignoreFile = await this.FindFileAsync(
+            directoryName,
+            this.ignoreFilesByDirectory,
+            (searchingDirectory) =>
+                this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".gitignore"))
+                || this.fileSystem.File.Exists(
+                    Path.Combine(searchingDirectory, ".csharpierignore")
+                ),
+            (searchingDirectory) =>
+                IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, cancellationToken)
+        );
+
+        if (ignoreFile is null)
         {
-            return resolvedEditorConfig;
+            // should never happen
+            throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
+        }
+
+        return ignoreFile;
+    }
+
+    /// <summary>
+    /// this is a type of lazy lookup. We preload file type for the initial directory of the format command
+    /// When trying to format a file in a given subdirectory if we've already found the appropriate file type then return it
+    /// otherwise track it down (parsing if we need to) and set the references for any parent directories
+    /// </summary>
+    private async Task<T?> FindFileAsync<T>(
+        string directoryName,
+        ConcurrentDictionary<string, T?> dictionary,
+        Func<string, bool> shouldConsiderDirectory,
+        Func<string, Task<T?>> createFileAsync
+    )
+    {
+        if (dictionary.TryGetValue(directoryName, out var result))
+        {
+            return result;
         }
 
         var directoriesToSet = new List<string>();
         var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
         while (
             searchingDirectory is not null
-            && !this.editorConfigByDirectory.TryGetValue(
-                searchingDirectory.FullName,
-                out resolvedEditorConfig
-            )
+            && !dictionary.TryGetValue(searchingDirectory.FullName, out result)
         )
         {
-            if (
-                this.fileSystem.File.Exists(
-                    Path.Combine(searchingDirectory.FullName, ".editorconfig")
-                )
-            )
+            if (shouldConsiderDirectory(searchingDirectory.FullName))
             {
-                this.editorConfigByDirectory[searchingDirectory.FullName] = resolvedEditorConfig =
-                    EditorConfigLocator.FindForDirectoryName(
-                        searchingDirectory.FullName,
-                        this.fileSystem,
-                        this.ignoreFile
-                    );
+                dictionary[searchingDirectory.FullName] = result = await createFileAsync(
+                    searchingDirectory.FullName
+                );
                 break;
             }
 
@@ -213,15 +238,23 @@ internal class OptionsProvider
 
         foreach (var directoryToSet in directoriesToSet)
         {
-            this.editorConfigByDirectory[directoryToSet] = resolvedEditorConfig;
+            dictionary[directoryToSet] = result;
         }
 
-        return resolvedEditorConfig;
+        return result;
     }
 
-    public bool IsIgnored(string actualFilePath)
+    public async Task<bool> IsIgnoredAsync(
+        string actualFilePath,
+        CancellationToken cancellationToken
+    )
     {
-        return this.ignoreFile.IsIgnored(actualFilePath);
+        return (
+            await this.FindIgnoreFileAsync(
+                Path.GetDirectoryName(actualFilePath)!,
+                cancellationToken
+            )
+        ).IsIgnored(actualFilePath);
     }
 
     public string Serialize()

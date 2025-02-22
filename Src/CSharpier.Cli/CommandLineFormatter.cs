@@ -54,7 +54,7 @@ internal static class CommandLineFormatter
                     (
                         commandLineOptions.IncludeGenerated
                         || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    ) && !optionsProvider.IsIgnored(filePath)
+                    ) && !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -62,7 +62,10 @@ internal static class CommandLineFormatter
                         logger
                     );
 
-                    var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
+                    var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                        filePath,
+                        cancellationToken
+                    );
                     if (printerOptions is { Formatter: not Formatter.Unknown })
                     {
                         printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
@@ -148,7 +151,7 @@ internal static class CommandLineFormatter
 
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
-            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
+            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x];
             var isFile = fileSystem.File.Exists(directoryOrFilePath);
             var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
 
@@ -175,9 +178,7 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions
-                .OriginalDirectoryOrFilePaths[x]
-                .Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[x];
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -190,7 +191,8 @@ internal static class CommandLineFormatter
             {
                 if (!originalDirectoryOrFile.StartsWith('.'))
                 {
-                    originalDirectoryOrFile = "./" + originalDirectoryOrFile;
+                    originalDirectoryOrFile =
+                        "." + Path.DirectorySeparatorChar + originalDirectoryOrFile;
                 }
             }
 
@@ -204,13 +206,16 @@ internal static class CommandLineFormatter
                     (
                         !commandLineOptions.IncludeGenerated
                         && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    ) || optionsProvider.IsIgnored(actualFilePath)
+                    ) || await optionsProvider.IsIgnoredAsync(actualFilePath, cancellationToken)
                 )
                 {
                     return;
                 }
 
-                var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
+                var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                    actualFilePath,
+                    cancellationToken
+                );
 
                 if (printerOptions is { Formatter: not Formatter.Unknown })
                 {
@@ -260,13 +265,8 @@ internal static class CommandLineFormatter
                         SearchOption.AllDirectories
                     )
                     .Select(o =>
-                    {
-                        var normalizedPath = o.Replace("\\", "/");
-                        return FormatFile(
-                            normalizedPath,
-                            normalizedPath.Replace(directoryOrFilePath, originalDirectoryOrFile)
-                        );
-                    })
+                        FormatFile(o, o.Replace(directoryOrFilePath, originalDirectoryOrFile))
+                    )
                     .ToArray();
                 try
                 {
