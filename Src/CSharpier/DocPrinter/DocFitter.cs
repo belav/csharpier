@@ -5,7 +5,7 @@ namespace CSharpier.DocPrinter;
 internal static class DocFitter
 {
     public static bool Fits(
-        PrintCommand nextCommand,
+        in PrintCommand nextCommand,
         Stack<PrintCommand> remainingCommands,
         int remainingWidth,
         Dictionary<string, PrintMode> groupModeMap,

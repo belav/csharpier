@@ -386,7 +386,7 @@ internal class DocPrinter
         }
     }
 
-    private bool Fits(PrintCommand possibleCommand)
+    private bool Fits(in PrintCommand possibleCommand)
     {
         return DocFitter.Fits(
             possibleCommand,
@@ -405,7 +405,7 @@ internal class DocPrinter
     }
 }
 
-internal record struct PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
+internal readonly record struct PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
 
 internal enum PrintMode
 {
