@@ -1,0 +1,21 @@
+class ClassName
+{
+    void MethodName()
+    {
+        unchecked
+        {
+            unchecked(++i);
+
+            unchecked(printsLikeInvocations + whenItsFlat);
+
+            unchecked(
+                printsLikeInvocations + whenItBreaks______________________________________________
+            );
+
+            unchecked(
+                printsLikeInvocations
+                + whenItLongBreaks_______________________________________________
+            );
+        }
+    }
+}
