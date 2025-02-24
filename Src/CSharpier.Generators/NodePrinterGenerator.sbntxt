@@ -29,11 +29,11 @@ namespace CSharpier.SyntaxPrinter
             context.State.PrintingDepth++;
             try
             {
-                switch (syntaxNode)
+                switch (syntaxNode.Kind())
                 {
                     {{- for nodeType in NodeTypes }}
-                    case {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }}:
-                        return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }}, context);
+                    case SyntaxKind.{{ nodeType.PrinterName }}:
+                        return {{ nodeType.PrinterName }}.Print(({{ nodeType.SyntaxNodeName }})syntaxNode, context);
                     {{- end }}
                     default:
                         return UnhandledNode.Print(syntaxNode, context);
