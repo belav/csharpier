@@ -49,12 +49,14 @@ internal abstract class Doc
         new() { Type = commentType, Comment = comment };
 
     public static Doc Concat(List<Doc> contents) =>
-        contents.Count == 1 ? contents[0] : new Concat(contents);
+        contents.Count == 1 ? contents[0] : DocTypes.Concat.Create(contents);
 
     // prevents allocating an array if there is only a single parameter
     public static Doc Concat(Doc contents) => contents;
 
-    public static Doc Concat(params Doc[] contents) => new Concat(contents);
+    public static Doc Concat(Doc[] contents) => DocTypes.Concat.Create((IList<Doc>)contents);
+
+    public static Doc Concat(params ReadOnlySpan<Doc> contents) => DocTypes.Concat.Create(contents);
 
     public static Doc Join(Doc separator, IEnumerable<Doc> array)
     {
@@ -83,7 +85,7 @@ internal abstract class Doc
     public static ForceFlat ForceFlat(List<Doc> contents) =>
         new() { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
 
-    public static ForceFlat ForceFlat(params Doc[] contents) =>
+    public static ForceFlat ForceFlat(params ReadOnlySpan<Doc> contents) =>
         new() { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
 
     public static Group Group(List<Doc> contents) =>
@@ -104,7 +106,7 @@ internal abstract class Doc
         return group;
     }
 
-    public static Group GroupWithId(string groupId, params Doc[] contents)
+    public static Group GroupWithId(string groupId, params ReadOnlySpan<Doc> contents)
     {
         var group = Group(contents);
         group.GroupId = groupId;
@@ -114,12 +116,12 @@ internal abstract class Doc
     // prevents allocating an array if there is only a single parameter
     public static Group Group(Doc contents) => new() { Contents = contents };
 
-    public static Group Group(params Doc[] contents) => new() { Contents = Concat(contents) };
+    public static Group Group(params ReadOnlySpan<Doc> contents) => new() { Contents = Concat(contents) };
 
     // prevents allocating an array if there is only a single parameter
     public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
 
-    public static IndentDoc Indent(params Doc[] contents) => new() { Contents = Concat(contents) };
+    public static IndentDoc Indent(params ReadOnlySpan<Doc> contents) => new() { Contents = Concat(contents) };
 
     public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
