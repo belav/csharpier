@@ -1,4 +1,5 @@
-using System.Text;
+using System.Runtime.CompilerServices;
+using ValueStringBuilder = CSharpier.Utilities.ValueStringBuilder;
 
 namespace CSharpier.SyntaxPrinter;
 
@@ -31,6 +32,7 @@ internal static class SeparatedSyntaxList
     // the names above aren't totally accurate
     // sometimes there are trailing commas with calls to Print (some patterns do that)
     // and if you pass null to PrintWithTrailingComma it won't add a trailing comma if there isn't one
+    [SkipLocalsInit]
     private static Doc Print<T>(
         in SeparatedSyntaxList<T> list,
         Func<T, PrintingContext, Doc> printFunc,
@@ -42,7 +44,7 @@ internal static class SeparatedSyntaxList
         where T : SyntaxNode
     {
         var docs = new List<Doc>();
-        var unFormattedCode = new StringBuilder();
+        var unFormattedCode = new ValueStringBuilder(stackalloc char[128]);
         var printUnformatted = false;
         for (var x = startingIndex; x < list.Count; x++)
         {
@@ -50,7 +52,7 @@ internal static class SeparatedSyntaxList
 
             if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
             {
-                docs.Add(unFormattedCode.ToString().Trim());
+                docs.Add(unFormattedCode.AsSpan().Trim().ToString());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
@@ -68,7 +70,8 @@ internal static class SeparatedSyntaxList
                 unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
                 if (x < list.SeparatorCount)
                 {
-                    unFormattedCode.AppendLine(list.GetSeparator(x).Text);
+                    unFormattedCode.Append(list.GetSeparator(x).Text);
+                    unFormattedCode.Append(Environment.NewLine);
                 }
 
                 continue;
@@ -138,8 +141,9 @@ internal static class SeparatedSyntaxList
 
         if (unFormattedCode.Length > 0)
         {
-            docs.Add(unFormattedCode.ToString().Trim());
+            docs.Add(unFormattedCode.AsSpan().Trim().ToString());
         }
+        unFormattedCode.Dispose();
 
         return docs.Count == 0 ? Doc.Null : Doc.Concat(docs);
     }
