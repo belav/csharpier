@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 using CliWrap;
 using CliWrap.Buffered;
@@ -17,10 +15,9 @@ namespace CSharpier.Cli.Tests;
 // are written properly
 public class CliTests
 {
-    private static readonly string testFileDirectory = Path.Combine(
-        Directory.GetCurrentDirectory(),
-        "TestFiles"
-    );
+    private static readonly string testFileDirectory = Directory
+        .CreateTempSubdirectory("CsharpierTestFies")
+        .FullName;
 
     [SetUp]
     public void BeforeEachTest()
@@ -30,6 +27,12 @@ public class CliTests
             File.Delete(FormattingCacheFactory.CacheFilePath);
         }
 
+        Directory.CreateDirectory(testFileDirectory);
+    }
+
+    [TearDown]
+    public void AfterEachTest()
+    {
         void DeleteDirectory()
         {
             if (Directory.Exists(testFileDirectory))
@@ -47,8 +50,6 @@ public class CliTests
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
             DeleteDirectory();
         }
-
-        Directory.CreateDirectory(testFileDirectory);
     }
 
     [TestCase("\n")]
