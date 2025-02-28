@@ -89,7 +89,13 @@ internal static class InterpolatedStringExpression
             }
         }
 
-        contents.Add(lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine);
+        contents.Add(
+            lastLineIsIndented
+                ? contents[^1] is StringDoc { Value: "" }
+                    ? Doc.HardLine
+                    : Doc.HardLineNoTrim
+                : Doc.LiteralLine
+        );
         contents.Add(Token.Print(node.StringEndToken, context));
 
         return Doc.IndentIf(!node.HasParent(typeof(ArgumentSyntax)), Doc.Concat(contents));
