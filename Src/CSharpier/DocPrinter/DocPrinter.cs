@@ -405,7 +405,7 @@ internal class DocPrinter
     }
 }
 
-internal record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
+internal record struct PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
 
 internal enum PrintMode
 {
