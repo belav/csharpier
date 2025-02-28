@@ -143,12 +143,6 @@ internal abstract class Doc
 
     public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
 
-    // prevents allocating an array if there is only a single parameter
-    public static Align Align(int alignment, Doc contents) => new(alignment, contents);
-
-    public static Align Align(int alignment, params Doc[] contents) =>
-        new(alignment, Concat(contents));
-
     public static AlwaysFits AlwaysFits(Doc printedTrivia)
     {
         return new AlwaysFits(printedTrivia);

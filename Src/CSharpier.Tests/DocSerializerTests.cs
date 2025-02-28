@@ -114,23 +114,6 @@ internal sealed class DocSerializerTests
     }
 
     [Test]
-    public void Should_Print_Align()
-    {
-        var doc = Doc.Align(2, Doc.Null, Doc.Null);
-
-        var actual = DocSerializer.Serialize(doc);
-
-        ActualShouldBe(
-            actual,
-            @"Doc.Align(
-    2,
-    Doc.Null,
-    Doc.Null
-)"
-        );
-    }
-
-    [Test]
     public void Should_Print_ForceFlat()
     {
         var doc = Doc.ForceFlat(Doc.Null, Doc.Null);
