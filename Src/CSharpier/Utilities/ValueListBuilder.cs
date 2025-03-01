@@ -60,6 +60,13 @@ internal ref partial struct ValueListBuilder<T>
             AddWithResize(item);
         }
     }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Pop()
+    {
+        _pos--;
+        return _span[_pos];
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(params ReadOnlySpan<T> source)
@@ -98,8 +105,8 @@ internal ref partial struct ValueListBuilder<T>
             Grow(source.Length);
         }
 
-        _span.Slice(0, _pos).CopyTo(_span.Slice(source.Length));
-        source.CopyTo(_span);
+        _span.Slice(index, _pos).CopyTo(_span.Slice(index + source.Length));
+        source.CopyTo(_span.Slice(index));
         _pos += source.Length;
     }
 
