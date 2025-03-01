@@ -134,13 +134,6 @@ internal static class DocFitter
                     break;
                 case BreakParent:
                     break;
-                case Align align:
-                    Push(
-                        align.Contents,
-                        currentMode,
-                        indenter.AddAlign(currentIndent, align.Width)
-                    );
-                    break;
                 case AlwaysFits:
                     break;
                 default:

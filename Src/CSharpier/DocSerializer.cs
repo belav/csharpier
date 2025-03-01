@@ -157,11 +157,6 @@ internal static class DocSerializer
                 CultureInfo.InvariantCulture,
                 $"Doc.{(doc is IndentDoc ? "Indent" : doc.GetType().Name)}("
             );
-            if (doc is Align align)
-            {
-                AppendNextIndent();
-                result.AppendLine(align.Width + ",");
-            }
 
             Serialize(hasContents.Contents, result, indent + 1, doc);
             result.AppendLine();

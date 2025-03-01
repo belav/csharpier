@@ -43,7 +43,7 @@ internal static class InterpolatedStringExpression
 
     private static Doc RawString(InterpolatedStringExpressionSyntax node, PrintingContext context)
     {
-        var lastLineIsIndented =
+        var endDelimiterIsIndented =
             node.StringEndToken.Text.Replace("\r", string.Empty).Replace("\n", string.Empty)[0]
                 is '\t'
                     or ' ';
@@ -51,7 +51,7 @@ internal static class InterpolatedStringExpression
         var contents = new List<Doc>
         {
             Token.Print(node.StringStartToken, context),
-            lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine,
+            endDelimiterIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine,
         };
         foreach (var content in node.Contents)
         {
@@ -79,7 +79,7 @@ internal static class InterpolatedStringExpression
                         continue;
                     }
                     contents.Add(
-                        lastLineIsIndented
+                        endDelimiterIsIndented
                             ? string.IsNullOrEmpty(line)
                                 ? Doc.HardLine
                                 : Doc.HardLineNoTrim
@@ -89,7 +89,13 @@ internal static class InterpolatedStringExpression
             }
         }
 
-        contents.Add(lastLineIsIndented ? Doc.HardLineNoTrim : Doc.LiteralLine);
+        contents.Add(
+            endDelimiterIsIndented
+                ? contents[^1] is StringDoc { Value: "" }
+                    ? Doc.HardLine
+                    : Doc.HardLineNoTrim
+                : Doc.LiteralLine
+        );
         contents.Add(Token.Print(node.StringEndToken, context));
 
         return Doc.IndentIf(!node.HasParent(typeof(ArgumentSyntax)), Doc.Concat(contents));

@@ -152,10 +152,6 @@ internal class DocPrinter
         {
             this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
         }
-        else if (doc is Align align)
-        {
-            this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
-        }
         else if (doc is Region region)
         {
             if (region.IsEnd)
