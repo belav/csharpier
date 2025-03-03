@@ -2,11 +2,14 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal class FileIssueLogger(string filePath, ILogger logger)
+internal class FileIssueLogger(string filePath, ILogger logger, bool isMsBuildFormat)
 {
     public void WriteError(string value, Exception? exception = null)
     {
-        logger.LogError(exception, $"{this.GetPath()} - {value}");
+        if (isMsBuildFormat)
+            logger.LogError("{Path}: error: {Message}", this.GetPath(), value);
+        else
+            logger.LogError(exception, $"{this.GetPath()} - {value}");
     }
 
     public void WriteWarning(string value)
