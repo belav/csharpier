@@ -2,7 +2,8 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, bool isMsBuildFormat) : ILogger
+internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, bool isMsBuildFormat)
+    : ILogger
 {
     private static readonly object ConsoleLock = new();
 
