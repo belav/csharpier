@@ -26,11 +26,16 @@ internal static class CSharpierIgnore
             return false;
         }
 
-        return syntaxNode.Parent
-                is BaseTypeDeclarationSyntax
-                    or BlockSyntax
-                    or CompilationUnitSyntax
-                    or NamespaceDeclarationSyntax
+        return syntaxNode.Parent?.Kind()
+                is SyntaxKind.ClassDeclaration
+                    or SyntaxKind.StructDeclaration
+                    or SyntaxKind.InterfaceDeclaration
+                    or SyntaxKind.RecordDeclaration
+                    or SyntaxKind.RecordStructDeclaration
+                    or SyntaxKind.EnumDeclaration
+                    or SyntaxKind.Block
+                    or SyntaxKind.CompilationUnit
+                    or SyntaxKind.NamespaceDeclaration
             && HasIgnoreComment(syntaxNode);
     }
 

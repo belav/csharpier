@@ -3,10 +3,13 @@
  * From https://github.com/PowerShell/PowerShell/tree/master
  */
 
+using System.Runtime.CompilerServices;
+
 namespace CSharpier.Utilities;
 
 internal static class CharacterSizeCalculator
 {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     // csharpier-ignore
     public static int CalculateWidth(char c)
     {
@@ -23,7 +26,6 @@ internal static class CharacterSizeCalculator
              ((uint)(c - 0xfe30) <= (0xfe6f - 0xfe30)) || /* CJK Compatibility Forms */
              ((uint)(c - 0xff00) <= (0xff60 - 0xff00)) || /* Fullwidth Forms */
              ((uint)(c - 0xffe0) <= (0xffe6 - 0xffe0)));
-
         // We can ignore these ranges because .Net strings use surrogate pairs
         // for this range and we do not handle surrogate pairs.
         // (c >= 0x20000 && c <= 0x2fffd) ||
