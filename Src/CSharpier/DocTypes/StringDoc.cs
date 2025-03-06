@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace CSharpier.DocTypes;
 
 internal sealed class StringDoc(string value, bool isDirective = false) : Doc
@@ -7,6 +9,8 @@ internal sealed class StringDoc(string value, bool isDirective = false) : Doc
 
     public static StringDoc ToStringDoc(string value) =>
         value == " " ? SpaceStringDoc : new StringDoc(value);
+
+    private static ConditionalWeakTable<string, StringDoc> Table = new();
 
     public static StringDoc ToStringDoc(SyntaxToken token)
     {
@@ -239,8 +243,20 @@ internal sealed class StringDoc(string value, bool isDirective = false) : Doc
             SyntaxKind.ScopedKeyword => ScopedKeywordStringDoc,
             SyntaxKind.FileKeyword => FileKeywordStringDoc,
             SyntaxKind.AllowsKeyword => AllowsKeywordStringDoc,
-            _ => new StringDoc(token.Text),
+            _ => GetOrCreateStringDoc(token.Text),
         };
+    }
+
+    private static StringDoc GetOrCreateStringDoc(string text)
+    {
+        if (Table.TryGetValue(text, out var doc))
+        {
+            return doc;
+        }
+
+        var newDoc = new StringDoc(text);
+        Table.Add(text, newDoc);
+        return newDoc;
     }
 
     private static readonly StringDoc SpaceStringDoc = new(" ");
