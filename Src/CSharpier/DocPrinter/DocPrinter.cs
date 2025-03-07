@@ -74,19 +74,14 @@ internal class DocPrinter
     private void ProcessNextCommand()
     {
         var (indent, mode, doc) = this.RemainingCommands.Pop();
-        if (doc.Kind is DocKind.Null or DocKind.BreakParent)
+        if (doc == Doc.Null)
         {
             return;
         }
-        else if (doc.Kind is DocKind.Trim)
+
+        if (doc is StringDoc stringDoc)
         {
-            this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
-            this.NewLineNextStringValue = false;
-        }
-        else if (doc.Kind is DocKind.String)
-        {
-            this.ProcessString((StringDoc)doc, indent);
-            return;
+            this.ProcessString(stringDoc, indent);
         }
         else if (doc is Concat concat)
         {
@@ -98,6 +93,11 @@ internal class DocPrinter
         else if (doc is IndentDoc indentDoc)
         {
             this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
+        }
+        else if (doc is Trim)
+        {
+            this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
+            this.NewLineNextStringValue = false;
         }
         else if (doc is Group group)
         {
@@ -118,10 +118,11 @@ internal class DocPrinter
                 groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
             this.Push(contents, mode, indent);
         }
-        else if (doc is LineDoc lineDoc)
+        else if (doc is LineDoc line)
         {
-            this.ProcessLine(lineDoc, mode, indent);
+            this.ProcessLine(line, mode, indent);
         }
+        else if (doc is BreakParent) { }
         else if (doc is LeadingComment leadingComment)
         {
             this.Output.TrimTrailingWhitespace();
@@ -175,9 +176,9 @@ internal class DocPrinter
 
             this.Output.Append(region.Text);
         }
-        else if (doc is AlwaysFits alwaysFits)
+        else if (doc is AlwaysFits temp)
         {
-            this.Push(alwaysFits.Contents, mode, indent);
+            this.Push(temp.Contents, mode, indent);
         }
         else
         {
