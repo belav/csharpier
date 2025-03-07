@@ -42,9 +42,8 @@ public class ClassName
             CallOtherMethod();
         });
 
-        CallMethod(
-            () => CallOtherMethod___________________________________________________________()
-        );
+        CallMethod(() =>
+            CallOtherMethod___________________________________________________________());
 
         var task = Task.Factory.StartNew(async () =>
         {

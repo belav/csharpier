@@ -9,56 +9,68 @@ internal static class ArgumentListLike
         PrintingContext context
     )
     {
-        var lambdaId = Guid.NewGuid();
-
-        var args = arguments switch
+        Doc? args;
+        if (arguments is [{ Expression: SimpleLambdaExpressionSyntax lambda1 }])
         {
-            [{ Expression: SimpleLambdaExpressionSyntax lambda } arg] => Doc.Concat(
+            var groupId = context.GroupFor("LambdaArguments");
+            args = Doc.Concat(
                 Doc.GroupWithId(
-                    $"LambdaArguments{lambdaId}",
+                    groupId,
                     Doc.Indent(
                         Doc.SoftLine,
-                        Argument.PrintModifiers(arg, context),
-                        SimpleLambdaExpression.PrintHead(lambda, context)
+                        Argument.PrintModifiers(arguments[0], context),
+                        SimpleLambdaExpression.PrintHead(lambda1, context)
                     )
                 ),
                 Doc.IfBreak(
-                    Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(lambda, context))),
-                    SimpleLambdaExpression.PrintBody(lambda, context),
-                    $"LambdaArguments{lambdaId}"
+                    Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(lambda1, context))),
+                    SimpleLambdaExpression.PrintBody(lambda1, context),
+                    groupId
                 ),
-                lambda.Body
+                lambda1.Body
                     is BlockSyntax
                         or ObjectCreationExpressionSyntax
                         or AnonymousObjectCreationExpressionSyntax
-                    ? Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
+                    ? Doc.IfBreak(Doc.SoftLine, Doc.Null, groupId)
                     : Doc.SoftLine
-            ),
-            [{ Expression: ParenthesizedLambdaExpressionSyntax lambda } arg]
-                when lambda is { ParameterList.Parameters: [], Block: { } } => Doc.Concat(
+            );
+        }
+        else if (
+            arguments is [{ Expression: ParenthesizedLambdaExpressionSyntax lambda }]
+            && lambda is { ParameterList.Parameters: [] }
+        )
+        {
+            var groupId = context.GroupFor("LambdaArguments");
+            args = Doc.Concat(
                 Doc.GroupWithId(
-                    $"LambdaArguments{lambdaId}",
+                    groupId,
                     Doc.Indent(
                         Doc.SoftLine,
-                        Argument.PrintModifiers(arg, context),
+                        Argument.PrintModifiers(arguments[0], context),
                         ParenthesizedLambdaExpression.PrintHead(lambda, context)
                     )
                 ),
                 Doc.IndentIfBreak(
                     ParenthesizedLambdaExpression.PrintBody(lambda, context),
-                    $"LambdaArguments{lambdaId}"
+                    groupId
                 ),
-                Doc.IfBreak(Doc.SoftLine, Doc.Null, $"LambdaArguments{lambdaId}")
-            ),
-            [_, ..] => Doc.Concat(
+                Doc.IfBreak(Doc.SoftLine, Doc.Null, groupId)
+            );
+        }
+        else if (arguments.Count > 0)
+        {
+            args = Doc.Concat(
                 Doc.Indent(
                     Doc.SoftLine,
                     SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context)
                 ),
                 Doc.SoftLine
-            ),
-            _ => Doc.Null,
-        };
+            );
+        }
+        else
+        {
+            args = Doc.Null;
+        }
 
         return Doc.Concat(
             Token.Print(openParenToken, context),
