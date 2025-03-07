@@ -11,9 +11,6 @@ namespace CSharpier.Tests;
 [Parallelizable(ParallelScope.All)]
 public class CommandLineFormatterTests
 {
-    private const bool IsMsBuildFormat = true;
-    private const bool IsNotMsBuildFormat = false;
-
     private const string UnformattedClassContent = "public class ClassName { public int Field; }";
     private const string FormattedClassContent =
         "public class ClassName\n{\n    public int Field;\n}\n";
