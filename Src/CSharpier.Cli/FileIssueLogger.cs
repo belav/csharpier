@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
-internal class FileIssueLogger(string filePath, ILogger logger, bool isMsBuildFormat)
+internal class FileIssueLogger(string filePath, ILogger logger, LogFormat logFormat)
 {
     public void WriteError(string value, Exception? exception = null)
     {
@@ -11,7 +11,8 @@ internal class FileIssueLogger(string filePath, ILogger logger, bool isMsBuildFo
 
     public void WriteWarning(string value)
     {
-        logger.LogWarning($"{this.GetPath()} - {value}");
+        // TODO: add tests for "log warnings in Console / MsBuildFormat"
+        logger.LogWarning(GetMessageTemplate(), this.GetPath(), value);
     }
 
     private string GetMessageTemplate()
