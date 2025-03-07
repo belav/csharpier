@@ -1,9 +1,8 @@
+using CSharpier.Cli.Server;
+using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO.Abstractions;
-using System.Text;
-using CSharpier.Cli.Server;
-using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
@@ -23,7 +22,7 @@ internal class Program
     public static async Task<int> Run(
         string[]? directoryOrFile,
         bool check,
-        bool msBuildFormat,
+        LogFormat logFormat,
         bool fast,
         bool skipWrite,
         bool writeStdout,
@@ -43,7 +42,7 @@ internal class Program
         var actualConfigPath = string.IsNullOrEmpty(configPath) ? null : configPath;
 
         var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel, msBuildFormat);
+        var logger = new ConsoleLogger(console, logLevel, logFormat);
 
         if (pipeMultipleFiles)
         {
@@ -90,7 +89,7 @@ internal class Program
             OriginalDirectoryOrFilePaths = originalDirectoryOrFile!,
             StandardInFileContents = standardInFileContents,
             Check = check,
-            MsBuildFormat = msBuildFormat,
+            LogFormat = logFormat,
             NoCache = noCache,
             NoMSBuildCheck = noMSBuildCheck,
             Fast = fast,

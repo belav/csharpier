@@ -1,5 +1,5 @@
-using System.CommandLine;
 using Microsoft.Extensions.Logging;
+using System.CommandLine;
 
 namespace CSharpier.Cli;
 
@@ -7,7 +7,7 @@ internal class CommandLineOptions
 {
     public string[] DirectoryOrFilePaths { get; init; } = [];
     public bool Check { get; init; }
-    public bool MsBuildFormat { get; init; }
+    public LogFormat LogFormat { get; init; }
     public bool Fast { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
@@ -22,7 +22,7 @@ internal class CommandLineOptions
     internal delegate Task<int> Handler(
         string[] directoryOrFile,
         bool check,
-        bool msBuildFormat,
+        LogFormat logFormat,
         bool fast,
         bool skipWrite,
         bool writeStdout,
@@ -54,9 +54,15 @@ internal class CommandLineOptions
                 () => LogLevel.Information.ToString(),
                 "Specify the log level - Debug, Information (default), Warning, Error, None"
             ),
-            new Option(
-                ["--msbuild-format"],
-                "Formats messages in standard error/warning format for MSBuild."
+            new Option<LogFormat>(
+                ["--log-format"],
+                () => LogFormat.Console,
+                """
+                Log output format
+                    Console - Formats messages in a human readable way for console
+                              interaction.
+                    MsBuild - Formats messages in standard error/warning format for MSBuild.
+                """
             ),
             new Option(
                 ["--no-cache"],

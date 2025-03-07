@@ -372,7 +372,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        var result = Format(context, check: true, msBuildFormat: true);
+        var result = Format(context, check: true, logFormat: LogFormat.MsBuild);
 
         result.ExitCode.Should().Be(1);
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
@@ -770,7 +770,7 @@ class ClassName
         TestContext context,
         bool skipWrite = false,
         bool check = false,
-        bool msBuildFormat = false,
+        LogFormat logFormat = LogFormat.Console,
         bool writeStdout = false,
         bool includeGenerated = false,
         bool compilationErrorsAsWarnings = false,
@@ -793,7 +793,7 @@ class ClassName
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information, msBuildFormat);
+        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information, logFormat);
         var exitCode = CommandLineFormatter
             .Format(
                 new CommandLineOptions
@@ -803,7 +803,7 @@ class ClassName
                     OriginalDirectoryOrFilePaths = originalDirectoryOrFilePaths,
                     SkipWrite = skipWrite,
                     Check = check,
-                    MsBuildFormat = msBuildFormat,
+                    LogFormat = logFormat,
                     WriteStdout = writeStdout || standardInFileContents != null,
                     StandardInFileContents = standardInFileContents,
                     IncludeGenerated = includeGenerated,

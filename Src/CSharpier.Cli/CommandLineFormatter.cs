@@ -1,10 +1,10 @@
-using System.Diagnostics;
-using System.IO.Abstractions;
-using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
+using System.IO.Abstractions;
+using System.Text;
 
 namespace CSharpier.Cli;
 
@@ -61,7 +61,7 @@ internal static class CommandLineFormatter
                     var fileIssueLogger = new FileIssueLogger(
                         commandLineOptions.OriginalDirectoryOrFilePaths[0],
                         logger,
-                        commandLineOptions.MsBuildFormat
+                        commandLineOptions.LogFormat
                     );
 
                     var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
@@ -235,7 +235,7 @@ internal static class CommandLineFormatter
                     var fileIssueLogger = new FileIssueLogger(
                         originalFilePath,
                         logger,
-                        isMsBuildFormat: false
+                        logFormat: LogFormat.Console
                     );
                     fileIssueLogger.WriteWarning("Is an unsupported file type.");
                 }
@@ -315,7 +315,7 @@ internal static class CommandLineFormatter
         var fileIssueLogger = new FileIssueLogger(
             originalFilePath,
             logger,
-            commandLineOptions.MsBuildFormat
+            commandLineOptions.LogFormat
         );
 
         logger.LogDebug(
