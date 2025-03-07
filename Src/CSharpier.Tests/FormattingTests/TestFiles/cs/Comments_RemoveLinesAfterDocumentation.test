@@ -1,0 +1,6 @@
+public class ClassName
+{
+    /// <summary>Remove the lines after the summary</summary>
+
+    public bool SomeField;
+}

@@ -250,7 +250,17 @@ internal static class Token
                 {
                     printNewLines = false;
                 }
-                docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
+
+                if (
+                    !(
+                        docs.Count > 1
+                        && docs[^1] == Doc.HardLineSkipBreakIfFirstInGroup
+                        && docs[^2] is LeadingComment
+                    )
+                )
+                {
+                    docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
+                }
             }
             if (kind is not (SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia))
             {
