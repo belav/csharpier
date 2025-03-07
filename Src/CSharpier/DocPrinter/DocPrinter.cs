@@ -74,115 +74,119 @@ internal class DocPrinter
     private void ProcessNextCommand()
     {
         var (indent, mode, doc) = this.RemainingCommands.Pop();
-        if (doc == Doc.Null)
+        switch (doc.Kind)
         {
-            return;
-        }
-
-        if (doc is StringDoc stringDoc)
-        {
-            this.ProcessString(stringDoc, indent);
-        }
-        else if (doc is Concat concat)
-        {
-            for (var x = concat.Contents.Count - 1; x >= 0; x--)
-            {
-                this.Push(concat.Contents[x], mode, indent);
-            }
-        }
-        else if (doc is IndentDoc indentDoc)
-        {
-            this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
-        }
-        else if (doc is Trim)
-        {
-            this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
-            this.NewLineNextStringValue = false;
-        }
-        else if (doc is Group group)
-        {
-            this.ProcessGroup(group, mode, indent);
-        }
-        else if (doc is IfBreak ifBreak)
-        {
-            var groupMode = mode;
-            if (ifBreak.GroupId != null)
-            {
-                if (!this.GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
+            case DocKind.Null:
+                return;
+            case DocKind.String:
+                this.ProcessString((StringDoc)doc, indent);
+                return;
+            case DocKind.Concat:
+                var concat = (Concat)doc;
+                for (var x = concat.Contents.Count - 1; x >= 0; x--)
                 {
-                    throw new Exception("You cannot use an ifBreak before the group it targets.");
+                    this.Push(concat.Contents[x], mode, indent);
                 }
-            }
 
-            var contents =
-                groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
-            this.Push(contents, mode, indent);
-        }
-        else if (doc is LineDoc line)
-        {
-            this.ProcessLine(line, mode, indent);
-        }
-        else if (doc is BreakParent) { }
-        else if (doc is LeadingComment leadingComment)
-        {
-            this.Output.TrimTrailingWhitespace();
-            if ((this.Output.Length != 0 && this.Output[^1] != '\n') || this.NewLineNextStringValue)
-            {
-                this.Output.Append(this.EndOfLine);
-            }
+                break;
+            case DocKind.Indent:
+                var indentDoc = (IndentDoc)doc;
+                this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
+                break;
+            case DocKind.Trim:
 
-            this.AppendComment(leadingComment, indent);
+                this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
+                this.NewLineNextStringValue = false;
+                break;
+            case DocKind.Group:
 
-            this.CurrentWidth = indent.Length;
-            this.NewLineNextStringValue = false;
-            this.SkipNextNewLine = false;
-        }
-        else if (doc is TrailingComment trailingComment)
-        {
-            this.Output.TrimTrailingWhitespace();
-            this.Output.Append(' ').Append(trailingComment.Comment);
-            this.CurrentWidth = indent.Length;
-            if (mode != PrintMode.ForceFlat)
-            {
-                this.NewLineNextStringValue = true;
-                this.SkipNextNewLine = true;
-            }
-        }
-        else if (doc is ForceFlat forceFlat)
-        {
-            this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
-        }
-        else if (doc is Region region)
-        {
-            if (region.IsEnd)
-            {
-                // in the case where regions are combined with ignored ranges, the start region
-                // ends up printing inside the unformatted nodes, so we don't have a matching
-                // start region to go with this end region
-                if (this.RegionIndents.TryPop(out var regionIndent))
+                this.ProcessGroup((Group)doc, mode, indent);
+                break;
+            case DocKind.IfBreak:
+                var ifBreak = (IfBreak)doc;
+                var groupMode = mode;
+                if (ifBreak.GroupId != null)
                 {
-                    this.Output.Append(regionIndent.Value);
+                    if (!this.GroupModeMap.TryGetValue(ifBreak.GroupId, out groupMode))
+                    {
+                        throw new Exception(
+                            "You cannot use an ifBreak before the group it targets."
+                        );
+                    }
+                }
+
+                var contents =
+                    groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
+                this.Push(contents, mode, indent);
+                break;
+            case DocKind.Line:
+                this.ProcessLine((LineDoc)doc, mode, indent);
+                break;
+            case DocKind.BreakParent:
+                break;
+            case DocKind.LeadingComment:
+
+                this.Output.TrimTrailingWhitespace();
+                if (
+                    (this.Output.Length != 0 && this.Output[^1] != '\n')
+                    || this.NewLineNextStringValue
+                )
+                {
+                    this.Output.Append(this.EndOfLine);
+                }
+
+                this.AppendComment((LeadingComment)doc, indent);
+
+                this.CurrentWidth = indent.Length;
+                this.NewLineNextStringValue = false;
+                this.SkipNextNewLine = false;
+                break;
+            case DocKind.TrailingComment:
+                this.Output.TrimTrailingWhitespace();
+                var trailingComment = (TrailingComment)doc;
+                this.Output.Append(' ').Append(trailingComment.Comment);
+                this.CurrentWidth = indent.Length;
+                if (mode != PrintMode.ForceFlat)
+                {
+                    this.NewLineNextStringValue = true;
+                    this.SkipNextNewLine = true;
+                }
+
+                break;
+            case DocKind.ForceFlat:
+                var forceFlat = (ForceFlat)doc;
+                this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
+                break;
+            case DocKind.Region:
+                var region = (Region)doc;
+                if (region.IsEnd)
+                {
+                    // in the case where regions are combined with ignored ranges, the start region
+                    // ends up printing inside the unformatted nodes, so we don't have a matching
+                    // start region to go with this end region
+                    if (this.RegionIndents.TryPop(out var regionIndent))
+                    {
+                        this.Output.Append(regionIndent.Value);
+                    }
+                    else
+                    {
+                        this.Output.Append(indent.Value);
+                    }
                 }
                 else
                 {
                     this.Output.Append(indent.Value);
+                    this.RegionIndents.Push(indent);
                 }
-            }
-            else
-            {
-                this.Output.Append(indent.Value);
-                this.RegionIndents.Push(indent);
-            }
 
-            this.Output.Append(region.Text);
-        }
-        else if (doc is AlwaysFits temp)
-        {
-            this.Push(temp.Contents, mode, indent);
-        }
-        else
-        {
-            throw new Exception("didn't handle " + doc);
+                this.Output.Append(region.Text);
+                break;
+            case DocKind.AlwaysFits:
+                var alwaysFits = (AlwaysFits)doc;
+                this.Push(alwaysFits.Contents, mode, indent);
+                break;
+            default:
+                throw new Exception("didn't handle " + doc);
         }
     }
 
