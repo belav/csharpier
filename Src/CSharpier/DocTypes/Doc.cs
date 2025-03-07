@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes;
 
-internal enum DocKind
+internal enum DocKind : byte
 {
     Trim,
     TrailingComment,
