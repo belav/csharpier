@@ -2,8 +2,7 @@ namespace CSharpier.DocTypes;
 
 internal sealed class ForceFlat : Doc, IHasContents
 {
-    internal ForceFlat()
-        : base(DocKind.ForceFlat) { }
+    public override DocKind Kind => DocKind.ForceFlat;
 
     public Doc Contents { get; set; } = Null;
 }

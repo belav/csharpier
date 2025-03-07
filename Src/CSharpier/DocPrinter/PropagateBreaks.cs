@@ -4,8 +4,7 @@ internal static class PropagateBreaks
 {
     private class MarkerDoc : Doc
     {
-        internal MarkerDoc()
-            : base(DocKind.Marker) { }
+        public override DocKind Kind => DocKind.Marker;
     }
 
     private static readonly MarkerDoc TraverseDocOnExitStackMarker = new();

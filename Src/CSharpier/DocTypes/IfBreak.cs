@@ -2,8 +2,7 @@ namespace CSharpier.DocTypes;
 
 internal class IfBreak : Doc
 {
-    internal IfBreak()
-        : base(DocKind.IfBreak) { }
+   public override DocKind Kind => DocKind.IfBreak;
 
     public Doc FlatContents { get; set; } = Null;
     public Doc BreakContents { get; set; } = Null;

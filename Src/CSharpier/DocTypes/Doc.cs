@@ -19,9 +19,9 @@ internal enum DocKind : byte
     ForceFlat,
 }
 
-internal abstract class Doc(DocKind kind)
+internal abstract class Doc
 {
-    public DocKind Kind { get; } = kind;
+    public abstract DocKind Kind { get; }
 
     public string Print()
     {
