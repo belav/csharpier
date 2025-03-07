@@ -38,11 +38,9 @@ internal static class BasePropertyDeclaration
             semicolonToken = eventDeclarationSyntax.SemicolonToken;
         }
 
-        var docs = new List<Doc> { AttributeLists.Print(node, node.AttributeLists, context) };
-
         return Doc.Group(
             Doc.Concat(
-                Doc.Concat(docs),
+                AttributeLists.Print(node, node.AttributeLists, context),
                 Modifiers.PrintSorted(node.Modifiers, context),
                 eventKeyword,
                 Node.Print(node.Type, context),
@@ -112,31 +110,31 @@ internal static class BasePropertyDeclaration
         PrintingContext context
     )
     {
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null]);
         if (node.AttributeLists.Count > 0 || node.Body != null || node.ExpressionBody != null)
         {
-            docs.Add(Doc.HardLine);
+            docs.Append(Doc.HardLine);
         }
         else
         {
-            docs.Add(separator);
+            docs.Append(separator);
         }
 
-        docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
-        docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
-        docs.Add(Token.Print(node.Keyword, context));
+        docs.Append(AttributeLists.Print(node, node.AttributeLists, context));
+        docs.Append(Modifiers.PrintSorted(node.Modifiers, context));
+        docs.Append(Token.Print(node.Keyword, context));
 
         if (node.Body != null)
         {
-            docs.Add(Block.Print(node.Body, context));
+            docs.Append(Block.Print(node.Body, context));
         }
         else if (node.ExpressionBody != null)
         {
-            docs.Add(ArrowExpressionClause.Print(node.ExpressionBody, context));
+            docs.Append(ArrowExpressionClause.Print(node.ExpressionBody, context));
         }
 
-        docs.Add(Token.Print(node.SemicolonToken, context));
+        docs.Append(Token.Print(node.SemicolonToken, context));
 
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }
