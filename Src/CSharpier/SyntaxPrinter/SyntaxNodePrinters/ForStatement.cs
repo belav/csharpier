@@ -4,8 +4,7 @@ internal static class ForStatement
 {
     public static Doc Print(ForStatementSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>
-        {
+        return Doc.Concat(
             ExtraNewLines.Print(node),
             Doc.Group(
                 Token.Print(node.ForKeyword, context),
@@ -45,9 +44,7 @@ internal static class ForStatement
             {
                 ForStatementSyntax => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
                 _ => OptionalBraces.Print(node.Statement, context),
-            },
-        };
-
-        return Doc.Concat(docs);
+            }
+        );
     }
 }
