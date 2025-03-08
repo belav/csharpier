@@ -43,7 +43,13 @@ public class ClassName
         });
 
         CallMethod(() =>
-            CallOtherMethod___________________________________________________________());
+            CallOtherMethod___________________________________________________________()
+        );
+
+        CallMethod(() =>
+            CallLongMethod_________________________________()
+                .ThenAnotherMethod_____________________________________()
+        );
 
         var task = Task.Factory.StartNew(async () =>
         {

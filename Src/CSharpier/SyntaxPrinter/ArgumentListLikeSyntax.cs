@@ -54,7 +54,9 @@ internal static class ArgumentListLike
                     ParenthesizedLambdaExpression.PrintBody(lambda, context),
                     groupId
                 ),
-                Doc.IfBreak(Doc.SoftLine, Doc.Null, groupId)
+                lambda.Block is not null
+                    ? Doc.IfBreak(Doc.SoftLine, Doc.Null, groupId)
+                    : Doc.SoftLine
             );
         }
         else if (arguments.Count > 0)
