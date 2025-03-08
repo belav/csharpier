@@ -255,7 +255,7 @@ internal static class Token
                     !(
                         docs.Count > 1
                         && docs[^1] == Doc.HardLineSkipBreakIfFirstInGroup
-                        && docs[^2] is LeadingComment
+                        && docs[^2] is LeadingComment { Type: CommentType.SingleLine }
                     )
                 )
                 {
