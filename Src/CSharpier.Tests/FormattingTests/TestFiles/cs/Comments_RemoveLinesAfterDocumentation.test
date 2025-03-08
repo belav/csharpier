@@ -1,0 +1,14 @@
+public class ClassName
+{
+    /// <summary>Remove the lines after the summary</summary>
+
+    public bool SomeField1;
+
+    /* Don't remove this line */
+
+    public bool SomeField2;
+
+    // Don't remove this line
+
+    public bool SomeField2;
+}
