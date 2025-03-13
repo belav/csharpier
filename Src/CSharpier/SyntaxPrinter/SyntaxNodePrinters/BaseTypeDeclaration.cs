@@ -6,7 +6,7 @@ internal static class BaseTypeDeclaration
     {
         ParameterListSyntax? parameterList = null;
         TypeParameterListSyntax? typeParameterList = null;
-        var constraintClauses = Enumerable.Empty<TypeParameterConstraintClauseSyntax>();
+        SyntaxList<TypeParameterConstraintClauseSyntax>? constraintClauses = null;
         SyntaxToken? recordKeyword = null;
         SyntaxToken? keyword = null;
         Func<Doc>? members = null;
@@ -125,7 +125,10 @@ internal static class BaseTypeDeclaration
             docs.Add(Doc.Group(Doc.Indent(Doc.Line, baseListDoc)));
         }
 
-        docs.Add(ConstraintClauses.Print(constraintClauses, context));
+        if (constraintClauses != null)
+        {
+            docs.Add(ConstraintClauses.Print(constraintClauses.Value, context));
+        }
 
         if (members != null)
         {
