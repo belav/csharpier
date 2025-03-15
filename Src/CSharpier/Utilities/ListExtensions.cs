@@ -2,13 +2,21 @@ namespace CSharpier.Utilities;
 
 internal static class ListExtensions
 {
-    public static void Add(this List<Doc> list, params Doc[] values)
+    public static void Add(this List<Doc> list, params ReadOnlySpan<Doc> values)
     {
         if (values.Length == 1 && values[0] == Doc.Null)
         {
             return;
         }
+
+#if NETSTANDARD2_0
+        foreach (var items in values)
+        {
+            list.Add(items);
+        }
+#else
         list.AddRange(values);
+#endif
     }
 
     public static void AddIfNotNull(this List<Doc> value, Doc doc)
