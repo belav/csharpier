@@ -2,8 +2,19 @@ using System.Text.RegularExpressions;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
-internal static class BaseMethodDeclaration
+internal static partial class BaseMethodDeclaration
 {
+#if NET8_0_OR_GREATER
+
+    [GeneratedRegex(@"\s*(\r\n?|\n)")]
+    private static partial Regex RemoveWhiteSpaceLineEndingsGenerator();
+
+    private static readonly Regex RemoveWhiteSpaceLineEndingsRegex =
+        RemoveWhiteSpaceLineEndingsGenerator();
+#else
+    private static readonly Regex RemoveWhiteSpaceLineEndingsRegex = new(@"\s*(\r\n?|\n)");
+#endif
+
     public static Doc Print(CSharpSyntaxNode node, PrintingContext context)
     {
         SyntaxList<AttributeListSyntax>? attributeLists = null;
@@ -95,9 +106,8 @@ internal static class BaseMethodDeclaration
                     .Trim();
 
                 docs.Add(
-                    Regex.Replace(
+                    RemoveWhiteSpaceLineEndingsRegex.Replace(
                         methodWithoutAttributes,
-                        @"\s*(\r\n?|\n)",
                         context.Options.LineEnding
                     )
                 );
