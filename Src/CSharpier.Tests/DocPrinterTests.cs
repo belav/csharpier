@@ -712,66 +712,6 @@ public class DocPrinterTests
         PrintedDocShouldBe(doc, "(1)(1)", 10);
     }
 
-    [Test]
-    public void Align_Should_Print_Basic_Case()
-    {
-        var doc = Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2")));
-        PrintedDocShouldBe(doc, "+ 1\n  2");
-    }
-
-    [Test]
-    public void Align_Should_Convert_Non_Trailing_Spaces_To_Tabs()
-    {
-        var doc = Doc.Concat(
-            "+ ",
-            Doc.Align(
-                2,
-                Doc.Indent(Doc.Concat("+ ", Doc.Align(2, Doc.Group("1", Doc.HardLine, "2"))))
-            )
-        );
-        PrintedDocShouldBe(doc, "+ + 1\n\t\t  2", useTabs: true);
-    }
-
-    [Test]
-    public void Align_Should_Merge()
-    {
-        var doc = Doc.Group(
-            Doc.Concat("return firstCondition"),
-            Doc.Align(
-                2,
-                Doc.HardLine,
-                Doc.Concat("? "),
-                Doc.Align(2, "firstValue"),
-                Doc.HardLine,
-                Doc.Concat(": "),
-                Doc.Align(
-                    2,
-                    "secondCondition",
-                    Doc.Align(
-                        2,
-                        Doc.Line,
-                        Doc.Concat("? "),
-                        Doc.Align(2, "secondValue"),
-                        Doc.Line,
-                        Doc.Concat(": "),
-                        Doc.Align(2, "thirdCondition;")
-                    )
-                )
-            )
-        );
-        PrintedDocShouldBe(
-            doc,
-            $"""
-            return firstCondition
-              ? firstValue
-              : secondCondition
-            {'\t'}  ? secondValue
-            {'\t'}  : thirdCondition;
-            """,
-            useTabs: true
-        );
-    }
-
     [TestCase(0, "\n")]
     [TestCase(0, "\r\n")]
     [TestCase(1, "\n")]

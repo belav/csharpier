@@ -1,6 +1,6 @@
 namespace CSharpier.DocTypes;
 
-internal class LiteralLine : LineDoc, IBreakParent
+internal sealed class LiteralLine : LineDoc, IBreakParent
 {
     public LiteralLine()
     {

@@ -16,6 +16,10 @@ internal class DocPrinter
     protected readonly Indenter Indenter;
     protected readonly Stack<Indent> RegionIndents = new();
 
+    // Reusable collection types for use in DocFitter
+    protected readonly Stack<PrintCommand> DocFitterNewCommands = new();
+    protected readonly StringBuilder DocFitterOutput = new();
+
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
         this.EndOfLine = endOfLine;
@@ -147,10 +151,6 @@ internal class DocPrinter
         else if (doc is ForceFlat forceFlat)
         {
             this.Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
-        }
-        else if (doc is Align align)
-        {
-            this.Push(align.Contents, mode, this.Indenter.AddAlign(indent, align.Width));
         }
         else if (doc is Region region)
         {
@@ -389,7 +389,9 @@ internal class DocPrinter
             this.RemainingCommands,
             this.PrinterOptions.Width - this.CurrentWidth,
             this.GroupModeMap,
-            this.Indenter
+            this.Indenter,
+            this.DocFitterNewCommands,
+            this.DocFitterOutput
         );
     }
 
@@ -399,7 +401,7 @@ internal class DocPrinter
     }
 }
 
-internal record PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
+internal record struct PrintCommand(Indent Indent, PrintMode Mode, Doc Doc);
 
 internal enum PrintMode
 {

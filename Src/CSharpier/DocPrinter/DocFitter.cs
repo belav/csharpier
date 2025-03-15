@@ -9,19 +9,22 @@ internal static class DocFitter
         Stack<PrintCommand> remainingCommands,
         int remainingWidth,
         Dictionary<string, PrintMode> groupModeMap,
-        Indenter indenter
+        Indenter indenter,
+        Stack<PrintCommand> newCommands,
+        StringBuilder output
     )
     {
+        // Reset reusable collections before usage
+        newCommands.Clear();
+        output.Clear();
+
         var returnFalseIfMoreStringsFound = false;
-        var newCommands = new Stack<PrintCommand>();
         newCommands.Push(nextCommand);
 
         void Push(Doc doc, PrintMode printMode, Indent indent)
         {
             newCommands.Push(new PrintCommand(indent, printMode, doc));
         }
-
-        var output = new StringBuilder();
 
         for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0; )
         {
@@ -130,13 +133,6 @@ internal static class DocFitter
                     Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
                     break;
                 case BreakParent:
-                    break;
-                case Align align:
-                    Push(
-                        align.Contents,
-                        currentMode,
-                        indenter.AddAlign(currentIndent, align.Width)
-                    );
                     break;
                 case AlwaysFits:
                     break;

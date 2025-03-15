@@ -12,7 +12,7 @@ internal static class RightHandSide
     {
         var layout = DetermineLayout(leftNode, rightNode);
 
-        var groupId = layout.ToString() + Guid.NewGuid();
+        var groupId = layout == Layout.Fluid ? $"{Layout.Fluid}{Guid.NewGuid()}" : string.Empty;
 
         return layout switch
         {
