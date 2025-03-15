@@ -10,9 +10,21 @@ namespace CSharpier.Benchmarks;
 public class Benchmarks
 {
     [Benchmark]
-    public void Default_CodeFormatter()
+    public void Default_CodeFormatter_Tests()
     {
-        CSharpFormatter.FormatAsync(this.largeCode, new PrinterOptions()).GetAwaiter().GetResult();
+        CSharpFormatter
+            .FormatAsync(this.largeTestCode, new PrinterOptions())
+            .GetAwaiter()
+            .GetResult();
+    }
+
+    [Benchmark]
+    public void Default_CodeFormatter_Complex()
+    {
+        CSharpFormatter
+            .FormatAsync(this.largeComplexCode, new PrinterOptions())
+            .GetAwaiter()
+            .GetResult();
     }
 
     [Benchmark]
@@ -36,8 +48,12 @@ public class Benchmarks
         DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
     }
 
-    private readonly string largeCode = File.ReadAllText(
+    private readonly string largeTestCode = File.ReadAllText(
         Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/PathAxesTests.cs")
+    );
+
+    private readonly string largeComplexCode = File.ReadAllText(
+        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Syntax.txt")
     );
 
     private readonly string code = File.ReadAllText(
