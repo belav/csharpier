@@ -239,7 +239,7 @@ internal static partial class BaseMethodDeclaration
 
         if (constraintClauses != null)
         {
-            docs.Add(ConstraintClauses.Print(constraintClauses, context));
+            docs.Add(ConstraintClauses.Print(constraintClauses.Value, context));
         }
 
         if (body != null)
