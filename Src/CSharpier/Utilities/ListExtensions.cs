@@ -34,6 +34,21 @@ internal static class ListExtensions
         return false;
     }
 
+    // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
+    public static bool Any(this in SyntaxTokenList tokenList, Func<SyntaxToken, bool> predicate)
+    {
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var token in tokenList)
+        {
+            if (predicate(token))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static SyntaxTrivia FirstOrDefault(
         this in SyntaxTriviaList source,
         Func<SyntaxTrivia, bool> predicate
