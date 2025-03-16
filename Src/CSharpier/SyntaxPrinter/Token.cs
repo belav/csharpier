@@ -248,7 +248,7 @@ internal static class Token
 
                 if (
                     !(
-                        docs.Count > 1
+                        docs.Length > 1
                         && docs[^1] == Doc.HardLineSkipBreakIfFirstInGroup
                         && docs[^2] is LeadingComment { Type: CommentType.SingleLine }
                     )
@@ -369,7 +369,7 @@ internal static class Token
             context.State.NextTriviaNeedsLine = false;
         }
 
-        return docs.Length > 0 ? Doc.Concat(ref docs) : Doc.Null;
+        return Doc.Concat(ref docs);
     }
 
     private static bool IsSingleLineComment(SyntaxKind kind) =>

@@ -97,8 +97,6 @@ internal ref partial struct ValueListBuilder<T>
             Grow(1);
         }
 
-        var sp = _span;
-
         _span.Slice(index, _pos - index).CopyTo(_span.Slice(index + 1));
         _span[index] = item;
         _pos += 1;
@@ -152,21 +150,6 @@ internal ref partial struct ValueListBuilder<T>
     public ReadOnlySpan<T> AsSpan()
     {
         return _span.Slice(0, _pos);
-    }
-
-    public List<T> ToList()
-    {
-        var list = new List<T>(_pos);
-#if NETSTANDARD2_0
-        foreach (var item in _span[.._pos])
-        {
-            list.Add(item);
-        }
-#else
-        list.AddRange(_span[.._pos]);
-#endif
-
-        return list;
     }
 
     public bool TryCopyTo(Span<T> destination, out int itemsWritten)
