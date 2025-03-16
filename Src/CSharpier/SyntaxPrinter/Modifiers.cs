@@ -2,7 +2,7 @@ namespace CSharpier.SyntaxPrinter;
 
 internal static class Modifiers
 {
-    private class DefaultOrder : IComparer<string>
+    private class DefaultOrder : IComparer<SyntaxToken>
     {
         // use the default order from https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036
         private static readonly string[] DefaultOrdered =
@@ -26,9 +26,9 @@ internal static class Modifiers
             "async",
         ];
 
-        public int Compare(string? x, string? y)
+        public int Compare(SyntaxToken x, SyntaxToken y)
         {
-            return GetIndex(x) - GetIndex(y);
+            return GetIndex(x.Text) - GetIndex(y.Text);
         }
 
         private static int GetIndex(string? value)
@@ -100,20 +100,17 @@ internal static class Modifiers
             modifiers.Count > 1
             && !modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()));
 
-        var sortedModifiers = (
-            willReorderModifiers
-                ? modifiers.OrderBy(o => o.Text, Comparer)
-                : modifiers.AsEnumerable()
-        ).ToArray();
+        var sortedModifiers = modifiers.ToArray();
+        if (willReorderModifiers)
+        {
+            Array.Sort(sortedModifiers, Comparer);
+        }
 
-        if (
-            willReorderModifiers
-            && sortedModifiers.Zip(modifiers, (original, sorted) => original != sorted).Any()
-        )
+        if (willReorderModifiers && !sortedModifiers.SequenceEqual(modifiers))
         {
             context.State.ReorderedModifiers = true;
         }
 
-        return print(sortedModifiers.ToArray());
+        return print(sortedModifiers);
     }
 }
