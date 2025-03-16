@@ -75,4 +75,34 @@ internal static class ListExtensions
 
         return first;
     }
+
+    public static SyntaxToken[] ToArray(this in SyntaxTokenList source)
+    {
+        var array = new SyntaxToken[source.Count];
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+        for (var i = 0; i < source.Count; i++)
+        {
+            array[i] = source[i];
+        }
+
+        return array;
+    }
+
+    public static bool SequenceEqual(this SyntaxToken[] left, in SyntaxTokenList right)
+    {
+        if (left.Length != right.Count)
+        {
+            return false;
+        }
+
+        for (var i = 0; i < left.Length; i++)
+        {
+            if (left[i] != right[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
