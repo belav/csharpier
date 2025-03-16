@@ -124,7 +124,16 @@ internal static class UsingDirectives
             }
         }
 
-        if (reorderedDirectives && usings.Any(o => o.ToFullString().Contains("#endif")))
+        if (
+            reorderedDirectives
+            && (
+                usings.Any(o => o.ToFullString().Contains("#endif"))
+                || (
+                    usings[0].Parent is NamespaceDeclarationSyntax namespaceDeclarationSyntax
+                    && namespaceDeclarationSyntax.GetLeadingTrivia().ToFullString().Contains("#if")
+                )
+            )
+        )
         {
             context.State.ReorderedUsingsWithDisabledText = true;
         }
