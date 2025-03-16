@@ -374,7 +374,13 @@ internal partial class SyntaxNodeComparer
         static string? BuildComment(SyntaxTriviaList list, ref int next)
         {
             string? result = null;
-            do
+            while (
+                next < list.Count
+                && list[next].RawSyntaxKind()
+                    is SyntaxKind.EndOfLineTrivia
+                        or SyntaxKind.WhitespaceTrivia
+                        or SyntaxKind.SingleLineDocumentationCommentTrivia
+            )
             {
                 if (next >= list.Count)
                 {
@@ -387,13 +393,8 @@ internal partial class SyntaxNodeComparer
                 }
 
                 next++;
-            } while (
-                next < list.Count
-                && list[next].RawSyntaxKind()
-                    is SyntaxKind.EndOfLineTrivia
-                        or SyntaxKind.WhitespaceTrivia
-                        or SyntaxKind.SingleLineDocumentationCommentTrivia
-            );
+            }
+            ;
 
             return result;
         }
