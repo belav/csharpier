@@ -61,9 +61,10 @@ internal static class InvocationExpression
             (
                 groups.Length <= cutoff
                 && (
-                    groups.ManualSkipAny(
-                        shouldMergeFirstTwoGroups ? 1 : 0,
-                        o =>
+                    groups
+                        .AsSpan()
+                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                        .Any(o =>
                             o.Last().Node
                                 is not (
                                     InvocationExpressionSyntax
@@ -73,7 +74,7 @@ internal static class InvocationExpression
                                         Operand: InvocationExpressionSyntax
                                     }
                                 )
-                    )
+                        )
                     // if the last group contains just a !, make sure it doesn't end up on a new line
                     || (
                         groups[^1].Length == 1 && groups[^1][0].Node is PostfixUnaryExpressionSyntax
@@ -120,7 +121,7 @@ internal static class InvocationExpression
         );
 
         return
-            oneLine.ManualSkipAny(1, DocUtilities.ContainsBreak)
+            oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
             || groups[0]
                 .Any(o =>
                     o.Node
