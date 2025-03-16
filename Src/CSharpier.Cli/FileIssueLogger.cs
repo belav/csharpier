@@ -11,7 +11,6 @@ internal class FileIssueLogger(string filePath, ILogger logger, LogFormat logFor
 
     public void WriteWarning(string value)
     {
-        // TODO: add tests for "log warnings in Console / MsBuildFormat"
         logger.LogWarning(GetMessageTemplate(), this.GetPath(), value);
     }
 
