@@ -27,6 +27,46 @@ internal static class ListExtensions
         }
     }
 
+    public static bool ManualSkipAny<T>(
+        ref this ValueListBuilder<T> collection,
+        int count,
+        Func<T, bool> predicate
+    )
+    {
+        if (predicate == null || count < 0)
+            throw new ArgumentException("Invalid arguments");
+
+        int skipped = 0;
+        foreach (var item in collection.AsSpan())
+        {
+            if (skipped++ < count)
+                continue; // Skip the first 'count' items
+
+            if (predicate(item))
+                return true; // If any item satisfies the predicate, return true
+        }
+
+        return false; // No match found after skipping 'count' items
+    }
+
+    public static bool ManualSkipAny<T>(this T[] collection, int count, Func<T, bool> predicate)
+    {
+        if (collection == null || predicate == null || count < 0)
+            throw new ArgumentException("Invalid arguments");
+
+        int skipped = 0;
+        foreach (var item in collection)
+        {
+            if (skipped++ < count)
+                continue; // Skip the first 'count' items
+
+            if (predicate(item))
+                return true; // If any item satisfies the predicate, return true
+        }
+
+        return false; // No match found after skipping 'count' items
+    }
+
     // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
     public static bool Any(this in SyntaxTriviaList triviaList, Func<SyntaxTrivia, bool> predicate)
     {

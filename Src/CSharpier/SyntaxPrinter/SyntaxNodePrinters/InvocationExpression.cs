@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CSharpier.SyntaxPrinter.SyntaxNodePrinters;
 
-internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
+internal record struct PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
 // This is based on prettier/src/language-js/print/member-chain.js
 // various discussions/prs about how to potentially improve the formatting
@@ -21,27 +21,49 @@ internal static class InvocationExpression
     public static Doc PrintMemberChain(ExpressionSyntax node, PrintingContext context)
     {
         var parent = node.Parent;
-        var printedNodes = new List<PrintedNode>();
+        var printedNodes = new ValueListBuilder<PrintedNode>(
+            [default, default, default, default, default, default, default, default]
+        );
 
-        FlattenAndPrintNodes(node, printedNodes, context);
+        FlattenAndPrintNodes(node, ref printedNodes, context);
 
-        var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
-            ? GroupPrintedNodesPrettierStyle(printedNodes)
-            : GroupPrintedNodesOnLines(printedNodes);
+        var anyInvocationExpression = false;
 
-        var oneLine = SelectManyDocsToArray(groups);
+        foreach (var printedNode in printedNodes.AsSpan())
+        {
+            if (printedNode.Node is InvocationExpressionSyntax)
+            {
+                anyInvocationExpression = true;
+                break;
+            }
+        }
 
-        var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups, parent);
+        var groups = new ValueListBuilder<PrintedNode[]>(
+            [null, null, null, null, null, null, null, null]
+        );
+
+        if (anyInvocationExpression)
+        {
+            GroupPrintedNodesPrettierStyle(ref groups, ref printedNodes);
+        }
+        else
+        {
+            GroupPrintedNodesOnLines(ref groups, ref printedNodes);
+        }
+
+        var oneLine = SelectManyDocsToArray(ref groups);
+
+        var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(ref groups, parent);
 
         var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
 
         var forceOneLine =
             (
-                groups.Count <= cutoff
+                groups.Length <= cutoff
                 && (
-                    groups
-                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                        .Any(o =>
+                    groups.ManualSkipAny(
+                        shouldMergeFirstTwoGroups ? 1 : 0,
+                        o =>
                             o.Last().Node
                                 is not (
                                     InvocationExpressionSyntax
@@ -51,11 +73,10 @@ internal static class InvocationExpression
                                         Operand: InvocationExpressionSyntax
                                     }
                                 )
-                        )
+                    )
                     // if the last group contains just a !, make sure it doesn't end up on a new line
                     || (
-                        groups.Last().Count == 1
-                        && groups.Last()[0].Node is PostfixUnaryExpressionSyntax
+                        groups[^1].Length == 1 && groups[^1][0].Node is PostfixUnaryExpressionSyntax
                     )
                 )
             )
@@ -91,15 +112,15 @@ internal static class InvocationExpression
             Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
             shouldMergeFirstTwoGroups
                 ? Doc.IndentIf(
-                    groups.Count > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc },
+                    groups.Length > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc },
                     Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
                 )
                 : Doc.Null,
-            PrintIndentedGroup(groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
+            PrintIndentedGroup(groups.AsSpan()[(shouldMergeFirstTwoGroups ? 2 : 1)..])
         );
 
         return
-            oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+            oneLine.ManualSkipAny(1, DocUtilities.ContainsBreak)
             || groups[0]
                 .Any(o =>
                     o.Node
@@ -112,7 +133,7 @@ internal static class InvocationExpression
 
     private static void FlattenAndPrintNodes(
         ExpressionSyntax expression,
-        List<PrintedNode> printedNodes,
+        ref ValueListBuilder<PrintedNode> printedNodes,
         PrintingContext context
     )
     {
@@ -138,8 +159,8 @@ internal static class InvocationExpression
         */
         if (expression is InvocationExpressionSyntax invocationExpressionSyntax)
         {
-            FlattenAndPrintNodes(invocationExpressionSyntax.Expression, printedNodes, context);
-            printedNodes.Add(
+            FlattenAndPrintNodes(invocationExpressionSyntax.Expression, ref printedNodes, context);
+            printedNodes.Append(
                 new PrintedNode(
                     invocationExpressionSyntax,
                     ArgumentList.Print(invocationExpressionSyntax.ArgumentList, context)
@@ -148,8 +169,8 @@ internal static class InvocationExpression
         }
         else if (expression is ElementAccessExpressionSyntax elementAccessExpression)
         {
-            FlattenAndPrintNodes(elementAccessExpression.Expression, printedNodes, context);
-            printedNodes.Add(
+            FlattenAndPrintNodes(elementAccessExpression.Expression, ref printedNodes, context);
+            printedNodes.Append(
                 new PrintedNode(
                     elementAccessExpression,
                     Node.Print(elementAccessExpression.ArgumentList, context)
@@ -158,8 +179,12 @@ internal static class InvocationExpression
         }
         else if (expression is MemberAccessExpressionSyntax memberAccessExpressionSyntax)
         {
-            FlattenAndPrintNodes(memberAccessExpressionSyntax.Expression, printedNodes, context);
-            printedNodes.Add(
+            FlattenAndPrintNodes(
+                memberAccessExpressionSyntax.Expression,
+                ref printedNodes,
+                context
+            );
+            printedNodes.Append(
                 new PrintedNode(
                     memberAccessExpressionSyntax,
                     Doc.Concat(
@@ -173,10 +198,10 @@ internal static class InvocationExpression
         {
             FlattenAndPrintNodes(
                 conditionalAccessExpressionSyntax.Expression,
-                printedNodes,
+                ref printedNodes,
                 context
             );
-            printedNodes.Add(
+            printedNodes.Append(
                 new PrintedNode(
                     conditionalAccessExpressionSyntax,
                     Token.Print(conditionalAccessExpressionSyntax.OperatorToken, context)
@@ -184,7 +209,7 @@ internal static class InvocationExpression
             );
             FlattenAndPrintNodes(
                 conditionalAccessExpressionSyntax.WhenNotNull,
-                printedNodes,
+                ref printedNodes,
                 context
             );
         }
@@ -195,8 +220,8 @@ internal static class InvocationExpression
             } postfixUnaryExpression
         )
         {
-            FlattenAndPrintNodes(postfixUnaryExpression.Operand, printedNodes, context);
-            printedNodes.Add(
+            FlattenAndPrintNodes(postfixUnaryExpression.Operand, ref printedNodes, context);
+            printedNodes.Append(
                 new PrintedNode(
                     postfixUnaryExpression,
                     Token.Print(postfixUnaryExpression.OperatorToken, context)
@@ -205,11 +230,14 @@ internal static class InvocationExpression
         }
         else
         {
-            printedNodes.Add(new PrintedNode(expression, Node.Print(expression, context)));
+            printedNodes.Append(new PrintedNode(expression, Node.Print(expression, context)));
         }
     }
 
-    private static List<List<PrintedNode>> GroupPrintedNodesOnLines(List<PrintedNode> printedNodes)
+    private static void GroupPrintedNodesOnLines(
+        ref ValueListBuilder<PrintedNode[]> groups,
+        ref ValueListBuilder<PrintedNode> printedNodes
+    )
     {
         // We want to group the printed nodes in the following manner
         //
@@ -220,18 +248,15 @@ internal static class InvocationExpression
         //     ?.b
         //     .c!
         //     .d
+        var currentGroup = new ValueListBuilder<PrintedNode>([default, default, default, default]);
+        currentGroup.Append(printedNodes[0]);
 
-        var groups = new List<List<PrintedNode>>();
-
-        var currentGroup = new List<PrintedNode> { printedNodes[0] };
-        groups.Add(currentGroup);
-
-        for (var index = 1; index < printedNodes.Count; index++)
+        for (var index = 1; index < printedNodes.Length; index++)
         {
             if (printedNodes[index].Node is ConditionalAccessExpressionSyntax)
             {
-                currentGroup = [];
-                groups.Add(currentGroup);
+                groups.Append(currentGroup.AsSpan().ToArray());
+                currentGroup.Length = 0;
             }
             else if (
                 printedNodes[index].Node
@@ -241,18 +266,22 @@ internal static class InvocationExpression
                 && printedNodes[index + -1].Node is not ConditionalAccessExpressionSyntax
             )
             {
-                currentGroup = [];
-                groups.Add(currentGroup);
+                groups.Append(currentGroup.AsSpan().ToArray());
+                currentGroup.Length = 0;
             }
 
-            currentGroup.Add(printedNodes[index]);
+            currentGroup.Append(printedNodes[index]);
         }
 
-        return groups;
+        if (currentGroup.Length > 0)
+        {
+            groups.Append(currentGroup.AsSpan().ToArray());
+        }
     }
 
-    private static List<List<PrintedNode>> GroupPrintedNodesPrettierStyle(
-        List<PrintedNode> printedNodes
+    private static void GroupPrintedNodesPrettierStyle(
+        ref ValueListBuilder<PrintedNode[]> groups,
+        ref ValueListBuilder<PrintedNode> printedNodes
     )
     {
         // We want to group the printed nodes in the following manner
@@ -275,14 +304,15 @@ internal static class InvocationExpression
         // TODO #451 this whole thing could possibly just turn into a big loop
         // based on the current node, and the next/previous node, decide when to create new groups.
         // certain nodes need to stay in the current group, other nodes indicate that a new group needs to be created.
-        var groups = new List<List<PrintedNode>>();
-        var currentGroup = new List<PrintedNode> { printedNodes[0] };
+        var currentGroup = new ValueListBuilder<PrintedNode>([default, default, default, default]);
+        currentGroup.Append(printedNodes[0]);
+
         var index = 1;
-        for (; index < printedNodes.Count; index++)
+        for (; index < printedNodes.Length; index++)
         {
             if (printedNodes[index].Node is InvocationExpressionSyntax)
             {
-                currentGroup.Add(printedNodes[index]);
+                currentGroup.Append(printedNodes[index]);
             }
             else
             {
@@ -292,21 +322,21 @@ internal static class InvocationExpression
 
         if (
             printedNodes[0].Node is not (InvocationExpressionSyntax or PostfixUnaryExpressionSyntax)
-            && index < printedNodes.Count
+            && index < printedNodes.Length
             && printedNodes[index].Node
                 is ElementAccessExpressionSyntax
                     or PostfixUnaryExpressionSyntax
         )
         {
-            currentGroup.Add(printedNodes[index]);
+            currentGroup.Append(printedNodes[index]);
             index++;
         }
 
-        groups.Add(currentGroup);
-        currentGroup = [];
+        groups.Append(currentGroup.AsSpan().ToArray());
+        currentGroup.Length = 0;
 
         var hasSeenNodeThatRequiresBreak = false;
-        for (; index < printedNodes.Count; index++)
+        for (; index < printedNodes.Length; index++)
         {
             if (
                 hasSeenNodeThatRequiresBreak
@@ -315,8 +345,8 @@ internal static class InvocationExpression
                         or ConditionalAccessExpressionSyntax
             )
             {
-                groups.Add(currentGroup);
-                currentGroup = [];
+                groups.Append(currentGroup.AsSpan().ToArray());
+                currentGroup.Length = 0;
                 hasSeenNodeThatRequiresBreak = false;
             }
 
@@ -327,30 +357,28 @@ internal static class InvocationExpression
             {
                 hasSeenNodeThatRequiresBreak = true;
             }
-            currentGroup.Add(printedNodes[index]);
+            currentGroup.Append(printedNodes[index]);
         }
 
-        if (currentGroup.Count != 0)
+        if (currentGroup.Length != 0)
         {
-            groups.Add(currentGroup);
+            groups.Append(currentGroup.AsSpan().ToArray());
         }
-
-        return groups;
     }
 
     [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
-    private static Doc[] SelectManyDocsToArray(List<List<PrintedNode>> groups)
+    private static Doc[] SelectManyDocsToArray(ref ValueListBuilder<PrintedNode[]> groups)
     {
         var arrayLength = 0;
-        foreach (var group in groups)
+        foreach (var group in groups.AsSpan())
         {
-            arrayLength += group.Count;
+            arrayLength += group.Length;
         }
 
         var outputArray = new Doc[arrayLength];
 
         var pos = 0;
-        foreach (var group in groups)
+        foreach (var group in groups.AsSpan())
         {
             foreach (var node in group)
             {
@@ -362,9 +390,9 @@ internal static class InvocationExpression
         return outputArray;
     }
 
-    private static Doc PrintIndentedGroup(List<List<PrintedNode>> groups)
+    private static Doc PrintIndentedGroup(ReadOnlySpan<PrintedNode[]> groups)
     {
-        if (groups.Count == 0)
+        if (groups.Length == 0)
         {
             return Doc.Null;
         }
@@ -374,7 +402,7 @@ internal static class InvocationExpression
                 Doc.HardLine,
                 Doc.Join(
                     Doc.HardLine,
-                    groups.Select(o => Doc.Group(o.Select(p => p.Doc).ToArray()))
+                    groups.ToArray().Select(o => Doc.Group(o.Select(p => p.Doc).ToArray()))
                 )
             )
         );
@@ -393,11 +421,11 @@ internal static class InvocationExpression
             .CallMethod();
      */
     private static bool ShouldMergeFirstTwoGroups(
-        List<List<PrintedNode>> groups,
+        ref ValueListBuilder<PrintedNode[]> groups,
         SyntaxNode? parent
     )
     {
-        if (groups.Count < 2 || groups[0].Count != 1)
+        if (groups.Length < 2 || groups[0].Length != 1)
         {
             return false;
         }
@@ -420,7 +448,7 @@ internal static class InvocationExpression
         // TODO maybe some things to fix in here
         // https://github.com/belav/csharpier-repos/pull/100/files
         if (
-            groups[1].Count == 1
+            groups[1].Length == 1
             || parent
                 is SimpleLambdaExpressionSyntax
                     or ArgumentSyntax
