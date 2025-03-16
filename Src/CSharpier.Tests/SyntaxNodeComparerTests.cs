@@ -378,6 +378,32 @@ public class SyntaxNodeComparerTests
     }
 
     [Test]
+    public void Comments_Not_Fail_When_Indentation_Changes()
+    {
+        var left = """
+            namespace Namespace
+            {
+                /// <summary>Some Summary</summary>
+            //  [SomeAttribute]
+                public class ClassName { }
+            }
+            """;
+
+        var right = """
+            namespace Namespace
+            {
+                /// <summary>Some Summary</summary>
+                //  [SomeAttribute]
+                public class ClassName { }
+            }
+
+            """;
+
+        var result = CompareSource(left, right);
+        result.Should().BeEmpty();
+    }
+
+    [Test]
     public void Comments_Should_Ignore_Indent_Width()
     {
         var left = """
