@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -65,9 +66,10 @@ internal static class InvocationExpression
             (
                 groups.Length <= cutoff
                 && (
-                    groups.ManualSkipAny(
-                        shouldMergeFirstTwoGroups ? 1 : 0,
-                        o =>
+                    groups
+                        .AsSpan()
+                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                        .Any(o =>
                             o.Last().Node
                                 is not (
                                     InvocationExpressionSyntax
@@ -77,7 +79,7 @@ internal static class InvocationExpression
                                         Operand: InvocationExpressionSyntax
                                     }
                                 )
-                    )
+                        )
                     // if the last group contains just a !, make sure it doesn't end up on a new line
                     || (
                         groups[^1].Length == 1 && groups[^1][0].Node is PostfixUnaryExpressionSyntax
@@ -112,19 +114,10 @@ internal static class InvocationExpression
             return Doc.Group(oneLine);
         }
 
-        var expanded = Doc.Concat(
-            Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
-            shouldMergeFirstTwoGroups
-                ? Doc.IndentIf(
-                    groups.Length > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc },
-                    Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
-                )
-                : Doc.Null,
-            PrintIndentedGroup(groups.AsSpan()[(shouldMergeFirstTwoGroups ? 2 : 1)..])
-        );
-
+        var expanded = IntoExpanded(groups, shouldMergeFirstTwoGroups);
+        
         return
-            oneLine.ManualSkipAny(1, DocUtilities.ContainsBreak)
+            oneLine.AsSpan().Skip(1).Any(DocUtilities.ContainsBreak)
             || groups[0]
                 .Any(o =>
                     o.Node
@@ -140,9 +133,48 @@ internal static class InvocationExpression
                 parent is ExpressionStatementSyntax expressionStatementSyntax
                 && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
             )
-            || groups.Count == 1
+            || groups.Length == 1
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+    }
+
+    private static Doc IntoExpanded(
+        ValueListBuilder<PrintedNode[]> groups,
+        bool shouldMergeFirstTwoGroups
+    )
+    {
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+
+        foreach (var item in groups[0])
+        {
+            docs.Append(item.Doc);
+        }
+
+        if (shouldMergeFirstTwoGroups)
+        {
+            if (groups.Length > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc })
+            {
+                docs.Append(Doc.Indent(Doc.Concat(groups[1].Select(o => o.Doc).ToArray())));
+            }
+            else
+            {
+                foreach (var item in groups[1])
+                {
+                    docs.Append(item.Doc);
+                }
+            }
+        }
+
+        var indented = PrintIndentedGroup(groups.AsSpan()[(shouldMergeFirstTwoGroups ? 2 : 1)..]);
+
+        if (indented != Doc.Null)
+        {
+            docs.Append(indented);
+        }
+
+        var returnDoc = Doc.Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
     }
 
     private static void FlattenAndPrintNodes(
@@ -469,7 +501,7 @@ internal static class InvocationExpression
                     or ArgumentSyntax
                     or BinaryExpressionSyntax
                     or ExpressionStatementSyntax
-            || groups[1].Skip(1).First().Node
+            || groups[1][1].Node
                 is InvocationExpressionSyntax
                     or ElementAccessExpressionSyntax
                     or PostfixUnaryExpressionSyntax
