@@ -1,5 +1,5 @@
-using Microsoft.Extensions.Logging;
 using System.CommandLine;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 

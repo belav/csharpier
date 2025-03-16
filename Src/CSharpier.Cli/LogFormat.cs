@@ -10,5 +10,5 @@ internal enum LogFormat
     /// <summary>
     /// Formats messages in standard error/warning format for MSBuild.
     /// </summary>
-    MsBuild
+    MsBuild,
 }

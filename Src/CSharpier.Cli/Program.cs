@@ -1,8 +1,8 @@
-using CSharpier.Cli.Server;
-using Microsoft.Extensions.Logging;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO.Abstractions;
+using CSharpier.Cli.Server;
+using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 

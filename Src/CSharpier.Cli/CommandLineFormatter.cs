@@ -1,10 +1,10 @@
+using System.Diagnostics;
+using System.IO.Abstractions;
+using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.IO.Abstractions;
-using System.Text;
 
 namespace CSharpier.Cli;
 

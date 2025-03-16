@@ -1,9 +1,9 @@
+using System.IO.Abstractions.TestingHelpers;
+using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using System.IO.Abstractions.TestingHelpers;
-using System.Text;
 
 namespace CSharpier.Tests;
 
