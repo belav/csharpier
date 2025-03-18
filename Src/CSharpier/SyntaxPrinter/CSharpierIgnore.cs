@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -59,6 +60,7 @@ internal static partial class CSharpierIgnore
             && HasIgnoreComment(syntaxNode);
     }
 
+    [SkipLocalsInit]
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
         SyntaxList<T> list,
         PrintingContext context
@@ -66,14 +68,14 @@ internal static partial class CSharpierIgnore
         where T : SyntaxNode
     {
         var statements = new List<Doc>();
-        var unFormattedCode = new StringBuilder();
+        var unFormattedCode = new ValueListBuilder<char>(stackalloc char[64]);
         var printUnformatted = false;
 
         foreach (var node in list)
         {
             if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
-                statements.Add(unFormattedCode.ToString().Trim());
+                statements.Add(unFormattedCode.AsSpan().ToString().Trim());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
@@ -94,8 +96,9 @@ internal static partial class CSharpierIgnore
 
         if (unFormattedCode.Length > 0)
         {
-            statements.Add(unFormattedCode.ToString().Trim());
+            statements.Add(unFormattedCode.AsSpan().ToString().Trim());
         }
+        unFormattedCode.Dispose();
 
         return statements;
     }
