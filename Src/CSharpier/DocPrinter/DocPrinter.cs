@@ -7,7 +7,8 @@ internal class DocPrinter
     protected readonly Stack<PrintCommand> RemainingCommands = new();
     protected readonly Dictionary<string, PrintMode> GroupModeMap = new();
     protected int CurrentWidth;
-    protected readonly StringBuilder Output = new();
+    protected readonly PooledStringBuilder PooledOutput;
+    protected readonly StringBuilder Output;
     protected bool ShouldRemeasure;
     protected bool NewLineNextStringValue;
     protected bool SkipNextNewLine;
@@ -28,6 +29,8 @@ internal class DocPrinter
         this.RemainingCommands.Push(
             new PrintCommand(Indenter.GenerateRoot(), PrintMode.Break, doc)
         );
+        this.PooledOutput = PooledStringBuilder.GetInstance();
+        this.Output = this.PooledOutput.Builder;
     }
 
     public static string Print(Doc document, PrinterOptions printerOptions, string endOfLine)
@@ -51,6 +54,8 @@ internal class DocPrinter
         {
             result = result.TrimStart('\n', '\r');
         }
+
+        this.PooledOutput.Free();
 
         return result;
     }

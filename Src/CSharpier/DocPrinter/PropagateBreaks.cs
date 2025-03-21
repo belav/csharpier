@@ -8,7 +8,7 @@ internal static class PropagateBreaks
 
     public static void RunOn(Doc document)
     {
-        var alreadyVisitedSet = new HashSet<Group>();
+        var alreadyVisitedSet = PooledHashSet<Group>.GetInstance();
         var groupStack = new Stack<Group>();
         var forceFlat = 0;
         var canSkipBreak = false;
@@ -131,5 +131,7 @@ internal static class PropagateBreaks
                 docsStack.Push(hasContents.Contents);
             }
         }
+
+        alreadyVisitedSet.Free();
     }
 }
