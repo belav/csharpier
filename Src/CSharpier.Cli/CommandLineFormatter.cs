@@ -20,7 +20,7 @@ internal static class CommandLineFormatter
     {
         try
         {
-            var stopwatch = Stopwatch.StartNew();
+            var timestamp = Stopwatch.GetTimestamp();
             var commandLineFormatterResult = new CommandLineFormatterResult();
 
             if (commandLineOptions.StandardInFileContents != null)
@@ -99,7 +99,8 @@ internal static class CommandLineFormatter
                 }
             }
 
-            commandLineFormatterResult.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            commandLineFormatterResult.ElapsedMilliseconds = (long)
+                Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds;
             if (!commandLineOptions.WriteStdout)
             {
                 logger.LogInformation(
@@ -276,7 +277,7 @@ internal static class CommandLineFormatter
                     .ToArray();
                 try
                 {
-                    Task.WaitAll(tasks, cancellationToken);
+                    await Task.WhenAll(tasks).WaitAsync(cancellationToken);
                 }
                 catch (OperationCanceledException ex)
                 {

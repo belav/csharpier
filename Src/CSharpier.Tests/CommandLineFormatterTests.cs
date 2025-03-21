@@ -696,6 +696,34 @@ class ClassName
     }
 
     [Test]
+    public void File_With_Reordered_Usings_In_If_Directive_Should_Pass_Validation()
+    {
+        var context = new TestContext();
+
+        context.WhenAFileExists(
+            "file1.cs",
+            """
+            #if NOT_UNTIL_LATER
+            namespace Namespace {
+                
+                using System.Xml;
+                using System.Configuration;
+                
+                public class ClassName {
+
+                }
+            }
+            #endif
+            """
+        );
+
+        var result = Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+    }
+
+    [Test]
     public void File_With_Added_Trailing_Comma_Before_Comment_Should_Pass_Validation()
     {
         var context = new TestContext();
