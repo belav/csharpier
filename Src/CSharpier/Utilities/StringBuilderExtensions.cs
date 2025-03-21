@@ -21,6 +21,17 @@ internal static class StringBuilderExtensions
     }
 #endif
 
+    public static void TrimStart(this StringBuilder value, params ReadOnlySpan<char> trimChars)
+    {
+        int startIndex = 0;
+        while (startIndex < value.Length && trimChars.IndexOf(value[startIndex]) >= 0)
+        {
+            startIndex++;
+        }
+
+        value.Remove(0, startIndex);
+    }
+
     public static bool EndsWithNewLineAndWhitespace(this StringBuilder stringBuilder)
     {
         for (var index = 1; index <= stringBuilder.Length; index++)
