@@ -43,6 +43,11 @@ internal static class ListExtensions
         return count > span.Length ? [] : span[count..];
     }
 
+    public static ReadOnlySpan<T> Skip<T>(this Span<T> span, int count)
+    {
+        return count > span.Length ? [] : span[count..];
+    }
+
     // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
     public static bool Any(this in SyntaxTriviaList triviaList, Func<SyntaxTrivia, bool> predicate)
     {

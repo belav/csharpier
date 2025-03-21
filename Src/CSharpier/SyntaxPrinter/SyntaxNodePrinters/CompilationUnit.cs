@@ -27,8 +27,7 @@ internal static class CompilationUnit
             {
                 for (
                     var i = 0;
-                    i < list.Count
-                        && list[i] is HardLine { SkipBreakIfFirstInGroup: true };
+                    i < list.Count && list[i] is HardLine { SkipBreakIfFirstInGroup: true };
                     i++
                 )
                 {

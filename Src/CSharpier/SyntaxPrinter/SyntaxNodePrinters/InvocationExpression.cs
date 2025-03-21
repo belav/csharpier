@@ -121,7 +121,7 @@ internal static class InvocationExpression
         );
 
         return
-            oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+            oneLine.AsSpan().Skip(1).Any(DocUtilities.ContainsBreak)
             || groups[0]
                 .Any(o =>
                     o.Node
@@ -455,7 +455,7 @@ internal static class InvocationExpression
                     or ArgumentSyntax
                     or BinaryExpressionSyntax
                     or ExpressionStatementSyntax
-            || groups[1].Skip(1).First().Node
+            || groups[1][1].Node
                 is InvocationExpressionSyntax
                     or ElementAccessExpressionSyntax
                     or PostfixUnaryExpressionSyntax

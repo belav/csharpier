@@ -229,7 +229,7 @@ internal static class MembersWithForcedLines
         {
             result.Add(unFormattedCode.AsSpan().ToString().Trim());
         }
-        
+
         unFormattedCode.Dispose();
 
         return result;

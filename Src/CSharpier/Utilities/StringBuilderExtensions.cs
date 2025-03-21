@@ -23,7 +23,8 @@ internal static class StringBuilderExtensions
 #endif
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Append(this ref ValueListBuilder<char> builder, string text) => builder.Append(text.AsSpan());
+    public static void Append(this ref ValueListBuilder<char> builder, string text) =>
+        builder.Append(text.AsSpan());
 
     public static void TrimStart(this StringBuilder value, params ReadOnlySpan<char> trimChars)
     {
@@ -35,7 +36,7 @@ internal static class StringBuilderExtensions
 
         value.Remove(0, startIndex);
     }
-    
+
     public static bool EndsWithNewLineAndWhitespace(this StringBuilder stringBuilder)
     {
         for (var index = 1; index <= stringBuilder.Length; index++)

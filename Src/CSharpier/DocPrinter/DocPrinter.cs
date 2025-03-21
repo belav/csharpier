@@ -53,7 +53,7 @@ internal class DocPrinter
         {
             this.Output.TrimStart('\n', '\r');
         }
-        
+
         var result = this.Output.ToString();
         this.PooledOutput.Free();
 

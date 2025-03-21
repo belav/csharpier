@@ -123,12 +123,14 @@ internal abstract class Doc
     // prevents allocating an array if there is only a single parameter
     public static Group Group(Doc contents) => new() { Contents = contents };
 
-    public static Group Group(params ReadOnlySpan<Doc> contents) => new() { Contents = Concat(contents) };
+    public static Group Group(params ReadOnlySpan<Doc> contents) =>
+        new() { Contents = Concat(contents) };
 
     // prevents allocating an array if there is only a single parameter
     public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
 
-    public static IndentDoc Indent(params ReadOnlySpan<Doc> contents) => new() { Contents = Concat(contents) };
+    public static IndentDoc Indent(params ReadOnlySpan<Doc> contents) =>
+        new() { Contents = Concat(contents) };
 
     public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
