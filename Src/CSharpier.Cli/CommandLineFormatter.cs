@@ -60,7 +60,8 @@ internal static class CommandLineFormatter
                 {
                     var fileIssueLogger = new FileIssueLogger(
                         commandLineOptions.OriginalDirectoryOrFilePaths[0],
-                        logger
+                        logger,
+                        commandLineOptions.LogFormat
                     );
 
                     var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
@@ -232,7 +233,11 @@ internal static class CommandLineFormatter
                 }
                 else if (warnForUnsupported)
                 {
-                    var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
+                    var fileIssueLogger = new FileIssueLogger(
+                        originalFilePath,
+                        logger,
+                        logFormat: LogFormat.Console
+                    );
                     fileIssueLogger.WriteWarning("Is an unsupported file type.");
                 }
             }
@@ -308,7 +313,11 @@ internal static class CommandLineFormatter
             cancellationToken
         );
 
-        var fileIssueLogger = new FileIssueLogger(originalFilePath, logger);
+        var fileIssueLogger = new FileIssueLogger(
+            originalFilePath,
+            logger,
+            commandLineOptions.LogFormat
+        );
 
         logger.LogDebug(
             commandLineOptions.Check
