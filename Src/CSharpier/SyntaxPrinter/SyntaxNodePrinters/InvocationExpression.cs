@@ -106,6 +106,8 @@ internal static class InvocationExpression
                         is ArrayCreationExpressionSyntax
                             or ObjectCreationExpressionSyntax { Initializer: not null }
                 )
+            || groups[0].First().Node
+                is ParenthesizedExpressionSyntax { Expression: SwitchExpressionSyntax }
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
