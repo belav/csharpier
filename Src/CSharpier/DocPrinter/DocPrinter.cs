@@ -46,11 +46,11 @@ internal class DocPrinter
 
         this.EnsureOutputEndsWithSingleNewLine();
 
-        var result = this.Output.ToString();
         if (this.PrinterOptions.TrimInitialLines)
         {
-            result = result.TrimStart('\n', '\r');
+            this.Output.TrimStart('\n', '\r');
         }
+        var result = this.Output.ToString();
 
         return result;
     }
