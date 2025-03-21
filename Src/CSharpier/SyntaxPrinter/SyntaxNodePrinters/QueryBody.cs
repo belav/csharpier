@@ -4,21 +4,20 @@ internal static class QueryBody
 {
     public static Doc Print(QueryBodySyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>
-        {
-            Doc.Join(Doc.Line, node.Clauses.Select(o => Node.Print(o, context))),
-        };
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null]);
+        docs.Append(Doc.Join(Doc.Line, node.Clauses.Select(o => Node.Print(o, context))));
+
         if (node.Clauses.Count > 0)
         {
-            docs.Add(Doc.Line);
+            docs.Append(Doc.Line);
         }
 
-        docs.Add(Node.Print(node.SelectOrGroup, context));
+        docs.Append(Node.Print(node.SelectOrGroup, context));
         if (node.Continuation != null)
         {
-            docs.Add(" ", QueryContinuation.Print(node.Continuation, context));
+            docs.Append(" ", QueryContinuation.Print(node.Continuation, context));
         }
 
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }

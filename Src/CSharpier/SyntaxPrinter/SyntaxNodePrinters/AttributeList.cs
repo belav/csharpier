@@ -9,19 +9,19 @@ internal static class AttributeList
             return CSharpierIgnore.PrintWithoutFormatting(node, context).Trim();
         }
 
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
         if (
             node.Parent is CompilationUnitSyntax compilationUnitSyntax
             && compilationUnitSyntax.AttributeLists.First() != node
         )
         {
-            docs.Add(ExtraNewLines.Print(node));
+            docs.Append(ExtraNewLines.Print(node));
         }
 
-        docs.Add(Token.Print(node.OpenBracketToken, context));
+        docs.Append(Token.Print(node.OpenBracketToken, context));
         if (node.Target != null)
         {
-            docs.Add(
+            docs.Append(
                 Token.Print(node.Target.Identifier, context),
                 Token.PrintWithSuffix(node.Target.ColonToken, " ", context)
             );
@@ -72,17 +72,19 @@ internal static class AttributeList
             context
         );
 
-        docs.Add(
+        docs.Append(
             node.Attributes.Count > 1
                 ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
                 : printSeparatedSyntaxList
         );
 
-        docs.Add(
-            node.Attributes.Count > 1 ? Doc.SoftLine : Doc.Null,
-            Token.Print(node.CloseBracketToken, context)
-        );
+        if (node.Attributes.Count > 1)
+        {
+            docs.Append(Doc.SoftLine);
+        }
 
-        return Doc.Group(docs);
+        docs.Append(Token.Print(node.CloseBracketToken, context));
+
+        return Doc.Group(docs.AsSpan().ToArray());
     }
 }

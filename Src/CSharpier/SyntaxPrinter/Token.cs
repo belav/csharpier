@@ -146,12 +146,7 @@ internal static class Token
             docs.Append(suffixDoc);
         }
 
-        var returnDoc = docs.Length switch
-        {
-            <= 0 => Doc.Null,
-            1 => docs[0],
-            _ => Doc.Concat(docs.AsSpan().ToArray()),
-        };
+        var returnDoc = Doc.Concat(ref docs);
         docs.Dispose();
 
         return returnDoc;
@@ -413,7 +408,7 @@ internal static class Token
             }
         }
 
-        var returnDoc = docs.Length > 0 ? Doc.Concat(docs.AsSpan().ToArray()) : Doc.Null;
+        var returnDoc = Doc.Concat(ref docs);
         docs.Dispose();
 
         return returnDoc;

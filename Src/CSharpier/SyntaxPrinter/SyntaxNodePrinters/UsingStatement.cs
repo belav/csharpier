@@ -4,9 +4,9 @@ internal static class UsingStatement
 {
     public static Doc Print(UsingStatementSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>
-        {
-            ExtraNewLines.Print(node),
+        var docs = new ValueListBuilder<Doc>([null, null, null, null]);
+        docs.Append(ExtraNewLines.Print(node));
+        docs.Append(
             Doc.Group(
                 Token.Print(node.AwaitKeyword, context),
                 node.AwaitKeyword.RawSyntaxKind() != SyntaxKind.None ? " " : Doc.Null,
@@ -25,21 +25,22 @@ internal static class UsingStatement
                 ),
                 Token.Print(node.CloseParenToken, context),
                 Doc.IfBreak(Doc.Null, Doc.SoftLine)
-            ),
-        };
+            )
+        );
+
         if (node.Statement is UsingStatementSyntax)
         {
-            docs.Add(Doc.HardLine, Node.Print(node.Statement, context));
+            docs.Append(Doc.HardLine, Node.Print(node.Statement, context));
         }
         else if (node.Statement is BlockSyntax blockSyntax)
         {
-            docs.Add(Block.Print(blockSyntax, context));
+            docs.Append(Block.Print(blockSyntax, context));
         }
         else
         {
-            docs.Add(Doc.Indent(Doc.HardLine, Node.Print(node.Statement, context)));
+            docs.Append(Doc.Indent(Doc.HardLine, Node.Print(node.Statement, context)));
         }
 
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }

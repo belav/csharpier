@@ -144,12 +144,7 @@ internal static class SeparatedSyntaxList
             docs.Append(unFormattedCode.ToString().Trim());
         }
 
-        var output = docs.Length switch
-        {
-            0 => Doc.Null,
-            1 => docs[0],
-            _ => Doc.Concat(docs.AsSpan().ToArray()),
-        };
+        var output = Doc.Concat(ref docs);
         docs.Dispose();
 
         return output;
