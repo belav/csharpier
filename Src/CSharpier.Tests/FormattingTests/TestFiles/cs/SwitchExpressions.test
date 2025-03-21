@@ -119,5 +119,16 @@ class ClassName
                 "someLongString________________________________________________________________"
             ),
         };
+
+        (
+            someValue switch
+            {
+                someValue => 1,
+                _ => 2,
+            }
+        )
+            .SomeLongMethodCall______________________________()
+            .SomeLongMethodCall______________________________()
+            .SomeLongMethodCall______________________________();
     }
 }
