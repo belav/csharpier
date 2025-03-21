@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CSharpier.Utilities;
@@ -20,6 +21,9 @@ internal static class StringBuilderExtensions
         value.Append(otherValue);
     }
 #endif
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void Append(this ref ValueListBuilder<char> builder, string text) => builder.Append(text.AsSpan());
 
     public static bool EndsWithNewLineAndWhitespace(this StringBuilder stringBuilder)
     {

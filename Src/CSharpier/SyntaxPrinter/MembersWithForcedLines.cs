@@ -1,10 +1,12 @@
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CSharpier.SyntaxPrinter;
 
 internal static class MembersWithForcedLines
 {
+    [SkipLocalsInit]
     public static List<Doc> Print<T>(
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
@@ -19,7 +21,7 @@ internal static class MembersWithForcedLines
             result.Add(Doc.HardLine);
         }
 
-        var unFormattedCode = new StringBuilder();
+        var unFormattedCode = new ValueListBuilder<char>(stackalloc char[64]);
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
         for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
@@ -30,7 +32,7 @@ internal static class MembersWithForcedLines
             if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
             {
                 skipAddingLineBecauseIgnoreEnded = true;
-                result.Add(unFormattedCode.ToString().Trim());
+                result.Add(unFormattedCode.AsSpan().ToString().Trim());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
@@ -225,8 +227,10 @@ internal static class MembersWithForcedLines
 
         if (unFormattedCode.Length > 0)
         {
-            result.Add(unFormattedCode.ToString().Trim());
+            result.Add(unFormattedCode.AsSpan().ToString().Trim());
         }
+        
+        unFormattedCode.Dispose();
 
         return result;
     }
