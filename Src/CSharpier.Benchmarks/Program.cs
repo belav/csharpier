@@ -27,7 +27,7 @@ public class Benchmarks
             .GetResult();
     }
 
-    [Benchmark]
+    // [Benchmark]
     public void Default_SyntaxNodeComparer()
     {
         var syntaxNodeComparer = new SyntaxNodeComparer(
@@ -42,7 +42,7 @@ public class Benchmarks
         syntaxNodeComparer.CompareSource();
     }
 
-    [Benchmark]
+    // [Benchmark]
     public void IsCodeBasicallyEqual_SyntaxNodeComparer()
     {
         DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
