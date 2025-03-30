@@ -108,6 +108,10 @@ internal static class InvocationExpression
                 )
             || groups[0].First().Node
                 is ParenthesizedExpressionSyntax { Expression: SwitchExpressionSyntax }
+            || (
+                parent is ExpressionStatementSyntax expressionStatementSyntax
+                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
+            )
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }

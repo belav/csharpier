@@ -267,3 +267,10 @@ o.Property.CallMethod(
     )
     .CallMethod()
     .CallMethod();
+
+builder
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    //.CallMethod()
+;
