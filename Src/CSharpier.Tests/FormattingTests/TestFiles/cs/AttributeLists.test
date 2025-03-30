@@ -101,6 +101,13 @@ class ClassName
         [SomeLongAttribute(someLongValue___________________________________________)]
             string someParameter
     ) { }
+
+    public void SomeMethod(
+        // Some Comment
+        [SomeAttribute]
+        [SomeOtherAttribute]
+            string someParameter
+    ) { }
 }
 
 [
