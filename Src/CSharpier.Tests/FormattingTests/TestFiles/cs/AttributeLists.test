@@ -129,3 +129,8 @@ public class ClassName { }
     LongName______________________
 >]
 public class ClassName { }
+
+public class ClassName
+{
+    public int ShortProperty { get; [SomeAttribute] init; } = 20;
+}
