@@ -10,13 +10,16 @@ internal static class Parameter
         if (hasAttribute)
         {
             docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
-            if (node.Parent is ParameterListSyntax { Parameters.Count: > 1 })
+            if (
+                node.GetLeadingTrivia().Any(o => o.IsComment())
+                || node.Parent is ParameterListSyntax { Parameters.Count: 0 }
+            )
             {
-                docs.Add(Doc.Indent(Doc.Line));
+                docs.Add(" ");
             }
             else
             {
-                docs.Add(" ");
+                docs.Add(Doc.Indent(Doc.Line));
             }
         }
 

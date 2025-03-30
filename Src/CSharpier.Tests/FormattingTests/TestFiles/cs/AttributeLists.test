@@ -96,6 +96,11 @@ class ClassName
         // Some Comment does not indent parameter
         [SomeAttribute] string someParameter
     ) { }
+
+    public void SomeMethod(
+        [SomeLongAttribute(someLongValue___________________________________________)]
+            string someParameter
+    ) { }
 }
 
 [
