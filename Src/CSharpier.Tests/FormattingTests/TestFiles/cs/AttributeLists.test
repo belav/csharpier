@@ -91,6 +91,23 @@ class ClassName
             TSomeMuchLongerName___________________________________,
         K
     >() { }
+
+    public void SomeMethod(
+        // Some Comment does not indent parameter
+        [SomeAttribute] string someParameter
+    ) { }
+
+    public void SomeMethod(
+        [SomeLongAttribute(someLongValue___________________________________________)]
+            string someParameter
+    ) { }
+
+    public void SomeMethod(
+        // Some Comment
+        [SomeAttribute]
+        [SomeOtherAttribute]
+            string someParameter
+    ) { }
 }
 
 [
