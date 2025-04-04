@@ -46,7 +46,7 @@ internal static class Token
 
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
-        if (!skipLeadingTrivia && !context.State.SkipNextLeadingTrivia)
+        if (!skipLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -54,8 +54,6 @@ internal static class Token
                 docs.Append(leadingTrivia);
             }
         }
-
-        context.State.SkipNextLeadingTrivia = false;
 
         if (
             (
@@ -154,6 +152,12 @@ internal static class Token
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
     {
+        if (context.State.SkipNextLeadingTrivia)
+        {
+            context.State.SkipNextLeadingTrivia = false;
+            return Doc.Null;
+        }
+
         var isClosingBrace =
             syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
             || syntaxToken.Parent is CollectionExpressionSyntax
