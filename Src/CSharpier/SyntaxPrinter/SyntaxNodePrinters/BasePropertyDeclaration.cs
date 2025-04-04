@@ -113,7 +113,15 @@ internal static class BasePropertyDeclaration
     )
     {
         var docs = new List<Doc>();
-        if (node.Body != null || node.ExpressionBody != null)
+        if (
+            node.AttributeLists.Count > 1
+            || node.Body != null
+            || node.ExpressionBody != null
+            || (
+                node.AttributeLists.FirstOrDefault() is { } attributeListSyntax
+                && attributeListSyntax.Attributes.First().ArgumentList?.Arguments.Count > 0
+            )
+        )
         {
             docs.Add(Doc.HardLine);
         }

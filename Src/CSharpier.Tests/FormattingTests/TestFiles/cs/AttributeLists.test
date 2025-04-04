@@ -8,13 +8,7 @@ class ClassName
     private string Field;
 
     [Obsolete]
-    public string Property
-    {
-        [Obsolete]
-        get;
-        [Obsolete]
-        set;
-    }
+    public string Property { [Obsolete] get; [Obsolete] set; }
 
     [Obsolete, NonSerialized]
     void MethodName([In] string value) { }
@@ -133,4 +127,18 @@ public class ClassName { }
 public class ClassName
 {
     public int ShortProperty { get; [SomeAttribute] init; } = 20;
+
+    public int CommandTimeout
+    {
+        get;
+        [SomeAttribute]
+        [SomeOtherAttribute]
+        set;
+    }
+
+    public int CommandTimeout
+    {
+        [SomeAttribute(someValue)]
+        get;
+    }
 }

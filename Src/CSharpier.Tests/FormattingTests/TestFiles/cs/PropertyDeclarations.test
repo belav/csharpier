@@ -46,13 +46,7 @@ public class ClassName
         }
     }
 
-    public string Property
-    {
-        [Obsolete]
-        get;
-        [Obsolete]
-        set;
-    }
+    public string Property { [Obsolete] get; [Obsolete] set; }
 
     public virtual ICollection<SomeObject> SomeLongNameThatForcesALineBreak______________________ { get; set; } =
         new HashSet<SomeObject>();
