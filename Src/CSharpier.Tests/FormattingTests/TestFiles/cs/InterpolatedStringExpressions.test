@@ -60,5 +60,17 @@ public class ClassName
             And {two} And
             Just Text
             """;
+
+        var multiLineRawMultiInterpolated = $$"""
+            {one}
+            And {{two}} And {{{three}}}
+            Just Text
+            """;
+
+        var multiLineRawMultiInterpolated = $$$"""
+            {one}
+            And {{two}} And {{{three}}}
+            Just Text
+            """;
     }
 }

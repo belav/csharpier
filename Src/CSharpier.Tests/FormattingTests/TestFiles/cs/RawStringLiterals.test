@@ -34,6 +34,18 @@ var whatAboutWhiteSpace = $"""
 
 CallMethod(
     """
+    "Quoted"
+    """
+);
+
+CallMethod(
+    """""
+    ""MultiQuoted""
+    """""
+);
+
+CallMethod(
+    """
     SomeString
     """
 );
