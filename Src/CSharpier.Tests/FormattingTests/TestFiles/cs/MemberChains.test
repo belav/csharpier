@@ -274,3 +274,9 @@ builder
     .CallMethod()
     //.CallMethod()
 ;
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.SomeOtherProperty = 1;
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.CallMethod();
