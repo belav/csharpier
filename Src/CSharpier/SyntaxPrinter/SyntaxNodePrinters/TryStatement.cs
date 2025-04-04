@@ -4,19 +4,20 @@ internal static class TryStatement
 {
     public static Doc Print(TryStatementSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>
-        {
-            ExtraNewLines.Print(node),
-            AttributeLists.Print(node, node.AttributeLists, context),
-            Token.Print(node.TryKeyword, context),
-            Block.Print(node.Block, context),
-            node.Catches.Any() ? Doc.HardLine : Doc.Null,
-            Doc.Join(Doc.HardLine, node.Catches.Select(o => CatchClause.Print(o, context))),
-        };
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+        docs.Append(ExtraNewLines.Print(node));
+        docs.Append(AttributeLists.Print(node, node.AttributeLists, context));
+        docs.Append(Token.Print(node.TryKeyword, context));
+        docs.Append(Block.Print(node.Block, context));
+        docs.Append(node.Catches.Any() ? Doc.HardLine : Doc.Null);
+        docs.Append(
+            Doc.Join(Doc.HardLine, node.Catches.Select(o => CatchClause.Print(o, context)))
+        );
+
         if (node.Finally != null)
         {
-            docs.Add(Doc.HardLine, FinallyClause.Print(node.Finally, context));
+            docs.Append(Doc.HardLine, FinallyClause.Print(node.Finally, context));
         }
-        return Doc.Concat(docs);
+        return Doc.Concat(ref docs);
     }
 }
