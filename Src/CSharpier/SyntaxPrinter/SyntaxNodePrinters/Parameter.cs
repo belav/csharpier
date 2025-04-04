@@ -44,7 +44,6 @@ internal static class Parameter
         }
 
         return hasAttribute ? Doc.Group(docs.AsSpan().ToArray())
-            : docs.Count == 1 ? docs[0]
             : Doc.Concat(ref docs);
     }
 }
