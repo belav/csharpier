@@ -43,7 +43,6 @@ internal static class Parameter
             docs.Append(EqualsValueClause.Print(node.Default, context));
         }
 
-        return hasAttribute ? Doc.Group(docs.AsSpan().ToArray())
-            : Doc.Concat(ref docs);
+        return hasAttribute ? Doc.Group(docs.AsSpan().ToArray()) : Doc.Concat(ref docs);
     }
 }
