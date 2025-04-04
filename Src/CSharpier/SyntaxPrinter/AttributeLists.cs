@@ -18,6 +18,7 @@ internal static class AttributeLists
             is TypeParameterSyntax
                 or ParameterSyntax
                 or ParenthesizedLambdaExpressionSyntax
+                or AccessorDeclarationSyntax
             ? Doc.Line
             : Doc.HardLine;
 

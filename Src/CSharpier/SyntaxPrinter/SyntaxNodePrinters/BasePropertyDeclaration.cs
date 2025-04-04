@@ -111,7 +111,15 @@ internal static class BasePropertyDeclaration
     )
     {
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null]);
-        if (node.AttributeLists.Count > 0 || node.Body != null || node.ExpressionBody != null)
+        if (
+            node.AttributeLists.Count > 1
+            || node.Body != null
+            || node.ExpressionBody != null
+            || (
+                node.AttributeLists.FirstOrDefault() is { } attributeListSyntax
+                && attributeListSyntax.Attributes.First().ArgumentList?.Arguments.Count > 0
+            )
+        )
         {
             docs.Append(Doc.HardLine);
         }

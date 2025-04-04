@@ -5,13 +5,26 @@ internal static class Parameter
     public static Doc Print(ParameterSyntax node, PrintingContext context)
     {
         var hasAttribute = node.AttributeLists.Any();
-        var groupId = hasAttribute ? Guid.NewGuid().ToString() : string.Empty;
+
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
 
         if (hasAttribute)
         {
             docs.Append(AttributeLists.Print(node, node.AttributeLists, context));
-            docs.Append(Doc.IndentIfBreak(Doc.Line, groupId));
+            if (
+                node.AttributeLists.Count < 2
+                && (
+                    node.GetLeadingTrivia().Any(o => o.IsComment())
+                    || node.Parent is ParameterListSyntax { Parameters.Count: 0 }
+                )
+            )
+            {
+                docs.Append(" ");
+            }
+            else
+            {
+                docs.Append(Doc.Indent(Doc.Line));
+            }
         }
 
         if (node.Modifiers.Any())
@@ -30,8 +43,8 @@ internal static class Parameter
             docs.Append(EqualsValueClause.Print(node.Default, context));
         }
 
-        return hasAttribute
-            ? Doc.GroupWithId(groupId, docs.AsSpan().ToArray())
+        return hasAttribute ? Doc.Group(docs.AsSpan.ToArray)
+            : docs.Count == 1 ? docs[0]
             : Doc.Concat(ref docs);
     }
 }
