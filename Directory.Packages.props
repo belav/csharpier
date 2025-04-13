@@ -11,6 +11,7 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="Ignore" Version="0.2.1" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.2" />
+    <PackageVersion Include="LovettSoftware.XmlDiff" Version="1.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.8" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.11.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />

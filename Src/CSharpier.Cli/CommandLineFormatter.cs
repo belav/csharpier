@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
+using CSharpier.Validators;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
@@ -334,7 +335,7 @@ internal static class CommandLineFormatter
         if (
             (!commandLineOptions.CompilationErrorsAsWarnings && result.FailedCompilation > 0)
             || (commandLineOptions.Check && result.UnformattedFiles > 0)
-            || result.FailedSyntaxTreeValidation > 0
+            || result.FailedFormattingValidation > 0
             || result.ExceptionsFormatting > 0
             || result.ExceptionsValidatingSource > 0
         )
@@ -435,6 +436,8 @@ internal static class CommandLineFormatter
 
         if (!commandLineOptions.Fast)
         {
+            IFormattingValidator? formattingValidator = null;
+
             if (printerOptions.Formatter is Formatter.CSharp or Formatter.CSharpScript)
             {
                 var sourceCodeKind =
@@ -452,15 +455,35 @@ internal static class CommandLineFormatter
                     cancellationToken
                 );
 
+                formattingValidator = new CSharpFormattingValidator(syntaxNodeComparer);
+            }
+            else if (printerOptions.Formatter is Formatter.XML)
+            {
+                formattingValidator = new XmlFormattingValidator(
+                    fileToFormatInfo.FileContents,
+                    codeFormattingResult.Code
+                );
+            }
+            else
+            {
+                // TODO log error?
+            }
+
+            if (formattingValidator is not null)
+            {
                 try
                 {
-                    var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
-                    if (!string.IsNullOrEmpty(failure))
+                    var validatorResult = await formattingValidator.ValidateAsync(
+                        cancellationToken
+                    );
+                    if (validatorResult.Failed)
                     {
                         Interlocked.Increment(
-                            ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                            ref commandLineFormatterResult.FailedFormattingValidation
                         );
-                        fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
+                        fileIssueLogger.WriteError(
+                            $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "/n" + validatorResult.FailureMessage)}"
+                        );
                     }
                 }
                 catch (Exception ex)
