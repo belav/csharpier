@@ -19,7 +19,7 @@ internal static class HasMismatchedCliAndMsBuildVersions
 
         string? GetPackagesVersion(string pathToCsProj)
         {
-            var directory = new DirectoryInfo(Path.GetDirectoryName(pathToCsProj)!);
+            var directory = fileSystem.DirectoryInfo.New(Path.GetDirectoryName(pathToCsProj)!);
             while (directory != null)
             {
                 var filePath = Path.Combine(directory.FullName, "Directory.Packages.props");
@@ -28,7 +28,7 @@ internal static class HasMismatchedCliAndMsBuildVersions
                     XElement packagesXElement;
                     try
                     {
-                        packagesXElement = XElement.Load(fileSystem.File.OpenRead(filePath));
+                        packagesXElement = XElement.Parse(fileSystem.File.ReadAllText(filePath));
                     }
                     catch (Exception ex)
                     {
@@ -58,7 +58,7 @@ internal static class HasMismatchedCliAndMsBuildVersions
             XElement csProjXElement;
             try
             {
-                csProjXElement = XElement.Load(fileSystem.File.OpenRead(pathToCsProj));
+                csProjXElement = XElement.Parse(fileSystem.File.ReadAllText(pathToCsProj));
             }
             catch (Exception ex)
             {

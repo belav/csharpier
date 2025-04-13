@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Utilities;
+using CSharpier.Validators;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
@@ -47,15 +48,14 @@ internal static class CommandLineFormatter
                     commandLineOptions.ConfigPath,
                     fileSystem,
                     logger,
-                    cancellationToken,
-                    limitConfigSearch: true
+                    cancellationToken
                 );
 
                 if (
                     (
                         commandLineOptions.IncludeGenerated
                         || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    ) && !optionsProvider.IsIgnored(filePath)
+                    ) && !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -64,8 +64,11 @@ internal static class CommandLineFormatter
                         commandLineOptions.LogFormat
                     );
 
-                    var printerOptions = optionsProvider.GetPrinterOptionsFor(filePath);
-                    if (printerOptions is not null)
+                    var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                        filePath,
+                        cancellationToken
+                    );
+                    if (printerOptions is { Formatter: not Formatter.Unknown })
                     {
                         printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
@@ -151,7 +154,7 @@ internal static class CommandLineFormatter
 
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
-            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x].Replace("\\", "/");
+            var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x];
             var isFile = fileSystem.File.Exists(directoryOrFilePath);
             var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
 
@@ -178,9 +181,7 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions
-                .OriginalDirectoryOrFilePaths[x]
-                .Replace("\\", "/");
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[x];
 
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
@@ -193,7 +194,8 @@ internal static class CommandLineFormatter
             {
                 if (!originalDirectoryOrFile.StartsWith('.'))
                 {
-                    originalDirectoryOrFile = "./" + originalDirectoryOrFile;
+                    originalDirectoryOrFile =
+                        "." + Path.DirectorySeparatorChar + originalDirectoryOrFile;
                 }
             }
 
@@ -207,15 +209,18 @@ internal static class CommandLineFormatter
                     (
                         !commandLineOptions.IncludeGenerated
                         && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    ) || optionsProvider.IsIgnored(actualFilePath)
+                    ) || await optionsProvider.IsIgnoredAsync(actualFilePath, cancellationToken)
                 )
                 {
                     return;
                 }
 
-                var printerOptions = optionsProvider.GetPrinterOptionsFor(actualFilePath);
+                var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                    actualFilePath,
+                    cancellationToken
+                );
 
-                if (printerOptions is not null)
+                if (printerOptions is { Formatter: not Formatter.Unknown })
                 {
                     printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
                     await FormatPhysicalFile(
@@ -267,13 +272,8 @@ internal static class CommandLineFormatter
                         SearchOption.AllDirectories
                     )
                     .Select(o =>
-                    {
-                        var normalizedPath = o.Replace("\\", "/");
-                        return FormatFile(
-                            normalizedPath,
-                            normalizedPath.Replace(directoryOrFilePath, originalDirectoryOrFile)
-                        );
-                    })
+                        FormatFile(o, o.Replace(directoryOrFilePath, originalDirectoryOrFile))
+                    )
                     .ToArray();
                 try
                 {
@@ -345,7 +345,7 @@ internal static class CommandLineFormatter
         if (
             (!commandLineOptions.CompilationErrorsAsWarnings && result.FailedCompilation > 0)
             || (commandLineOptions.Check && result.UnformattedFiles > 0)
-            || result.FailedSyntaxTreeValidation > 0
+            || result.FailedFormattingValidation > 0
             || result.ExceptionsFormatting > 0
             || result.ExceptionsValidatingSource > 0
         )
@@ -389,18 +389,13 @@ internal static class CommandLineFormatter
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        CodeFormatterResult codeFormattingResult;
-
-        var sourceCodeKind = Path.GetExtension(fileToFormatInfo.Path).EqualsIgnoreCase(".csx")
-            ? SourceCodeKind.Script
-            : SourceCodeKind.Regular;
+        CodeFormatterResult? codeFormattingResult;
 
         try
         {
-            codeFormattingResult = await CSharpFormatter.FormatAsync(
+            codeFormattingResult = await CodeFormatter.FormatAsync(
                 fileToFormatInfo.FileContents,
                 printerOptions,
-                sourceCodeKind,
                 cancellationToken
             );
         }
@@ -437,43 +432,81 @@ internal static class CommandLineFormatter
             return;
         }
 
+        if (!string.IsNullOrEmpty(codeFormattingResult.WarningMessage))
+        {
+            fileIssueLogger.WriteWarning(codeFormattingResult.WarningMessage);
+            return;
+        }
+
         if (!string.IsNullOrEmpty(codeFormattingResult.FailureMessage))
         {
             fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
             return;
         }
 
-        if (!commandLineOptions.Fast)
+        if (!commandLineOptions.SkipValidation)
         {
-            var syntaxNodeComparer = new SyntaxNodeComparer(
-                fileToFormatInfo.FileContents,
-                codeFormattingResult.Code,
-                codeFormattingResult.ReorderedModifiers,
-                codeFormattingResult.ReorderedUsingsWithDisabledText,
-                codeFormattingResult.MovedTrailingTrivia,
-                sourceCodeKind,
-                cancellationToken
-            );
+            IFormattingValidator? formattingValidator = null;
 
-            try
+            if (printerOptions.Formatter is Formatter.CSharp or Formatter.CSharpScript)
             {
-                var failure = await syntaxNodeComparer.CompareSourceAsync(cancellationToken);
-                if (!string.IsNullOrEmpty(failure))
+                var sourceCodeKind =
+                    printerOptions.Formatter is Formatter.CSharpScript
+                        ? SourceCodeKind.Script
+                        : SourceCodeKind.Regular;
+
+                var syntaxNodeComparer = new SyntaxNodeComparer(
+                    fileToFormatInfo.FileContents,
+                    codeFormattingResult.Code,
+                    codeFormattingResult.ReorderedModifiers,
+                    codeFormattingResult.ReorderedUsingsWithDisabledText,
+                    codeFormattingResult.MovedTrailingTrivia,
+                    sourceCodeKind,
+                    cancellationToken
+                );
+
+                formattingValidator = new CSharpFormattingValidator(syntaxNodeComparer);
+            }
+            else if (printerOptions.Formatter is Formatter.XML)
+            {
+                formattingValidator = new XmlFormattingValidator(
+                    fileToFormatInfo.FileContents,
+                    codeFormattingResult.Code
+                );
+            }
+            else
+            {
+                // TODO log error?
+            }
+
+            if (formattingValidator is not null)
+            {
+                try
+                {
+                    var validatorResult = await formattingValidator.ValidateAsync(
+                        cancellationToken
+                    );
+                    if (validatorResult.Failed)
+                    {
+                        Interlocked.Increment(
+                            ref commandLineFormatterResult.FailedFormattingValidation
+                        );
+                        fileIssueLogger.WriteError(
+                            $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "/n" + validatorResult.FailureMessage)}"
+                        );
+                    }
+                }
+                catch (Exception ex)
                 {
                     Interlocked.Increment(
-                        ref commandLineFormatterResult.FailedSyntaxTreeValidation
+                        ref commandLineFormatterResult.ExceptionsValidatingSource
                     );
-                    fileIssueLogger.WriteError($"Failed syntax tree validation.\n{failure}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Interlocked.Increment(ref commandLineFormatterResult.ExceptionsValidatingSource);
 
-                fileIssueLogger.WriteError(
-                    "Failed with exception during syntax tree validation.",
-                    ex
-                );
+                    fileIssueLogger.WriteError(
+                        "Failed with exception during syntax tree validation.",
+                        ex
+                    );
+                }
             }
         }
 

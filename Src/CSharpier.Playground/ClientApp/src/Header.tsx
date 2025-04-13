@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Loading } from "./Icons/Loading";
-import { useAppContext } from "./AppContext";
 import "./Header.css";
+import { useAppContext } from "./AppContext";
+import { observer } from "mobx-react-lite";
 
-export const Header = () => {
+export const Header = observer(() => {
     const { isLoading, formatCode, showDoc, showAst } = useAppContext();
     const width = showDoc && showAst ? 25 : showDoc || showAst ? 33 : 50;
     const [version, setVersion] = useState<string | undefined>();
@@ -39,4 +40,4 @@ export const Header = () => {
             </div>
         </div>
     );
-};
+});

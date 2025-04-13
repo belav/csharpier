@@ -6,7 +6,7 @@ namespace CSharpier.Tests.FormattingTests
 {
     [TestFixture]
     [Parallelizable(ParallelScope.All)]
-    public class FormattingTests : BaseTest
+    public class FormattingTests_{{ FileExtension }} : BaseTest
     {
         {{- for test in Tests }}
         [Test]

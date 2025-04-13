@@ -42,7 +42,7 @@ repos:
         description: Install the .NET tools listed at .config/dotnet-tools.json.
       - id: csharpier
         name: Run CSharpier on C# files
-        entry: dotnet tool run dotnet-csharpier
+        entry: dotnet tool run CSharpier
         language: system
         types:
           - c#
@@ -64,8 +64,8 @@ Modify the file at `.husky/task-runner.json`
 {
     "tasks": [{
         "name": "Run csharpier",
-        "command": "dotnet",
-        "args": [ "csharpier", "${staged}" ],
+        "command": "csharpier",
+        "args": [ "format", "${staged}" ],
         "include": [ "**/*.cs" ]
     }]
 }

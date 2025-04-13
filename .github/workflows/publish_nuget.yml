@@ -31,7 +31,7 @@ jobs:
         with:
           PROJECT_FILE_PATH: Src/CSharpier/CSharpier.csproj
           TAG_FORMAT: "*"
-      - name: Publish CSharpie dotnet tool on version change
+      - name: Publish CSharpier dotnet tool on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:
           PACKAGE_NAME: CSharpier

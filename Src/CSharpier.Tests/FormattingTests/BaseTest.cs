@@ -13,13 +13,17 @@ public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-    protected async Task RunTest(string fileName, string fileExtension, bool useTabs = false)
+    protected async Task RunTest(
+        string fileName,
+        string fileExtensionWithoutDot,
+        bool useTabs = false
+    )
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,
             "FormattingTests",
             "TestFiles",
-            fileExtension,
+            fileExtensionWithoutDot,
             fileName + ".test"
         );
         var fileReaderResult = await FileReader.ReadFileAsync(
@@ -28,10 +32,22 @@ public class BaseTest
             CancellationToken.None
         );
 
-        var result = await CSharpFormatter.FormatAsync(
+        var formatter = fileExtensionWithoutDot switch
+        {
+            "cs" => Formatter.CSharp,
+            "csx" => Formatter.CSharpScript,
+            "xml" => Formatter.XML,
+            _ => Formatter.Unknown,
+        };
+
+        var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            new PrinterOptions { Width = PrinterOptions.WidthUsedByTests, UseTabs = useTabs },
-            fileExtension.EqualsIgnoreCase("csx") ? SourceCodeKind.Script : SourceCodeKind.Regular,
+            new PrinterOptions(formatter)
+            {
+                Width = PrinterOptions.WidthUsedByTests,
+                UseTabs = useTabs,
+                IndentSize = formatter == Formatter.XML ? 2 : 4,
+            },
             CancellationToken.None
         );
 
@@ -57,6 +73,7 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
+        // TODO #1359 xml comparer here
         var comparer = new SyntaxNodeComparer(
             expectedCode,
             normalizedCode,

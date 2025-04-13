@@ -46,24 +46,20 @@ function CSH-UpdateCSharpierRepos()
     Set-Location $destination
     & git checkout main
 
-    Get-ChildItem $tempLocation | Copy-Item -Destination $destination -Filter *.cs -Recurse -Force
+    $extensions = (".csproj", ".props", ".targets", ".xml", ".config", ".cs")
+    
+    foreach ($extension in $extensions)
+    {
+        Get-ChildItem $tempLocation | Copy-Item -Destination $destination -Filter "*$extension" -Recurse -Force    
+    }
 
+    return
+    
     $items = Get-ChildItem -Recurse C:\projects\csharpier-repos -File
     $count = 0
     foreach ($item in $items)
     {
-        if ($item.Name -eq ".git")
-        {
-            Remove-Item -Force -Recurse $item.FullName
-        }
-        elseif ($item.Extension -ne ".cs")
-        {
-            if ($item.Name -ne ".csharpierignore")
-            {
-                Remove-Item $item.FullName
-            }
-        }
-        else
+        if ($item.Extension -eq ".cs")
         {
             # we don't really need all of these files, let's just cut out every other one
             if ($count % 2 -eq 0)
@@ -71,15 +67,6 @@ function CSH-UpdateCSharpierRepos()
                 Remove-Item $item.FullName
             }
             $count++
-        }
-    }
-
-    $items = Get-ChildItem C:\projects\csharpier-repos -Directory -Recurse
-    foreach ($item in $items)
-    {
-        if ($item.Name -eq ".git")
-        {
-            Remove-Item -Force -Recurse $item.FullName
         }
     }
 

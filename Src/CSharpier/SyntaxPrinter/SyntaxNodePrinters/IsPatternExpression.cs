@@ -4,7 +4,11 @@ internal static class IsPatternExpression
 {
     public static Doc Print(IsPatternExpressionSyntax node, PrintingContext context)
     {
-        if (node.Parent is not (IfStatementSyntax or ParenthesizedExpressionSyntax))
+        if (
+            node.Parent
+            is not (IfStatementSyntax or ParenthesizedExpressionSyntax)
+                or ParenthesizedExpressionSyntax { Parent: EqualsValueClauseSyntax }
+        )
         {
             return Doc.Group(
                 Node.Print(node.Expression, context),

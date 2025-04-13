@@ -1,9 +1,18 @@
 import React from "react";
-import { useAppContext } from "./AppContext";
 import "./Controls.css";
+import { observer } from "mobx-react-lite";
+import { useAppContext } from "./AppContext";
 
-export const Controls = () => {
+export const Controls = observer(() => {
     const {
+        printWidth,
+        setPrintWidth,
+        indentSize,
+        setIndentSize,
+        useTabs,
+        setUseTabs,
+        formatter,
+        setFormatter,
         showDoc,
         setShowDoc,
         hideNull,
@@ -13,14 +22,6 @@ export const Controls = () => {
         setEmptyMethod,
         setEmptyClass,
         copyLeft,
-        printWidth,
-        setPrintWidth,
-        indentSize,
-        setIndentSize,
-        useTabs,
-        setUseTabs,
-        parser,
-        setParser,
     } = useAppContext();
     return (
         <div className="controlsWrapper">
@@ -41,9 +42,10 @@ export const Controls = () => {
                     Use Tabs
                 </label>
                 <label>Parser</label>
-                <select value={parser} onChange={e => setParser(e.target.value)}>
+                <select value={formatter} onChange={e => setFormatter(e.target.value)}>
                     <option value="CSharp">C#</option>
                     <option value="CSharpScript">C# Script</option>
+                    <option value="XML">XML</option>
                 </select>
             </div>
             <div>
@@ -92,4 +94,4 @@ export const Controls = () => {
             </div>
         </div>
     );
-};
+});

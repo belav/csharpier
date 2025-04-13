@@ -11,31 +11,66 @@ namespace CSharpier.Tests;
 public class OptionsProviderTests
 {
     [Test]
-    public async Task Should_Return_Default_Options_With_Empty_Json()
+    public async Task Should_Return_Default_CSharp_Options_With_Empty_Json()
     {
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "{}");
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        ShouldHaveDefaultOptions(result);
+        ShouldHaveDefaultCSharpOptions(result);
     }
 
     [Test]
-    public async Task Should_Return_Default_Options_With_No_File_And_Known_Extension()
+    public async Task Should_Return_Default_Xml_Options_With_Empty_Json()
     {
         var context = new TestContext();
-        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+        context.WhenAFileExists("c:/test/.csharpierrc", "{}");
 
-        ShouldHaveDefaultOptions(result);
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.xml");
+
+        ShouldHaveDefaultXmlOptions(result);
+    }
+
+    [TestCase("cs")]
+    [TestCase("csx")]
+    public async Task Should_Return_Default_Options_With_No_Config_File_And_Known_CSharp_Extension(
+        string extension
+    )
+    {
+        var context = new TestContext();
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test." + extension
+        );
+
+        ShouldHaveDefaultCSharpOptions(result);
+    }
+
+    [TestCase("xml")]
+    [TestCase("csproj")]
+    [TestCase("props")]
+    [TestCase("targets")]
+    [TestCase("config")]
+    public async Task Should_Return_Default_Options_With_No_File_And_Known_Xml_Extension(
+        string extension
+    )
+    {
+        var context = new TestContext();
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test." + extension
+        );
+
+        ShouldHaveDefaultXmlOptions(result);
     }
 
     [Test]
-    public async Task Should_Return_Default_Options_With_No_File_And_Unknown_Extension()
+    public async Task Should_Throw_Exception_With_No_Config_File_And_Unknown_Extension()
     {
         var context = new TestContext();
         var result = async () =>
-            await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+            await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.bad");
 
         await result.Should().ThrowAsync<Exception>();
     }
@@ -49,7 +84,7 @@ public class OptionsProviderTests
         context.WhenAFileExists($"c:/test/{fileName}", string.Empty);
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
-        ShouldHaveDefaultOptions(result);
+        ShouldHaveDefaultCSharpOptions(result);
     }
 
     [Test]
@@ -148,10 +183,10 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_With_Json()
+    public async Task Should_Return_IndentSize_With_Json()
     {
         var context = new TestContext();
-        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"tabWidth\": 10 }");
+        context.WhenAFileExists("c:/test/.csharpierrc", "{ \"indentSize\": 10 }");
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
@@ -181,10 +216,10 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_With_Yaml()
+    public async Task Should_Return_IndentSize_With_Yaml()
     {
         var context = new TestContext();
-        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 10");
+        context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 10");
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
@@ -203,22 +238,56 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_TabWidth_For_Override()
+    public async Task Should_Return_IndentSize_For_Override()
     {
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.csharpierrc",
             """
             overrides:
-                - files: "*.cst"
+                - files: "*.override"
                   formatter: "csharp"
-                  tabWidth: 2
+                  indentSize: 2
             """
         );
 
-        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test.override"
+        );
 
         result.IndentSize.Should().Be(2);
+    }
+
+    [TestCase("cs")]
+    [TestCase("csx")]
+    public async Task Should_Return_Default_CSharp_Options_With_Empty_EditorConfig(string extension)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.editorconfig", string.Empty);
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test." + extension
+        );
+        ShouldHaveDefaultCSharpOptions(result);
+    }
+
+    [TestCase("xml")]
+    [TestCase("csproj")]
+    [TestCase("props")]
+    [TestCase("targets")]
+    [TestCase("config")]
+    public async Task Should_Return_Default_Xml_Options_With_Empty_EditorConfig(string extension)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("c:/test/.editorconfig", string.Empty);
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test." + extension
+        );
+        ShouldHaveDefaultXmlOptions(result);
     }
 
     [Test]
@@ -576,12 +645,9 @@ indent_size = 2
 indent_size = 2
 "
         );
-        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 1");
+        context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/subfolder",
-            "c:/test/test.cs"
-        );
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
         result.IndentSize.Should().Be(1);
     }
 
@@ -596,7 +662,7 @@ indent_size = 2
 indent_size = 2
 "
         );
-        context.WhenAFileExists("c:/test/.csharpierrc", "tabWidth: 1");
+        context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
         var result = await context.CreateProviderAndGetOptionsFor(
             "c:/test",
@@ -663,7 +729,7 @@ INVALID
 indent_size = 2
 "
         );
-        context.WhenAFileExists("c:/test/subfolder/.csharpierrc", "tabWidth: 1");
+        context.WhenAFileExists("c:/test/subfolder/.csharpierrc", "indentSize: 1");
 
         var result = await context.CreateProviderAndGetOptionsFor(
             "c:/test",
@@ -672,74 +738,18 @@ indent_size = 2
         result.IndentSize.Should().Be(1);
     }
 
-    [Test]
-    public async Task Should_Not_Look_For_Subfolders_EditorConfig_When_Limited()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/subfolder/.editorconfig",
-            @"
-    [*]
-    indent_size = 1
-    "
-        );
-
-        // this shouldn't happen in the real world, but validates we correctly limit
-        // the search to the top directory only
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/",
-            "c:/test/subfolder/test.cs",
-            limitEditorConfigSearch: true
-        );
-        result.IndentSize.Should().Be(4);
-    }
-
-    [Test]
-    public async Task Should_Not_Look_For_Subfolders_CSharpierRc_When_Limited()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/subfolder/.csharpierrc",
-            @"
-    [*]
-    tabWidth: 1
-    "
-        );
-
-        // this shouldn't happen in the real world, but validates we correctly limit
-        // the search to the top directory only
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/",
-            "c:/test/subfolder/test.cs",
-            limitEditorConfigSearch: true
-        );
-        result.IndentSize.Should().Be(4);
-    }
-
-    [Test]
-    public async Task Should_Look_For_Subfolders_When_Limited()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists(
-            "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_size = 1
-    "
-        );
-
-        var result = await context.CreateProviderAndGetOptionsFor(
-            "c:/test/subfolder",
-            "c:/test/subfolder/test.cs",
-            limitEditorConfigSearch: true
-        );
-        result.IndentSize.Should().Be(1);
-    }
-
-    private static void ShouldHaveDefaultOptions(PrinterOptions printerOptions)
+    private static void ShouldHaveDefaultCSharpOptions(PrinterOptions printerOptions)
     {
         printerOptions.Width.Should().Be(100);
         printerOptions.IndentSize.Should().Be(4);
+        printerOptions.UseTabs.Should().BeFalse();
+        printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
+    }
+
+    private static void ShouldHaveDefaultXmlOptions(PrinterOptions printerOptions)
+    {
+        printerOptions.Width.Should().Be(100);
+        printerOptions.IndentSize.Should().Be(2);
         printerOptions.UseTabs.Should().BeFalse();
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
     }
@@ -760,8 +770,7 @@ indent_size = 2
 
         public async Task<PrinterOptions> CreateProviderAndGetOptionsFor(
             string directoryName,
-            string filePath,
-            bool limitEditorConfigSearch = false
+            string filePath
         )
         {
             if (!OperatingSystem.IsWindows())
@@ -770,17 +779,28 @@ indent_size = 2
                 filePath = filePath.Replace("c:", string.Empty);
             }
 
+            directoryName = directoryName.Replace(
+                Path.AltDirectorySeparatorChar,
+                Path.DirectorySeparatorChar
+            );
+            filePath = filePath.Replace(
+                Path.AltDirectorySeparatorChar,
+                Path.DirectorySeparatorChar
+            );
+
             this.fileSystem.AddDirectory(directoryName);
             var provider = await OptionsProvider.Create(
                 directoryName,
                 null,
                 this.fileSystem,
                 NullLogger.Instance,
-                CancellationToken.None,
-                limitEditorConfigSearch
+                CancellationToken.None
             );
 
-            var printerOptions = provider.GetPrinterOptionsFor(filePath);
+            var printerOptions = await provider.GetPrinterOptionsForAsync(
+                filePath,
+                CancellationToken.None
+            );
 
             if (printerOptions is null)
             {

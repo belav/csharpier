@@ -9,7 +9,6 @@ internal static class PipeMultipleFilesFormatter
     public static async Task<int> StartServer(
         SystemConsole console,
         ILogger logger,
-        string? configPath,
         CancellationToken cancellationToken
     )
     {
@@ -66,9 +65,8 @@ internal static class PipeMultipleFilesFormatter
                         : "./" + fileName,
                     ],
                     StandardInFileContents = stringBuilder.ToString(),
-                    Fast = true,
+                    SkipValidation = true,
                     WriteStdout = true,
-                    ConfigPath = configPath,
                 };
 
                 try

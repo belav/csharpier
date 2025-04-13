@@ -47,7 +47,6 @@ build
 publish
 
 *.doctree.txt
-*.actual.cst
 *.actual.test
 *.vsix
 /.husky/pre-commit

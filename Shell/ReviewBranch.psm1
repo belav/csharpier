@@ -2,12 +2,12 @@ function CSH-ReviewBranch {
     param (
         [string]$folder,
         [string]$pathToTestingRepo,
-        [switch]$fast = $true
+        [switch]$skipValidation = $true
     )
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
     $csProjectPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/CSharpier.Cli.csproj"
-    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/dotnet-csharpier.dll"
+    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/CSharpier.dll"
 
     $location = Get-Location
 
@@ -53,9 +53,9 @@ function CSH-ReviewBranch {
     $postBranchOutput = (git status 2>&1) | Out-String
     $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
 
-    $fastParam = ""
-    if ($fast -eq $true) {
-        $fastParam = "--fast"
+    $skipValidationParam = ""
+    if ($skipValidation -eq $true) {
+        $skipValidationParam = "--skip-validation"
     }
 
     if ($firstRun) {
@@ -76,11 +76,11 @@ function CSH-ReviewBranch {
         & git reset --hard
         & git checkout -b $preBranch
 
-        dotnet $csharpierDllPath . $fastParam --no-cache
+        dotnet $csharpierDllPath format . $skipValidationParam --no-cache
         # there is some weirdness with a couple files with #if where
         # they need to be formatted twice to get them stable
         # it isn't worth fixing in csharpier, because it only really affects this
-        dotnet $csharpierDllPath . $fastParam
+        dotnet $csharpierDllPath format . $skipValidationParam
 
         & git add -A
         & git commit -m "Before $branch"
@@ -99,7 +99,7 @@ function CSH-ReviewBranch {
         & git checkout $postBranch
     }
 
-    dotnet $csharpierDllPath . $fastParam --no-cache
+    dotnet $csharpierDllPath format . $skipValidationParam --no-cache
 
     & git add -A
     & git commit -m "After $branch"

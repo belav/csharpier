@@ -5,7 +5,6 @@
  * From https://github.com/SLaks/Minimatch
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

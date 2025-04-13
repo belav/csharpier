@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http.Json;
-using System.Text;
 using CliWrap;
 using CliWrap.EventStream;
 using CSharpier.Cli.Server;
@@ -23,7 +22,7 @@ public class ServerTests
     [Ignore("Not working on GH, test locally on linux?")]
     public async Task Stuff()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
 
         var processStartInfo = new ProcessStartInfo("dotnet", $"{path} --server")
         {
@@ -76,7 +75,7 @@ public class ServerTests
     [Ignore("leaves things running when it fails and probably won't work on GH")]
     public void RunTwo()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll");
+        var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
 
         async Task NewFunction()
         {

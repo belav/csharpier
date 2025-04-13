@@ -1,40 +1,23 @@
 <Project>
   <PropertyGroup>
-    <CSharpier_FrameworkVersion
-      Condition="'$(CSharpier_FrameworkVersion)' == '' and $([MSBuild]::VersionGreaterThanOrEquals($(NETCoreSdkVersion), '9.0'))"
-      >net9.0</CSharpier_FrameworkVersion
-    >
-    <CSharpier_FrameworkVersion
-      Condition="'$(CSharpier_FrameworkVersion)' == '' and $([MSBuild]::VersionGreaterThanOrEquals($(NETCoreSdkVersion), '8.0'))"
-      >net8.0</CSharpier_FrameworkVersion
-    >
-    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''" Label="Fallback"
-      >net8.0</CSharpier_FrameworkVersion
-    >
-    <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/dotnet-csharpier.dll</CSharpierDllPath>
-    <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''"
-      >$(DOTNET_HOST_PATH)</CSharpier_dotnet_Path
-    >
-    <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''"
-      >dotnet</CSharpier_dotnet_Path
-    >
-    <CSharpierArgs Condition="'$(CSharpier_Check)' == 'true'"
-      >$(CSharpierArgs) --check</CSharpierArgs
-    >
-    <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''"
-      >$(CSharpierArgs) --loglevel $(CSharpier_LogLevel)</CSharpierArgs
-    >
-    <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' "
-      >$(TargetFramework)</FirstTargetFramework
-    >
-    <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' "
-      >$(TargetFrameworks.Split(';')[0])</FirstTargetFramework
-    >
+    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == '' and $([MSBuild]::VersionGreaterThanOrEquals($(NETCoreSdkVersion), '9.0'))">net9.0</CSharpier_FrameworkVersion>
+    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == '' and $([MSBuild]::VersionGreaterThanOrEquals($(NETCoreSdkVersion), '8.0'))">net8.0</CSharpier_FrameworkVersion>
+    <CSharpier_FrameworkVersion Condition="'$(CSharpier_FrameworkVersion)' == ''" Label="Fallback">net8.0</CSharpier_FrameworkVersion>
+    <CSharpierDllPath>$(MSBuildThisFileDirectory)../tools/csharpier/$(CSharpier_FrameworkVersion)/CSharpier.dll</CSharpierDllPath>
+    <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">$(DOTNET_HOST_PATH)</CSharpier_dotnet_Path>
+    <CSharpier_dotnet_Path Condition="'$(CSharpier_dotnet_Path)' == ''">dotnet</CSharpier_dotnet_Path>
+    <CSharpierCommand>format</CSharpierCommand>
+    <CSharpierCommand Condition="'$(CSharpier_Check)' == 'true'">check</CSharpierCommand>
+    <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''">$(CSharpierArgs) --loglevel $(CSharpier_LogLevel)</CSharpierArgs>
+    <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
+    <FirstTargetFramework Condition=" '$(FirstTargetFrameworks)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
     <NullOutput>NUL</NullOutput>
   </PropertyGroup>
+
   <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
     <NullOutput>/dev/null</NullOutput>
   </PropertyGroup>
+
   <Target Name="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' != 'true'">
     <!-- IgnoreExitCode cleans up the output when files aren't formatted and fail the check -->
     <!-- &gt; NullOutput suppresses the output from this so that compilation errors will show up a single time -->
@@ -43,26 +26,17 @@
       StdOutEncoding="utf-8"
       StdErrEncoding="utf-8"
       IgnoreExitCode="true"
-      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierArgs) --log-format msBuild --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) "
+      Command="&quot;$(CSharpier_dotnet_Path)&quot; exec &quot;$(CSharpierDllPath)&quot; $(CSharpierCommand) $(CSharpierArgs) --log-format msBuild --no-msbuild-check --compilation-errors-as-warnings &quot;$(MSBuildProjectDirectory)&quot; &gt; $(NullOutput) "
     />
   </Target>
+
   <!-- getting this to run a single time for projects that target multiple frameworks requires all of this
    see https://github.com/dotnet/msbuild/issues/2781 -->
   <Target Name="CSharpierFormat" BeforeTargets="DispatchToInnerBuilds;BeforeBuild">
-    <MSBuild
-      Projects="$(MSBuildProjectFile)"
-      Targets="CSharpierFormatInner"
-      Properties="TargetFramework=$(FirstTargetFramework);CSharpier_FrameworkVersion=$(CSharpier_FrameworkVersion)"
-    />
+    <MSBuild Projects="$(MSBuildProjectFile)" Targets="CSharpierFormatInner" Properties="TargetFramework=$(FirstTargetFramework);CSharpier_FrameworkVersion=$(CSharpier_FrameworkVersion)" />
   </Target>
-  <Target
-    Name="CSharpierLogBypass"
-    BeforeTargets="CSharpierFormatInner"
-    Condition="'$(CSharpier_Bypass)' == 'true'"
-  >
-    <Message
-      Text="CSharpier bypassed because CSharpier_Bypass is set to 'true'"
-      Importance="high"
-    />
+
+  <Target Name="CSharpierLogBypass" BeforeTargets="CSharpierFormatInner" Condition="'$(CSharpier_Bypass)' == 'true'">
+    <Message Text="CSharpier bypassed because CSharpier_Bypass is set to 'true'" Importance="high" />
   </Target>
 </Project>

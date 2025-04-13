@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli.Server;
 
-internal class CSharpierServiceImplementation(string? configPath, ILogger logger)
+internal class CSharpierServiceImplementation(ILogger logger)
 {
     private readonly FileSystem fileSystem = new();
 
@@ -43,7 +43,7 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
 
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
-                configPath,
+                configPath: null,
                 this.fileSystem,
                 logger,
                 cancellationToken
@@ -51,23 +51,35 @@ internal class CSharpierServiceImplementation(string? configPath, ILogger logger
 
             if (
                 GeneratedCodeUtilities.IsGeneratedCodeFile(fileName)
-                || optionsProvider.IsIgnored(fileName)
+                || await optionsProvider.IsIgnoredAsync(fileName, cancellationToken)
             )
             {
                 return new FormatFileResult(Status.Ignored);
             }
 
-            var printerOptions = optionsProvider.GetPrinterOptionsFor(fileName);
-            if (printerOptions == null)
+            var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                formatFileParameter.fileName,
+                cancellationToken
+            );
+            if (printerOptions == null || printerOptions.Formatter is Formatter.Unknown)
             {
                 return new FormatFileResult(Status.UnsupportedFile);
             }
 
-            var result = await CSharpFormatter.FormatAsync(
+            // TODO #819 if there are compilation errors we need to do something here
+            var result = await CodeFormatter.FormatAsync(
                 formatFileParameter.fileContents,
                 printerOptions,
                 cancellationToken
             );
+
+            if (result.CompilationErrors.Any())
+            {
+                return new FormatFileResult(Status.Failed)
+                {
+                    errorMessage = "File had compilation errors and could not be formatted",
+                };
+            }
 
             return new FormatFileResult(Status.Formatted) { formattedFile = result.Code };
         }

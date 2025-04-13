@@ -13,7 +13,7 @@ public class Benchmarks
     public void Default_CodeFormatter_Tests()
     {
         CSharpFormatter
-            .FormatAsync(this.largeTestCode, new PrinterOptions())
+            .FormatAsync(this.largeTestCode, new PrinterOptions(Formatter.CSharp))
             .GetAwaiter()
             .GetResult();
     }
@@ -22,7 +22,7 @@ public class Benchmarks
     public void Default_CodeFormatter_Complex()
     {
         CSharpFormatter
-            .FormatAsync(this.largeComplexCode, new PrinterOptions())
+            .FormatAsync(this.largeComplexCode, new PrinterOptions(Formatter.CSharp))
             .GetAwaiter()
             .GetResult();
     }
