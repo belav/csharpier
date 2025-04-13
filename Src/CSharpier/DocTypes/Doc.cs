@@ -7,10 +7,7 @@ internal abstract class Doc
         return DocSerializer.Serialize(this);
     }
 
-    public static implicit operator Doc(string value)
-    {
-        return new StringDoc(value);
-    }
+    public static implicit operator Doc(string value) => StringDoc.Create(value);
 
     public static NullDoc Null => NullDoc.Instance;
 
