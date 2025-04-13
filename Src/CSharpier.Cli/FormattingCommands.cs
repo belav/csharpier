@@ -35,6 +35,7 @@ internal static class FormattingCommands
         formatCommand.AddOption(writeStdoutOption);
         formatCommand.AddOption(CompilationErrorsAsWarningsOption);
         formatCommand.AddOption(ConfigPathOption);
+        formatCommand.AddOption(LogFormatOption);
         formatCommand.AddOption(LogLevelOption);
 
         formatCommand.SetHandler(async context =>
@@ -51,6 +52,7 @@ internal static class FormattingCommands
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
             var logLevel = context.ParseResult.GetValueForOption(LogLevelOption);
+            var logFormat = context.ParseResult.GetValueForOption(LogFormatOption);
             var token = context.GetCancellationToken();
 
             context.ExitCode = await FormatOrCheck(
@@ -65,6 +67,7 @@ internal static class FormattingCommands
                 compilationErrorsAsWarnings,
                 configPath,
                 logLevel,
+                logFormat,
                 token
             );
         });
@@ -81,6 +84,7 @@ internal static class FormattingCommands
         var directoryOrFileArgument = AddDirectoryOrFileArgument(checkCommand);
 
         checkCommand.AddOption(ConfigPathOption);
+        checkCommand.AddOption(LogFormatOption);
         checkCommand.AddOption(LogLevelOption);
         checkCommand.AddOption(IncludeGeneratedOption);
         checkCommand.AddOption(NoMsBuildCheckOption);
@@ -96,6 +100,7 @@ internal static class FormattingCommands
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
             var logLevel = context.ParseResult.GetValueForOption(LogLevelOption);
+            var logFormat = context.ParseResult.GetValueForOption(LogFormatOption);
             var token = context.GetCancellationToken();
 
             context.ExitCode = await FormatOrCheck(
@@ -110,6 +115,7 @@ internal static class FormattingCommands
                 compilationErrorsAsWarnings,
                 configPath,
                 logLevel,
+                logFormat,
                 token
             );
         });
@@ -129,11 +135,12 @@ internal static class FormattingCommands
         bool compilationErrorsAsWarnings,
         string? configPath,
         LogLevel logLevel,
+        LogFormat logFormat,
         CancellationToken cancellationToken
     )
     {
         var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel);
+        var logger = new ConsoleLogger(console, logLevel, logFormat);
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;
@@ -210,8 +217,18 @@ internal static class FormattingCommands
         "Path to the CSharpier configuration file"
     );
 
+    private static readonly Option<LogFormat> LogFormatOption = new(
+        ["--log-format"],
+        () => LogFormat.Console,
+        """
+        Log output format
+          Console (default) - Formats messages in a human readable way for console interaction.
+          MsBuild - Formats messages in standard error/warning format for MSBuild.
+        """
+    );
+
     private static readonly Option<LogLevel> LogLevelOption = new(
-        ["--loglevel"],
+        ["--log-level"],
         () => LogLevel.Information,
         "Specify the log level - Debug, Information (default), Warning, Error, None"
     );

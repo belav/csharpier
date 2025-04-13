@@ -267,3 +267,16 @@ o.Property.CallMethod(
     )
     .CallMethod()
     .CallMethod();
+
+builder
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    //.CallMethod()
+;
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.SomeOtherProperty = 1;
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.CallMethod();

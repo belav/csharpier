@@ -305,27 +305,47 @@ internal partial class SyntaxNodeComparer
 
         if (originalTrivia.IsComment())
         {
-            var originalStringReader = new StringReader(originalTrivia.ToString());
-            var formattedStringReader = new StringReader(formattedTrivia.ToString());
-            var originalLine = originalStringReader.ReadLine();
-            var formattedLine = formattedStringReader.ReadLine();
-            while (originalLine != null)
-            {
-                if (formattedLine == null || originalLine.Trim() != formattedLine.Trim())
-                {
-                    return NotEqual(originalTrivia.Span, formattedTrivia.Span);
-                }
-
-                originalLine = originalStringReader.ReadLine();
-                formattedLine = formattedStringReader.ReadLine();
-            }
-
-            return Equal;
+            return CompareComment(
+                originalTrivia.ToString(),
+                formattedTrivia.ToString(),
+                originalTrivia,
+                formattedTrivia
+            );
         }
 
         return originalTrivia.ToString().TrimEnd() == formattedTrivia.ToString().TrimEnd()
             ? Equal
             : NotEqual(originalTrivia.Span, formattedTrivia.Span);
+    }
+
+    private static CompareResult CompareComment(
+        string originalComment,
+        string formattedComment,
+        SyntaxTrivia originalTrivia,
+        SyntaxTrivia formattedTrivia
+    )
+    {
+        var originalStringReader = new StringReader(originalComment);
+        var formattedStringReader = new StringReader(formattedComment);
+        var originalLine = originalStringReader.ReadLine();
+        var formattedLine = formattedStringReader.ReadLine();
+        while (originalLine != null)
+        {
+            if (formattedLine == null || originalLine.Trim() != formattedLine.Trim())
+            {
+                return NotEqual(originalTrivia.Span, formattedTrivia.Span);
+            }
+
+            originalLine = originalStringReader.ReadLine();
+            formattedLine = formattedStringReader.ReadLine();
+        }
+
+        if (formattedLine is null && originalLine is not null)
+        {
+            return NotEqual(originalTrivia.Span, formattedTrivia.Span);
+        }
+
+        return Equal;
     }
 
     private CompareResult Compare(SyntaxTriviaList originalList, SyntaxTriviaList formattedList)
@@ -351,6 +371,34 @@ internal partial class SyntaxNodeComparer
             return result;
         }
 
+        static string? BuildComment(SyntaxTriviaList list, ref int next)
+        {
+            string? result = null;
+            while (
+                next < list.Count
+                && list[next].RawSyntaxKind()
+                    is SyntaxKind.EndOfLineTrivia
+                        or SyntaxKind.WhitespaceTrivia
+                        or SyntaxKind.SingleLineDocumentationCommentTrivia
+            )
+            {
+                if (next >= list.Count)
+                {
+                    return result;
+                }
+
+                if (list[next].RawSyntaxKind() is SyntaxKind.SingleLineDocumentationCommentTrivia)
+                {
+                    result += list[next].ToFullString();
+                }
+
+                next++;
+            }
+            ;
+
+            return result;
+        }
+
         var nextOriginal = 0;
         var nextFormatted = 0;
         var original = FindNextSyntaxTrivia(originalList, ref nextOriginal);
@@ -358,6 +406,26 @@ internal partial class SyntaxNodeComparer
         while (original != null && formatted != null)
         {
             var result = this.Compare(original.Value, formatted.Value);
+            if (
+                original.Value.RawSyntaxKind() is SyntaxKind.SingleLineDocumentationCommentTrivia
+                && formatted.Value.RawSyntaxKind()
+                    is SyntaxKind.SingleLineDocumentationCommentTrivia
+            )
+            {
+                var originalCommentValue = original.Value.ToFullString();
+                originalCommentValue += BuildComment(originalList, ref nextOriginal);
+
+                var formattedCommentValue = formatted.Value.ToFullString();
+                formattedCommentValue += BuildComment(formattedList, ref nextFormatted);
+
+                result = CompareComment(
+                    originalCommentValue,
+                    formattedCommentValue,
+                    original.Value,
+                    formatted.Value
+                );
+            }
+
             if (result.IsInvalid)
             {
                 return result;

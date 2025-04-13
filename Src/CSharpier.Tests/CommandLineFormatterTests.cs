@@ -383,6 +383,24 @@ public class CommandLineFormatterTests
             .StartWith("Error ./Unformatted.cs - Was not formatted.");
     }
 
+    [Test]
+    public void Format_Checks_Unformatted_File_With_MsBuildFormat_Message()
+    {
+        var context = new TestContext();
+        const string unformattedFilePath = "Unformatted.cs";
+        context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
+
+        var result = Format(context, check: true, logFormat: LogFormat.MsBuild);
+
+        result.ExitCode.Should().Be(1);
+        context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
+        result
+            .ErrorOutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .StartWith("./Unformatted.cs: error: Was not formatted.");
+    }
+
     [TestCase("Src/node_modules/File.cs")]
     [TestCase("node_modules/File.cs")]
     [TestCase("node_modules/Folder/File.cs")]
@@ -774,6 +792,34 @@ class ClassName
     }
 
     [Test]
+    public void File_With_Reordered_Usings_In_If_Directive_Should_Pass_Validation()
+    {
+        var context = new TestContext();
+
+        context.WhenAFileExists(
+            "file1.cs",
+            """
+            #if NOT_UNTIL_LATER
+            namespace Namespace {
+                
+                using System.Xml;
+                using System.Configuration;
+                
+                public class ClassName {
+
+                }
+            }
+            #endif
+            """
+        );
+
+        var result = Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+    }
+
+    [Test]
     public void File_With_Added_Trailing_Comma_Before_Comment_Should_Pass_Validation()
     {
         var context = new TestContext();
@@ -844,6 +890,7 @@ class ClassName
         TestContext context,
         bool skipWrite = false,
         bool check = false,
+        LogFormat logFormat = LogFormat.Console,
         bool writeStdout = false,
         bool includeGenerated = false,
         bool compilationErrorsAsWarnings = false,
@@ -866,7 +913,7 @@ class ClassName
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information);
+        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information, logFormat);
         var exitCode = CommandLineFormatter
             .Format(
                 new CommandLineOptions
@@ -876,6 +923,7 @@ class ClassName
                     OriginalDirectoryOrFilePaths = originalDirectoryOrFilePaths,
                     SkipWrite = skipWrite,
                     Check = check,
+                    LogFormat = logFormat,
                     WriteStdout = writeStdout || standardInFileContents != null,
                     StandardInFileContents = standardInFileContents,
                     IncludeGenerated = includeGenerated,

@@ -34,6 +34,7 @@ jobs:
       - name: Publish CSharpier dotnet tool on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:
+          PACKAGE_NAME: CSharpier
           PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
           TAG_FORMAT: "*"
       - name: Publish CSharpier.MsBuild library on version change

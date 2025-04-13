@@ -37,7 +37,13 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     ```
 
 
-- `--loglevel`
+- `--log-format`
+
+  Log output format
+  - Console (default) - Formats messages in a human readable way for console interaction.
+  - MsBuild - Formats messages in standard error/warning format for MSBuild.
+
+- `--log-level`
 
     Changes the level of logging output. Valid options are:
   - None
@@ -142,7 +148,8 @@ See the `format` command for descriptions of these options
 - `--no-msbuild-check`
 - `--compilation-errors-as-warnings`
 - `--config-path`
-- `--loglevel`
+- `--log-format`
+- `--log-level`
 
 ### Server
 `dotnet csharpier server`

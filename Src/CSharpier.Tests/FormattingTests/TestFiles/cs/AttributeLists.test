@@ -8,13 +8,7 @@ class ClassName
     private string Field;
 
     [Obsolete]
-    public string Property
-    {
-        [Obsolete]
-        get;
-        [Obsolete]
-        set;
-    }
+    public string Property { [Obsolete] get; [Obsolete] set; }
 
     [Obsolete, NonSerialized]
     void MethodName([In] string value) { }
@@ -91,6 +85,23 @@ class ClassName
             TSomeMuchLongerName___________________________________,
         K
     >() { }
+
+    public void SomeMethod(
+        // Some Comment does not indent parameter
+        [SomeAttribute] string someParameter
+    ) { }
+
+    public void SomeMethod(
+        [SomeLongAttribute(someLongValue___________________________________________)]
+            string someParameter
+    ) { }
+
+    public void SomeMethod(
+        // Some Comment
+        [SomeAttribute]
+        [SomeOtherAttribute]
+            string someParameter
+    ) { }
 }
 
 [
@@ -112,3 +123,22 @@ public class ClassName { }
     LongName______________________
 >]
 public class ClassName { }
+
+public class ClassName
+{
+    public int ShortProperty { get; [SomeAttribute] init; } = 20;
+
+    public int CommandTimeout
+    {
+        get;
+        [SomeAttribute]
+        [SomeOtherAttribute]
+        set;
+    }
+
+    public int CommandTimeout
+    {
+        [SomeAttribute(someValue)]
+        get;
+    }
+}

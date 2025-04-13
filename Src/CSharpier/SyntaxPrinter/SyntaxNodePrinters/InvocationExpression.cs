@@ -106,6 +106,12 @@ internal static class InvocationExpression
                         is ArrayCreationExpressionSyntax
                             or ObjectCreationExpressionSyntax { Initializer: not null }
                 )
+            || groups[0].First().Node
+                is ParenthesizedExpressionSyntax { Expression: SwitchExpressionSyntax }
+            || (
+                parent is ExpressionStatementSyntax expressionStatementSyntax
+                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
+            )
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }

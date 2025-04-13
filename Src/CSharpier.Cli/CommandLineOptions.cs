@@ -8,6 +8,8 @@ internal class CommandLineOptions
     public string[] DirectoryOrFilePaths { get; init; } = [];
     public bool Check { get; init; }
     public bool SkipValidation { get; init; }
+    public LogFormat LogFormat { get; init; }
+    public bool Fast { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
     public bool NoCache { get; init; }

@@ -8,3 +8,7 @@ WithComment();
 
 #error Error
 WithDirective();
+
+{
+    var doExtraLineAboveThisBlock = 0;
+}

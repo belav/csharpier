@@ -25,7 +25,7 @@ internal static class ServerCommand
             var serverPort = context.ParseResult.GetValueForOption(serverPortOption);
             context.ExitCode = await ServerFormatter.StartServer(
                 serverPort,
-                new ConsoleLogger(new SystemConsole(), logLevel)
+                new ConsoleLogger(new SystemConsole(), logLevel, LogFormat.Console)
             );
         });
 

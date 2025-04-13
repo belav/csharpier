@@ -46,7 +46,7 @@ internal static class Token
 
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
-        if (!skipLeadingTrivia && !context.State.SkipNextLeadingTrivia)
+        if (!skipLeadingTrivia)
         {
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
@@ -54,8 +54,6 @@ internal static class Token
                 docs.Append(leadingTrivia);
             }
         }
-
-        context.State.SkipNextLeadingTrivia = false;
 
         if (
             (
@@ -146,12 +144,7 @@ internal static class Token
             docs.Append(suffixDoc);
         }
 
-        var returnDoc = docs.Length switch
-        {
-            <= 0 => Doc.Null,
-            1 => docs[0],
-            _ => Doc.Concat(docs.AsSpan().ToArray()),
-        };
+        var returnDoc = Doc.Concat(ref docs);
         docs.Dispose();
 
         return returnDoc;
@@ -159,6 +152,12 @@ internal static class Token
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
     {
+        if (context.State.SkipNextLeadingTrivia)
+        {
+            context.State.SkipNextLeadingTrivia = false;
+            return Doc.Null;
+        }
+
         var isClosingBrace =
             syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
             || syntaxToken.Parent is CollectionExpressionSyntax
@@ -413,7 +412,7 @@ internal static class Token
             }
         }
 
-        var returnDoc = docs.Length > 0 ? Doc.Concat(docs.AsSpan().ToArray()) : Doc.Null;
+        var returnDoc = Doc.Concat(ref docs);
         docs.Dispose();
 
         return returnDoc;

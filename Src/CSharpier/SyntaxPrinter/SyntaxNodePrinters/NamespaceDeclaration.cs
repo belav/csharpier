@@ -4,15 +4,6 @@ internal static class NamespaceDeclaration
 {
     public static Doc Print(NamespaceDeclarationSyntax node, PrintingContext context)
     {
-        var docs = new List<Doc>
-        {
-            AttributeLists.Print(node, node.AttributeLists, context),
-            Modifiers.Print(node.Modifiers, context),
-            Token.Print(node.NamespaceKeyword, context),
-            " ",
-            Node.Print(node.Name, context),
-        };
-
         var innerDocs = new List<Doc>();
         var hasMembers = node.Members.Count > 0;
         var hasUsing = node.Usings.Count > 0;
@@ -29,7 +20,12 @@ internal static class NamespaceDeclaration
 
         DocUtilities.RemoveInitialDoubleHardLine(innerDocs);
 
-        docs.Add(
+        return Doc.Concat(
+            AttributeLists.Print(node, node.AttributeLists, context),
+            Modifiers.Print(node.Modifiers, context),
+            Token.Print(node.NamespaceKeyword, context),
+            " ",
+            Node.Print(node.Name, context),
             Doc.Group(
                 Doc.Line,
                 Token.Print(node.OpenBraceToken, context),
@@ -39,6 +35,5 @@ internal static class NamespaceDeclaration
                 Token.Print(node.SemicolonToken, context)
             )
         );
-        return Doc.Concat(docs);
     }
 }

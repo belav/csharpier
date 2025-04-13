@@ -32,9 +32,10 @@ public class SyntaxNodeComparerTests
     public void Class_Not_Equal_Class_Different_Whitespace()
     {
         var left = "class ClassName { }";
-        var right =
-            @"class ClassName {
-}";
+        var right = """
+            class ClassName {
+            }
+            """;
 
         var result = CompareSource(left, right);
 
@@ -44,131 +45,141 @@ public class SyntaxNodeComparerTests
     [Test]
     public void Constructor_Missing_Base()
     {
-        var left =
-            @"public class ConstructorWithBase
-{
-    public ConstructorWithBase(string value)
-        : base(value)
-    {
-        return;
-    }
-}";
-        var right =
-            @"public class ConstructorWithBase
-{
-    public ConstructorWithBase(string value)
-    {
-        return;
-    }
-}
-";
+        var left = """
+            public class ConstructorWithBase
+            {
+                public ConstructorWithBase(string value)
+                    : base(value)
+                {
+                    return;
+                }
+            }
+            """;
+        var right = """
+            public class ConstructorWithBase
+            {
+                public ConstructorWithBase(string value)
+                {
+                    return;
+                }
+            }
+
+            """;
 
         var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 2 -----------------------------
-public class ConstructorWithBase
-{
-    public ConstructorWithBase(string value)
-        : base(value)
-    {
-        return;
-    }
-}
------------------------------ Formatted: Around Line 2 -----------------------------
-public class ConstructorWithBase
-{
-    public ConstructorWithBase(string value)
-    {
-        return;
-    }
-}
-"
+            """
+            ----------------------------- Original: Around Line 2 -----------------------------
+            public class ConstructorWithBase
+            {
+                public ConstructorWithBase(string value)
+                    : base(value)
+                {
+                    return;
+                }
+            }
+            ----------------------------- Formatted: Around Line 2 -----------------------------
+            public class ConstructorWithBase
+            {
+                public ConstructorWithBase(string value)
+                {
+                    return;
+                }
+            }
+
+            """
         );
     }
 
     [Test]
     public void MissingAttribute()
     {
-        var left =
-            @"class Resources
-{
-    [Obsolete]
-    public Resources()
-    {
-    }
-}
-";
-        var right =
-            @"class Resources
-{
-    public Resources() { }
-}
-";
+        var left = """
+            class Resources
+            {
+                [Obsolete]
+                public Resources()
+                {
+                }
+            }
+
+            """;
+        var right = """
+            class Resources
+            {
+                public Resources() { }
+            }
+
+            """;
 
         var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 2 -----------------------------
-class Resources
-{
-    [Obsolete]
-    public Resources()
-    {
-    }
-}
------------------------------ Formatted: Around Line 2 -----------------------------
-class Resources
-{
-    public Resources() { }
-}
-"
+            """
+            ----------------------------- Original: Around Line 2 -----------------------------
+            class Resources
+            {
+                [Obsolete]
+                public Resources()
+                {
+                }
+            }
+            ----------------------------- Formatted: Around Line 2 -----------------------------
+            class Resources
+            {
+                public Resources() { }
+            }
+
+            """
         );
     }
 
     [Test]
     public void SeperatedSyntaxLists()
     {
-        var left =
-            @"namespace Insite.Automated.Core
-{
-    using System;
+        var left = """
+            namespace Insite.Automated.Core
+            {
+                using System;
 
-    public class DropdownAttribute : Attribute
-    {
-        public bool IgnoreIfNotPresent { get; set; }
+                public class DropdownAttribute : Attribute
+                {
+                    public bool IgnoreIfNotPresent { get; set; }
 
-        public DropdownAttribute()
-        {
-        }
+                    public DropdownAttribute()
+                    {
+                    }
 
-        public DropdownAttribute(bool ignoreIfNotPresent)
-        {
-            this.IgnoreIfNotPresent = ignoreIfNotPresent;
-        }
-    }
-}";
+                    public DropdownAttribute(bool ignoreIfNotPresent)
+                    {
+                        this.IgnoreIfNotPresent = ignoreIfNotPresent;
+                    }
+                }
+            }
+            """;
 
-        var right =
-            @"namespace Insite.Automated.Core
-{
-    using System;
+        var right = """
+            namespace Insite.Automated.Core
+            {
+                using System;
 
-    public class DropdownAttribute : Attribute
-    {
-        public bool IgnoreIfNotPresent { get; set; }
+                public class DropdownAttribute : Attribute
+                {
+                    public bool IgnoreIfNotPresent { get; set; }
 
-        public DropdownAttribute() { }
+                    public DropdownAttribute() { }
 
-        public DropdownAttribute(bool ignoreIfNotPresent)
-        {
-            this.IgnoreIfNotPresent = ignoreIfNotPresent;
-        }
-    }
-}
-";
+                    public DropdownAttribute(bool ignoreIfNotPresent)
+                    {
+                        this.IgnoreIfNotPresent = ignoreIfNotPresent;
+                    }
+                }
+            }
+
+            """;
 
         var result = CompareSource(left, right);
 
@@ -178,33 +189,37 @@ class Resources
     [Test]
     public void MissingSemiColon()
     {
-        var left =
-            @"public enum Enum
-{
-    Integer,
-    String,
-};";
-        var right =
-            @"public enum Enum
-{
-    Integer,
-    String,
-}";
+        var left = """
+            public enum Enum
+            {
+                Integer,
+                String,
+            };
+            """;
+        var right = """
+            public enum Enum
+            {
+                Integer,
+                String,
+            }
+            """;
         var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 4 -----------------------------
-    Integer,
-    String,
-};
------------------------------ Formatted: Around Line 0 -----------------------------
-public enum Enum
-{
-    Integer,
-    String,
-}
-"
+            """
+            ----------------------------- Original: Around Line 4 -----------------------------
+                Integer,
+                String,
+            };
+            ----------------------------- Formatted: Around Line 0 -----------------------------
+            public enum Enum
+            {
+                Integer,
+                String,
+            }
+
+            """
         );
     }
 
@@ -221,57 +236,64 @@ public enum Enum
     [Test]
     public void Mismatched_Syntax_Trivia_Should_Print_Error()
     {
-        var left =
-            @"// leading comment
-public class ClassName { }";
+        var left = """
+            // leading comment
+            public class ClassName { }
+            """;
         var right = "public class ClassName { }";
 
         var result = CompareSource(left, right);
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 0 -----------------------------
-// leading comment
-public class ClassName { }
------------------------------ Formatted: Around Line 0 -----------------------------
-public class ClassName { }
-"
+            """
+            ----------------------------- Original: Around Line 0 -----------------------------
+            // leading comment
+            public class ClassName { }
+            ----------------------------- Formatted: Around Line 0 -----------------------------
+            public class ClassName { }
+
+            """
         );
     }
 
     [Test]
     public void Long_Mismatched_Syntax_Trivia_Should_Print_Error()
     {
-        var left =
-            @"// 1
-// 2
-// 3
-// 4
-// 5
-// 6
-public class ClassName { }";
-        var right =
-            @"// 1
-// 2
-// 3
-// 4
-// 5
-// 7
-public class ClassName { }";
+        var left = """
+            // 1
+            // 2
+            // 3
+            // 4
+            // 5
+            // 6
+            public class ClassName { }
+            """;
+        var right = """
+            // 1
+            // 2
+            // 3
+            // 4
+            // 5
+            // 7
+            public class ClassName { }
+            """;
 
         var result = CompareSource(left, right);
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 5 -----------------------------
-// 4
-// 5
-// 6
-public class ClassName { }
------------------------------ Formatted: Around Line 5 -----------------------------
-// 4
-// 5
-// 7
-public class ClassName { }
-"
+            """
+            ----------------------------- Original: Around Line 5 -----------------------------
+            // 4
+            // 5
+            // 6
+            public class ClassName { }
+            ----------------------------- Formatted: Around Line 5 -----------------------------
+            // 4
+            // 5
+            // 7
+            public class ClassName { }
+
+            """
         );
     }
 
@@ -296,21 +318,87 @@ public class ClassName { }
     [Test]
     public void Mismatched_Disabled_Text_Should_Not_Print_Error()
     {
-        var left =
-            @"class ClassName
-{
-#if DEBUG
-    public string    Tester;
-#endif
-}";
-        var right =
-            @"class ClassName
-{
-#if DEBUG
-    public string Tester;
-#endif
-}
-";
+        var left = """
+            class ClassName
+            {
+            #if DEBUG
+                public string    Tester;
+            #endif
+            }
+            """;
+        var right = """
+            class ClassName
+            {
+            #if DEBUG
+                public string Tester;
+            #endif
+            }
+
+            """;
+        var result = CompareSource(left, right);
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Comments_Not_Fail_When_Cleaning_New_Lines()
+    {
+        var left = """
+            /// <summary>class!</summary>
+
+            class ClassName { }
+            """;
+
+        var right = """
+            /// <summary>class!</summary>
+            class ClassName { }
+            """;
+
+        var result = CompareSource(left, right);
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Comments_Not_Fail_When_Cleaning_New_Lines2()
+    {
+        var left = """
+            /// <summary>class!</summary>
+
+            /// <remarks>remarks!</remarks>
+            class ClassName { }
+            """;
+
+        var right = """
+            /// <summary>class!</summary>
+            /// <remarks>remarks!</remarks>
+            class ClassName { }
+            """;
+
+        var result = CompareSource(left, right);
+        result.Should().BeEmpty();
+    }
+
+    [Test]
+    public void Comments_Not_Fail_When_Indentation_Changes()
+    {
+        var left = """
+            namespace Namespace
+            {
+                /// <summary>Some Summary</summary>
+            //  [SomeAttribute]
+                public class ClassName { }
+            }
+            """;
+
+        var right = """
+            namespace Namespace
+            {
+                /// <summary>Some Summary</summary>
+                //  [SomeAttribute]
+                public class ClassName { }
+            }
+
+            """;
+
         var result = CompareSource(left, right);
         result.Should().BeEmpty();
     }
@@ -318,31 +406,33 @@ public class ClassName { }
     [Test]
     public void Comments_Should_Ignore_Indent_Width()
     {
-        var left =
-            @"class ClassName
-{
-    /// multiline
-    /// multiline
-    private string field;
+        var left = """
+            class ClassName
+            {
+                /// multiline
+                /// multiline
+                private string field;
 
-    /* multiline
-     * multiline
-     */
-    private string field;
-}";
+                /* multiline
+                 * multiline
+                 */
+                private string field;
+            }
+            """;
 
-        var right =
-            @"class ClassName
-{
-  /// multiline
-  /// multiline
-  private string field;
+        var right = """
+            class ClassName
+            {
+              /// multiline
+              /// multiline
+              private string field;
 
-  /* multiline
-   * multiline
-   */
-  private string field;
-}";
+              /* multiline
+               * multiline
+               */
+              private string field;
+            }
+            """;
 
         var result = CompareSource(left, right);
         result.Should().BeEmpty();
@@ -351,31 +441,33 @@ public class ClassName { }
     [Test]
     public void Handles_Ternary_In_Disabled_Text()
     {
-        var left =
-            @"namespace Namespace;
-#if DEBUG
-class Class
-{
-    void MethodName()
-    {
-        var x = true?1:2;
-    }
-}
-#endif
-";
+        var left = """
+            namespace Namespace;
+            #if DEBUG
+            class Class
+            {
+                void MethodName()
+                {
+                    var x = true?1:2;
+                }
+            }
+            #endif
 
-        var right =
-            @"namespace Namespace;
-#if DEBUG
-class Class
-{
-    void MethodName()
-    {
-        var x = true ? 1 : 2;
-    }
-}
-#endif
-";
+            """;
+
+        var right = """
+            namespace Namespace;
+            #if DEBUG
+            class Class
+            {
+                void MethodName()
+                {
+                    var x = true ? 1 : 2;
+                }
+            }
+            #endif
+
+            """;
 
         var result = CompareSource(left, right);
 
@@ -397,20 +489,22 @@ class Class
     [Test]
     public void Sorted_Usings_Pass_Validation()
     {
-        var left =
-            @"using Monday;
-using Zebra;
-using Apple;
-using Banana;
-using Yellow;";
+        var left = """
+            using Monday;
+            using Zebra;
+            using Apple;
+            using Banana;
+            using Yellow;
+            """;
 
-        var right =
-            @"using Apple;
-using Banana;
-using Monday;
-using Yellow;
-using Zebra;
-";
+        var right = """
+            using Apple;
+            using Banana;
+            using Monday;
+            using Yellow;
+            using Zebra;
+
+            """;
 
         var result = CompareSource(left, right);
 
@@ -420,48 +514,54 @@ using Zebra;
     [Test]
     public void Extra_Usings_Fails_Validation()
     {
-        var left =
-            @"using Zebra;
-using Apple;
-";
+        var left = """
+            using Zebra;
+            using Apple;
 
-        var right =
-            @"using Apple;
-using Monday;
-using Zebra;
-";
+            """;
+
+        var right = """
+            using Apple;
+            using Monday;
+            using Zebra;
+
+            """;
 
         var result = CompareSource(left, right);
 
         ResultShouldBe(
             result,
-            @"----------------------------- Original: Around Line 0 -----------------------------
-using Zebra;
-using Apple;
------------------------------ Formatted: Around Line 0 -----------------------------
-using Apple;
-using Monday;
-using Zebra;
-"
+            """
+            ----------------------------- Original: Around Line 0 -----------------------------
+            using Zebra;
+            using Apple;
+            ----------------------------- Formatted: Around Line 0 -----------------------------
+            using Apple;
+            using Monday;
+            using Zebra;
+
+            """
         );
     }
 
     [Test]
     public void Sorted_Usings_With_Header_Pass_Validation()
     {
-        var left =
-            @"// some copyright 
+        var left = """
+            // some copyright 
 
-using Zebra;
-using Apple;
-";
+            using Zebra;
+            using Apple;
 
-        var right =
-            @"// some copyright1
+            """;
 
-using Apple;
-using Zebra;
-";
+        var right = """
+            // some copyright1
+
+            using Apple;
+            using Zebra;
+
+            """;
 
         var result = CompareSource(left, right);
 
@@ -477,23 +577,25 @@ using Zebra;
         // that class could be an interface, enum, top level statement, etc
         // so there doesn't seem to be any good way to handle this
         // it will only fail the compare the first time that it sorts, so doesn't seem worth fixing
-        var left =
-            @$"#if DEBUG
-using System;
-#endif
-using System.IO;
+        var left = $"""
+            #if DEBUG
+            using System;
+            #endif
+            using System.IO;
 
-{content}
-";
+            {content}
+            
+            """;
 
-        var right =
-            @$"using System.IO;
-#if DEBUG
-using Microsoft;
-#endif
+        var right = $"""
+            using System.IO;
+            #if DEBUG
+            using Microsoft;
+            #endif
 
-{content}
-";
+            {content}
+            
+            """;
 
         var result = CompareSource(left, right, reorderedUsingsWithDisabledText: true);
 
