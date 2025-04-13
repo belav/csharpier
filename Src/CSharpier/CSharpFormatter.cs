@@ -5,21 +5,10 @@ using CSharpier.SyntaxPrinter;
 
 namespace CSharpier;
 
-internal class CSharpScriptFormatter : CSharpFormatter { }
-
-internal class CSharpFormatter : IFormatter
+internal static class CSharpFormatter
 {
     private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
     internal static readonly LanguageVersion LanguageVersion = LanguageVersion.Preview;
-
-    Task<CodeFormatterResult> IFormatter.FormatAsync(
-        string code,
-        PrinterOptions printerOptions,
-        CancellationToken cancellationToken
-    )
-    {
-        return FormatAsync(code, printerOptions, cancellationToken);
-    }
 
     internal static Task<CodeFormatterResult> FormatAsync(
         string code,
@@ -121,7 +110,7 @@ internal class CSharpFormatter : IFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var PrintingContext = new PrintingContext
+            var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions
                 {
@@ -130,13 +119,13 @@ internal class CSharpFormatter : IFormatter
                     UseTabs = printerOptions.UseTabs,
                 },
             };
-            var document = Node.Print(rootNode, PrintingContext);
+            var document = Node.Print(rootNode, printingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-            var reorderedModifiers = PrintingContext.State.ReorderedModifiers;
-            var reorderedUsingsWithDisabledText = PrintingContext
+            var reorderedModifiers = printingContext.State.ReorderedModifiers;
+            var reorderedUsingsWithDisabledText = printingContext
                 .State
                 .ReorderedUsingsWithDisabledText;
-            var movedTrailingTrivia = PrintingContext.State.MovedTrailingTrivia;
+            var movedTrailingTrivia = printingContext.State.MovedTrailingTrivia;
 
             foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
             {
@@ -147,7 +136,7 @@ internal class CSharpFormatter : IFormatter
                     return result;
                 }
 
-                var PrintingContext2 = new PrintingContext
+                var formattingContext2 = new PrintingContext
                 {
                     Options = new PrintingContext.PrintingContextOptions
                     {
@@ -158,16 +147,16 @@ internal class CSharpFormatter : IFormatter
                 };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
-                    PrintingContext2
+                    formattingContext2
                 );
                 formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
                 reorderedModifiers =
-                    reorderedModifiers || PrintingContext2.State.ReorderedModifiers;
+                    reorderedModifiers || formattingContext2.State.ReorderedModifiers;
                 reorderedUsingsWithDisabledText =
                     reorderedUsingsWithDisabledText
-                    || PrintingContext2.State.ReorderedUsingsWithDisabledText;
+                    || formattingContext2.State.ReorderedUsingsWithDisabledText;
                 movedTrailingTrivia =
-                    movedTrailingTrivia || PrintingContext2.State.MovedTrailingTrivia;
+                    movedTrailingTrivia || formattingContext2.State.MovedTrailingTrivia;
             }
 
             return new CodeFormatterResult

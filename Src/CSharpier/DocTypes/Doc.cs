@@ -2,11 +2,6 @@ namespace CSharpier.DocTypes;
 
 internal abstract class Doc
 {
-    public string Print()
-    {
-        return DocPrinter.DocPrinter.Print(this, new PrinterOptions(), Environment.NewLine);
-    }
-
     public override string ToString()
     {
         return DocSerializer.Serialize(this);
@@ -104,6 +99,17 @@ internal abstract class Doc
     // prevents allocating an array if there is only a single parameter
     public static Group GroupWithId(string groupId, Doc contents)
     {
+        var group = Group(contents);
+        group.GroupId = groupId;
+        return group;
+    }
+
+    private static int groupNumber;
+
+    public static Group GroupWithNewId(out string groupId, Doc contents)
+    {
+        groupId = "Group_" + groupNumber;
+        Interlocked.Increment(ref groupNumber);
         var group = Group(contents);
         group.GroupId = groupId;
         return group;

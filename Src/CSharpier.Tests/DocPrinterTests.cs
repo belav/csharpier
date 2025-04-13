@@ -726,7 +726,11 @@ public class DocPrinterTests
             doc += endOfLine;
         }
 
-        var result = DocPrinter.DocPrinter.Print(doc, new PrinterOptions(), endOfLine);
+        var result = DocPrinter.DocPrinter.Print(
+            doc,
+            new PrinterOptions(Formatter.CSharp),
+            endOfLine
+        );
 
         result.Should().Be($"1{endOfLine}");
     }
@@ -784,7 +788,7 @@ public class DocPrinterTests
         return DocPrinter
             .DocPrinter.Print(
                 doc,
-                new PrinterOptions
+                new PrinterOptions(Formatter.CSharp)
                 {
                     Width = width,
                     TrimInitialLines = trimInitialLines,

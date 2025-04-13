@@ -11,6 +11,7 @@
     <LangVersion>13</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="LovettSoftware.XmlDiff" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
       <PrivateAssets>all</PrivateAssets>
@@ -34,7 +35,7 @@
       <_Parameter1>CSharpier.Tests, PublicKey=$(PublicKey)</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>dotnet-csharpier, PublicKey=$(PublicKey)</_Parameter1>
+      <_Parameter1>CSharpier, PublicKey=$(PublicKey)</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>

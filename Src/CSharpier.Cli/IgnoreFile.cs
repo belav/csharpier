@@ -1,103 +1,184 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
+using Ignore;
 
 namespace CSharpier.Cli;
 
 internal class IgnoreFile
 {
-    protected Ignore.Ignore Ignore { get; }
-    protected string IgnoreBaseDirectoryPath { get; }
+    private List<IgnoreWithBasePath> ignores { get; }
     private static readonly string[] alwaysIgnored = ["**/node_modules", "**/obj", "**/.git"];
 
-    protected IgnoreFile(Ignore.Ignore ignore, string ignoreBaseDirectoryPath)
+    private IgnoreFile(List<IgnoreWithBasePath> ignores)
     {
-        this.Ignore = ignore;
-        this.IgnoreBaseDirectoryPath = ignoreBaseDirectoryPath.Replace('\\', '/');
+        this.ignores = ignores;
     }
 
     public bool IsIgnored(string filePath)
     {
-        var normalizedFilePath = filePath.Replace('\\', '/');
-        if (!normalizedFilePath.StartsWith(this.IgnoreBaseDirectoryPath, StringComparison.Ordinal))
+        filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        foreach (var ignore in this.ignores)
         {
-            throw new Exception(
-                "The filePath of "
-                    + filePath
-                    + " does not start with the ignoreBaseDirectoryPath of "
-                    + this.IgnoreBaseDirectoryPath
-            );
+            // when using one of the ignore files to determine if a given file is ignored or not
+            // we can only consider that file if it actually has a matching rule for the filePath
+            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath);
+            if (hasMatchingRule)
+            {
+                return isIgnored;
+            }
         }
 
-        normalizedFilePath =
-            normalizedFilePath.Length > this.IgnoreBaseDirectoryPath.Length
-                ? normalizedFilePath[(this.IgnoreBaseDirectoryPath.Length + 1)..]
-                : string.Empty;
-
-        return this.Ignore.IsIgnored(normalizedFilePath);
+        return false;
     }
 
-    public static async Task<IgnoreFile> Create(
+    public static async Task<IgnoreFile?> CreateAsync(
         string baseDirectoryPath,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
     )
     {
-        var ignore = new Ignore.Ignore();
-
-        foreach (var name in alwaysIgnored)
+        var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
+        if (ignoreFilePaths.Count == 0)
         {
-            ignore.Add(name);
-        }
-
-        var ignoreFilePath = FindIgnorePath(baseDirectoryPath, fileSystem);
-        if (ignoreFilePath == null)
-        {
-            return new IgnoreFile(ignore, baseDirectoryPath);
-        }
-
-        foreach (
-            var line in await fileSystem.File.ReadAllLinesAsync(ignoreFilePath, cancellationToken)
-        )
-        {
-            try
+            var ignore = new IgnoreWithBasePath(baseDirectoryPath);
+            foreach (var name in alwaysIgnored)
             {
-                ignore.Add(line);
+                ignore.Add(name);
             }
-            catch (Exception ex)
+            return new IgnoreFile([ignore]);
+        }
+
+        var ignores = new List<IgnoreWithBasePath>();
+        foreach (var ignoreFilePath in ignoreFilePaths)
+        {
+            var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
+            ignores.Add(ignore);
+            foreach (var name in alwaysIgnored)
             {
-                throw new InvalidIgnoreFileException(
-                    @$"The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
-{line}
-",
-                    ex
-                );
+                ignore.Add(name);
+            }
+            foreach (
+                var line in await fileSystem.File.ReadAllLinesAsync(
+                    ignoreFilePath,
+                    cancellationToken
+                )
+            )
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
+                try
+                {
+                    ignore.Add(line);
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidIgnoreFileException(
+                        $"""
+                        The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
+                        {line}
+                        """,
+                        ex
+                    );
+                }
             }
         }
 
-        var directoryName = fileSystem.Path.GetDirectoryName(ignoreFilePath);
-
-        ArgumentNullException.ThrowIfNull(directoryName);
-
-        return new IgnoreFile(ignore, directoryName);
+        return new IgnoreFile(ignores);
     }
 
-    private static string? FindIgnorePath(string baseDirectoryPath, IFileSystem fileSystem)
+    // this will return the ignore paths in order of priority
+    // the first csharpierignore it finds at or above the path
+    // and then all .gitignores (at or above) it finds in order from closest to further away
+    private static List<string> FindIgnorePaths(string baseDirectoryPath, IFileSystem fileSystem)
     {
+        var result = new List<string>();
+        string? foundCSharpierIgnoreFilePath = null;
         var directoryInfo = fileSystem.DirectoryInfo.New(baseDirectoryPath);
         while (directoryInfo != null)
         {
-            var ignoreFilePath = fileSystem.Path.Combine(
-                directoryInfo.FullName,
-                ".csharpierignore"
-            );
-            if (fileSystem.File.Exists(ignoreFilePath))
+            if (foundCSharpierIgnoreFilePath is null)
             {
-                return ignoreFilePath;
+                var csharpierIgnoreFilePath = fileSystem.Path.Combine(
+                    directoryInfo.FullName,
+                    ".csharpierignore"
+                );
+                if (fileSystem.File.Exists(csharpierIgnoreFilePath))
+                {
+                    foundCSharpierIgnoreFilePath = csharpierIgnoreFilePath;
+                }
+            }
+
+            var gitIgnoreFilePath = fileSystem.Path.Combine(directoryInfo.FullName, ".gitignore");
+            if (fileSystem.File.Exists(gitIgnoreFilePath))
+            {
+                result.Add(gitIgnoreFilePath);
             }
 
             directoryInfo = directoryInfo.Parent;
         }
 
-        return null;
+        if (foundCSharpierIgnoreFilePath is not null)
+        {
+            result.Insert(0, foundCSharpierIgnoreFilePath);
+        }
+
+        return result;
+    }
+
+    // modified from the nuget library to include the directory
+    // that the ignore file exists at
+    // and to return if this ignore file has a rule for a given path
+    private class IgnoreWithBasePath(string basePath)
+    {
+        private readonly List<IgnoreRule> Rules = new();
+
+        public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
+        {
+            if (!path.StartsWith(basePath, StringComparison.Ordinal))
+            {
+                return (false, false);
+            }
+
+            var pathRelativeToIgnoreFile =
+                path.Length > basePath.Length
+                    ? path[(basePath.Length + 1)..].Replace('\\', '/')
+                    : string.Empty;
+
+            var isIgnored = false;
+            var hasMatchingRule = false;
+            foreach (var rule in this.Rules)
+            {
+                var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
+                if (isMatch)
+                {
+                    hasMatchingRule = true;
+                }
+                if (rule.Negate)
+                {
+                    if (isIgnored && isMatch)
+                    {
+                        isIgnored = false;
+                    }
+                }
+                else if (!isIgnored && isMatch)
+                {
+                    isIgnored = true;
+                }
+            }
+            return (hasMatchingRule, isIgnored);
+        }
+
+        public void Add(string rule)
+        {
+            this.Rules.Add(new IgnoreRule(rule));
+        }
+
+        public override string ToString()
+        {
+            return "BasePath = " + basePath;
+        }
     }
 }
 

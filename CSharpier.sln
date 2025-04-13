@@ -4,7 +4,7 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Playground", "Src\CSharpier.Playground\CSharpier.Playground.csproj", "{E7F03E73-82C7-4DB2-AF20-F25C45231A72}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier", "Src\CSharpier\CSharpier.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Core", "Src\CSharpier\CSharpier.Core.csproj", "{F1DE8719-9961-4F83-8BE6-34639C96DA5E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpier.Tests", "Src\CSharpier.Tests\CSharpier.Tests.csproj", "{A77E4297-FAA5-40AB-9856-ECF72AF5D859}"
 EndProject

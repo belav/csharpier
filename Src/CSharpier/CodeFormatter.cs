@@ -1,6 +1,4 @@
-using System.Text;
-using System.Text.Json;
-using CSharpier.SyntaxPrinter;
+using CSharpier.Formatters.Xml;
 
 namespace CSharpier;
 
@@ -21,14 +19,13 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             code,
-            new PrinterOptions
+            new PrinterOptions(Formatter.CSharp)
             {
                 Width = options.Width,
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
                 IncludeGenerated = options.IncludeGenerated,
-                Formatter = "csharp",
             },
             cancellationToken
         );
@@ -52,16 +49,40 @@ public static class CodeFormatter
 
         return CSharpFormatter.FormatAsync(
             syntaxTree,
-            new PrinterOptions
+            new PrinterOptions(Formatter.CSharp)
             {
                 Width = options.Width,
                 UseTabs = options.IndentStyle == IndentStyle.Tabs,
                 IndentSize = options.IndentSize,
                 EndOfLine = options.EndOfLine,
-                Formatter = "csharp",
             },
             SourceCodeKind.Regular,
             cancellationToken
         );
+    }
+
+    internal static async Task<CodeFormatterResult> FormatAsync(
+        string fileContents,
+        PrinterOptions options,
+        CancellationToken cancellationToken
+    )
+    {
+        return options.Formatter switch
+        {
+            Formatter.CSharp => await CSharpFormatter.FormatAsync(
+                fileContents,
+                options,
+                SourceCodeKind.Regular,
+                cancellationToken
+            ),
+            Formatter.CSharpScript => await CSharpFormatter.FormatAsync(
+                fileContents,
+                options,
+                SourceCodeKind.Script,
+                cancellationToken
+            ),
+            Formatter.XML => XmlFormatter.Format(fileContents, options),
+            _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." },
+        };
     }
 }

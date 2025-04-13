@@ -10,7 +10,7 @@ dotnet tool install csharpier -g
 ```
 Then format the contents of a directory and its children with the following command.
 ```bash
-dotnet csharpier .
+csharpier .
 ```
 
 CSharpier can also format [on save in your editor](https://csharpier.com/docs/Editors), as a [pre-commit hook](https://csharpier.com/docs/Pre-commit), as [part of your build](https://csharpier.com/docs/MSBuild) or even [programatically](https://csharpier.com/docs/API). Then you can ensure code was formatted with a [CI/CD tool](https://csharpier.com/docs/ContinuousIntegration).

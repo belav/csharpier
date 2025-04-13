@@ -32,7 +32,7 @@ internal sealed class LineEndingEdgeCase
 
         var result = await CSharpFormatter.FormatAsync(
             unformattedCode,
-            new PrinterOptions { EndOfLine = endOfLine },
+            new PrinterOptions(Formatter.CSharp) { EndOfLine = endOfLine },
             CancellationToken.None
         );
 

@@ -12,11 +12,7 @@ namespace CSharpier.Cli.Server;
 
 internal static class ServerFormatter
 {
-    public static async Task<int> StartServer(
-        int? port,
-        ConsoleLogger logger,
-        string? actualConfigPath
-    )
+    public static async Task<int> StartServer(int? port, ConsoleLogger logger)
     {
         // Editor plugins, like the Rider extension, run the server in the root directory
         // of a solution. Using the root directory as the content root for an ASP.NET application
@@ -83,7 +79,6 @@ internal static class ServerFormatter
             }
         });
         var service = new CSharpierServiceImplementation(
-            actualConfigPath,
             // we want any further logging to happen in the file log, not out to the console
             app.Services.GetRequiredService<ILogger<CSharpierServiceImplementation>>()
         );

@@ -2,12 +2,12 @@ function CSH-ReviewBranch {
     param (
         [string]$folder,
         [string]$pathToTestingRepo,
-        [switch]$fast = $true
+        [switch]$skipValidation = $true
     )
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
     $csProjectPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/CSharpier.Cli.csproj"
-    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/dotnet-csharpier.dll"
+    $csharpierDllPath = Join-Path $repositoryRoot "Src/CSharpier.Cli/bin/release/net8.0/CSharpier.dll"
 
     $location = Get-Location
 
@@ -53,9 +53,9 @@ function CSH-ReviewBranch {
     $postBranchOutput = (git status 2>&1) | Out-String
     $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
 
-    $fastParam = ""
-    if ($fast -eq $true) {
-        $fastParam = "--fast"
+    $skipValidation = ""
+    if ($skipValidation -eq $true) {
+        $skipValidation = "--skip-validation"
     }
 
     if ($firstRun) {

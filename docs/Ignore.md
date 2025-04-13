@@ -2,11 +2,11 @@
 title: Ignoring Code
 hide_table_of_contents: true
 ---
-Use `.csharpierignore` to bypass formatting specific files and folders.
+CSharpier supports
+- `.csharpierignore` and `.gitignore` to bypass formatting specific files and folders.
+- `csharpier-ignore` comments to bypass formatting specific parts of files.
 
-Use `csharpier-ignore` comments to bypass formatting specific parts of files.
-
-## Ignoring Files `.csharpierignore`
+## Ignoring Files
 
 Add a `.csharpierignore` file to ignore additional files and folders. The file uses [gitignore syntax](https://git-scm.com/docs/gitignore#_pattern_format)
 
@@ -14,6 +14,23 @@ Example
 ```ignore
 Uploads/
 **/App_Data/*.cs
+```
+
+### .gitignore
+CSharpier will read the contents of `.gitignore` files and use them in addition to a `.csharpierignore` file to determine if a file should be ignored.
+
+If a directory tree contains a `.csharpierignore` file then patterns in that file will always take priority over any `.gitignore` file in the same tree.
+
+To enable formatting of a file that is ignored via a `.gitignore` add a negated pattern.
+
+```.gitignore
+# .gitignore
+**/generated
+```
+
+```.gitignore
+# .csharpierignore
+!**/generated
 ```
 
 ### Files Ignored by Default
