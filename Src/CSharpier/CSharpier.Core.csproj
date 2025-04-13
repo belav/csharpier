@@ -11,6 +11,7 @@
     <LangVersion>13</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="LovettSoftware.XmlDiff" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
       <PrivateAssets>all</PrivateAssets>
