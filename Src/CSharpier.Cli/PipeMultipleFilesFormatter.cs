@@ -65,7 +65,7 @@ internal static class PipeMultipleFilesFormatter
                         : "./" + fileName,
                     ],
                     StandardInFileContents = stringBuilder.ToString(),
-                    Fast = true,
+                    SkipValidation = true,
                     WriteStdout = true,
                 };
 

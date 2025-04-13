@@ -2,7 +2,7 @@ function CSH-ReviewBranch {
     param (
         [string]$folder,
         [string]$pathToTestingRepo,
-        [switch]$fast = $true
+        [switch]$skipValidation = $true
     )
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
@@ -53,9 +53,9 @@ function CSH-ReviewBranch {
     $postBranchOutput = (git status 2>&1) | Out-String
     $firstRun = -not $postBranchOutput.Contains("On branch $postBranch")
 
-    $fastParam = ""
-    if ($fast -eq $true) {
-        $fastParam = "--fast"
+    $skipValidation = ""
+    if ($skipValidation -eq $true) {
+        $skipValidation = "--skip-validation"
     }
 
     if ($firstRun) {

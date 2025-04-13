@@ -18,11 +18,11 @@ internal static class FormattingCommands
         formatCommand.AddOption(noCacheOption);
         formatCommand.AddOption(NoMsBuildCheckOption);
         formatCommand.AddOption(IncludeGeneratedOption);
-        var fastOption = new Option<bool>(
-            ["--fast"],
-            "Skip comparing syntax tree of formatted file to original file to validate changes."
+        var skipValidationOption = new Option<bool>(
+            ["--skip-validation"],
+            "Skip validation of formatted files to improve performance."
         );
-        formatCommand.AddOption(fastOption);
+        formatCommand.AddOption(skipValidationOption);
         var skipWriteOption = new Option<bool>(
             ["--skip-write"],
             "Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures."
@@ -40,7 +40,7 @@ internal static class FormattingCommands
         formatCommand.SetHandler(async context =>
         {
             var directoryOrFile = context.ParseResult.GetValueForArgument(directoryOrFileArgument);
-            var fast = context.ParseResult.GetValueForOption(fastOption);
+            var skipValidation = context.ParseResult.GetValueForOption(skipValidationOption);
             var skipWrite = context.ParseResult.GetValueForOption(skipWriteOption);
             var writeStdout = context.ParseResult.GetValueForOption(writeStdoutOption);
             var noCache = context.ParseResult.GetValueForOption(noCacheOption);
@@ -56,7 +56,7 @@ internal static class FormattingCommands
             context.ExitCode = await FormatOrCheck(
                 directoryOrFile,
                 check: false,
-                fast,
+                skipValidation,
                 skipWrite,
                 writeStdout,
                 noCache,
@@ -101,7 +101,7 @@ internal static class FormattingCommands
             context.ExitCode = await FormatOrCheck(
                 directoryOrFile,
                 check: true,
-                fast: false,
+                skipValidation: false,
                 skipWrite: false,
                 writeStdout: false,
                 noCache: false,
@@ -120,7 +120,7 @@ internal static class FormattingCommands
     private static async Task<int> FormatOrCheck(
         string[]? directoryOrFile,
         bool check,
-        bool fast,
+        bool skipValidation,
         bool skipWrite,
         bool writeStdout,
         bool noCache,
@@ -167,7 +167,7 @@ internal static class FormattingCommands
             Check = check,
             NoCache = noCache,
             NoMSBuildCheck = noMSBuildCheck,
-            Fast = fast,
+            SkipValidation = skipValidation,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,
             IncludeGenerated = includeGenerated,

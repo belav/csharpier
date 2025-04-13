@@ -434,7 +434,7 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (!commandLineOptions.Fast)
+        if (!commandLineOptions.SkipValidation)
         {
             IFormattingValidator? formattingValidator = null;
 
