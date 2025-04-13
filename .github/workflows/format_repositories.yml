@@ -21,4 +21,4 @@ jobs:
           repository: belav/csharpier-repos
           path: csharpier-repos
       - run: dotnet build csharpier/Src/CSharpier.Cli/CSharpier.Cli.csproj -c release
-      - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net9.0/CSharpier.dll csharpier-repos --skip-write
+      - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net9.0/CSharpier.dll format csharpier-repos --skip-write
