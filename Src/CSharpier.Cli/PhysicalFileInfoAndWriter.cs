@@ -1,4 +1,5 @@
 using System.IO.Abstractions;
+using CSharpier.Core;
 
 namespace CSharpier.Cli;
 

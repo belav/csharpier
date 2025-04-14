@@ -1,0 +1,45 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".config/dotnet-tools.json" />
+    <File Path=".csharpierignore" />
+    <File Path=".dockerignore" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path=".husky/pre-commit" />
+    <File Path=".husky/task-runner.json" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="Dockerfile" />
+    <File Path="Dockerfile-Website" />
+    <File Path="global.json" />
+    <File Path="LICENSE" />
+    <File Path="Nuget/Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Src/">
+    <Project Path="Src/CSharpier.Benchmarks/CSharpier.Benchmarks.csproj" />
+    <Project Path="Src/CSharpier.Cli.Tests/CSharpier.Cli.Tests.csproj" />
+    <Project Path="Src/CSharpier.Cli/CSharpier.Cli.csproj" />
+    <Project Path="Src/CSharpier.FakeGenerators/CSharpier.FakeGenerators.csproj" />
+    <Project Path="Src/CSharpier.Generators/CSharpier.Generators.csproj" />
+    <Project Path="Src/CSharpier.MsBuild/MsBuild.csproj">
+      <Build Project="false" />
+    </Project>
+    <Project Path="Src/CSharpier.Playground/CSharpier.Playground.csproj" />
+    <Project Path="Src/CSharpier.Tests.Generators/CSharpier.Tests.Generators.csproj" />
+    <Project Path="Src/CSharpier.Tests/CSharpier.Tests.csproj" />
+    <Project Path="Src/CSharpier.Core/CSharpier.Core.csproj" />
+    <Project Path="Src/SyntaxFinder/SyntaxFinder.csproj" />
+    <Project Path="Src/Website/Website.csproj" />
+  </Folder>
+  <Project Path=".github/Github.csproj">
+    <Build Project="false" />
+  </Project>
+  <Project Path="docs/Docs.csproj">
+    <Build Project="false" />
+  </Project>
+  <Project Path="Scripts/Scripts.csproj">
+    <Build Project="false" />
+  </Project>
+  <Project Path="Shell/Shell.csproj" />
+</Solution>

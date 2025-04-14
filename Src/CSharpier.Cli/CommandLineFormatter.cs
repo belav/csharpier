@@ -2,8 +2,11 @@ using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli.Options;
-using CSharpier.Utilities;
-using CSharpier.Validators;
+using CSharpier.Core;
+using CSharpier.Core.CSharp;
+using CSharpier.Core.Utilities;
+using CSharpier.Core.Validators;
+using CSharpier.Core.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 

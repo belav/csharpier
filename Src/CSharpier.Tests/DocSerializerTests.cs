@@ -1,4 +1,5 @@
-using CSharpier.DocTypes;
+using CSharpier.Core;
+using CSharpier.Core.DocTypes;
 using FluentAssertions;
 using NUnit.Framework;
 

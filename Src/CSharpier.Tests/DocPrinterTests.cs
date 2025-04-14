@@ -1,4 +1,6 @@
-using CSharpier.DocTypes;
+using CSharpier.Core;
+using CSharpier.Core.DocPrinter;
+using CSharpier.Core.DocTypes;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -726,11 +728,7 @@ public class DocPrinterTests
             doc += endOfLine;
         }
 
-        var result = DocPrinter.DocPrinter.Print(
-            doc,
-            new PrinterOptions(Formatter.CSharp),
-            endOfLine
-        );
+        var result = DocPrinter.Print(doc, new PrinterOptions(Formatter.CSharp), endOfLine);
 
         result.Should().Be($"1{endOfLine}");
     }
@@ -786,7 +784,7 @@ public class DocPrinterTests
     )
     {
         return DocPrinter
-            .DocPrinter.Print(
+            .Print(
                 doc,
                 new PrinterOptions(Formatter.CSharp)
                 {

@@ -1,3 +1,5 @@
+using CSharpier.Core;
+
 namespace CSharpier.Cli.EditorConfig;
 
 /// <summary>

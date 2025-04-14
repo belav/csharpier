@@ -1,3 +1,4 @@
+using CSharpier.Core;
 using FluentAssertions;
 using NUnit.Framework;
 

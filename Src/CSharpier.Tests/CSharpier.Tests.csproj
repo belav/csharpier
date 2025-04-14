@@ -23,7 +23,7 @@
       OutputItemType="Analyzer"
       ReferenceOutputAssembly="false"
     />
-    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
+    <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="FormattingTests\TestFiles\**\*.test" />

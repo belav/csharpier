@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.Text.Json;
 using CSharpier.Cli.EditorConfig;
+using CSharpier.Core;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli.Options;

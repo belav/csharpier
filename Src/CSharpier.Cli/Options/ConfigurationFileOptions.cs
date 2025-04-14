@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using CSharpier.Cli.EditorConfig;
+using CSharpier.Core;
 
 namespace CSharpier.Cli.Options;
 

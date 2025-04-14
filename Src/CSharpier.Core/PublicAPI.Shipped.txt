@@ -1,0 +1,37 @@
+﻿#nullable enable
+
+CSharpier.Core.CodeFormatterOptions
+CSharpier.Core.CodeFormatterOptions.CodeFormatterOptions() -> void
+CSharpier.Core.CodeFormatterOptions.Width.get -> int
+CSharpier.Core.CodeFormatterOptions.Width.init -> void
+CSharpier.Core.CodeFormatterOptions.EndOfLine.get -> CSharpier.Core.EndOfLine
+CSharpier.Core.CodeFormatterOptions.EndOfLine.init -> void
+CSharpier.Core.CodeFormatterOptions.IndentSize.get -> int
+CSharpier.Core.CodeFormatterOptions.IndentSize.init -> void
+CSharpier.Core.CodeFormatterOptions.IndentStyle.get -> CSharpier.Core.IndentStyle
+CSharpier.Core.CodeFormatterOptions.IndentStyle.init -> void
+
+CSharpier.Core.CodeFormatterResult
+CSharpier.Core.CodeFormatterResult.Code.get -> string!
+CSharpier.Core.CodeFormatterResult.CompilationErrors.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
+CSharpier.Core.CodeFormatterOptions.IncludeGenerated.get -> bool
+CSharpier.Core.CodeFormatterOptions.IncludeGenerated.init -> void
+
+CSharpier.Core.EndOfLine
+CSharpier.Core.EndOfLine.Auto = 0 -> CSharpier.Core.EndOfLine
+CSharpier.Core.EndOfLine.CRLF = 1 -> CSharpier.Core.EndOfLine
+CSharpier.Core.EndOfLine.LF = 2 -> CSharpier.Core.EndOfLine
+CSharpier.Core.IndentStyle
+CSharpier.Core.IndentStyle.Spaces = 0 -> CSharpier.Core.IndentStyle
+CSharpier.Core.IndentStyle.Tabs = 1 -> CSharpier.Core.IndentStyle
+
+CSharpier.Core.CSharp.CSharpFormatter
+static CSharpier.Core.CSharp.CSharpFormatter.Format(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.Core.CodeFormatterOptions? options = null) -> CSharpier.Core.CodeFormatterResult!
+static CSharpier.Core.CSharp.CSharpFormatter.Format(string! code, CSharpier.Core.CodeFormatterOptions? options = null) -> CSharpier.Core.CodeFormatterResult!
+static CSharpier.Core.CSharp.CSharpFormatter.FormatAsync(Microsoft.CodeAnalysis.SyntaxTree! syntaxTree, CSharpier.Core.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<CSharpier.Core.CodeFormatterResult!>!
+static CSharpier.Core.CSharp.CSharpFormatter.FormatAsync(string! code, CSharpier.Core.CodeFormatterOptions? options = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<CSharpier.Core.CodeFormatterResult!>!
+
+CSharpier.Core.Xml.XmlFormatter
+static CSharpier.Core.Xml.XmlFormatter.Format(string! xml, CSharpier.Core.CodeFormatterOptions? options = null) -> CSharpier.Core.CodeFormatterResult!
+
+

@@ -29,7 +29,7 @@
     <EmbeddedResource Remove="App_Data\Uploads\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
+    <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
   </ItemGroup>
   <Target
     Name="DebugEnsureNodeEnv"

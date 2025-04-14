@@ -4,7 +4,7 @@ using System.IO.Hashing;
 using System.Text;
 using System.Text.Json;
 using CSharpier.Cli.Options;
-using CSharpier.Utilities;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Cli;
 

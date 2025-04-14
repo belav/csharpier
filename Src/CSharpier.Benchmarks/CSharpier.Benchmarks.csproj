@@ -9,7 +9,7 @@
     <PackageReference Include="BenchmarkDotNet.Annotations" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSharpier\CSharpier.Core.csproj" />
+    <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="CodeSamples/*.*" />

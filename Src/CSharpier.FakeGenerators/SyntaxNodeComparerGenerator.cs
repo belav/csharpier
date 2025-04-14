@@ -26,7 +26,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier
+namespace CSharpier.Core.CSharp
 {
     internal partial class SyntaxNodeComparer
     {

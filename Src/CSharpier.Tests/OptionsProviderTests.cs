@@ -1,5 +1,6 @@
 using System.IO.Abstractions.TestingHelpers;
 using CSharpier.Cli.Options;
+using CSharpier.Core;
 using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
