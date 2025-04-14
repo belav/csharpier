@@ -1,3 +1,5 @@
+using CSharpier.Core;
+using CSharpier.Core.CSharp;
 using FluentAssertions;
 using NUnit.Framework;
 

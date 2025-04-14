@@ -1,12 +1,14 @@
 using System;
 using System.Diagnostics;
-using CSharpier.DocTypes;
-using CSharpier.SyntaxPrinter;
-using CSharpier.SyntaxPrinter.SyntaxNodePrinters;
+using CSharpier.Core;
+using CSharpier.Core.DocTypes;
+using CSharpier.Core.CSharp.SyntaxPrinter;
+using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.SyntaxPrinter
+namespace CSharpier.Core.CSharp.SyntaxPrinter
 {
     internal static class Node
     {

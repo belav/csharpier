@@ -1,5 +1,6 @@
 using System.IO.Abstractions;
 using CSharpier.Cli.Options;
+using CSharpier.Core;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli.Server;

@@ -29,7 +29,7 @@ public class SyntaxNodeJsonWriterGenerator
         sourceBuilder.AppendLine("using Microsoft.CodeAnalysis.CSharp;");
         sourceBuilder.AppendLine("using Microsoft.CodeAnalysis.CSharp.Syntax;");
         sourceBuilder.AppendLine();
-        sourceBuilder.AppendLine("namespace CSharpier");
+        sourceBuilder.AppendLine("namespace CSharpier.Core.CSharp");
         sourceBuilder.AppendLine("{");
         sourceBuilder.AppendLine("    internal static partial class SyntaxNodeJsonWriter");
         sourceBuilder.AppendLine("    {");

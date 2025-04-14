@@ -1,8 +1,8 @@
 using System.IO.Abstractions;
 using System.Text;
 using CSharpier.Cli;
-using CSharpier.SyntaxPrinter;
-using CSharpier.Utilities;
+using CSharpier.Core;
+using CSharpier.Core.CSharp;
 using DiffEngine;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;

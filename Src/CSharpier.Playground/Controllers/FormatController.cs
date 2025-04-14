@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using CSharpier.Core;
+using CSharpier.Core.CSharp;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 
@@ -56,7 +58,6 @@ public class FormatController : ControllerBase
             cancellationToken
         );
 
-        // TODO #1359 need to do xml compare here
         var comparer = new SyntaxNodeComparer(
             model.Code,
             result.Code,

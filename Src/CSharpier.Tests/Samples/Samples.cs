@@ -1,4 +1,6 @@
 using System.Text;
+using CSharpier.Core;
+using CSharpier.Core.CSharp;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using NUnit.Framework;

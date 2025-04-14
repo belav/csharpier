@@ -1,5 +1,6 @@
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
+using CSharpier.Core;
 using IniParser;
 using IniParser.Model.Configuration;
 using IniParser.Parser;

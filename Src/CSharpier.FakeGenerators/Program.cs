@@ -25,6 +25,6 @@ while (!directory.Name.Equals("Src", StringComparison.Ordinal))
     }
 }
 
-var codeContext = new CodeContext(Path.Combine(directory.FullName, "CSharpier"));
+var codeContext = new CodeContext(Path.Combine(directory.FullName, "CSharpier.Core", "CSharp"));
 SyntaxNodeComparerGenerator.Execute(codeContext);
 new SyntaxNodeJsonWriterGenerator().Execute(codeContext);
