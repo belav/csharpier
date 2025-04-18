@@ -43,7 +43,7 @@ internal static class Node
             [
                 Tag.PrintOpeningTagPrefix(xText),
                 GetEncodedTextValue(xText),
-                Tag.PrintClosingTagSuffix(xText),
+                Tag.PrintClosingTagSuffix(xText, context),
             ];
 
             if (doc.All(o => o is StringDoc))
