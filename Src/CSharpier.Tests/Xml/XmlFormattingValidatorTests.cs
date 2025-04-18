@@ -3,7 +3,7 @@ using CSharpier.Core.Xml;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace CSharpier.Tests.Validators;
+namespace CSharpier.Tests.Xml;
 
 [TestFixture]
 [Parallelizable(ParallelScope.All)]
@@ -47,6 +47,28 @@ public class XmlFormattingValidatorTests
         var result = CompareSource(left, right);
 
         result.Failed.Should().BeTrue();
+    }
+
+    [Test]
+    public void Should_Handle_DTD()
+    {
+        var left = """
+            <?xml version="1.0"?>
+            <!DOCTYPE staff SYSTEM "staff.dtd"[
+               <!ENTITY ent1 "es">
+            ]>
+            <staff></staff>
+            """;
+        var right = """
+            <?xml version="1.0"?>
+            <!DOCTYPE staff SYSTEM "staff.dtd"[
+               <!ENTITY ent1 "es">
+            ]>
+            <staff></staff>
+            """;
+        var result = CompareSource(left, right);
+
+        result.Failed.Should().BeFalse();
     }
 
     private static FormattingValidatorResult CompareSource(string left, string right)
