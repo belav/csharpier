@@ -11,10 +11,7 @@ internal class XmlFormattingValidator(string originalXml, string formattedXml)
     public Task<FormattingValidatorResult> ValidateAsync(CancellationToken cancellationToken)
     {
         var xmlDiff = new XmlDiff(XmlDiffOptions.IgnoreWhitespace);
-        var settings = new XmlReaderSettings
-        {
-            DtdProcessing = DtdProcessing.Parse
-        };
+        var settings = new XmlReaderSettings { DtdProcessing = DtdProcessing.Parse };
         using var originalReader = XmlReader.Create(new StringReader(originalXml), settings);
         using var formattedReader = XmlReader.Create(new StringReader(formattedXml), settings);
         var stringBuilder = new StringBuilder();

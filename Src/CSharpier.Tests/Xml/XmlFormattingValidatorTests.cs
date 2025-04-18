@@ -53,19 +53,19 @@ public class XmlFormattingValidatorTests
     public void Should_Handle_DTD()
     {
         var left = """
-                   <?xml version="1.0"?>
-                   <!DOCTYPE staff SYSTEM "staff.dtd"[
-                      <!ENTITY ent1 "es">
-                   ]>
-                   <staff></staff>
-                   """;
+            <?xml version="1.0"?>
+            <!DOCTYPE staff SYSTEM "staff.dtd"[
+               <!ENTITY ent1 "es">
+            ]>
+            <staff></staff>
+            """;
         var right = """
-                    <?xml version="1.0"?>
-                    <!DOCTYPE staff SYSTEM "staff.dtd"[
-                       <!ENTITY ent1 "es">
-                    ]>
-                    <staff></staff>
-                    """;
+            <?xml version="1.0"?>
+            <!DOCTYPE staff SYSTEM "staff.dtd"[
+               <!ENTITY ent1 "es">
+            ]>
+            <staff></staff>
+            """;
         var result = CompareSource(left, right);
 
         result.Failed.Should().BeFalse();
