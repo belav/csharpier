@@ -8,19 +8,22 @@ internal static class Tag
     public static Doc PrintOpeningTag(XElement element, XmlPrintingContext context)
     {
         return Doc.Concat(
-            PrintOpeningTagStart(element),
+            PrintOpeningTagStart(element, context),
             Attributes.Print(element, context),
             element.IsEmpty ? Doc.Null : PrintOpeningTagEnd(element)
         );
     }
 
-    private static Doc PrintOpeningTagStart(XElement element)
+    private static Doc PrintOpeningTagStart(XElement element, XmlPrintingContext context)
     {
         return
             element.PreviousNode is not null
             && NeedsToBorrowNextOpeningTagStartMarker(element.PreviousNode)
             ? Doc.Null
-            : Doc.Concat(PrintOpeningTagPrefix(element), PrintOpeningTagStartMarker(element));
+            : Doc.Concat(
+                PrintOpeningTagPrefix(element),
+                PrintOpeningTagStartMarker(element, context)
+            );
     }
 
     private static Doc PrintOpeningTagEnd(XElement node)
@@ -60,29 +63,32 @@ internal static class Tag
         ;
     }
 
-    public static Doc PrintClosingTag(XElement node)
+    public static Doc PrintClosingTag(XElement node, XmlPrintingContext context)
     {
         return Doc.Concat(
-            node.IsEmpty ? Doc.Null : PrintClosingTagStart(node),
-            PrintClosingTagEnd(node)
+            node.IsEmpty ? Doc.Null : PrintClosingTagStart(node, context),
+            PrintClosingTagEnd(node, context)
         );
     }
 
-    public static Doc PrintClosingTagStart(XElement element)
+    public static Doc PrintClosingTagStart(XElement element, XmlPrintingContext context)
     {
         var lastChild = element.Nodes().LastOrDefault();
 
         return lastChild is not null && NeedsToBorrowParentClosingTagStartMarker(lastChild)
             ? Doc.Null
-            : Doc.Concat(PrintClosingTagPrefix(element), PrintClosingTagStartMarker(element));
+            : Doc.Concat(
+                PrintClosingTagPrefix(element),
+                PrintClosingTagStartMarker(element, context)
+            );
     }
 
-    public static Doc PrintClosingTagStartMarker(XElement element)
+    public static Doc PrintClosingTagStartMarker(XElement element, XmlPrintingContext context)
     {
-        return $"</{GetPrefixedElementName(element)}";
+        return $"</{GetPrefixedElementName(element, context)}";
     }
 
-    public static Doc PrintClosingTagEnd(XElement node)
+    public static Doc PrintClosingTagEnd(XElement node, XmlPrintingContext context)
     {
         return (
             node.NextNode is not null
@@ -90,7 +96,7 @@ internal static class Tag
                 : NeedsToBorrowLastChildClosingTagEndMarker(node.Parent!)
         )
             ? Doc.Null
-            : Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node));
+            : Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node, context));
     }
 
     public static bool NeedsToBorrowLastChildClosingTagEndMarker(XElement node)
@@ -116,29 +122,32 @@ internal static class Tag
         return node.IsEmpty ? "/>" : ">";
     }
 
-    public static Doc PrintClosingTagSuffix(XNode node)
+    public static Doc PrintClosingTagSuffix(XNode node, XmlPrintingContext context)
     {
         return NeedsToBorrowParentClosingTagStartMarker(node)
-                ? PrintClosingTagStartMarker(node.Parent!)
+                ? PrintClosingTagStartMarker(node.Parent!, context)
             : NeedsToBorrowNextOpeningTagStartMarker(node)
-                ? PrintOpeningTagStartMarker(node.NextNode!)
+                ? PrintOpeningTagStartMarker(node.NextNode!, context)
             : Doc.Null;
     }
 
-    private static Doc PrintOpeningTagStartMarker(XNode node)
+    private static Doc PrintOpeningTagStartMarker(XNode node, XmlPrintingContext context)
     {
         if (node is not XElement element)
         {
             return "<" + node;
         }
 
-        return $"<{GetPrefixedElementName(element)}";
+        return $"<{GetPrefixedElementName(element, context)}";
     }
 
-    private static string GetPrefixedElementName(XElement element)
+    private static string GetPrefixedElementName(XElement element, XmlPrintingContext context)
     {
         var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
-        if (string.IsNullOrEmpty(prefix))
+        if (
+            string.IsNullOrEmpty(prefix)
+            || !context.Mapping[element].Name.StartsWith(prefix, StringComparison.Ordinal)
+        )
         {
             return element.Name.LocalName;
         }

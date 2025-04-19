@@ -61,7 +61,7 @@ internal static class Element
         return Doc.Group(
             Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node, context)),
             elementContent,
-            Tag.PrintClosingTag(node)
+            Tag.PrintClosingTag(node, context)
         );
     }
 
