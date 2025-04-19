@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [2.1.2]
+- Set compatibility for rider 2025.1
+
 ## [2.1.1]
 - Set working directory for CSharpier Server to the directory that contains CSharpier. Fixes an issue with a recursive file watch being run on the project root.
 
