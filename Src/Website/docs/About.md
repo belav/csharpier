@@ -4,7 +4,7 @@ id: About
 hide_table_of_contents: true
 ---
 
-CSharpier is an opinionated code formatter for c#. It uses Roslyn to parse your code and re-prints it using its own rules.
+CSharpier is an opinionated code formatter for c# and XML. It uses parses your code and re-prints it using its own rules.
 The printing process was ported from [prettier](https://github.com/prettier/prettier) but has evolved over time.  
 
 CSharpier provides a few basic options that affect formatting and follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier. Option requests are out of scope for CSharpier, they will be closed without discussion.
@@ -16,7 +16,7 @@ dotnet tool install csharpier
 ```
 Then format the contents of the project
 ```bash
-dotnet csharpier .
+dotnet csharpier format .
 ```
 
 See [Install a local tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools#install-a-local-tool) and [CLI Usage](https://csharpier.com/docs/CLI) for more information
@@ -55,6 +55,4 @@ public class ClassName
             .ToArray();
     }
 }
-
-
 ```
