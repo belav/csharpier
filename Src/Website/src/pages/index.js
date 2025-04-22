@@ -29,7 +29,7 @@ export default function Home() {
             <main className="container">
                 <div className="home__text">
                     <p>
-                        CSharpier is an opinionated code formatter for c#. It uses Roslyn to parse your code and
+                        CSharpier is an opinionated code formatter for c# and Xml. It parses your code and
                         re-prints it using its own rules. The printing process was ported from{" "}
                         <a href="https://prettier.io/">prettier</a> but has evolved over time.
                     </p>
