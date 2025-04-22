@@ -5,7 +5,6 @@ using CSharpier.Cli.Options;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
 using CSharpier.Core.Utilities;
-using CSharpier.Core.Validators;
 using CSharpier.Core.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Logging;

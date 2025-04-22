@@ -6,18 +6,18 @@ namespace CSharpier.Cli;
 
 internal class IgnoreFile
 {
-    private List<IgnoreWithBasePath> ignores { get; }
+    private List<IgnoreWithBasePath> Ignores { get; }
     private static readonly string[] alwaysIgnored = ["**/node_modules", "**/obj", "**/.git"];
 
     private IgnoreFile(List<IgnoreWithBasePath> ignores)
     {
-        this.ignores = ignores;
+        this.Ignores = ignores;
     }
 
     public bool IsIgnored(string filePath)
     {
         filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-        foreach (var ignore in this.ignores)
+        foreach (var ignore in this.Ignores)
         {
             // when using one of the ignore files to determine if a given file is ignored or not
             // we can only consider that file if it actually has a matching rule for the filePath
@@ -132,7 +132,7 @@ internal class IgnoreFile
     // and to return if this ignore file has a rule for a given path
     private class IgnoreWithBasePath(string basePath)
     {
-        private readonly List<IgnoreRule> Rules = new();
+        private readonly List<IgnoreRule> Rules = [];
 
         public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
         {

@@ -9,7 +9,7 @@ internal class Indent
 internal class Indenter(PrinterOptions printerOptions)
 {
     protected readonly PrinterOptions PrinterOptions = printerOptions;
-    protected readonly Dictionary<string, Indent> IncreaseIndentCache = new();
+    protected readonly Dictionary<string, Indent> IncreaseIndentCache = [];
 
     public static Indent GenerateRoot()
     {

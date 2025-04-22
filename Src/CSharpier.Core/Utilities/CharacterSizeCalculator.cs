@@ -18,14 +18,14 @@ internal static class CharacterSizeCalculator
         var isWide = c >= 0x1100 &&
             (c <= 0x115f || /* Hangul Jamo init. consonants */
              c == 0x2329 || c == 0x232a ||
-             ((uint)(c - 0x2e80) <= (0xa4cf - 0x2e80) &&
+             ((uint)(c - 0x2e80) <= 0xa4cf - 0x2e80 &&
               c != 0x303f) || /* CJK ... Yi */
-             ((uint)(c - 0xac00) <= (0xd7a3 - 0xac00)) || /* Hangul Syllables */
-             ((uint)(c - 0xf900) <= (0xfaff - 0xf900)) || /* CJK Compatibility Ideographs */
-             ((uint)(c - 0xfe10) <= (0xfe19 - 0xfe10)) || /* Vertical forms */
-             ((uint)(c - 0xfe30) <= (0xfe6f - 0xfe30)) || /* CJK Compatibility Forms */
-             ((uint)(c - 0xff00) <= (0xff60 - 0xff00)) || /* Fullwidth Forms */
-             ((uint)(c - 0xffe0) <= (0xffe6 - 0xffe0)));
+             (uint)(c - 0xac00) <= 0xd7a3 - 0xac00 || /* Hangul Syllables */
+             (uint)(c - 0xf900) <= 0xfaff - 0xf900 || /* CJK Compatibility Ideographs */
+             (uint)(c - 0xfe10) <= 0xfe19 - 0xfe10 || /* Vertical forms */
+             (uint)(c - 0xfe30) <= 0xfe6f - 0xfe30 || /* CJK Compatibility Forms */
+             (uint)(c - 0xff00) <= 0xff60 - 0xff00 || /* Fullwidth Forms */
+             (uint)(c - 0xffe0) <= 0xffe6 - 0xffe0);
         // We can ignore these ranges because .Net strings use surrogate pairs
         // for this range and we do not handle surrogate pairs.
         // (c >= 0x20000 && c <= 0x2fffd) ||

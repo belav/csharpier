@@ -68,7 +68,7 @@ internal static class UsingDirectives
             }
         }
 
-        docs.Add(Token.PrintLeadingTrivia(new SyntaxTriviaList(initialComments), context));
+        docs.Add(Token.PrintLeadingTrivia([.. initialComments], context));
         if (keepUsingsUntilEndIf)
         {
             while (usingList.Count != 0)
@@ -96,13 +96,7 @@ internal static class UsingDirectives
         var isFirst = true;
         var index = 0;
         var reorderedDirectives = false;
-        foreach (
-            var groupOfUsingData in GroupUsings(
-                usingList,
-                new SyntaxTriviaList(triviaWithinIf),
-                context
-            )
-        )
+        foreach (var groupOfUsingData in GroupUsings(usingList, [.. triviaWithinIf], context))
         {
             foreach (var usingData in groupOfUsingData)
             {

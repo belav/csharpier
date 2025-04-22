@@ -70,8 +70,8 @@ internal static class Token
                 && syntaxToken.Parent!.Parent
                     is InterpolatedStringExpressionSyntax
                     {
-                        StringStartToken:
-                        { RawKind: (int)SyntaxKind.InterpolatedVerbatimStringStartToken }
+                        StringStartToken.RawKind: (int)
+                            SyntaxKind.InterpolatedVerbatimStringStartToken
                     }
             )
         )
@@ -453,7 +453,9 @@ internal static class Token
                 o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
                 && regex.IsMatch(o.ToString())
             )
+            {
                 return true;
+            }
         }
 
         return false;

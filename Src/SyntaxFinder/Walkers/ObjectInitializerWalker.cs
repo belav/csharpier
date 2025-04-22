@@ -9,7 +9,7 @@ public class ObjectInitializerWalker(string file) : CSharpSyntaxWalker
     private static int total;
     private static int matching;
     private static double totalExpressions;
-    private static HashSet<string> matchingFiles = new();
+    private static HashSet<string> matchingFiles = [];
 
     public override void VisitInitializerExpression(InitializerExpressionSyntax node)
     {

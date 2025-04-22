@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace CSharpier.Core;
+namespace CSharpier.Core.CSharp;
 
 internal static class SyntaxNodeExtensions
 {

@@ -48,10 +48,14 @@ internal static class DocFitter
                 case StringDoc stringDoc:
                     // directives should not be considered when calculating if something fits
                     if (stringDoc.Value == null || stringDoc.IsDirective)
+                    {
                         continue;
+                    }
 
                     if (returnFalseIfMoreStringsFound)
+                    {
                         return false;
+                    }
 
                     output.Append(stringDoc.Value);
                     remainingWidth -= stringDoc.Value.GetPrintedWidth();
@@ -59,14 +63,19 @@ internal static class DocFitter
                 case LeadingComment
                 or TrailingComment:
                     if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
+                    {
                         returnFalseIfMoreStringsFound = true;
+                    }
 
                     break;
                 case Region:
                     return false;
                 case Concat concat:
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)
+                    {
                         Push(concat.Contents[i], currentMode, currentIndent);
+                    }
+
                     break;
                 case IndentDoc indent:
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));

@@ -1,5 +1,3 @@
-using CSharpier.Core.Validators;
-
 namespace CSharpier.Core.CSharp;
 
 internal class CSharpFormattingValidator(SyntaxNodeComparer syntaxNodeComparer)

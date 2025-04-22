@@ -7,7 +7,7 @@ namespace CSharpier.Core.DocPrinter;
 internal class DocPrinter
 {
     protected readonly Stack<PrintCommand> RemainingCommands = new();
-    protected readonly Dictionary<string, PrintMode> GroupModeMap = new();
+    protected readonly Dictionary<string, PrintMode> GroupModeMap = [];
     protected int CurrentWidth;
     protected readonly StringBuilder Output = new();
     protected bool ShouldRemeasure;
@@ -190,8 +190,10 @@ internal class DocPrinter
 
     private void AppendComment(LeadingComment leadingComment, Indent indent)
     {
-        int CalculateIndentLength(string line) =>
-            line.CalculateCurrentLeadingIndentation(this.PrinterOptions.IndentSize);
+        int CalculateIndentLength(string line)
+        {
+            return line.CalculateCurrentLeadingIndentation(this.PrinterOptions.IndentSize);
+        }
 
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();

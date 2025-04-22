@@ -332,7 +332,8 @@ internal static class InvocationExpression
 
             if (
                 printedNodes[index].Node
-                is (InvocationExpressionSyntax or ElementAccessExpressionSyntax)
+                is InvocationExpressionSyntax
+                    or ElementAccessExpressionSyntax
             )
             {
                 hasSeenNodeThatRequiresBreak = true;

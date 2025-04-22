@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using CSharpier.Core.CSharp;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -6,7 +7,9 @@ namespace CSharpier.Core.DocTypes;
 
 internal sealed class StringDoc(string value, bool isDirective = false) : Doc
 {
+#pragma warning disable IDE0028
     private static readonly ConditionalWeakTable<string, StringDoc> StringDocCache = new();
+#pragma warning restore IDE0028
     public string Value { get; } = value;
     public bool IsDirective { get; } = isDirective;
 

@@ -186,12 +186,10 @@ internal static class Tag
          *        ^^^
          *     >
          */
-        return (
-            node.NextNode is null
+        return node.NextNode is null
             && node.IsTextLike()
-            && node.GetLastDescendant() is XText and not XCData
+            && node.GetLastDescendant() is XText and not XCData;
         // && !node.hasTrailingSpaces
-        );
     }
 
     public static Doc PrintClosingTagPrefix(XElement node)
