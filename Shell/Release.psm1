@@ -29,6 +29,8 @@ function CSH-Release {
     {
         Copy-Item $file.FullName ($PSScriptRoot + "/../Src/Website/docs/" + $file.Name)
     }
+    
+    & dotnet csharpier format .
 }
 
 Export-ModuleMember -Function CSH-*

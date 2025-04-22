@@ -39,7 +39,8 @@ Default `false`
 #### Indent Size
 Specify the number of spaces used per indentation level.
 
-Default `4`
+Default for C# `4`\
+Default for XML `2`
 
 #### End of Line
 
@@ -95,6 +96,12 @@ dotnet_separate_import_directive_groups = false
 # end_of_line = lf - there is no 'auto' with an .editorconfig
 indent_style = space
 indent_size = 4
+max_line_length = 100
+
+[*.{csproj,props,targets,xml,config}]
+# Configurable behaviors
+indent_style = space
+indent_size = 2
 max_line_length = 100
 ```
 

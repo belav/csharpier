@@ -1,4 +1,3 @@
-using CSharpier.Core;
 using CSharpier.Core.CSharp;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
@@ -18,6 +17,7 @@ public class SyntaxNodeComparerTests
 
         var result = CompareSource(left, right);
 
+        // wtf
         ResultShouldBe(
             result,
             """
@@ -586,7 +586,7 @@ public class SyntaxNodeComparerTests
             using System.IO;
 
             {content}
-            
+
             """;
 
         var right = $"""
@@ -596,7 +596,7 @@ public class SyntaxNodeComparerTests
             #endif
 
             {content}
-            
+
             """;
 
         var result = CompareSource(left, right, reorderedUsingsWithDisabledText: true);

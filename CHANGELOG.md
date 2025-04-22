@@ -1,4 +1,275 @@
-﻿# 0.30.6
+# 1.0.0
+## Major Changes
+### Support for formatting XML [#819](https://github.com/belav/csharpier/issues/819)
+CSharpier now formats xml files by default. It will try to format ".csproj", ".props", ".targets", ".xml", ".config" as if they were xml. \
+If a file is not valid xml it will be treated as a warning. \
+The default indent size is `2` instead of `4`
+
+### Performance Improvements
+@TimothyMakkison put a lot of effort into improving the performance of CSharpier. These benchmark numbers show drastic improvement for both speed and memory usage.
+
+Baseline
+```
+| Method                        | Mean     | Error   | StdDev  | Median   | Gen0       | Gen1      | Gen2      | Allocated |
+|------------------------------ |---------:|--------:|--------:|---------:|-----------:|----------:|----------:|----------:|
+| Default_CodeFormatter_Tests   | 233.3 ms | 4.63 ms | 8.23 ms | 229.7 ms | 11000.0000 | 4000.0000 | 1000.0000 | 101.41 MB |
+| Default_CodeFormatter_Complex | 433.7 ms | 8.53 ms | 7.56 ms | 433.4 ms | 20000.0000 | 5000.0000 | 1000.0000 | 182.44 MB |
+```
+
+After Improvements
+```
+| Method                        | Mean      | Error    | StdDev   | Gen0      | Gen1      | Allocated |
+|------------------------------ |----------:|---------:|---------:|----------:|----------:|----------:|
+| Default_CodeFormatter_Tests   |  64.72 ms | 0.548 ms | 0.512 ms | 1666.6667 | 1000.0000 |  18.33 MB |
+| Default_CodeFormatter_Complex | 137.83 ms | 2.730 ms | 4.708 ms | 3000.0000 | 1000.0000 |  30.78 MB |
+
+```
+## Breaking Changes
+### ConfigurationFile - rename TabWidth to IndentSize [#1377](https://github.com/belav/csharpier/issues/1377)
+In order to get consistency between an `.editorconfig` and `.csharpierconfig` the option `TabWidth` has been renamed to `IndentSize`. This is also a more accurate name considering by default indentation is done with spaces and not tabs.
+### Rework the CLI to use commands and arguments. [#1321](https://github.com/belav/csharpier/issues/1321)
+The CLI has been reworked to use commands. This helps make it clear which arguments apply to which commands. The two common commands are below, see https://csharpier.com/docs/CLI for more details.
+```
+dotnet csharpier format .
+dotnet csharpier check .
+```
+### Changing the tool command to csharpier. Changing the assembly/exe to CSharpier [#1418](https://github.com/belav/csharpier/pull/1418)
+Prior to `1.0.0` the tool command was `dotnet-csharpier` and assembly/exe were named `dotnet_csharpier`. 
+The tool command name was changed to just `csharpier`
+- Running a local tool remains the same `dotnet csharpier --version`
+- Running a global tool is changed to `csharpier --version`
+
+The assembly/exe names have changed to just `CSharpier`
+
+### Support for ignoring files via a .gitignore [#631](https://github.com/belav/csharpier/issues/631)
+CSharpier now works as follows when determining if a file should be ignored.
+
+- .gitignore files are considered when determining if a file will be ignored. A .gitignore file at the same level as a given file will take priority over a .gitignore file above it in the directory tree.
+- If a .csharpierignore file is present at the same level or anywhere above the given file in the tree and it contains a pattern for a given file, that will take priority.
+- The patterns within .csharpierignore work the same as a .gitignore, with patterns lower in the file taking priority over patterns above
+- CSharpier does not currently look further up the directory tree for additional .csharpierignore files if it finds one. But it does look for .gitignore files. If there is demand this could be added later.
+## What's Changed
+### Add logging format argument and support for msbuild logs [#1517](https://github.com/belav/csharpier/pull/1517)
+CSharpier now supports a `--log-format` argument. By default it will log with a console format. \
+With `--log-format MsBuild` CSharpier will produce logs in a format that allow jumping to files in the VisualStudio error list.
+
+Thanks go to @moormaster for the contribution
+### Allow passing an `.editorconfig` file path into `--config-path` [#1456](https://github.com/belav/csharpier/issues/1456)
+CSharpier now supports passing a path to an `.editorconfig` file when using the `--config-path` argument.
+### Always ignore any files in .git folder [#1438](https://github.com/belav/csharpier/pull/1438)
+CSharpier will now ignore any files that are in a `.git` folder. Previously if the `.git` folder happened to contain an invalid c# file CSharpier would attempt to format it and report an error.
+### Avoid excessive file system watches for --server [#1465](https://github.com/belav/csharpier/pull/1465)
+When CSharpier server was started, it would create file watches for all of the files within the directory the tool existed in. This can lead to some systems running out of the ability to monitor more files.
+
+CSharpier server now uses a temporary empty content root to avoid creating all file watches.
+
+Thanks go to @chklauser for the contribution
+### Smarter EditorConfig parsing [#1228](https://github.com/belav/csharpier/issues/1228)
+Previously CSharpier was eagerly loading all `.editorconfig` files within a directory that it was asked to format. It now lazy loads them in a way that is performant and avoids loading and parsing editorconfigs that aren't needed. 
+### Extra blank line before local scope block in global statement [#1566](https://github.com/belav/csharpier/issues/1566)
+```c#
+// input & expected output
+int x = 1;
+
+{
+    int x = 2;
+}
+
+// 0.30.6
+int x = 1;
+
+
+{
+    int x = 2;
+}
+```
+### Inconsistent indentation for parenthesis expression [#1562](https://github.com/belav/csharpier/issues/1562)
+A statement being surrounded by parentheses affected the indentation in an inconsistent way.
+```c#
+// input & expected output
+var b2 = 
+    System.Environment.SpecialFolder.AdminTools
+        is System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools;
+
+var b2 = (
+    System.Environment.SpecialFolder.AdminTools
+        is System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+);
+
+// 0.30.6
+var b2 =
+    System.Environment.SpecialFolder.AdminTools
+        is System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools;
+
+var b2 = (
+    System.Environment.SpecialFolder.AdminTools
+    is System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+);
+
+```
+### Attribute on property accessor causes unnecessary newlines in formatting [#1558](https://github.com/belav/csharpier/issues/1558)
+The logic around when to break properties with attributes has been adjusted. See the example for more details
+```c#
+public class ClassName
+{
+    [Obsolete]
+    public string Property { [Obsolete] get; [Obsolete] set; }
+
+    public int ShortProperty { get; [SomeAttribute] init; } = 20;
+
+    public int CommandTimeout
+    {
+        get;
+        [SomeAttribute]
+        [SomeOtherAttribute]
+        set;
+    }
+
+    public int CommandTimeout
+    {
+        [SomeAttribute(someValue)]
+        get;
+    }
+}
+```
+### Fluent multiline with comment re-formats incorrectly. [#1556](https://github.com/belav/csharpier/issues/1556)
+When a single method in a fluent chain was commented out, csharpier would try to collapse the chain to a single line.
+```c#
+// input & expected output
+builder
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    //.CallMethod()
+;
+
+// 0.30.6
+builder.CallMethod().CallMethod().CallMethod()
+//.CallMethod()
+;
+
+```
+### Comments on an invocation chain that began with a generic where breaking when they should not [#1555](https://github.com/belav/csharpier/issues/1555)
+In some cases CSharpier was breaking an invocation chain when it should not.
+```c#
+// input & expected output
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.SomeOtherProperty = 1;
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.CallMethod();
+
+// 0.30.6
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>
+    .SomeProperty
+    .SomeOtherProperty = 1;
+
+// CommentOnGenericDoesNotBreakChain
+SomeObject<SomeThing>.SomeProperty.CallMethod();
+
+```
+### Comment in line before attribute causes unexpected line break after attribute [#1553](https://github.com/belav/csharpier/issues/1553)
+CSharpier was breaking and indenting a parameter when it had a comment
+```c#
+// input & expected output
+    public void SomeMethod(
+        // Some Comment does not indent parameter
+        [SomeAttribute] string someParameter
+    ) { }
+
+// 0.30.6
+    public void SomeMethod(
+        // Some Comment does not indent parameter
+        [SomeAttribute]
+            string someParameter
+    ) { }
+```
+### Huge oneliner with switch expression followed my method invocations  [#1546](https://github.com/belav/csharpier/issues/1546)
+CSharpier was keeping a method chain on a single line if it was invoked on a switch expression within parentheses.
+```c#
+// input & expected output
+(
+    someValue switch
+    {
+        someValue => 1,
+        _ => 2,
+    }
+)
+    .SomeLongMethodCall______________________________()
+    .SomeLongMethodCall______________________________()
+    .SomeLongMethodCall______________________________();
+
+// 0.30.6
+(
+    someValue switch
+    {
+        someValue => 1,
+        _ => 2,
+    }
+).SomeLongMethodCall______________________________().SomeLongMethodCall______________________________().SomeLongMethodCall______________________________();
+
+```
+### Inconsistent Formatting of Single Parameter Lambda Expressions [#1522](https://github.com/belav/csharpier/issues/1522)
+CSharpier was not formatting all lambda expressions consistently when they were the single argument to a method call.
+```c#
+// input & expected output
+CallMethod(() =>
+    CallOtherMethod___________________________________________________________()
+);
+
+CallMethod(() =>
+    CallLongMethod_________________________________()
+        .ThenAnotherMethod_____________________________________()
+);
+
+// 0.30.6
+CallMethod(() =>
+    CallOtherMethod___________________________________________________________()
+);
+
+CallMethod(
+    () =>
+        CallLongMethod_________________________________()
+            .ThenAnotherMethod_____________________________________()
+);
+```
+
+### Empty lines after XmlComments should be removed [#1521](https://github.com/belav/csharpier/issues/1521)
+When a member has documentation comments, any empty lines after those comments and before the member are now removed.
+```c#
+// input
+    /// <summary>Remove the lines after the summary</summary>
+
+    public bool SomeField1;
+
+// output
+    /// <summary>Remove the lines after the summary</summary>
+    public bool SomeField1;
+```
+### CSharpier always includes indentation whitespace on non-content lines [#1455](https://github.com/belav/csharpier/issues/1455)
+CSharpier was indenting the final non-content line within a raw string. It now leaves them dedented to keep it consistent with other non-content lines.
+```c#
+MakeSureBothNonContentLinesHereStayTrimmed(
+    $"""
+
+
+    """
+);
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.0.0...1.0.0
+# 0.30.6
 ## What's Changed
 ### Trailing comma is placed on new line if last enum value is followed by a comment [#1429](https://github.com/belav/csharpier/issues/1429)
 ```c#
@@ -2898,6 +3169,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
