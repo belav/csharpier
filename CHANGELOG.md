@@ -268,7 +268,7 @@ MakeSureBothNonContentLinesHereStayTrimmed(
 );
 ```
 
-**Full Changelog**: https://github.com/belav/csharpier/compare/1.0.0...1.0.0
+**Full Changelog**: https://github.com/belav/csharpier/compare/0.30.6...1.0.0
 # 0.30.6
 ## What's Changed
 ### Trailing comma is placed on new line if last enum value is followed by a comment [#1429](https://github.com/belav/csharpier/issues/1429)
