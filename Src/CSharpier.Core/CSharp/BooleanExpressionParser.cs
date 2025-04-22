@@ -25,7 +25,7 @@ internal abstract class BooleanExpressionParser
 
     private static List<Token> Tokenize(string input)
     {
-        bool IsPartOfValue(char character)
+        static bool IsPartOfValue(char character)
         {
             return char.IsLetter(character) || char.IsNumber(character) || character == '_';
         }

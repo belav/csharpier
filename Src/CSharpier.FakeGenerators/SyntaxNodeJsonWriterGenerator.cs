@@ -7,7 +7,7 @@ namespace CSharpier.FakeGenerators;
 
 public class SyntaxNodeJsonWriterGenerator
 {
-    readonly List<string> missingTypes = new();
+    private readonly List<string> missingTypes = [];
 
     // this would probably be easier to understand as a scriban template but is a lot of effort
     // to switch and doesn't really change at this point

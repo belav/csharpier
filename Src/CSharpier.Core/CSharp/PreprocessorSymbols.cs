@@ -73,11 +73,11 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
     public override void VisitElseDirectiveTrivia(ElseDirectiveTriviaSyntax node)
     {
         var allParameters = this
-            .CurrentContext.booleanExpressions.SelectMany(o => o.Parameters)
+            .CurrentContext.BooleanExpressions.SelectMany(o => o.Parameters)
             .Distinct()
             .ToList();
         var combinations = GenerateCombinations(allParameters);
-        var functions = this.CurrentContext.booleanExpressions.Select(o => o.Function).ToList();
+        var functions = this.CurrentContext.BooleanExpressions.Select(o => o.Function).ToList();
 
         var combination = combinations.FirstOrDefault(combination =>
             functions.All(o => !o(combination))
@@ -90,7 +90,7 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
         // TODO it would be more efficient to not add a new boolean expression, because we know which
         // symbols we need
-        this.CurrentContext.booleanExpressions.Add(
+        this.CurrentContext.BooleanExpressions.Add(
             new BooleanExpression
             {
                 Parameters = combination.Where(o => o.Value).Select(o => o.Key).ToList(),
@@ -102,12 +102,12 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
     public override void VisitEndIfDirectiveTrivia(EndIfDirectiveTriviaSyntax node)
     {
         var parentSymbols = Array.Empty<string>();
-        if (this.CurrentContext.ParentContext.booleanExpressions.Count != 0)
+        if (this.CurrentContext.ParentContext.BooleanExpressions.Count != 0)
         {
-            parentSymbols = GetSymbols(this.CurrentContext.ParentContext.booleanExpressions.Last());
+            parentSymbols = GetSymbols(this.CurrentContext.ParentContext.BooleanExpressions.Last());
         }
 
-        foreach (var booleanExpression in this.CurrentContext.booleanExpressions)
+        foreach (var booleanExpression in this.CurrentContext.BooleanExpressions)
         {
             var symbolSet = GetSymbols(booleanExpression)
                 .Concat(parentSymbols)
@@ -154,14 +154,17 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
             expression = expression[..indexOf];
         }
         var booleanExpression = BooleanExpressionParser.Parse(expression);
-        this.CurrentContext.booleanExpressions.Add(booleanExpression);
+        this.CurrentContext.BooleanExpressions.Add(booleanExpression);
     }
 
     private static List<Dictionary<string, bool>> GenerateCombinations(List<string> parameterNames)
     {
         if (parameterNames.Count == 0)
         {
-            return [new()];
+            return
+            [
+                [],
+            ];
         }
 
         var subCombinations = GenerateCombinations(parameterNames.Skip(1).ToList());
@@ -188,6 +191,6 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
     private class SymbolContext
     {
         public required SymbolContext ParentContext { get; init; }
-        public List<BooleanExpression> booleanExpressions { get; } = [];
+        public List<BooleanExpression> BooleanExpressions { get; } = [];
     }
 }

@@ -9,7 +9,7 @@ internal class PrintingContext
     public required PrintingContextOptions Options { get; init; }
     public PrintingContextState State { get; } = new();
 
-    private readonly Dictionary<string, int> groupNumberByValue = new();
+    private readonly Dictionary<string, int> groupNumberByValue = [];
 
     public string GroupFor(string value)
     {

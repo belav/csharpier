@@ -19,15 +19,12 @@ internal static class ArgumentList
                             {
                                 Expression: ThisExpressionSyntax
                                     or PredefinedTypeSyntax
-                                    or IdentifierNameSyntax
-                                    {
-                                        Identifier: { Text: { Length: <= 4 } }
-                                    }
+                                    or IdentifierNameSyntax { Identifier.Text.Length: <= 4 }
                             },
                         Parent: { Parent: InvocationExpressionSyntax }
                             or PostfixUnaryExpressionSyntax
                             {
-                                Parent: { Parent: InvocationExpressionSyntax }
+                                Parent.Parent: InvocationExpressionSyntax
                             }
                     },
                 ArgumentListLike.Print(

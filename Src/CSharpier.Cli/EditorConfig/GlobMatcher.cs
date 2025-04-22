@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Text.RegularExpressions;
 
 #nullable disable
 
+#pragma warning disable idIDEe0011
 namespace CSharpier.Cli.EditorConfig;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -64,6 +66,7 @@ internal class GlobMatcherOptions
 /// <summary>
 /// A simple glob matcher implementation, if you want a proper one please use a full fletched one from nuget.
 /// </summary>
+[SuppressMessage("Style", "IDE0011:Add braces")]
 internal class GlobMatcher
 {
     private readonly GlobMatcherOptions myOptions;
@@ -137,11 +140,11 @@ internal class GlobMatcher
         private int myLastAsteriskItem;
         private int myNextPositionForAsterisk;
 
-        private StringComparison ComparisonType =>
+        private readonly StringComparison ComparisonType =>
             this.myOptions.IgnoreCase
                 ? StringComparison.OrdinalIgnoreCase
                 : StringComparison.Ordinal;
-        private char[] PathSeparatorChars =>
+        private readonly char[] PathSeparatorChars =>
             this.myOptions.AllowWindowsPaths ? ourWinPathSeparators : ourUnixPathSeparators;
 
         public MatchContext(GlobMatcherOptions options, string str, PatternCase patternCase)
@@ -540,7 +543,7 @@ internal class GlobMatcher
             return true;
         }
 
-        private bool CheckMatchedByAsterisk(
+        private readonly bool CheckMatchedByAsterisk(
             Asterisk asteriskItem,
             bool first,
             int oldStartPos,
@@ -600,7 +603,7 @@ internal class GlobMatcher
             return true;
         }
 
-        private bool CheckDot(int dotPos)
+        private readonly bool CheckDot(int dotPos)
         {
             // .x should not match neither *x, nor **x, nor ?x, unless
             // myOptions.Dot is set.
@@ -814,7 +817,7 @@ internal class GlobMatcher
         }
 
         if (negateOffset > 0)
-            pattern = pattern.Substring(negateOffset);
+            pattern = pattern[negateOffset..];
 
         return negate;
     }
@@ -876,7 +879,7 @@ internal class GlobMatcher
                 }
                 else if (c == '{' && !escaping)
                 {
-                    prefix = pattern.Substring(0, i);
+                    prefix = pattern[..i];
                     break;
                 }
             }
@@ -888,7 +891,7 @@ internal class GlobMatcher
                 return [pattern];
             }
 
-            var braceExpand = BraceExpand(pattern.Substring(i), options);
+            var braceExpand = BraceExpand(pattern[i..], options);
 
             for (var index = 0; index < braceExpand.Count; index++)
             {
@@ -909,7 +912,7 @@ internal class GlobMatcher
         if (numset.Success)
         {
             // console.error("numset", numset[1], numset[2])
-            var suf = BraceExpand(pattern.Substring(numset.Length), options).ToList();
+            var suf = BraceExpand(pattern[numset.Length..], options).ToList();
             int start = int.Parse(numset.Groups[1].Value, CultureInfo.InvariantCulture),
                 end = int.Parse(numset.Groups[2].Value, CultureInfo.InvariantCulture),
                 inc = start > end ? -1 : 1;
@@ -1026,7 +1029,7 @@ internal class GlobMatcher
         // x{y,z} -> ["xy", "xz"]
         // console.error("set", set)
         // console.error("suffix", pattern.substr(i))
-        var s2 = BraceExpand(pattern.Substring(i), options);
+        var s2 = BraceExpand(pattern[i..], options);
         var list1 = new List<string>(s2.Count * set.Count);
         for (var index = 0; index < s2.Count; index++)
         {

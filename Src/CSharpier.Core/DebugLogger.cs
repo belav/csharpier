@@ -6,7 +6,9 @@ namespace CSharpier.Core;
 
 internal class DebugLogger
 {
+#pragma warning disable IDE0330
     private static readonly object lockObject = new();
+#pragma warning restore IDE0330
 
     [Conditional("DEBUG")]
     public static void Log(object message)

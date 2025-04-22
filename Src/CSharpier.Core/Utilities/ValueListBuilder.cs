@@ -2,35 +2,33 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-// ReSharper disable InconsistentNaming
-
 namespace CSharpier.Core.Utilities;
 
 // From https://github.com/dotnet/runtime/blob/f5c73447ca9dcb3407d0143829bbf708c04170c1/src/libraries/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.cs#L10
 internal ref partial struct ValueListBuilder<T>
 {
-    private Span<T> _span;
-    private T[]? _arrayFromPool;
-    private int _pos;
+    private Span<T> span;
+    private T[]? arrayFromPool;
+    private int pos;
 
     public ValueListBuilder(Span<T?> scratchBuffer)
     {
-        _span = scratchBuffer!;
+        this.span = scratchBuffer!;
     }
 
     public ValueListBuilder(int capacity)
     {
-        Grow(capacity);
+        this.Grow(capacity);
     }
 
     public int Length
     {
-        get => _pos;
+        readonly get => this.pos;
         set
         {
             Debug.Assert(value >= 0);
-            Debug.Assert(value <= _span.Length);
-            _pos = value;
+            Debug.Assert(value <= this.span.Length);
+            this.pos = value;
         }
     }
 
@@ -38,69 +36,69 @@ internal ref partial struct ValueListBuilder<T>
     {
         get
         {
-            Debug.Assert(index < _pos);
-            return ref _span[index];
+            Debug.Assert(index < this.pos);
+            return ref this.span[index];
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(T item)
     {
-        int pos = _pos;
+        var pos = this.pos;
 
         // Workaround for https://github.com/dotnet/runtime/issues/72004
-        Span<T> span = _span;
+        var span = this.span;
         if ((uint)pos < (uint)span.Length)
         {
             span[pos] = item;
-            _pos = pos + 1;
+            this.pos = pos + 1;
         }
         else
         {
-            AddWithResize(item);
+            this.AddWithResize(item);
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(params ReadOnlySpan<T> source)
     {
-        int pos = _pos;
-        Span<T> span = _span;
+        var pos = this.pos;
+        var span = this.span;
         if (source.Length == 1 && (uint)pos < (uint)span.Length)
         {
             span[pos] = source[0];
-            _pos = pos + 1;
+            this.pos = pos + 1;
         }
         else
         {
-            AppendMultiChar(source);
+            this.AppendMultiChar(source);
         }
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void AppendMultiChar(scoped ReadOnlySpan<T> source)
     {
-        if ((uint)(_pos + source.Length) > (uint)_span.Length)
+        if ((uint)(this.pos + source.Length) > (uint)this.span.Length)
         {
-            Grow(_span.Length - _pos + source.Length);
+            this.Grow(this.span.Length - this.pos + source.Length);
         }
 
-        source.CopyTo(_span.Slice(_pos));
-        _pos += source.Length;
+        source.CopyTo(this.span[this.pos..]);
+        this.pos += source.Length;
     }
 
     public void Insert(int index, scoped ReadOnlySpan<T> source)
     {
         Debug.Assert(index == 0, "Implementation currently only supports index == 0");
 
-        if ((uint)(_pos + source.Length) > (uint)_span.Length)
+        if ((uint)(this.pos + source.Length) > (uint)this.span.Length)
         {
-            Grow(source.Length);
+            this.Grow(source.Length);
         }
 
-        _span.Slice(0, _pos).CopyTo(_span.Slice(source.Length));
-        source.CopyTo(_span);
-        _pos += source.Length;
+        this.span[..this.pos].CopyTo(this.span[source.Length..]);
+        source.CopyTo(this.span);
+        this.pos += source.Length;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -108,49 +106,49 @@ internal ref partial struct ValueListBuilder<T>
     {
         Debug.Assert(length >= 0);
 
-        int pos = _pos;
-        Span<T> span = _span;
+        var pos = this.pos;
+        var span = this.span;
         if ((ulong)(uint)pos + (ulong)(uint)length <= (ulong)(uint)span.Length) // same guard condition as in Span<T>.Slice on 64-bit
         {
-            _pos = pos + length;
+            this.pos = pos + length;
             return span.Slice(pos, length);
         }
         else
         {
-            return AppendSpanWithGrow(length);
+            return this.AppendSpanWithGrow(length);
         }
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
     private Span<T> AppendSpanWithGrow(int length)
     {
-        int pos = _pos;
-        Grow(_span.Length - pos + length);
-        _pos += length;
-        return _span.Slice(pos, length);
+        var pos = this.pos;
+        this.Grow(this.span.Length - pos + length);
+        this.pos += length;
+        return this.span.Slice(pos, length);
     }
 
     // Hide uncommon path
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void AddWithResize(T item)
     {
-        Debug.Assert(_pos == _span.Length);
-        int pos = _pos;
-        Grow(1);
-        _span[pos] = item;
-        _pos = pos + 1;
+        Debug.Assert(this.pos == this.span.Length);
+        var pos = this.pos;
+        this.Grow(1);
+        this.span[pos] = item;
+        this.pos = pos + 1;
     }
 
-    public ReadOnlySpan<T> AsSpan()
+    public readonly ReadOnlySpan<T> AsSpan()
     {
-        return _span.Slice(0, _pos);
+        return this.span[..this.pos];
     }
 
-    public bool TryCopyTo(Span<T> destination, out int itemsWritten)
+    public readonly bool TryCopyTo(Span<T> destination, out int itemsWritten)
     {
-        if (_span.Slice(0, _pos).TryCopyTo(destination))
+        if (this.span[..this.pos].TryCopyTo(destination))
         {
-            itemsWritten = _pos;
+            itemsWritten = this.pos;
             return true;
         }
 
@@ -161,10 +159,10 @@ internal ref partial struct ValueListBuilder<T>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Dispose()
     {
-        T[]? toReturn = _arrayFromPool;
+        var toReturn = this.arrayFromPool;
         if (toReturn != null)
         {
-            _arrayFromPool = null;
+            this.arrayFromPool = null;
             ArrayPool<T>.Shared.Return(toReturn);
         }
     }
@@ -180,9 +178,9 @@ internal ref partial struct ValueListBuilder<T>
 
         // Double the size of the span.  If it's currently empty, default to size 4,
         // although it'll be increased in Rent to the pool's minimum bucket size.
-        int nextCapacity = Math.Max(
-            _span.Length != 0 ? _span.Length * 2 : 4,
-            _span.Length + additionalCapacityRequired
+        var nextCapacity = Math.Max(
+            this.span.Length != 0 ? this.span.Length * 2 : 4,
+            this.span.Length + additionalCapacityRequired
         );
 
         // If the computed doubled capacity exceeds the possible length of an array, then we
@@ -193,14 +191,17 @@ internal ref partial struct ValueListBuilder<T>
         // array), just use that same value again and let it OOM in Rent as well.
         if ((uint)nextCapacity > ArrayMaxLength)
         {
-            nextCapacity = Math.Max(Math.Max(_span.Length + 1, ArrayMaxLength), _span.Length);
+            nextCapacity = Math.Max(
+                Math.Max(this.span.Length + 1, ArrayMaxLength),
+                this.span.Length
+            );
         }
 
-        T[] array = ArrayPool<T>.Shared.Rent(nextCapacity);
-        _span.CopyTo(array);
+        var array = ArrayPool<T>.Shared.Rent(nextCapacity);
+        this.span.CopyTo(array);
 
-        T[]? toReturn = _arrayFromPool;
-        _span = _arrayFromPool = array;
+        var toReturn = this.arrayFromPool;
+        this.span = this.arrayFromPool = array;
         if (toReturn != null)
         {
             ArrayPool<T>.Shared.Return(toReturn);

@@ -92,7 +92,7 @@ internal static class RightHandSide
                 is ObjectCreationExpressionSyntax
                 {
                     Type: GenericNameSyntax,
-                    ArgumentList: { Arguments: { Count: 0 } },
+                    ArgumentList.Arguments.Count: 0,
                     Initializer: null
                 }
         )

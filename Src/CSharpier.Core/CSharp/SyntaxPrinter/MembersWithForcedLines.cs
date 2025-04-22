@@ -96,7 +96,7 @@ internal static class MembersWithForcedLines
                 return Doc.Null;
             }
 
-            var blankLineIsForced = (
+            var blankLineIsForced =
                 member is MethodDeclarationSyntax && node is not InterfaceDeclarationSyntax
                 || member
                     is ClassDeclarationSyntax
@@ -109,8 +109,7 @@ internal static class MembersWithForcedLines
                         or NamespaceDeclarationSyntax
                         or OperatorDeclarationSyntax
                         or RecordDeclarationSyntax
-                        or StructDeclarationSyntax
-            );
+                        or StructDeclarationSyntax;
 
             if (
                 member is MethodDeclarationSyntax methodDeclaration
@@ -135,7 +134,7 @@ internal static class MembersWithForcedLines
                 continue;
             }
 
-            var addBlankLine = (blankLineIsForced || lastMemberForcedBlankLine);
+            var addBlankLine = blankLineIsForced || lastMemberForcedBlankLine;
 
             var triviaContainsCommentOrNewLine = false;
             var printExtraNewLines = false;

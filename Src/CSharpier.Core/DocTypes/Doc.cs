@@ -9,7 +9,10 @@ internal abstract class Doc
         return DocSerializer.Serialize(this);
     }
 
-    public static implicit operator Doc(string value) => StringDoc.Create(value);
+    public static implicit operator Doc(string value)
+    {
+        return StringDoc.Create(value);
+    }
 
     public static NullDoc Null => NullDoc.Instance;
 
@@ -169,7 +172,7 @@ internal enum CommentType
     MultiLine,
 }
 
-interface IHasContents
+internal interface IHasContents
 {
     Doc Contents { get; }
 }

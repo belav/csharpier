@@ -1,4 +1,4 @@
-namespace CSharpier.Core.Validators;
+namespace CSharpier.Core;
 
 internal interface IFormattingValidator
 {

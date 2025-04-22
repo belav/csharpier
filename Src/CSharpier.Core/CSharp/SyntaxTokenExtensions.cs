@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace CSharpier.Core;
+namespace CSharpier.Core.CSharp;
 
 internal static class SyntaxTokenExtensions
 {

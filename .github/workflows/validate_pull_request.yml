@@ -15,7 +15,13 @@ jobs:
           --logger "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
           --
           RunConfiguration.CollectSourceInformation=true
-
+  builds_playground:
+    runs-on: ubuntu-latest
+    name: Builds Playground
+    steps:
+      - uses: actions/checkout@v2
+      - run: >
+          docker build .
   check_formatting:
     runs-on: ubuntu-latest
     name: Check Formatting

@@ -33,7 +33,7 @@ public class CliTests
     [TearDown]
     public void AfterEachTest()
     {
-        void DeleteDirectory()
+        static void DeleteDirectory()
         {
             if (Directory.Exists(testFileDirectory))
             {
@@ -671,7 +671,7 @@ max_line_length = 10"
             newFiles.Add(fileName);
         }
 
-        async Task FormatFile(string file)
+        static async Task FormatFile(string file)
         {
             var result = await new CsharpierProcess().WithArguments(file).ExecuteAsync();
             result.ErrorOutput.Should().BeEmpty();

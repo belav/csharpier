@@ -1,4 +1,4 @@
-using CSharpier.Core.Validators;
+using CSharpier.Core;
 using CSharpier.Core.Xml;
 using FluentAssertions;
 using NUnit.Framework;

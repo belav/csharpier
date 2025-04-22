@@ -26,7 +26,7 @@ public class ExampleWalker(string file) : SyntaxFinderWalker(file)
         {
             MembersInType.AddOrUpdate(
                 node.GetType().Name,
-                new List<string>(),
+                [],
                 (key, list) =>
                 {
                     if (!list.Contains(member.GetType().Name))
