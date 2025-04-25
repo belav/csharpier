@@ -628,7 +628,7 @@ public class CommandLineFormatterTests
     [TestCase("File.cs", "!File.cs", false)]
     [TestCase("", "File.cs", true)]
     [TestCase("!File.cs", "File.cs", true)]
-    // [TestCase("File.cs", "", true)]
+    [TestCase("File.cs", "", true)]
     public void CSharpier_Ignore_And_Git_Ignore_Root_Level(
         string gitIgnoreContents,
         string csharpierIgnoreContents,
@@ -651,7 +651,7 @@ public class CommandLineFormatterTests
     [TestCase("File.cs", "!File.cs", false)]
     [TestCase("", "File.cs", true)]
     [TestCase("!File.cs", "File.cs", true)]
-    // [TestCase("File.cs", "", true)]
+    [TestCase("File.cs", "", true)]
     public void CSharpier_Ignore_And_Git_Ignore_Sub_Level(
         string gitIgnoreContents,
         string csharpierIgnoreContents,
@@ -671,28 +671,28 @@ public class CommandLineFormatterTests
             .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
     }
 
-    // [TestCase("File.cs", "!File.cs", false)]
-    // [TestCase("", "File.cs", true)]
-    // [TestCase("!File.cs", "File.cs", true)]
-    // [TestCase("File.cs", "", true)]
-    // public void Two_Git_Ignores(
-    //     string rootGitIgnoreContents,
-    //     string subGitIgnoreContents,
-    //     bool isIgnored
-    // )
-    // {
-    //     var context = new TestContext();
-    //     context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
-    //     context.WhenAFileExists(".gitignore", rootGitIgnoreContents);
-    //     context.WhenAFileExists("Sub/.gitignore", subGitIgnoreContents);
-    //
-    //     var result = Format(context);
-    //
-    //     result
-    //         .OutputLines.FirstOrDefault()
-    //         .Should()
-    //         .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
-    // }
+    [TestCase("File.cs", "!File.cs", false)]
+    [TestCase("", "File.cs", true)]
+    [TestCase("!File.cs", "File.cs", true)]
+    [TestCase("File.cs", "", true)]
+    public void Two_Git_Ignores(
+        string rootGitIgnoreContents,
+        string subGitIgnoreContents,
+        bool isIgnored
+    )
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
+        context.WhenAFileExists(".gitignore", rootGitIgnoreContents);
+        context.WhenAFileExists("Sub/.gitignore", subGitIgnoreContents);
+
+        var result = Format(context);
+
+        result
+            .OutputLines.FirstOrDefault()
+            .Should()
+            .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
+    }
 
     [Test]
     public void Write_Stdout_Should_Only_Write_File()
