@@ -109,6 +109,9 @@ if (-not($result[0].Contains("1 Error(s)"))) {
 
 Write-Host "::endgroup::"
 
+# need a test to validate that a file is actually formatted to help prevent breaking these again
+
+
 if ($failureMessages.Length -ne 0) {
     foreach ($message in $failureMessages) {
         Write-Host "::error::$message`n"
