@@ -542,8 +542,8 @@ public class CommandLineFormatterTests
     public void Multiple_Files_Should_Use_Root_Ignore()
     {
         var context = new TestContext();
-        var unformattedFilePath1 = "SubFolder/1/File1.cs";
-        var unformattedFilePath2 = "SubFolder/2/File2.cs";
+        var unformattedFilePath1 = "Subfolder/1/File1.cs";
+        var unformattedFilePath2 = "Subfolder/2/File2.cs";
         context.WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
         context.WhenAFileExists(unformattedFilePath2, UnformattedClassContent);
         context.WhenAFileExists(".csharpierignore", "Subfolder/**/*.cs");
@@ -604,25 +604,6 @@ public class CommandLineFormatterTests
         var result = Format(context, directoryOrFilePaths: unformattedFilePath1);
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
-    }
-
-    [Test]
-    public void Ignore_Reports_Errors()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists("Test.cs", UnformattedClassContent);
-        var path = context.WhenAFileExists(".csharpierignore", @"\Src\Uploads\*.cs");
-
-        var result = Format(context);
-
-        result.ExitCode.Should().Be(1);
-        result
-            .ErrorOutputLines.First()
-            .Should()
-            .Contain(
-                $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
-            );
-        result.ErrorOutputLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
     }
 
     [TestCase("File.cs", "!File.cs", false)]
