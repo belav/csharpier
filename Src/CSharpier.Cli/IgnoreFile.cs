@@ -1,13 +1,16 @@
-using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
-using Ignore;
+using System.Text.RegularExpressions;
 
 namespace CSharpier.Cli;
 
 internal class IgnoreFile
 {
     private List<IgnoreWithBasePath> Ignores { get; }
-    private static readonly string[] alwaysIgnored = ["**/node_modules", "**/obj", "**/.git"];
+    private static readonly string alwaysIgnoredText = """
+        **/node_modules
+        **/obj
+        **/.git
+        """;
 
     private IgnoreFile(List<IgnoreWithBasePath> ignores)
     {
@@ -41,10 +44,7 @@ internal class IgnoreFile
         if (ignoreFilePaths.Count == 0)
         {
             var ignore = new IgnoreWithBasePath(baseDirectoryPath);
-            foreach (var name in alwaysIgnored)
-            {
-                ignore.Add(name);
-            }
+            AddDefaultRules(ignore);
             return new IgnoreFile([ignore]);
         }
 
@@ -52,40 +52,30 @@ internal class IgnoreFile
         foreach (var ignoreFilePath in ignoreFilePaths)
         {
             var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
+            AddDefaultRules(ignore);
+
+            var content = await fileSystem.File.ReadAllTextAsync(ignoreFilePath, cancellationToken);
+
+            var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(content, true);
+
+            ignore.AddPositives(positives.Merged);
+            ignore.AddNegatives(negatives.Merged);
+
             ignores.Add(ignore);
-            foreach (var name in alwaysIgnored)
-            {
-                ignore.Add(name);
-            }
-            foreach (
-                var line in await fileSystem.File.ReadAllLinesAsync(
-                    ignoreFilePath,
-                    cancellationToken
-                )
-            )
-            {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    continue;
-                }
-                try
-                {
-                    ignore.Add(line);
-                }
-                catch (Exception ex)
-                {
-                    throw new InvalidIgnoreFileException(
-                        $"""
-                        The .csharpierignore file at {ignoreFilePath} could not be parsed due to the following line:
-                        {line}
-                        """,
-                        ex
-                    );
-                }
-            }
         }
 
         return new IgnoreFile(ignores);
+    }
+
+    private static void AddDefaultRules(IgnoreWithBasePath ignore)
+    {
+        var (alwaysPositives, alwaysNegatives) = GitignoreParserNet.GitignoreParser.Parse(
+            alwaysIgnoredText,
+            true
+        );
+
+        ignore.AddPositives(alwaysPositives.Merged);
+        ignore.AddNegatives(alwaysNegatives.Merged);
     }
 
     // this will return the ignore paths in order of priority
@@ -132,7 +122,8 @@ internal class IgnoreFile
     // and to return if this ignore file has a rule for a given path
     private class IgnoreWithBasePath(string basePath)
     {
-        private readonly List<IgnoreRule> Rules = [];
+        private readonly List<Regex> positives = [];
+        private readonly List<Regex> negatives = [];
 
         public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
         {
@@ -143,36 +134,50 @@ internal class IgnoreFile
 
             var pathRelativeToIgnoreFile =
                 path.Length > basePath.Length
-                    ? path[(basePath.Length + 1)..].Replace('\\', '/')
+                    ? path[basePath.Length..].Replace('\\', '/')
                     : string.Empty;
 
             var isIgnored = false;
             var hasMatchingRule = false;
-            foreach (var rule in this.Rules)
+            foreach (var rule in this.positives)
             {
                 var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
                 if (isMatch)
                 {
                     hasMatchingRule = true;
                 }
-                if (rule.Negate)
-                {
-                    if (isIgnored && isMatch)
-                    {
-                        isIgnored = false;
-                    }
-                }
-                else if (!isIgnored && isMatch)
+
+                if (!isIgnored && isMatch)
                 {
                     isIgnored = true;
                 }
             }
+
+            foreach (var rule in this.negatives)
+            {
+                var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
+                if (isMatch)
+                {
+                    hasMatchingRule = true;
+                }
+
+                if (isIgnored && isMatch)
+                {
+                    isIgnored = false;
+                }
+            }
+
             return (hasMatchingRule, isIgnored);
         }
 
-        public void Add(string rule)
+        public void AddPositives(Regex rule)
         {
-            this.Rules.Add(new IgnoreRule(rule));
+            this.positives.Add(rule);
+        }
+
+        public void AddNegatives(Regex rule)
+        {
+            this.negatives.Add(rule);
         }
 
         public override string ToString()
