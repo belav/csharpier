@@ -85,7 +85,7 @@ RUN dotnet build -c Release
 
 # I hate powershell, ugly hacks to get output to return and also update the running list of failures
 Write-Host "::group::UnformattedFileCausesError"
-$result = [TestHelper]::RunTestCase("UnformattedFileCausesError", $false)
+$result = [TestHelper]::RunTestCase("UnformattedFileCausesError", $true)
 if ($result.Length -gt 1) {
     $failureMessages += $result[1]
 }
@@ -108,8 +108,6 @@ if (-not($result[0].Contains("1 Error(s)"))) {
 }
 
 Write-Host "::endgroup::"
-
-Write-Host $failureMessages.Length
 
 if ($failureMessages.Length -ne 0) {
     foreach ($message in $failureMessages) {
