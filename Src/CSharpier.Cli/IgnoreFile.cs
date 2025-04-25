@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO.Abstractions;
+using CSharpier.Cli.Options;
+using CSharpier.Core;
 using Ignore;
 
 namespace CSharpier.Cli;
@@ -37,6 +39,7 @@ internal class IgnoreFile
         CancellationToken cancellationToken
     )
     {
+        DebugLogger.Log("Creating IgnoreFile for " + baseDirectoryPath);
         var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
         if (ignoreFilePaths.Count == 0)
         {
@@ -110,11 +113,11 @@ internal class IgnoreFile
                 }
             }
 
-            var gitIgnoreFilePath = fileSystem.Path.Combine(directoryInfo.FullName, ".gitignore");
-            if (fileSystem.File.Exists(gitIgnoreFilePath))
-            {
-                result.Add(gitIgnoreFilePath);
-            }
+            // var gitIgnoreFilePath = fileSystem.Path.Combine(directoryInfo.FullName, ".gitignore");
+            // if (OptionsProvider.UseGitIgnore && fileSystem.File.Exists(gitIgnoreFilePath))
+            // {
+            //     result.Add(gitIgnoreFilePath);
+            // }
 
             directoryInfo = directoryInfo.Parent;
         }

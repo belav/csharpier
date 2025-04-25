@@ -42,6 +42,7 @@ The tool command name was changed to just `csharpier`
 The assembly/exe names have changed to just `CSharpier`
 
 ### Support for ignoring files via a .gitignore [#631](https://github.com/belav/csharpier/issues/631)
+**Disabled for performance issues as of 1.0.1** see [#1588](https://github.com/belav/csharpier/issues/1588)
 CSharpier now works as follows when determining if a file should be ignored.
 
 - .gitignore files are considered when determining if a file will be ignored. A .gitignore file at the same level as a given file will take priority over a .gitignore file above it in the directory tree.
