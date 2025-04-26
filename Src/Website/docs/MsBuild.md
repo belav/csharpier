@@ -37,7 +37,7 @@ dotnet publish -c release -o /app --no-restore /p:CSharpier_Bypass=true
 ```
 
 ### Log Level
-You can control the value passed to `--loglevel` with the following Property
+You can control the value passed to `--log-level` with the following Property
 ```xml
   <PropertyGroup>
     <CSharpier_LogLevel>Error</CSharpier_LogLevel>
