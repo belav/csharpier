@@ -83,8 +83,15 @@ RUN dotnet build -c Release
     }
 }
 
+# we don't want the actual csharpier run to find the unformatted files in these projects
+# so they are ignored in the root .csharpierignore
+# but that would mean our test projects never try to format them unless we create this
+# empty ignore file. We delete it at the end
+New-Item .csharpierignore -force
+
 # I hate powershell, ugly hacks to get output to return and also update the running list of failures
 Write-Host "::group::UnformattedFileCausesError"
+# TODO these no longer fail the build
 $result = [TestHelper]::RunTestCase("UnformattedFileCausesError", $true)
 if ($result.Length -gt 1) {
     $failureMessages += $result[1]
@@ -109,8 +116,7 @@ if (-not($result[0].Contains("1 Error(s)"))) {
 
 Write-Host "::endgroup::"
 
-# need a test to validate that a file is actually formatted to help prevent breaking these again
-
+# TODO need a test to validate that a file is actually formatted to help prevent breaking these again
 
 if ($failureMessages.Length -ne 0) {
     foreach ($message in $failureMessages) {
@@ -133,7 +139,7 @@ class TestHelper {
 
         $result = @();
         $result += $output
-        
+
         if ($LASTEXITCODE -ne $expectedExitCode) {
 
             $result += "The TestCase $testCase did not return an exit code of $expectedExitCode"
@@ -142,4 +148,6 @@ class TestHelper {
         return $result
     }
 }
+
+Remove-Item .csharpierignore
 

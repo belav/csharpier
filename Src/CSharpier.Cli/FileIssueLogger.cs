@@ -6,12 +6,12 @@ internal class FileIssueLogger(string filePath, ILogger logger, LogFormat logFor
 {
     public void WriteError(string value, Exception? exception = null)
     {
-        logger.LogError(exception, GetMessageTemplate(), this.GetPath(), value);
+        logger.LogError(exception, this.GetMessageTemplate(), this.GetPath(), value);
     }
 
     public void WriteWarning(string value)
     {
-        logger.LogWarning(GetMessageTemplate(), this.GetPath(), value);
+        logger.LogWarning(this.GetMessageTemplate(), this.GetPath(), value);
     }
 
     private string GetMessageTemplate()

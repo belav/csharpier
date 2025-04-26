@@ -180,6 +180,7 @@ internal static class FormattingCommands
             IncludeGenerated = includeGenerated,
             ConfigPath = configPath,
             CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
+            LogFormat = logFormat,
         };
 
         return await CommandLineFormatter.Format(
