@@ -1,7 +1,18 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Debug msbuild" type="DotNetProject" factoryName=".NET Project">
-    <option name="EXE_PATH" value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0/CSharpier.exe" />
-    <option name="PROGRAM_PARAMETERS" value="check C:\projects\csharpier-msbuild --log-format MsBuild" />
+  <configuration
+    default="false"
+    name="Debug msbuild"
+    type="DotNetProject"
+    factoryName=".NET Project"
+  >
+    <option
+      name="EXE_PATH"
+      value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0/CSharpier.exe"
+    />
+    <option
+      name="PROGRAM_PARAMETERS"
+      value="check C:\projects\csharpier-msbuild --log-format MsBuild"
+    />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0" />
     <option name="PASS_PARENT_ENVS" value="1" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
