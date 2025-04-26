@@ -1,3 +1,13 @@
+# 1.0.1
+## What's Changed
+### CSharpier's support for .gitignore is causing performance issues [#1584](https://github.com/belav/csharpier/issues/1584)
+The support for `.gitignore` has some major performance problems when there are a large number of `.gitignore` files and/or ignore rules. The feature has been disabled for now until it can be fixed.
+### CSharpier.MsBuild issues [#1586](https://github.com/belav/csharpier/issues/1586)
+CSharpier.MsBuild was not properly logging errors when performing a formatting check. This would result in the build passing when files were not formatted.
+Setting `CSharpier_LogLevel` was passing an invalid parameter of `--loglevel` to CSharpier, resulting in a build failure \
+
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.0.0...1.0.1
 # 1.0.0
 ## Major Changes
 ### Support for formatting XML [#819](https://github.com/belav/csharpier/issues/819)
@@ -3170,6 +3180,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
