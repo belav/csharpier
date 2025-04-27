@@ -184,9 +184,10 @@ internal class OptionsProvider
             directoryName,
             this.ignoreFilesByDirectory,
             (searchingDirectory) =>
-                // this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".gitignore"))
-                //||
-                this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".csharpierignore")),
+                this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".gitignore"))
+                || this.fileSystem.File.Exists(
+                    Path.Combine(searchingDirectory, ".csharpierignore")
+                ),
             (searchingDirectory) =>
                 IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, cancellationToken)
         );

@@ -9,7 +9,7 @@
     <PackageVersion Include="DiffEngine" Version="6.5.7" />
     <PackageVersion Include="FluentAssertions" Version="6.12.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
-    <PackageVersion Include="Ignore" Version="0.2.1" />
+    <PackageVersion Include="GitignoreParserNet" Version="0.2.0.14" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.2" />
     <PackageVersion Include="LovettSoftware.XmlDiff" Version="1.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.8" />
@@ -25,6 +25,7 @@
     <PackageVersion Include="PolySharp" Version="1.14.1" />
     <PackageVersion Include="Scriban" Version="5.10.0" />
     <PackageVersion Include="Serilog.Extensions.Logging.File" Version="3.0.0" />
+    <PackageVersion Include="StrongNamer" Version="0.2.5" />
     <PackageVersion Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageVersion Include="System.IO.Abstractions" Version="21.0.29" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="21.0.29" />

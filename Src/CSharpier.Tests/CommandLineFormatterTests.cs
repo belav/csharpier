@@ -542,8 +542,8 @@ public class CommandLineFormatterTests
     public void Multiple_Files_Should_Use_Root_Ignore()
     {
         var context = new TestContext();
-        var unformattedFilePath1 = "SubFolder/1/File1.cs";
-        var unformattedFilePath2 = "SubFolder/2/File2.cs";
+        var unformattedFilePath1 = "Subfolder/1/File1.cs";
+        var unformattedFilePath2 = "Subfolder/2/File2.cs";
         context.WhenAFileExists(unformattedFilePath1, UnformattedClassContent);
         context.WhenAFileExists(unformattedFilePath2, UnformattedClassContent);
         context.WhenAFileExists(".csharpierignore", "Subfolder/**/*.cs");
@@ -606,29 +606,10 @@ public class CommandLineFormatterTests
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
-    [Test]
-    public void Ignore_Reports_Errors()
-    {
-        var context = new TestContext();
-        context.WhenAFileExists("Test.cs", UnformattedClassContent);
-        var path = context.WhenAFileExists(".csharpierignore", @"\Src\Uploads\*.cs");
-
-        var result = Format(context);
-
-        result.ExitCode.Should().Be(1);
-        result
-            .ErrorOutputLines.First()
-            .Should()
-            .Contain(
-                $"Error The .csharpierignore file at {path} could not be parsed due to the following line:"
-            );
-        result.ErrorOutputLines.Skip(1).First().Should().Contain(@"\Src\Uploads\*.cs");
-    }
-
     [TestCase("File.cs", "!File.cs", false)]
     [TestCase("", "File.cs", true)]
     [TestCase("!File.cs", "File.cs", true)]
-    // [TestCase("File.cs", "", true)]
+    [TestCase("File.cs", "", true)]
     public void CSharpier_Ignore_And_Git_Ignore_Root_Level(
         string gitIgnoreContents,
         string csharpierIgnoreContents,
@@ -651,7 +632,7 @@ public class CommandLineFormatterTests
     [TestCase("File.cs", "!File.cs", false)]
     [TestCase("", "File.cs", true)]
     [TestCase("!File.cs", "File.cs", true)]
-    // [TestCase("File.cs", "", true)]
+    [TestCase("File.cs", "", true)]
     public void CSharpier_Ignore_And_Git_Ignore_Sub_Level(
         string gitIgnoreContents,
         string csharpierIgnoreContents,
@@ -671,28 +652,28 @@ public class CommandLineFormatterTests
             .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
     }
 
-    // [TestCase("File.cs", "!File.cs", false)]
-    // [TestCase("", "File.cs", true)]
-    // [TestCase("!File.cs", "File.cs", true)]
-    // [TestCase("File.cs", "", true)]
-    // public void Two_Git_Ignores(
-    //     string rootGitIgnoreContents,
-    //     string subGitIgnoreContents,
-    //     bool isIgnored
-    // )
-    // {
-    //     var context = new TestContext();
-    //     context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
-    //     context.WhenAFileExists(".gitignore", rootGitIgnoreContents);
-    //     context.WhenAFileExists("Sub/.gitignore", subGitIgnoreContents);
-    //
-    //     var result = Format(context);
-    //
-    //     result
-    //         .OutputLines.FirstOrDefault()
-    //         .Should()
-    //         .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
-    // }
+    [TestCase("File.cs", "!File.cs", false)]
+    [TestCase("", "File.cs", true)]
+    [TestCase("!File.cs", "File.cs", true)]
+    [TestCase("File.cs", "", true)]
+    public void Two_Git_Ignores(
+        string rootGitIgnoreContents,
+        string subGitIgnoreContents,
+        bool isIgnored
+    )
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
+        context.WhenAFileExists(".gitignore", rootGitIgnoreContents);
+        context.WhenAFileExists("Sub/.gitignore", subGitIgnoreContents);
+
+        var result = Format(context);
+
+        result
+            .OutputLines.FirstOrDefault()
+            .Should()
+            .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
+    }
 
     [Test]
     public void Write_Stdout_Should_Only_Write_File()
