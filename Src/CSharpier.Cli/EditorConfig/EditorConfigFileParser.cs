@@ -25,6 +25,7 @@ internal static class EditorConfigFileParser
 
     public static EditorConfigFile Parse(string filePath, IFileSystem fileSystem)
     {
+        // TODO parallel it seems we re-read this file, should it also use the semaphore?
         DebugLogger.Log("Reading file at " + filePath);
         var directory = fileSystem.Path.GetDirectoryName(filePath);
 

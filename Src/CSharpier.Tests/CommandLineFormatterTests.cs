@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace CSharpier.Tests;
 
 [TestFixture]
-[Parallelizable(ParallelScope.All)]
+[Parallelizable(ParallelScope.None)]
 public class CommandLineFormatterTests
 {
     private const string UnformattedClassContent = "public class ClassName { public int Field; }";

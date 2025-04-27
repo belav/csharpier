@@ -1,5 +1,9 @@
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
+using CSharpier.Core;
+using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier.Cli;
 
@@ -40,31 +44,47 @@ internal class IgnoreFile
         CancellationToken cancellationToken
     )
     {
-        var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
-        if (ignoreFilePaths.Count == 0)
-        {
-            var ignore = new IgnoreWithBasePath(baseDirectoryPath);
-            AddDefaultRules(ignore);
-            return new IgnoreFile([ignore]);
-        }
+        return await SharedOperation<IgnoreFile?>
+            .GetOrAddAsync(
+                baseDirectoryPath,
+                async () =>
+                {
+                    DebugLogger.Log("Creating ignore file for " + baseDirectoryPath);
+                    var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
+                    if (ignoreFilePaths.Count == 0)
+                    {
+                        var ignore = new IgnoreWithBasePath(baseDirectoryPath);
+                        AddDefaultRules(ignore);
+                        return new IgnoreFile([ignore]);
+                    }
 
-        var ignores = new List<IgnoreWithBasePath>();
-        foreach (var ignoreFilePath in ignoreFilePaths)
-        {
-            var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
-            AddDefaultRules(ignore);
+                    var ignores = new List<IgnoreWithBasePath>();
+                    foreach (var ignoreFilePath in ignoreFilePaths)
+                    {
+                        var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
+                        AddDefaultRules(ignore);
 
-            var content = await fileSystem.File.ReadAllTextAsync(ignoreFilePath, cancellationToken);
+                        var content = await fileSystem.File.ReadAllTextAsync(
+                            ignoreFilePath,
+                            cancellationToken
+                        );
 
-            var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(content, true);
+                        var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(
+                            content,
+                            true
+                        );
 
-            ignore.AddPositives(positives.Merged);
-            ignore.AddNegatives(negatives.Merged);
+                        ignore.AddPositives(positives.Merged);
+                        ignore.AddNegatives(negatives.Merged);
 
-            ignores.Add(ignore);
-        }
+                        ignores.Add(ignore);
+                    }
 
-        return new IgnoreFile(ignores);
+                    return new IgnoreFile(ignores);
+                },
+                cancellationToken
+            )
+            .ConfigureAwait(false);
     }
 
     private static void AddDefaultRules(IgnoreWithBasePath ignore)
@@ -183,6 +203,51 @@ internal class IgnoreFile
         public override string ToString()
         {
             return "BasePath = " + basePath;
+        }
+    }
+
+    private sealed class SharedOperation<T> : IDisposable
+    {
+        private OperationResult result;
+        private readonly string key;
+        private readonly SemaphoreSlim semaphore = new(1, int.MaxValue);
+        private static readonly ConcurrentDictionary<string, SharedOperation<T>> RunningOperations =
+            new();
+
+        private SharedOperation(string key)
+        {
+            this.key = key;
+        }
+
+        public static async Task<T> GetOrAddAsync(
+            string key,
+            Func<Task<T>> factory,
+            CancellationToken cancellationToken
+        )
+        {
+            using var workspace = RunningOperations.GetOrAdd(key, _ => new(key));
+            await workspace.semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
+
+            if (!workspace.result.HasResult)
+            {
+                workspace.result = new(await factory());
+            }
+
+            return workspace.result.Result;
+        }
+
+        public void Dispose()
+        {
+            this.semaphore.Release();
+            RunningOperations.TryRemove(this.key, out _);
+
+            this.semaphore.Dispose();
+        }
+
+        private readonly struct OperationResult(T result)
+        {
+            public readonly bool HasResult = true;
+            public readonly T Result = result;
         }
     }
 }
