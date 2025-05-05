@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
@@ -44,7 +43,7 @@ internal class IgnoreFile
         CancellationToken cancellationToken
     )
     {
-        return await SharedOperation<IgnoreFile?>
+        return await SharedFunc<IgnoreFile?>
             .GetOrAddAsync(
                 baseDirectoryPath,
                 async () =>
@@ -203,51 +202,6 @@ internal class IgnoreFile
         public override string ToString()
         {
             return "BasePath = " + basePath;
-        }
-    }
-
-    private sealed class SharedOperation<T> : IDisposable
-    {
-        private OperationResult result;
-        private readonly string key;
-        private readonly SemaphoreSlim semaphore = new(1, int.MaxValue);
-        private static readonly ConcurrentDictionary<string, SharedOperation<T>> RunningOperations =
-            new();
-
-        private SharedOperation(string key)
-        {
-            this.key = key;
-        }
-
-        public static async Task<T> GetOrAddAsync(
-            string key,
-            Func<Task<T>> factory,
-            CancellationToken cancellationToken
-        )
-        {
-            using var workspace = RunningOperations.GetOrAdd(key, _ => new(key));
-            await workspace.semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
-
-            if (!workspace.result.HasResult)
-            {
-                workspace.result = new(await factory());
-            }
-
-            return workspace.result.Result;
-        }
-
-        public void Dispose()
-        {
-            this.semaphore.Release();
-            RunningOperations.TryRemove(this.key, out _);
-
-            this.semaphore.Dispose();
-        }
-
-        private readonly struct OperationResult(T result)
-        {
-            public readonly bool HasResult = true;
-            public readonly T Result = result;
         }
     }
 }
