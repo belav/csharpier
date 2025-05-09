@@ -1,13 +1,15 @@
 using System.IO.Abstractions;
+using CSharpier.Core;
 
 namespace CSharpier.Cli.EditorConfig;
 
 internal static class EditorConfigLocator
 {
-    public static EditorConfigSections? FindForDirectoryName(
+    public static async Task<EditorConfigSections?> FindForDirectoryNameAsync(
         string directoryName,
         IFileSystem fileSystem,
-        IgnoreFile ignoreFile
+        IgnoreFile ignoreFile,
+        CancellationToken cancellationToken
     )
     {
         if (directoryName is "")
@@ -15,29 +17,43 @@ internal static class EditorConfigLocator
             return null;
         }
 
-        var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
-
-        while (directoryInfo is not null)
-        {
-            var file = fileSystem.FileInfo.New(
-                fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig")
-            );
-            if (file.Exists && !ignoreFile.IsIgnored(file.FullName))
-            {
-                var dirName = fileSystem.Path.GetDirectoryName(file.FullName);
-                ArgumentNullException.ThrowIfNull(dirName);
-
-                return new EditorConfigSections
+        return await SharedFunc<EditorConfigSections?>
+            .GetOrAddAsync(
+                directoryName,
+#pragma warning disable CS1998
+                async () =>
+#pragma warning restore CS1998
                 {
-                    DirectoryName = dirName,
-                    SectionsIncludingParentFiles = FindSections(file.FullName, fileSystem),
-                };
-            }
+                    var directoryInfo = fileSystem.DirectoryInfo.New(directoryName);
 
-            directoryInfo = directoryInfo.Parent;
-        }
+                    while (directoryInfo is not null)
+                    {
+                        var file = fileSystem.FileInfo.New(
+                            fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig")
+                        );
+                        if (file.Exists && !ignoreFile.IsIgnored(file.FullName))
+                        {
+                            var dirName = fileSystem.Path.GetDirectoryName(file.FullName);
+                            ArgumentNullException.ThrowIfNull(dirName);
 
-        return null;
+                            return new EditorConfigSections
+                            {
+                                DirectoryName = dirName,
+                                SectionsIncludingParentFiles = FindSections(
+                                    file.FullName,
+                                    fileSystem
+                                ),
+                            };
+                        }
+
+                        directoryInfo = directoryInfo.Parent;
+                    }
+
+                    return null;
+                },
+                cancellationToken
+            )
+            .ConfigureAwait(false);
     }
 
     private static List<Section> FindSections(string filePath, IFileSystem fileSystem)

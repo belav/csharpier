@@ -1,5 +1,6 @@
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
+using CSharpier.Core;
 
 namespace CSharpier.Cli;
 
@@ -40,31 +41,47 @@ internal class IgnoreFile
         CancellationToken cancellationToken
     )
     {
-        var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
-        if (ignoreFilePaths.Count == 0)
-        {
-            var ignore = new IgnoreWithBasePath(baseDirectoryPath);
-            AddDefaultRules(ignore);
-            return new IgnoreFile([ignore]);
-        }
+        return await SharedFunc<IgnoreFile?>
+            .GetOrAddAsync(
+                baseDirectoryPath,
+                async () =>
+                {
+                    DebugLogger.Log("Creating ignore file for " + baseDirectoryPath);
+                    var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
+                    if (ignoreFilePaths.Count == 0)
+                    {
+                        var ignore = new IgnoreWithBasePath(baseDirectoryPath);
+                        AddDefaultRules(ignore);
+                        return new IgnoreFile([ignore]);
+                    }
 
-        var ignores = new List<IgnoreWithBasePath>();
-        foreach (var ignoreFilePath in ignoreFilePaths)
-        {
-            var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
-            AddDefaultRules(ignore);
+                    var ignores = new List<IgnoreWithBasePath>();
+                    foreach (var ignoreFilePath in ignoreFilePaths)
+                    {
+                        var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
+                        AddDefaultRules(ignore);
 
-            var content = await fileSystem.File.ReadAllTextAsync(ignoreFilePath, cancellationToken);
+                        var content = await fileSystem.File.ReadAllTextAsync(
+                            ignoreFilePath,
+                            cancellationToken
+                        );
 
-            var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(content, true);
+                        var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(
+                            content,
+                            true
+                        );
 
-            ignore.AddPositives(positives.Merged);
-            ignore.AddNegatives(negatives.Merged);
+                        ignore.AddPositives(positives.Merged);
+                        ignore.AddNegatives(negatives.Merged);
 
-            ignores.Add(ignore);
-        }
+                        ignores.Add(ignore);
+                    }
 
-        return new IgnoreFile(ignores);
+                    return new IgnoreFile(ignores);
+                },
+                cancellationToken
+            )
+            .ConfigureAwait(false);
     }
 
     private static void AddDefaultRules(IgnoreWithBasePath ignore)

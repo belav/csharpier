@@ -25,7 +25,6 @@ internal static class EditorConfigFileParser
 
     public static EditorConfigFile Parse(string filePath, IFileSystem fileSystem)
     {
-        DebugLogger.Log("Reading file at " + filePath);
         var directory = fileSystem.Path.GetDirectoryName(filePath);
 
         ArgumentNullException.ThrowIfNull(directory);

@@ -8,7 +8,6 @@ using NUnit.Framework;
 namespace CSharpier.Tests;
 
 [TestFixture]
-[Parallelizable(ParallelScope.Fixtures)]
 public class OptionsProviderTests
 {
     [Test]
