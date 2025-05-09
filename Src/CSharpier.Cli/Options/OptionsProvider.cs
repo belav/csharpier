@@ -64,10 +64,11 @@ internal class OptionsProvider
         }
 
         var specifiedEditorConfig = editorConfigPath is not null
-            ? EditorConfigLocator.FindForDirectoryName(
+            ? await EditorConfigLocator.FindForDirectoryNameAsync(
                 Path.GetDirectoryName(editorConfigPath)!,
                 fileSystem,
-                ignoreFile
+                ignoreFile,
+                cancellationToken
             )
             : null;
 
@@ -89,7 +90,12 @@ internal class OptionsProvider
         if (editorConfigPath is null)
         {
             optionsProvider.editorConfigByDirectory[directoryName] =
-                EditorConfigLocator.FindForDirectoryName(directoryName, fileSystem, ignoreFile);
+                await EditorConfigLocator.FindForDirectoryNameAsync(
+                    directoryName,
+                    fileSystem,
+                    ignoreFile,
+                    cancellationToken
+                );
         }
 
         return optionsProvider;
@@ -167,10 +173,11 @@ internal class OptionsProvider
             searchingDirectory =>
                 this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".editorconfig")),
             async searchingDirectory =>
-                EditorConfigLocator.FindForDirectoryName(
+                await EditorConfigLocator.FindForDirectoryNameAsync(
                     searchingDirectory,
                     this.fileSystem,
-                    await this.FindIgnoreFileAsync(searchingDirectory, cancellationToken)
+                    await this.FindIgnoreFileAsync(searchingDirectory, cancellationToken),
+                    cancellationToken
                 )
         );
     }

@@ -1,8 +1,6 @@
-using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 using CSharpier.Core;
-using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 namespace CSharpier.Cli;
 

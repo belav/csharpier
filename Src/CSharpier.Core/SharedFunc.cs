@@ -29,6 +29,7 @@ internal sealed class SharedFunc<T> : SemaphoreSlim
         finally
         {
             workspace.Release();
+            RunningFuncs.TryRemove(key, out _);
         }
 
         return workspace.result.Result;
