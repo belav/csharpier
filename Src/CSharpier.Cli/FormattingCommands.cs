@@ -198,7 +198,7 @@ internal static class FormattingCommands
         {
             Arity = ArgumentArity.ZeroOrMore,
             Description =
-                "One or more paths to a directory containing C# files to format or a C# file to format. It may be ommited when piping data via stdin.",
+                "One or more paths to - a directory containing files to format or a specific file to format. May be omitted when piping data via stdin.",
         }.LegalFilePathsOnly();
         command.AddArgument(argument);
         command.AddValidator(commandResult =>
