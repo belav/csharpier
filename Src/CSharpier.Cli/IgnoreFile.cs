@@ -8,6 +8,7 @@ internal class IgnoreFile
 {
     private List<IgnoreWithBasePath> Ignores { get; }
     private static readonly string alwaysIgnoredText = """
+        **/bin
         **/node_modules
         **/obj
         **/.git
