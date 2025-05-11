@@ -27,6 +27,11 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
+            if (node.Nodes().FirstOrDefault() is XText { Value: ['\n', ..] or ['r', ..] })
+            {
+                return Doc.LiteralLine;
+            }
+
             if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
             {
                 return Doc.Null;

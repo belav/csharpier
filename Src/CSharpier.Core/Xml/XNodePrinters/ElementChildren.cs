@@ -32,12 +32,7 @@ internal static class ElementChildren
 
             if (prevBetweenLine is not NullDoc)
             {
-                if (ForceNextEmptyLine(childNode.PreviousNode))
-                {
-                    prevParts.Add(Doc.HardLine);
-                    prevParts.Add(Doc.HardLine);
-                }
-                else if (prevBetweenLine is HardLine)
+                if (prevBetweenLine is HardLine)
                 {
                     prevParts.Add(Doc.HardLine);
                 }
@@ -53,15 +48,7 @@ internal static class ElementChildren
 
             if (nextBetweenLine is not NullDoc)
             {
-                if (ForceNextEmptyLine(childNode))
-                {
-                    if (childNode.NextNode is XText)
-                    {
-                        nextParts.Add(Doc.HardLine);
-                        nextParts.Add(Doc.HardLine);
-                    }
-                }
-                else if (nextBetweenLine is HardLine)
+                if (nextBetweenLine is HardLine)
                 {
                     if (childNode.NextNode is XText)
                     {
@@ -95,17 +82,6 @@ internal static class ElementChildren
         return Doc.Concat(result);
     }
 
-    private static bool ForceNextEmptyLine(XNode? childNode)
-    {
-        return false;
-        // return (
-        //     isFrontMatter(node) ||
-        //     (node.next &&
-        //      node.sourceSpan.end &&
-        //      node.sourceSpan.end.line + 1 < node.next.sourceSpan.start.line)
-        // );
-    }
-
     public static Doc PrintChild(XNode child, XmlPrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
@@ -129,86 +105,12 @@ internal static class ElementChildren
         return Node.Print(child, context);
     }
 
-    // public static int GetEndLocation(XmlElement node)
-    // {
-    //     int endLocation = LocEnd(node);
-    //
-    //     // Element can be unclosed
-    //     if (node.Type == "element" && node.Children != null && node.Children.Count > 0)
-    //     {
-    //         return Math.Max(endLocation, GetEndLocation(node.Children[^1])); // Using C# ^ for last element
-    //     }
-    //
-    //     return endLocation;
-    // }
-
     public static Doc PrintBetweenLine(XNode prevNode, XNode nextNode)
     {
-        return prevNode is XText && nextNode is XText
-            ? Doc.HardLine
-            // ? prevNode.isTrailingSpaceSensitive
-            //     ? prevNode.hasTrailingSpaces
-            //         ? preferHardlineAsLeadingSpaces(nextNode)
-            //             ? hardline
-            //             : line
-            //         : ""
-            //     : preferHardlineAsLeadingSpaces(nextNode)
-            //       ? hardline
-            //       : softline
-            :
-            // (needsToBorrowNextOpeningTagStartMarker(prevNode) &&
-            //       (hasPrettierIgnore(nextNode) ||
-            //           /**
-            //            *     123<a
-            //            *          ~
-            //            *       ><b>
-            //            */
-            //           nextNode.firstChild ||
-            //           /**
-            //            *     123<!--
-            //            *            ~
-            //            *     -->
-            //            */
-            //           nextNode.isSelfClosing ||
-            //           /**
-            //            *     123<span
-            //            *             ~
-            //            *       attr
-            //            */
-            //           (nextNode.type === "element" &&
-            //               nextNode.attrs.length > 0))) ||
-            //   /**
-            //    *     <img
-            //    *       src="long"
-            //    *                 ~
-            //    *     />123
-            //    */
-            //   (prevNode.type === "element" &&
-            //       prevNode.isSelfClosing &&
-            //       needsToBorrowPrevClosingTagEndMarker(nextNode))
-            // ? ""
-            // :
-            // !nextNode.isLeadingSpaceSensitive ||
-            //   preferHardlineAsLeadingSpaces(nextNode) ||
-            //   /**
-            //    *       Want to write us a letter? Use our<a
-            //    *         ><b><a>mailing address</a></b></a
-            //    *                                          ~
-            //    *       >.
-            //    */
-            //   (needsToBorrowPrevClosingTagEndMarker(nextNode) &&
-            //       prevNode.lastChild &&
-            //       needsToBorrowParentClosingTagStartMarker(
-            //           prevNode.lastChild,
-            //       ) &&
-            //       prevNode.lastChild.lastChild &&
-            //       needsToBorrowParentClosingTagStartMarker(
-            //           prevNode.lastChild.lastChild,
-            //       ))
-            // ? hardline
-            // : nextNode.hasLeadingSpaces
-            //   ? line
-            //   : softline;
-            Doc.HardLine;
+        return
+            (prevNode is XText && nextNode is XComment)
+            || (prevNode is XComment && nextNode is XText)
+            ? Doc.Null
+            : Doc.HardLine;
     }
 }

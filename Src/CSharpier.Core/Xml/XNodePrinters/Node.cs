@@ -75,6 +75,20 @@ internal static class Node
             return xcData.ToString();
         }
 
-        return new XElement("EncodeText", xText.Value).LastNode!.ToString();
+        var textValue = xText.Value;
+        if (xText.Parent?.FirstNode == xText)
+        {
+            if (textValue[0] is '\r')
+            {
+                textValue = textValue[1..];
+            }
+
+            if (textValue[0] is '\n')
+            {
+                textValue = textValue[1..];
+            }
+        }
+
+        return new XElement("EncodeText", textValue).LastNode!.ToString();
     }
 }
