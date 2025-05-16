@@ -61,7 +61,7 @@ public class Startup(IConfiguration configuration)
             if (env.IsDevelopment())
             {
                 spa.Options.SourcePath = "ClientApp";
-                spa.Options.DevServerPort = 3000;
+                spa.Options.DevServerPort = 7010;
                 spa.UseReactDevelopmentServer(npmScript: "start");
             }
         });
