@@ -1,5 +1,6 @@
 using System.Xml.Linq;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
@@ -8,19 +9,20 @@ internal static class ElementChildren
     public static Doc Print(XElement element, XmlPrintingContext context)
     {
         var groupIds = new List<string>();
-        foreach (var _ in element.Nodes())
+        var childNodes = element.Nodes().ToList();
+        foreach (var _ in childNodes)
         {
             groupIds.Add(context.GroupFor("symbol"));
         }
 
-        var result = new List<Doc>();
+        var result = new ValueListBuilder<Doc>(childNodes.Count * 5);
         var x = 0;
-        foreach (var childNode in element.Nodes())
+        foreach (var childNode in childNodes)
         {
-            var prevParts = new List<Doc>();
-            var leadingParts = new List<Doc>();
-            var trailingParts = new List<Doc>();
-            var nextParts = new List<Doc>();
+            var prevParts = new ValueListBuilder<Doc>([null, null]);
+            var leadingParts = new ValueListBuilder<Doc>([null, null]);
+            var trailingParts = new ValueListBuilder<Doc>([null, null]);
+            var nextParts = new ValueListBuilder<Doc>([null, null]);
 
             var prevBetweenLine = childNode.PreviousNode is not null
                 ? PrintBetweenLine(childNode.PreviousNode, childNode)
@@ -34,15 +36,15 @@ internal static class ElementChildren
             {
                 if (prevBetweenLine is HardLine)
                 {
-                    prevParts.Add(Doc.HardLine);
+                    prevParts.Append(Doc.HardLine);
                 }
                 else if (childNode.PreviousNode is XText)
                 {
-                    leadingParts.Add(prevBetweenLine);
+                    leadingParts.Append(prevBetweenLine);
                 }
                 else
                 {
-                    leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    leadingParts.Append(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
                 }
             }
 
@@ -52,49 +54,31 @@ internal static class ElementChildren
                 {
                     if (childNode.NextNode is XText)
                     {
-                        nextParts.Add(Doc.HardLine);
+                        nextParts.Append(Doc.HardLine);
                     }
                 }
                 else
                 {
-                    trailingParts.Add(nextBetweenLine);
+                    trailingParts.Append(nextBetweenLine);
                 }
             }
 
-            DebugLogger.Log("childNode:     " + childNode);
-            DebugLogger.Log(
-                "prevParts:     " + string.Join(", ", prevParts.Select(o => o.ToString()))
-            );
-            DebugLogger.Log(
-                "leadingParts:  " + string.Join(", ", leadingParts.Select(o => o.ToString()))
-            );
-            DebugLogger.Log(
-                "trailingParts: " + string.Join(", ", trailingParts.Select(o => o.ToString()))
-            );
-            DebugLogger.Log(
-                "nextParts:     " + string.Join(", ", nextParts.Select(o => o.ToString()))
-            );
-            DebugLogger.Log("");
-
-            List<Doc> innerResult =
-            [
-                .. prevParts,
+            result.Append(prevParts.AsSpan());
+            result.Append(
                 Doc.Group(
-                    Doc.Concat(leadingParts),
+                    Doc.Concat(ref leadingParts),
                     Doc.GroupWithId(
                         groupIds[x],
                         PrintChild(childNode, context),
-                        Doc.Concat(trailingParts)
+                        Doc.Concat(ref trailingParts)
                     )
-                ),
-                .. nextParts,
-            ];
-
-            result.AddRange(innerResult);
+                )
+            );
+            result.Append(nextParts.AsSpan());
             x++;
         }
 
-        return Doc.Concat(result);
+        return Doc.Concat(ref result);
     }
 
     public static Doc PrintChild(XNode child, XmlPrintingContext context)
