@@ -61,6 +61,21 @@ internal static class ElementChildren
                 }
             }
 
+            DebugLogger.Log("childNode:     " + childNode);
+            DebugLogger.Log(
+                "prevParts:     " + string.Join(", ", prevParts.Select(o => o.ToString()))
+            );
+            DebugLogger.Log(
+                "leadingParts:  " + string.Join(", ", leadingParts.Select(o => o.ToString()))
+            );
+            DebugLogger.Log(
+                "trailingParts: " + string.Join(", ", trailingParts.Select(o => o.ToString()))
+            );
+            DebugLogger.Log(
+                "nextParts:     " + string.Join(", ", nextParts.Select(o => o.ToString()))
+            );
+            DebugLogger.Log("");
+
             List<Doc> innerResult =
             [
                 .. prevParts,
@@ -110,6 +125,8 @@ internal static class ElementChildren
         return
             (prevNode is XText && nextNode is XComment)
             || (prevNode is XComment && nextNode is XText)
+            || (prevNode is XText && nextNode is XElement)
+            || (prevNode is XElement && nextNode is XText)
             ? Doc.Null
             : Doc.HardLine;
     }
