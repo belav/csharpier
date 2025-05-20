@@ -214,7 +214,8 @@ internal static class Tag
         return node.PreviousNode is null
             // I think isLeadingSpaceSensitive is true for text/comment
             // && node.IsTextLike()
-            && node is XText and not XCData
+            && node is XText xText and not XCData
+            && xText.ToString()[0] is not ('\r' or '\n')
         // && node.isLeadingSpaceSensitive && !node.hasLeadingSpaces
         ;
     }

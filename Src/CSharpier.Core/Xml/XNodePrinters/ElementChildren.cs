@@ -1,5 +1,6 @@
 using System.Xml.Linq;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
@@ -8,19 +9,20 @@ internal static class ElementChildren
     public static Doc Print(XElement element, XmlPrintingContext context)
     {
         var groupIds = new List<string>();
-        foreach (var _ in element.Nodes())
+        var childNodes = element.Nodes().ToList();
+        foreach (var _ in childNodes)
         {
             groupIds.Add(context.GroupFor("symbol"));
         }
 
-        var result = new List<Doc>();
+        var result = new ValueListBuilder<Doc>(childNodes.Count * 5);
         var x = 0;
-        foreach (var childNode in element.Nodes())
+        foreach (var childNode in childNodes)
         {
-            var prevParts = new List<Doc>();
-            var leadingParts = new List<Doc>();
-            var trailingParts = new List<Doc>();
-            var nextParts = new List<Doc>();
+            var prevParts = new ValueListBuilder<Doc>([null, null]);
+            var leadingParts = new ValueListBuilder<Doc>([null, null]);
+            var trailingParts = new ValueListBuilder<Doc>([null, null]);
+            var nextParts = new ValueListBuilder<Doc>([null, null]);
 
             var prevBetweenLine = childNode.PreviousNode is not null
                 ? PrintBetweenLine(childNode.PreviousNode, childNode)
@@ -32,78 +34,51 @@ internal static class ElementChildren
 
             if (prevBetweenLine is not NullDoc)
             {
-                if (ForceNextEmptyLine(childNode.PreviousNode))
+                if (prevBetweenLine is HardLine)
                 {
-                    prevParts.Add(Doc.HardLine);
-                    prevParts.Add(Doc.HardLine);
-                }
-                else if (prevBetweenLine is HardLine)
-                {
-                    prevParts.Add(Doc.HardLine);
+                    prevParts.Append(Doc.HardLine);
                 }
                 else if (childNode.PreviousNode is XText)
                 {
-                    leadingParts.Add(prevBetweenLine);
+                    leadingParts.Append(prevBetweenLine);
                 }
                 else
                 {
-                    leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    leadingParts.Append(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
                 }
             }
 
             if (nextBetweenLine is not NullDoc)
             {
-                if (ForceNextEmptyLine(childNode))
+                if (nextBetweenLine is HardLine)
                 {
                     if (childNode.NextNode is XText)
                     {
-                        nextParts.Add(Doc.HardLine);
-                        nextParts.Add(Doc.HardLine);
-                    }
-                }
-                else if (nextBetweenLine is HardLine)
-                {
-                    if (childNode.NextNode is XText)
-                    {
-                        nextParts.Add(Doc.HardLine);
+                        nextParts.Append(Doc.HardLine);
                     }
                 }
                 else
                 {
-                    trailingParts.Add(nextBetweenLine);
+                    trailingParts.Append(nextBetweenLine);
                 }
             }
 
-            List<Doc> innerResult =
-            [
-                .. prevParts,
+            result.Append(prevParts.AsSpan());
+            result.Append(
                 Doc.Group(
-                    Doc.Concat(leadingParts),
+                    Doc.Concat(ref leadingParts),
                     Doc.GroupWithId(
                         groupIds[x],
                         PrintChild(childNode, context),
-                        Doc.Concat(trailingParts)
+                        Doc.Concat(ref trailingParts)
                     )
-                ),
-                .. nextParts,
-            ];
-
-            result.AddRange(innerResult);
+                )
+            );
+            result.Append(nextParts.AsSpan());
             x++;
         }
 
-        return Doc.Concat(result);
-    }
-
-    private static bool ForceNextEmptyLine(XNode? childNode)
-    {
-        return false;
-        // return (
-        //     isFrontMatter(node) ||
-        //     (node.next &&
-        //      node.sourceSpan.end &&
-        //      node.sourceSpan.end.line + 1 < node.next.sourceSpan.start.line)
-        // );
+        return Doc.Concat(ref result);
     }
 
     public static Doc PrintChild(XNode child, XmlPrintingContext context)
@@ -129,86 +104,14 @@ internal static class ElementChildren
         return Node.Print(child, context);
     }
 
-    // public static int GetEndLocation(XmlElement node)
-    // {
-    //     int endLocation = LocEnd(node);
-    //
-    //     // Element can be unclosed
-    //     if (node.Type == "element" && node.Children != null && node.Children.Count > 0)
-    //     {
-    //         return Math.Max(endLocation, GetEndLocation(node.Children[^1])); // Using C# ^ for last element
-    //     }
-    //
-    //     return endLocation;
-    // }
-
     public static Doc PrintBetweenLine(XNode prevNode, XNode nextNode)
     {
-        return prevNode is XText && nextNode is XText
-            ? Doc.HardLine
-            // ? prevNode.isTrailingSpaceSensitive
-            //     ? prevNode.hasTrailingSpaces
-            //         ? preferHardlineAsLeadingSpaces(nextNode)
-            //             ? hardline
-            //             : line
-            //         : ""
-            //     : preferHardlineAsLeadingSpaces(nextNode)
-            //       ? hardline
-            //       : softline
-            :
-            // (needsToBorrowNextOpeningTagStartMarker(prevNode) &&
-            //       (hasPrettierIgnore(nextNode) ||
-            //           /**
-            //            *     123<a
-            //            *          ~
-            //            *       ><b>
-            //            */
-            //           nextNode.firstChild ||
-            //           /**
-            //            *     123<!--
-            //            *            ~
-            //            *     -->
-            //            */
-            //           nextNode.isSelfClosing ||
-            //           /**
-            //            *     123<span
-            //            *             ~
-            //            *       attr
-            //            */
-            //           (nextNode.type === "element" &&
-            //               nextNode.attrs.length > 0))) ||
-            //   /**
-            //    *     <img
-            //    *       src="long"
-            //    *                 ~
-            //    *     />123
-            //    */
-            //   (prevNode.type === "element" &&
-            //       prevNode.isSelfClosing &&
-            //       needsToBorrowPrevClosingTagEndMarker(nextNode))
-            // ? ""
-            // :
-            // !nextNode.isLeadingSpaceSensitive ||
-            //   preferHardlineAsLeadingSpaces(nextNode) ||
-            //   /**
-            //    *       Want to write us a letter? Use our<a
-            //    *         ><b><a>mailing address</a></b></a
-            //    *                                          ~
-            //    *       >.
-            //    */
-            //   (needsToBorrowPrevClosingTagEndMarker(nextNode) &&
-            //       prevNode.lastChild &&
-            //       needsToBorrowParentClosingTagStartMarker(
-            //           prevNode.lastChild,
-            //       ) &&
-            //       prevNode.lastChild.lastChild &&
-            //       needsToBorrowParentClosingTagStartMarker(
-            //           prevNode.lastChild.lastChild,
-            //       ))
-            // ? hardline
-            // : nextNode.hasLeadingSpaces
-            //   ? line
-            //   : softline;
-            Doc.HardLine;
+        return
+            (prevNode is XText && nextNode is XComment)
+            || (prevNode is XComment && nextNode is XText)
+            || (prevNode is XText && nextNode is XElement)
+            || (prevNode is XElement && nextNode is XText)
+            ? Doc.Null
+            : Doc.HardLine;
     }
 }
