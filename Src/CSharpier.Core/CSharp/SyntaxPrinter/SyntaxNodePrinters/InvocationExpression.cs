@@ -116,6 +116,7 @@ internal static class InvocationExpression
                 parent is ExpressionStatementSyntax expressionStatementSyntax
                 && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
             )
+            || groups.Count == 1
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
