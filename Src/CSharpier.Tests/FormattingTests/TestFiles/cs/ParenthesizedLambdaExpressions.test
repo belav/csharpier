@@ -5,6 +5,9 @@ public class ClassName
         null,
         (Action)(() => { })
     );
+    private SomeObject someObject = new SomeObject_____________________________________(
+        () => new SomeObject()
+    );
     private static readonly Action _callbackCompleted = () => { };
 
     public void MethodName()
@@ -103,7 +106,7 @@ public class ClassName
         CallMethod(() =>
             CallAnotherMethod______________________________________________________123()
         );
-        
+
         CallMethod(
             CallAnotherMethod_________________(),
             () => CallAnotherMethod_________________()
