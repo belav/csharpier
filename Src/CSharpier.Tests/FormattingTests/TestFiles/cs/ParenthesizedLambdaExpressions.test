@@ -92,5 +92,21 @@ public class ClassName
         var returnType = object (bool o) => o ? 1 : "two";
         var returnTypeWithAsync = async object (bool o) => o ? 1 : "two";
         var returnTypeWithAttribute = [Attribute] object (bool o) => o ? 1 : "two";
+
+        CallMethod(() => CallAnotherMethod______________________________________________________());
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________1()
+        );
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________12()
+        );
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________123()
+        );
+        
+        CallMethod(
+            CallAnotherMethod_________________(),
+            () => CallAnotherMethod_________________()
+        );
     }
 }
