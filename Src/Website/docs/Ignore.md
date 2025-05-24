@@ -17,8 +17,6 @@ Uploads/
 ```
 
 ### .gitignore
-**Disabled for performance issues as of 1.0.1** see [#1588](https://github.com/belav/csharpier/issues/1588)
-
 CSharpier will read the contents of `.gitignore` files and use them in addition to a `.csharpierignore` file to determine if a file should be ignored.
 
 If a directory tree contains a `.csharpierignore` file then patterns in that file will always take priority over any `.gitignore` file in the same tree.

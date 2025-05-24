@@ -1,3 +1,65 @@
+# 1.0.2
+## What's Changed
+### Performance issues when supporting .gitignore. [#1588](https://github.com/belav/csharpier/issues/1588)
+CSharpier was using a naive algorithm for parsing and evaluating gitignore rules that caused significant perfomance issues. @kevinboss reworked the implementation to drastically increate performance.
+### Exclude `bin/` and `obj/` directory content from xml formatting [#1600](https://github.com/belav/csharpier/issues/1600)
+CSharpier now excludes all files in `bin/` and `obj/` by default.
+### Error on syntactically valid conditional with `is` [#1612](https://github.com/belav/csharpier/issues/1612)
+The following c# is valid and compiles with `9.0.300+`. CSharpier was updated to properly parse it.
+```c#
+var x = y is y ? [] : z ?? [];
+```
+### Xml formatting with comments in text element inserts extra new lines [#1607](https://github.com/belav/csharpier/issues/1607)
+CSharpier has some issues with formatting text that contained xml comments. That has been improved.
+
+Input & expected output
+```xml
+<NoWarn>
+  CA1031; <!-- Since this is not a library project, catching general exceptions is OK -->
+  IDE0005; <!-- Allow unused usings -->
+</NoWarn>
+```
+1.0.1
+```xml
+<NoWarn
+    >
+      CA1031;
+    <!-- Since this is not a library project, catching general exceptions is OK -->
+
+    
+      IDE0005;
+    <!-- Allow unused usings -->
+</NoWarn>
+
+```
+
+### Inconsistent formatting of single-line lambda expressions [#1594](https://github.com/belav/csharpier/issues/1594)
+CSharpier `1.0.0` introduced a regression that caused the following formatting. This is now working as expected.
+```c#
+// input & expected output
+        CallMethod(() => CallAnotherMethod______________________________________________________());
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________1()
+        );
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________12()
+        );
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________123()
+        );
+
+// 1.0.0
+        CallMethod(() => CallAnotherMethod______________________________________________________());
+        CallMethod(() => CallAnotherMethod______________________________________________________1()
+        );
+        CallMethod(() => CallAnotherMethod______________________________________________________12()
+        );
+        CallMethod(() =>
+            CallAnotherMethod______________________________________________________123()
+        );
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.0.1...1.0.2
 # 1.0.1
 ## What's Changed
 ### CSharpier's support for .gitignore is causing performance issues [#1584](https://github.com/belav/csharpier/issues/1584)
@@ -3179,6 +3241,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
