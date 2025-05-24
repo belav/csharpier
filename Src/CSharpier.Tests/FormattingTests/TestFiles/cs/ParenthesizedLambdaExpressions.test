@@ -5,7 +5,7 @@ public class ClassName
         null,
         (Action)(() => { })
     );
-    private SomeObject someObject = new SomeObject_____________________________________(
+    private SomeObject someObject = new SomeObject_____________________________________________(
         () => new SomeObject()
     );
     private static readonly Action _callbackCompleted = () => { };
@@ -110,6 +110,10 @@ public class ClassName
         CallMethod(
             CallAnotherMethod_________________(),
             () => CallAnotherMethod_________________()
+        );
+
+        var x = CallMethod(
+            () => CallAnotherMethod_______________________________________________()
         );
     }
 }

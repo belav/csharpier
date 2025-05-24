@@ -40,6 +40,7 @@ internal static class ParenthesizedLambdaExpression
         if (
             node.ParameterList.Parameters.Count == 0
             && node.Parent?.Parent is ArgumentListSyntax { Arguments.Count: 1 }
+            && node.Parent.Parent?.Parent?.Parent is not EqualsValueClauseSyntax
         )
         {
             return Doc.IfBreak(Doc.Indent(Doc.Line, body), Doc.Group(Doc.Indent(Doc.Line, body)));
