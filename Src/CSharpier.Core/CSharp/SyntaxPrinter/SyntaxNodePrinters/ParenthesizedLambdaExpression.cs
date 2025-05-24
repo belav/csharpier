@@ -27,13 +27,24 @@ internal static class ParenthesizedLambdaExpression
 
     public static Doc PrintBody(ParenthesizedLambdaExpressionSyntax node, PrintingContext context)
     {
-        return node.Body switch
+        if (node.Body is BlockSyntax block)
         {
-            BlockSyntax block => Doc.Concat(
+            return Doc.Concat(
                 block.Statements.Count > 0 ? Doc.HardLine : " ",
                 Block.Print(block, context)
-            ),
-            _ => Doc.Group(Doc.Indent(Doc.Line, Node.Print(node.Body, context))),
-        };
+            );
+        }
+
+        var body = Node.Print(node.Body, context);
+
+        if (
+            node.ParameterList.Parameters.Count == 0
+            && node.Parent?.Parent is ArgumentListSyntax { Arguments.Count: 1 }
+        )
+        {
+            return Doc.IfBreak(Doc.Indent(Doc.Line, body), Doc.Group(Doc.Indent(Doc.Line, body)));
+        }
+
+        return Doc.Group(Doc.Indent(Doc.Line, body));
     }
 }
