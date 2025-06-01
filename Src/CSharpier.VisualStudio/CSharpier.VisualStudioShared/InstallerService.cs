@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using EnvDTE;
+using Microsoft.VisualStudio.Settings;
+using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Shell.Settings;
 
 namespace CSharpier.VisualStudio
 {
@@ -11,19 +14,42 @@ namespace CSharpier.VisualStudio
         private readonly DTE dte;
 
         private bool warnedAlready;
+        private const string InstallerWarningShownKey = "CSharpier.InstallerWarningShown";
+        private const string CollectionName = "CSharpier";
+        private readonly WritableSettingsStore settingsStore;
 
-        public static InstallerService Instance { get; private set; } = default!;
+        public static InstallerService Instance { get; private set; } = null!;
 
         public static async Task InitializeAsync(CSharpierPackage package)
         {
             var dte = await package.GetServiceAsync(typeof(DTE)) as DTE;
-            Instance = new InstallerService(dte!);
+            var settingsManager =
+                await package.GetServiceAsync(typeof(SVsSettingsManager)) as IVsSettingsManager;
+
+            var writableSettingsStore = new ShellSettingsManager(
+                settingsManager
+            ).GetWritableSettingsStore(SettingsScope.UserSettings);
+            Instance = new InstallerService(dte!, writableSettingsStore);
         }
 
-        private InstallerService(DTE dte)
+        private InstallerService(DTE dte, WritableSettingsStore settingsStore)
         {
             this.logger = Logger.Instance;
             this.dte = dte;
+
+            this.settingsStore = settingsStore;
+
+            if (!this.settingsStore.CollectionExists(CollectionName))
+            {
+                this.settingsStore.CreateCollection(CollectionName);
+            }
+
+            this.warnedAlready = this.settingsStore.GetBoolean(
+                CollectionName,
+                InstallerWarningShownKey,
+                false
+            );
+            this.logger.Debug(InstallerWarningShownKey + " was " + this.warnedAlready);
         }
 
         public void DisplayInstallNeededMessage(
@@ -37,6 +63,7 @@ namespace CSharpier.VisualStudio
             }
 
             this.warnedAlready = true;
+            this.settingsStore.SetBoolean(CollectionName, InstallerWarningShownKey, true);
             this.logger.Warn("CSharpier was not found so files may not be formatted.");
 
             var solutionFullName = this.dte.Solution?.FullName;
@@ -114,6 +141,7 @@ namespace CSharpier.VisualStudio
             var normalizedPath = directoryThatContainsFile.Replace("\\", "/");
             return normalizedPath.ContainsIgnoreCase("Temp/TFSTemp")
                 || normalizedPath.ContainsIgnoreCase("Temp/MetadataAsSource")
+                || normalizedPath.ContainsIgnoreCase("Temp/.vsdbgsrc")
                 || normalizedPath.ContainsIgnoreCase("MSBuild/Current/Bin");
         }
     }
