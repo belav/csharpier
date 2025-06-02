@@ -111,7 +111,10 @@ internal static class InvocationExpression
                             or ObjectCreationExpressionSyntax { Initializer: not null }
                 )
             || groups[0].First().Node
-                is ParenthesizedExpressionSyntax { Expression: SwitchExpressionSyntax }
+                is ParenthesizedExpressionSyntax
+                {
+                    Expression: SwitchExpressionSyntax or QueryExpressionSyntax
+                }
             || (
                 parent is ExpressionStatementSyntax expressionStatementSyntax
                 && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())

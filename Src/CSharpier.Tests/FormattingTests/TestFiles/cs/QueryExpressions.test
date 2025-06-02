@@ -98,5 +98,18 @@ class ClassName
             let i2 = i * i
             where i2 < 100
             select new { Square = i2, Root = i };
+
+        (
+            from x in SomeMethod()
+            select """
+                someString
+                """
+        )
+            .CallMethod_____________________________________________()
+            .CallMethod_____________________________________________();
+
+        (from x in SomeMethod() select "someString")
+            .CallMethod_____________________________________________()
+            .CallMethod_____________________________________________();
     }
 }
