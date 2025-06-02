@@ -1,4 +1,7 @@
-﻿## [2.0.1]
+﻿## [2.0.2]
+- Remember if a user has closed the "CSharpier must be installed" warning so that it doesn't reappear in each new instance of VS
+
+## [2.0.1]
 - Set working directory for CSharpier Server to the directory that contains CSharpier. Fixes an issue with a recursive file watch being run on the project root.
 
 ## [2.0.0]
