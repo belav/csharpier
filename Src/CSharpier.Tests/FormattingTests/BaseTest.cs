@@ -37,6 +37,7 @@ public class BaseTest
             "cs" => Formatter.CSharp,
             "csx" => Formatter.CSharpScript,
             "xml" => Formatter.XML,
+            "xaml" => Formatter.XML,
             _ => Formatter.Unknown,
         };
 
