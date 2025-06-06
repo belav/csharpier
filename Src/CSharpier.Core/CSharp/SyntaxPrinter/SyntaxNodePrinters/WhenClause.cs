@@ -9,7 +9,9 @@ internal static class WhenClause
     {
         return Doc.Group(
             Doc.Indent(
-                Doc.Line,
+                node.Parent is SwitchExpressionArmSyntax { Pattern: DiscardPatternSyntax }
+                    ? " "
+                    : Doc.Line,
                 Token.PrintWithSuffix(node.WhenKeyword, " ", context),
                 Node.Print(node.Condition, context)
             )
