@@ -44,7 +44,7 @@ internal class PrinterOptions(Formatter formatter)
             || filePath.EndsWith(".targets", StringComparison.Ordinal)
             || filePath.EndsWith(".xml", StringComparison.Ordinal)
             || filePath.EndsWith(".config", StringComparison.Ordinal)
-            || filePath.EndsWith(".xml", StringComparison.Ordinal)
+            || filePath.EndsWith(".xaml", StringComparison.Ordinal)
                 ? Formatter.XML
             : Formatter.Unknown;
         return formatter;
