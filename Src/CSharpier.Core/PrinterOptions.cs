@@ -43,6 +43,7 @@ internal class PrinterOptions(Formatter formatter)
             || filePath.EndsWith(".props", StringComparison.Ordinal)
             || filePath.EndsWith(".targets", StringComparison.Ordinal)
             || filePath.EndsWith(".xml", StringComparison.Ordinal)
+            || filePath.EndsWith(".xaml", StringComparison.Ordinal)
             || filePath.EndsWith(".config", StringComparison.Ordinal)
                 ? Formatter.XML
             : Formatter.Unknown;
