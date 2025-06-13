@@ -7,7 +7,7 @@ internal static class CasePatternSwitchLabel
 {
     public static Doc Print(CasePatternSwitchLabelSyntax node, PrintingContext context)
     {
-        return Doc.Concat(
+        return Doc.Group(
             ExtraNewLines.Print(node),
             Token.PrintWithSuffix(node.Keyword, " ", context),
             Node.Print(node.Pattern, context),
