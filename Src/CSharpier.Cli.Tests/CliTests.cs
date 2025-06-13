@@ -110,11 +110,33 @@ public class CliTests
     [TestCase("node_modules")]
     [TestCase("subdirectory/node_modules")]
     [TestCase("obj")]
+    [TestCase("bin")]
+    [TestCase("bin/Debug/net9.0")]
     [TestCase("subdirectory/obj")]
     public async Task Should_Ignore_Special_Case_Files(string path)
     {
         var unformattedContent = "public class Unformatted {     }";
         var filePath = $"{path}/IgnoredFile.cs";
+        await WriteFileAsync(filePath, unformattedContent);
+
+        await new CsharpierProcess().WithArguments(".").ExecuteAsync();
+        var result = await ReadAllTextAsync(filePath);
+
+        result.Should().Be(unformattedContent, $"The file at {filePath} should have been ignored");
+    }
+
+    [TestCase(".git")]
+    [TestCase("subdirectory/.git")]
+    [TestCase("node_modules")]
+    [TestCase("subdirectory/node_modules")]
+    [TestCase("obj")]
+    [TestCase("bin")]
+    [TestCase("bin/Debug/net9.0")]
+    [TestCase("subdirectory/obj")]
+    public async Task Should_Ignore_Special_Case_Xml_Files(string path)
+    {
+        var unformattedContent = "public class Unformatted {     }";
+        var filePath = $"{path}/IgnoredFile.xml";
         await WriteFileAsync(filePath, unformattedContent);
 
         await new CsharpierProcess().WithArguments(".").ExecuteAsync();
