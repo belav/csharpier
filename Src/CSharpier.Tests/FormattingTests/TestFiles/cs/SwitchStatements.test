@@ -71,6 +71,8 @@ public class ClassName
             {
                 return;
             }
+            case "1" or "2":
+                break;
             default:
             {
                 break;
