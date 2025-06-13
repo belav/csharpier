@@ -23,7 +23,7 @@ namespace CSharpier.VisualStudio
 
         public static bool IsSupportedLanguage(string language)
         {
-            return language is "CSharp" or "XML";
+            return language is "CSharp" or "XML" or "XAML";
         }
 
         public void Format(Document document)
