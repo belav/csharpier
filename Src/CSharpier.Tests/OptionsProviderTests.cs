@@ -238,16 +238,43 @@ endOfLine: crlf
     }
 
     [Test]
-    public async Task Should_Return_IndentSize_For_Override()
+    public async Task Should_Return_IndentSize_For_Override_With_Yaml()
     {
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.csharpierrc",
             """
             overrides:
-                - files: "*.override"
+                - files: "*.{override,another}"
                   formatter: "csharp"
                   indentSize: 2
+            """
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test.override"
+        );
+
+        result.IndentSize.Should().Be(2);
+    }
+
+    [Test]
+    public async Task Should_Return_IndentSize_For_Override_With_Json()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.csharpierrc",
+            """
+            {
+                "overrides": [
+                    {
+                        "files": "*.{override,another}",
+                        "formatter": "csharp",
+                        "indentSize": 2
+                    }
+                ]
+            }
             """
         );
 
