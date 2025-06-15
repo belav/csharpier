@@ -41,6 +41,14 @@ class ClassName
             ),
             VeryLongObject_______________________________________________________________
                 when count > 0 => CallSomeMethod(someValue),
+            _ when KeepWhenWithDiscard() => "",
+            _ when KeepWhenWithDiscard_________________(
+                    SomeObject_______________________________________________
+                ) => "",
+            _ when KeepWhenWithDiscard_________________(
+                    SomeObject_______________________________________________
+                ) =>
+                "LongString_____________________________________________________________________",
             OneMore => "someStrings"
                 + "moreStrings"
                 + "andMoreStrings_________________________________________",
