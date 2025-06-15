@@ -14,10 +14,10 @@ The configuration file will be resolved based on the location of the file being 
 JSON
 ```json
 {
-    "printWidth": 100,
-    "useTabs": false,
-    "indentSize": 4,
-    "endOfLine": "auto"
+  "printWidth": 100,
+  "useTabs": false,
+  "indentSize": 4,
+  "endOfLine": "auto"
 }
 ```
 YAML
@@ -57,27 +57,27 @@ Overrides allows you to specify different configuration options based on glob pa
 
 ```json
 {
-    "overrides": [
-        {
-           "files": ["*.cst"],
-           "formatter": "csharp",
-           "indentSize": 2,
-           "useTabs": true,
-           "printWidth": 10,
-           "endOfLine": "LF"
-        }
-    ]
+  "overrides": [
+    {
+      "files": "*.{csr,cst}",
+      "formatter": "csharp",
+      "indentSize": 2,
+      "useTabs": true,
+      "printWidth": 10,
+      "endOfLine": "LF"
+    }
+  ]
 }
 ```
 
 ```yaml
 overrides:
-    - files: "*.cst"
-      formatter: "csharp"
-      indentSize: 2
-      useTabs: true
-      printWidth: 10
-      endOfLine: "LF"
+  - files: "*.{csr,cst}"
+    formatter: "csharp"
+    indentSize: 2
+    useTabs: true
+    printWidth: 10
+    endOfLine: "LF"
 ```
 
 ### EditorConfig
