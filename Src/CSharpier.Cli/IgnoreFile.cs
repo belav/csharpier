@@ -14,6 +14,15 @@ internal class IgnoreFile
         **/.git
         """;
 
+    private static readonly Lazy<(Regex positives, Regex negatives)> defaultRules = new(() =>
+    {
+        var (alwaysPositives, alwaysNegatives) = GitignoreParserNet.GitignoreParser.Parse(
+            alwaysIgnoredText,
+            true
+        );
+        return (alwaysPositives.Merged, alwaysNegatives.Merged);
+    });
+
     private IgnoreFile(List<IgnoreWithBasePath> ignores)
     {
         this.Ignores = ignores;
@@ -22,6 +31,7 @@ internal class IgnoreFile
     public bool IsIgnored(string filePath)
     {
         filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+
         foreach (var ignore in this.Ignores)
         {
             // when using one of the ignore files to determine if a given file is ignored or not
@@ -87,13 +97,10 @@ internal class IgnoreFile
 
     private static void AddDefaultRules(IgnoreWithBasePath ignore)
     {
-        var (alwaysPositives, alwaysNegatives) = GitignoreParserNet.GitignoreParser.Parse(
-            alwaysIgnoredText,
-            true
-        );
+        var (positives, negatives) = defaultRules.Value;
 
-        ignore.AddPositives(alwaysPositives.Merged);
-        ignore.AddNegatives(alwaysNegatives.Merged);
+        ignore.AddPositives(positives);
+        ignore.AddNegatives(negatives);
     }
 
     // this will return the ignore paths in order of priority
@@ -157,17 +164,15 @@ internal class IgnoreFile
 
             var isIgnored = false;
             var hasMatchingRule = false;
+
             foreach (var rule in this.positives)
             {
                 var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
                 if (isMatch)
                 {
                     hasMatchingRule = true;
-                }
-
-                if (!isIgnored && isMatch)
-                {
                     isIgnored = true;
+                    break;
                 }
             }
 
@@ -177,11 +182,11 @@ internal class IgnoreFile
                 if (isMatch)
                 {
                     hasMatchingRule = true;
-                }
-
-                if (isIgnored && isMatch)
-                {
-                    isIgnored = false;
+                    if (isIgnored)
+                    {
+                        isIgnored = false;
+                        break;
+                    }
                 }
             }
 
