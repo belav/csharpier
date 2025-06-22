@@ -166,10 +166,16 @@ export class CSharpierProcessProvider implements Disposable {
         let currentDirectory = directoryThatContainsFile;
         let parentNumber = 0;
         while (parentNumber < 30) {
-            const csProjVersion = this.findVersionInCsProj(currentDirectory);
-            if (csProjVersion) {
-                return csProjVersion;
+            try {
+                const csProjVersion = this.findVersionInCsProj(currentDirectory);
+                if (csProjVersion) {
+                    return csProjVersion;
+                }
+            } catch (error) {
+                this.logger.error("Failed while trying to find version in " + currentDirectory);
+                this.logger.error(error);
             }
+
 
             const nextDirectory = path.join(currentDirectory, "..");
             if (nextDirectory === currentDirectory) {
