@@ -1,3 +1,6 @@
+## 2.0.7
+- Ensure extension works with windows virtual drives
+
 ## 2.0.6
 - Clean up some logging
 
