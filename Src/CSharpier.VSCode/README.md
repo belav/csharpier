@@ -1,10 +1,10 @@
 # CSharpier Formatter for Visual Studio Code
 
-This extension makes use of the dotnet tool [CSharpier](https://github.com/belav/csharpier) to format your code and is versioned independently.
+This extension makes use of the dotnet tool [CSharpier](https://github.com/belav/csharpier) to format your code. This extension is versioned independently from CSharpier itself.
 
 CSharpier is an opinionated code formatter for c# and xml. \
-It provides very few options and provides a deterministic way to enforce formatting of your code. \
-The printing process was ported from [prettier](https://prettier.io) but has evolved over time. \
+It provides very few options and a deterministic way to enforce formatting of your code. \
+The printing process was ported from [prettier](https://prettier.io) but has evolved over time.
 
 ## Installation
 
@@ -32,6 +32,8 @@ The extension makes use of `dotnet` commands and uses the following logic to loc
 ## Default Formatter
 To ensure that CSharpier is used to format files, be sure to set it as the default formatter.
 
+You can modify your [settings.json](https://code.visualstudio.com/docs/configure/settings#_settings-json-file) file.
+
 ```json
   "[csharp]": {
     "editor.defaultFormatter": "csharpier.csharpier-vscode"
@@ -40,6 +42,10 @@ To ensure that CSharpier is used to format files, be sure to set it as the defau
     "editor.defaultFormatter": "csharpier.csharpier-vscode"
   },
 ```
+
+## Troubleshooting
+
+See [this page](https://csharpier.com/docs/EditorsTroubleshooting)
 
 ## Usage
 
