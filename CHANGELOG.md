@@ -1,3 +1,77 @@
+# 1.0.3
+## What's Changed
+### Switch block case with conditionals adding newlines [#1630](https://github.com/belav/csharpier/issues/1630)
+Switch blocks were breaking on conditions within patterns.
+```c#
+// input and expected output
+switch ("")
+{
+    case "" or "":
+        break;
+}
+
+// 1.0.2
+switch ("")
+{
+    case ""
+    or "":
+        break;
+}
+```
+### switch expression formatting adds odd newlines [#1620](https://github.com/belav/csharpier/issues/1620)
+CSharpier was breaking after a discard with a when, resulting in extra new lines
+```c#
+// input and expected output
+_ = someValue switch
+{
+    _ when KeepWhenWithDiscard() => "",
+    _ when KeepWhenWithDiscard_________________(
+            SomeObject_______________________________________________
+        ) => "",
+    _ when KeepWhenWithDiscard_________________(
+            SomeObject_______________________________________________
+        ) => "LongString_____________________________________________________________________",
+};
+
+// 1.0.2
+_ = someValue switch
+{
+    _ when KeepWhenWithDiscard() => "",
+    _
+        when KeepWhenWithDiscard_________________(
+            SomeObject_______________________________________________
+        ) => "",
+    _
+        when KeepWhenWithDiscard_________________(
+            SomeObject_______________________________________________
+        ) => "LongString_____________________________________________________________________",
+};
+
+```
+### multi-line raw string in linq query causes a subsequent linq query to be printed on one line [#1617](https://github.com/belav/csharpier/issues/1617)
+If a query syntax linq expression contained a raw string, it could result in method invocations not breaking.
+```c#
+// input and expected output
+(
+    from x in SomeMethod()
+    select """
+        someString
+        """
+)
+    .CallMethod_____________________________________________()
+    .CallMethod_____________________________________________();
+
+// 1.0.2
+(
+    from x in SomeMethod()
+    select """
+        someString
+        """
+).CallMethod_____________________________________________().CallMethod_____________________________________________();
+
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.0.2...1.0.3
 # 1.0.2
 ## What's Changed
 ### Performance issues when supporting .gitignore. [#1588](https://github.com/belav/csharpier/issues/1588)
@@ -3241,6 +3315,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
