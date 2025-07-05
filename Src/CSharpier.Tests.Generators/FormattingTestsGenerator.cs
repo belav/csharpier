@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
@@ -7,22 +6,38 @@ using Scriban;
 
 namespace CSharpier.Tests.Generators;
 
-// the magic command to get source generators to actually regenerate when they get stuck with old code
-// dotnet build-server shutdown
 [Generator]
-public class FormattingTestsGenerator : ISourceGenerator
+public class FormattingTestsGenerator : IIncrementalGenerator
 {
-    public void Initialize(GeneratorInitializationContext context) { }
-
-    public void Execute(GeneratorExecutionContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var template = Template.Parse(this.GetContent(this.GetType().Name + ".sbntxt"));
+        var additionalFiles = context
+            .AdditionalTextsProvider.Where(file =>
+                file.Path.EndsWith(".test")
+                && !file.Path.EndsWith(".actual.test")
+                && !file.Path.EndsWith(".expected.test")
+            )
+            .Collect();
 
-        var extensions = this.GetExtensions(context).ToList();
+        context.RegisterSourceOutput(additionalFiles, GenerateSource);
+    }
+
+    private static void GenerateSource(
+        SourceProductionContext context,
+        ImmutableArray<AdditionalText> additionalFiles
+    )
+    {
+        var generator = new FormattingTestsGenerator();
+        var template = Template.Parse(generator.GetContent(generator.GetType().Name + ".sbntxt"));
+
+        var extensions = additionalFiles
+            .Select(o => new FileInfo(o.Path).Directory!.Name)
+            .Distinct();
+
         foreach (var extension in extensions)
         {
             var renderedSource = template.Render(
-                this.GetModel(context, extension),
+                generator.GetModel(additionalFiles, extension),
                 member => member.Name
             );
 
@@ -32,27 +47,10 @@ public class FormattingTestsGenerator : ISourceGenerator
         }
     }
 
-    private IEnumerable<string> GetExtensions(GeneratorExecutionContext context)
+    protected object GetModel(ImmutableArray<AdditionalText> additionalFiles, string extension)
     {
-        return context
-            .AdditionalFiles.Where(o =>
-                o.Path.EndsWith(".test")
-                && !o.Path.EndsWith(".actual.test")
-                && !o.Path.EndsWith(".expected.test")
-            )
-            .Select(o => new FileInfo(o.Path).Directory!.Name)
-            .Distinct();
-    }
-
-    protected object GetModel(GeneratorExecutionContext context, string extension)
-    {
-        var tests = context
-            .AdditionalFiles.Where(o =>
-                o.Path.EndsWith(".test")
-                && !o.Path.EndsWith(".actual.test")
-                && !o.Path.EndsWith(".expected.test")
-                && new FileInfo(o.Path).Directory!.Name == extension
-            )
+        var tests = additionalFiles
+            .Where(o => new FileInfo(o.Path).Directory!.Name == extension)
             .Select(o => new
             {
                 Name = Path.GetFileNameWithoutExtension(o.Path),
