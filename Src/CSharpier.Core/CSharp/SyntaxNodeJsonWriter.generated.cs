@@ -95,8 +95,10 @@ namespace CSharpier.Core.CSharp
             if (syntaxNode is ExpressionColonSyntax) WriteExpressionColonSyntax(builder, syntaxNode as ExpressionColonSyntax);
             if (syntaxNode is ExpressionElementSyntax) WriteExpressionElementSyntax(builder, syntaxNode as ExpressionElementSyntax);
             if (syntaxNode is ExpressionStatementSyntax) WriteExpressionStatementSyntax(builder, syntaxNode as ExpressionStatementSyntax);
+            if (syntaxNode is ExtensionDeclarationSyntax) WriteExtensionDeclarationSyntax(builder, syntaxNode as ExtensionDeclarationSyntax);
             if (syntaxNode is ExternAliasDirectiveSyntax) WriteExternAliasDirectiveSyntax(builder, syntaxNode as ExternAliasDirectiveSyntax);
             if (syntaxNode is FieldDeclarationSyntax) WriteFieldDeclarationSyntax(builder, syntaxNode as FieldDeclarationSyntax);
+            if (syntaxNode is FieldExpressionSyntax) WriteFieldExpressionSyntax(builder, syntaxNode as FieldExpressionSyntax);
             if (syntaxNode is FileScopedNamespaceDeclarationSyntax) WriteFileScopedNamespaceDeclarationSyntax(builder, syntaxNode as FileScopedNamespaceDeclarationSyntax);
             if (syntaxNode is FinallyClauseSyntax) WriteFinallyClauseSyntax(builder, syntaxNode as FinallyClauseSyntax);
             if (syntaxNode is FixedStatementSyntax) WriteFixedStatementSyntax(builder, syntaxNode as FixedStatementSyntax);
@@ -117,6 +119,7 @@ namespace CSharpier.Core.CSharp
             if (syntaxNode is IdentifierNameSyntax) WriteIdentifierNameSyntax(builder, syntaxNode as IdentifierNameSyntax);
             if (syntaxNode is IfDirectiveTriviaSyntax) WriteIfDirectiveTriviaSyntax(builder, syntaxNode as IfDirectiveTriviaSyntax);
             if (syntaxNode is IfStatementSyntax) WriteIfStatementSyntax(builder, syntaxNode as IfStatementSyntax);
+            if (syntaxNode is IgnoredDirectiveTriviaSyntax) WriteIgnoredDirectiveTriviaSyntax(builder, syntaxNode as IgnoredDirectiveTriviaSyntax);
             if (syntaxNode is ImplicitArrayCreationExpressionSyntax) WriteImplicitArrayCreationExpressionSyntax(builder, syntaxNode as ImplicitArrayCreationExpressionSyntax);
             if (syntaxNode is ImplicitElementAccessSyntax) WriteImplicitElementAccessSyntax(builder, syntaxNode as ImplicitElementAccessSyntax);
             if (syntaxNode is ImplicitObjectCreationExpressionSyntax) WriteImplicitObjectCreationExpressionSyntax(builder, syntaxNode as ImplicitObjectCreationExpressionSyntax);
@@ -3194,6 +3197,99 @@ namespace CSharpier.Core.CSharp
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
         }
+        public static void WriteExtensionDeclarationSyntax(StringBuilder builder, ExtensionDeclarationSyntax syntaxNode)
+        {
+            builder.Append("{");
+            var properties = new List<string>();
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add(WriteInt("arity", syntaxNode.Arity));
+            var attributeLists = new List<string>();
+            foreach(var node in syntaxNode.AttributeLists)
+            {
+                var innerBuilder = new StringBuilder();
+                WriteAttributeListSyntax(innerBuilder, node);
+                attributeLists.Add(innerBuilder.ToString());
+            }
+            properties.Add($"\"attributeLists\":[{string.Join(",", attributeLists)}]");
+            if (syntaxNode.BaseList != default(BaseListSyntax))
+            {
+                var baseListBuilder = new StringBuilder();
+                WriteBaseListSyntax(baseListBuilder, syntaxNode.BaseList);
+                properties.Add($"\"baseList\":{baseListBuilder.ToString()}");
+            }
+            if (syntaxNode.CloseBraceToken != default(SyntaxToken))
+            {
+                var closeBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(closeBraceTokenBuilder, syntaxNode.CloseBraceToken);
+                properties.Add($"\"closeBraceToken\":{closeBraceTokenBuilder.ToString()}");
+            }
+            var constraintClauses = new List<string>();
+            foreach(var node in syntaxNode.ConstraintClauses)
+            {
+                var innerBuilder = new StringBuilder();
+                WriteTypeParameterConstraintClauseSyntax(innerBuilder, node);
+                constraintClauses.Add(innerBuilder.ToString());
+            }
+            properties.Add($"\"constraintClauses\":[{string.Join(",", constraintClauses)}]");
+            properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
+            properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
+            if (syntaxNode.Identifier != default(SyntaxToken))
+            {
+                var identifierBuilder = new StringBuilder();
+                WriteSyntaxToken(identifierBuilder, syntaxNode.Identifier);
+                properties.Add($"\"identifier\":{identifierBuilder.ToString()}");
+            }
+            properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
+            if (syntaxNode.Keyword != default(SyntaxToken))
+            {
+                var keywordBuilder = new StringBuilder();
+                WriteSyntaxToken(keywordBuilder, syntaxNode.Keyword);
+                properties.Add($"\"keyword\":{keywordBuilder.ToString()}");
+            }
+            var members = new List<string>();
+            foreach(var node in syntaxNode.Members)
+            {
+                var innerBuilder = new StringBuilder();
+                WriteSyntaxNode(innerBuilder, node);
+                members.Add(innerBuilder.ToString());
+            }
+            properties.Add($"\"members\":[{string.Join(",", members)}]");
+            var modifiers = new List<string>();
+            foreach(var node in syntaxNode.Modifiers)
+            {
+                var innerBuilder = new StringBuilder();
+                WriteSyntaxToken(innerBuilder, node);
+                modifiers.Add(innerBuilder.ToString());
+            }
+            properties.Add($"\"modifiers\":[{string.Join(",", modifiers)}]");
+            if (syntaxNode.OpenBraceToken != default(SyntaxToken))
+            {
+                var openBraceTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(openBraceTokenBuilder, syntaxNode.OpenBraceToken);
+                properties.Add($"\"openBraceToken\":{openBraceTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.ParameterList != default(ParameterListSyntax))
+            {
+                var parameterListBuilder = new StringBuilder();
+                WriteParameterListSyntax(parameterListBuilder, syntaxNode.ParameterList);
+                properties.Add($"\"parameterList\":{parameterListBuilder.ToString()}");
+            }
+            if (syntaxNode.SemicolonToken != default(SyntaxToken))
+            {
+                var semicolonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
+                properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.TypeParameterList != default(TypeParameterListSyntax))
+            {
+                var typeParameterListBuilder = new StringBuilder();
+                WriteTypeParameterListSyntax(typeParameterListBuilder, syntaxNode.TypeParameterList);
+                properties.Add($"\"typeParameterList\":{typeParameterListBuilder.ToString()}");
+            }
+            builder.Append(string.Join(",", properties.Where(o => o != null)));
+            builder.Append("}");
+        }
         public static void WriteExternAliasDirectiveSyntax(StringBuilder builder, ExternAliasDirectiveSyntax syntaxNode)
         {
             builder.Append("{");
@@ -3266,6 +3362,24 @@ namespace CSharpier.Core.CSharp
                 var semicolonTokenBuilder = new StringBuilder();
                 WriteSyntaxToken(semicolonTokenBuilder, syntaxNode.SemicolonToken);
                 properties.Add($"\"semicolonToken\":{semicolonTokenBuilder.ToString()}");
+            }
+            builder.Append(string.Join(",", properties.Where(o => o != null)));
+            builder.Append("}");
+        }
+        public static void WriteFieldExpressionSyntax(StringBuilder builder, FieldExpressionSyntax syntaxNode)
+        {
+            builder.Append("{");
+            var properties = new List<string>();
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
+            properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
+            properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
+            if (syntaxNode.Token != default(SyntaxToken))
+            {
+                var tokenBuilder = new StringBuilder();
+                WriteSyntaxToken(tokenBuilder, syntaxNode.Token);
+                properties.Add($"\"token\":{tokenBuilder.ToString()}");
             }
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
@@ -4130,6 +4244,43 @@ namespace CSharpier.Core.CSharp
                 WriteSyntaxNode(statementBuilder, syntaxNode.Statement);
                 properties.Add($"\"statement\":{statementBuilder.ToString()}");
             }
+            builder.Append(string.Join(",", properties.Where(o => o != null)));
+            builder.Append("}");
+        }
+        public static void WriteIgnoredDirectiveTriviaSyntax(StringBuilder builder, IgnoredDirectiveTriviaSyntax syntaxNode)
+        {
+            builder.Append("{");
+            var properties = new List<string>();
+            properties.Add($"\"nodeType\":\"{GetNodeType(syntaxNode.GetType())}\"");
+            properties.Add($"\"kind\":\"{syntaxNode.Kind().ToString()}\"");
+            if (syntaxNode.ColonToken != default(SyntaxToken))
+            {
+                var colonTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(colonTokenBuilder, syntaxNode.ColonToken);
+                properties.Add($"\"colonToken\":{colonTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.DirectiveNameToken != default(SyntaxToken))
+            {
+                var directiveNameTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(directiveNameTokenBuilder, syntaxNode.DirectiveNameToken);
+                properties.Add($"\"directiveNameToken\":{directiveNameTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.EndOfDirectiveToken != default(SyntaxToken))
+            {
+                var endOfDirectiveTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(endOfDirectiveTokenBuilder, syntaxNode.EndOfDirectiveToken);
+                properties.Add($"\"endOfDirectiveToken\":{endOfDirectiveTokenBuilder.ToString()}");
+            }
+            if (syntaxNode.HashToken != default(SyntaxToken))
+            {
+                var hashTokenBuilder = new StringBuilder();
+                WriteSyntaxToken(hashTokenBuilder, syntaxNode.HashToken);
+                properties.Add($"\"hashToken\":{hashTokenBuilder.ToString()}");
+            }
+            properties.Add(WriteBoolean("hasLeadingTrivia", syntaxNode.HasLeadingTrivia));
+            properties.Add(WriteBoolean("hasTrailingTrivia", syntaxNode.HasTrailingTrivia));
+            properties.Add(WriteBoolean("isActive", syntaxNode.IsActive));
+            properties.Add(WriteBoolean("isMissing", syntaxNode.IsMissing));
             builder.Append(string.Join(",", properties.Where(o => o != null)));
             builder.Append("}");
         }

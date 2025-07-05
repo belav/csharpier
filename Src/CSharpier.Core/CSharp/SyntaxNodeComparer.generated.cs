@@ -204,10 +204,14 @@ namespace CSharpier.Core.CSharp
                  return this.CompareExpressionElementSyntax(expressionElementSyntax, formattedNode as ExpressionElementSyntax);
              case ExpressionStatementSyntax expressionStatementSyntax:
                  return this.CompareExpressionStatementSyntax(expressionStatementSyntax, formattedNode as ExpressionStatementSyntax);
+             case ExtensionDeclarationSyntax extensionDeclarationSyntax:
+                 return this.CompareExtensionDeclarationSyntax(extensionDeclarationSyntax, formattedNode as ExtensionDeclarationSyntax);
              case ExternAliasDirectiveSyntax externAliasDirectiveSyntax:
                  return this.CompareExternAliasDirectiveSyntax(externAliasDirectiveSyntax, formattedNode as ExternAliasDirectiveSyntax);
              case FieldDeclarationSyntax fieldDeclarationSyntax:
                  return this.CompareFieldDeclarationSyntax(fieldDeclarationSyntax, formattedNode as FieldDeclarationSyntax);
+             case FieldExpressionSyntax fieldExpressionSyntax:
+                 return this.CompareFieldExpressionSyntax(fieldExpressionSyntax, formattedNode as FieldExpressionSyntax);
              case FileScopedNamespaceDeclarationSyntax fileScopedNamespaceDeclarationSyntax:
                  return this.CompareFileScopedNamespaceDeclarationSyntax(fileScopedNamespaceDeclarationSyntax, formattedNode as FileScopedNamespaceDeclarationSyntax);
              case FinallyClauseSyntax finallyClauseSyntax:
@@ -248,6 +252,8 @@ namespace CSharpier.Core.CSharp
                  return this.CompareIfDirectiveTriviaSyntax(ifDirectiveTriviaSyntax, formattedNode as IfDirectiveTriviaSyntax);
              case IfStatementSyntax ifStatementSyntax:
                  return this.CompareIfStatementSyntax(ifStatementSyntax, formattedNode as IfStatementSyntax);
+             case IgnoredDirectiveTriviaSyntax ignoredDirectiveTriviaSyntax:
+                 return this.CompareIgnoredDirectiveTriviaSyntax(ignoredDirectiveTriviaSyntax, formattedNode as IgnoredDirectiveTriviaSyntax);
              case ImplicitArrayCreationExpressionSyntax implicitArrayCreationExpressionSyntax:
                  return this.CompareImplicitArrayCreationExpressionSyntax(implicitArrayCreationExpressionSyntax, formattedNode as ImplicitArrayCreationExpressionSyntax);
              case ImplicitElementAccessSyntax implicitElementAccessSyntax:
@@ -528,7 +534,7 @@ namespace CSharpier.Core.CSharp
                  return this.CompareYieldStatementSyntax(yieldStatementSyntax, formattedNode as YieldStatementSyntax);
                 default:
 #if DEBUG
-                    throw new Exception("Can't handle " + originalNode.GetType().Name);
+                    throw new Exception("Can't handle " + originalNode.GetType().Name + ". May need to rerun CSharpier.FakeGenerators");
 #else
                     return Equal;
 #endif
@@ -1685,6 +1691,36 @@ namespace CSharpier.Core.CSharp
             if (result.IsInvalid) return result;
             return Equal;
         }
+      private CompareResult CompareExtensionDeclarationSyntax(ExtensionDeclarationSyntax originalNode, ExtensionDeclarationSyntax formattedNode)
+      {
+          CompareResult result;
+            result = this.CompareLists(originalNode.AttributeLists, formattedNode.AttributeLists, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.BaseList, originalNode));
+            formattedStack.Push((formattedNode.BaseList, formattedNode));
+            result = this.Compare(originalNode.CloseBraceToken, formattedNode.CloseBraceToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.ConstraintClauses, formattedNode.ConstraintClauses, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.Identifier, formattedNode.Identifier, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            result = this.Compare(originalNode.Keyword, formattedNode.Keyword, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.Members, formattedNode.Members, null, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            result = this.CompareLists(originalNode.Modifiers.OrderBy(o => o.Text).ToList(), formattedNode.Modifiers.OrderBy(o => o.Text).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.OpenBraceToken, formattedNode.OpenBraceToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.ParameterList, originalNode));
+            formattedStack.Push((formattedNode.ParameterList, formattedNode));
+            result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            originalStack.Push((originalNode.TypeParameterList, originalNode));
+            formattedStack.Push((formattedNode.TypeParameterList, formattedNode));
+            return Equal;
+        }
       private CompareResult CompareExternAliasDirectiveSyntax(ExternAliasDirectiveSyntax originalNode, ExternAliasDirectiveSyntax formattedNode)
       {
           CompareResult result;
@@ -1710,6 +1746,14 @@ namespace CSharpier.Core.CSharp
             result = this.CompareLists(originalNode.Modifiers.OrderBy(o => o.Text).ToList(), formattedNode.Modifiers.OrderBy(o => o.Text).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);
             if (result.IsInvalid) return result;
             result = this.Compare(originalNode.SemicolonToken, formattedNode.SemicolonToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            return Equal;
+        }
+      private CompareResult CompareFieldExpressionSyntax(FieldExpressionSyntax originalNode, FieldExpressionSyntax formattedNode)
+      {
+          CompareResult result;
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
+            result = this.Compare(originalNode.Token, formattedNode.Token, originalNode, formattedNode);
             if (result.IsInvalid) return result;
             return Equal;
         }
@@ -2046,6 +2090,21 @@ namespace CSharpier.Core.CSharp
             if (result.IsInvalid) return result;
             originalStack.Push((originalNode.Statement, originalNode));
             formattedStack.Push((formattedNode.Statement, formattedNode));
+            return Equal;
+        }
+      private CompareResult CompareIgnoredDirectiveTriviaSyntax(IgnoredDirectiveTriviaSyntax originalNode, IgnoredDirectiveTriviaSyntax formattedNode)
+      {
+          CompareResult result;
+            result = this.Compare(originalNode.ColonToken, formattedNode.ColonToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.DirectiveNameToken, formattedNode.DirectiveNameToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.EndOfDirectiveToken, formattedNode.EndOfDirectiveToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            result = this.Compare(originalNode.HashToken, formattedNode.HashToken, originalNode, formattedNode);
+            if (result.IsInvalid) return result;
+            if (originalNode.IsActive != formattedNode.IsActive) return NotEqual(originalNode, formattedNode);
+            if (originalNode.IsMissing != formattedNode.IsMissing) return NotEqual(originalNode, formattedNode);
             return Equal;
         }
       private CompareResult CompareImplicitArrayCreationExpressionSyntax(ImplicitArrayCreationExpressionSyntax originalNode, ImplicitArrayCreationExpressionSyntax formattedNode)

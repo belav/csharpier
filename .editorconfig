@@ -55,3 +55,5 @@ dotnet_diagnostic.IDE0301.severity = warning
 dotnet_diagnostic.IDE0305.severity = none
 dotnet_diagnostic.IDE0330.severity = warning
 dotnet_diagnostic.IDE1006.severity = warning
+
+dotnet_diagnostic.RSEXPERIMENTAL005.severity = none
