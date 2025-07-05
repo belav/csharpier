@@ -1,0 +1,6 @@
+#!/usr/bin/dotnet run
+#:package Humanizer@2.14.1
+#:sdk Microsoft.NET.Sdk.Web
+#:property LangVersion preview
+
+Console.WriteLine("dotnet run!");
