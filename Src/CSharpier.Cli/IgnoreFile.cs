@@ -105,8 +105,7 @@ internal class IgnoreFile
 
     // this will return the ignore paths in order of priority
     // the first csharpierignore it finds at or above the path
-    // and then all .gitignores (at or above) it finds in order from closest to further away
-    // stopping once it encounters a .git directory
+    // and then all .gitignores (at or above stopping once it encounters a .git directory) it finds in order from closest to further away
     private static List<string> FindIgnorePaths(string baseDirectoryPath, IFileSystem fileSystem)
     {
         var result = new List<string>();
