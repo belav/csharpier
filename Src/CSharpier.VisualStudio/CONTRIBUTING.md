@@ -5,7 +5,7 @@ Local Testing
 Uninstalling both csharpier and csharpier 2019 from the test instance and restarting seems to fix it. 
 
 Publishing
-- Update version in BOTH files at CSharpier.VisualStudio[2019]/source.extension.vsixmanifest
+- Update version at CSharpier.VisualStudio/source.extension.vsixmanifest
 - Update ChangeLog.md
 - use cli
   - CSH-PublishVS [AccessToken] 

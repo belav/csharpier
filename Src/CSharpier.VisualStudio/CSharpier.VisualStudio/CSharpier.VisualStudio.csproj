@@ -97,13 +97,34 @@
     </PackageReference>
     <PackageReference Include="NuGet.Versioning" Version="6.12.1" />
   </ItemGroup>
-  <Import
-    Project="..\CSharpier.VisualStudioShared\CSharpier.VisualStudioShared.projitems"
-    Label="Shared"
-  />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import
     Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets"
     Condition="'$(VSToolsPath)' != ''"
   />
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)AsyncPackageExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessServer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessPipeMultipleFiles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessSingleFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CSharpierProcessProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomPathInstaller.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FormattingService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FunctionRunner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ICSharpierProcess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InfoBarService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)InstallerService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NullCSharpierProcess.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ProcessHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReformatWithCSharpier.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ReformatWithCSharpierOnSave.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Semver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StringExtensions.cs" />
+  </ItemGroup>
 </Project>

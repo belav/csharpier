@@ -21,12 +21,6 @@ function CSH-PublishVS {
         -payload $vsRoot/CSharpier.VisualStudio/bin/Release/CSharpier.VisualStudio.vsix `
         -publishManifest $vsRoot/manifest.json `
         -personalAccessToken $accessToken
-
-    & $vsixPath publish `
-        -payload $vsRoot/CSharpier.VisualStudio2019/bin/Release/CSharpier.VisualStudio2019.vsix `
-        -publishManifest $vsRoot/manifest2019.json `
-        -personalAccessToken $accessToken
-
 }
 
 Export-ModuleMember -Function CSH-*
