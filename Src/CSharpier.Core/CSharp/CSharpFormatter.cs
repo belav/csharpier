@@ -90,7 +90,7 @@ public static class CSharpFormatter
                 DocumentationMode.Diagnose,
                 preprocessorSymbols: preprocessorSymbols,
                 kind: sourceCodeKind
-            ),
+            ).WithFeatures([new KeyValuePair<string, string>("FileBasedProgram", "true")]),
             cancellationToken: cancellationToken
         );
     }
