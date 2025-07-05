@@ -530,7 +530,7 @@ max_line_length = 10"
 
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Formatted 1 files in ");
+        result.Output.Should().StartWith("Checked 1 files in ");
     }
 
     [Test]

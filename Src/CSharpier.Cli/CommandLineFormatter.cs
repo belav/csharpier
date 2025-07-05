@@ -109,7 +109,7 @@ internal static class CommandLineFormatter
             if (!commandLineOptions.WriteStdout)
             {
                 logger.LogInformation(
-                    $"Formatted {commandLineFormatterResult.Files} files in {commandLineFormatterResult.ElapsedMilliseconds}ms."
+                    $"{(commandLineOptions.Check ? "Checked" : "Formatted")} {commandLineFormatterResult.Files} files in {commandLineFormatterResult.ElapsedMilliseconds}ms."
                 );
             }
 
