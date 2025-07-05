@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace CSharpier.Core;
 
 internal class PrinterOptions(Formatter formatter)
@@ -36,16 +38,16 @@ internal class PrinterOptions(Formatter formatter)
 
     public static Formatter GetFormatter(string filePath)
     {
-        var formatter =
-            filePath.EndsWith(".cs", StringComparison.Ordinal) ? Formatter.CSharp
-            : filePath.EndsWith(".csx", StringComparison.Ordinal) ? Formatter.CSharpScript
-            : filePath.EndsWith(".csproj", StringComparison.Ordinal)
-            || filePath.EndsWith(".props", StringComparison.Ordinal)
-            || filePath.EndsWith(".targets", StringComparison.Ordinal)
-            || filePath.EndsWith(".xml", StringComparison.Ordinal)
-            || filePath.EndsWith(".config", StringComparison.Ordinal)
-                ? Formatter.XML
-            : Formatter.Unknown;
+        var extension = Path.GetExtension(filePath)[1..].ToLower(CultureInfo.InvariantCulture);
+
+        var formatter = extension switch
+        {
+            "cs" => Formatter.CSharp,
+            "csx" => Formatter.CSharpScript,
+            "config" or "csproj" or "props" or "slnx" or "targets" or "xaml" or "xml" =>
+                Formatter.XML,
+            _ => Formatter.Unknown,
+        };
         return formatter;
     }
 }

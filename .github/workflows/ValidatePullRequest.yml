@@ -32,6 +32,18 @@ jobs:
           rm -r -f ./Tests/CSharpier.MsBuild.Test
           dotnet tool restore
           dotnet csharpier check .
+  check_todos:
+    runs-on: ubuntu-latest
+    name: Check TODOs
+    steps:
+      - uses: actions/checkout@v2
+      - name: Get branch name (pull request)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
+      - shell: pwsh
+        run: |
+          ./.github/workflows/ValidatePullRequest_CheckTodos.ps1 -BranchName ${{ env.BRANCH_NAME }}
   test_msbuild:
     strategy:
       matrix:
