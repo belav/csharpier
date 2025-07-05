@@ -38,7 +38,6 @@ internal class PrinterOptions(Formatter formatter)
 
     public static Formatter GetFormatter(string filePath)
     {
-        // TODO more-xml-files what about the extensions?
         var extension = Path.GetExtension(filePath)[1..].ToLower(CultureInfo.InvariantCulture);
 
         var formatter = extension switch
