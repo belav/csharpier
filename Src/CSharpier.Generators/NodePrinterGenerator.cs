@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -8,10 +12,8 @@ using Scriban;
 namespace CSharpier.Generators;
 
 [Generator]
-public class NodePrinterGenerator : ISourceGenerator
+public class NodePrinterGenerator : IIncrementalGenerator
 {
-    public void Initialize(GeneratorInitializationContext context) { }
-
     private static readonly Dictionary<string, string[]> SpecialCase = new()
     {
         {
@@ -203,10 +205,34 @@ public class NodePrinterGenerator : ISourceGenerator
         },
     };
 
-    public void Execute(GeneratorExecutionContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        var template = Template.Parse(this.GetContent(this.GetType().Name + ".sbntxt"));
-        var renderedSource = template.Render(this.GetModel(context), member => member.Name);
+        var syntaxTrees = context.CompilationProvider.Select(
+            (compilation, _) =>
+                compilation
+                    .SyntaxTrees.Where(o => o.FilePath.Contains("SyntaxNodePrinters"))
+                    .ToImmutableArray()
+        );
+
+        context.RegisterSourceOutput(syntaxTrees, GenerateSource);
+    }
+
+    private static void GenerateSource(
+        SourceProductionContext context,
+        ImmutableArray<SyntaxTree> syntaxTrees
+    )
+    {
+        if (syntaxTrees.Length == 0)
+        {
+            return;
+        }
+
+        var generator = new NodePrinterGenerator();
+        var template = Template.Parse(generator.GetContent(generator.GetType().Name + ".sbntxt"));
+        var renderedSource = template.Render(
+            generator.GetModel(syntaxTrees),
+            member => member.Name
+        );
 
         var sourceText = SourceText.From(renderedSource, Encoding.UTF8);
 
@@ -239,10 +265,9 @@ public class NodePrinterGenerator : ISourceGenerator
         return reader.ReadToEnd();
     }
 
-    private object GetModel(GeneratorExecutionContext context)
+    private object GetModel(ImmutableArray<SyntaxTree> syntaxTrees)
     {
-        var nodeTypes = context
-            .Compilation.SyntaxTrees.Where(o => o.FilePath.Contains("SyntaxNodePrinters"))
+        var nodeTypes = syntaxTrees
             .Select(o => Path.GetFileNameWithoutExtension(o.FilePath))
             .Select(fileName => new
             {
