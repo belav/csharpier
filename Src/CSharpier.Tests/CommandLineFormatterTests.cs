@@ -901,9 +901,7 @@ class ClassName
         else
         {
             directoryOrFilePaths = directoryOrFilePaths
-                .Select(o =>
-                    context.FileSystem.Path.Combine(GetRootPath(), o.TrimStart('.').Trim('/'))
-                )
+                .Select(o => context.FileSystem.Path.Combine(GetRootPath(), o))
                 .ToArray();
         }
 
