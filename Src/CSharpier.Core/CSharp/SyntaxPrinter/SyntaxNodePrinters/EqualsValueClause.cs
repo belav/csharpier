@@ -8,7 +8,13 @@ internal static class EqualsValueClause
     public static Doc Print(EqualsValueClauseSyntax node, PrintingContext context)
     {
         Doc separator = Doc.Line;
-        if (node.Parent is PropertyDeclarationSyntax)
+        if (
+            node is
+            {
+                Parent: PropertyDeclarationSyntax,
+                Value: not AnonymousObjectCreationExpressionSyntax
+            }
+        )
         {
             // keeping line
         }
@@ -37,7 +43,7 @@ internal static class EqualsValueClause
             Node.Print(node.Value, context)
         );
 
-        if (separator is LineDoc)
+        if (separator is LineDoc && node.Value is not CollectionExpressionSyntax)
         {
             result = Doc.Indent(result);
         }

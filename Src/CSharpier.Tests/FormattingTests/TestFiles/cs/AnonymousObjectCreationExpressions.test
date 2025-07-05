@@ -1,15 +1,22 @@
 public class ClassName
 {
-    public dynamic ShortValue = new { Property = true };
+    public SomeObject ShortValue = new { Property = true };
 
-    public dynamic LongValue = new
+    public SomeObject LongValue = new
     {
         One = "One",
         Two = "Two",
         ThreeThreeThree = "ThreeThreeThree",
     };
 
-    public dynamic Value = new { NoName };
+    public SomeObject LongValue { get; } = new
+    {
+        One = "One",
+        Two = "Two",
+        ThreeThreeThree = "ThreeThreeThree",
+    };
+
+    public SomeObject Value = new { NoName };
 
     public void Method()
     {
