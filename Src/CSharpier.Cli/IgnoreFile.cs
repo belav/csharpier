@@ -106,11 +106,13 @@ internal class IgnoreFile
     // this will return the ignore paths in order of priority
     // the first csharpierignore it finds at or above the path
     // and then all .gitignores (at or above) it finds in order from closest to further away
+    // stopping once it encounters a .git directory
     private static List<string> FindIgnorePaths(string baseDirectoryPath, IFileSystem fileSystem)
     {
         var result = new List<string>();
         string? foundCSharpierIgnoreFilePath = null;
         var directoryInfo = fileSystem.DirectoryInfo.New(baseDirectoryPath);
+        var includeGitIgnores = true;
         while (directoryInfo != null)
         {
             if (foundCSharpierIgnoreFilePath is null)
@@ -125,10 +127,21 @@ internal class IgnoreFile
                 }
             }
 
-            var gitIgnoreFilePath = fileSystem.Path.Combine(directoryInfo.FullName, ".gitignore");
-            if (fileSystem.File.Exists(gitIgnoreFilePath))
+            if (includeGitIgnores)
             {
-                result.Add(gitIgnoreFilePath);
+                var gitIgnoreFilePath = fileSystem.Path.Combine(
+                    directoryInfo.FullName,
+                    ".gitignore"
+                );
+                if (fileSystem.File.Exists(gitIgnoreFilePath))
+                {
+                    result.Add(gitIgnoreFilePath);
+                }
+            }
+
+            if (fileSystem.Directory.Exists(Path.Combine(directoryInfo.FullName, ".git")))
+            {
+                includeGitIgnores = false;
             }
 
             directoryInfo = directoryInfo.Parent;

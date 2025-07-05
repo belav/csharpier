@@ -675,6 +675,19 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Gitignore_Outside_Git_Is_Not_Used()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
+        context.WhenAFileExists(".gitignore", "*.cs");
+        context.WhenAFileExists("Sub/.git/test.txt", string.Empty);
+
+        var result = Format(context, directoryOrFilePaths: "Sub");
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+    }
+
+    [Test]
     public void Write_Stdout_Should_Only_Write_File()
     {
         var context = new TestContext();
@@ -888,7 +901,9 @@ class ClassName
         else
         {
             directoryOrFilePaths = directoryOrFilePaths
-                .Select(o => context.FileSystem.Path.Combine(GetRootPath(), o))
+                .Select(o =>
+                    context.FileSystem.Path.Combine(GetRootPath(), o.TrimStart('.').Trim('/'))
+                )
                 .ToArray();
         }
 
