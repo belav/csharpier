@@ -47,11 +47,13 @@ public class OptionsProviderTests
         ShouldHaveDefaultCSharpOptions(result);
     }
 
-    [TestCase("xml")]
+    [TestCase("config")]
     [TestCase("csproj")]
     [TestCase("props")]
+    [TestCase("slnx")]
     [TestCase("targets")]
-    [TestCase("config")]
+    [TestCase("xaml")]
+    [TestCase("xml")]
     public async Task Should_Return_Default_Options_With_No_File_And_Known_Xml_Extension(
         string extension
     )
