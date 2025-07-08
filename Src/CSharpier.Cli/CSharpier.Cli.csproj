@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <PackageId>CSharpier</PackageId>
     <AssemblyName>CSharpier</AssemblyName>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>csharpier</ToolCommandName>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
