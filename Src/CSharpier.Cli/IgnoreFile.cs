@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 using CSharpier.Core;
@@ -49,46 +50,61 @@ internal class IgnoreFile
     public static async Task<IgnoreFile?> CreateAsync(
         string baseDirectoryPath,
         IFileSystem fileSystem,
+        string? ignorePath,
         CancellationToken cancellationToken
     )
     {
+        async Task<IgnoreWithBasePath> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
+        {
+            var ignore = new IgnoreWithBasePath(
+                overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!
+            );
+            AddDefaultRules(ignore);
+
+            var content = await fileSystem.File.ReadAllTextAsync(ignoreFilePath, cancellationToken);
+
+            var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(content, true);
+
+            ignore.AddPositives(positives.Merged);
+            ignore.AddNegatives(negatives.Merged);
+
+            return ignore;
+        }
+
         return await SharedFunc<IgnoreFile?>
             .GetOrAddAsync(
                 baseDirectoryPath,
                 async () =>
                 {
                     DebugLogger.Log("Creating ignore file for " + baseDirectoryPath);
-                    var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
-                    if (ignoreFilePaths.Count == 0)
+                    if (ignorePath is not null)
                     {
-                        var ignore = new IgnoreWithBasePath(baseDirectoryPath);
-                        AddDefaultRules(ignore);
-                        return new IgnoreFile([ignore]);
-                    }
+                        if (!fileSystem.File.Exists(ignorePath))
+                        {
+                            throw new Exception("There was no ignore file found at " + ignorePath);
+                        }
 
-                    var ignores = new List<IgnoreWithBasePath>();
-                    foreach (var ignoreFilePath in ignoreFilePaths)
+                        DebugLogger.Log("Using ignorePath: " + ignorePath);
+                        return new IgnoreFile([await CreateIgnore(ignorePath, baseDirectoryPath)]);
+                    }
+                    else
                     {
-                        var ignore = new IgnoreWithBasePath(Path.GetDirectoryName(ignoreFilePath)!);
-                        AddDefaultRules(ignore);
+                        var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
+                        if (ignoreFilePaths.Count == 0)
+                        {
+                            var ignore = new IgnoreWithBasePath(baseDirectoryPath);
+                            AddDefaultRules(ignore);
+                            return new IgnoreFile([ignore]);
+                        }
 
-                        var content = await fileSystem.File.ReadAllTextAsync(
-                            ignoreFilePath,
-                            cancellationToken
-                        );
+                        var ignores = new List<IgnoreWithBasePath>();
+                        foreach (var ignoreFilePath in ignoreFilePaths)
+                        {
+                            ignores.Add(await CreateIgnore(ignoreFilePath, null));
+                        }
 
-                        var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(
-                            content,
-                            true
-                        );
-
-                        ignore.AddPositives(positives.Merged);
-                        ignore.AddNegatives(negatives.Merged);
-
-                        ignores.Add(ignore);
+                        return new IgnoreFile(ignores);
                     }
-
-                    return new IgnoreFile(ignores);
                 },
                 cancellationToken
             )
@@ -164,6 +180,8 @@ internal class IgnoreFile
 
         public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
         {
+            DebugLogger.Log("path: " + path);
+            DebugLogger.Log("basePath: " + basePath);
             if (!path.StartsWith(basePath, StringComparison.Ordinal))
             {
                 return (false, false);

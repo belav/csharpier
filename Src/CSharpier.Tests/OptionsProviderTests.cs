@@ -821,6 +821,7 @@ indent_size = 2
             var provider = await OptionsProvider.Create(
                 directoryName,
                 null,
+                null,
                 this.fileSystem,
                 NullLogger.Instance,
                 CancellationToken.None
