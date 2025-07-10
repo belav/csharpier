@@ -63,6 +63,7 @@ Thanks to the following companies for sponsoring the ongoing development of CSha
 [<img src="./Src/Website/static/img/aws.png" />](https://github.com/aws/dotnet-foss)
 
 [Fern](https://buildwithfern.com/) \
-[<img height=120 src="https://cdn.brandfetch.io/idPXovIzxA/idAQ1VBj_9.svg?c=1bxid64Mup7aczewSAYMX&t=1745869953751"/>]((https://buildwithfern.com/))
+ \
+[<img src="./fern.svg" />]((https://buildwithfern.com/))
 
 And a huge thanks to all the others who sponsor the project through [Github sponsors](https://github.com/sponsors/belav)
