@@ -56,6 +56,14 @@ Join Us [![Discord](https://img.shields.io/badge/Discord-chat?label=&logo=discor
 
 ## Sponsors
 
-Special thanks to the [.NET on AWS Open Source Software Fund](https://github.com/aws/dotnet-foss) for sponsoring the ongoing development CSharpier.
+Thanks to the following companies for sponsoring the ongoing development of CSharpier.
 
-[<img src="./Src/Website/static/img/aws.png" style="padding: 10px 0; width: 200px" />](https://github.com/aws/dotnet-foss)
+[.NET on AWS Open Source Software Fund](https://github.com/aws/dotnet-foss) \
+ \
+[<img src="./Src/Website/static/img/aws.png" />](https://github.com/aws/dotnet-foss)
+
+[Fern](https://buildwithfern.com/) \
+ \
+[<img src="./fern.svg" />]((https://buildwithfern.com/))
+
+And a huge thanks to all the others who sponsor the project through [Github sponsors](https://github.com/sponsors/belav)

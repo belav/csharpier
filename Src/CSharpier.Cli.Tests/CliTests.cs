@@ -105,6 +105,38 @@ public class CliTests
             .Be(unformattedContent, $"The file at {filePath} should have been ignored");
     }
 
+    [Test]
+    public async Task Format_Should_Respect_Ignore_Path()
+    {
+        var unformattedContent = "public class Unformatted {     }";
+        var filePath = "IgnoredFile.cs";
+        await WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(".config/.csharpierignore", filePath);
+
+        await new CsharpierProcess()
+            .WithArguments("format . --ignore-path ./config/.csharpierignore")
+            .ExecuteAsync();
+        var fileContents = await ReadAllTextAsync(filePath);
+
+        fileContents
+            .Should()
+            .Be(unformattedContent, $"The file at {filePath} should have been ignored");
+    }
+
+    [Test]
+    public async Task Check_Should_Respect_Ignore_Path()
+    {
+        var unformattedContent = "public class Unformatted {     }";
+        var filePath = "IgnoredFile.cs";
+        await WriteFileAsync(filePath, unformattedContent);
+        await WriteFileAsync(".config/.csharpierignore", filePath);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check . --ignore-path .config/.csharpierignore")
+            .ExecuteAsync();
+        result.ExitCode.Should().Be(0);
+    }
+
     [TestCase(".git")]
     [TestCase("subdirectory/.git")]
     [TestCase("node_modules")]

@@ -48,6 +48,7 @@ internal static class CommandLineFormatter
                 var optionsProvider = await OptionsProvider.Create(
                     directoryPath,
                     commandLineOptions.ConfigPath,
+                    commandLineOptions.IgnorePath,
                     fileSystem,
                     logger,
                     cancellationToken
@@ -178,6 +179,7 @@ internal static class CommandLineFormatter
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
                 commandLineOptions.ConfigPath,
+                commandLineOptions.IgnorePath,
                 fileSystem,
                 logger,
                 cancellationToken

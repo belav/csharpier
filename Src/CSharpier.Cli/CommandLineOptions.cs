@@ -19,4 +19,5 @@ internal class CommandLineOptions
     public string? StandardInFileContents { get; init; }
     public string? ConfigPath { get; init; }
     public string[] OriginalDirectoryOrFilePaths { get; init; } = [];
+    public string? IgnorePath { get; init; }
 }

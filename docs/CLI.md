@@ -33,9 +33,16 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     dotnet csharpier format . --config-path "./config/csharpier.yaml"
 
     # allows passing in a path to an editorconfig
-    dotnet csharpier . --config-path "./config/.editorconfig"
+    dotnet csharpier format . --config-path "./config/.editorconfig"
     ```
 
+- `--ignore-path`
+
+  If your ignore file lives in a location that CSharpier would not normally resolve it (such as in a config folder)
+  you can pass the path for the ignore file to CSharpier.
+    ```bash
+    dotnet csharpier format . --ignore-path "./config/.csharpierignore"
+    ```
 
 - `--log-format`
 

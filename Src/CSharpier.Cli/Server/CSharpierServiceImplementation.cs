@@ -45,6 +45,7 @@ internal class CSharpierServiceImplementation(ILogger logger)
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
                 configPath: null,
+                ignorePath: null,
                 this.fileSystem,
                 logger,
                 cancellationToken
