@@ -886,6 +886,7 @@ class ClassName
         var context = new TestContext();
         var content = new StringBuilder();
 #pragma warning disable CA1305
+        // avoiding raw strings because this needs to use specific line breaks
         content.Append($"<Root>{lineBreak}");
         content.Append($"  <Element />{lineBreak}");
         content.Append($"  <!--{lineBreak}");
