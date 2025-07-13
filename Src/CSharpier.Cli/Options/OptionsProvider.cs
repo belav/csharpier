@@ -37,6 +37,7 @@ internal class OptionsProvider
     public static async Task<OptionsProvider> Create(
         string directoryName,
         string? configPath,
+        string? ignorePath,
         IFileSystem fileSystem,
         ILogger logger,
         CancellationToken cancellationToken
@@ -55,7 +56,12 @@ internal class OptionsProvider
             ? CSharpierConfigParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var ignoreFile = await IgnoreFile.CreateAsync(directoryName, fileSystem, cancellationToken);
+        var ignoreFile = await IgnoreFile.CreateAsync(
+            directoryName,
+            fileSystem,
+            ignorePath,
+            cancellationToken
+        );
 
         if (ignoreFile is null)
         {
@@ -196,7 +202,7 @@ internal class OptionsProvider
                     Path.Combine(searchingDirectory, ".csharpierignore")
                 ),
             (searchingDirectory) =>
-                IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, cancellationToken)
+                IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, null, cancellationToken)
         );
 
         if (ignoreFile is null)

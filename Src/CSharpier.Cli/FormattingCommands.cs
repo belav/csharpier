@@ -35,6 +35,7 @@ internal static class FormattingCommands
         formatCommand.AddOption(writeStdoutOption);
         formatCommand.AddOption(CompilationErrorsAsWarningsOption);
         formatCommand.AddOption(ConfigPathOption);
+        formatCommand.AddOption(IgnorePathOption);
         formatCommand.AddOption(LogFormatOption);
         formatCommand.AddOption(LogLevelOption);
 
@@ -51,6 +52,7 @@ internal static class FormattingCommands
                 CompilationErrorsAsWarningsOption
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
+            var ignorePath = context.ParseResult.GetValueForOption(IgnorePathOption);
             var logLevel = context.ParseResult.GetValueForOption(LogLevelOption);
             var logFormat = context.ParseResult.GetValueForOption(LogFormatOption);
             var token = context.GetCancellationToken();
@@ -66,6 +68,7 @@ internal static class FormattingCommands
                 includeGenerated,
                 compilationErrorsAsWarnings,
                 configPath,
+                ignorePath,
                 logLevel,
                 logFormat,
                 token
@@ -84,6 +87,7 @@ internal static class FormattingCommands
         var directoryOrFileArgument = AddDirectoryOrFileArgument(checkCommand);
 
         checkCommand.AddOption(ConfigPathOption);
+        checkCommand.AddOption(IgnorePathOption);
         checkCommand.AddOption(LogFormatOption);
         checkCommand.AddOption(LogLevelOption);
         checkCommand.AddOption(IncludeGeneratedOption);
@@ -99,6 +103,7 @@ internal static class FormattingCommands
                 CompilationErrorsAsWarningsOption
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
+            var ignorePath = context.ParseResult.GetValueForOption(IgnorePathOption);
             var logLevel = context.ParseResult.GetValueForOption(LogLevelOption);
             var logFormat = context.ParseResult.GetValueForOption(LogFormatOption);
             var token = context.GetCancellationToken();
@@ -114,6 +119,7 @@ internal static class FormattingCommands
                 includeGenerated,
                 compilationErrorsAsWarnings,
                 configPath,
+                ignorePath,
                 logLevel,
                 logFormat,
                 token
@@ -134,6 +140,7 @@ internal static class FormattingCommands
         bool includeGenerated,
         bool compilationErrorsAsWarnings,
         string? configPath,
+        string? ignorePath,
         LogLevel logLevel,
         LogFormat logFormat,
         CancellationToken cancellationToken
@@ -179,6 +186,7 @@ internal static class FormattingCommands
             WriteStdout = writeStdout || standardInFileContents != null,
             IncludeGenerated = includeGenerated,
             ConfigPath = configPath,
+            IgnorePath = ignorePath,
             CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
             LogFormat = logFormat,
         };
@@ -216,6 +224,11 @@ internal static class FormattingCommands
     private static readonly Option<string> ConfigPathOption = new(
         ["--config-path"],
         "Path to the CSharpier configuration file"
+    );
+
+    private static readonly Option<string> IgnorePathOption = new(
+        ["--ignore-path"],
+        "Path to the CSharpier ignore file"
     );
 
     private static readonly Option<LogFormat> LogFormatOption = new(
