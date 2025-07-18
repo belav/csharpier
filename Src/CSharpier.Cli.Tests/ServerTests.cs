@@ -12,7 +12,7 @@ namespace CSharpier.Cli.Tests;
 [TestFixture]
 public class ServerTests
 {
-    private static readonly HttpClient httpClient = new HttpClient();
+    private static readonly HttpClient httpClient = new();
 
     // TODO server add other tests
     // starting on port

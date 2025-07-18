@@ -827,15 +827,9 @@ indent_size = 2
                 CancellationToken.None
             );
 
-            var printerOptions = await provider.GetPrinterOptionsForAsync(
-                filePath,
-                CancellationToken.None
-            );
-
-            if (printerOptions is null)
-            {
-                throw new Exception("PrinterOptions was null");
-            }
+            var printerOptions =
+                await provider.GetPrinterOptionsForAsync(filePath, CancellationToken.None)
+                ?? throw new Exception("PrinterOptions was null");
 
             return printerOptions;
         }
