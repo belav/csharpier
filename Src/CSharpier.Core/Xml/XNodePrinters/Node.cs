@@ -5,9 +5,18 @@ using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
-internal static class Node
+internal static
+#if !NETSTANDARD2_0
+partial
+#endif
+class Node
 {
+#if NETSTANDARD2_0
     private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
+#else
+    [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
+    private static partial Regex NewlineRegex();
+#endif
 
     internal static Doc Print(XNode xNode, XmlPrintingContext context)
     {
@@ -60,7 +69,11 @@ internal static class Node
 
         if (xNode is XComment or XProcessingInstruction)
         {
-            return NewlineRegex.Replace(xNode.ToString(), context.Options.LineEnding);
+            return NewlineRegex
+#if !NETSTANDARD2_0
+                ()
+#endif
+            .Replace(xNode.ToString(), context.Options.LineEnding);
         }
 
         throw new Exception("Need to handle + " + xNode.GetType());
