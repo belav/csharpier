@@ -29,9 +29,14 @@ internal static class CompilationUnit
                 && previousList.Contents[^2] is HardLine
             )
             {
-                while (list.Contents[0] is HardLine { SkipBreakIfFirstInGroup: true })
+                for (
+                    var i = 0;
+                    i < list.Contents.Count
+                        && list.Contents[i] is HardLine { SkipBreakIfFirstInGroup: true };
+                    i++
+                )
                 {
-                    list.Contents.RemoveAt(0);
+                    docs[i] = Doc.Null;
                 }
 
                 docs.Add(finalTrivia);
