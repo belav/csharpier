@@ -879,6 +879,29 @@ class ClassName
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
 
+    [TestCase("\r\n")]
+    [TestCase("\n")]
+    public void Format_XML_With_Multiline_Comment_Uses_Consistent_Line_Breaks(string lineBreak)
+    {
+        var context = new TestContext();
+        var content = new StringBuilder();
+#pragma warning disable CA1305
+        // avoiding raw strings because this needs to use specific line breaks
+        content.Append($"<Root>{lineBreak}");
+        content.Append($"  <Element />{lineBreak}");
+        content.Append($"  <!--{lineBreak}");
+        content.Append($"  SomeText{lineBreak}");
+        content.Append($"  -->{lineBreak}");
+        content.Append($"</Root>{lineBreak}");
+#pragma warning restore CA1305
+
+        context.WhenAFileExists("Xml.xml", content.ToString());
+
+        Format(context);
+
+        context.GetFileContent("Xml.xml").Should().Be(content.ToString());
+    }
+
     private static FormatResult Format(
         TestContext context,
         bool skipWrite = false,
