@@ -1,4 +1,6 @@
+using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
+using System.Security.AccessControl;
 using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;

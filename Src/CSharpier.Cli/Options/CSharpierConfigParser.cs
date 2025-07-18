@@ -24,18 +24,24 @@ internal static class CSharpierConfigParser
 
         while (directoryInfo is not null)
         {
-            var file = directoryInfo
-                .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
-                .Where(o => validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase))
-                .MinBy(o => o.Extension);
-
-            if (file != null)
+            try
             {
-                return new CSharpierConfigData(
-                    file.DirectoryName!,
-                    Create(file.FullName, fileSystem, logger)
-                );
+                var file = directoryInfo
+                    .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
+                    .Where(o =>
+                        validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase)
+                    )
+                    .MinBy(o => o.Extension);
+
+                if (file != null)
+                {
+                    return new CSharpierConfigData(
+                        file.DirectoryName!,
+                        Create(file.FullName, fileSystem, logger)
+                    );
+                }
             }
+            catch (UnauthorizedAccessException) { }
 
             directoryInfo = directoryInfo.Parent;
         }

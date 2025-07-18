@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 using CliWrap;
 using CliWrap.Buffered;
@@ -87,6 +89,72 @@ public class CliTests
         result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
+    }
+
+    [Test]
+    public async Task Format_Should_Handle_UnauthorizedAccessException_In_Subdirectory()
+    {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            // on linux you can't read a subdirectory if you don't have access to the parent directory
+            return;
+        }
+
+        var formattedContent = "public class ClassName { }\n";
+        var unformattedContent = "public class ClassName {\n\n}";
+
+        await WriteFileAsync(
+            "UnauthorizedSubdirectory/Subdirectory/BasicFile.cs",
+            unformattedContent
+        );
+
+        var directory = new DirectoryInfo(
+            Path.Combine(testFileDirectory, "UnauthorizedSubdirectory")
+        );
+
+        void ChangeDirectoryPermissions(bool allowAccess)
+        {
+            var accessControl = directory.GetAccessControl();
+            if (allowAccess)
+            {
+                accessControl.RemoveAccessRule(
+                    new FileSystemAccessRule(
+                        "Everyone",
+                        FileSystemRights.FullControl,
+                        AccessControlType.Deny
+                    )
+                );
+            }
+            else
+            {
+                accessControl.AddAccessRule(
+                    new FileSystemAccessRule(
+                        "Everyone",
+                        FileSystemRights.FullControl,
+                        AccessControlType.Deny
+                    )
+                );
+            }
+            directory.SetAccessControl(accessControl);
+        }
+
+        try
+        {
+            ChangeDirectoryPermissions(allowAccess: false);
+
+            var formatResult = await new CsharpierProcess()
+                .WithArguments("format UnauthorizedSubdirectory/Subdirectory")
+                .ExecuteAsync();
+
+            formatResult.ErrorOutput.Should().BeEmpty();
+            (await ReadAllTextAsync("UnauthorizedSubdirectory/Subdirectory/BasicFile.cs"))
+                .Should()
+                .Be(formattedContent);
+        }
+        finally
+        {
+            ChangeDirectoryPermissions(allowAccess: true);
+        }
     }
 
     [Test]
