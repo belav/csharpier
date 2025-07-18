@@ -94,6 +94,12 @@ public class CliTests
     [Test]
     public async Task Format_Should_Handle_UnauthorizedAccessException_In_Subdirectory()
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            // on linux you can't read a subdirectory if you don't have access to the parent directory
+            return;
+        }
+
         var formattedContent = "public class ClassName { }\n";
         var unformattedContent = "public class ClassName {\n\n}";
 
@@ -106,61 +112,35 @@ public class CliTests
             Path.Combine(testFileDirectory, "UnauthorizedSubdirectory")
         );
 
-        async Task ChangeDirectoryPermissions(bool allowAccess)
+        void ChangeDirectoryPermissions(bool allowAccess)
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            var accessControl = directory.GetAccessControl();
+            if (allowAccess)
             {
-                var accessControl = directory.GetAccessControl();
-                if (allowAccess)
-                {
-                    accessControl.RemoveAccessRule(
-                        new FileSystemAccessRule(
-                            "Everyone",
-                            FileSystemRights.FullControl,
-                            AccessControlType.Deny
-                        )
-                    );
-                }
-                else
-                {
-                    accessControl.AddAccessRule(
-                        new FileSystemAccessRule(
-                            "Everyone",
-                            FileSystemRights.FullControl,
-                            AccessControlType.Deny
-                        )
-                    );
-                }
-                directory.SetAccessControl(accessControl);
+                accessControl.RemoveAccessRule(
+                    new FileSystemAccessRule(
+                        "Everyone",
+                        FileSystemRights.FullControl,
+                        AccessControlType.Deny
+                    )
+                );
             }
             else
             {
-                var processInfo = new ProcessStartInfo
-                {
-                    FileName = "chmod",
-                    Arguments = $"{(allowAccess ? "755" : "000")}  \"{directory.FullName}\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                };
-
-                using var process = Process.Start(processInfo);
-                if (process == null)
-                {
-                    Assert.Ignore(
-                        "chmod command not available - unable to set directory permissions"
-                    );
-                    return;
-                }
-
-                await process.WaitForExitAsync();
+                accessControl.AddAccessRule(
+                    new FileSystemAccessRule(
+                        "Everyone",
+                        FileSystemRights.FullControl,
+                        AccessControlType.Deny
+                    )
+                );
             }
+            directory.SetAccessControl(accessControl);
         }
 
         try
         {
-            await ChangeDirectoryPermissions(allowAccess: false);
+            ChangeDirectoryPermissions(allowAccess: false);
 
             var formatResult = await new CsharpierProcess()
                 .WithArguments("format UnauthorizedSubdirectory/Subdirectory")
@@ -173,7 +153,7 @@ public class CliTests
         }
         finally
         {
-            await ChangeDirectoryPermissions(allowAccess: true);
+            ChangeDirectoryPermissions(allowAccess: true);
         }
     }
 
