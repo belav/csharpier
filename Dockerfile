@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.5-bookworm-slim-amd64 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS base
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0.300-bookworm-slim-amd64 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
 
 RUN set -uex \
     && apt-get update \
