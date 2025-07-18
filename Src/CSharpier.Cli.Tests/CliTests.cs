@@ -106,18 +106,31 @@ public class CliTests
             Path.Combine(testFileDirectory, "UnauthorizedSubdirectory")
         );
 
-        async Task ChangeAccess(bool allowAccess)
+        async Task ChangeDirectoryPermissions(bool allowAccess)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 var accessControl = directory.GetAccessControl();
-                accessControl.AddAccessRule(
-                    new FileSystemAccessRule(
-                        "Everyone",
-                        FileSystemRights.FullControl,
-                        allowAccess ? AccessControlType.Allow : AccessControlType.Deny
-                    )
-                );
+                if (allowAccess)
+                {
+                    accessControl.RemoveAccessRule(
+                        new FileSystemAccessRule(
+                            "Everyone",
+                            FileSystemRights.FullControl,
+                            AccessControlType.Deny
+                        )
+                    );
+                }
+                else
+                {
+                    accessControl.AddAccessRule(
+                        new FileSystemAccessRule(
+                            "Everyone",
+                            FileSystemRights.FullControl,
+                            AccessControlType.Deny
+                        )
+                    );
+                }
                 directory.SetAccessControl(accessControl);
             }
             else
@@ -147,20 +160,20 @@ public class CliTests
 
         try
         {
-            await ChangeAccess(false);
+            await ChangeDirectoryPermissions(allowAccess: false);
 
             var formatResult = await new CsharpierProcess()
                 .WithArguments("format UnauthorizedSubdirectory/Subdirectory")
                 .ExecuteAsync();
 
-            formatResult.ExitCode.Should().Be(0);
+            formatResult.ErrorOutput.Should().BeEmpty();
             (await ReadAllTextAsync("UnauthorizedSubdirectory/Subdirectory/BasicFile.cs"))
                 .Should()
                 .Be(formattedContent);
         }
         finally
         {
-            await ChangeAccess(true);
+            await ChangeDirectoryPermissions(allowAccess: true);
         }
     }
 
