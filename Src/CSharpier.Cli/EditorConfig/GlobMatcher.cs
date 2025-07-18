@@ -204,7 +204,7 @@ internal partial class GlobMatcher
 
                 switch (item)
                 {
-                    case Asterisk _:
+                    case Asterisk:
                         return true;
 
                     case Literal literal:
@@ -223,7 +223,7 @@ internal partial class GlobMatcher
                         this.myEndOffset = pos;
                         break;
 
-                    case PathSeparator _:
+                    case PathSeparator:
                         if (this.myStartItem <= this.myEndItem - 1)
                         {
                             // If we have pattern like a/**/b, then it should be matched by a/b, so don't eat path separator after **
@@ -329,7 +329,10 @@ internal partial class GlobMatcher
 
                         this.myLastAsteriskItem = this.myStartItem;
 
-                        if (!(item is DoubleAsterisk) || !(asterisk.NextAsterisk is SimpleAsterisk))
+                        if (
+                            item is not DoubleAsterisk
+                            || asterisk.NextAsterisk is not SimpleAsterisk
+                        )
                         {
                             if (!this.GotoNextPositionForAsterisk(true))
                                 return false;
@@ -376,7 +379,7 @@ internal partial class GlobMatcher
                             first = false;
                         }
 
-                    case PathSeparator _:
+                    case PathSeparator:
                         if (this.myEndOffset - this.myStartOffset < 1)
                             return false; // Not enough chars
 
@@ -665,21 +668,21 @@ internal partial class GlobMatcher
                         fixedItemsLength += literal.Source.Length;
                         break;
 
-                    case PathSeparator _:
+                    case PathSeparator:
                         if (lastAsterisk != null && lastAsterisk.LiteralAfterAsterisk == -1)
                         {
                             lastAsterisk.LiteralAfterAsterisk = i;
                         }
 
                         // First slash after ** could be skipped
-                        if (!(lastAsterisk is DoubleAsterisk) || fixedItemsLength > 0)
+                        if (lastAsterisk is not DoubleAsterisk || fixedItemsLength > 0)
                         {
                             fixedItemsLength += 1;
                         }
 
                         break;
 
-                    case OneChar _:
+                    case OneChar:
                         fixedItemsLength += 1;
                         break;
 
@@ -709,7 +712,7 @@ internal partial class GlobMatcher
     {
         static OneChar() { }
 
-        public static readonly OneChar EmptyInstance = new OneChar(null, false);
+        public static readonly OneChar EmptyInstance = new(null, false);
 
         private string PossibleChars { get; } = possibleChars;
         private bool Negate { get; } = negate;
@@ -745,7 +748,7 @@ internal partial class GlobMatcher
 
         static PathSeparator() { }
 
-        public static readonly PathSeparator Instance = new PathSeparator();
+        public static readonly PathSeparator Instance = new();
     }
 
     ///<summary>Creates a new GlobMatcher instance, parsing the pattern into a regex.</summary>
@@ -1072,7 +1075,7 @@ internal partial class GlobMatcher
         {
             if (inClass && range)
             {
-                var firstChar = sb[sb.Length - 1];
+                var firstChar = sb[^1];
                 firstChar++;
 
                 for (var c2 = firstChar; c2 <= c1; c2++)

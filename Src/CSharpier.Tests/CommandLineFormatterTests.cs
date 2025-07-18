@@ -248,7 +248,6 @@ public class CommandLineFormatterTests
     public void Works_With_MSBuild_Version_Checking_When_No_Version_Specified()
     {
         var context = new TestContext();
-        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
 
         context.WhenAFileExists(
             "Test.csproj",

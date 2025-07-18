@@ -1,0 +1,20 @@
+public static class Enumerable
+{
+    extension<TSource>(IEnumerable<TSource> source)
+    {
+        public bool IsEmpty => !source.Any();
+        public TSource this[int index] => source.Skip(index).First();
+
+        public IEnumerable<TSource> Where(Func<TSource, bool> predicate) { }
+    }
+
+    extension<TSource>(IEnumerable<TSource>)
+    {
+        public static IEnumerable<TSource> Combine(
+            IEnumerable<TSource> first,
+            IEnumerable<TSource> second
+        ) { }
+
+        public static IEnumerable<TSource> Identity => Enumerable.Empty<TSource>();
+    }
+}
