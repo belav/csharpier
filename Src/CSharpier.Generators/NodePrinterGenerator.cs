@@ -73,6 +73,7 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 nameof(SyntaxKind.RecordDeclaration),
                 nameof(SyntaxKind.RecordStructDeclaration),
                 nameof(SyntaxKind.EnumDeclaration),
+                nameof(SyntaxKind.ExtensionDeclaration),
             }
         },
         {
