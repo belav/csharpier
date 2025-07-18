@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 using CliWrap;
 using CliWrap.Buffered;
@@ -87,6 +89,79 @@ public class CliTests
         result.Output.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
+    }
+
+    [Test]
+    public async Task Format_Should_Handle_UnauthorizedAccessException_In_Subdirectory()
+    {
+        var formattedContent = "public class ClassName { }\n";
+        var unformattedContent = "public class ClassName {\n\n}";
+
+        await WriteFileAsync(
+            "UnauthorizedSubdirectory/Subdirectory/BasicFile.cs",
+            unformattedContent
+        );
+
+        var directory = new DirectoryInfo(
+            Path.Combine(testFileDirectory, "UnauthorizedSubdirectory")
+        );
+
+        async Task ChangeAccess(bool allowAccess)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var accessControl = directory.GetAccessControl();
+                accessControl.AddAccessRule(
+                    new FileSystemAccessRule(
+                        "Everyone",
+                        FileSystemRights.FullControl,
+                        allowAccess ? AccessControlType.Allow : AccessControlType.Deny
+                    )
+                );
+                directory.SetAccessControl(accessControl);
+            }
+            else
+            {
+                var processInfo = new ProcessStartInfo
+                {
+                    FileName = "chmod",
+                    Arguments = $"{(allowAccess ? "755" : "000")}  \"{directory.FullName}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+
+                using var process = Process.Start(processInfo);
+                if (process == null)
+                {
+                    Assert.Ignore(
+                        "chmod command not available - unable to set directory permissions"
+                    );
+                    return;
+                }
+
+                await process.WaitForExitAsync();
+            }
+        }
+
+        try
+        {
+            await ChangeAccess(false);
+
+            var formatResult = await new CsharpierProcess()
+                .WithArguments("format UnauthorizedSubdirectory/Subdirectory")
+                .ExecuteAsync();
+
+            formatResult.ExitCode.Should().Be(0);
+            (await ReadAllTextAsync("UnauthorizedSubdirectory/Subdirectory/BasicFile.cs"))
+                .Should()
+                .Be(formattedContent);
+        }
+        finally
+        {
+            await ChangeAccess(true);
+        }
     }
 
     [Test]
