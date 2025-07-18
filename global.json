@@ -1,7 +1,7 @@
 {
   "sdk": {
     "version": "10.0.100-preview.5.25277.114",
-    "rollForward": "latestFeature"
+    "rollForward": "Disable"
   },
   "msbuild-sdks": {
     "Microsoft.Build.Traversal": "4.1.0"

@@ -67,7 +67,7 @@ internal class GlobMatcherOptions
 /// A simple glob matcher implementation, if you want a proper one please use a full fletched one from nuget.
 /// </summary>
 [SuppressMessage("Style", "IDE0011:Add braces")]
-internal class GlobMatcher
+internal partial class GlobMatcher
 {
     private readonly GlobMatcherOptions myOptions;
     private readonly List<PatternCase> mySet;
@@ -825,9 +825,11 @@ internal class GlobMatcher
         return negate;
     }
 
-    private static readonly Regex ourHasBraces = new(@"\{.*\}");
+    [GeneratedRegex(@"\{.*\}")]
+    private static partial Regex ourHasBraces();
 
-    private static readonly Regex ourNumericSet = new(@"^\{(-?[0-9]+)\.\.(-?[0-9]+)\}");
+    [GeneratedRegex(@"^\{(-?[0-9]+)\.\.(-?[0-9]+)\}")]
+    private static partial Regex ourNumericSet();
 
     // Brace expansion:
     // a{b,c}d -> abd acd
@@ -842,7 +844,7 @@ internal class GlobMatcher
     ///<summary>Expands all brace ranges in a pattern, returning a sequence containing every possible combination.</summary>
     private static IList<string> BraceExpand(string pattern, GlobMatcherOptions options)
     {
-        if (options.NoBrace || !ourHasBraces.IsMatch(pattern))
+        if (options.NoBrace || !ourHasBraces().IsMatch(pattern))
         {
             // shortcut. no need to expand.
             return [pattern];
@@ -911,7 +913,7 @@ internal class GlobMatcher
         // If the set only has a single member, then'll put the {} back
 
         // first, handle numeric sets, since they're easier
-        var numset = ourNumericSet.Match(pattern);
+        var numset = ourNumericSet().Match(pattern);
         if (numset.Success)
         {
             // console.error("numset", numset[1], numset[2])
