@@ -28,23 +28,34 @@ internal static class CommandLineFormatter
 
             if (commandLineOptions.StandardInFileContents != null)
             {
-                // TODO when we format via stdin this is the current directory
-                // we need it for finding options.... maybe? what does prettier do
-                var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[0];
-                DebugLogger.Log(directoryOrFilePath);
-                var directoryPath = fileSystem.Directory.Exists(directoryOrFilePath)
-                    ? directoryOrFilePath
-                    : fileSystem.Path.GetDirectoryName(directoryOrFilePath);
+                var pathSupplied = false;
+                var directoryPath = commandLineOptions.DirectoryOrFilePaths[0];
+                string? filePath;
 
-                // TODO this assumes .cs, can we auto detect the format?
-                var filePath =
-                    directoryOrFilePath != directoryPath
-                        ? directoryOrFilePath
-                        : Path.Combine(directoryPath, "StdIn.cs");
+                // when piping multiple files we get a path to a file here
+                // when sending stdin-filepath we get a path to a file here
+                // so because this path is not a directory one of those is true
+                if (!fileSystem.Directory.Exists(directoryPath))
+                {
+                    filePath = directoryPath;
+                    directoryPath = fileSystem.Path.GetDirectoryName(directoryPath);
+                    ArgumentNullException.ThrowIfNull(directoryPath);
+                    pathSupplied = true;
+                }
+                // otherwise someone is running this as a single command and not sending a path
+                else
+                {
+                    filePath = Path.Combine(directoryPath, Guid.NewGuid().ToString());
+                    if (commandLineOptions.StandardInFileContents.TrimStart().StartsWith('<'))
+                    {
+                        filePath += ".xml";
+                    }
+                    else
+                    {
+                        filePath += ".cs";
+                    }
+                }
 
-                ArgumentNullException.ThrowIfNull(directoryPath);
-
-                // TODO what if we didn't have a filePath here?
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
                     commandLineOptions.StandardInFileContents,
@@ -64,8 +75,12 @@ internal static class CommandLineFormatter
                     (
                         commandLineOptions.IncludeGenerated
                         || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    // TODO this is as easy as never ignoring right now
-                    ) && !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
+                    )
+                    // this only considers the ignore files when a path is supplied
+                    && (
+                        !pathSupplied
+                        || !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
+                    )
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -78,6 +93,7 @@ internal static class CommandLineFormatter
                         filePath,
                         cancellationToken
                     );
+
                     if (printerOptions is { Formatter: not Formatter.Unknown })
                     {
                         printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;

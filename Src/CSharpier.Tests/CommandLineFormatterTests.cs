@@ -711,7 +711,17 @@ public class CommandLineFormatterTests
     }
 
     [Test]
-    public void Should_Format_StandardInput_With_Gitignore_TODO()
+    public void Should_Format_StandardInput_Xml_When_Provided()
+    {
+        var context = new TestContext();
+        var result = Format(context, standardInFileContents: "<element> </element>");
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Trim().Should().Be("<element></element>");
+    }
+
+    [Test]
+    public void Should_Format_StandardInput_And_Not_Consider_Gitignore_When_No_Path_Supplied()
     {
         var context = new TestContext();
         context.WhenAFileExists(".gitignore", "*");

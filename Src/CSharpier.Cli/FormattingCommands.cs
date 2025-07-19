@@ -36,6 +36,7 @@ internal static class FormattingCommands
         formatCommand.AddOption(CompilationErrorsAsWarningsOption);
         formatCommand.AddOption(ConfigPathOption);
         formatCommand.AddOption(IgnorePathOption);
+        formatCommand.AddOption(StdinPathOption);
         formatCommand.AddOption(LogFormatOption);
         formatCommand.AddOption(LogLevelOption);
 
@@ -53,6 +54,7 @@ internal static class FormattingCommands
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
             var ignorePath = context.ParseResult.GetValueForOption(IgnorePathOption);
+            var stdinPath = context.ParseResult.GetValueForOption(StdinPathOption);
             var logLevel = context.ParseResult.GetValueForOption(LogLevelOption);
             var logFormat = context.ParseResult.GetValueForOption(LogFormatOption);
             var token = context.GetCancellationToken();
@@ -69,6 +71,7 @@ internal static class FormattingCommands
                 compilationErrorsAsWarnings,
                 configPath,
                 ignorePath,
+                stdinPath,
                 logLevel,
                 logFormat,
                 token
@@ -120,6 +123,7 @@ internal static class FormattingCommands
                 compilationErrorsAsWarnings,
                 configPath,
                 ignorePath,
+                null,
                 logLevel,
                 logFormat,
                 token
@@ -141,6 +145,7 @@ internal static class FormattingCommands
         bool compilationErrorsAsWarnings,
         string? configPath,
         string? ignorePath,
+        string? stdinPath,
         LogLevel logLevel,
         LogFormat logFormat,
         CancellationToken cancellationToken
@@ -165,9 +170,8 @@ internal static class FormattingCommands
 #endif
             );
 
-            // TODO this needs to change
-            directoryOrFile = [Directory.GetCurrentDirectory()];
-            originalDirectoryOrFile = [Directory.GetCurrentDirectory()];
+            directoryOrFile = [stdinPath ?? Directory.GetCurrentDirectory()];
+            originalDirectoryOrFile = [stdinPath ?? Directory.GetCurrentDirectory()];
         }
         else
         {
@@ -230,6 +234,11 @@ internal static class FormattingCommands
     private static readonly Option<string> IgnorePathOption = new(
         ["--ignore-path"],
         "Path to the CSharpier ignore file"
+    );
+
+    private static readonly Option<string> StdinPathOption = new(
+        ["--stdin-path"],
+        "Supply a path when piping input to format via stdin"
     );
 
     private static readonly Option<LogFormat> LogFormatOption = new(
