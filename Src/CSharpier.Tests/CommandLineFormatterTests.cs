@@ -711,6 +711,17 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Should_Format_StandardInput_With_Gitignore_TODO()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(".gitignore", "*");
+        var result = Format(context, standardInFileContents: UnformattedClassContent);
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedClassContent);
+    }
+
+    [Test]
     public void File_With_Mismatched_Line_Endings_In_Verbatim_String_Should_Pass_Validation()
     {
         var context = new TestContext();

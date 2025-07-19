@@ -165,6 +165,7 @@ internal static class FormattingCommands
 #endif
             );
 
+            // TODO this needs to change
             directoryOrFile = [Directory.GetCurrentDirectory()];
             originalDirectoryOrFile = [Directory.GetCurrentDirectory()];
         }

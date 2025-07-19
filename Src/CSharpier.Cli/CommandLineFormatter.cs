@@ -28,10 +28,15 @@ internal static class CommandLineFormatter
 
             if (commandLineOptions.StandardInFileContents != null)
             {
+                // TODO when we format via stdin this is the current directory
+                // we need it for finding options.... maybe? what does prettier do
                 var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[0];
+                DebugLogger.Log(directoryOrFilePath);
                 var directoryPath = fileSystem.Directory.Exists(directoryOrFilePath)
                     ? directoryOrFilePath
                     : fileSystem.Path.GetDirectoryName(directoryOrFilePath);
+
+                // TODO this assumes .cs, can we auto detect the format?
                 var filePath =
                     directoryOrFilePath != directoryPath
                         ? directoryOrFilePath
@@ -39,6 +44,7 @@ internal static class CommandLineFormatter
 
                 ArgumentNullException.ThrowIfNull(directoryPath);
 
+                // TODO what if we didn't have a filePath here?
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
                     commandLineOptions.StandardInFileContents,
@@ -58,6 +64,7 @@ internal static class CommandLineFormatter
                     (
                         commandLineOptions.IncludeGenerated
                         || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
+                    // TODO this is as easy as never ignoring right now
                     ) && !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
                 )
                 {
