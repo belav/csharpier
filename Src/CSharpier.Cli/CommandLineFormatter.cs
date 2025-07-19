@@ -28,16 +28,33 @@ internal static class CommandLineFormatter
 
             if (commandLineOptions.StandardInFileContents != null)
             {
-                var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[0];
-                var directoryPath = fileSystem.Directory.Exists(directoryOrFilePath)
-                    ? directoryOrFilePath
-                    : fileSystem.Path.GetDirectoryName(directoryOrFilePath);
-                var filePath =
-                    directoryOrFilePath != directoryPath
-                        ? directoryOrFilePath
-                        : Path.Combine(directoryPath, "StdIn.cs");
+                var pathSupplied = false;
+                var directoryPath = commandLineOptions.DirectoryOrFilePaths[0];
+                string? filePath;
 
-                ArgumentNullException.ThrowIfNull(directoryPath);
+                // when piping multiple files we get a path to a file here
+                // when sending stdin-filepath we get a path to a file here
+                // so because this path is not a directory one of those is true
+                if (!fileSystem.Directory.Exists(directoryPath))
+                {
+                    filePath = directoryPath;
+                    directoryPath = fileSystem.Path.GetDirectoryName(directoryPath);
+                    ArgumentNullException.ThrowIfNull(directoryPath);
+                    pathSupplied = true;
+                }
+                // otherwise someone is running this as a single command and not sending a path
+                else
+                {
+                    filePath = Path.Combine(directoryPath, Guid.NewGuid().ToString());
+                    if (commandLineOptions.StandardInFileContents.TrimStart().StartsWith('<'))
+                    {
+                        filePath += ".xml";
+                    }
+                    else
+                    {
+                        filePath += ".cs";
+                    }
+                }
 
                 var fileToFormatInfo = FileToFormatInfo.Create(
                     filePath,
@@ -58,7 +75,12 @@ internal static class CommandLineFormatter
                     (
                         commandLineOptions.IncludeGenerated
                         || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-                    ) && !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
+                    )
+                    // this only considers the ignore files when a path is supplied
+                    && (
+                        !pathSupplied
+                        || !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
+                    )
                 )
                 {
                     var fileIssueLogger = new FileIssueLogger(
@@ -71,6 +93,7 @@ internal static class CommandLineFormatter
                         filePath,
                         cancellationToken
                     );
+
                     if (printerOptions is { Formatter: not Formatter.Unknown })
                     {
                         printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;

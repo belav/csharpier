@@ -711,6 +711,27 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Should_Format_StandardInput_Xml_When_Provided()
+    {
+        var context = new TestContext();
+        var result = Format(context, standardInFileContents: "<element> </element>");
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Trim().Should().Be("<element></element>");
+    }
+
+    [Test]
+    public void Should_Format_StandardInput_And_Not_Consider_Gitignore_When_No_Path_Supplied()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(".gitignore", "*");
+        var result = Format(context, standardInFileContents: UnformattedClassContent);
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedClassContent);
+    }
+
+    [Test]
     public void File_With_Mismatched_Line_Endings_In_Verbatim_String_Should_Pass_Validation()
     {
         var context = new TestContext();

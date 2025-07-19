@@ -180,8 +180,6 @@ internal class IgnoreFile
 
         public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
         {
-            DebugLogger.Log("path: " + path);
-            DebugLogger.Log("basePath: " + basePath);
             if (!path.StartsWith(basePath, StringComparison.Ordinal))
             {
                 return (false, false);
