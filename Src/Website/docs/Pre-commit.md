@@ -62,12 +62,20 @@ dotnet husky install
 Modify the file at `.husky/task-runner.json`. Include any file extensions that you want to be formatted by CSharpier.
 ```json
 {
-    "tasks": [{
-        "name": "Run csharpier",
-        "command": "dotnet",
-        "args": [ "csharpier", "format", "${staged}" ],
-        "include": [ "**/*.{cs,csx,csproj,props,targets,xml,config}" ]
-    }]
+  "tasks": [{
+    "name": "Run csharpier",
+    "command": "dotnet",
+    "args": [ "csharpier", "format", "${staged}" ],
+    "include": [
+      "**/*.cs",
+      "**/*.csx",
+      "**/*.csproj",
+      "**/*.props",
+      "**/*.targets",
+      "**/*.xml",
+      "**/*.config"
+    ]
+  }]
 }
 ```
 
