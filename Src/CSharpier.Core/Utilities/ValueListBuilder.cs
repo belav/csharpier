@@ -87,18 +87,16 @@ internal ref partial struct ValueListBuilder<T>
         this.pos += source.Length;
     }
 
-    public void Insert(int index, scoped ReadOnlySpan<T> source)
+    public void Insert(int index, T item)
     {
-        Debug.Assert(index == 0, "Implementation currently only supports index == 0");
-
-        if ((uint)(this.pos + source.Length) > (uint)this.span.Length)
+        if ((uint)(this.pos + 1) > (uint)this.span.Length)
         {
-            this.Grow(source.Length);
+            this.Grow(1);
         }
 
-        this.span[..this.pos].CopyTo(this.span[source.Length..]);
-        source.CopyTo(this.span);
-        this.pos += source.Length;
+        span.Slice(index, this.pos - index).CopyTo(this.span.Slice(index + 1));
+        this.span[index] = item;
+        this.pos += 1;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -137,6 +135,13 @@ internal ref partial struct ValueListBuilder<T>
         this.Grow(1);
         this.span[pos] = item;
         this.pos = pos + 1;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public T Pop()
+    {
+        this.pos--;
+        return this.span[this.pos];
     }
 
     public readonly ReadOnlySpan<T> AsSpan()
