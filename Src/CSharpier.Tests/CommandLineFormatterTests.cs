@@ -901,6 +901,44 @@ class ClassName
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
 
+    [Test]
+    public void Should_Not_Fail_With_Invalid_Editor_Config()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            ".editorconfig",
+            """
+            [*
+            max_line_length 10
+            """
+        );
+        var fileName = context.WhenAFileExists("file1.cs", "var myVariable   = someLongValue;");
+
+        Format(context);
+
+        context.GetFileContent(fileName).Should().Be("var myVariable = someLongValue;\n");
+    }
+
+    [TestCase(".gitignore")]
+    [TestCase(".csharpierignore")]
+    public void Should_Respect_Ignored_Editor_Config(string ignoreFileName)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            ".editorconfig",
+            """
+            [*]
+            max_line_length = 10
+            """
+        );
+        context.WhenAFileExists(ignoreFileName, ".editorconfig");
+        var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
+
+        Format(context);
+
+        context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
     [TestCase("\r\n")]
     [TestCase("\n")]
     public void Format_XML_With_Multiline_Comment_Uses_Consistent_Line_Breaks(string lineBreak)
