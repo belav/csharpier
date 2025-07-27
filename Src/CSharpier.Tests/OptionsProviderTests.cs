@@ -719,7 +719,7 @@ INVALID
     }
 
     [Test]
-    public async Task Should_Ignore_Ignored_EditorConfig()
+    public async Task Should_Not_Ignore_Ignored_EditorConfig()
     {
         var context = new TestContext();
         context.WhenAFileExists(
@@ -744,7 +744,7 @@ INVALID
             "c:/test",
             "c:/test/subfolder/test.cs"
         );
-        result.IndentSize.Should().Be(1);
+        result.IndentSize.Should().Be(2);
     }
 
     [Test]
