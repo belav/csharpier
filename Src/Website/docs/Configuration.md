@@ -98,8 +98,7 @@ indent_style = space
 indent_size = 4
 max_line_length = 100
 
-[*.{csproj,props,targets,xml,config}]
-# Configurable behaviors
+[*.{config,csproj,props,slnx,targets,xaml,xml}]
 indent_style = space
 indent_size = 2
 max_line_length = 100

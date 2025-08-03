@@ -20,6 +20,11 @@ If a list of paths is supplied
 - if the path points to an existing directory, CSharpier will recursively format the contents of that directory
 
 If a list of paths is not supplied, then stdin is read as a file, formatted and written to stdout
+- When no path is specified via `stdin-path`
+  - No ignore files are considered.
+  - The current directory is considered when locating options
+  - The file is assumed to be c# unless the first non-whitespace character is `<` in which case it is assumed to be xml.
+
 
 #### Options
 - `--config-path`
@@ -33,9 +38,23 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     dotnet csharpier format . --config-path "./config/csharpier.yaml"
 
     # allows passing in a path to an editorconfig
-    dotnet csharpier . --config-path "./config/.editorconfig"
+    dotnet csharpier format . --config-path "./config/.editorconfig"
     ```
 
+- `--ignore-path`
+
+  If your ignore file lives in a location that CSharpier would not normally resolve it (such as in a config folder)
+  you can pass the path for the ignore file to CSharpier.
+    ```bash
+    dotnet csharpier format . --ignore-path "./config/.csharpierignore"
+    ```
+
+- `--stdin-path`
+
+  If you are piping input to csharpier and want to specify a path to be used for resolving options and determining if a file is ignored
+    ```bash
+    "public class Class { }" | dotnet csharpier format --stdin-path "MyFile.cs"
+    ```
 
 - `--log-format`
 
