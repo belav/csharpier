@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <PackageId>CSharpier</PackageId>
     <AssemblyName>CSharpier</AssemblyName>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>csharpier</ToolCommandName>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
@@ -15,16 +15,20 @@
   <ItemGroup>
     <PackageReference Include="GitignoreParserNet" />
     <PackageReference Include="ini-parser-netstandard" />
-    <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="NReco.Logging.File" />
     <PackageReference Include="StrongNamer" />
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="System.IO.Abstractions" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
     <PackageReference Include="System.IO.Hashing" />
-    <PackageReference Include="System.Text.Encoding.CodePages" />
     <PackageReference Include="YamlDotNet" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="System.Text.Encoding.CodePages" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net9.0' AND '$(TargetFramework)' != 'net8.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

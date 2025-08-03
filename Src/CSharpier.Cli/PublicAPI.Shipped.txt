@@ -17,3 +17,4 @@ CSharpier.Cli.Server.Status
 CSharpier.Cli.Server.Status.Failed = 2 -> CSharpier.Cli.Server.Status
 CSharpier.Cli.Server.Status.Formatted = 0 -> CSharpier.Cli.Server.Status
 CSharpier.Cli.Server.Status.Ignored = 1 -> CSharpier.Cli.Server.Status
+CSharpier.Cli.Server.Status.UnsupportedFile = 3 -> CSharpier.Cli.Server.Status

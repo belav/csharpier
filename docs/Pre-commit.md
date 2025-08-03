@@ -66,7 +66,15 @@ Modify the file at `.husky/task-runner.json`. Include any file extensions that y
         "name": "Run csharpier",
         "command": "dotnet",
         "args": [ "csharpier", "format", "${staged}" ],
-        "include": [ "**/*.{cs,csx,config,csproj,props,slnx,targets,xaml,xml}" ]
+        "include": [
+            "**/*.cs",
+            "**/*.csx",
+            "**/*.csproj",
+            "**/*.props",
+            "**/*.targets",
+            "**/*.xml",
+            "**/*.config"
+        ]
     }]
 }
 ```

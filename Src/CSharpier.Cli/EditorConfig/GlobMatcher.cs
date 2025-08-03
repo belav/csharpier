@@ -67,7 +67,7 @@ internal class GlobMatcherOptions
 /// A simple glob matcher implementation, if you want a proper one please use a full fletched one from nuget.
 /// </summary>
 [SuppressMessage("Style", "IDE0011:Add braces")]
-internal class GlobMatcher
+internal partial class GlobMatcher
 {
     private readonly GlobMatcherOptions myOptions;
     private readonly List<PatternCase> mySet;
@@ -204,7 +204,7 @@ internal class GlobMatcher
 
                 switch (item)
                 {
-                    case Asterisk _:
+                    case Asterisk:
                         return true;
 
                     case Literal literal:
@@ -223,7 +223,7 @@ internal class GlobMatcher
                         this.myEndOffset = pos;
                         break;
 
-                    case PathSeparator _:
+                    case PathSeparator:
                         if (this.myStartItem <= this.myEndItem - 1)
                         {
                             // If we have pattern like a/**/b, then it should be matched by a/b, so don't eat path separator after **
@@ -329,7 +329,10 @@ internal class GlobMatcher
 
                         this.myLastAsteriskItem = this.myStartItem;
 
-                        if (!(item is DoubleAsterisk) || !(asterisk.NextAsterisk is SimpleAsterisk))
+                        if (
+                            item is not DoubleAsterisk
+                            || asterisk.NextAsterisk is not SimpleAsterisk
+                        )
                         {
                             if (!this.GotoNextPositionForAsterisk(true))
                                 return false;
@@ -376,7 +379,7 @@ internal class GlobMatcher
                             first = false;
                         }
 
-                    case PathSeparator _:
+                    case PathSeparator:
                         if (this.myEndOffset - this.myStartOffset < 1)
                             return false; // Not enough chars
 
@@ -665,21 +668,21 @@ internal class GlobMatcher
                         fixedItemsLength += literal.Source.Length;
                         break;
 
-                    case PathSeparator _:
+                    case PathSeparator:
                         if (lastAsterisk != null && lastAsterisk.LiteralAfterAsterisk == -1)
                         {
                             lastAsterisk.LiteralAfterAsterisk = i;
                         }
 
                         // First slash after ** could be skipped
-                        if (!(lastAsterisk is DoubleAsterisk) || fixedItemsLength > 0)
+                        if (lastAsterisk is not DoubleAsterisk || fixedItemsLength > 0)
                         {
                             fixedItemsLength += 1;
                         }
 
                         break;
 
-                    case OneChar _:
+                    case OneChar:
                         fixedItemsLength += 1;
                         break;
 
@@ -709,7 +712,7 @@ internal class GlobMatcher
     {
         static OneChar() { }
 
-        public static readonly OneChar EmptyInstance = new OneChar(null, false);
+        public static readonly OneChar EmptyInstance = new(null, false);
 
         private string PossibleChars { get; } = possibleChars;
         private bool Negate { get; } = negate;
@@ -745,7 +748,7 @@ internal class GlobMatcher
 
         static PathSeparator() { }
 
-        public static readonly PathSeparator Instance = new PathSeparator();
+        public static readonly PathSeparator Instance = new();
     }
 
     ///<summary>Creates a new GlobMatcher instance, parsing the pattern into a regex.</summary>
@@ -822,9 +825,11 @@ internal class GlobMatcher
         return negate;
     }
 
-    private static readonly Regex ourHasBraces = new Regex(@"\{.*\}");
+    [GeneratedRegex(@"\{.*\}")]
+    private static partial Regex ourHasBraces();
 
-    private static readonly Regex ourNumericSet = new Regex(@"^\{(-?[0-9]+)\.\.(-?[0-9]+)\}");
+    [GeneratedRegex(@"^\{(-?[0-9]+)\.\.(-?[0-9]+)\}")]
+    private static partial Regex ourNumericSet();
 
     // Brace expansion:
     // a{b,c}d -> abd acd
@@ -839,7 +844,7 @@ internal class GlobMatcher
     ///<summary>Expands all brace ranges in a pattern, returning a sequence containing every possible combination.</summary>
     private static IList<string> BraceExpand(string pattern, GlobMatcherOptions options)
     {
-        if (options.NoBrace || !ourHasBraces.IsMatch(pattern))
+        if (options.NoBrace || !ourHasBraces().IsMatch(pattern))
         {
             // shortcut. no need to expand.
             return [pattern];
@@ -908,7 +913,7 @@ internal class GlobMatcher
         // If the set only has a single member, then'll put the {} back
 
         // first, handle numeric sets, since they're easier
-        var numset = ourNumericSet.Match(pattern);
+        var numset = ourNumericSet().Match(pattern);
         if (numset.Success)
         {
             // console.error("numset", numset[1], numset[2])
@@ -1070,7 +1075,7 @@ internal class GlobMatcher
         {
             if (inClass && range)
             {
-                var firstChar = sb[sb.Length - 1];
+                var firstChar = sb[^1];
                 firstChar++;
 
                 for (var c2 = firstChar; c2 <= c1; c2++)

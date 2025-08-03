@@ -1,11 +1,23 @@
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
-internal static class Node
+internal static
+#if !NETSTANDARD2_0
+partial
+#endif
+class Node
 {
+#if NETSTANDARD2_0
+    private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
+#else
+    [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
+    private static partial Regex NewlineRegex();
+#endif
+
     internal static Doc Print(XNode xNode, XmlPrintingContext context)
     {
         if (xNode is XDocument xDocument)
@@ -57,7 +69,11 @@ internal static class Node
 
         if (xNode is XComment or XProcessingInstruction)
         {
-            return xNode.ToString();
+            return NewlineRegex
+#if !NETSTANDARD2_0
+                ()
+#endif
+            .Replace(xNode.ToString(), context.Options.LineEnding);
         }
 
         throw new Exception("Need to handle + " + xNode.GetType());

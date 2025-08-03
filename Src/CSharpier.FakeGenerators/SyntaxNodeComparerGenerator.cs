@@ -99,7 +99,7 @@ namespace CSharpier.Core.CSharp
             """
                 default:
 #if DEBUG
-                    throw new Exception("Can't handle " + originalNode.GetType().Name);
+                    throw new Exception("Can't handle " + originalNode.GetType().Name + ". May need to rerun CSharpier.FakeGenerators");
 #else
                     return Equal;
 #endif

@@ -1,5 +1,6 @@
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
@@ -38,7 +39,12 @@ internal static class Parameter
 
         if (node.Type != null)
         {
-            docs.Append(Node.Print(node.Type, context), " ");
+            docs.Append(Node.Print(node.Type, context));
+
+            if (node.Identifier.RawSyntaxKind() is not SyntaxKind.None)
+            {
+                docs.Append(" ");
+            }
         }
 
         docs.Append(Token.Print(node.Identifier, context));

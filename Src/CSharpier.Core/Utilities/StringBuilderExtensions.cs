@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CSharpier.Core.Utilities;
@@ -20,6 +21,10 @@ internal static class StringBuilderExtensions
         value.Append(otherValue);
     }
 #endif
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void Append(this ref ValueListBuilder<char> builder, string text) =>
+        builder.Append(text.AsSpan());
 
     public static void TrimStart(this StringBuilder value, params ReadOnlySpan<char> trimChars)
     {

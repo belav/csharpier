@@ -7,7 +7,7 @@ public static class Ignored
         return ignored.Any(file.Replace("\\", "/").Contains);
     }
 
-    private static string[] ignored =
+    private static readonly string[] ignored =
     [
         "roslyn/src/Compilers/Test/Core/Assert/ConditionalFactAttribute.cs",
         "roslyn/src/Compilers/Test/Core/Compilation/RuntimeUtilities.cs",

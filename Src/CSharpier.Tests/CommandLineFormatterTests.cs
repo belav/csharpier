@@ -1,4 +1,6 @@
+using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
+using System.Security.AccessControl;
 using System.Text;
 using CSharpier.Cli;
 using FluentAssertions;
@@ -246,7 +248,6 @@ public class CommandLineFormatterTests
     public void Works_With_MSBuild_Version_Checking_When_No_Version_Specified()
     {
         var context = new TestContext();
-        var currentVersion = typeof(CommandLineFormatter).Assembly.GetName().Version!.ToString(3);
 
         context.WhenAFileExists(
             "Test.csproj",
@@ -710,6 +711,27 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Should_Format_StandardInput_Xml_When_Provided()
+    {
+        var context = new TestContext();
+        var result = Format(context, standardInFileContents: "<element> </element>");
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Trim().Should().Be("<element></element>");
+    }
+
+    [Test]
+    public void Should_Format_StandardInput_And_Not_Consider_Gitignore_When_No_Path_Supplied()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(".gitignore", "*");
+        var result = Format(context, standardInFileContents: UnformattedClassContent);
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedClassContent);
+    }
+
+    [Test]
     public void File_With_Mismatched_Line_Endings_In_Verbatim_String_Should_Pass_Validation()
     {
         var context = new TestContext();
@@ -877,6 +899,67 @@ class ClassName
         Format(context, configPath: configPath);
 
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
+    public void Should_Not_Fail_With_Invalid_Editor_Config()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            ".editorconfig",
+            """
+            [*
+            max_line_length 10
+            """
+        );
+        var fileName = context.WhenAFileExists("file1.cs", "var myVariable   = someLongValue;");
+
+        Format(context);
+
+        context.GetFileContent(fileName).Should().Be("var myVariable = someLongValue;\n");
+    }
+
+    [TestCase(".gitignore")]
+    [TestCase(".csharpierignore")]
+    public void Should_Respect_Ignored_Editor_Config(string ignoreFileName)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            ".editorconfig",
+            """
+            [*]
+            max_line_length = 10
+            """
+        );
+        context.WhenAFileExists(ignoreFileName, ".editorconfig");
+        var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
+
+        Format(context);
+
+        context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [TestCase("\r\n")]
+    [TestCase("\n")]
+    public void Format_XML_With_Multiline_Comment_Uses_Consistent_Line_Breaks(string lineBreak)
+    {
+        var context = new TestContext();
+        var content = new StringBuilder();
+#pragma warning disable CA1305
+        // avoiding raw strings because this needs to use specific line breaks
+        content.Append($"<Root>{lineBreak}");
+        content.Append($"  <Element />{lineBreak}");
+        content.Append($"  <!--{lineBreak}");
+        content.Append($"  SomeText{lineBreak}");
+        content.Append($"  -->{lineBreak}");
+        content.Append($"</Root>{lineBreak}");
+#pragma warning restore CA1305
+
+        context.WhenAFileExists("Xml.xml", content.ToString());
+
+        Format(context);
+
+        context.GetFileContent("Xml.xml").Should().Be(content.ToString());
     }
 
     private static FormatResult Format(

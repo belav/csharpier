@@ -54,6 +54,11 @@ internal static class BaseTypeDeclaration
                 keyword = recordDeclarationSyntax.ClassOrStructKeyword;
                 parameterList = recordDeclarationSyntax.ParameterList;
             }
+            else if (node is ExtensionDeclarationSyntax extensionDeclarationSyntax)
+            {
+                keyword = extensionDeclarationSyntax.Keyword;
+                parameterList = extensionDeclarationSyntax.ParameterList;
+            }
 
             semicolonToken = typeDeclarationSyntax.SemicolonToken;
         }
@@ -93,7 +98,14 @@ internal static class BaseTypeDeclaration
 
         if (keyword != null)
         {
-            docs.Add(Token.PrintWithSuffix(keyword.Value, " ", context));
+            if (node is ExtensionDeclarationSyntax)
+            {
+                docs.Add(Token.Print(keyword.Value, context));
+            }
+            else
+            {
+                docs.Add(Token.PrintWithSuffix(keyword.Value, " ", context));
+            }
         }
 
         docs.Add(Token.Print(node.Identifier, context));

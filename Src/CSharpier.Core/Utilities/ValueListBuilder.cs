@@ -42,6 +42,9 @@ internal ref partial struct ValueListBuilder<T>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Clear() => Length = 0;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(T item)
     {
         var pos = this.pos;

@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <NoWarn>$(NoWarn);CA2211;</NoWarn>
+    <NoWarn>$(NoWarn);CA2211;IDE0052;IDE0051;</NoWarn>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup>

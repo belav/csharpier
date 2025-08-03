@@ -31,7 +31,7 @@ internal static class EditorConfigLocator
                         var file = fileSystem.FileInfo.New(
                             fileSystem.Path.Combine(directoryInfo.FullName, ".editorconfig")
                         );
-                        if (file.Exists && !ignoreFile.IsIgnored(file.FullName))
+                        if (file.Exists)
                         {
                             var dirName = fileSystem.Path.GetDirectoryName(file.FullName);
                             ArgumentNullException.ThrowIfNull(dirName);

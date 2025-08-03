@@ -41,12 +41,4 @@ public class SharedFuncTests
 
         result.Should().Be(1);
     }
-
-    private static async Task<T> DelayAsync<T>(int millisecondsDelay, T value)
-    {
-        using var delay = Task.Delay(millisecondsDelay);
-        await delay;
-
-        return value;
-    }
 }

@@ -7,15 +7,16 @@ using IniParser.Parser;
 
 namespace CSharpier.Cli.EditorConfig;
 
-internal static class EditorConfigFileParser
+internal static partial class EditorConfigFileParser
 {
     // According to https://spec.editorconfig.org/#file-format
     // "Comment: starts with a ; or a #."
-    private static readonly Regex CommentRegex = new("^[;#].*$");
+    [GeneratedRegex("^[;#].*$")]
+    private static partial Regex CommentRegex();
 
     private static readonly IniParserConfiguration Configuration = new()
     {
-        CommentRegex = CommentRegex,
+        CommentRegex = CommentRegex(),
         AllowDuplicateKeys = true,
         AllowDuplicateSections = true,
         OverrideDuplicateKeys = true,
