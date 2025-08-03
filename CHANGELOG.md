@@ -1,3 +1,93 @@
+# 1.1.0
+## What's Changed
+### .gitignore from parent folders impacts formatting of children [#1627](https://github.com/belav/csharpier/issues/1627)
+CSharpier will no longer consider `.gitignore` files located above the root of the current git repository.
+### Changes to stdin formatting  [#288](https://github.com/belav/csharpier/issues/288) [#1657](https://github.com/belav/csharpier/issues/1657)
+There is a new option `--stdin-filepath` that is used to specify the filepath CSharpier should use for resolving options and ignore files. \
+When no path is specified via `stdin-path`
+  - No ignore files are considered.
+  - The current directory is considered when locating options
+  - The file is assumed to be c# unless the first non-whitespace character is `<` in which case it is assumed to be xml.
+### Support for C# 14 and .NET 10 [#1654](https://github.com/belav/csharpier/issues/1654) [#1646](https://github.com/belav/csharpier/issues/1646)
+Changes were required to support the following
+- Extension Declarations
+- File level directives in file based C# Apps 
+### Support --ignore-path CLI option [#1585](https://github.com/belav/csharpier/issues/1585)
+It is now possible to specify the path to an ignore file
+```bash
+dotnet csharpier format . --ignore-path .config/.csharpierignore
+```
+### Format xaml and slnx by default [#1628](https://github.com/belav/csharpier/issues/1628) [#1604](https://github.com/belav/csharpier/issues/1604)
+CSharpier now formats `xaml` and `slnx` by default without the need for configuration changes.
+### XML formatting is not taking into account EOL configuration on multiline comments [#1660](https://github.com/belav/csharpier/issues/1660)
+When formatting the following XML, CSharpier would always use the system system default for ending lines within the comment instead of the respecting the configured EOL setting.
+```xml
+<Element>
+  <!--
+  Comment with EOL
+  -->
+</Element>
+```
+
+### Error when no read access to intermediate containing folder [#1656](https://github.com/belav/csharpier/issues/1656)
+In the case that CSharpier had access to a sub directory but not the parent of that sub directory, it was failing with an exception. That has been resolved.
+### Misleading message after "csharpier check" [#1645](https://github.com/belav/csharpier/issues/1645)
+Previously the `format` and `check` commands both used the same output message. The `check` command now correctly reports that it checked files and did not format them. 
+```bash
+# 1.0.3
+dotnet csharpier check .
+Formatted 13226 files in 21986ms.
+
+# 1.1.0
+dotnet csharpier check .
+Checked 13226 files in 21986ms.
+```
+### Multiline collection expressions should not be indented [#1635](https://github.com/belav/csharpier/issues/1635)
+CSharpier now formats collection expressions consistently when they are in a property
+```c#
+// input & expected output
+public class ClassName
+{
+    public SomeObject LongValue = new
+    {
+        One = "One",
+        Two = "Two",
+        ThreeThreeThree = "ThreeThreeThree",
+    };
+
+    public SomeObject LongValue { get; } = new
+    {
+        One = "One",
+        Two = "Two",
+        ThreeThreeThree = "ThreeThreeThree",
+    };
+}
+
+// 1.0.3
+public class ClassName
+{
+    public SomeObject LongValue = new
+    {
+        One = "One",
+        Two = "Two",
+        ThreeThreeThree = "ThreeThreeThree",
+    };
+
+    public SomeObject LongValue { get; } =
+        new
+        {
+            One = "One",
+            Two = "Two",
+            ThreeThreeThree = "ThreeThreeThree",
+        };
+}
+
+```
+
+### .editorconfig is not considered, when its part of the .gitignore [#1582](https://github.com/belav/csharpier/issues/1582)
+Previously if an `.editorconfig` was in the `.gitignore` it would not be considered when determining the configuration options for formatting a given file. That behavior has been changed so it will be considered.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.0.3...1.1.0
 # 1.0.3
 ## What's Changed
 ### Switch block case with conditionals adding newlines [#1630](https://github.com/belav/csharpier/issues/1630)
@@ -3315,6 +3405,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
