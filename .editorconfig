@@ -60,3 +60,7 @@ dotnet_diagnostic.IDE1006.severity = warning
 dotnet_diagnostic.RSEXPERIMENTAL005.severity = none
 
 dotnet_diagnostic.SYSLIB1045.severity = warning
+
+dotnet_diagnostic.CA1873.severity = none
+
+
