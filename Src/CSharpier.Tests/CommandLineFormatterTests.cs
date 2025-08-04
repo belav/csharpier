@@ -939,6 +939,20 @@ class ClassName
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
 
+    [Test]
+    public void Should_Work_With_Extensionless_File()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "LICENSE",
+            """
+            MIT!
+            """
+        );
+
+        Format(context, directoryOrFilePaths: "LICENSE");
+    }
+
     [TestCase("\r\n")]
     [TestCase("\n")]
     public void Format_XML_With_Multiline_Comment_Uses_Consistent_Line_Breaks(string lineBreak)

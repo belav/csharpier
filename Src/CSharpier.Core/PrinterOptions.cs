@@ -38,7 +38,13 @@ internal class PrinterOptions(Formatter formatter)
 
     public static Formatter GetFormatter(string filePath)
     {
-        var extension = Path.GetExtension(filePath)[1..].ToLower(CultureInfo.InvariantCulture);
+        var possibleExtension = Path.GetExtension(filePath);
+        if (possibleExtension == string.Empty)
+        {
+            return Formatter.Unknown;
+        }
+
+        var extension = possibleExtension[1..].ToLower(CultureInfo.InvariantCulture);
 
         var formatter = extension switch
         {
