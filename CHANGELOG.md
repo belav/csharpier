@@ -1,3 +1,9 @@
+# 1.1.1
+## What's Changed
+### Unhandled exception: System.ArgumentOutOfRangeException: startIndex cannot be larger than length of string. (Parameter 'startIndex') [#1673](https://github.com/belav/csharpier/issues/1673)
+CSharpier was throwing an exception when formating a directory contained a file without an extension.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.1.1...1.1.1
 # 1.1.0
 ## What's Changed
 ### .gitignore from parent folders impacts formatting of children [#1627](https://github.com/belav/csharpier/issues/1627)
@@ -3405,6 +3411,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
