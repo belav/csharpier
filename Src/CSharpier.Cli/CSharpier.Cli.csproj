@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../../Nuget/Build.props" />
   <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1510</NoWarn>
     <OutputType>Exe</OutputType>
     <PackageId>CSharpier</PackageId>
     <AssemblyName>CSharpier</AssemblyName>
