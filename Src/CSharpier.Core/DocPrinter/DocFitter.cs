@@ -60,8 +60,7 @@ internal static class DocFitter
                     output.Append(stringDoc.Value);
                     remainingWidth -= stringDoc.Value.GetPrintedWidth();
                     break;
-                case LeadingComment
-                or TrailingComment:
+                case LeadingComment or TrailingComment:
                     if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
                     {
                         returnFalseIfMoreStringsFound = true;
