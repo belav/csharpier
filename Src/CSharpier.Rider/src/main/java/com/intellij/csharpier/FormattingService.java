@@ -25,7 +25,12 @@ public class FormattingService {
     }
 
     static boolean isSupportedLanguageId(String languageId) {
-        return languageId.equals("C#") || languageId.equals("MSBuild") || languageId.equals("XML");
+        return (
+            languageId.equals("C#") ||
+            languageId.equals("MSBuild") ||
+            languageId.equals("XML") ||
+            languageId.equals("Xaml")
+        );
     }
 
     public void format(@NotNull Document document, @NotNull Project project) {

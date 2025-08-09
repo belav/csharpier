@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [2.2.0]
+- Include XAML in list of supported languages
+
 ## [2.1.2]
 - Set compatibility for rider 2025.1
 
