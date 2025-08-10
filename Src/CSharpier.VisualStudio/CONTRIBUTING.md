@@ -8,6 +8,7 @@ Publishing
 - Update version at CSharpier.VisualStudio/source.extension.vsixmanifest
 - Update ChangeLog.md
 - use cli
+  - NOTE seem to have to still build in release mode in VS2022 first 
   - CSH-PublishVS [AccessToken] 
 - old way
   - go to https://marketplace.visualstudio.com/manage/publishers/csharpier (with personal microsoft account)
