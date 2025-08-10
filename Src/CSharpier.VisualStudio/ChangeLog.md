@@ -1,4 +1,7 @@
-﻿## [2.0.2]
+﻿## [2.2.0]
+- Add right click format command for XAML. Ensure format on save also works
+
+## [2.0.2]
 - Remember if a user has closed the "CSharpier must be installed" warning so that it doesn't reappear in each new instance of VS
 
 ## [2.0.1]
