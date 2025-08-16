@@ -84,12 +84,62 @@ internal static class BinaryExpression
             var binaryOnTheRight = binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
             if (binaryOnTheRight)
             {
-                docs.Add(
-                    Node.Print(binaryExpressionSyntax.Left, context),
-                    Doc.Line,
-                    Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                    " "
-                );
+                var chain = 0;
+                var possibleInvocation = binaryExpressionSyntax.Left;
+                while (possibleInvocation is not null)
+                {
+                    if (possibleInvocation is InvocationExpressionSyntax invocationExpression)
+                    {
+                        possibleInvocation = invocationExpression.Expression;
+                        chain++;
+                    }
+                    else if (
+                        possibleInvocation
+                        is MemberAccessExpressionSyntax memberAccessExpressionSyntax
+                    )
+                    {
+                        possibleInvocation = memberAccessExpressionSyntax.Expression;
+                        chain++;
+                    }
+                    else if (
+                        possibleInvocation
+                        is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax
+                    )
+                    {
+                        possibleInvocation = conditionalAccessExpressionSyntax.Expression;
+                        chain++;
+                    }
+                    else if (
+                        possibleInvocation
+                        is ElementAccessExpressionSyntax elementAccessExpressionSyntax
+                    )
+                    {
+                        possibleInvocation = elementAccessExpressionSyntax.Expression;
+                        chain++;
+                    }
+                    else
+                    {
+                        possibleInvocation = null;
+                    }
+                }
+                var leftDoc = Node.Print(binaryExpressionSyntax.Left, context);
+                if (chain > 3)
+                {
+                    docs.Add(
+                        Doc.Group(leftDoc, Doc.Line),
+                        Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                        " "
+                    );
+                }
+                else
+                {
+                    docs.Add(
+                        leftDoc,
+                        Doc.Line,
+                        Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                        " "
+                    );
+                }
             }
 
             var possibleBinary = binaryOnTheRight
