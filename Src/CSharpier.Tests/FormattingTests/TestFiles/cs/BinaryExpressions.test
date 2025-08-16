@@ -216,6 +216,15 @@ class TestClass
             ?? SomeObject.CallSomeMethod___________()
             ?? new SomeObject();
 
+        var storeObject =
+            entityType.GetSchemaQualifiedTableName()
+            ?? entityType.GetInsertStoredProcedure()?.GetSchemaQualifiedName()
+            ?? entityType.GetDeleteStoredProcedure()?.GetSchemaQualifiedName()
+            ?? entityType.GetUpdateStoredProcedure()?.GetSchemaQualifiedName();
+
+        return parameterDescriptor.BindingInfo.Binder
+            ?? Binders.GetBinder(parameterDescriptor.ParameterType);
+
         var notIdealSee355 =
             variable
                 .Replace(someParameter_______________________, '.')
