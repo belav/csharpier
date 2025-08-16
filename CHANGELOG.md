@@ -1,3 +1,36 @@
+# 1.1.2
+## What's Changed
+### Inconsistencies with null-coalescing wrapping on method chains [#1573](https://github.com/belav/csharpier/issues/1573)
+On longer method chains, depending on the exact chain a null coalescing expression wouldn't always be preceded by a new line.
+
+```c#
+// input & expected output
+var x =
+    someValue
+        .Property.CallLongMethod_____________________________________()
+        .CallMethod__________()
+    ?? throw new Exception();
+
+var x =
+    someValue
+        .Property.CallLongMethod_____________________________________()
+        .CallLongMethod___________________________________________________()
+    ?? throw new Exception();
+
+// 1.1.1
+var x =
+    someValue
+        .Property.CallLongMethod_____________________________________()
+        .CallMethod__________() ?? throw new Exception();
+
+var x =
+    someValue
+        .Property.CallLongMethod_____________________________________()
+        .CallLongMethod___________________________________________________()
+    ?? throw new Exception();
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.1.1...1.1.2
 # 1.1.1
 ## What's Changed
 ### Unhandled exception: System.ArgumentOutOfRangeException: startIndex cannot be larger than length of string. (Parameter 'startIndex') [#1673](https://github.com/belav/csharpier/issues/1673)
@@ -3411,6 +3444,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
