@@ -84,12 +84,31 @@ internal static class BinaryExpression
             var binaryOnTheRight = binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
             if (binaryOnTheRight)
             {
-                docs.Add(
-                    Node.Print(binaryExpressionSyntax.Left, context),
-                    Doc.Line,
-                    Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                    " "
-                );
+                // if the code is NOT of the form below group around Left + Line. Else no group keeps the ?? next to the )
+                /*
+                    CallMethod(
+                        longParameters,
+                        longParameters
+                    ) ?? expression
+                */
+                var leftDoc = Node.Print(binaryExpressionSyntax.Left, context);
+                if (leftDoc is ConditionalGroup)
+                {
+                    docs.Add(
+                        Doc.Group(leftDoc, Doc.Line),
+                        Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                        " "
+                    );
+                }
+                else
+                {
+                    docs.Add(
+                        leftDoc,
+                        Doc.Line,
+                        Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                        " "
+                    );
+                }
             }
 
             var possibleBinary = binaryOnTheRight

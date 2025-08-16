@@ -200,6 +200,22 @@ class TestClass
                 someLongValue__________________________________________
             ) ?? someOtherValue;
 
+        var x =
+            someValue
+                .Property.CallLongMethod_____________________________________()
+                .CallMethod__________()
+            ?? throw new Exception();
+
+        var x =
+            someValue
+                .Property.CallLongMethod_____________________________________()
+                .CallLongMethod___________________________________________________()
+            ?? throw new Exception();
+
+        return SomeObject.CallSomeMethod___________()
+            ?? SomeObject.CallSomeMethod___________()
+            ?? new SomeObject();
+
         var notIdealSee355 =
             variable
                 .Replace(someParameter_______________________, '.')
