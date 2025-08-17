@@ -2,7 +2,7 @@ using System.Xml;
 
 namespace CSharpier.Core.Xml;
 
-internal class RawAttributeReader(string originalXml)
+internal class RawAttributeReader(string originalXml, string endOfLine)
 {
     private readonly string[] lines = originalXml.Split(["\r\n", "\n"], StringSplitOptions.None);
 
@@ -31,20 +31,17 @@ internal class RawAttributeReader(string originalXml)
         }
 
         var nextLineNumber = lineNumber + 1;
-        // TODO is it worth using a stringbuilder?
         var result = line[firstQuote..];
-        // TODO use configured EOL
-        var EOL = "\r\n";
         var nextLine = this.lines[nextLineNumber];
         while (endQuote < 0)
         {
-            result += EOL + nextLine;
+            result += endOfLine + nextLine;
             nextLineNumber++;
             nextLine = this.lines[nextLineNumber];
             endQuote = nextLine.IndexOf('"');
         }
 
-        result += EOL + nextLine[..endQuote];
+        result += endOfLine + nextLine[..endQuote];
 
         return result;
     }

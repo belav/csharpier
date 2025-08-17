@@ -1,45 +1,52 @@
+using System.Xml;
 using System.Xml.Linq;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Tag
 {
-    public static Doc PrintOpeningTag(XElement element, XmlPrintingContext context)
+    public static Doc PrintOpeningTag(XmlReader xmlReader, PrintingContext context)
     {
         return Doc.Concat(
-            PrintOpeningTagStart(element, context),
-            Attributes.Print(element, context),
-            element.IsEmpty ? Doc.Null : PrintOpeningTagEnd(element)
+            PrintOpeningTagStart(xmlReader, context),
+            // Attributes.Print(xmlReader, context),
+            xmlReader.IsEmptyElement
+                ? Doc.Null
+                : PrintOpeningTagEnd(xmlReader)
         );
     }
 
-    private static Doc PrintOpeningTagStart(XElement element, XmlPrintingContext context)
+    private static Doc PrintOpeningTagStart(XmlReader xmlReader, PrintingContext context)
     {
         return
-            element.PreviousNode is not null
-            && NeedsToBorrowNextOpeningTagStartMarker(element.PreviousNode)
+        // TOOD need to know if previous node is text like
+        // xmlReader.PreviousNode is not null
+        // && NeedsToBorrowNextOpeningTagStartMarker(xmlReader.PreviousNode)
+        false
             ? Doc.Null
             : Doc.Concat(
-                PrintOpeningTagPrefix(element),
-                PrintOpeningTagStartMarker(element, context)
+                PrintOpeningTagPrefix(xmlReader),
+                PrintOpeningTagStartMarker(xmlReader, context)
             );
     }
 
-    private static Doc PrintOpeningTagEnd(XElement node)
+    private static Doc PrintOpeningTagEnd(XmlReader xmlReader)
     {
-        return node.FirstNode is not null && NeedsToBorrowParentOpeningTagEndMarker(node.FirstNode)
+        return false // node.FirstNode is not null && NeedsToBorrowParentOpeningTagEndMarker(node.FirstNode)
             ? Doc.Null
-            : PrintOpeningTagEndMarker(node);
+            : ">";
     }
 
-    public static Doc PrintOpeningTagPrefix(XNode element)
+    public static Doc PrintOpeningTagPrefix(XmlReader xmlReader)
     {
-        return NeedsToBorrowParentOpeningTagEndMarker(element)
-                ? PrintOpeningTagEndMarker(element.Parent!)
-            : NeedsToBorrowPrevClosingTagEndMarker(element)
-                ? PrintClosingTagEndMarker((element.PreviousNode as XElement)!)
-            : "";
+        return string.Empty;
+        // NeedsToBorrowParentOpeningTagEndMarker(element)
+        //     ? PrintOpeningTagEndMarker(element.Parent!)
+        // : NeedsToBorrowPrevClosingTagEndMarker(element)
+        //     ? PrintClosingTagEndMarker((element.PreviousNode as XElement)!)
+        //: "";
     }
 
     private static bool NeedsToBorrowPrevClosingTagEndMarker(XNode node)
@@ -63,40 +70,41 @@ internal static class Tag
         ;
     }
 
-    public static Doc PrintClosingTag(XElement node, XmlPrintingContext context)
+    public static Doc PrintClosingTag(XmlReader xmlReader, PrintingContext context)
     {
         return Doc.Concat(
-            node.IsEmpty ? Doc.Null : PrintClosingTagStart(node, context),
-            PrintClosingTagEnd(node, context)
+            xmlReader.IsEmptyElement ? Doc.Null : PrintClosingTagStart(xmlReader, context),
+            PrintClosingTagEnd(xmlReader, context)
         );
     }
 
-    public static Doc PrintClosingTagStart(XElement element, XmlPrintingContext context)
+    public static Doc PrintClosingTagStart(XmlReader xmlReader, PrintingContext context)
     {
-        var lastChild = element.Nodes().LastOrDefault();
+        // var lastChild = xmlReader.Nodes().LastOrDefault();
 
-        return lastChild is not null && NeedsToBorrowParentClosingTagStartMarker(lastChild)
+        return false //lastChild is not null && NeedsToBorrowParentClosingTagStartMarker(lastChild)
+            ? Doc.Null
+            : PrintClosingTagStartMarker(xmlReader, context);
+    }
+
+    public static Doc PrintClosingTagStartMarker(XmlReader xmlReader, PrintingContext context)
+    {
+        return $"</{GetPrefixedElementName(xmlReader, context)}";
+    }
+
+    public static Doc PrintClosingTagEnd(XmlReader xmlReader, PrintingContext context)
+    {
+        return false
+            // (
+            //     xmlReader.NextNode is not null
+            //         ? NeedsToBorrowPrevClosingTagEndMarker(xmlReader.NextNode)
+            //         : NeedsToBorrowLastChildClosingTagEndMarker(xmlReader.Parent!)
+            // )
             ? Doc.Null
             : Doc.Concat(
-                PrintClosingTagPrefix(element),
-                PrintClosingTagStartMarker(element, context)
+                PrintClosingTagEndMarker(xmlReader),
+                PrintClosingTagSuffix(xmlReader, context)
             );
-    }
-
-    public static Doc PrintClosingTagStartMarker(XElement element, XmlPrintingContext context)
-    {
-        return $"</{GetPrefixedElementName(element, context)}";
-    }
-
-    public static Doc PrintClosingTagEnd(XElement node, XmlPrintingContext context)
-    {
-        return (
-            node.NextNode is not null
-                ? NeedsToBorrowPrevClosingTagEndMarker(node.NextNode)
-                : NeedsToBorrowLastChildClosingTagEndMarker(node.Parent!)
-        )
-            ? Doc.Null
-            : Doc.Concat(PrintClosingTagEndMarker(node), PrintClosingTagSuffix(node, context));
     }
 
     public static bool NeedsToBorrowLastChildClosingTagEndMarker(XElement node)
@@ -117,42 +125,45 @@ internal static class Tag
         ;
     }
 
-    public static Doc PrintClosingTagEndMarker(XElement node)
+    public static Doc PrintClosingTagEndMarker(XmlReader xmlReader)
     {
-        return node.IsEmpty ? "/>" : ">";
+        return xmlReader.IsEmptyElement ? "/>" : ">";
     }
 
-    public static Doc PrintClosingTagSuffix(XNode node, XmlPrintingContext context)
+    public static Doc PrintClosingTagSuffix(XmlReader xmlReader, PrintingContext context)
     {
-        return NeedsToBorrowParentClosingTagStartMarker(node)
-                ? PrintClosingTagStartMarker(node.Parent!, context)
-            : NeedsToBorrowNextOpeningTagStartMarker(node)
-                ? PrintOpeningTagStartMarker(node.NextNode!, context)
-            : Doc.Null;
+        return "";
+        // return NeedsToBorrowParentClosingTagStartMarker(node)
+        //         ? PrintClosingTagStartMarker(node.Parent!, context)
+        //     : NeedsToBorrowNextOpeningTagStartMarker(node)
+        //         ? PrintOpeningTagStartMarker(node.NextNode!, context)
+        // TODO 1679 should this be string.empty?
+        //     : Doc.Null;
     }
 
-    private static Doc PrintOpeningTagStartMarker(XNode node, XmlPrintingContext context)
+    private static Doc PrintOpeningTagStartMarker(XmlReader xmlReader, PrintingContext context)
     {
-        if (node is not XElement element)
+        if (xmlReader.NodeType != XmlNodeType.Element)
         {
-            return "<" + node;
+            return "<" + xmlReader;
         }
 
-        return $"<{GetPrefixedElementName(element, context)}";
+        return $"<{GetPrefixedElementName(xmlReader, context)}";
     }
 
-    private static string GetPrefixedElementName(XElement element, XmlPrintingContext context)
+    private static string GetPrefixedElementName(XmlReader xmlReader, PrintingContext context)
     {
-        var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
-        if (
-            string.IsNullOrEmpty(prefix)
-            || !context.Mapping[element].Name.StartsWith(prefix, StringComparison.Ordinal)
-        )
-        {
-            return element.Name.LocalName;
-        }
-
-        return $"{prefix}:{element.Name.LocalName}";
+        return xmlReader.Name;
+        // var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
+        // if (
+        //     string.IsNullOrEmpty(prefix)
+        //     || !context.Mapping[element].Name.StartsWith(prefix, StringComparison.Ordinal)
+        // )
+        // {
+        //     return element.Name.LocalName;
+        // }
+        //
+        // return $"{prefix}:{element.Name.LocalName}";
     }
 
     private static bool NeedsToBorrowNextOpeningTagStartMarker(XNode node)
@@ -192,14 +203,6 @@ internal static class Tag
         // && !node.hasTrailingSpaces
     }
 
-    public static Doc PrintClosingTagPrefix(XElement node)
-    {
-        return Doc.Null;
-        // return needsToBorrowLastChildClosingTagEndMarker(node)
-        //     ? printClosingTagEndMarker(node.lastChild, options)
-        //     : "";
-    }
-
     public static bool NeedsToBorrowParentOpeningTagEndMarker(XNode node)
     {
         /*
@@ -220,7 +223,7 @@ internal static class Tag
         ;
     }
 
-    private static string PrintOpeningTagEndMarker(XNode node)
+    private static string PrintOpeningTagEndMarker(XmlReader xmlReader)
     {
         return ">";
         // assert(!node.isSelfClosing);

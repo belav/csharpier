@@ -1,13 +1,14 @@
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Attributes
 {
-    public static Doc Print(XElement element, XmlPrintingContext context)
+    public static Doc Print(XElement element, PrintingContext context)
     {
         if (!element.Attributes().Any())
         {
@@ -16,18 +17,18 @@ internal static class Attributes
 
         var printedAttributes = new List<Doc>();
         var index = 0;
-        var xmlNode = context.Mapping[element];
-        foreach (var attribute in element.Attributes())
-        {
-            printedAttributes.Add(PrintAttribute(attribute, xmlNode.Attributes![index]));
-
-            index++;
-        }
-
-        var doNotBreakAttributes =
-            element.Attributes().Count() == 1
-            && !context.Mapping[element].Attributes![0].Value.Contains('\n')
-            && (element.Nodes().Any(o => o is XElement) || element.IsEmpty);
+        // var xmlNode = context.Mapping[element];
+        // foreach (var attribute in element.Attributes())
+        // {
+        //     printedAttributes.Add(PrintAttribute(attribute, xmlNode.Attributes![index]));
+        //
+        //     index++;
+        // }
+        //
+        var doNotBreakAttributes = true;
+        //     element.Attributes().Count() == 1
+        //     && !context.Mapping[element].Attributes![0].Value.Contains('\n')
+        //     && (element.Nodes().Any(o => o is XElement) || element.IsEmpty);
         var attributeLine = Doc.Line;
 
         var parts = new List<Doc>

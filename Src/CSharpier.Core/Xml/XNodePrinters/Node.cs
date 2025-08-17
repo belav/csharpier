@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
@@ -18,44 +20,57 @@ class Node
     private static partial Regex NewlineRegex();
 #endif
 
-    internal static Doc Print(XNode xNode, XmlPrintingContext context)
+    internal static Doc Print(XmlReader xmlReader, PrintingContext context)
     {
-        if (xNode is XDocument xDocument)
+        while (xmlReader.NodeType == XmlNodeType.Whitespace)
         {
-            var result = new List<Doc>();
+            xmlReader.Read();
+        }
 
-            if (xDocument.Declaration is not null)
+        if (xmlReader.NodeType == XmlNodeType.XmlDeclaration)
+        {
+            var version = xmlReader.GetAttribute("version");
+            var encoding = xmlReader.GetAttribute("encoding");
+            var standalone = xmlReader.GetAttribute("standalone");
+
+            var declaration = $"<?xml version=\"{version}\"";
+            if (!string.IsNullOrEmpty(encoding))
             {
-                result.Add(xDocument.Declaration.ToString(), Doc.HardLine);
+                declaration += $" encoding=\"{encoding}\"";
             }
 
-            foreach (var node in xDocument.Nodes())
+            if (!string.IsNullOrEmpty(standalone))
             {
-                result.Add(Print(node, context), Doc.HardLine);
+                declaration += $" standalone=\"{standalone}\"";
             }
 
-            result.Add(Doc.HardLine);
+            declaration += "?>";
 
-            return Doc.Concat(result);
+            return Doc.Concat(declaration, Doc.HardLine);
         }
 
-        if (xNode is XDocumentType xDocumentType)
+        if (xmlReader.NodeType == XmlNodeType.DocumentType)
         {
-            return xDocumentType.ToString().Replace("[]", string.Empty);
+            return $"<!DOCTYPE {xmlReader.Name}>".Replace("[]", string.Empty);
         }
 
-        if (xNode is XElement xElement)
+        if (xmlReader.NodeType == XmlNodeType.Element)
         {
-            return Element.Print(xElement, context);
+            return Element.Print(xmlReader, context);
         }
 
-        if (xNode is XText xText)
+        if (xmlReader.NodeType == XmlNodeType.None)
+        {
+            return Doc.Null;
+        }
+
+        if (xmlReader.NodeType == XmlNodeType.Text)
         {
             List<Doc> doc =
             [
-                Tag.PrintOpeningTagPrefix(xText),
-                GetEncodedTextValue(xText),
-                Tag.PrintClosingTagSuffix(xText, context),
+                Tag.PrintOpeningTagPrefix(xmlReader),
+                GetEncodedTextValue(xmlReader),
+                Tag.PrintClosingTagSuffix(xmlReader, context),
             ];
 
             if (doc.All(o => o is StringDoc))
@@ -66,44 +81,46 @@ class Node
 
             return Doc.Concat(doc);
         }
+        //
+        //         if (xNode is XComment or XProcessingInstruction)
+        //         {
+        //             return NewlineRegex
+        // #if !NETSTANDARD2_0
+        //                 ()
+        // #endif
+        //             .Replace(xNode.ToString(), context.Options.LineEnding);
+        //         }
 
-        if (xNode is XComment or XProcessingInstruction)
-        {
-            return NewlineRegex
-#if !NETSTANDARD2_0
-                ()
-#endif
-            .Replace(xNode.ToString(), context.Options.LineEnding);
-        }
-
-        throw new Exception("Need to handle + " + xNode.GetType());
+        throw new Exception("Need to handle + " + xmlReader.NodeType);
     }
 
-    private static Doc GetEncodedTextValue(XText xText)
+    private static Doc GetEncodedTextValue(XmlReader xmlReader)
     {
-        if (xText.Value is null)
+        if (!xmlReader.HasValue)
         {
             return Doc.Null;
         }
 
-        if (xText is XCData xcData)
-        {
-            return xcData.ToString();
-        }
+        // TODO 1679
+        // if (xText is XCData xcData)
+        // {
+        //     return xcData.ToString();
+        // }
 
-        var textValue = xText.Value;
-        if (xText.Parent?.FirstNode == xText)
-        {
-            if (textValue[0] is '\r')
-            {
-                textValue = textValue[1..];
-            }
-
-            if (textValue[0] is '\n')
-            {
-                textValue = textValue[1..];
-            }
-        }
+        var textValue = xmlReader.Value;
+        // TODO 1679
+        // if (xText.Parent?.FirstNode == xText)
+        // {
+        //     if (textValue[0] is '\r')
+        //     {
+        //         textValue = textValue[1..];
+        //     }
+        //
+        //     if (textValue[0] is '\n')
+        //     {
+        //         textValue = textValue[1..];
+        //     }
+        // }
 
         return new XElement("EncodeText", textValue).LastNode!.ToString();
     }

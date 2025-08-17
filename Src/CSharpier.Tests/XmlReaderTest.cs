@@ -10,6 +10,21 @@ namespace CSharpier.Tests;
 [TestFixture]
 public class XmlReaderTest
 {
+    [Test]
+    public void DoOtherStuff()
+    {
+        var xml = """
+            <element></element>
+            """;
+
+        using var reader = XmlReader.Create(
+            new StringReader(xml),
+            new XmlReaderSettings { IgnoreWhitespace = false }
+        );
+
+        reader.Read();
+    }
+
     [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
     [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
     [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
@@ -53,8 +68,8 @@ public class XmlReaderTest
         }
                 */
         reader.MoveToFirstAttribute();
-        var rawAttributeReader = new RawAttributeReader(xml);
+        var rawAttributeReader = new RawAttributeReader(xml, "\n");
         var attribute = rawAttributeReader.GetRawAttribute((IXmlLineInfo)reader, "Attribute");
-        attribute.Should().Be(attributeValue);
+        attribute.Should().Be(attributeValue.Replace("\r", string.Empty));
     }
 }
