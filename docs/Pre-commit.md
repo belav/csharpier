@@ -42,7 +42,7 @@ repos:
         description: Install the .NET tools listed at .config/dotnet-tools.json.
       - id: csharpier
         name: Run CSharpier on C# files
-        entry: dotnet tool run CSharpier
+        entry: dotnet tool run CSharpier format
         language: system
         types:
           - c#
