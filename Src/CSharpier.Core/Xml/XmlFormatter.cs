@@ -4,7 +4,7 @@ using System.Xml;
 using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
-using Node = CSharpier.Core.Xml.XNodePrinters.Node;
+using Node = CSharpier.Core.Xml.RawNodePrinters.Node;
 
 namespace CSharpier.Core.Xml;
 
@@ -25,7 +25,7 @@ public static class XmlFormatter
             );
 
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var elements = RawElementReader.ReadAllElements(xml, lineEnding, xmlReader);
+            var elements = RawNodeReader.ReadAllNodes(xml, lineEnding, xmlReader);
             var printingContext = new XmlPrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions

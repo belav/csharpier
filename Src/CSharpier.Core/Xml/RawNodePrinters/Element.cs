@@ -3,21 +3,18 @@ using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
-namespace CSharpier.Core.Xml.XNodePrinters;
+namespace CSharpier.Core.Xml.RawNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(RawElement rawElement, XmlPrintingContext context)
+    internal static Doc Print(RawNode rawNode, XmlPrintingContext context)
     {
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
 
-        // TODO 1679 somewhere in here we should return the list of RawElements
-        // TODO 1679 or we should just convert the reader into RawElements + attributes + etc
-
         Doc PrintChildrenDoc()
         {
-            var childContent = ElementChildren.Print(rawElement, context);
+            var childContent = ElementChildren.Print(rawNode, context);
 
             if (shouldHugContent)
             {
@@ -37,18 +34,15 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            // if (
-            //     node.Nodes().FirstOrDefault()
-            //     is not XCData
-            //         and XText { Value: ['\n', ..] or ['\r', ..] }
-            // )
-            // {
-            //     return Doc.LiteralLine;
-            // }
-
-            if (rawElement.Attributes.Length == 0
-            // TODO 1679 && node.Nodes().ToList() is [XText] and not [XCData]
+            if (
+                rawNode.Nodes.FirstOrDefault() is
+                { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
             )
+            {
+                return Doc.LiteralLine;
+            }
+
+            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
             {
                 return Doc.Null;
             }
@@ -64,9 +58,7 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (rawElement.Attributes.Length == 0
-            // TODO 1679 && node.Nodes().ToList() is [XText] and not [XCData]
-            )
+            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
             {
                 return Doc.Null;
             }
@@ -75,10 +67,10 @@ internal static class Element
 
         Doc PrintElementContent()
         {
-            var elementContent = rawElement.IsEmpty
+            var elementContent = rawNode.IsEmpty
                 ? Doc.Null
                 : Doc.Concat(
-                    ForceBreakContent(rawElement) ? Doc.BreakParent : "",
+                    ForceBreakContent(rawNode) ? Doc.BreakParent : "",
                     PrintChildrenDoc(),
                     PrintLineAfterChildren()
                 );
@@ -87,15 +79,15 @@ internal static class Element
         }
 
         return Doc.Group(
-            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(rawElement, context)),
+            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(rawNode, context)),
             PrintElementContent(),
-            Tag.PrintClosingTag(rawElement, context)
+            Tag.PrintClosingTag(rawNode, context)
         );
     }
 
-    private static bool ForceBreakContent(RawElement node)
+    private static bool ForceBreakContent(RawNode rawNode)
     {
-        var childNode = node.Nodes.Count == 1 ? node.Nodes.First() : null;
+        var childNode = rawNode.Nodes.Count == 1 ? rawNode.Nodes.First() : null;
 
         return childNode is not null
             && childNode.NodeType is XmlNodeType.CDATA or not XmlNodeType.Text;

@@ -4,22 +4,45 @@ namespace CSharpier.Core.Xml;
 
 internal class RawAttributeReader(string originalXml, string endOfLine, XmlReader xmlReader)
 {
+    private readonly IXmlLineInfo xmlLineInfo = (xmlReader as IXmlLineInfo)!;
+
     private readonly string[] lines = originalXml.Split(["\r\n", "\n"], StringSplitOptions.None);
 
-    // TODO 1679 don't need to pass xmlLineInfo here
-    public string? GetRawAttribute(IXmlLineInfo xmlLineInfo, string attributeName)
+    public RawAttribute[] GetAttributes()
     {
-        var lineNumber = xmlLineInfo.LineNumber - 1;
+        xmlReader.MoveToFirstAttribute();
+
+        var result = new RawAttribute[xmlReader.AttributeCount];
+
+        for (var x = 0; x < xmlReader.AttributeCount; x++)
+        {
+            result[x] = new RawAttribute
+            {
+                Name = xmlReader.Name,
+                Value = this.GetRawAttribute(xmlReader.Name).Replace("\"", "&quot;"),
+            };
+
+            xmlReader.MoveToNextAttribute();
+        }
+
+        xmlReader.MoveToElement();
+
+        return result;
+    }
+
+    private string GetRawAttribute(string attributeName)
+    {
+        var lineNumber = this.xmlLineInfo.LineNumber - 1;
         var line = this.lines[lineNumber];
 
         var index = line.IndexOf(
             attributeName,
-            xmlLineInfo.LinePosition - 1,
+            this.xmlLineInfo.LinePosition - 1,
             StringComparison.Ordinal
         );
         if (index < 0)
         {
-            return null;
+            return string.Empty;
         }
 
         var firstQuote = line.IndexOfAny(['"', '\''], index);
@@ -45,30 +68,6 @@ internal class RawAttributeReader(string originalXml, string endOfLine, XmlReade
         }
 
         result += endOfLine + nextLine[..endQuote];
-
-        return result;
-    }
-
-    public RawAttribute[] GetAttributes()
-    {
-        xmlReader.MoveToFirstAttribute();
-
-        var result = new RawAttribute[xmlReader.AttributeCount];
-
-        var xmlLineInfo = (xmlReader as IXmlLineInfo)!;
-
-        for (var x = 0; x < xmlReader.AttributeCount; x++)
-        {
-            result[x] = new RawAttribute
-            {
-                Name = xmlReader.Name,
-                Value = this.GetRawAttribute(xmlLineInfo, xmlReader.Name),
-            };
-
-            xmlReader.MoveToNextAttribute();
-        }
-
-        xmlReader.MoveToElement();
 
         return result;
     }

@@ -2,21 +2,21 @@ using System.Xml;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
-namespace CSharpier.Core.Xml.XNodePrinters;
+namespace CSharpier.Core.Xml.RawNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(RawElement element, XmlPrintingContext context)
+    public static Doc Print(RawNode node, XmlPrintingContext context)
     {
         var groupIds = new List<string>();
-        foreach (var _ in element.Nodes)
+        foreach (var _ in node.Nodes)
         {
             groupIds.Add(context.GroupFor("symbol"));
         }
 
-        var result = new ValueListBuilder<Doc>(element.Nodes.Count * 5);
+        var result = new ValueListBuilder<Doc>(node.Nodes.Count * 5);
         var x = 0;
-        foreach (var childNode in element.Nodes)
+        foreach (var childNode in node.Nodes)
         {
             var prevParts = new ValueListBuilder<Doc>([null, null]);
             var leadingParts = new ValueListBuilder<Doc>([null, null]);
@@ -80,7 +80,7 @@ internal static class ElementChildren
         return Doc.Concat(ref result);
     }
 
-    public static Doc PrintChild(RawElement child, XmlPrintingContext context)
+    public static Doc PrintChild(RawNode child, XmlPrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))
@@ -103,7 +103,7 @@ internal static class ElementChildren
         return Node.Print(child, context);
     }
 
-    public static Doc PrintBetweenLine(RawElement prevNode, RawElement nextNode)
+    public static Doc PrintBetweenLine(RawNode prevNode, RawNode nextNode)
     {
         return
             (prevNode.NodeType is XmlNodeType.Text && nextNode.NodeType is XmlNodeType.Comment)
