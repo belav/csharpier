@@ -7,16 +7,8 @@ namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(BetterXmlReader xmlReader, XmlPrintingContext context)
+    internal static Doc Print(RawElement rawElement, XmlPrintingContext context)
     {
-        var rawElement = new RawElement
-        {
-            Name = xmlReader.Name,
-            NodeType = xmlReader.NodeType,
-            IsEmpty = xmlReader.IsEmptyElement,
-            Attributes = context.RawAttributeReader.GetAttributes(xmlReader),
-        };
-
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
 
@@ -25,11 +17,7 @@ internal static class Element
 
         Doc PrintChildrenDoc()
         {
-            using var childrenReader = xmlReader.ReadSubtree();
-            childrenReader.Read(); // starts at none so read that
-            childrenReader.Read(); // then read past the current element to get to the children
-
-            var childContent = ElementChildren.Print(childrenReader, context);
+            var childContent = ElementChildren.Print(rawElement, context);
 
             if (shouldHugContent)
             {
@@ -90,7 +78,7 @@ internal static class Element
             var elementContent = rawElement.IsEmpty
                 ? Doc.Null
                 : Doc.Concat(
-                    ForceBreakContent(xmlReader) ? Doc.BreakParent : "",
+                    ForceBreakContent(rawElement) ? Doc.BreakParent : "",
                     PrintChildrenDoc(),
                     PrintLineAfterChildren()
                 );
@@ -99,20 +87,17 @@ internal static class Element
         }
 
         return Doc.Group(
-            Doc.GroupWithId(
-                attrGroupId,
-                Tag.PrintOpeningTag(xmlReader, rawElement.Attributes, context)
-            ),
+            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(rawElement, context)),
             PrintElementContent(),
-            Tag.PrintClosingTag(xmlReader, context)
+            Tag.PrintClosingTag(rawElement, context)
         );
     }
 
-    private static bool ForceBreakContent(BetterXmlReader node)
+    private static bool ForceBreakContent(RawElement node)
     {
-        return false;
-        // var childNode = node.Nodes().Count() == 1 ? node.Nodes().First() : null;
-        //
-        // return childNode is not null and (XCData or not XText);
+        var childNode = node.Nodes.Count == 1 ? node.Nodes.First() : null;
+
+        return childNode is not null
+            && childNode.NodeType is XmlNodeType.CDATA or not XmlNodeType.Text;
     }
 }

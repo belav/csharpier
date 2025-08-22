@@ -1,5 +1,4 @@
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
@@ -7,45 +6,30 @@ namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(BetterXmlReader xmlReader, XmlPrintingContext context)
+    public static Doc Print(RawElement element, XmlPrintingContext context)
     {
         var groupIds = new List<string>();
-
-        // TODO can we calculate this better?
-        var result = new ValueListBuilder<Doc>(20);
-        var x = 0;
-        var previousNodeType = XmlNodeType.None;
-        while (true)
+        foreach (var _ in element.Nodes)
         {
-            if (xmlReader.NodeType == XmlNodeType.EndElement)
-            {
-                break;
-            }
-            if (xmlReader.NodeType == XmlNodeType.Whitespace)
-            {
-                xmlReader.Read();
-                continue;
-            }
-
-            var currentNodeType = xmlReader.NodeType;
-            var currentContent = PrintChild(xmlReader, context);
-            var nextNodeType = xmlReader.NodeType;
-
             groupIds.Add(context.GroupFor("symbol"));
+        }
+
+        var result = new ValueListBuilder<Doc>(element.Nodes.Count * 5);
+        var x = 0;
+        foreach (var childNode in element.Nodes)
+        {
             var prevParts = new ValueListBuilder<Doc>([null, null]);
             var leadingParts = new ValueListBuilder<Doc>([null, null]);
             var trailingParts = new ValueListBuilder<Doc>([null, null]);
             var nextParts = new ValueListBuilder<Doc>([null, null]);
 
-            var prevBetweenLine =
-                previousNodeType != XmlNodeType.None
-                    ? PrintBetweenLine(previousNodeType, currentNodeType)
-                    : Doc.Null;
+            var prevBetweenLine = childNode.PreviousNode is not null
+                ? PrintBetweenLine(childNode.PreviousNode, childNode)
+                : Doc.Null;
 
-            var nextBetweenLine =
-                nextNodeType != XmlNodeType.None
-                    ? PrintBetweenLine(currentNodeType, nextNodeType)
-                    : Doc.Null;
+            var nextBetweenLine = childNode.NextNode is not null
+                ? PrintBetweenLine(childNode, childNode.NextNode)
+                : Doc.Null;
 
             if (prevBetweenLine is not NullDoc)
             {
@@ -53,7 +37,7 @@ internal static class ElementChildren
                 {
                     prevParts.Append(Doc.HardLine);
                 }
-                else if (previousNodeType == XmlNodeType.Text)
+                else if (childNode.PreviousNode?.NodeType is XmlNodeType.Text)
                 {
                     leadingParts.Append(prevBetweenLine);
                 }
@@ -67,7 +51,7 @@ internal static class ElementChildren
             {
                 if (nextBetweenLine is HardLine)
                 {
-                    if (nextNodeType == XmlNodeType.Text)
+                    if (childNode.NextNode?.NodeType is XmlNodeType.Text)
                     {
                         nextParts.Append(Doc.HardLine);
                     }
@@ -82,19 +66,21 @@ internal static class ElementChildren
             result.Append(
                 Doc.Group(
                     Doc.Concat(ref leadingParts),
-                    Doc.GroupWithId(groupIds[x], currentContent, Doc.Concat(ref trailingParts))
+                    Doc.GroupWithId(
+                        groupIds[x],
+                        PrintChild(childNode, context),
+                        Doc.Concat(ref trailingParts)
+                    )
                 )
             );
             result.Append(nextParts.AsSpan());
-
-            previousNodeType = currentNodeType;
             x++;
         }
 
         return Doc.Concat(ref result);
     }
 
-    public static Doc PrintChild(BetterXmlReader xmlReader, XmlPrintingContext context)
+    public static Doc PrintChild(RawElement child, XmlPrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))
@@ -114,18 +100,16 @@ internal static class ElementChildren
         //     };
         // }
 
-        var result = Node.Print(xmlReader, context);
-        xmlReader.Read();
-        return result;
+        return Node.Print(child, context);
     }
 
-    public static Doc PrintBetweenLine(XmlNodeType prevNode, XmlNodeType nextNode)
+    public static Doc PrintBetweenLine(RawElement prevNode, RawElement nextNode)
     {
         return
-            (prevNode == XmlNodeType.Text && nextNode == XmlNodeType.Comment)
-            || (prevNode == XmlNodeType.Comment && nextNode == XmlNodeType.Text)
-            || (prevNode == XmlNodeType.Text && nextNode == XmlNodeType.EndElement)
-            || (prevNode == XmlNodeType.EndElement && nextNode == XmlNodeType.Text)
+            (prevNode.NodeType is XmlNodeType.Text && nextNode.NodeType is XmlNodeType.Comment)
+            || (prevNode.NodeType is XmlNodeType.Comment && nextNode.NodeType is XmlNodeType.Text)
+            || (prevNode.NodeType is XmlNodeType.Text && nextNode.NodeType is XmlNodeType.Element)
+            || (prevNode.NodeType is XmlNodeType.Element && nextNode.NodeType is XmlNodeType.Text)
             ? Doc.Null
             : Doc.HardLine;
     }

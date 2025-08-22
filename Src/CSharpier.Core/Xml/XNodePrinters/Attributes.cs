@@ -8,29 +8,23 @@ namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Attributes
 {
-    public static Doc Print(
-        BetterXmlReader xmlReader,
-        RawAttribute[] attributes,
-        PrintingContext context
-    )
+    public static Doc Print(RawElement rawElement, PrintingContext context)
     {
-        if (attributes.Length == 0)
+        if (rawElement.Attributes.Length == 0)
         {
-            return xmlReader.IsEmptyElement ? " " : Doc.Null;
+            return rawElement.IsEmpty ? " " : Doc.Null;
         }
 
         var printedAttributes = new List<Doc>();
-        var index = 0;
-
-        foreach (var attribute in attributes)
+        foreach (var attribute in rawElement.Attributes)
         {
             printedAttributes.Add(PrintAttribute(attribute));
-
-            index++;
         }
 
-        var doNotBreakAttributes = attributes.Length == 1 && !attributes[0].Value.Contains('\n');
-        // TODO 1679     && (element.Nodes().Any(o => o is XElement) || element.IsEmpty);
+        var doNotBreakAttributes =
+            rawElement.Attributes.Length == 1
+            && !rawElement.Attributes[0].Value.Contains('\n')
+            && (rawElement.Nodes.Any(o => o.NodeType is XmlNodeType.Element) || rawElement.IsEmpty);
         var attributeLine = Doc.Line;
 
         var parts = new List<Doc>
@@ -49,17 +43,16 @@ internal static class Attributes
              *       >456
              */
             (
-                false
-            // TODO C1679 xmlReader.Nodes().Any()
-            // && Tag.NeedsToBorrowParentOpeningTagEndMarker(xmlReader.Nodes().First())
+                rawElement.Nodes.Count != 0
+                && Tag.NeedsToBorrowParentOpeningTagEndMarker(rawElement.Nodes.First())
             ) || doNotBreakAttributes
         )
         {
-            parts.Add(xmlReader.IsEmptyElement ? " " : "");
+            parts.Add(rawElement.IsEmpty ? " " : "");
         }
         else
         {
-            parts.Add(xmlReader.IsEmptyElement ? Doc.Line : Doc.SoftLine);
+            parts.Add(rawElement.IsEmpty ? Doc.Line : Doc.SoftLine);
         }
 
         return Doc.Concat(parts);

@@ -2,10 +2,11 @@ using System.Xml;
 
 namespace CSharpier.Core.Xml;
 
-internal class RawAttributeReader(string originalXml, string endOfLine)
+internal class RawAttributeReader(string originalXml, string endOfLine, XmlReader xmlReader)
 {
     private readonly string[] lines = originalXml.Split(["\r\n", "\n"], StringSplitOptions.None);
 
+    // TODO 1679 don't need to pass xmlLineInfo here
     public string? GetRawAttribute(IXmlLineInfo xmlLineInfo, string attributeName)
     {
         var lineNumber = xmlLineInfo.LineNumber - 1;
@@ -48,18 +49,20 @@ internal class RawAttributeReader(string originalXml, string endOfLine)
         return result;
     }
 
-    public RawAttribute[] GetAttributes(BetterXmlReader xmlReader)
+    public RawAttribute[] GetAttributes()
     {
         xmlReader.MoveToFirstAttribute();
 
         var result = new RawAttribute[xmlReader.AttributeCount];
+
+        var xmlLineInfo = (xmlReader as IXmlLineInfo)!;
 
         for (var x = 0; x < xmlReader.AttributeCount; x++)
         {
             result[x] = new RawAttribute
             {
                 Name = xmlReader.Name,
-                Value = this.GetRawAttribute(xmlReader.XmlLineInfo, xmlReader.Name),
+                Value = this.GetRawAttribute(xmlLineInfo, xmlReader.Name),
             };
 
             xmlReader.MoveToNextAttribute();
@@ -69,18 +72,4 @@ internal class RawAttributeReader(string originalXml, string endOfLine)
 
         return result;
     }
-}
-
-internal struct RawAttribute
-{
-    public string Name { get; set; }
-    public string Value { get; set; }
-}
-
-internal struct RawElement
-{
-    public required string? Name { get; set; }
-    public required XmlNodeType NodeType { get; set; }
-    public required bool IsEmpty { get; set; }
-    public required RawAttribute[] Attributes { get; set; }
 }

@@ -22,10 +22,10 @@ public class XmlReaderTest
             new XmlReaderSettings { IgnoreWhitespace = false }
         );
 
-        var rawAttributeReader = new RawAttributeReader(xml, "\n");
+        var rawAttributeReader = new RawAttributeReader(xml, "\n", reader);
         reader.Read();
 
-        var attributes = rawAttributeReader.GetAttributes(new BetterXmlReader(reader));
+        var attributes = rawAttributeReader.GetAttributes();
 
         attributes.Length.Should().Be(2);
         attributes[0].Name.Should().Be("one");
@@ -78,7 +78,7 @@ public class XmlReaderTest
         }
                 */
         reader.MoveToFirstAttribute();
-        var rawAttributeReader = new RawAttributeReader(xml, "\n");
+        var rawAttributeReader = new RawAttributeReader(xml, "\n", reader);
         var attribute = rawAttributeReader.GetRawAttribute((IXmlLineInfo)reader, "Attribute");
         attribute.Should().Be(attributeValue.Replace("\r", string.Empty));
     }

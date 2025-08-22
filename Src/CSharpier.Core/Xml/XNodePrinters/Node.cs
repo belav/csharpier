@@ -20,19 +20,14 @@ class Node
     private static partial Regex NewlineRegex();
 #endif
 
-    internal static Doc Print(BetterXmlReader xmlReader, XmlPrintingContext context)
+    internal static Doc Print(RawElement element, XmlPrintingContext context)
     {
-        while (xmlReader.NodeType == XmlNodeType.Whitespace)
-        {
-            xmlReader.Read();
-        }
-
-        if (xmlReader.NodeType == XmlNodeType.XmlDeclaration)
+        if (element.NodeType == XmlNodeType.XmlDeclaration)
         {
             var version = "TODO";
-            // xmlReader.GetAttribute("version");
-            // var encoding = xmlReader.GetAttribute("encoding");
-            // var standalone = xmlReader.GetAttribute("standalone");
+            // element.GetAttribute("version");
+            // var encoding = element.GetAttribute("encoding");
+            // var standalone = element.GetAttribute("standalone");
 
             var declaration = $"<?xml version=\"{version}\"";
             // if (!string.IsNullOrEmpty(encoding))
@@ -50,28 +45,28 @@ class Node
             return Doc.Concat(declaration, Doc.HardLine);
         }
 
-        if (xmlReader.NodeType == XmlNodeType.DocumentType)
+        if (element.NodeType == XmlNodeType.DocumentType)
         {
-            return $"<!DOCTYPE {xmlReader.Name}>".Replace("[]", string.Empty);
+            return $"<!DOCTYPE {element.Name}>".Replace("[]", string.Empty);
         }
 
-        if (xmlReader.NodeType == XmlNodeType.Element)
+        if (element.NodeType == XmlNodeType.Element)
         {
-            return Element.Print(xmlReader, context);
+            return Element.Print(element, context);
         }
 
-        if (xmlReader.NodeType == XmlNodeType.None)
+        if (element.NodeType == XmlNodeType.None)
         {
             return Doc.Null;
         }
 
-        if (xmlReader.NodeType == XmlNodeType.Text)
+        if (element.NodeType == XmlNodeType.Text)
         {
             List<Doc> doc =
             [
-                Tag.PrintOpeningTagPrefix(xmlReader),
-                GetEncodedTextValue(xmlReader),
-                Tag.PrintClosingTagSuffix(xmlReader, context),
+                Tag.PrintOpeningTagPrefix(element),
+                GetEncodedTextValue(element),
+                Tag.PrintClosingTagSuffix(element, context),
             ];
 
             if (doc.All(o => o is StringDoc))
@@ -92,36 +87,35 @@ class Node
         //             .Replace(xNode.ToString(), context.Options.LineEnding);
         //         }
 
-        throw new Exception("Need to handle + " + xmlReader.NodeType);
+        throw new Exception("Need to handle + " + element.NodeType);
     }
 
-    private static Doc GetEncodedTextValue(BetterXmlReader xmlReader)
+    private static Doc GetEncodedTextValue(RawElement rawElement)
     {
-        if (!xmlReader.HasValue)
+        // TODO 1679 don't allow empty?
+        if (string.IsNullOrEmpty(rawElement.Value))
         {
             return Doc.Null;
         }
 
-        // TODO 1679
-        // if (xText is XCData xcData)
-        // {
-        //     return xcData.ToString();
-        // }
+        if (rawElement.NodeType is XmlNodeType.CDATA)
+        {
+            return rawElement.Value;
+        }
 
-        var textValue = xmlReader.Value;
-        // TODO 1679
-        // if (xText.Parent?.FirstNode == xText)
-        // {
-        //     if (textValue[0] is '\r')
-        //     {
-        //         textValue = textValue[1..];
-        //     }
-        //
-        //     if (textValue[0] is '\n')
-        //     {
-        //         textValue = textValue[1..];
-        //     }
-        // }
+        var textValue = rawElement.Value;
+        if (rawElement.Parent?.Nodes.First() == rawElement)
+        {
+            if (textValue[0] is '\r')
+            {
+                textValue = textValue[1..];
+            }
+
+            if (textValue[0] is '\n')
+            {
+                textValue = textValue[1..];
+            }
+        }
 
         return new XElement("EncodeText", textValue).LastNode!.ToString();
     }
