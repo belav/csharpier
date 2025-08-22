@@ -20,7 +20,7 @@ class Node
     private static partial Regex NewlineRegex();
 #endif
 
-    internal static Doc Print(XmlReader xmlReader, PrintingContext context)
+    internal static Doc Print(BetterXmlReader xmlReader, XmlPrintingContext context)
     {
         while (xmlReader.NodeType == XmlNodeType.Whitespace)
         {
@@ -29,20 +29,21 @@ class Node
 
         if (xmlReader.NodeType == XmlNodeType.XmlDeclaration)
         {
-            var version = xmlReader.GetAttribute("version");
-            var encoding = xmlReader.GetAttribute("encoding");
-            var standalone = xmlReader.GetAttribute("standalone");
+            var version = "TODO";
+            // xmlReader.GetAttribute("version");
+            // var encoding = xmlReader.GetAttribute("encoding");
+            // var standalone = xmlReader.GetAttribute("standalone");
 
             var declaration = $"<?xml version=\"{version}\"";
-            if (!string.IsNullOrEmpty(encoding))
-            {
-                declaration += $" encoding=\"{encoding}\"";
-            }
-
-            if (!string.IsNullOrEmpty(standalone))
-            {
-                declaration += $" standalone=\"{standalone}\"";
-            }
+            // if (!string.IsNullOrEmpty(encoding))
+            // {
+            //     declaration += $" encoding=\"{encoding}\"";
+            // }
+            //
+            // if (!string.IsNullOrEmpty(standalone))
+            // {
+            //     declaration += $" standalone=\"{standalone}\"";
+            // }
 
             declaration += "?>";
 
@@ -94,7 +95,7 @@ class Node
         throw new Exception("Need to handle + " + xmlReader.NodeType);
     }
 
-    private static Doc GetEncodedTextValue(XmlReader xmlReader)
+    private static Doc GetEncodedTextValue(BetterXmlReader xmlReader)
     {
         if (!xmlReader.HasValue)
         {

@@ -21,9 +21,11 @@ internal class RawAttributeReader(string originalXml, string endOfLine)
             return null;
         }
 
-        var firstQuote = line.IndexOf('"', index) + 1;
+        var firstQuote = line.IndexOfAny(['"', '\''], index);
+        var quoteCharacter = line[firstQuote];
+        firstQuote += 1;
 
-        var endQuote = line.IndexOf('"', firstQuote);
+        var endQuote = line.IndexOf(quoteCharacter, firstQuote);
         // attribute on a single line, return in
         if (endQuote > 0)
         {
@@ -45,4 +47,40 @@ internal class RawAttributeReader(string originalXml, string endOfLine)
 
         return result;
     }
+
+    public RawAttribute[] GetAttributes(BetterXmlReader xmlReader)
+    {
+        xmlReader.MoveToFirstAttribute();
+
+        var result = new RawAttribute[xmlReader.AttributeCount];
+
+        for (var x = 0; x < xmlReader.AttributeCount; x++)
+        {
+            result[x] = new RawAttribute
+            {
+                Name = xmlReader.Name,
+                Value = this.GetRawAttribute(xmlReader.XmlLineInfo, xmlReader.Name),
+            };
+
+            xmlReader.MoveToNextAttribute();
+        }
+
+        xmlReader.MoveToElement();
+
+        return result;
+    }
+}
+
+internal struct RawAttribute
+{
+    public string Name { get; set; }
+    public string Value { get; set; }
+}
+
+internal struct RawElement
+{
+    public required string? Name { get; set; }
+    public required XmlNodeType NodeType { get; set; }
+    public required bool IsEmpty { get; set; }
+    public required RawAttribute[] Attributes { get; set; }
 }

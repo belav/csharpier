@@ -7,7 +7,7 @@ namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(XmlReader xmlReader, PrintingContext context)
+    public static Doc Print(BetterXmlReader xmlReader, XmlPrintingContext context)
     {
         var groupIds = new List<string>();
 
@@ -94,7 +94,7 @@ internal static class ElementChildren
         return Doc.Concat(ref result);
     }
 
-    public static Doc PrintChild(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintChild(BetterXmlReader xmlReader, XmlPrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))

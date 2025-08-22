@@ -14,7 +14,7 @@ public class XmlReaderTest
     public void DoOtherStuff()
     {
         var xml = """
-            <element></element>
+            <element one="1" two="2"></element>
             """;
 
         using var reader = XmlReader.Create(
@@ -22,10 +22,20 @@ public class XmlReaderTest
             new XmlReaderSettings { IgnoreWhitespace = false }
         );
 
+        var rawAttributeReader = new RawAttributeReader(xml, "\n");
         reader.Read();
+
+        var attributes = rawAttributeReader.GetAttributes(new BetterXmlReader(reader));
+
+        attributes.Length.Should().Be(2);
+        attributes[0].Name.Should().Be("one");
+        attributes[0].Value.Should().Be("1");
+        attributes[1].Name.Should().Be("two");
+        attributes[1].Value.Should().Be("2");
     }
 
     [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
+    [TestCase("<Element Attribute='SomeText\"'/>", "SomeText\"")]
     [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
     [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
     [TestCase(

@@ -19,14 +19,18 @@ public static class XmlFormatter
     {
         try
         {
-            using var xmlReader = XmlReader.Create(
-                new StringReader(xml),
-                new XmlReaderSettings { IgnoreWhitespace = false }
+            using var xmlReader = new BetterXmlReader(
+                XmlReader.Create(
+                    new StringReader(xml),
+                    new XmlReaderSettings { IgnoreWhitespace = false }
+                )
             );
 
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var printingContext = new PrintingContext
+            var rawAttributeReader = new RawAttributeReader(xml, lineEnding);
+            var printingContext = new XmlPrintingContext
             {
+                RawAttributeReader = rawAttributeReader,
                 Options = new PrintingContext.PrintingContextOptions
                 {
                     LineEnding = lineEnding,
@@ -103,4 +107,9 @@ public static class XmlFormatter
             index++;
         }
     }
+}
+
+internal class XmlPrintingContext : PrintingContext
+{
+    public required RawAttributeReader RawAttributeReader { get; set; }
 }

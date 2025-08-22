@@ -7,18 +7,20 @@ namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Tag
 {
-    public static Doc PrintOpeningTag(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintOpeningTag(
+        BetterXmlReader xmlReader,
+        RawAttribute[] attributes,
+        PrintingContext context
+    )
     {
         return Doc.Concat(
             PrintOpeningTagStart(xmlReader, context),
-            // Attributes.Print(xmlReader, context),
-            xmlReader.IsEmptyElement
-                ? Doc.Null
-                : PrintOpeningTagEnd(xmlReader)
+            Attributes.Print(xmlReader, attributes, context),
+            xmlReader.IsEmptyElement ? Doc.Null : PrintOpeningTagEnd(xmlReader)
         );
     }
 
-    private static Doc PrintOpeningTagStart(XmlReader xmlReader, PrintingContext context)
+    private static Doc PrintOpeningTagStart(BetterXmlReader xmlReader, PrintingContext context)
     {
         return
         // TOOD need to know if previous node is text like
@@ -32,18 +34,18 @@ internal static class Tag
             );
     }
 
-    private static Doc PrintOpeningTagEnd(XmlReader xmlReader)
+    private static Doc PrintOpeningTagEnd(BetterXmlReader xmlReader)
     {
         return false // node.FirstNode is not null && NeedsToBorrowParentOpeningTagEndMarker(node.FirstNode)
             ? Doc.Null
             : ">";
     }
 
-    public static Doc PrintOpeningTagPrefix(XmlReader xmlReader)
+    public static Doc PrintOpeningTagPrefix(BetterXmlReader xmlReader)
     {
         return string.Empty;
         // NeedsToBorrowParentOpeningTagEndMarker(element)
-        //     ? PrintOpeningTagEndMarker(element.Parent!)
+        //     ? ">"
         // : NeedsToBorrowPrevClosingTagEndMarker(element)
         //     ? PrintClosingTagEndMarker((element.PreviousNode as XElement)!)
         //: "";
@@ -70,7 +72,7 @@ internal static class Tag
         ;
     }
 
-    public static Doc PrintClosingTag(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintClosingTag(BetterXmlReader xmlReader, PrintingContext context)
     {
         return Doc.Concat(
             xmlReader.IsEmptyElement ? Doc.Null : PrintClosingTagStart(xmlReader, context),
@@ -78,7 +80,7 @@ internal static class Tag
         );
     }
 
-    public static Doc PrintClosingTagStart(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintClosingTagStart(BetterXmlReader xmlReader, PrintingContext context)
     {
         // var lastChild = xmlReader.Nodes().LastOrDefault();
 
@@ -87,18 +89,18 @@ internal static class Tag
             : PrintClosingTagStartMarker(xmlReader, context);
     }
 
-    public static Doc PrintClosingTagStartMarker(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintClosingTagStartMarker(BetterXmlReader xmlReader, PrintingContext context)
     {
         return $"</{GetPrefixedElementName(xmlReader, context)}";
     }
 
-    public static Doc PrintClosingTagEnd(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintClosingTagEnd(BetterXmlReader xmlReader, PrintingContext context)
     {
         return false
             // (
             //     xmlReader.NextNode is not null
             //         ? NeedsToBorrowPrevClosingTagEndMarker(xmlReader.NextNode)
-            //         : NeedsToBorrowLastChildClosingTagEndMarker(xmlReader.Parent!)
+            //         : false
             // )
             ? Doc.Null
             : Doc.Concat(
@@ -107,30 +109,12 @@ internal static class Tag
             );
     }
 
-    public static bool NeedsToBorrowLastChildClosingTagEndMarker(XElement node)
-    {
-        /*
-         *     <p
-         *       ><a></a
-         *       ></p
-         *       ^
-         *     >
-         */
-        return false
-        // we don't want to take into account whitespace
-        // && !node.Nodes().Last().GetLastDescendant().IsTextLike()
-        // && !node.lastChild.hasTrailingSpaces
-        // && node.lastChild?.isTrailingSpaceSensitive
-        // && !isPreLikeNode(node)
-        ;
-    }
-
-    public static Doc PrintClosingTagEndMarker(XmlReader xmlReader)
+    public static Doc PrintClosingTagEndMarker(BetterXmlReader xmlReader)
     {
         return xmlReader.IsEmptyElement ? "/>" : ">";
     }
 
-    public static Doc PrintClosingTagSuffix(XmlReader xmlReader, PrintingContext context)
+    public static Doc PrintClosingTagSuffix(BetterXmlReader xmlReader, PrintingContext context)
     {
         return "";
         // return NeedsToBorrowParentClosingTagStartMarker(node)
@@ -141,17 +125,20 @@ internal static class Tag
         //     : Doc.Null;
     }
 
-    private static Doc PrintOpeningTagStartMarker(XmlReader xmlReader, PrintingContext context)
+    private static Doc PrintOpeningTagStartMarker(
+        BetterXmlReader xmlReader,
+        PrintingContext context
+    )
     {
         if (xmlReader.NodeType != XmlNodeType.Element)
         {
-            return "<" + xmlReader;
+            return "<" + xmlReader.Name;
         }
 
         return $"<{GetPrefixedElementName(xmlReader, context)}";
     }
 
-    private static string GetPrefixedElementName(XmlReader xmlReader, PrintingContext context)
+    private static string GetPrefixedElementName(BetterXmlReader xmlReader, PrintingContext context)
     {
         return xmlReader.Name;
         // var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
@@ -221,22 +208,5 @@ internal static class Tag
             && xText.ToString()[0] is not ('\r' or '\n')
         // && node.isLeadingSpaceSensitive && !node.hasLeadingSpaces
         ;
-    }
-
-    private static string PrintOpeningTagEndMarker(XmlReader xmlReader)
-    {
-        return ">";
-        // assert(!node.isSelfClosing);
-        // switch (node.type) {
-        //     case "ieConditionalComment":
-        //         return "]>";
-        //     case "element":
-        //         if (node.condition) {
-        //             return "><!--<![endif]-->";
-        //         }
-        //     // fall through
-        //     default:
-        //         return ">";
-        // }
     }
 }

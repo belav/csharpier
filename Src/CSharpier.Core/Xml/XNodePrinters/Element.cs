@@ -7,13 +7,21 @@ namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(XmlReader xmlReader, PrintingContext context)
+    internal static Doc Print(BetterXmlReader xmlReader, XmlPrintingContext context)
     {
-        var elementName = xmlReader.Name;
-        var isEmpty = xmlReader.IsEmptyElement;
-        var isStartElement = xmlReader.IsStartElement();
+        var rawElement = new RawElement
+        {
+            Name = xmlReader.Name,
+            NodeType = xmlReader.NodeType,
+            IsEmpty = xmlReader.IsEmptyElement,
+            Attributes = context.RawAttributeReader.GetAttributes(xmlReader),
+        };
+
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
+
+        // TODO 1679 somewhere in here we should return the list of RawElements
+        // TODO 1679 or we should just convert the reader into RawElements + attributes + etc
 
         Doc PrintChildrenDoc()
         {
@@ -50,10 +58,12 @@ internal static class Element
             //     return Doc.LiteralLine;
             // }
 
-            // if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
-            // {
-            //     return Doc.Null;
-            // }
+            if (rawElement.Attributes.Length == 0
+            // TODO 1679 && node.Nodes().ToList() is [XText] and not [XCData]
+            )
+            {
+                return Doc.Null;
+            }
 
             return Doc.SoftLine;
         }
@@ -66,16 +76,18 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            // if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
-            // {
-            //     return Doc.Null;
-            // }
+            if (rawElement.Attributes.Length == 0
+            // TODO 1679 && node.Nodes().ToList() is [XText] and not [XCData]
+            )
+            {
+                return Doc.Null;
+            }
             return Doc.SoftLine;
         }
 
         Doc PrintElementContent()
         {
-            var elementContent = isEmpty
+            var elementContent = rawElement.IsEmpty
                 ? Doc.Null
                 : Doc.Concat(
                     ForceBreakContent(xmlReader) ? Doc.BreakParent : "",
@@ -87,13 +99,16 @@ internal static class Element
         }
 
         return Doc.Group(
-            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(xmlReader, context)),
+            Doc.GroupWithId(
+                attrGroupId,
+                Tag.PrintOpeningTag(xmlReader, rawElement.Attributes, context)
+            ),
             PrintElementContent(),
             Tag.PrintClosingTag(xmlReader, context)
         );
     }
 
-    private static bool ForceBreakContent(XmlReader node)
+    private static bool ForceBreakContent(BetterXmlReader node)
     {
         return false;
         // var childNode = node.Nodes().Count() == 1 ? node.Nodes().First() : null;
