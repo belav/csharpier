@@ -16,12 +16,20 @@ class RawNodeReader
     private static partial Regex NewlineRegex();
 #endif
 
-    public static List<RawNode> ReadAllNodes(
-        string originalXml,
-        string lineEnding,
-        XmlReader xmlReader
-    )
+    public static List<RawNode> ReadAllNodes(string originalXml, string lineEnding)
     {
+        // xml reader can get confused about line numbers if we don't normalize them
+        originalXml = NewlineRegex
+#if !NETSTANDARD2_0
+            ()
+#endif
+        .Replace(originalXml, "\n");
+
+        using var xmlReader = XmlReader.Create(
+            new StringReader(originalXml),
+            new XmlReaderSettings { IgnoreWhitespace = false }
+        );
+
         var elements = new List<RawNode>();
         var elementStack = new Stack<RawNode>();
         var attributeReader = new RawAttributeReader(originalXml, lineEnding, xmlReader);

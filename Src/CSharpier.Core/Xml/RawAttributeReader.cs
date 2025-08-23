@@ -37,6 +37,8 @@ internal class RawAttributeReader(string originalXml, string endOfLine, XmlReade
         var lineNumber = this.xmlLineInfo.LineNumber - 1;
         var line = this.lines[lineNumber];
 
+        DebugLogger.Log("Reading attribute " + attributeName + " on line " + lineNumber);
+
         var index = line.IndexOf(
             attributeName,
             this.xmlLineInfo.LinePosition - 1,

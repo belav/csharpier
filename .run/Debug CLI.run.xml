@@ -1,17 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration
-    default="false"
-    name="Debug msbuild"
-    type="DotNetProject"
-    factoryName=".NET Project"
-  >
+  <configuration default="false" name="Debug CLI" type="DotNetProject" factoryName=".NET Project">
     <option
       name="EXE_PATH"
-      value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0/CSharpier.exe"
+      value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0/CSharpier.dll"
     />
     <option
       name="PROGRAM_PARAMETERS"
-      value="check C:\projects\csharpier-msbuild --log-format MsBuild"
+      value="format C:\projects\csharpier-repos\mono/mcs/docs/ecma334/14.5.10.1.xml"
     />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0" />
     <option name="PASS_PARENT_ENVS" value="1" />
@@ -19,10 +14,10 @@
     <option name="ENV_FILE_PATHS" value="" />
     <option name="REDIRECT_INPUT_PATH" value="" />
     <option name="PTY_MODE" value="Auto" />
+    <option name="MIXED_MODE_DEBUG" value="0" />
     <option name="USE_MONO" value="0" />
     <option name="RUNTIME_ARGUMENTS" value="" />
     <option name="AUTO_ATTACH_CHILDREN" value="0" />
-    <option name="MIXED_MODE_DEBUG" value="0" />
     <option name="PROJECT_PATH" value="$PROJECT_DIR$/Src/CSharpier.Cli/CSharpier.Cli.csproj" />
     <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
     <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />

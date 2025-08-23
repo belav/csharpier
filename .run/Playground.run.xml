@@ -9,7 +9,7 @@
       name="LAUNCH_PROFILE_PROJECT_FILE_PATH"
       value="$PROJECT_DIR$/Src/CSharpier.Playground/CSharpier.Playground.csproj"
     />
-    <option name="LAUNCH_PROFILE_TFM" value="net9.0" />
+    <option name="LAUNCH_PROFILE_TFM" value="net10.0" />
     <option name="LAUNCH_PROFILE_NAME" value="Watch" />
     <option name="USE_EXTERNAL_CONSOLE" value="0" />
     <option name="USE_MONO" value="0" />
@@ -18,6 +18,7 @@
     <option name="SHOW_IIS_EXPRESS_OUTPUT" value="0" />
     <option name="SEND_DEBUG_REQUEST" value="1" />
     <option name="ADDITIONAL_IIS_EXPRESS_ARGUMENTS" value="" />
+    <option name="AUTO_ATTACH_CHILDREN" value="0" />
     <method v="2">
       <option name="Build" />
     </method>

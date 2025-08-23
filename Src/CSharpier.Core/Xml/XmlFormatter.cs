@@ -19,13 +19,8 @@ public static class XmlFormatter
     {
         try
         {
-            using var xmlReader = XmlReader.Create(
-                new StringReader(xml),
-                new XmlReaderSettings { IgnoreWhitespace = false }
-            );
-
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var elements = RawNodeReader.ReadAllNodes(xml, lineEnding, xmlReader);
+            var elements = RawNodeReader.ReadAllNodes(xml, lineEnding);
             var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions
