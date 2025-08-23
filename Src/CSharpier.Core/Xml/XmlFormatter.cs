@@ -26,7 +26,7 @@ public static class XmlFormatter
 
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
             var elements = RawNodeReader.ReadAllNodes(xml, lineEnding, xmlReader);
-            var printingContext = new XmlPrintingContext
+            var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions
                 {
@@ -63,48 +63,4 @@ public static class XmlFormatter
             };
         }
     }
-
-    private static readonly JsonSerializerOptions XmlFormatterJsonSerializerOptions = new()
-    {
-        ReferenceHandler = ReferenceHandler.Preserve,
-    };
-
-    private static void CreateMapping(
-        XNode? xNode,
-        XmlNode? xmlNode,
-        Dictionary<XNode, XmlNode> mapping
-    )
-    {
-        if (xNode == null || xmlNode == null)
-        {
-            return;
-        }
-
-        mapping[xNode] = xmlNode;
-
-        if (xNode is not XContainer xContainer)
-        {
-            return;
-        }
-
-        var index = 0;
-        if (xmlNode.ChildNodes[0] is XmlDeclaration)
-        {
-            index++;
-        }
-        foreach (var xChild in xContainer.Nodes())
-        {
-            if (index > xmlNode.ChildNodes.Count)
-            {
-                break;
-            }
-
-            CreateMapping(xChild, xmlNode.ChildNodes[index], mapping);
-
-            index++;
-        }
-    }
 }
-
-// TODO 1679 kill this
-internal class XmlPrintingContext : PrintingContext { }

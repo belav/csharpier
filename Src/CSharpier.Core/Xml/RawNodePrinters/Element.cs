@@ -7,7 +7,7 @@ namespace CSharpier.Core.Xml.RawNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(RawNode rawNode, XmlPrintingContext context)
+    internal static Doc Print(RawNode rawNode, PrintingContext context)
     {
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");

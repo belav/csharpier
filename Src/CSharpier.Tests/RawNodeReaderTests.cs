@@ -105,7 +105,7 @@ public class RawNodeReaderTests
         var attribute = elements.First().Attributes.First();
 
         attribute.Name.Should().Be("Attribute");
-        attribute.Value.Should().Be(attributeValue);
+        attribute.Value.Should().Be(attributeValue.Replace("\"", "&quote;"));
     }
 
     private static List<RawNode> ReadAllElements(string xml)

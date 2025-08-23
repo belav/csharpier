@@ -9,7 +9,7 @@ namespace CSharpier.Core.Xml.RawNodePrinters;
 
 internal static class Node
 {
-    internal static Doc Print(RawNode node, XmlPrintingContext context)
+    internal static Doc Print(RawNode node, PrintingContext context)
     {
         if (node.NodeType == XmlNodeType.XmlDeclaration)
         {

@@ -1,4 +1,5 @@
 using System.Xml;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
@@ -6,7 +7,7 @@ namespace CSharpier.Core.Xml.RawNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(RawNode node, XmlPrintingContext context)
+    public static Doc Print(RawNode node, PrintingContext context)
     {
         var groupIds = new List<string>();
         foreach (var _ in node.Nodes)
@@ -80,7 +81,7 @@ internal static class ElementChildren
         return Doc.Concat(ref result);
     }
 
-    public static Doc PrintChild(RawNode child, XmlPrintingContext context)
+    public static Doc PrintChild(RawNode child, PrintingContext context)
     {
         // should we try to support csharpier-ignore some day?
         // if (HasPrettierIgnore(child))

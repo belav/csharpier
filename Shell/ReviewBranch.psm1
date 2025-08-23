@@ -59,22 +59,16 @@ function CSH-ReviewBranch {
         $skipValidationParam = "--skip-validation"
     }
 
-    $formatArgument = "."
-    if ($onlyXml) {
-        $formatArgument = "**/*.{config,csproj,props,slnx,targets,xaml,xml}"
-    }
-    
     if ($firstRun) {
         Set-Location $repositoryRoot
-#        try  {
-            & git checkout main #2>&1 | Out-String
-#        }
-#        catch {
-#            Write-Host "Could not checkout main on csharpier, working directory is probably not clean"
-#            return
-#        }
-        
-        CSH-BuildProject
+
+        & git checkout main #2>&1 | Out-String
+
+        CSH-BuildProject -doNotExit
+
+        if ($lastExitCode -gt 0) {
+            return
+        }
 
         Set-Location $pathToTestingRepo
 
@@ -82,11 +76,15 @@ function CSH-ReviewBranch {
         & git reset --hard
         & git checkout -b $preBranch
 
-        dotnet $csharpierDllPath format $formatArgument $skipValidationParam --no-cache
+        if ($onlyXml) {
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.cs"
+        }
+        
+        dotnet $csharpierDllPath format . $skipValidationParam --no-cache
         # there is some weirdness with a couple files with #if where
         # they need to be formatted twice to get them stable
         # it isn't worth fixing in csharpier, because it only really affects this
-        dotnet $csharpierDllPath format $formatArgument $skipValidationParam
+        dotnet $csharpierDllPath format . $skipValidationParam
 
         & git add -A
         & git commit -m "Before $branch"
@@ -105,7 +103,7 @@ function CSH-ReviewBranch {
         & git checkout $postBranch
     }
 
-    dotnet $csharpierDllPath format $formatArgument $skipValidationParam --no-cache
+    dotnet $csharpierDllPath format . $skipValidationParam --no-cache
 
     & git add -A
     & git commit -m "After $branch"

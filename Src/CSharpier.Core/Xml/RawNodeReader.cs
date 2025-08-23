@@ -28,7 +28,7 @@ class RawNodeReader
 
         while (xmlReader.Read())
         {
-            if (xmlReader.NodeType == XmlNodeType.Whitespace)
+            if (xmlReader.NodeType is XmlNodeType.Whitespace or XmlNodeType.SignificantWhitespace)
             {
                 continue;
             }
@@ -82,7 +82,7 @@ class RawNodeReader
         return elements;
     }
 
-    private static string? GetValue(XmlReader xmlReader, string lineEnding)
+    private static string GetValue(XmlReader xmlReader, string lineEnding)
     {
         var normalizedTextValue = NewlineRegex
 #if !NETSTANDARD2_0
@@ -90,11 +90,13 @@ class RawNodeReader
 #endif
         .Replace(xmlReader.Value, lineEnding);
 
-        return xmlReader.NodeType is XmlNodeType.Text ? normalizedTextValue
-            : xmlReader.NodeType is XmlNodeType.Comment ? $"<!--{normalizedTextValue}-->"
-            : xmlReader.NodeType is XmlNodeType.CDATA ? $"<![CDATA[{normalizedTextValue}]]>"
-            : xmlReader.NodeType is XmlNodeType.ProcessingInstruction
-                ? $"<?{xmlReader.Name} {normalizedTextValue}?>"
-            : null;
+        return xmlReader.NodeType switch
+        {
+            XmlNodeType.Text => normalizedTextValue,
+            XmlNodeType.Comment => $"<!--{normalizedTextValue}-->",
+            XmlNodeType.CDATA => $"<![CDATA[{normalizedTextValue}]]>",
+            XmlNodeType.ProcessingInstruction => $"<?{xmlReader.Name} {normalizedTextValue}?>",
+            _ => string.Empty,
+        };
     }
 }

@@ -32,6 +32,8 @@ internal class RawAttributeReader(string originalXml, string endOfLine, XmlReade
 
     private string GetRawAttribute(string attributeName)
     {
+        // TODO 1679 a whole lot of exceptions formatting files like
+        //  .\mono\mcs\class\corlib\Documentation\en\System\Boolean.xml
         var lineNumber = this.xmlLineInfo.LineNumber - 1;
         var line = this.lines[lineNumber];
 

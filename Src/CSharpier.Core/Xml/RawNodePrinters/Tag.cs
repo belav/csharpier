@@ -86,7 +86,7 @@ internal static class Tag
 
     public static Doc PrintClosingTagStartMarker(RawNode rawNode, PrintingContext context)
     {
-        return $"</{GetPrefixedElementName(rawNode, context)}";
+        return $"</{rawNode.Name}";
     }
 
     public static Doc PrintClosingTagEnd(RawNode rawNode, PrintingContext context)
@@ -121,22 +121,7 @@ internal static class Tag
             return "<" + rawNode.Name;
         }
 
-        return $"<{GetPrefixedElementName(rawNode, context)}";
-    }
-
-    private static string GetPrefixedElementName(RawNode rawNode, PrintingContext context)
-    {
-        return rawNode.Name;
-        // var prefix = element.GetPrefixOfNamespace(element.Name.Namespace);
-        // if (
-        //     string.IsNullOrEmpty(prefix)
-        //     || !context.Mapping[element].Name.StartsWith(prefix, StringComparison.Ordinal)
-        // )
-        // {
-        //     return element.Name.LocalName;
-        // }
-        //
-        // return $"{prefix}:{element.Name.LocalName}";
+        return $"<{rawNode.Name}";
     }
 
     private static bool NeedsToBorrowNextOpeningTagStartMarker(RawNode rawNode)
