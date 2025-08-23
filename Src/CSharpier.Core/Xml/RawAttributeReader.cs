@@ -6,7 +6,7 @@ internal class RawAttributeReader(string originalXml, string endOfLine, XmlReade
 {
     private readonly IXmlLineInfo xmlLineInfo = (xmlReader as IXmlLineInfo)!;
 
-    private readonly string[] lines = originalXml.Split(["\r\n", "\n"], StringSplitOptions.None);
+    private readonly string[] lines = originalXml.Split(["\n"], StringSplitOptions.None);
 
     public RawAttribute[] GetAttributes()
     {
@@ -33,7 +33,8 @@ internal class RawAttributeReader(string originalXml, string endOfLine, XmlReade
     private string GetRawAttribute(string attributeName)
     {
         // TODO 1679 a whole lot of exceptions formatting files like
-        //  .\mono\mcs\class\corlib\Documentation\en\System\Boolean.xml
+        //  .\mono\mcs\class\corlib\Documentation\en\System\Activator.xml
+        // why is it off by one? can we go backwards til we find it?
         var lineNumber = this.xmlLineInfo.LineNumber - 1;
         var line = this.lines[lineNumber];
 
@@ -46,6 +47,12 @@ internal class RawAttributeReader(string originalXml, string endOfLine, XmlReade
         );
         if (index < 0)
         {
+            throw new Exception(
+                "Could not find attribute "
+                    + attributeName
+                    + " on line "
+                    + this.xmlLineInfo.LineNumber
+            );
             return string.Empty;
         }
 

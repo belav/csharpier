@@ -109,6 +109,16 @@ public class RawNodeReaderTests
     }
 
     [Test]
+    public void Should_Do_Stuff()
+    {
+        var xml = File.ReadAllText(
+            @"c:\projects\csharpier-repos\mono\mcs\class\corlib\Documentation\en\System\Activator.xml"
+        );
+
+        ReadAllNodes(xml);
+    }
+
+    [Test]
     public void Should_Work_With_This_File_And_CRLF()
     {
         var xml = """
