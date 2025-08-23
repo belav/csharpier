@@ -1,6 +1,8 @@
 #pragma warning disable
 
+using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using CSharpier.Core.Xml;
 using FluentAssertions;
 using NUnit.Framework;
@@ -106,6 +108,60 @@ public class RawNodeReaderTests
 
         attribute.Name.Should().Be("Attribute");
         attribute.Value.Should().Be(attributeValue.Replace("\"", "&quot;"));
+    }
+
+    [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
+    [TestCase("<Element Attribute='SomeText\"'/>", "SomeText\"")]
+    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [TestCase(
+        """
+            <Element
+              Attribute=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
+            />
+            """,
+        """
+             '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' 
+            """
+    )]
+    public void XDocument(string xml, string attributeValue)
+    {
+        var xDoc = System.Xml.Linq.XDocument.Parse(xml);
+        var element = xDoc.Root;
+        var actualAttributeValue = element.Attribute("Attribute").Value;
+        actualAttributeValue.Should().Be(attributeValue);
+    }
+
+    [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
+    [TestCase("<Element Attribute='SomeText\"'/>", "SomeText\"")]
+    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [TestCase(
+        """
+            <Element
+              Attribute=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
+            />
+            """,
+        """
+             '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' 
+            """
+    )]
+    public void XmlDocument(string xml, string attributeValue)
+    {
+        var xmlDoc = new XmlDocument();
+        xmlDoc.LoadXml(xml);
+
+        var element = xmlDoc.DocumentElement;
+        var actualAttributeValue = element.GetAttribute("Attribute");
+        actualAttributeValue.Should().Be(attributeValue);
     }
 
     [Test]
