@@ -1,18 +1,30 @@
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace CSharpier.Core.Xml;
 
-internal static class RawNodeReader
+internal static
+#if !NETSTANDARD2_0
+partial
+#endif
+class RawNodeReader
 {
+#if NETSTANDARD2_0
+    private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
+#else
+    [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
+    private static partial Regex NewlineRegex();
+#endif
+
     public static List<RawNode> ReadAllNodes(
         string originalXml,
-        string endOfLine,
+        string lineEnding,
         XmlReader xmlReader
     )
     {
         var elements = new List<RawNode>();
         var elementStack = new Stack<RawNode>();
-        var attributeReader = new RawAttributeReader(originalXml, endOfLine, xmlReader);
+        var attributeReader = new RawAttributeReader(originalXml, lineEnding, xmlReader);
 
         while (xmlReader.Read())
         {
@@ -47,15 +59,7 @@ internal static class RawNodeReader
                     IsEmpty = xmlReader.IsEmptyElement,
                     Attributes =
                         xmlReader.AttributeCount > 0 ? attributeReader.GetAttributes() : [],
-                    // TODO 1679 I think line endings need to be accounted for in here
-                    Value =
-                        xmlReader.NodeType is XmlNodeType.Text ? xmlReader.Value
-                        : xmlReader.NodeType is XmlNodeType.Comment
-                            ? "<!--" + xmlReader.Value + "-->"
-                        : xmlReader.NodeType is XmlNodeType.CDATA
-                            ? "<![CDATA[" + xmlReader.Value + "]]>"
-                        : xmlReader.NodeType is XmlNodeType.ProcessingInstruction ? xmlReader.Value
-                        : null,
+                    Value = GetValue(xmlReader, lineEnding),
                 };
 
                 if (elementStack.Count > 0)
@@ -76,5 +80,21 @@ internal static class RawNodeReader
         }
 
         return elements;
+    }
+
+    private static string? GetValue(XmlReader xmlReader, string lineEnding)
+    {
+        var normalizedTextValue = NewlineRegex
+#if !NETSTANDARD2_0
+            ()
+#endif
+        .Replace(xmlReader.Value, lineEnding);
+
+        return xmlReader.NodeType is XmlNodeType.Text ? normalizedTextValue
+            : xmlReader.NodeType is XmlNodeType.Comment ? $"<!--{normalizedTextValue}-->"
+            : xmlReader.NodeType is XmlNodeType.CDATA ? $"<![CDATA[{normalizedTextValue}]]>"
+            : xmlReader.NodeType is XmlNodeType.ProcessingInstruction
+                ? $"<?{xmlReader.Name} {normalizedTextValue}?>"
+            : null;
     }
 }

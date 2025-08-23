@@ -7,19 +7,8 @@ using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.RawNodePrinters;
 
-internal static
-#if !NETSTANDARD2_0
-partial
-#endif
-class Node
+internal static class Node
 {
-#if NETSTANDARD2_0
-    private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
-#else
-    [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
-    private static partial Regex NewlineRegex();
-#endif
-
     internal static Doc Print(RawNode node, XmlPrintingContext context)
     {
         if (node.NodeType == XmlNodeType.XmlDeclaration)
@@ -59,7 +48,7 @@ class Node
             return Doc.Null;
         }
 
-        if (node.NodeType is XmlNodeType.Text or XmlNodeType.CDATA)
+        if (node.NodeType is XmlNodeType.Text)
         {
             List<Doc> doc =
             [
@@ -77,20 +66,19 @@ class Node
             return Doc.Concat(doc);
         }
 
-        if (node.NodeType is XmlNodeType.Comment or XmlNodeType.ProcessingInstruction)
+        if (
+            node.NodeType
+            is XmlNodeType.Comment
+                or XmlNodeType.ProcessingInstruction
+                or XmlNodeType.CDATA
+        )
         {
-            var result = NewlineRegex
-#if !NETSTANDARD2_0
-                ()
-#endif
-            .Replace(node.Value!, context.Options.LineEnding);
-
-            if (node.NodeType is XmlNodeType.ProcessingInstruction)
+            if (node.Parent is null)
             {
-                result = $"<?{node.Name} {result}?>";
+                return Doc.Concat(node.Value!, Doc.HardLine);
             }
 
-            return result;
+            return node.Value!;
         }
 
         throw new Exception("Need to handle + " + node.NodeType);
@@ -98,17 +86,18 @@ class Node
 
     private static Doc GetEncodedTextValue(RawNode rawNode)
     {
-        if (string.IsNullOrEmpty(rawNode.Value))
+        var textValue = rawNode.Value;
+
+        if (string.IsNullOrEmpty(textValue))
         {
             return Doc.Null;
         }
 
         if (rawNode.NodeType is XmlNodeType.CDATA)
         {
-            return rawNode.Value;
+            return textValue;
         }
 
-        var textValue = rawNode.Value;
         if (rawNode.Parent?.Nodes.First() == rawNode)
         {
             if (textValue[0] is '\r')

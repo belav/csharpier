@@ -2,7 +2,8 @@ function CSH-ReviewBranch {
     param (
         [string]$folder,
         [string]$pathToTestingRepo,
-        [switch]$skipValidation = $true
+        [switch]$skipValidation = $true,
+        [switch]$onlyXml = $false
     )
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
@@ -58,6 +59,11 @@ function CSH-ReviewBranch {
         $skipValidationParam = "--skip-validation"
     }
 
+    $formatArgument = "."
+    if ($onlyXml) {
+        $formatArgument = "**/*.{config,csproj,props,slnx,targets,xaml,xml}"
+    }
+    
     if ($firstRun) {
         Set-Location $repositoryRoot
 #        try  {
@@ -76,11 +82,11 @@ function CSH-ReviewBranch {
         & git reset --hard
         & git checkout -b $preBranch
 
-        dotnet $csharpierDllPath format . $skipValidationParam --no-cache
+        dotnet $csharpierDllPath format $formatArgument $skipValidationParam --no-cache
         # there is some weirdness with a couple files with #if where
         # they need to be formatted twice to get them stable
         # it isn't worth fixing in csharpier, because it only really affects this
-        dotnet $csharpierDllPath format . $skipValidationParam
+        dotnet $csharpierDllPath format $formatArgument $skipValidationParam
 
         & git add -A
         & git commit -m "Before $branch"
@@ -99,7 +105,7 @@ function CSH-ReviewBranch {
         & git checkout $postBranch
     }
 
-    dotnet $csharpierDllPath format . $skipValidationParam --no-cache
+    dotnet $csharpierDllPath format $formatArgument $skipValidationParam --no-cache
 
     & git add -A
     & git commit -m "After $branch"

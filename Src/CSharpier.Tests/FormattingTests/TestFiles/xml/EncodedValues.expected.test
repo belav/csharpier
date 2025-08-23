@@ -1,6 +1,0 @@
-<Project>
-  <Element AttributeLineEndingDecimal="@('', '&#xA;')" />
-  <Element AttributeLineEndingHexidecimal="@('', '&#xA;')" />
-  <Element Attribute="&quot;&quot; &amp;&amp;" />
-  <Element Attribute="@(MyItems->'MyItems has %(Identity)', ', ')" />
-</Project>

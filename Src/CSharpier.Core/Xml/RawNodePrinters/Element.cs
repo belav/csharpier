@@ -67,13 +67,14 @@ internal static class Element
 
         Doc PrintElementContent()
         {
-            var elementContent = rawNode.IsEmpty
-                ? Doc.Null
-                : Doc.Concat(
-                    ForceBreakContent(rawNode) ? Doc.BreakParent : "",
-                    PrintChildrenDoc(),
-                    PrintLineAfterChildren()
-                );
+            var elementContent =
+                rawNode.IsEmpty || rawNode.Nodes.Count == 0
+                    ? Doc.Null
+                    : Doc.Concat(
+                        ForceBreakContent(rawNode) ? Doc.BreakParent : "",
+                        PrintChildrenDoc(),
+                        PrintLineAfterChildren()
+                    );
 
             return elementContent;
         }
