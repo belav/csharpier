@@ -20,7 +20,8 @@ public static class XmlFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var elements = RawNodeReader.ReadAllNodes(xml, lineEnding);
+            var elements = new CustomXmlReader(xml, lineEnding).ReadAll();
+            // RawNodeReader.ReadAllNodes(xml, lineEnding);
             var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions

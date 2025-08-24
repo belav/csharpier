@@ -305,6 +305,8 @@ public class RawNodeReaderTests
 
     private static List<RawNode> ReadAllNodes(string xml)
     {
-        return RawNodeReader.ReadAllNodes(xml, Environment.NewLine);
+        return new CustomXmlReader(xml, Environment.NewLine).ReadAll();
+
+        //return RawNodeReader.ReadAllNodes(xml, Environment.NewLine);
     }
 }
