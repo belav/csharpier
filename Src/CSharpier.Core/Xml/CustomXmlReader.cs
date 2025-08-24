@@ -8,7 +8,7 @@ internal
 #if !NETSTANDARD2_0
 partial
 #endif
-class CustomXmlReader
+class BetterRawNodeReader
 {
     private readonly string originalXml;
     private readonly string lineEnding;
@@ -23,8 +23,7 @@ class CustomXmlReader
     private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
 #endif
 
-    // TODO 1679 if this stays, clean it all up
-    public CustomXmlReader(string xml, string lineEnding)
+    private BetterRawNodeReader(string xml, string lineEnding)
     {
         this.originalXml = NewlineRegex
 #if !NETSTANDARD2_0
@@ -32,14 +31,18 @@ class CustomXmlReader
 #endif
         .Replace(xml, "\n");
         this.lineEnding = lineEnding;
-        this.position = 0;
     }
 
-    public List<RawNode> ReadAll()
+    public static List<RawNode> ReadAll(string originalXml, string lineEnding)
+    {
+        var reader = new BetterRawNodeReader(originalXml, lineEnding);
+        return reader.ReadAll();
+    }
+
+    private List<RawNode> ReadAll()
     {
         while (this.position < this.originalXml.Length)
         {
-            // TODO 1679 I think this is what is causing most of the issues, trimming off whitespace
             this.SkipWhitespace();
             if (this.position >= this.originalXml.Length)
             {
@@ -61,7 +64,6 @@ class CustomXmlReader
 
     private void SkipWhitespace()
     {
-        // TODO 1679 I think this is causing most of the issues by trimming off whitespace on text nodes
         while (
             this.position < this.originalXml.Length
             && char.IsWhiteSpace(this.originalXml[this.position])
@@ -140,14 +142,7 @@ class CustomXmlReader
             this.position++;
         }
 
-        var node = new RawNode
-        {
-            Name = "",
-            NodeType = XmlNodeType.Comment,
-            IsEmpty = true,
-            Attributes = [],
-            Value = $"<!--{content}-->",
-        };
+        var node = new RawNode { NodeType = XmlNodeType.Comment, Value = $"<!--{content}-->" };
 
         this.AddNode(node);
     }
@@ -176,14 +171,7 @@ class CustomXmlReader
             this.position++;
         }
 
-        var node = new RawNode
-        {
-            Name = "",
-            NodeType = XmlNodeType.CDATA,
-            IsEmpty = true,
-            Attributes = [],
-            Value = $"<![CDATA[{content}]]>",
-        };
+        var node = new RawNode { NodeType = XmlNodeType.CDATA, Value = $"<![CDATA[{content}]]>" };
 
         this.AddNode(node);
     }
@@ -219,8 +207,6 @@ class CustomXmlReader
         {
             Name = name,
             NodeType = XmlNodeType.ProcessingInstruction,
-            IsEmpty = true,
-            Attributes = [],
             Value = $"<?{name} {content}?>",
         };
 
@@ -289,6 +275,12 @@ class CustomXmlReader
     private void ParseText()
     {
         var content = new StringBuilder();
+        // we skip all whitespace in the main read, so for parsing text go backwards until we find the actual start
+        while (this.position >= 0 && this.originalXml[this.position - 1] != '>')
+        {
+            this.position--;
+        }
+
         while (this.position < this.originalXml.Length && this.originalXml[this.position] != '<')
         {
             if (this.originalXml[this.position] == '\n')
@@ -302,20 +294,14 @@ class CustomXmlReader
             this.position++;
         }
 
-        var text = content.ToString().Trim();
-        if (!string.IsNullOrEmpty(text))
+        var text = content.ToString();
+        if (string.IsNullOrEmpty(text))
         {
-            var node = new RawNode
-            {
-                Name = "",
-                NodeType = XmlNodeType.Text,
-                IsEmpty = true,
-                Attributes = [],
-                Value = text,
-            };
-
-            this.AddNode(node);
+            return;
         }
+        var node = new RawNode { NodeType = XmlNodeType.Text, Value = text };
+
+        this.AddNode(node);
     }
 
     private List<RawAttribute> ParseAttributes()
@@ -376,13 +362,13 @@ class CustomXmlReader
     {
         if (this.position >= this.originalXml.Length)
         {
-            return "";
+            return string.Empty;
         }
 
         var quote = this.originalXml[this.position];
         if (quote is not ('"' or '\''))
         {
-            return "";
+            return string.Empty;
         }
 
         this.position++; // Skip opening quote
@@ -413,8 +399,6 @@ class CustomXmlReader
     {
         while (this.position < this.originalXml.Length && this.originalXml[this.position] != target)
         {
-            if (this.originalXml[this.position] == '\n') { }
-            else { }
             this.position++;
         }
 
@@ -492,14 +476,7 @@ class CustomXmlReader
             this.position++;
         }
 
-        var node = new RawNode
-        {
-            Name = "",
-            NodeType = XmlNodeType.DocumentType,
-            IsEmpty = true,
-            Attributes = [],
-            Value = content.ToString(),
-        };
+        var node = new RawNode { NodeType = XmlNodeType.DocumentType, Value = content.ToString() };
 
         this.AddNode(node);
     }

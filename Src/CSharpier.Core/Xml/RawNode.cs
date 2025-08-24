@@ -8,10 +8,10 @@ internal class RawNode
     public RawNode? Parent { get; set; }
     public RawNode? PreviousNode { get; set; }
     public RawNode? NextNode { get; set; }
-    public required string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
     public required XmlNodeType NodeType { get; set; }
-    public required bool IsEmpty { get; set; }
-    public required RawAttribute[] Attributes { get; set; }
+    public bool IsEmpty { get; set; }
+    public RawAttribute[] Attributes { get; set; } = [];
     public List<RawNode> Nodes { get; set; } = [];
     public string Value { get; set; } = string.Empty;
 

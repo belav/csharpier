@@ -10,6 +10,7 @@
     <PackageVersion Include="FluentAssertions" Version="6.12.1" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="GitignoreParserNet" Version="0.2.0.14" />
+    <PackageVersion Include="GuiLabs.Language.Xml" Version="1.2.93" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.2" />
     <PackageVersion Include="LovettSoftware.XmlDiff" Version="1.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="8.0.8" />

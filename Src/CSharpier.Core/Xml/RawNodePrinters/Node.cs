@@ -35,7 +35,7 @@ internal static class Node
 
         if (node.NodeType == XmlNodeType.DocumentType)
         {
-            return $"<!DOCTYPE {node.Name}>".Replace("[]", string.Empty);
+            return Doc.Concat(node.Value, Doc.HardLine);
         }
 
         if (node.NodeType == XmlNodeType.Element)
@@ -53,7 +53,7 @@ internal static class Node
             List<Doc> doc =
             [
                 Tag.PrintOpeningTagPrefix(node),
-                GetEncodedTextValue(node),
+                GetTextValue(node),
                 Tag.PrintClosingTagSuffix(node, context),
             ];
 
@@ -84,7 +84,7 @@ internal static class Node
         throw new Exception("Need to handle + " + node.NodeType);
     }
 
-    private static Doc GetEncodedTextValue(RawNode rawNode)
+    private static Doc GetTextValue(RawNode rawNode)
     {
         var textValue = rawNode.Value;
 
@@ -111,6 +111,6 @@ internal static class Node
             }
         }
 
-        return new XElement("EncodeText", textValue).LastNode!.ToString();
+        return textValue;
     }
 }

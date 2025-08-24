@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using CSharpier.Core.Xml;
 using FluentAssertions;
+using Microsoft.Language.Xml;
 using NUnit.Framework;
 
 namespace CSharpier.Tests;
@@ -108,6 +109,37 @@ public class RawNodeReaderTests
 
         attribute.Name.Should().Be("Attribute");
         attribute.Value.Should().Be(attributeValue.Replace("\"", "&quot;"));
+    }
+
+    [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
+    [TestCase("<Element Attribute='SomeText\"'/>", "SomeText\"")]
+    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [TestCase(
+        """
+            <Element
+              Attribute=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
+            />
+            """,
+        """
+             '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' 
+            """
+    )]
+    public void XmlParser(string xml, string attributeValue)
+    {
+        var root = Parser.ParseText(xml);
+        var node = string.Join(
+            string.Empty,
+            (root.Body as XmlEmptyElementSyntax)
+                .AttributesNode.First()
+                .ValueNode.TextTokens.Select(o => (o as XmlTextTokenSyntax).Value)
+        );
+
+        node.Should().Be(attributeValue);
     }
 
     [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
@@ -305,8 +337,6 @@ public class RawNodeReaderTests
 
     private static List<RawNode> ReadAllNodes(string xml)
     {
-        return new CustomXmlReader(xml, Environment.NewLine).ReadAll();
-
-        //return RawNodeReader.ReadAllNodes(xml, Environment.NewLine);
+        return BetterRawNodeReader.ReadAll(xml, Environment.NewLine);
     }
 }

@@ -1,8 +1,14 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿#pragma warning disable
+
+using System.Xml;
+using System.Xml.Linq;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
+using CSharpier.Core.Xml;
 using Microsoft.CodeAnalysis;
+using Microsoft.Language.Xml;
 
 namespace CSharpier.Benchmarks;
 
@@ -10,43 +16,86 @@ namespace CSharpier.Benchmarks;
 public class Benchmarks
 {
     [Benchmark]
-    public void Default_CodeFormatter_Tests()
+    public void XmlDocument_Parse()
     {
-        CSharpFormatter
-            .FormatAsync(this.largeTestCode, new PrinterOptions(Formatter.CSharp))
-            .GetAwaiter()
-            .GetResult();
+        var root = new XmlDocument();
+        root.LoadXml(this.largeXmlCode);
     }
 
     [Benchmark]
-    public void Default_CodeFormatter_Complex()
+    public void XDocument_Parse()
     {
-        CSharpFormatter
-            .FormatAsync(this.largeComplexCode, new PrinterOptions(Formatter.CSharp))
-            .GetAwaiter()
-            .GetResult();
+        var root = XDocument.Parse(this.largeXmlCode);
     }
 
     [Benchmark]
-    public void Default_SyntaxNodeComparer()
+    public void XmlParser_Parse()
     {
-        var syntaxNodeComparer = new SyntaxNodeComparer(
-            this.code,
-            this.code,
-            false,
-            false,
-            false,
-            SourceCodeKind.Regular,
-            CancellationToken.None
+        var root = Parser.ParseText(this.largeXmlCode);
+    }
+
+    [Benchmark]
+    public void CustomParser_Parse()
+    {
+        var root = BetterRawNodeReader.ReadAll(this.largeXmlCode, Environment.NewLine);
+    }
+
+    [Benchmark]
+    public void XmlReader_Parse()
+    {
+        using var xmlReader = XmlReader.Create(
+            new StringReader(this.largeXmlCode),
+            new XmlReaderSettings { IgnoreWhitespace = false }
         );
-        syntaxNodeComparer.CompareSource();
+
+        while (xmlReader.Read())
+        {
+            //
+        }
     }
 
-    [Benchmark]
-    public void IsCodeBasicallyEqual_SyntaxNodeComparer()
-    {
-        DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
-    }
+    // [Benchmark]
+    // public void Default_CodeFormatter_Tests()
+    // {
+    //     CSharpFormatter
+    //         .FormatAsync(this.largeTestCode, new PrinterOptions(Formatter.CSharp))
+    //         .GetAwaiter()
+    //         .GetResult();
+    // }
+    //
+    // [Benchmark]
+    // public void Default_CodeFormatter_Complex()
+    // {
+    //     CSharpFormatter
+    //         .FormatAsync(this.largeComplexCode, new PrinterOptions(Formatter.CSharp))
+    //         .GetAwaiter()
+    //         .GetResult();
+    // }
+    //
+    // [Benchmark]
+    // public void Default_SyntaxNodeComparer()
+    // {
+    //     var syntaxNodeComparer = new SyntaxNodeComparer(
+    //         this.code,
+    //         this.code,
+    //         false,
+    //         false,
+    //         false,
+    //         SourceCodeKind.Regular,
+    //         CancellationToken.None
+    //     );
+    //     syntaxNodeComparer.CompareSource();
+    // }
+    //
+    // [Benchmark]
+    // public void IsCodeBasicallyEqual_SyntaxNodeComparer()
+    // {
+    //     DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
+    // }
+
+    private readonly string largeXmlCode = File.ReadAllText(
+        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Type.xml")
+    );
 
     private readonly string largeTestCode = File.ReadAllText(
         Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/PathAxesTests.cs")
