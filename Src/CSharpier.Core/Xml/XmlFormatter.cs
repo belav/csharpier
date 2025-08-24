@@ -1,7 +1,4 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Xml;
-using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 using Node = CSharpier.Core.Xml.RawNodePrinters.Node;
@@ -15,13 +12,14 @@ public static class XmlFormatter
         return Format(xml, (options ?? new()).ToPrinterOptions());
     }
 
+    // TODO 1679
+    // some edge cases to deal with
     internal static CodeFormatterResult Format(string xml, PrinterOptions printerOptions)
     {
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var elements = BetterRawNodeReader.ReadAll(xml, lineEnding);
-            // RawNodeReader.ReadAllNodes(xml, lineEnding);
+            var elements = RawNodeReader.ReadAll(xml, lineEnding);
             var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions
@@ -46,7 +44,7 @@ public static class XmlFormatter
                 DocTree = printerOptions.IncludeDocTree
                     ? DocSerializer.Serialize(doc)
                     : string.Empty,
-                // TODO 1679 use xdocument or something?
+                // TODO 1679 spit out version of our thing?
                 AST = string.Empty,
             };
         }

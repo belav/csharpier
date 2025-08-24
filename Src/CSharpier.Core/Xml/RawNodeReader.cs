@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -7,209 +8,481 @@ internal
 #if !NETSTANDARD2_0
 partial
 #endif
-class RawNodeReader(string originalXml, string lineEnding, XmlReader xmlReader)
+class RawNodeReader
 {
-    private readonly IXmlLineInfo xmlLineInfo = (xmlReader as IXmlLineInfo)!;
+    private readonly string originalXml;
+    private readonly string lineEnding;
+    private int position;
+    private readonly Stack<RawNode> elementStack = new();
+    private readonly List<RawNode> rootNodes = [];
 
-    private readonly string[] lines = originalXml
-        .Split(["\n"], StringSplitOptions.None)
-        .Prepend("")
-        .ToArray();
-
-#if NETSTANDARD2_0
-    private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
-#else
+#if !NETSTANDARD2_0
     [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
     private static partial Regex NewlineRegex();
+#else
+    private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
 #endif
 
-    public static List<RawNode> ReadAllNodes(string originalXml, string lineEnding)
+    private RawNodeReader(string xml, string lineEnding)
     {
-        // xml reader can get confused about line numbers if we don't normalize them
-        originalXml = NewlineRegex
+        var x = 1;
+        this.originalXml = NewlineRegex
 #if !NETSTANDARD2_0
             ()
 #endif
-        .Replace(originalXml, "\n");
-
-        using var xmlReader = XmlReader.Create(
-            new StringReader(originalXml),
-            new XmlReaderSettings { IgnoreWhitespace = false }
-        );
-
-        var thing = new RawNodeReader(originalXml, lineEnding, xmlReader);
-        return thing.ReadStuff();
+        .Replace(xml, "\n");
+        this.lineEnding = lineEnding;
     }
 
-    public List<RawNode> ReadStuff()
+    public static List<RawNode> ReadAll(string originalXml, string lineEnding)
     {
-        var elements = new List<RawNode>();
-        var elementStack = new Stack<RawNode>();
+        var reader = new RawNodeReader(originalXml, lineEnding);
+        return reader.ReadAll();
+    }
 
-        while (xmlReader.Read())
+    private List<RawNode> ReadAll()
+    {
+        while (this.position < this.originalXml.Length)
         {
-            if (xmlReader.NodeType is XmlNodeType.Whitespace or XmlNodeType.SignificantWhitespace)
+            this.SkipWhitespace();
+            if (this.position >= this.originalXml.Length)
             {
-                continue;
+                break;
             }
-            if (xmlReader.NodeType == XmlNodeType.EndElement && elementStack.Count > 0)
-            {
-                var theElement = elementStack.Pop();
-                for (var x = 0; x < theElement.Nodes.Count; x++)
-                {
-                    if (x > 0)
-                    {
-                        theElement.Nodes[x - 1].NextNode = theElement.Nodes[x];
-                        theElement.Nodes[x].PreviousNode = theElement.Nodes[x - 1];
-                    }
 
-                    if (x == theElement.Nodes.Count - 2)
-                    {
-                        theElement.Nodes[x].NextNode = theElement.Nodes[x + 1];
-                        theElement.Nodes[x + 1].PreviousNode = theElement.Nodes[x];
-                    }
-                }
+            if (this.originalXml[this.position] == '<')
+            {
+                this.ParseTag();
             }
             else
             {
-                var lineNumber = this.xmlLineInfo.LineNumber;
-
-                if (xmlReader.NodeType == XmlNodeType.Element)
+                if (this.rootNodes.Count == 0)
                 {
-                    DebugLogger.Log(
-                        "Element "
-                            + xmlReader.Name
-                            + " Position: "
-                            + this.xmlLineInfo.LineNumber
-                            + ":"
-                            + this.xmlLineInfo.LinePosition
-                    );
-
-                    var line = this.lines[lineNumber];
-                    while (
-                        this.xmlLineInfo.LinePosition > line.Length
-                        || !line[(this.xmlLineInfo.LinePosition - 1)..]
-                            .StartsWith(xmlReader.Name, StringComparison.InvariantCulture)
-                    )
-                    {
-                        lineNumber--;
-                        line = this.lines[lineNumber];
-                    }
+                    throw new XmlException("There do not appear to be any root nodes");
                 }
-
-                var element = new RawNode
-                {
-                    Name = xmlReader.Name,
-                    NodeType = xmlReader.NodeType,
-                    IsEmpty = xmlReader.IsEmptyElement,
-                    Attributes = xmlReader.AttributeCount > 0 ? this.GetAttributes(lineNumber) : [],
-                    Value = GetValue(xmlReader, lineEnding),
-                };
-
-                if (elementStack.Count > 0)
-                {
-                    element.Parent = elementStack.Peek();
-                    elementStack.Peek().Nodes.Add(element);
-                }
-                else
-                {
-                    elements.Add(element);
-                }
-
-                if (xmlReader.NodeType == XmlNodeType.Element && !element.IsEmpty)
-                {
-                    elementStack.Push(element);
-                }
+                this.ParseText();
             }
         }
 
-        return elements;
+        return this.rootNodes;
     }
 
-    private static string GetValue(XmlReader xmlReader, string lineEnding)
+    private void SkipWhitespace()
     {
-        var normalizedTextValue = NewlineRegex
-#if !NETSTANDARD2_0
-            ()
-#endif
-        .Replace(xmlReader.Value, lineEnding);
-
-        return xmlReader.NodeType switch
+        while (
+            this.position < this.originalXml.Length
+            && char.IsWhiteSpace(this.originalXml[this.position])
+        )
         {
-            XmlNodeType.Text => normalizedTextValue,
-            XmlNodeType.Comment => $"<!--{normalizedTextValue}-->",
-            XmlNodeType.CDATA => $"<![CDATA[{normalizedTextValue}]]>",
-            XmlNodeType.ProcessingInstruction => $"<?{xmlReader.Name} {normalizedTextValue}?>",
-            _ => string.Empty,
-        };
+            this.position++;
+        }
     }
 
-    private RawAttribute[] GetAttributes(int lineNumber)
+    private void ParseTag()
     {
-        xmlReader.MoveToFirstAttribute();
-
-        var result = new RawAttribute[xmlReader.AttributeCount];
-
-        string GetRawAttribute(string attributeName)
+        if (this.position + 1 >= this.originalXml.Length)
         {
-            var line = this.lines[lineNumber];
+            return;
+        }
 
-            while (
-                this.xmlLineInfo.LinePosition > line.Length
-                || !line[(this.xmlLineInfo.LinePosition - 1)..]
-                    .StartsWith(attributeName, StringComparison.InvariantCulture)
+        if (this.originalXml[this.position + 1] == '!')
+        {
+            if (
+                this.position + 4 < this.originalXml.Length
+                && this.originalXml.Substring(this.position, 4) == "<!--"
             )
             {
-                lineNumber++;
-                line = this.lines[lineNumber];
+                this.ParseComment();
             }
-
-            var index = line.IndexOf(
-                attributeName + "=",
-                this.xmlLineInfo.LinePosition - 1,
-                StringComparison.Ordinal
-            );
-
-            var firstQuote = line.IndexOfAny(['"', '\''], index);
-            var quoteCharacter = line[firstQuote];
-            firstQuote += 1;
-
-            var endQuote = line.IndexOf(quoteCharacter, firstQuote);
-            // attribute on a single line, return in
-            if (endQuote > 0)
+            else if (
+                this.position + 9 < this.originalXml.Length
+                && this.originalXml.Substring(this.position, 9) == "<![CDATA["
+            )
             {
-                return line[firstQuote..endQuote];
+                this.ParseCData();
             }
-
-            lineNumber++;
-            var result = line[firstQuote..];
-            var nextLine = this.lines[lineNumber];
-            while (endQuote < 0)
+            else if (
+                this.position + 9 < this.originalXml.Length
+                && this.originalXml.Substring(this.position, 9) == "<!DOCTYPE"
+            )
             {
-                result += lineEnding + nextLine;
-                lineNumber++;
-                nextLine = this.lines[lineNumber];
-                endQuote = nextLine.IndexOf('"');
+                this.ParseDocType();
             }
-
-            result += lineEnding + nextLine[..endQuote];
-
-            return result;
         }
-
-        for (var x = 0; x < xmlReader.AttributeCount; x++)
+        else if (this.originalXml[this.position + 1] == '?')
         {
-            result[x] = new RawAttribute
-            {
-                Name = xmlReader.Name,
-                Value = GetRawAttribute(xmlReader.Name).Replace("\"", "&quot;"),
-            };
+            this.ParseProcessingInstruction();
+        }
+        else if (this.originalXml[this.position + 1] == '/')
+        {
+            this.ParseEndElement();
+        }
+        else
+        {
+            this.ParseStartElement();
+        }
+    }
 
-            xmlReader.MoveToNextAttribute();
+    private void ParseComment()
+    {
+        this.position += 4; // Skip "<!--"
+
+        var content = new StringBuilder();
+        while (this.position + 2 < this.originalXml.Length)
+        {
+            if (this.originalXml.Substring(this.position, 3) == "-->")
+            {
+                this.position += 3;
+                break;
+            }
+
+            if (this.originalXml[this.position] == '\n')
+            {
+                content.Append(this.lineEnding);
+            }
+            else
+            {
+                content.Append(this.originalXml[this.position]);
+            }
+            this.position++;
         }
 
-        xmlReader.MoveToElement();
+        var node = new RawNode { NodeType = XmlNodeType.Comment, Value = $"<!--{content}-->" };
 
-        return result;
+        this.AddNode(node);
+    }
+
+    private void ParseCData()
+    {
+        this.position += 9; // Skip "<![CDATA["
+
+        var content = new StringBuilder();
+        while (this.position + 2 < this.originalXml.Length)
+        {
+            if (this.originalXml.Substring(this.position, 3) == "]]>")
+            {
+                this.position += 3;
+                break;
+            }
+
+            if (this.originalXml[this.position] == '\n')
+            {
+                content.Append(this.lineEnding);
+            }
+            else
+            {
+                content.Append(this.originalXml[this.position]);
+            }
+            this.position++;
+        }
+
+        var node = new RawNode { NodeType = XmlNodeType.CDATA, Value = $"<![CDATA[{content}]]>" };
+
+        this.AddNode(node);
+    }
+
+    private void ParseProcessingInstruction()
+    {
+        this.position += 2; // Skip "<?"
+
+        var name = this.ReadName();
+        this.SkipWhitespace();
+
+        var content = new StringBuilder();
+        while (this.position + 1 < this.originalXml.Length)
+        {
+            if (this.originalXml.Substring(this.position, 2) == "?>")
+            {
+                this.position += 2;
+                break;
+            }
+
+            if (this.originalXml[this.position] == '\n')
+            {
+                content.Append(this.lineEnding);
+            }
+            else
+            {
+                content.Append(this.originalXml[this.position]);
+            }
+            this.position++;
+        }
+
+        var node = new RawNode
+        {
+            Name = name,
+            NodeType = XmlNodeType.ProcessingInstruction,
+            Value = $"<?{name} {content}?>",
+        };
+
+        this.AddNode(node);
+    }
+
+    private void ParseEndElement()
+    {
+        this.position += 2; // Skip "</"
+
+        this.ReadName();
+        this.SkipToChar('>');
+
+        if (this.elementStack.Count > 0)
+        {
+            var element = this.elementStack.Pop();
+            for (var x = 0; x < element.Nodes.Count; x++)
+            {
+                if (x > 0)
+                {
+                    element.Nodes[x - 1].NextNode = element.Nodes[x];
+                    element.Nodes[x].PreviousNode = element.Nodes[x - 1];
+                }
+
+                if (x == element.Nodes.Count - 2)
+                {
+                    element.Nodes[x].NextNode = element.Nodes[x + 1];
+                    element.Nodes[x + 1].PreviousNode = element.Nodes[x];
+                }
+            }
+        }
+    }
+
+    private void ParseStartElement()
+    {
+        this.position++; // Skip "<"
+
+        var name = this.ReadName();
+        var attributes = this.ParseAttributes();
+
+        var isEmpty = false;
+        if (this.position < this.originalXml.Length && this.originalXml[this.position] == '/')
+        {
+            isEmpty = true;
+            this.position++;
+        }
+
+        this.SkipToChar('>');
+
+        var node = new RawNode
+        {
+            Name = name,
+            NodeType = XmlNodeType.Element,
+            IsEmpty = isEmpty,
+            Attributes = attributes.ToArray(),
+        };
+
+        this.AddNode(node);
+
+        if (!isEmpty)
+        {
+            this.elementStack.Push(node);
+        }
+    }
+
+    private void ParseText()
+    {
+        var content = new StringBuilder();
+        // we skip all whitespace in the main read, so for parsing text go backwards until we find the actual start
+        while (this.position >= 0 && this.originalXml[this.position - 1] != '>')
+        {
+            this.position--;
+        }
+
+        while (this.position < this.originalXml.Length && this.originalXml[this.position] != '<')
+        {
+            if (this.originalXml[this.position] == '\n')
+            {
+                content.Append(this.lineEnding);
+            }
+            else
+            {
+                content.Append(this.originalXml[this.position]);
+            }
+            this.position++;
+        }
+
+        var text = content.ToString();
+        if (string.IsNullOrEmpty(text))
+        {
+            return;
+        }
+        var node = new RawNode { NodeType = XmlNodeType.Text, Value = text };
+
+        this.AddNode(node);
+    }
+
+    private List<RawAttribute> ParseAttributes()
+    {
+        var attributes = new List<RawAttribute>();
+
+        while (this.position < this.originalXml.Length)
+        {
+            this.SkipWhitespace();
+            if (
+                this.position >= this.originalXml.Length
+                || this.originalXml[this.position] == '>'
+                || this.originalXml[this.position] == '/'
+            )
+            {
+                break;
+            }
+
+            var attrName = this.ReadName();
+            this.SkipWhitespace();
+
+            if (this.position < this.originalXml.Length && this.originalXml[this.position] == '=')
+            {
+                this.position++;
+                this.SkipWhitespace();
+
+                var attrValue = this.ReadQuotedValue();
+                attributes.Add(
+                    new RawAttribute { Name = attrName, Value = attrValue.Replace("\"", "&quot;") }
+                );
+            }
+        }
+
+        return attributes;
+    }
+
+    private string ReadName()
+    {
+        var name = new StringBuilder();
+        while (
+            this.position < this.originalXml.Length
+            && (
+                char.IsLetterOrDigit(this.originalXml[this.position])
+                || this.originalXml[this.position] == '_'
+                || this.originalXml[this.position] == ':'
+                || this.originalXml[this.position] == '-'
+                || this.originalXml[this.position] == '.'
+            )
+        )
+        {
+            name.Append(this.originalXml[this.position]);
+            this.position++;
+        }
+        return name.ToString();
+    }
+
+    private string ReadQuotedValue()
+    {
+        if (this.position >= this.originalXml.Length)
+        {
+            return string.Empty;
+        }
+
+        var quote = this.originalXml[this.position];
+        if (quote is not ('"' or '\''))
+        {
+            return string.Empty;
+        }
+
+        this.position++; // Skip opening quote
+
+        var value = new StringBuilder();
+        while (this.position < this.originalXml.Length && this.originalXml[this.position] != quote)
+        {
+            if (this.originalXml[this.position] == '\n')
+            {
+                value.Append(this.lineEnding);
+            }
+            else
+            {
+                value.Append(this.originalXml[this.position]);
+            }
+            this.position++;
+        }
+
+        if (this.position < this.originalXml.Length)
+        {
+            this.position++; // Skip closing quote
+        }
+
+        return value.ToString();
+    }
+
+    private void SkipToChar(char target)
+    {
+        while (this.position < this.originalXml.Length && this.originalXml[this.position] != target)
+        {
+            this.position++;
+        }
+
+        if (this.position < this.originalXml.Length)
+        {
+            this.position++; // Skip the target character
+        }
+    }
+
+    private void AddNode(RawNode node)
+    {
+        if (this.elementStack.Count > 0)
+        {
+            var parent = this.elementStack.Peek();
+            node.Parent = parent;
+            parent.Nodes.Add(node);
+        }
+        else
+        {
+            this.rootNodes.Add(node);
+        }
+    }
+
+    private void ParseDocType()
+    {
+        this.position += 9; // Skip "<!DOCTYPE"
+
+        var content = new StringBuilder();
+        content.Append("<!DOCTYPE");
+
+        var bracketCount = 0;
+        var inQuotes = false;
+        var quoteChar = '\0';
+
+        while (this.position < this.originalXml.Length)
+        {
+            var ch = this.originalXml[this.position];
+
+            if (!inQuotes)
+            {
+                if (ch is '"' or '\'')
+                {
+                    inQuotes = true;
+                    quoteChar = ch;
+                }
+                else if (ch == '[')
+                {
+                    bracketCount++;
+                }
+                else if (ch == ']')
+                {
+                    bracketCount--;
+                }
+                else if (ch == '>' && bracketCount == 0)
+                {
+                    content.Append(ch);
+                    this.position++;
+                    break;
+                }
+            }
+            else if (ch == quoteChar)
+            {
+                inQuotes = false;
+                quoteChar = '\0';
+            }
+
+            if (ch == '\n')
+            {
+                content.Append(this.lineEnding);
+            }
+            else
+            {
+                content.Append(ch);
+            }
+            this.position++;
+        }
+
+        var node = new RawNode { NodeType = XmlNodeType.DocumentType, Value = content.ToString() };
+
+        this.AddNode(node);
     }
 }

@@ -39,32 +39,7 @@ internal static class Tag
 
     public static Doc PrintOpeningTagPrefix(RawNode rawNode)
     {
-        return NeedsToBorrowParentOpeningTagEndMarker(rawNode) ? ">"
-            : NeedsToBorrowPrevClosingTagEndMarker(rawNode)
-                ? PrintClosingTagEndMarker(rawNode.PreviousNode!)
-            : "";
-    }
-
-    private static bool NeedsToBorrowPrevClosingTagEndMarker(RawNode node)
-    {
-        /*
-         *     <p></p
-         *     >123
-         *     ^
-         *
-         *     <p></p
-         *     ><a
-         *     ^
-         */
-        return node.PreviousNode is not null
-            // && node.prev.type !== "docType"
-            //    && node.type !== "angularControlFlowBlock"
-            && node.PreviousNode.NodeType is not (XmlNodeType.Text or XmlNodeType.Comment)
-            // && node.isLeadingSpaceSensitive
-            // TODO 1679 kill this whole method? we always return false
-            && !true
-        // && !node.hasLeadingSpaces
-        ;
+        return NeedsToBorrowParentOpeningTagEndMarker(rawNode) ? ">" : "";
     }
 
     public static Doc PrintClosingTag(RawNode rawNode, PrintingContext context)
@@ -91,13 +66,10 @@ internal static class Tag
 
     public static Doc PrintClosingTagEnd(RawNode rawNode, PrintingContext context)
     {
-        return
-            rawNode.NextNode is not null && NeedsToBorrowPrevClosingTagEndMarker(rawNode.NextNode)
-            ? Doc.Null
-            : Doc.Concat(
-                PrintClosingTagEndMarker(rawNode),
-                PrintClosingTagSuffix(rawNode, context)
-            );
+        return Doc.Concat(
+            PrintClosingTagEndMarker(rawNode),
+            PrintClosingTagSuffix(rawNode, context)
+        );
     }
 
     public static Doc PrintClosingTagEndMarker(RawNode rawNode)

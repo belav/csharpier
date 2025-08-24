@@ -2,7 +2,6 @@ using System.Xml;
 
 namespace CSharpier.Core.Xml;
 
-// TODO 1679 call this RawNode instead?
 internal class RawNode
 {
     public RawNode? Parent { get; set; }
