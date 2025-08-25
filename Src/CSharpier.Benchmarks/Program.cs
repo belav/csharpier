@@ -1,7 +1,10 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Xml;
+using System.Xml.Linq;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
+using CSharpier.Core.Xml;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Benchmarks;
@@ -9,6 +12,39 @@ namespace CSharpier.Benchmarks;
 [MemoryDiagnoser]
 public class Benchmarks
 {
+    [Benchmark]
+    public void XmlDocument_Parse()
+    {
+        var root = new XmlDocument();
+        root.LoadXml(this.largeXmlCode);
+    }
+
+    [Benchmark]
+    public void XDocument_Parse()
+    {
+        _ = XDocument.Parse(this.largeXmlCode);
+    }
+
+    [Benchmark]
+    public void CustomParser_Parse()
+    {
+        _ = RawNodeReader.ParseXml(this.largeXmlCode, Environment.NewLine);
+    }
+
+    [Benchmark]
+    public void XmlReader_Parse()
+    {
+        using var xmlReader = XmlReader.Create(
+            new StringReader(this.largeXmlCode),
+            new XmlReaderSettings { IgnoreWhitespace = false }
+        );
+
+        while (xmlReader.Read())
+        {
+            //
+        }
+    }
+
     [Benchmark]
     public void Default_CodeFormatter_Tests()
     {
@@ -47,6 +83,10 @@ public class Benchmarks
     {
         DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
     }
+
+    private readonly string largeXmlCode = File.ReadAllText(
+        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Type.xml")
+    );
 
     private readonly string largeTestCode = File.ReadAllText(
         Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/PathAxesTests.cs")

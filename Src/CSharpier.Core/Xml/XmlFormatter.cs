@@ -1,9 +1,7 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Xml;
-using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
-using Node = CSharpier.Core.Xml.XNodePrinters.Node;
+using CSharpier.Core.DocTypes;
+using Node = CSharpier.Core.Xml.RawNodePrinters.Node;
 
 namespace CSharpier.Core.Xml;
 
@@ -14,15 +12,41 @@ public static class XmlFormatter
         return Format(xml, (options ?? new()).ToPrinterOptions());
     }
 
+    // TODO 1679 ignore all invalid xml in the repo so that we can make sure we don't screw up any
+    // TODO 1679 some edge cases to deal with - https://github.com/belav/csharpier-repos/pull/150/files
+    // cdata on its own line.. okay or not?
+    // https://github.com/belav/csharpier-repos/pull/150/files#diff-aaa8f7c465894fd87e55f47256d3b6bdfb011d6bb8f9c5ff8368a42705091048
+    // some files being reformatted with spaces removed etc, why?
+    // https://github.com/belav/csharpier-repos/pull/150/files#diff-d43be0b1199187297fc0edd2da7abd74782fcf67b4614feb1bac76528f657b1f
+    // https://github.com/belav/csharpier-repos/pull/150/files#diff-c89f46bbc5617ee258659fc31bea43fb82be10302363a86d638ec0e251019e1a
     internal static CodeFormatterResult Format(string xml, PrinterOptions printerOptions)
     {
-        // with xmlDocument we can't get the proper encoded values in an attribute
-        // with xDocument we can't retain any newlines in attributes
-        // so let's just use them both
-        XDocument xDocument;
         try
         {
-            xDocument = XDocument.Parse(xml);
+            var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
+            // TODO 1679 should probably use XmlReader to validate this is good xml before sending it through this thing
+            var rootNode = RawNodeReader.ParseXml(xml, lineEnding);
+            var printingContext = new PrintingContext
+            {
+                Options = new PrintingContext.PrintingContextOptions
+                {
+                    LineEnding = lineEnding,
+                    IndentSize = printerOptions.IndentSize,
+                    UseTabs = printerOptions.UseTabs,
+                },
+            };
+            var doc = Node.Print(rootNode, printingContext);
+            var formattedXml = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
+
+            return new CodeFormatterResult
+            {
+                Code = formattedXml,
+                DocTree = printerOptions.IncludeDocTree
+                    ? DocSerializer.Serialize(doc)
+                    : string.Empty,
+                // TODO 1679 spit out version of our thing?
+                AST = string.Empty,
+            };
         }
         catch (XmlException)
         {
@@ -32,78 +56,5 @@ public static class XmlFormatter
                 WarningMessage = "Appeared to be invalid xml so was not formatted.",
             };
         }
-        var xmlDocument = new XmlDocument();
-        xmlDocument.LoadXml(xml);
-        var mapping = new Dictionary<XNode, XmlNode>();
-        CreateMapping(xDocument, xmlDocument, mapping);
-
-        var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-        var printingContext = new XmlPrintingContext
-        {
-            Mapping = mapping,
-            Options = new PrintingContext.PrintingContextOptions
-            {
-                LineEnding = lineEnding,
-                IndentSize = printerOptions.IndentSize,
-                UseTabs = printerOptions.UseTabs,
-            },
-        };
-        var doc = Node.Print(xDocument, printingContext);
-        var formattedXml = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
-
-        return new CodeFormatterResult
-        {
-            Code = formattedXml,
-            DocTree = printerOptions.IncludeDocTree ? DocSerializer.Serialize(doc) : string.Empty,
-            AST = printerOptions.IncludeAST
-                ? JsonSerializer.Serialize(xDocument, XmlFormatterJsonSerializerOptions)
-                : string.Empty,
-        };
     }
-
-    private static readonly JsonSerializerOptions XmlFormatterJsonSerializerOptions = new()
-    {
-        ReferenceHandler = ReferenceHandler.Preserve,
-    };
-
-    private static void CreateMapping(
-        XNode? xNode,
-        XmlNode? xmlNode,
-        Dictionary<XNode, XmlNode> mapping
-    )
-    {
-        if (xNode == null || xmlNode == null)
-        {
-            return;
-        }
-
-        mapping[xNode] = xmlNode;
-
-        if (xNode is not XContainer xContainer)
-        {
-            return;
-        }
-
-        var index = 0;
-        if (xmlNode.ChildNodes[0] is XmlDeclaration)
-        {
-            index++;
-        }
-        foreach (var xChild in xContainer.Nodes())
-        {
-            if (index > xmlNode.ChildNodes.Count)
-            {
-                break;
-            }
-
-            CreateMapping(xChild, xmlNode.ChildNodes[index], mapping);
-
-            index++;
-        }
-    }
-}
-
-internal class XmlPrintingContext : PrintingContext
-{
-    public required Dictionary<XNode, XmlNode> Mapping { get; set; }
 }

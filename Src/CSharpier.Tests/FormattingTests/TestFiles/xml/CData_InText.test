@@ -1,0 +1,3 @@
+<Element>SomeText
+  <![CDATA[This is a CDATASection]]>
+</Element>
