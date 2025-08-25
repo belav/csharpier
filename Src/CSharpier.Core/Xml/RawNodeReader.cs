@@ -14,7 +14,6 @@ class RawNodeReader
     private readonly string lineEnding;
     private int position;
     private readonly Stack<RawNode> elementStack = new();
-    private readonly List<RawNode> rootNodes = [];
 
 #if !NETSTANDARD2_0
     [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
@@ -25,7 +24,6 @@ class RawNodeReader
 
     private RawNodeReader(string xml, string lineEnding)
     {
-        var x = 1;
         this.originalXml = NewlineRegex
 #if !NETSTANDARD2_0
             ()
@@ -34,14 +32,16 @@ class RawNodeReader
         this.lineEnding = lineEnding;
     }
 
-    public static List<RawNode> ReadAll(string originalXml, string lineEnding)
+    public static RawNode ParseXml(string originalXml, string lineEnding)
     {
         var reader = new RawNodeReader(originalXml, lineEnding);
-        return reader.ReadAll();
+        return reader.ParseXml();
     }
 
-    private List<RawNode> ReadAll()
+    private RawNode ParseXml()
     {
+        var rootNode = new RawNode { NodeType = XmlNodeType.Document };
+        this.elementStack.Push(rootNode);
         while (this.position < this.originalXml.Length)
         {
             this.SkipWhitespace();
@@ -56,7 +56,7 @@ class RawNodeReader
             }
             else
             {
-                if (this.rootNodes.Count == 0)
+                if (rootNode.Nodes.Count == 0)
                 {
                     throw new XmlException("There do not appear to be any root nodes");
                 }
@@ -64,7 +64,7 @@ class RawNodeReader
             }
         }
 
-        return this.rootNodes;
+        return rootNode;
     }
 
     private void SkipWhitespace()
@@ -313,6 +313,7 @@ class RawNodeReader
     {
         var attributes = new List<RawAttribute>();
 
+        var lastPosition = this.position;
         while (this.position < this.originalXml.Length)
         {
             this.SkipWhitespace();
@@ -337,6 +338,10 @@ class RawNodeReader
                 attributes.Add(
                     new RawAttribute { Name = attrName, Value = attrValue.Replace("\"", "&quot;") }
                 );
+            }
+            else
+            {
+                throw new XmlException("Cannot find next attribute");
             }
         }
 
@@ -420,10 +425,6 @@ class RawNodeReader
             var parent = this.elementStack.Peek();
             node.Parent = parent;
             parent.Nodes.Add(node);
-        }
-        else
-        {
-            this.rootNodes.Add(node);
         }
     }
 

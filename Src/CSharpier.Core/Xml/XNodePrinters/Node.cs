@@ -11,6 +11,19 @@ internal static class Node
 {
     internal static Doc Print(RawNode node, PrintingContext context)
     {
+        if (node.NodeType is XmlNodeType.Document)
+        {
+            var result = new ValueListBuilder<Doc>(node.Nodes.Count * 2 + 1);
+
+            foreach (var childNode in node.Nodes)
+            {
+                result.Append(Print(childNode, context), Doc.HardLine);
+            }
+
+            result.Append(Doc.HardLine);
+
+            return Doc.Concat(ref result);
+        }
         if (node.NodeType == XmlNodeType.XmlDeclaration)
         {
             var version = node.Attributes.FirstOrDefault(o => o.Name == "version")?.Value;
@@ -30,22 +43,17 @@ internal static class Node
 
             declaration += "?>";
 
-            return Doc.Concat(declaration, Doc.HardLine);
+            return declaration;
         }
 
         if (node.NodeType == XmlNodeType.DocumentType)
         {
-            return Doc.Concat(node.Value, Doc.HardLine);
+            return node.Value;
         }
 
         if (node.NodeType == XmlNodeType.Element)
         {
             return Element.Print(node, context);
-        }
-
-        if (node.NodeType == XmlNodeType.None)
-        {
-            return Doc.Null;
         }
 
         if (node.NodeType is XmlNodeType.Text)
@@ -75,10 +83,10 @@ internal static class Node
         {
             if (node.Parent is null)
             {
-                return Doc.Concat(node.Value!, Doc.HardLine);
+                return Doc.Concat(node.Value, Doc.HardLine);
             }
 
-            return node.Value!;
+            return node.Value;
         }
 
         throw new Exception("Need to handle + " + node.NodeType);

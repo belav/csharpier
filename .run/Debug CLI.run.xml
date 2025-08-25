@@ -6,7 +6,7 @@
     />
     <option
       name="PROGRAM_PARAMETERS"
-      value="format C:\projects\csharpier-repos\mono/mcs/docs/ecma334/14.5.10.1.xml"
+      value="format C:\projects\csharpier-repos\mono\mcs\class\System.XML\Test\System.Xml\nist_dom\files\staff.xml"
     />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Src/CSharpier.Cli/bin/Debug/net8.0" />
     <option name="PASS_PARENT_ENVS" value="1" />
