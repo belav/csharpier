@@ -47,6 +47,11 @@ internal static class Element
                 return Doc.Null;
             }
 
+            if (rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n')))
+            {
+                return Doc.HardLine;
+            }
+
             return Doc.SoftLine;
         }
         ;

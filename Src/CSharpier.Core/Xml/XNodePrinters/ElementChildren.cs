@@ -107,10 +107,15 @@ internal static class ElementChildren
     public static Doc PrintBetweenLine(RawNode prevNode, RawNode nextNode)
     {
         return
-            (prevNode.NodeType is XmlNodeType.Text && nextNode.NodeType is XmlNodeType.Comment)
-            || (prevNode.NodeType is XmlNodeType.Comment && nextNode.NodeType is XmlNodeType.Text)
-            || (prevNode.NodeType is XmlNodeType.Text && nextNode.NodeType is XmlNodeType.Element)
-            || (prevNode.NodeType is XmlNodeType.Element && nextNode.NodeType is XmlNodeType.Text)
+            (prevNode.IsTextLike() && nextNode.IsTextLike())
+            || (
+                prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
+                && nextNode.NodeType is XmlNodeType.Element
+            )
+            || (
+                prevNode.NodeType is XmlNodeType.Element
+                && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
+            )
             ? Doc.Null
             : Doc.HardLine;
     }

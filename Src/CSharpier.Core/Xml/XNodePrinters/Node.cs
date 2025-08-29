@@ -101,11 +101,6 @@ internal static class Node
             return Doc.Null;
         }
 
-        if (rawNode.NodeType is XmlNodeType.CDATA)
-        {
-            return textValue;
-        }
-
         if (rawNode.Parent?.Nodes.First() == rawNode)
         {
             if (textValue[0] is '\r')

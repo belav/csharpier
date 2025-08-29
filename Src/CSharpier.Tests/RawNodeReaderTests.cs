@@ -10,6 +10,17 @@ namespace CSharpier.Tests;
 public class RawNodeReaderTests
 {
     [Test]
+    [Ignore("TODO 1599 make this work when keeping lines is working")]
+    public void Should_Keep_Only_Whitespace()
+    {
+        var xml = "<JustWhitespace> </JustWhitespace>";
+
+        var nodes = ReadAllNodes(xml);
+        nodes.First().Name.Should().Be("JustWhitespace");
+        nodes.First().Nodes.Count.Should().Be(1);
+    }
+
+    [Test]
     public void Should_Read_Text()
     {
         var xml = """
