@@ -26,7 +26,7 @@ internal static class CodeFormatter
                 SourceCodeKind.Script,
                 cancellationToken
             ),
-            Formatter.XML => XmlFormatter.Format(fileContents, options),
+            Formatter.XML => await XmlFormatter.FormatAsync(fileContents, options),
             _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." },
         };
     }
