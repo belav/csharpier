@@ -1,33 +1,28 @@
-using System.Text;
 using System.Xml;
-using System.Xml.Linq;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Attributes
 {
-    public static Doc Print(XElement element, XmlPrintingContext context)
+    public static Doc Print(RawNode rawNode, PrintingContext context)
     {
-        if (!element.Attributes().Any())
+        if (rawNode.Attributes.Length == 0)
         {
-            return element.IsEmpty ? " " : Doc.Null;
+            return rawNode.IsEmpty ? " " : Doc.Null;
         }
 
         var printedAttributes = new List<Doc>();
-        var index = 0;
-        var xmlNode = context.Mapping[element];
-        foreach (var attribute in element.Attributes())
+        foreach (var attribute in rawNode.Attributes)
         {
-            printedAttributes.Add(PrintAttribute(attribute, xmlNode.Attributes![index]));
-
-            index++;
+            printedAttributes.Add($"{attribute.Name}=\"{attribute.Value}\"");
         }
 
         var doNotBreakAttributes =
-            element.Attributes().Count() == 1
-            && !context.Mapping[element].Attributes![0].Value.Contains('\n')
-            && (element.Nodes().Any(o => o is XElement) || element.IsEmpty);
+            rawNode.Attributes.Length == 1
+            && !rawNode.Attributes[0].Value.Contains('\n')
+            && (rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Element) || rawNode.IsEmpty);
         var attributeLine = Doc.Line;
 
         var parts = new List<Doc>
@@ -46,93 +41,18 @@ internal static class Attributes
              *       >456
              */
             (
-                element.Nodes().Any()
-                && Tag.NeedsToBorrowParentOpeningTagEndMarker(element.Nodes().First())
-            )
-            /*
-             *     <span
-             *       >123<meta
-             *                ~
-             *     /></span>
-             */
-            || (element.IsEmpty && Tag.NeedsToBorrowLastChildClosingTagEndMarker(element.Parent!))
-            || doNotBreakAttributes
+                rawNode.Nodes.Count != 0
+                && Tag.NeedsToBorrowParentOpeningTagEndMarker(rawNode.Nodes.First())
+            ) || doNotBreakAttributes
         )
         {
-            parts.Add(element.IsEmpty ? " " : "");
+            parts.Add(rawNode.IsEmpty ? " " : "");
         }
         else
         {
-            parts.Add(element.IsEmpty ? Doc.Line : Doc.SoftLine);
+            parts.Add(rawNode.IsEmpty ? Doc.Line : Doc.SoftLine);
         }
 
         return Doc.Concat(parts);
-    }
-
-    private static Doc PrintAttribute(XAttribute attribute, XmlAttribute xmlAttribute)
-    {
-        // XAttribute mostly gets us what we want, but it removes new lines (per spec)
-        // XmlAttribute gives us those new lines
-        // this makes use of both values to get the final value we want to display
-        // we want the new lines because it is common to add them with long conditions in csproj files
-        string GetAttributeValue()
-        {
-            // this gives us the attribute value with everything encoded after we remove the name + quotes
-            var xValue = attribute.ToString();
-            xValue = xValue[(xValue.IndexOf('=') + 2)..];
-            xValue = xValue[..^1];
-            var xmlValue = xmlAttribute.Value;
-
-            if (xValue == xmlValue)
-            {
-                return xValue;
-            }
-
-            var valueBuilder = new StringBuilder();
-            var xmlIndex = 0;
-            var xIndex = 0;
-            while (xIndex < xValue.Length)
-            {
-                var xChar = xValue[xIndex];
-                var xmlChar = xmlValue[xmlIndex];
-
-                if (xChar == ' ' && xmlChar == '\r')
-                {
-                    valueBuilder.Append(xmlChar);
-                    xmlIndex++;
-                    xmlChar = xmlValue[xmlIndex];
-                }
-
-                if (xChar == '&')
-                {
-                    do
-                    {
-                        valueBuilder.Append(xChar);
-                        xIndex++;
-                        xChar = xValue[xIndex];
-                    } while (xChar != ';');
-                    valueBuilder.Append(xChar);
-                }
-
-                if (xChar == xmlChar || (xChar == ' ' && xmlChar == '\n'))
-                {
-                    valueBuilder.Append(xmlChar);
-                }
-
-                xIndex++;
-                xmlIndex++;
-            }
-
-            return valueBuilder.ToString();
-        }
-
-        var name = attribute.Name.LocalName;
-        var prefix = attribute.Parent!.GetPrefixOfNamespace(attribute.Name.Namespace);
-        if (!string.IsNullOrEmpty(prefix))
-        {
-            name = $"{prefix}:{name}";
-        }
-
-        return $"{name}=\"{GetAttributeValue()}\"";
     }
 }

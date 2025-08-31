@@ -1,8 +1,8 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.IO;
+using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
+using CSharpier.Core.DocTypes;
 using Node = CSharpier.Core.Xml.XNodePrinters.Node;
 
 namespace CSharpier.Core.Xml;
@@ -11,18 +11,45 @@ public static class XmlFormatter
 {
     public static CodeFormatterResult Format(string xml, CodeFormatterOptions? options = null)
     {
-        return Format(xml, (options ?? new()).ToPrinterOptions());
+        return FormatAsync(xml, (options ?? new()).ToPrinterOptions())
+            .ConfigureAwait(false)
+            .GetAwaiter()
+            .GetResult();
     }
 
-    internal static CodeFormatterResult Format(string xml, PrinterOptions printerOptions)
+    internal static async Task<CodeFormatterResult> FormatAsync(
+        string xml,
+        PrinterOptions printerOptions
+    )
     {
-        // with xmlDocument we can't get the proper encoded values in an attribute
-        // with xDocument we can't retain any newlines in attributes
-        // so let's just use them both
-        XDocument xDocument;
         try
         {
-            xDocument = XDocument.Parse(xml);
+            var validationTask = ValidateXmlAsync(xml);
+
+            var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
+            var rootNode = RawNodeReader.ParseXml(xml, lineEnding);
+            var printingContext = new PrintingContext
+            {
+                Options = new PrintingContext.PrintingContextOptions
+                {
+                    LineEnding = lineEnding,
+                    IndentSize = printerOptions.IndentSize,
+                    UseTabs = printerOptions.UseTabs,
+                },
+            };
+            var doc = Node.Print(rootNode, printingContext);
+            var formattedXml = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
+
+            await validationTask;
+
+            return new CodeFormatterResult
+            {
+                Code = formattedXml,
+                DocTree = printerOptions.IncludeDocTree
+                    ? DocSerializer.Serialize(doc)
+                    : string.Empty,
+                AST = RawNodeSyntaxWriter.Write(rootNode),
+            };
         }
         catch (XmlException)
         {
@@ -32,78 +59,23 @@ public static class XmlFormatter
                 WarningMessage = "Appeared to be invalid xml so was not formatted.",
             };
         }
-        var xmlDocument = new XmlDocument();
-        xmlDocument.LoadXml(xml);
-        var mapping = new Dictionary<XNode, XmlNode>();
-        CreateMapping(xDocument, xmlDocument, mapping);
-
-        var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-        var printingContext = new XmlPrintingContext
-        {
-            Mapping = mapping,
-            Options = new PrintingContext.PrintingContextOptions
-            {
-                LineEnding = lineEnding,
-                IndentSize = printerOptions.IndentSize,
-                UseTabs = printerOptions.UseTabs,
-            },
-        };
-        var doc = Node.Print(xDocument, printingContext);
-        var formattedXml = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
-
-        return new CodeFormatterResult
-        {
-            Code = formattedXml,
-            DocTree = printerOptions.IncludeDocTree ? DocSerializer.Serialize(doc) : string.Empty,
-            AST = printerOptions.IncludeAST
-                ? JsonSerializer.Serialize(xDocument, XmlFormatterJsonSerializerOptions)
-                : string.Empty,
-        };
     }
 
-    private static readonly JsonSerializerOptions XmlFormatterJsonSerializerOptions = new()
+    // the RawNodeReader is very basic and doesn't care if xml is valid or not and could mangle invalid xml if we allow it to format the invalid xml
+    private static async Task ValidateXmlAsync(string xml)
     {
-        ReferenceHandler = ReferenceHandler.Preserve,
-    };
-
-    private static void CreateMapping(
-        XNode? xNode,
-        XmlNode? xmlNode,
-        Dictionary<XNode, XmlNode> mapping
-    )
-    {
-        if (xNode == null || xmlNode == null)
+        using var stringReader = new StringReader(xml);
+        var settings = new XmlReaderSettings
         {
-            return;
-        }
+            ValidationType = ValidationType.None,
+            CheckCharacters = true,
+            Async = true,
+        };
 
-        mapping[xNode] = xmlNode;
-
-        if (xNode is not XContainer xContainer)
+        using var xmlReader = XmlReader.Create(stringReader, settings);
+        while (await xmlReader.ReadAsync())
         {
-            return;
-        }
-
-        var index = 0;
-        if (xmlNode.ChildNodes[0] is XmlDeclaration)
-        {
-            index++;
-        }
-        foreach (var xChild in xContainer.Nodes())
-        {
-            if (index > xmlNode.ChildNodes.Count)
-            {
-                break;
-            }
-
-            CreateMapping(xChild, xmlNode.ChildNodes[index], mapping);
-
-            index++;
+            // XmlReader will throw XmlException if invalid
         }
     }
-}
-
-internal class XmlPrintingContext : PrintingContext
-{
-    public required Dictionary<XNode, XmlNode> Mapping { get; set; }
 }

@@ -2,7 +2,8 @@ function CSH-ReviewBranch {
     param (
         [string]$folder,
         [string]$pathToTestingRepo,
-        [switch]$skipValidation = $true
+        [switch]$skipValidation = $true,
+        [switch]$onlyXml = $false
     )
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
@@ -60,15 +61,14 @@ function CSH-ReviewBranch {
 
     if ($firstRun) {
         Set-Location $repositoryRoot
-#        try  {
-            & git checkout main #2>&1 | Out-String
-#        }
-#        catch {
-#            Write-Host "Could not checkout main on csharpier, working directory is probably not clean"
-#            return
-#        }
-        
-        CSH-BuildProject
+
+        & git checkout main #2>&1 | Out-String
+
+        CSH-BuildProject -doNotExit
+
+        if ($lastExitCode -gt 0) {
+            return
+        }
 
         Set-Location $pathToTestingRepo
 
@@ -76,6 +76,10 @@ function CSH-ReviewBranch {
         & git reset --hard
         & git checkout -b $preBranch
 
+        if ($onlyXml) {
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.cs"
+        }
+        
         dotnet $csharpierDllPath format . $skipValidationParam --no-cache
         # there is some weirdness with a couple files with #if where
         # they need to be formatted twice to get them stable

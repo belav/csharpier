@@ -1,23 +1,29 @@
-using System.Xml.Linq;
+using System.Xml;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(XElement node, XmlPrintingContext context)
+    internal static Doc Print(RawNode rawNode, PrintingContext context)
     {
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
 
-        Doc PrintChildrenDoc(params Doc[] childrenDoc)
+        Doc PrintChildrenDoc()
         {
+            var childContent = ElementChildren.Print(rawNode, context);
+
             if (shouldHugContent)
             {
-                return Doc.IndentIfBreak(Doc.Concat(childrenDoc), attrGroupId);
+                return Doc.IndentIfBreak(
+                    Doc.Concat(PrintLineBeforeChildren(), childContent),
+                    attrGroupId
+                );
             }
 
-            return Doc.Indent(childrenDoc);
+            return Doc.Indent(PrintLineBeforeChildren(), childContent);
         }
 
         Doc PrintLineBeforeChildren()
@@ -28,17 +34,21 @@ internal static class Element
             }
 
             if (
-                node.Nodes().FirstOrDefault()
-                is not XCData
-                    and XText { Value: ['\n', ..] or ['\r', ..] }
+                rawNode.Nodes.FirstOrDefault() is
+                { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
             )
             {
                 return Doc.LiteralLine;
             }
 
-            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
+            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
             {
                 return Doc.Null;
+            }
+
+            if (rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n')))
+            {
+                return Doc.HardLine;
             }
 
             return Doc.SoftLine;
@@ -52,32 +62,34 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (!node.Attributes().Any() && node.Nodes().ToList() is [XText] and not [XCData])
+            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
             {
                 return Doc.Null;
             }
             return Doc.SoftLine;
         }
 
-        var elementContent = !node.Nodes().Any()
-            ? Doc.Null
-            : Doc.Concat(
-                ForceBreakContent(node) ? Doc.BreakParent : "",
-                PrintChildrenDoc(PrintLineBeforeChildren(), ElementChildren.Print(node, context)),
-                PrintLineAfterChildren()
-            );
+        var elementContent =
+            rawNode.IsEmpty || rawNode.Nodes.Count == 0
+                ? Doc.Null
+                : Doc.Concat(
+                    ForceBreakContent(rawNode) ? Doc.BreakParent : "",
+                    PrintChildrenDoc(),
+                    PrintLineAfterChildren()
+                );
 
         return Doc.Group(
-            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(node, context)),
+            Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(rawNode, context)),
             elementContent,
-            Tag.PrintClosingTag(node, context)
+            Tag.PrintClosingTag(rawNode, context)
         );
     }
 
-    private static bool ForceBreakContent(XElement node)
+    private static bool ForceBreakContent(RawNode rawNode)
     {
-        var childNode = node.Nodes().Count() == 1 ? node.Nodes().First() : null;
+        var childNode = rawNode.Nodes.Count == 1 ? rawNode.Nodes.First() : null;
 
-        return childNode is not null and (XCData or not XText);
+        return childNode is not null
+            && childNode.NodeType is XmlNodeType.CDATA or not XmlNodeType.Text;
     }
 }
