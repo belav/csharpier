@@ -313,7 +313,6 @@ class RawNodeReader
     {
         var attributes = new List<RawAttribute>();
 
-        var lastPosition = this.position;
         while (this.position < this.originalXml.Length)
         {
             this.SkipWhitespace();

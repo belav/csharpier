@@ -1,10 +1,8 @@
-using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
-namespace CSharpier.Core.Xml.RawNodePrinters;
+namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Attributes
 {

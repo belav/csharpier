@@ -1,9 +1,8 @@
 using System.Xml;
-using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
-namespace CSharpier.Core.Xml.RawNodePrinters;
+namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Element
 {
@@ -70,23 +69,18 @@ internal static class Element
             return Doc.SoftLine;
         }
 
-        Doc PrintElementContent()
-        {
-            var elementContent =
-                rawNode.IsEmpty || rawNode.Nodes.Count == 0
-                    ? Doc.Null
-                    : Doc.Concat(
-                        ForceBreakContent(rawNode) ? Doc.BreakParent : "",
-                        PrintChildrenDoc(),
-                        PrintLineAfterChildren()
-                    );
-
-            return elementContent;
-        }
+        var elementContent =
+            rawNode.IsEmpty || rawNode.Nodes.Count == 0
+                ? Doc.Null
+                : Doc.Concat(
+                    ForceBreakContent(rawNode) ? Doc.BreakParent : "",
+                    PrintChildrenDoc(),
+                    PrintLineAfterChildren()
+                );
 
         return Doc.Group(
             Doc.GroupWithId(attrGroupId, Tag.PrintOpeningTag(rawNode, context)),
-            PrintElementContent(),
+            elementContent,
             Tag.PrintClosingTag(rawNode, context)
         );
     }

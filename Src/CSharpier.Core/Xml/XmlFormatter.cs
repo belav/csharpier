@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
-using Node = CSharpier.Core.Xml.RawNodePrinters.Node;
+using Node = CSharpier.Core.Xml.XNodePrinters.Node;
 
 namespace CSharpier.Core.Xml;
 

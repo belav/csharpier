@@ -1,11 +1,9 @@
-using System.Text.RegularExpressions;
 using System.Xml;
-using System.Xml.Linq;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
-namespace CSharpier.Core.Xml.RawNodePrinters;
+namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Node
 {
