@@ -58,7 +58,10 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
         ) {
             return;
         }
-        var filePath = file.getPath();
+        var filePath = file.getCanonicalPath();
+        if (filePath == null) {
+            filePath = file.getPath(); // fallback to VFS path if canonical path unavailable
+        }
 
         this.findAndWarmProcess(filePath);
     }
