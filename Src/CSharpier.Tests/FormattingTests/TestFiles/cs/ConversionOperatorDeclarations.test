@@ -12,12 +12,11 @@ class Test
         return new Test();
     }
 
-    public static implicit operator Test(Person p) =>
-        new Test(p.First + "                        " + p.Last);
+    public static implicit operator Test(Person p)
+        => new Test(p.First + "                        " + p.Last);
 
     public static implicit operator Test(int x) => new Test(x);
 
-    public static implicit operator Test(
-        bool reallyLongNameThatWillMakeThisBreak________________
-    ) => new Test(x);
+    public static implicit operator Test(bool reallyLongNameThatWillMakeThisBreak________________)
+        => new Test(x);
 }
