@@ -20,26 +20,17 @@
     <Project Path="Src/CSharpier.Benchmarks/CSharpier.Benchmarks.csproj" />
     <Project Path="Src/CSharpier.Cli.Tests/CSharpier.Cli.Tests.csproj" />
     <Project Path="Src/CSharpier.Cli/CSharpier.Cli.csproj" />
-    <Project Path="Src/CSharpier.FakeGenerators/CSharpier.FakeGenerators.csproj" />
+    <Project Path="Src/CSharpier.Core/CSharpier.Core.csproj" />
     <Project Path="Src/CSharpier.Generators/CSharpier.Generators.csproj" />
-    <Project Path="Src/CSharpier.MsBuild/MsBuild.csproj">
-      <Build Project="false" />
-    </Project>
+    <Project Path="Src/CSharpier.MsBuild/MsBuild.csproj" />
     <Project Path="Src/CSharpier.Playground/CSharpier.Playground.csproj" />
     <Project Path="Src/CSharpier.Tests.Generators/CSharpier.Tests.Generators.csproj" />
     <Project Path="Src/CSharpier.Tests/CSharpier.Tests.csproj" />
-    <Project Path="Src/CSharpier.Core/CSharpier.Core.csproj" />
     <Project Path="Src/SyntaxFinder/SyntaxFinder.csproj" />
     <Project Path="Src/Website/Website.csproj" />
   </Folder>
-  <Project Path=".github/Github.csproj">
-    <Build Project="false" />
-  </Project>
-  <Project Path="docs/Docs.csproj">
-    <Build Project="false" />
-  </Project>
-  <Project Path="Scripts/Scripts.csproj">
-    <Build Project="false" />
-  </Project>
+  <Project Path=".github/Github.csproj" />
+  <Project Path="docs/Docs.csproj" />
+  <Project Path="Scripts/Scripts.csproj" />
   <Project Path="Shell/Shell.csproj" />
 </Solution>

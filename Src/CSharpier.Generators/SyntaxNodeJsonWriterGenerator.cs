@@ -3,24 +3,33 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace CSharpier.FakeGenerators;
+namespace CSharpier.Generators;
 
-public class SyntaxNodeJsonWriterGenerator
+[Generator]
+public class SyntaxNodeJsonWriterGenerator : IIncrementalGenerator
 {
     private readonly List<string> missingTypes = [];
 
-    // this would probably be easier to understand as a scriban template but is a lot of effort
-    // to switch and doesn't really change at this point
-    public void Execute(CodeContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.AddSource("SyntaxNodeJsonWriter.generated", this.GenerateSource());
+        var compilationProvider = context.CompilationProvider.Select(
+            (compilation, _) => ValidNodeTypes.Get(compilation)
+        );
+
+        context.RegisterSourceOutput(compilationProvider, this.Execute);
     }
 
-    private string GenerateSource()
+    // this would probably be easier to understand as a scriban template but is a lot of effort
+    // to switch and doesn't really change at this point
+    public void Execute(SourceProductionContext context, IEnumerable<INamedTypeSymbol> types)
     {
-        var syntaxNodeTypes = ValidNodeTypes.Get();
+        context.AddSource("SyntaxNodeJsonWriter.generated", this.GenerateSource(types.ToList()));
+    }
 
+    private string GenerateSource(List<INamedTypeSymbol> types)
+    {
         var sourceBuilder = new StringBuilder();
+        sourceBuilder.AppendLine("#pragma warning disable");
         sourceBuilder.AppendLine("using System.Collections.Generic;");
         sourceBuilder.AppendLine("using System.IO;");
         sourceBuilder.AppendLine("using System.Linq;");
@@ -38,10 +47,9 @@ public class SyntaxNodeJsonWriterGenerator
             $"        public static void WriteSyntaxNode(StringBuilder builder, SyntaxNode syntaxNode)"
         );
         sourceBuilder.AppendLine("        {");
-        foreach (var syntaxNodeType in syntaxNodeTypes)
+        foreach (var syntaxNodeType in types)
         {
             sourceBuilder.AppendLine(
-                CultureInfo.InvariantCulture,
                 $"            if (syntaxNode is {syntaxNodeType.Name}) Write{syntaxNodeType.Name}(builder, syntaxNode as {syntaxNodeType.Name});"
             );
         }
@@ -49,13 +57,14 @@ public class SyntaxNodeJsonWriterGenerator
         sourceBuilder.AppendLine("        }");
         sourceBuilder.AppendLine();
 
-        foreach (var syntaxNodeType in syntaxNodeTypes)
+        foreach (var syntaxNodeType in types)
         {
             this.GenerateMethod(sourceBuilder, syntaxNodeType);
         }
 
-        this.GenerateMethod(sourceBuilder, typeof(SyntaxToken));
-        this.GenerateMethod(sourceBuilder, typeof(SyntaxTrivia));
+        // TODO
+        // this.GenerateMethod(sourceBuilder, typeof(SyntaxToken));
+        // this.GenerateMethod(sourceBuilder, typeof(SyntaxTrivia));
 
         sourceBuilder.AppendLine("    }");
         sourceBuilder.AppendLine("}");
@@ -63,17 +72,18 @@ public class SyntaxNodeJsonWriterGenerator
         if (this.missingTypes.Count != 0)
         {
             throw new Exception(
+#pragma warning disable RS1035
                 Environment.NewLine + string.Join(Environment.NewLine, this.missingTypes)
+#pragma warning restore RS1035
             );
         }
 
         return sourceBuilder.ToString();
     }
 
-    private void GenerateMethod(StringBuilder sourceBuilder, Type type)
+    private void GenerateMethod(StringBuilder sourceBuilder, INamedTypeSymbol type)
     {
         sourceBuilder.AppendLine(
-            CultureInfo.InvariantCulture,
             $$"""
                     public static void Write{{type.Name}}(StringBuilder builder, {{type.Name}} syntaxNode)
                     {
@@ -84,64 +94,64 @@ public class SyntaxNodeJsonWriterGenerator
             """
         );
 
-        if (type == typeof(SyntaxTrivia))
+        if (type.Name == nameof(SyntaxTrivia))
         {
             sourceBuilder.AppendLine(
                 "            properties.Add(WriteString(\"text\", syntaxNode.ToString()));"
             );
         }
 
-        foreach (var propertyInfo in type.GetProperties().OrderBy(o => o.Name))
+        foreach (var propertySymbol in type.GetAllProperties().OrderBy(o => o.Name))
         {
-            var propertyName = propertyInfo.Name;
+            var propertyName = propertySymbol.Name;
             var camelCaseName = CamelCaseName(propertyName);
-            var propertyType = propertyInfo.PropertyType;
+            if (propertySymbol.Type is not INamedTypeSymbol propertyType)
+            {
+                continue;
+            }
 
             if (
                 Ignored.Properties.Contains(camelCaseName)
-                || Ignored.Types.Contains(propertyType)
+                || Ignored.Types.Contains(propertyType.Name)
                 || (
-                    Ignored.PropertiesByType.ContainsKey(type)
-                    && Ignored.PropertiesByType[type].Contains(camelCaseName)
+                    Ignored.PropertiesByType.ContainsKey(type.Name)
+                    && Ignored.PropertiesByType[type.Name].Contains(camelCaseName)
                 )
             )
             {
                 continue;
             }
 
-            if (propertyType == typeof(bool))
+            if (propertyType.SpecialType is SpecialType.System_Boolean)
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            properties.Add(WriteBoolean(\"{camelCaseName}\", syntaxNode.{propertyName}));"
                 );
             }
-            else if (propertyType == typeof(string))
+            else if (propertyType.SpecialType is SpecialType.System_String)
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            properties.Add(WriteString(\"{camelCaseName}\", syntaxNode.{propertyName}));"
                 );
             }
-            else if (propertyType == typeof(int))
+            else if (propertyType.SpecialType is SpecialType.System_Int32)
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            properties.Add(WriteInt(\"{camelCaseName}\", syntaxNode.{propertyName}));"
                 );
             }
             else if (
-                typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType)
-                || propertyType == typeof(SyntaxToken)
-                || propertyType == typeof(SyntaxTrivia)
+                propertyType.InheritsFrom(nameof(CSharpSyntaxNode))
+                || propertyType.Name == nameof(SyntaxToken)
+                || propertyType.Name == nameof(SyntaxTrivia)
             )
             {
                 var methodName = "WriteSyntaxNode";
-                if (propertyType == typeof(SyntaxToken))
+                if (propertyType.Name == nameof(SyntaxToken))
                 {
                     methodName = "WriteSyntaxToken";
                 }
-                else if (propertyType == typeof(SyntaxTrivia))
+                else if (propertyType.Name == nameof(SyntaxTrivia))
                 {
                     methodName = "WriteSyntaxTrivia";
                 }
@@ -151,7 +161,6 @@ public class SyntaxNodeJsonWriterGenerator
                 }
 
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $$"""
                                 if (syntaxNode.{{propertyName}} != default({{propertyType.Name}}))
                                 {
@@ -166,26 +175,30 @@ public class SyntaxNodeJsonWriterGenerator
                 (
                     propertyType.IsGenericType
                     && (
-                        propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
-                        || propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
+                        propertyType
+                            .ConstructedFrom.ToDisplayString()
+                            .StartsWith("Microsoft.CodeAnalysis.SyntaxList<")
+                        || propertyType
+                            .ConstructedFrom.ToDisplayString()
+                            .StartsWith("Microsoft.CodeAnalysis.SeparatedSyntaxList<")
                     )
                 )
-                || propertyType == typeof(SyntaxTokenList)
-                || propertyType == typeof(SyntaxTriviaList)
+                || propertyType.Name == nameof(SyntaxTokenList)
+                || propertyType.Name == nameof(SyntaxTriviaList)
             )
             {
                 var methodName = "WriteSyntaxNode";
-                if (propertyType == typeof(SyntaxTokenList))
+                if (propertyType.Name == nameof(SyntaxTokenList))
                 {
                     methodName = "WriteSyntaxToken";
                 }
-                else if (propertyType == typeof(SyntaxTriviaList))
+                else if (propertyType.Name == nameof(SyntaxTriviaList))
                 {
                     methodName = "WriteSyntaxTrivia";
                 }
                 else
                 {
-                    var genericArgument = propertyType.GetGenericArguments()[0];
+                    var genericArgument = propertyType.TypeArguments[0];
                     if (!genericArgument.IsAbstract)
                     {
                         methodName = "Write" + genericArgument.Name;
@@ -193,7 +206,6 @@ public class SyntaxNodeJsonWriterGenerator
                 }
 
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $$"""
                                 var {{camelCaseName}} = new List<string>();
                                 foreach(var node in syntaxNode.{{propertyName}})

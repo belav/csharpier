@@ -2,7 +2,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace CSharpier.FakeGenerators;
+namespace CSharpier.Generators;
 
 public static class Ignored
 {
@@ -19,17 +19,18 @@ public static class Ignored
         "hasStructuredTrivia",
         "containsSkippedText",
         "containsAnnotations",
+        "kindText",
     ];
 
-    public static readonly Type[] Types = [typeof(TextSpan), typeof(SyntaxTree)];
+    public static readonly string[] Types = [nameof(TextSpan), nameof(SyntaxTree)];
 
-    public static readonly Dictionary<Type, string[]> PropertiesByType = new()
+    public static readonly Dictionary<string, string[]> PropertiesByType = new()
     {
-        { typeof(PropertyDeclarationSyntax), ["semicolon"] },
-        { typeof(IndexerDeclarationSyntax), ["semicolon"] },
-        { typeof(SyntaxTrivia), ["token"] },
-        { typeof(SyntaxToken), ["value", "valueText"] },
-        { typeof(ParameterSyntax), ["exclamationExclamationToken"] },
+        { nameof(PropertyDeclarationSyntax), ["semicolon"] },
+        { nameof(IndexerDeclarationSyntax), ["semicolon"] },
+        { nameof(SyntaxTrivia), ["token"] },
+        { nameof(SyntaxToken), ["value", "valueText"] },
+        { nameof(ParameterSyntax), ["exclamationExclamationToken"] },
     };
 
     public static readonly HashSet<string> UnsupportedNodes = [];
