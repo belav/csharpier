@@ -4,7 +4,7 @@
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
-    <LangVersion>10</LangVersion>
+    <LangVersion>13</LangVersion>
     <NoWarn>SYSLIB0013</NoWarn>
   </PropertyGroup>
   <ItemGroup>

@@ -4,23 +4,36 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.FakeGenerators;
+namespace CSharpier.Generators;
 
-public static class SyntaxNodeComparerGenerator
+[Generator]
+public class SyntaxNodeComparerGenerator : IIncrementalGenerator
 {
-    // this would probably be easier to understand as a scriban template but is a lot of effort
-    // to switch and doesn't really change at this point
-    public static void Execute(CodeContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.AddSource("SyntaxNodeComparer.generated", GenerateSource());
+        var compilationProvider = context.CompilationProvider.Select(
+            (compilation, _) => ValidNodeTypes.Get(compilation)
+        );
+
+        context.RegisterSourceOutput(
+            compilationProvider,
+            static (context, entityClasses) => Execute(context, entityClasses)
+        );
     }
 
-    private static string GenerateSource()
+    // this would probably be easier to understand as a scriban template but is a lot of effort
+    // to switch and doesn't really change at this point
+    public static void Execute(SourceProductionContext context, IEnumerable<INamedTypeSymbol> types)
+    {
+        context.AddSource("SyntaxNodeComparer.generated", GenerateSource(types.ToList()));
+    }
+
+    private static string GenerateSource(List<INamedTypeSymbol> types)
     {
         var sourceBuilder = new StringBuilder();
         sourceBuilder.AppendLine(
             """
-#pragma warning disable CS0168
+#pragma warning disable
 using System;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -63,18 +76,15 @@ namespace CSharpier.Core.CSharp
 """
         );
 
-        var syntaxNodeTypes = ValidNodeTypes.Get();
-
-        foreach (var syntaxNodeType in syntaxNodeTypes)
+        foreach (var syntaxNodeType in types)
         {
             var lowerCaseName =
                 syntaxNodeType.Name[0].ToString().ToLower(CultureInfo.InvariantCulture)
                 + syntaxNodeType.Name[1..];
 
-            if (syntaxNodeType == typeof(UsingDirectiveSyntax))
+            if (syntaxNodeType.Name == nameof(UsingDirectiveSyntax))
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"""
                 case {syntaxNodeType.Name} {lowerCaseName}:
                     if (this.ReorderedUsingsWithDisabledText)
@@ -86,7 +96,6 @@ namespace CSharpier.Core.CSharp
             else
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"""
              case {syntaxNodeType.Name} {lowerCaseName}:
                  return this.Compare{syntaxNodeType.Name}({lowerCaseName}, formattedNode as {syntaxNodeType.Name});
@@ -109,7 +118,7 @@ namespace CSharpier.Core.CSharp
 """
         );
 
-        foreach (var syntaxNodeType in syntaxNodeTypes)
+        foreach (var syntaxNodeType in types)
         {
             GenerateMethod(sourceBuilder, syntaxNodeType);
         }
@@ -122,20 +131,19 @@ namespace CSharpier.Core.CSharp
         return sourceBuilder.ToString();
     }
 
-    private static void GenerateMethod(StringBuilder sourceBuilder, Type type)
+    private static void GenerateMethod(StringBuilder sourceBuilder, INamedTypeSymbol type)
     {
         sourceBuilder.AppendLine(
-            CultureInfo.InvariantCulture,
             $$"""
-      private CompareResult Compare{{type.Name}}({{type.Name}} originalNode, {{type.Name}} formattedNode)
-      {
-          CompareResult result;
-"""
+                  private CompareResult Compare{{type.Name}}({{type.Name}} originalNode, {{type.Name}} formattedNode)
+                  {
+                      CompareResult result;
+            """
         );
 
-        foreach (var propertyInfo in type.GetProperties().OrderBy(o => o.Name))
+        foreach (var propertySymbol in type.GetAllProperties().OrderBy(o => o.Name))
         {
-            var propertyName = propertyInfo.Name;
+            var propertyName = propertySymbol.Name;
 
             if (
                 propertyName
@@ -146,87 +154,87 @@ namespace CSharpier.Core.CSharp
                     or "ParentTrivia"
                     or "Arity"
                     or "SpanStart"
+                    or "KindText"
             )
             {
                 continue;
             }
 
             var camelCaseName = CamelCaseName(propertyName);
-            var propertyType = propertyInfo.PropertyType;
+            if (propertySymbol.Type is not INamedTypeSymbol propertyType)
+            {
+                continue;
+            }
 
             if (
                 Ignored.Properties.Contains(camelCaseName)
-                || Ignored.Types.Contains(propertyType)
+                || Ignored.Types.Contains(propertyType.Name)
                 || (
-                    Ignored.PropertiesByType.ContainsKey(type)
-                    && Ignored.PropertiesByType[type].Contains(camelCaseName)
+                    Ignored.PropertiesByType.ContainsKey(type.Name)
+                    && Ignored.PropertiesByType[type.Name].Contains(camelCaseName)
                 )
             )
             {
                 continue;
             }
 
-            if (propertyType == typeof(bool) || propertyType == typeof(Int32))
+            if (propertyType.SpecialType is SpecialType.System_Boolean or SpecialType.System_Int32)
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            if (originalNode.{propertyName} != formattedNode.{propertyName}) return NotEqual(originalNode, formattedNode);"
                 );
             }
-            else if (propertyType == typeof(SyntaxToken))
+            else if (propertyType.Name == nameof(SyntaxToken))
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            result = this.Compare(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
                 );
                 sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
             }
-            else if (propertyType == typeof(SyntaxTrivia))
+            else if (propertyType.Name == nameof(SyntaxTrivia))
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            result = this.Compare(originalNode.{propertyName}, formattedNode.{propertyName});"
                 );
                 sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
             }
-            else if (typeof(CSharpSyntaxNode).IsAssignableFrom(propertyType))
+            else if (propertyType.InheritsFrom(nameof(CSharpSyntaxNode)))
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            originalStack.Push((originalNode.{propertyName}, originalNode));"
                 );
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            formattedStack.Push((formattedNode.{propertyName}, formattedNode));"
                 );
             }
             else if (
-                propertyType == typeof(SyntaxTokenList)
+                propertyType.Name == nameof(SyntaxTokenList)
                 || (
                     propertyType.IsGenericType
-                    && propertyType.GetGenericTypeDefinition() == typeof(SyntaxList<>)
+                    && propertyType
+                        .ConstructedFrom.ToDisplayString()
+                        .StartsWith("Microsoft.CodeAnalysis.SyntaxList<")
                 )
             )
             {
                 if (
                     propertyType.IsGenericType
-                    && propertyType.GenericTypeArguments[0] == typeof(UsingDirectiveSyntax)
+                    && propertyType.TypeArguments[0].Name == nameof(UsingDirectiveSyntax)
                 )
                 {
                     sourceBuilder.AppendLine(
-                        CultureInfo.InvariantCulture,
                         $"            result = this.CompareUsingDirectives(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
                     );
                 }
                 else
                 {
-                    var compare = propertyType == typeof(SyntaxTokenList) ? "Compare" : "null";
+                    var compare = propertyType.Name == nameof(SyntaxTokenList) ? "Compare" : "null";
                     if (propertyName == "Modifiers")
                     {
                         propertyName += ".OrderBy(o => o.Text).ToList()";
                     }
+
                     sourceBuilder.AppendLine(
-                        CultureInfo.InvariantCulture,
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
                     );
                 }
@@ -235,23 +243,31 @@ namespace CSharpier.Core.CSharp
             }
             else if (
                 propertyType.IsGenericType
-                && propertyType.GetGenericTypeDefinition() == typeof(SeparatedSyntaxList<>)
+                && propertyType
+                    .ConstructedFrom.ToDisplayString()
+                    .StartsWith("Microsoft.CodeAnalysis.SeparatedSyntaxList<")
             )
             {
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
-                sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
+                sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
 
                 // Omit the last separator when comparing the original node with the formatted node, as it legitimately may be added or removed
                 sourceBuilder.AppendLine(
-                    CultureInfo.InvariantCulture,
                     $"            result = this.CompareLists(originalNode.{propertyName}.GetSeparators().Take(originalNode.{propertyName}.Count() - 1).ToList(), formattedNode.{propertyName}.GetSeparators().Take(formattedNode.{propertyName}.Count() - 1).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
-                sourceBuilder.AppendLine($"            if (result.IsInvalid) return result;");
+                sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
+            }
+            else
+            {
+                sourceBuilder.AppendLine("// " + propertyName);
+                sourceBuilder.AppendLine("// " + propertyType.ConstructedFrom.ToDisplayString());
+                sourceBuilder.AppendLine("// " + propertyType.ConstructedFrom);
+                sourceBuilder.AppendLine("// " + propertyType.Name);
             }
         }
+
         sourceBuilder.AppendLine("            return Equal;");
         sourceBuilder.AppendLine("        }");
     }
