@@ -2,6 +2,14 @@
 
 # csharpier-rider Changelog
 
+## [2.2.3]
+- Fix for error when Rider returns a composite file path for the location of a given file
+- Fix for when a directory is temporarily inaccessible
+
+## [2.2.2]
+- Include link to changelog from readme
+- Include details in "What's New" for each version
+
 ## [2.2.0]
 - Include XAML in list of supported languages
 

@@ -1,3 +1,4 @@
+import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -32,6 +33,14 @@ intellijPlatform {
         ideaVersion.untilBuild.set(properties("pluginUntilBuild"))
         description = getProjectDescription()
         version = properties("pluginVersion")
+
+        changeNotes.set(provider {
+            project.changelog.renderItem(
+                project.changelog.getOrNull(properties("pluginVersion"))
+                    ?: project.changelog.getLatest(),
+                Changelog.OutputType.HTML
+            )
+        })
     }
 }
 

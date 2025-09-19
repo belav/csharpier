@@ -54,4 +54,8 @@ See [Editor Troubleshooting](https://csharpier.com/docs/EditorsTroubleshooting) 
 - Add entry for "#com.intellij.csharpier.CSharpierLogger"
 - Restart Rider
 
+### Release Notes
+
+[Change Log](https://github.com/belav/csharpier/blob/main/Src/CSharpier.Rider/CHANGELOG.md)
+
 <!-- Plugin description end -->
