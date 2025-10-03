@@ -233,3 +233,13 @@ public class KeepLineBreaks
          }
     }
 }
+
+public class TrailingComma
+{
+    List<string> SomeField = new()
+    {
+        // csharpier-ignore-start
+            "SomeValue" // SomeComment
+        // csharpier-ignore-end
+    };
+}
