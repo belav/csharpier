@@ -78,9 +78,8 @@ internal static class RecursivePattern
                 result.Add(
                     Doc.Group(
                         node.Type != null
-                        && !Enumerable.Any(
-                            node.PropertyPatternClause.OpenBraceToken.LeadingTrivia,
-                            o => o.IsDirective || o.IsComment()
+                        && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.Any(o =>
+                            o.IsDirective || o.IsComment()
                         )
                             ? Doc.Line
                             : Doc.Null,
