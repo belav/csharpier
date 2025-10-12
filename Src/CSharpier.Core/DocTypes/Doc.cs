@@ -110,8 +110,7 @@ internal abstract class Doc
 
     public static Group GroupWithNewId(out string groupId, Doc contents)
     {
-        groupId = "Group_" + groupNumber;
-        Interlocked.Increment(ref groupNumber);
+        groupId = "Group_" + Interlocked.Increment(ref groupNumber);
         var group = Group(contents);
         group.GroupId = groupId;
         return group;
