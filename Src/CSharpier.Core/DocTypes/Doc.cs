@@ -129,6 +129,9 @@ internal abstract class Doc
 
     public static Group Group(params Doc[] contents) => new() { Contents = Concat(contents) };
 
+    public static Group Group(ref ValueListBuilder<Doc> contents) =>
+        new() { Contents = Concat(ref contents) };
+
     // prevents allocating an array if there is only a single parameter
     public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
 
