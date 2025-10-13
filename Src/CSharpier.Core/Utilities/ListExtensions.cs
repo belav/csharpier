@@ -30,6 +30,23 @@ internal static class ListExtensions
         }
     }
 
+    public static bool Any<T>(this ReadOnlySpan<T> span, Func<T, bool> predicate)
+    {
+        foreach (var item in span)
+        {
+            if (predicate(item))
+                return true;
+        }
+
+        return false;
+    }
+
+    public static ReadOnlySpan<T> Skip<T>(this ReadOnlySpan<T> span, int count) =>
+        count > span.Length ? [] : span[count..];
+
+    public static ReadOnlySpan<T> Skip<T>(this Span<T> span, int count) =>
+        count > span.Length ? [] : span[count..];
+
     // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
     public static bool Any(this in SyntaxTriviaList triviaList, Func<SyntaxTrivia, bool> predicate)
     {
