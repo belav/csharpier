@@ -41,34 +41,47 @@ internal static class AttributeList
                     return name;
                 }
 
+                var singleCollectionExpression =
+                    attributeNode.ArgumentList.Arguments
+                        is [
+                            {
+                                Expression: CollectionExpressionSyntax,
+                                NameColon: null,
+                                NameEquals: null
+                            },
+                        ];
+
                 return Doc.Group(
                     name,
                     Token.Print(attributeNode.ArgumentList.OpenParenToken, context),
-                    Doc.Indent(
-                        Doc.SoftLine,
-                        SeparatedSyntaxList.Print(
-                            attributeNode.ArgumentList.Arguments,
-                            (attributeArgumentNode, _) =>
-                                Doc.Concat(
-                                    attributeArgumentNode.NameEquals != null
-                                        ? NameEquals.Print(
-                                            attributeArgumentNode.NameEquals,
-                                            context
-                                        )
-                                        : Doc.Null,
-                                    attributeArgumentNode.NameColon != null
-                                        ? BaseExpressionColon.Print(
-                                            attributeArgumentNode.NameColon,
-                                            context
-                                        )
-                                        : Doc.Null,
-                                    Node.Print(attributeArgumentNode.Expression, context)
-                                ),
-                            Doc.Line,
-                            context
+                    Doc.IndentIf(
+                        !singleCollectionExpression,
+                        Doc.Concat(
+                            singleCollectionExpression ? Doc.Null : Doc.SoftLine,
+                            SeparatedSyntaxList.Print(
+                                attributeNode.ArgumentList.Arguments,
+                                (attributeArgumentNode, _) =>
+                                    Doc.Concat(
+                                        attributeArgumentNode.NameEquals != null
+                                            ? NameEquals.Print(
+                                                attributeArgumentNode.NameEquals,
+                                                context
+                                            )
+                                            : Doc.Null,
+                                        attributeArgumentNode.NameColon != null
+                                            ? BaseExpressionColon.Print(
+                                                attributeArgumentNode.NameColon,
+                                                context
+                                            )
+                                            : Doc.Null,
+                                        Node.Print(attributeArgumentNode.Expression, context)
+                                    ),
+                                Doc.Line,
+                                context
+                            )
                         )
                     ),
-                    Doc.SoftLine,
+                    singleCollectionExpression ? Doc.Null : Doc.SoftLine,
                     Token.Print(attributeNode.ArgumentList.CloseParenToken, context)
                 );
             },

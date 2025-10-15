@@ -155,18 +155,35 @@ class MyClass
     ];
 }
 
+[SomeAttribute([
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+])]
+[SomeAttribute(
+    someName: [
+        SomeValue__________________________________________,
+        SomeValue__________________________________________,
+    ]
+)]
 [SomeAttribute(
     [
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
+        SomeValue__________________________________________,
+        SomeValue__________________________________________,
+    ],
+    SomeArgument = false
+)]
+[SomeAttribute(
+    SomeArgument = [
+        SomeValue__________________________________________,
+        SomeValue__________________________________________,
     ]
 )]
 class ClassName { }
