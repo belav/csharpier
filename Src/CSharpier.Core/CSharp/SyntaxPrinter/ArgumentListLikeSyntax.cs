@@ -64,6 +64,10 @@ internal static class ArgumentListLike
                     : Doc.SoftLine
             );
         }
+        else if (arguments is [{ Expression: CollectionExpressionSyntax, NameColon: null }])
+        {
+            args = SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context);
+        }
         else if (arguments.Count > 0)
         {
             args = Doc.Concat(
