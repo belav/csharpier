@@ -210,4 +210,18 @@ internal ref partial struct ValueListBuilder<T>
             ArrayPool<T>.Shared.Return(toReturn);
         }
     }
+
+    public readonly bool Contains<T>(T item)
+        where T : struct
+    {
+        foreach (var element in this.AsSpan())
+        {
+            if (item.Equals(element))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
