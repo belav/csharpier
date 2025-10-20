@@ -27,7 +27,7 @@ internal static partial class BaseMethodDeclaration
         TypeSyntax? returnType = null;
         ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifier = null;
         TypeParameterListSyntax? typeParameterList = null;
-        Func<Doc>? identifier = null;
+        Func<CSharpSyntaxNode, PrintingContext, Doc>? identifier = null;
         SyntaxList<TypeParameterConstraintClauseSyntax>? constraintClauses = null;
         ParameterListSyntax? parameterList = null;
         ConstructorInitializerSyntax? constructorInitializer = null;
@@ -46,21 +46,32 @@ internal static partial class BaseMethodDeclaration
             {
                 returnType = methodDeclarationSyntax.ReturnType;
                 explicitInterfaceSpecifier = methodDeclarationSyntax.ExplicitInterfaceSpecifier;
-                identifier = () => Token.Print(methodDeclarationSyntax.Identifier, context);
+                identifier = static (node, context) =>
+                {
+                    var methodDeclarationSyntax = (MethodDeclarationSyntax)node;
+                    return Token.Print(methodDeclarationSyntax.Identifier, context);
+                };
                 typeParameterList = methodDeclarationSyntax.TypeParameterList;
                 constraintClauses = methodDeclarationSyntax.ConstraintClauses;
             }
-            else if (node is DestructorDeclarationSyntax destructorDeclarationSyntax)
+            else if (node is DestructorDeclarationSyntax)
             {
-                identifier = () =>
-                    Doc.Concat(
+                identifier = static (node, context) =>
+                {
+                    var destructorDeclarationSyntax = (DestructorDeclarationSyntax)node;
+                    return Doc.Concat(
                         Token.Print(destructorDeclarationSyntax.TildeToken, context),
                         Token.Print(destructorDeclarationSyntax.Identifier, context)
                     );
+                };
             }
             else if (node is ConstructorDeclarationSyntax constructorDeclarationSyntax)
             {
-                identifier = () => Token.Print(constructorDeclarationSyntax.Identifier, context);
+                identifier = static (node, context) =>
+                {
+                    var constructorDeclarationSyntax = (ConstructorDeclarationSyntax)node;
+                    return Token.Print(constructorDeclarationSyntax.Identifier, context);
+                };
                 constructorInitializer = constructorDeclarationSyntax.Initializer;
             }
 
@@ -71,7 +82,11 @@ internal static partial class BaseMethodDeclaration
             attributeLists = localFunctionStatementSyntax.AttributeLists;
             modifiers = localFunctionStatementSyntax.Modifiers;
             returnType = localFunctionStatementSyntax.ReturnType;
-            identifier = () => Token.Print(localFunctionStatementSyntax.Identifier, context);
+            identifier = static (node, context) =>
+            {
+                var localFunctionStatementSyntax = (LocalFunctionStatementSyntax)node;
+                return Token.Print(localFunctionStatementSyntax.Identifier, context);
+            };
             typeParameterList = localFunctionStatementSyntax.TypeParameterList;
             parameterList = localFunctionStatementSyntax.ParameterList;
             constraintClauses = localFunctionStatementSyntax.ConstraintClauses;
@@ -176,7 +191,7 @@ internal static partial class BaseMethodDeclaration
 
         if (identifier != null)
         {
-            declarationGroup.Append(identifier());
+            declarationGroup.Append(identifier(node, context));
         }
 
         if (node is ConversionOperatorDeclarationSyntax conversionOperatorDeclarationSyntax)
