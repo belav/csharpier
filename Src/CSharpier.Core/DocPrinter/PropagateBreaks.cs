@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.DocPrinter;
@@ -27,6 +28,7 @@ internal static class PropagateBreaks
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool OnEnter(Doc doc)
         {
             if (doc is ForceFlat)
@@ -87,21 +89,22 @@ internal static class PropagateBreaks
         docsStack.Push(document);
         while (docsStack.Count > 0)
         {
-            var doc = docsStack.Pop();
+            var doc = docsStack.Peek();
 
             if (doc == TraverseDocOnExitStackMarker)
+            {
+                docsStack.Pop();
+                OnExit(docsStack.Pop());
+                continue;
+            }
+
+            if (!OnEnter(doc))
             {
                 OnExit(docsStack.Pop());
                 continue;
             }
 
-            docsStack.Push(doc);
             docsStack.Push(TraverseDocOnExitStackMarker);
-
-            if (!OnEnter(doc))
-            {
-                continue;
-            }
 
             if (doc is Concat concat)
             {
