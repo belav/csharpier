@@ -4,11 +4,6 @@ namespace CSharpier.Core.DocTypes;
 
 internal abstract class Doc
 {
-    public string Print()
-    {
-        return DocPrinter.DocPrinter.Print(this, new PrinterOptions(), Environment.NewLine);
-    }
-
     public override string ToString()
     {
         return DocSerializer.Serialize(this);
@@ -62,12 +57,7 @@ internal abstract class Doc
 
     public static Doc Concat(ref ValueListBuilder<Doc> contents)
     {
-        return contents.Length switch
-        {
-            0 => Null,
-            1 => contents[0],
-            _ => new Concat(contents.AsSpan().ToArray()),
-        };
+        return DocTypes.Concat.Create(contents.AsSpan());
     }
 
     public static Doc Join(Doc separator, IEnumerable<Doc> enumerable)
@@ -124,7 +114,6 @@ internal abstract class Doc
         return group;
     }
 
-    public static Group GroupWithId(string groupId, params Doc[] contents)
     public static Group GroupWithId(string groupId, params ReadOnlySpan<Doc> contents)
     {
         var group = Group(contents);

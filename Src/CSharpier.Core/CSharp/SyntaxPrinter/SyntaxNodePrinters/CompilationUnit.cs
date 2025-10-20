@@ -29,9 +29,11 @@ internal static class CompilationUnit
                 && previousList[^2] is HardLine
             )
             {
-                while (list[0] is HardLine { SkipBreakIfFirstInGroup: true })
+                var i = 0;
+                while (list[i] is HardLine { SkipBreakIfFirstInGroup: true })
                 {
-                    list.RemoveAt(0);
+                    list[i] = Doc.Null;
+                    i++;
                 }
 
                 docs.Add(finalTrivia);

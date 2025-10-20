@@ -1,4 +1,4 @@
-namespace CSharpier.DocTypes;
+namespace CSharpier.Core.DocTypes;
 
 internal abstract partial class Concat
 {
@@ -36,27 +36,6 @@ internal abstract partial class Concat
                     default:
                         throw new IndexOutOfRangeException(nameof(index));
                 }
-            }
-        }
-
-        public override void RemoveAt(int index)
-        {
-            switch (index)
-            {
-                case 0:
-                    _child0 = _child1;
-                    _child1 = _child2;
-                    _child2 = Doc.Null;
-                    break;
-                case 1:
-                    _child1 = _child2;
-                    _child2 = Doc.Null;
-                    break;
-                case 2:
-                    _child2 = Doc.Null;
-                    break;
-                default:
-                    throw new IndexOutOfRangeException(nameof(index));
             }
         }
     }

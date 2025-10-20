@@ -10,12 +10,12 @@ internal static class ExpressionStatement
         var semicolonLeadingTrivia = Token.PrintLeadingTrivia(node.SemicolonToken, context);
         if (
             node.Expression is InvocationExpressionSyntax
-            && semicolonLeadingTrivia is Concat { Contents.Count: > 1 } concat
-            && concat.Contents[^1] is HardLine
-            && concat.Contents[0] is LeadingComment
+            && semicolonLeadingTrivia is Concat { Count: > 1 } concat
+            && concat[^1] is HardLine
+            && concat[0] is LeadingComment
         )
         {
-            concat.Contents.RemoveAt(concat.Contents.Count - 1);
+            concat[^1] = Doc.Null;
             semicolonLeadingTrivia = Doc.Concat(Doc.Indent(semicolonLeadingTrivia), Doc.HardLine);
         }
 

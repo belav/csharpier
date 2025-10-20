@@ -1,4 +1,4 @@
-namespace CSharpier.DocTypes;
+namespace CSharpier.Core.DocTypes;
 
 internal abstract partial class Concat
 {
@@ -11,7 +11,5 @@ internal abstract partial class Concat
             get => content[index];
             set => content[index] = value;
         }
-
-        public override void RemoveAt(int index) => content.RemoveAt(index);
     }
 }

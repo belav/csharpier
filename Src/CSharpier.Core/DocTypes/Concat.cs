@@ -6,8 +6,6 @@ internal abstract partial class Concat : Doc
 
     public abstract Doc this[int index] { get; set; }
 
-    public abstract void RemoveAt(int index);
-
     public bool Any(Func<Doc, bool> predicate)
     {
         for (var i = 0; i < Count; i++)
@@ -27,7 +25,7 @@ internal abstract partial class Concat : Doc
     {
         return collection.Length switch
         {
-            0 => Doc.Null,
+            0 => Null,
             1 => collection[0],
             2 => new WithTwoChildren(collection[0], collection[1]),
             3 => new WithThreeChildren(collection[0], collection[1], collection[2]),
