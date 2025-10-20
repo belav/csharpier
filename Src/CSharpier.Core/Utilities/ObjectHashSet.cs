@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace CSharpier.Utilities;
+namespace CSharpier.Core.Utilities;
 
 // From https://github.com/dotnet/roslyn/blob/38f239fb81b72bfd313cd18aeff0b0ed40f34c5c/src/Dependencies/PooledObjects/PooledHashSet.cs#L12
 internal sealed class PooledHashSet<T> : HashSet<T>

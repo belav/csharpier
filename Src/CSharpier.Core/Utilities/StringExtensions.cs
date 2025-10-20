@@ -40,12 +40,12 @@ internal static class StringExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GetPrintedWidth(this string value)
     {
-#if NET8_0_OR_GREATER
-        if (! MemoryExtensions.ContainsAnyExceptInRange(value, (char)0, (char)0x10FF))
-        {
-            return value.Length;
-        }
-        #endif
+// #if NET8_0_OR_GREATER
+//         if (! MemoryExtensions.ContainsAnyExceptInRange(value, (char)0, (char)0x10FF))
+//         {
+//             return value.Length;
+//         }
+//         #endif
 
         return CalculateActualWidth(value);
     }

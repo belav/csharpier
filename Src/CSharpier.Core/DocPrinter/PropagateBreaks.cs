@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.DocPrinter;
 
