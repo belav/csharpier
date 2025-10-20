@@ -7,28 +7,6 @@ internal static class Modifiers
 {
     private class DefaultOrder : IComparer<SyntaxToken>
     {
-        // use the default order from https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036
-        private static readonly string[] DefaultOrdered =
-        [
-            "public",
-            "private",
-            "protected",
-            "internal",
-            "file",
-            "static",
-            "extern",
-            "new",
-            "virtual",
-            "abstract",
-            "sealed",
-            "override",
-            "readonly",
-            "unsafe",
-            "required",
-            "volatile",
-            "async",
-        ];
-
         public int Compare(SyntaxToken x, SyntaxToken y)
         {
             return GetIndex(x.Text) - GetIndex(y.Text);
@@ -36,8 +14,28 @@ internal static class Modifiers
 
         private static int GetIndex(string? value)
         {
-            var result = Array.IndexOf(DefaultOrdered, value);
-            return result == -1 ? int.MaxValue : result;
+            // use the default order from https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0036
+            return value switch
+            {
+                "public" => 0,
+                "private" => 1,
+                "protected" => 2,
+                "internal" => 3,
+                "file" => 4,
+                "static" => 5,
+                "extern" => 6,
+                "new" => 7,
+                "virtual" => 8,
+                "abstract" => 9,
+                "sealed" => 10,
+                "override" => 11,
+                "readonly" => 12,
+                "unsafe" => 13,
+                "required" => 14,
+                "volatile" => 15,
+                "async" => 16,
+                _ => int.MaxValue,
+            };
         }
     }
 
@@ -58,7 +56,7 @@ internal static class Modifiers
         return PrintWithSortedModifiers(
             modifiers,
             context,
-            sortedModifiers =>
+            static (sortedModifiers, context) =>
                 Doc.Group(Doc.Join(" ", sortedModifiers.Select(o => Token.Print(o, context))), " ")
         );
     }
@@ -71,7 +69,7 @@ internal static class Modifiers
         return PrintWithSortedModifiers(
             modifiers,
             context,
-            sortedModifiers =>
+            static (sortedModifiers, context) =>
                 Doc.Group(
                     Token.PrintWithoutLeadingTrivia(sortedModifiers[0], context),
                     " ",
@@ -90,7 +88,7 @@ internal static class Modifiers
     private static Doc PrintWithSortedModifiers(
         in SyntaxTokenList modifiers,
         PrintingContext context,
-        Func<IReadOnlyList<SyntaxToken>, Doc> print
+        Func<IReadOnlyList<SyntaxToken>, PrintingContext, Doc> print
     )
     {
         if (modifiers.Count == 0)
@@ -114,6 +112,6 @@ internal static class Modifiers
             context.State.ReorderedModifiers = true;
         }
 
-        return print(sortedModifiers);
+        return print(sortedModifiers, context);
     }
 }
