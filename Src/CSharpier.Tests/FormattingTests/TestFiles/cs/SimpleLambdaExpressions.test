@@ -136,6 +136,30 @@ public class ClassName
             return x;
         });
 
+        this.Where___________________(
+            x // Comment
+            =>
+            {
+                return x;
+            }
+        );
+
+        this.Where___________________(
+            // Comment
+            x =>
+            {
+                return x;
+            }
+        );
+
+        this.Where___________________(
+            // Comment
+            () =>
+            {
+                return 1;
+            }
+        );
+
         this.Where______________________________________(
             superLongName________________________________ =>
             {
