@@ -250,6 +250,8 @@ class RawNodeReader
         if (this.elementStack.Count > 0)
         {
             var element = this.elementStack.Pop();
+            // we don't want to keep around any leading or trailing newlines in an elements children
+            // it is easier to remove them here instead of dealing with it in the printer
             for (var x = element.Nodes.Count - 1; x >= 0; x--)
             {
                 if (
