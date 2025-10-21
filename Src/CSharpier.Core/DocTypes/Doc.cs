@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.DocTypes;
@@ -53,6 +54,21 @@ internal abstract class Doc
 
     public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
+    [SkipLocalsInit]
+    public static Doc Concat(IEnumerable<Doc> contents)
+    {
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+
+        foreach (var item in contents)
+        {
+            docs.Append(item);
+        }
+
+        var returnDoc = Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
+    }
+
     public static Doc Concat(ref ValueListBuilder<Doc> contents)
     {
         return contents.Length switch
@@ -63,23 +79,26 @@ internal abstract class Doc
         };
     }
 
+    [SkipLocalsInit]
     public static Doc Join(Doc separator, IEnumerable<Doc> enumerable)
     {
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
         var x = 0;
         foreach (var doc in enumerable)
         {
             if (x != 0)
             {
-                docs.Add(separator);
+                docs.Append(separator);
             }
 
-            docs.Add(doc);
+            docs.Append(doc);
             x++;
         }
 
-        return docs.Count == 1 ? docs[0] : Concat(docs);
+        var returnDoc = Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
     }
 
     public static ForceFlat ForceFlat(List<Doc> contents) =>
@@ -134,6 +153,9 @@ internal abstract class Doc
     public static IndentDoc Indent(params Doc[] contents) => new() { Contents = Concat(contents) };
 
     public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
+
+    public static IndentDoc Indent(IEnumerable<Doc> contents) =>
+        new() { Contents = Concat(contents) };
 
     public static Doc IndentIf(bool condition, Doc contents)
     {

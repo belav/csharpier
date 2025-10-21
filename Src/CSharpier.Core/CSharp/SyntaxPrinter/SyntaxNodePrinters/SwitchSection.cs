@@ -19,10 +19,7 @@ internal static class SwitchSection
             docs.Append(
                 Doc.Indent(
                     node.Statements.First() is BlockSyntax ? Doc.Null : Doc.HardLine,
-                    Doc.Join(
-                        Doc.HardLine,
-                        node.Statements.Select(o => Node.Print(o, context)).ToArray()
-                    )
+                    Doc.Join(Doc.HardLine, node.Statements.Select(o => Node.Print(o, context)))
                 )
             );
         }

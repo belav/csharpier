@@ -42,9 +42,7 @@ internal static class BinaryExpression
                 && conditionalExpressionSyntax.WhenFalse != node
             );
 
-        return shouldNotIndent
-            ? Doc.Group(docs)
-            : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
+        return shouldNotIndent ? Doc.Group(docs) : Doc.Group(docs[0], Doc.Indent(docs.Skip(1)));
     }
 
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
