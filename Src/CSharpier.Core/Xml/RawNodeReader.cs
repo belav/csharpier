@@ -44,6 +44,28 @@ class RawNodeReader
         this.elementStack.Push(rootNode);
         while (this.position < this.originalXml.Length)
         {
+            var newLines = 0;
+            while (
+                this.position < this.originalXml.Length
+                && char.IsWhiteSpace(this.originalXml[this.position])
+            )
+            {
+                if (this.originalXml[this.position] == '\n')
+                {
+                    newLines++;
+                }
+                this.position++;
+            }
+
+            if (newLines > 1)
+            {
+                // this is a bit of a hack and doesn't actually represent the whitespace from the original xml
+                // we turn all whitespace into a single new line if it has more than a single newline in it
+                // then we remove the leading/trailing whitespace nodes from a nodes child nodes before sending it to printing
+                // then during printing when we find this we add a new line
+                this.AddNode(new RawNode { NodeType = XmlNodeType.Whitespace, Value = "\n" });
+            }
+
             this.SkipWhitespace();
             if (this.position >= this.originalXml.Length)
             {
@@ -228,6 +250,17 @@ class RawNodeReader
         if (this.elementStack.Count > 0)
         {
             var element = this.elementStack.Pop();
+            for (var x = element.Nodes.Count - 1; x >= 0; x--)
+            {
+                if (
+                    (x == element.Nodes.Count - 1 || x == 0)
+                    && element.Nodes[x].NodeType is XmlNodeType.Whitespace
+                )
+                {
+                    element.Nodes.RemoveAt(x);
+                }
+            }
+
             for (var x = 0; x < element.Nodes.Count; x++)
             {
                 if (x > 0)

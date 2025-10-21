@@ -1,0 +1,12 @@
+<Root>
+  <Element />
+  <Element />
+
+  <Element />
+
+  <Element>
+    <ChildElement />
+
+    <ChildElement />
+  </Element>
+</Root>

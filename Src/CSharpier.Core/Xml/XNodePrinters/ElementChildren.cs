@@ -19,6 +19,12 @@ internal static class ElementChildren
         var x = 0;
         foreach (var childNode in node.Nodes)
         {
+            if (childNode.NodeType is XmlNodeType.Whitespace)
+            {
+                result.Append(Doc.HardLine);
+                continue;
+            }
+
             var prevParts = new ValueListBuilder<Doc>([null, null]);
             var leadingParts = new ValueListBuilder<Doc>([null, null]);
             var trailingParts = new ValueListBuilder<Doc>([null, null]);
