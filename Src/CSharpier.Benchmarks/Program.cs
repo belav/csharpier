@@ -12,38 +12,38 @@ namespace CSharpier.Benchmarks;
 [MemoryDiagnoser]
 public class Benchmarks
 {
-    [Benchmark]
-    public void XmlDocument_Parse()
-    {
-        var root = new XmlDocument();
-        root.LoadXml(this.largeXmlCode);
-    }
-
-    [Benchmark]
-    public void XDocument_Parse()
-    {
-        _ = XDocument.Parse(this.largeXmlCode);
-    }
-
-    [Benchmark]
-    public void CustomParser_Parse()
-    {
-        _ = RawNodeReader.ParseXml(this.largeXmlCode, Environment.NewLine);
-    }
-
-    [Benchmark]
-    public void XmlReader_Parse()
-    {
-        using var xmlReader = XmlReader.Create(
-            new StringReader(this.largeXmlCode),
-            new XmlReaderSettings { IgnoreWhitespace = false }
-        );
-
-        while (xmlReader.Read())
-        {
-            //
-        }
-    }
+    // [Benchmark]
+    // public void XmlDocument_Parse()
+    // {
+    //     var root = new XmlDocument();
+    //     root.LoadXml(this.largeXmlCode);
+    // }
+    //
+    // [Benchmark]
+    // public void XDocument_Parse()
+    // {
+    //     _ = XDocument.Parse(this.largeXmlCode);
+    // }
+    //
+    // [Benchmark]
+    // public void CustomParser_Parse()
+    // {
+    //     _ = RawNodeReader.ParseXml(this.largeXmlCode, Environment.NewLine);
+    // }
+    //
+    // [Benchmark]
+    // public void XmlReader_Parse()
+    // {
+    //     using var xmlReader = XmlReader.Create(
+    //         new StringReader(this.largeXmlCode),
+    //         new XmlReaderSettings { IgnoreWhitespace = false }
+    //     );
+    //
+    //     while (xmlReader.Read())
+    //     {
+    //         //
+    //     }
+    // }
 
     [Benchmark]
     public void Default_CodeFormatter_Tests()
@@ -63,26 +63,26 @@ public class Benchmarks
             .GetResult();
     }
 
-    [Benchmark]
-    public void Default_SyntaxNodeComparer()
-    {
-        var syntaxNodeComparer = new SyntaxNodeComparer(
-            this.code,
-            this.code,
-            false,
-            false,
-            false,
-            SourceCodeKind.Regular,
-            CancellationToken.None
-        );
-        syntaxNodeComparer.CompareSource();
-    }
-
-    [Benchmark]
-    public void IsCodeBasicallyEqual_SyntaxNodeComparer()
-    {
-        DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
-    }
+    // [Benchmark]
+    // public void Default_SyntaxNodeComparer()
+    // {
+    //     var syntaxNodeComparer = new SyntaxNodeComparer(
+    //         this.code,
+    //         this.code,
+    //         false,
+    //         false,
+    //         false,
+    //         SourceCodeKind.Regular,
+    //         CancellationToken.None
+    //     );
+    //     syntaxNodeComparer.CompareSource();
+    // }
+    //
+    // [Benchmark]
+    // public void IsCodeBasicallyEqual_SyntaxNodeComparer()
+    // {
+    //     DisabledTextComparer.IsCodeBasicallyEqual(this.code, this.code);
+    // }
 
     private readonly string largeXmlCode = File.ReadAllText(
         Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Type.xml")
@@ -129,5 +129,9 @@ public static class Program
     public static void Main()
     {
         _ = BenchmarkRunner.Run<Benchmarks>();
+        var bench = new Benchmarks();
+        for (int i = 0; i < 10; i++) { }
+        bench.Default_CodeFormatter_Complex();
+        GC.Collect();
     }
 }
