@@ -49,6 +49,23 @@ internal static class Token
             return Doc.Null;
         }
 
+        return PrintSyntaxToken1(
+            syntaxToken,
+            context,
+            suffixDoc,
+            skipLeadingTrivia,
+            skipTrailingTrivia
+        );
+    }
+
+    private static Doc PrintSyntaxToken1(
+        SyntaxToken syntaxToken,
+        PrintingContext context,
+        Doc? suffixDoc,
+        bool skipLeadingTrivia,
+        bool skipTrailingTrivia
+    )
+    {
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
         if (!skipLeadingTrivia)
@@ -163,6 +180,11 @@ internal static class Token
             return Doc.Null;
         }
 
+        return PrintLeadingTrivia1(syntaxToken, context);
+    }
+
+    private static Doc PrintLeadingTrivia1(SyntaxToken syntaxToken, PrintingContext context)
+    {
         var isClosingBrace =
             syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
             || syntaxToken.Parent is CollectionExpressionSyntax
@@ -238,6 +260,21 @@ internal static class Token
             return Doc.Null;
         }
 
+        return PrivatePrintLeadingTrivia1(
+            leadingTrivia,
+            context,
+            includeInitialNewLines,
+            skipLastHardline
+        );
+    }
+
+    private static Doc PrivatePrintLeadingTrivia1(
+        SyntaxTriviaList leadingTrivia,
+        PrintingContext context,
+        bool includeInitialNewLines,
+        bool skipLastHardline
+    )
+    {
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
         // we don't print any new lines until we run into a comment or directive
@@ -436,6 +473,13 @@ internal static class Token
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
+        // exit if the leading trivia length is smaller than the smallest regex
+        var leadingTriviaLength = node.Span.Start - node.FullSpan.Start;
+        if (leadingTriviaLength < 19)
+        {
+            return false;
+        }
+
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
         foreach (var o in node.GetLeadingTrivia())
         {
