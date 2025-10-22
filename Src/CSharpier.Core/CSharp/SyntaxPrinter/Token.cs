@@ -446,6 +446,13 @@ internal static class Token
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
+        // exit if the leading trivia length is smaller than the smallest regex
+        var leadingTriviaLength = node.Span.Start - node.FullSpan.Start;
+        if (leadingTriviaLength < 19)
+        {
+            return false;
+        }
+
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
         foreach (var o in node.GetLeadingTrivia())
         {
