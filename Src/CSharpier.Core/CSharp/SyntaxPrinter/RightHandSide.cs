@@ -1,4 +1,5 @@
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -59,7 +60,7 @@ internal static class RightHandSide
 
     private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
     {
-        if (rightNode.GetLeadingTrivia().Any(o => o.IsComment()))
+        if (rightNode.AnyLeadingComment())
         {
             return Layout.BreakAfterOperator;
         }
