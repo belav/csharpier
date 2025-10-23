@@ -1,3 +1,4 @@
+using CSharpier.Core.CSharp;
 using CSharpier.Core.DocTypes;
 using Microsoft.CodeAnalysis;
 
@@ -124,5 +125,27 @@ internal static class ListExtensions
         }
 
         return true;
+    }
+
+    public static SyntaxTrivia FirstOrDefaultTrailingComment(this SyntaxNode syntaxNode)
+    {
+        var len = syntaxNode.Span.End - syntaxNode.FullSpan.End;
+        if (len == 0)
+        {
+            return default;
+        }
+
+        return syntaxNode.GetTrailingTrivia().FirstOrDefault(o => o.IsComment());
+    }
+
+    public static bool AnyLeadingComment(this SyntaxNode syntaxNode)
+    {
+        var len = syntaxNode.Span.Start - syntaxNode.FullSpan.Start;
+        if (len == 0)
+        {
+            return false;
+        }
+
+        return syntaxNode.GetLeadingTrivia().Any(o => o.IsComment());
     }
 }
