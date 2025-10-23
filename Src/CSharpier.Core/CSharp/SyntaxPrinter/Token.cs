@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
@@ -148,7 +149,7 @@ internal static class Token
             {
                 if (
                     context.State.TrailingComma is not null
-                    && syntaxToken.TrailingTrivia.FirstOrDefault(o => o.IsComment())
+                    && syntaxToken.FirstOrDefaultTrailingComment()
                         == context.State.TrailingComma.TrailingComment
                 )
                 {
@@ -255,6 +256,7 @@ internal static class Token
         bool skipLastHardline = false
     )
     {
+        // TODO: add length check here
         if (leadingTrivia.Count == 0)
         {
             return Doc.Null;
@@ -495,10 +497,28 @@ internal static class Token
         return false;
     }
 
+    [SkipLocalsInit]
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
     {
-        return token.LeadingTrivia.Any(o =>
-            o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia && regex.IsMatch(o.ToString())
-        );
+        // exit if the leading trivia length is smaller than the smallest regex
+        var leadingTriviaLength = token.Span.Start - token.FullSpan.Start;
+        if (leadingTriviaLength < 19)
+        {
+            return false;
+        }
+        
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var o in token.LeadingTrivia)
+        {
+            if (
+                o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                && regex.IsMatch(o.ToString())
+            )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
