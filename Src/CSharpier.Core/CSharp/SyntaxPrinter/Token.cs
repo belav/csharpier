@@ -191,13 +191,13 @@ internal static class Token
             || syntaxToken.Parent is CollectionExpressionSyntax
                 && syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBracketToken;
 
+        var leadingTrivia = syntaxToken.LeadingTrivia;
         var printedTrivia = PrivatePrintLeadingTrivia(
-            syntaxToken.LeadingTrivia,
+            leadingTrivia,
             context,
             skipLastHardline: isClosingBrace
         );
 
-        var leadingTrivia = syntaxToken.LeadingTrivia;
         var hasDirective = leadingTrivia.Any(o => o.IsDirective);
 
         if (hasDirective)
@@ -224,7 +224,7 @@ internal static class Token
 
         if (hasDirective || leadingTrivia.Any(o => o.IsComment()))
         {
-            extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
+            extraNewLines = ExtraNewLines.Print(leadingTrivia);
         }
 
         return printedTrivia != Doc.Null || extraNewLines != Doc.Null
@@ -437,6 +437,7 @@ internal static class Token
         return PrintTrailingTrivia(node.TrailingTrivia);
     }
 
+    [SkipLocalsInit]
     private static Doc PrintTrailingTrivia(in SyntaxTriviaList trailingTrivia)
     {
         if (trailingTrivia.Count == 0)
