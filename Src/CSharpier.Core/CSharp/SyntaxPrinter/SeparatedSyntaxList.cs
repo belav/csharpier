@@ -56,19 +56,31 @@ internal static class SeparatedSyntaxList
         {
             var member = list[x];
 
-            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
+            if (member.FullSpan.Length >= 19)
             {
-                docs.Append(unFormattedCode.AsSpan().Trim().ToString());
-                unFormattedCode.Clear();
-                printUnformatted = false;
-            }
-            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
-            {
-                if (!printUnformatted && x > 0)
+                var triviaList = member.GetLeadingTrivia();
+                if (triviaList.FullSpan.Length >= 19)
                 {
-                    docs.Append(Doc.HardLine);
+                    if (Token.HasLeadingCommentMatching(triviaList, CSharpierIgnore.IgnoreEndRegex))
+                    {
+                        docs.Append(unFormattedCode.AsSpan().Trim().ToString());
+                        unFormattedCode.Clear();
+                        printUnformatted = false;
+                    }
+                    else if (
+                        Token.HasLeadingCommentMatching(
+                            triviaList,
+                            CSharpierIgnore.IgnoreStartRegex
+                        )
+                    )
+                    {
+                        if (!printUnformatted && x > 0)
+                        {
+                            docs.Append(Doc.HardLine);
+                        }
+                        printUnformatted = true;
+                    }
                 }
-                printUnformatted = true;
             }
 
             if (printUnformatted)

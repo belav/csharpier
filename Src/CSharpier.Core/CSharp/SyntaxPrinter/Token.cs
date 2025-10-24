@@ -476,8 +476,7 @@ internal static class Token
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
         // exit if the leading trivia length is smaller than the smallest regex
-        var leadingTriviaLength = node.Span.Start - node.FullSpan.Start;
-        if (leadingTriviaLength < 19)
+        if (node.FullSpan.Length < 19)
         {
             return false;
         }
@@ -497,18 +496,27 @@ internal static class Token
         return false;
     }
 
-    [SkipLocalsInit]
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
     {
-        // exit if the leading trivia length is smaller than the smallest regex
-        var leadingTriviaLength = token.Span.Start - token.FullSpan.Start;
-        if (leadingTriviaLength < 19)
-        {
-            return false;
-        }
-        
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
         foreach (var o in token.LeadingTrivia)
+        {
+            if (
+                o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
+                && regex.IsMatch(o.ToString())
+            )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    public static bool HasLeadingCommentMatching(in SyntaxTriviaList triviaList, Regex regex)
+    {
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var o in triviaList)
         {
             if (
                 o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
