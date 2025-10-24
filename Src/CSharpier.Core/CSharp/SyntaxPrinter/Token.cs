@@ -513,7 +513,7 @@ internal static class Token
 
         return false;
     }
-    
+
     public static bool HasLeadingCommentMatching(in SyntaxTriviaList triviaList, Regex regex)
     {
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator

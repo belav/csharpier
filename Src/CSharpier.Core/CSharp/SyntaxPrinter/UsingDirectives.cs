@@ -192,10 +192,7 @@ internal static class UsingDirectives
                 if (openIf)
                 {
                     directiveGroup.Add(
-                        new UsingData
-                        {
-                            LeadingTrivia = PrintLeadingTrivia(usingDirective),
-                        }
+                        new UsingData { LeadingTrivia = PrintLeadingTrivia(usingDirective) }
                     );
                 }
 
@@ -320,9 +317,7 @@ internal static class UsingDirectives
                 );
             }
 
-            return string.Compare(
-                x?.Name,
-                y?.Name,
+            return string.Compare(x?.Name, y?.Name,
 #pragma warning disable CA1309
                 StringComparison.InvariantCultureIgnoreCase
 #pragma warning restore CA1309

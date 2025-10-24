@@ -140,24 +140,11 @@ internal static class ListExtensions
 
     public static SyntaxTrivia FirstOrDefaultTrailingComment(this in SyntaxToken token)
     {
-        var len = token.FullSpan.End - token.Span.End;
-        if (len < 2)
-        {
-            return default;
-        }
-
         return token.TrailingTrivia.FirstOrDefault(o => o.IsComment());
     }
 
-    
     public static bool AnyLeadingComment(this SyntaxNode syntaxNode)
     {
-        var len = syntaxNode.Span.Start - syntaxNode.FullSpan.Start;
-        if (len < 2)
-        {
-            return false;
-        }
-
         return syntaxNode.GetLeadingTrivia().Any(o => o.IsComment());
     }
 }
