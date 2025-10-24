@@ -15,7 +15,7 @@ internal static class ExpressionStatement
             && concat.Contents[0] is LeadingComment
         )
         {
-            concat.Contents.RemoveAt(concat.Contents.Count - 1);
+            concat.Contents[^1] = Doc.Null;
             semicolonLeadingTrivia = Doc.Concat(Doc.Indent(semicolonLeadingTrivia), Doc.HardLine);
         }
 
