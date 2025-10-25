@@ -44,6 +44,7 @@ public static class CSharpFormatter
             syntaxTree,
             (options ?? new()).ToPrinterOptions(),
             SourceCodeKind.Regular,
+            true,
             cancellationToken
         );
     }
@@ -67,11 +68,13 @@ public static class CSharpFormatter
     )
     {
         var initialSymbolSet = Array.Empty<string>();
+        var hasPreprocessorSymbols = code.Contains("#if");
 
         return FormatAsync(
             ParseText(code, initialSymbolSet, sourceCodeKind, cancellationToken),
             printerOptions,
             sourceCodeKind,
+            hasPreprocessorSymbols,
             cancellationToken
         );
     }
@@ -99,6 +102,7 @@ public static class CSharpFormatter
         SyntaxTree syntaxTree,
         PrinterOptions printerOptions,
         SourceCodeKind sourceCodeKind,
+        bool hasPreprocessorSymbols,
         CancellationToken cancellationToken
     )
     {
@@ -165,36 +169,48 @@ public static class CSharpFormatter
                 .ReorderedUsingsWithDisabledText;
             var movedTrailingTrivia = printingContext.State.MovedTrailingTrivia;
 
-            foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
+            if (hasPreprocessorSymbols)
             {
-                syntaxTree = ParseText(formattedCode, symbolSet, sourceCodeKind, cancellationToken);
-
-                if (TryGetCompilationFailure(out result))
+                foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
                 {
-                    return result;
-                }
+                    syntaxTree = ParseText(
+                        formattedCode,
+                        symbolSet,
+                        sourceCodeKind,
+                        cancellationToken
+                    );
 
-                var formattingContext2 = new PrintingContext
-                {
-                    Options = new PrintingContext.PrintingContextOptions
+                    if (TryGetCompilationFailure(out result))
                     {
-                        LineEnding = lineEnding,
-                        IndentSize = printerOptions.IndentSize,
-                        UseTabs = printerOptions.UseTabs,
-                    },
-                };
-                document = Node.Print(
-                    await syntaxTree.GetRootAsync(cancellationToken),
-                    formattingContext2
-                );
-                formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
-                reorderedModifiers =
-                    reorderedModifiers || formattingContext2.State.ReorderedModifiers;
-                reorderedUsingsWithDisabledText =
-                    reorderedUsingsWithDisabledText
-                    || formattingContext2.State.ReorderedUsingsWithDisabledText;
-                movedTrailingTrivia =
-                    movedTrailingTrivia || formattingContext2.State.MovedTrailingTrivia;
+                        return result;
+                    }
+
+                    var formattingContext2 = new PrintingContext
+                    {
+                        Options = new PrintingContext.PrintingContextOptions
+                        {
+                            LineEnding = lineEnding,
+                            IndentSize = printerOptions.IndentSize,
+                            UseTabs = printerOptions.UseTabs,
+                        },
+                    };
+                    document = Node.Print(
+                        await syntaxTree.GetRootAsync(cancellationToken),
+                        formattingContext2
+                    );
+                    formattedCode = DocPrinter.DocPrinter.Print(
+                        document,
+                        printerOptions,
+                        lineEnding
+                    );
+                    reorderedModifiers =
+                        reorderedModifiers || formattingContext2.State.ReorderedModifiers;
+                    reorderedUsingsWithDisabledText =
+                        reorderedUsingsWithDisabledText
+                        || formattingContext2.State.ReorderedUsingsWithDisabledText;
+                    movedTrailingTrivia =
+                        movedTrailingTrivia || formattingContext2.State.MovedTrailingTrivia;
+                }
             }
 
             return new CodeFormatterResult
