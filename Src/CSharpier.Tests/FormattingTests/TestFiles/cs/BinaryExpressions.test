@@ -1,8 +1,8 @@
 class TestClass
 {
-    public string SomeProperty =>
-        "someLongStringValue__________________________"
-        + "someOtherLongStringValue_______________________________";
+    public string SomeProperty
+        => "someLongStringValue__________________________"
+            + "someOtherLongStringValue_______________________________";
 
     void TestMethod()
     {
