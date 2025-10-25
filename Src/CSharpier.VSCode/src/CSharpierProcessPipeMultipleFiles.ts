@@ -35,7 +35,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             ? "pipe-files"
             : "--pipe-multiple-files";
 
-        const csharpierProcess = spawn(csharpierPath, [argument], {
+        let csharpierProcess = spawn(csharpierPath, [argument], {
             stdio: "pipe",
             cwd: workingDirectory,
             env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
@@ -48,7 +48,7 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             );
             this.processFailedToStart = true;
             while (this.callbacks.length > 0) {
-                const callback = this.callbacks.shift();
+                let callback = this.callbacks.shift();
                 if (callback) {
                     callback("");
                 }
@@ -66,9 +66,9 @@ export class CSharpierProcessPipeMultipleFiles implements ICSharpierProcess {
             this.nextFile += chunk;
             let number = this.nextFile.indexOf("\u0003");
             while (number >= 0) {
-                const result = this.nextFile.substring(0, number);
+                let result = this.nextFile.substring(0, number);
                 this.nextFile = this.nextFile.substring(number + 1);
-                const callback = this.callbacks.shift();
+                let callback = this.callbacks.shift();
                 if (callback) {
                     if (!result) {
                         this.logger.info(
