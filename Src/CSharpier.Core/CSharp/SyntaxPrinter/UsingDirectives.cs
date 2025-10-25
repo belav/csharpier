@@ -141,7 +141,7 @@ internal static class UsingDirectives
         return Doc.Concat(docs);
     }
 
-    private static IEnumerable<List<UsingData>> GroupUsings(
+    private static IEnumerable<IEnumerable<UsingData>> GroupUsings(
         List<UsingDirectiveSyntax> usings,
         SyntaxTriviaList triviaOnFirstUsing,
         PrintingContext context
@@ -198,9 +198,11 @@ internal static class UsingDirectives
                 {
                     Using = usingDirective,
                     LeadingTrivia = !openIf ? PrintLeadingTrivia(usingDirective) : Doc.Null,
+                    Alias = usingDirective?.Alias?.ToFullString(),
+                    Name = usingDirective?.Name?.ToFullString(),
                 };
 
-                if (usingDirective.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)
+                if (usingDirective!.GlobalKeyword.RawSyntaxKind() != SyntaxKind.None)
                 {
                     if (usingDirective.Alias is not null)
                     {
@@ -245,15 +247,15 @@ internal static class UsingDirectives
             }
         }
 
-        yield return globalSystemUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return globalUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return globalAliasUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return systemUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return aliasNameUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return regularUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return staticSystemUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return staticUsings.OrderBy(o => o.Using, Comparer).ToList();
-        yield return aliasUsings.OrderBy(o => o.Using, Comparer).ToList();
+        yield return globalSystemUsings.OrderBy(o => o, Comparer);
+        yield return globalUsings.OrderBy(o => o, Comparer);
+        yield return globalAliasUsings.OrderBy(o => o, Comparer);
+        yield return systemUsings.OrderBy(o => o, Comparer);
+        yield return aliasNameUsings.OrderBy(o => o, Comparer);
+        yield return regularUsings.OrderBy(o => o, Comparer);
+        yield return staticSystemUsings.OrderBy(o => o, Comparer);
+        yield return staticUsings.OrderBy(o => o, Comparer);
+        yield return aliasUsings.OrderBy(o => o, Comparer);
         // we need the directive groups at the end, the #endif directive
         // will be attached to the first node after the usings making it very hard print it before any of these other groups
         yield return directiveGroup;
@@ -274,6 +276,8 @@ internal static class UsingDirectives
     {
         public Doc LeadingTrivia { get; init; } = Doc.Null;
         public UsingDirectiveSyntax? Using { get; init; }
+        public string? Alias { get; init; }
+        public string? Name { get; init; }
     }
 
     private static bool IsSystemName(NameSyntax value)
@@ -286,9 +290,9 @@ internal static class UsingDirectives
         return value is IdentifierNameSyntax { Identifier.Text: "System" };
     }
 
-    private class DefaultOrder : IComparer<UsingDirectiveSyntax?>
+    private class DefaultOrder : IComparer<UsingData?>
     {
-        public int Compare(UsingDirectiveSyntax? x, UsingDirectiveSyntax? y)
+        public int Compare(UsingData? x, UsingData? y)
         {
             if (x?.Name is null && y?.Name is not null)
             {
@@ -303,17 +307,15 @@ internal static class UsingDirectives
             if (x?.Alias is not null && y?.Alias is not null)
             {
                 return string.Compare(
-                    x.Alias.ToFullString(),
-                    y.Alias.ToFullString(),
+                    x.Alias,
+                    y.Alias,
 #pragma warning disable CA1309
                     StringComparison.InvariantCultureIgnoreCase
 #pragma warning restore CA1309
                 );
             }
 
-            return string.Compare(
-                x?.Name?.ToFullString(),
-                y?.Name?.ToFullString(),
+            return string.Compare(x?.Name, y?.Name,
 #pragma warning disable CA1309
                 StringComparison.InvariantCultureIgnoreCase
 #pragma warning restore CA1309
