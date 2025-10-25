@@ -187,6 +187,9 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private findVersionInCsProj = (currentDirectory: string) => {
+        if (currentDirectory.endsWith(":/") || currentDirectory.endsWith(":\\")) {
+            currentDirectory += ".";
+        }
         this.logger.debug(`Looking for ${currentDirectory}/*.csproj`);
         const csProjFileNames = fs
             .readdirSync(currentDirectory)
