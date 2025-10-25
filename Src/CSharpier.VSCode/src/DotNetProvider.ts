@@ -51,3 +51,15 @@ export let findDotNet = async (logger: Logger) => {
         return false;
     }
 };
+
+export let getArchitecture = () => {
+    let lines = execDotNet("--info").toString().trim().split(/\r?\n/);
+    for (let line of lines) {
+        if (line.includes(" Architecture: ")) {
+            let parts = line.split(":");
+            return parts.length > 1 ? parts[1].trim() : line;
+        }
+    }
+
+    return null;
+};

@@ -2,9 +2,10 @@ import { Logger } from "./Logger";
 import * as path from "path";
 import * as fs from "fs";
 import { workspace } from "vscode";
-import { getDotNetRoot, execDotNet } from "./DotNetProvider";
+import { getDotNetRoot, execDotNet, getArchitecture } from "./DotNetProvider";
 import { execSync } from "child_process";
 import * as semver from "semver";
+import * as Path from "node:path";
 
 export class CustomPathInstaller {
     private readonly logger: Logger;
@@ -84,11 +85,13 @@ export class CustomPathInstaller {
             return this.customPath;
         }
 
-        let result =
-            process.platform !== "win32"
-                ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
-                : path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
-        return result.toString();
+        if (process.platform === "win32") {
+            return path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);
+        }
+
+        let result = path.resolve(process.env.HOME!, ".cache/csharpier", version);
+        let arch = getArchitecture();
+        return arch != null ? path.resolve(result, arch) : result;
     }
 
     public getPathForVersion(version: string) {
