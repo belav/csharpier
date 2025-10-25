@@ -27,7 +27,7 @@ export class CustomPathInstaller {
             return true;
         }
 
-        const pathToDirectoryForVersion = this.getDirectoryForVersion(version);
+        let pathToDirectoryForVersion = this.getDirectoryForVersion(version);
         if (fs.existsSync(pathToDirectoryForVersion)) {
             this.logger.debug("Validating install at " + pathToDirectoryForVersion);
             if (this.validateInstall(pathToDirectoryForVersion, version)) {
@@ -40,7 +40,7 @@ export class CustomPathInstaller {
             fs.rmSync(pathToDirectoryForVersion, { recursive: true, force: true });
         }
 
-        const command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
+        let command = `dotnet tool install csharpier --version ${version} --tool-path "${pathToDirectoryForVersion}"`;
         this.logger.debug("Running " + command);
         execDotNet(command, directory);
 
@@ -50,14 +50,14 @@ export class CustomPathInstaller {
     private validateInstall(pathToDirectoryForVersion: string, version: string): boolean {
         let pathForVersion = this.getPathForVersion(version);
         try {
-            const output = execSync(`"${pathForVersion}" --version`, {
+            let output = execSync(`"${pathForVersion}" --version`, {
                 env: { ...process.env, DOTNET_ROOT: getDotNetRoot() },
             })
                 .toString()
                 .trim();
 
             this.logger.debug(`"${pathForVersion}" --version output: ${output}`);
-            const versionWithoutHash = output.split("+")[0];
+            let versionWithoutHash = output.split("+")[0];
             this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
 
             if (versionWithoutHash === version) {
@@ -72,7 +72,7 @@ export class CustomPathInstaller {
                 );
             }
         } catch (error: any) {
-            const message = !error.stderr ? error.toString() : error.stderr.toString();
+            let message = !error.stderr ? error.toString() : error.stderr.toString();
             this.logger.warn(`Exception while running '${pathForVersion} --version'`, message);
         }
 
@@ -84,7 +84,7 @@ export class CustomPathInstaller {
             return this.customPath;
         }
 
-        const result =
+        let result =
             process.platform !== "win32"
                 ? path.resolve(process.env.HOME!, ".cache/csharpier", version)
                 : path.resolve(process.env.LOCALAPPDATA!, "CSharpier", version);

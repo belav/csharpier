@@ -35,7 +35,7 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         let newCommandsVersion = "1.0.0-alpha1";
         let argument = semver.gte(this.version, newCommandsVersion) ? "server" : "--server";
 
-        const csharpierProcess = spawn(csharpierPath, [argument], {
+        let csharpierProcess = spawn(csharpierPath, [argument], {
             stdio: "pipe",
             cwd: path.dirname(csharpierPath),
             env: { ...process.env, DOTNET_NOLOGO: "1", DOTNET_ROOT: getDotNetRoot() },
@@ -60,7 +60,7 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         });
 
         let output = "";
-        const regex = /^Started on (\d+)/;
+        let regex = /^Started on (\d+)/;
 
         csharpierProcess.stdout.on("data", chunk => {
             output += chunk;
@@ -73,11 +73,11 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
     }
 
     public async formatFile(content: string, filePath: string): Promise<string> {
-        const parameter = {
+        let parameter = {
             fileName: filePath,
             fileContents: content,
         };
-        const result = await this.formatFile2(parameter);
+        let result = await this.formatFile2(parameter);
         return result?.formattedFile ?? "";
     }
 
@@ -97,9 +97,9 @@ export class CSharpierProcessServer implements ICSharpierProcess2 {
         }
 
         try {
-            const url = "http://127.0.0.1:" + this.port + "/format";
+            let url = "http://127.0.0.1:" + this.port + "/format";
 
-            const response = await fetch(url, {
+            let response = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

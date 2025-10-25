@@ -14,16 +14,16 @@ export class FormatDocumentProvider {
         // the diagnostic service calls format on almost every keypress, avoid logging those formats so we don't spawn the output
         writeLogs: boolean = true,
     ): Promise<string | null> {
-        const csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
-        const text = document.getText();
-        const startTime = performance.now();
+        let csharpierProcess = this.csharpierProcessProvider.getProcessFor(document.fileName);
+        let text = document.getText();
+        let startTime = performance.now();
 
         if ("formatFile2" in csharpierProcess) {
-            const parameter = {
+            let parameter = {
                 fileContents: text,
                 fileName: document.fileName,
             };
-            const result = await csharpierProcess.formatFile2(parameter);
+            let result = await csharpierProcess.formatFile2(parameter);
 
             if (result == null) {
                 return null;
@@ -62,8 +62,8 @@ export class FormatDocumentProvider {
                     break;
             }
         } else {
-            const newText = await csharpierProcess.formatFile(text, document.fileName);
-            const endTime = performance.now();
+            let newText = await csharpierProcess.formatFile(text, document.fileName);
+            let endTime = performance.now();
             if (writeLogs) {
                 this.logger.info("Formatted in " + (endTime - startTime) + "ms");
             }
