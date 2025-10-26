@@ -7,6 +7,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter;
 internal class PrintingContext
 {
     public required PrintingContextOptions Options { get; init; }
+    public required CodeInformation Information { get; init; }
     public PrintingContextState State { get; } = new();
 
     private readonly Dictionary<string, int> groupNumberByValue = [];
@@ -59,4 +60,6 @@ internal class PrintingContext
     }
 
     public record TrailingCommaContext(SyntaxTrivia TrailingComment, Doc PrintedTrailingComma);
+
+    public record struct CodeInformation(bool HasPreprocessorSymbols, bool HasCSharpierIgnore);
 }

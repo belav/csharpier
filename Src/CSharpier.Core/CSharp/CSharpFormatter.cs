@@ -44,7 +44,7 @@ public static class CSharpFormatter
             syntaxTree,
             (options ?? new()).ToPrinterOptions(),
             SourceCodeKind.Regular,
-            true,
+            new PrintingContext.CodeInformation(true, true),
             cancellationToken
         );
     }
@@ -68,13 +68,14 @@ public static class CSharpFormatter
     )
     {
         var initialSymbolSet = Array.Empty<string>();
-        var hasPreprocessorSymbols = code.Contains("#if");
+
+        var codeInformation = CSharpScanner.Scan(code);
 
         return FormatAsync(
             ParseText(code, initialSymbolSet, sourceCodeKind, cancellationToken),
             printerOptions,
             sourceCodeKind,
-            hasPreprocessorSymbols,
+            codeInformation,
             cancellationToken
         );
     }
@@ -102,7 +103,7 @@ public static class CSharpFormatter
         SyntaxTree syntaxTree,
         PrinterOptions printerOptions,
         SourceCodeKind sourceCodeKind,
-        bool hasPreprocessorSymbols,
+        PrintingContext.CodeInformation information,
         CancellationToken cancellationToken
     )
     {
@@ -160,6 +161,7 @@ public static class CSharpFormatter
                     IndentSize = printerOptions.IndentSize,
                     UseTabs = printerOptions.UseTabs,
                 },
+                Information = information,
             };
             var document = Node.Print(rootNode, printingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
@@ -169,7 +171,7 @@ public static class CSharpFormatter
                 .ReorderedUsingsWithDisabledText;
             var movedTrailingTrivia = printingContext.State.MovedTrailingTrivia;
 
-            if (hasPreprocessorSymbols)
+            if (printingContext.Information.HasPreprocessorSymbols)
             {
                 foreach (var symbolSet in PreprocessorSymbols.GetSets(syntaxTree))
                 {
@@ -193,6 +195,7 @@ public static class CSharpFormatter
                             IndentSize = printerOptions.IndentSize,
                             UseTabs = printerOptions.UseTabs,
                         },
+                        Information = printingContext.Information,
                     };
                     document = Node.Print(
                         await syntaxTree.GetRootAsync(cancellationToken),

@@ -34,21 +34,24 @@ internal static class MembersWithForcedLines
             var skipAddingLineBecauseIgnoreEnded = false;
             var member = members[memberIndex];
 
-            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
+            if (context.Information.HasCSharpierIgnore)
             {
-                skipAddingLineBecauseIgnoreEnded = true;
-                result.Add(unFormattedCode.AsSpan().Trim().ToString());
-                unFormattedCode.Clear();
-                printUnformatted = false;
-            }
-            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
-            {
-                if (!printUnformatted && memberIndex > 0)
+                if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
                 {
-                    result.Add(Doc.HardLine);
-                    result.Add(ExtraNewLines.Print(member));
+                    skipAddingLineBecauseIgnoreEnded = true;
+                    result.Add(unFormattedCode.AsSpan().Trim().ToString());
+                    unFormattedCode.Clear();
+                    printUnformatted = false;
                 }
-                printUnformatted = true;
+                else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
+                {
+                    if (!printUnformatted && memberIndex > 0)
+                    {
+                        result.Add(Doc.HardLine);
+                        result.Add(ExtraNewLines.Print(member));
+                    }
+                    printUnformatted = true;
+                }
             }
 
             if (printUnformatted)

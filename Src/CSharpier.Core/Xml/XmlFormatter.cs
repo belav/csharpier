@@ -36,6 +36,7 @@ public static class XmlFormatter
                     IndentSize = printerOptions.IndentSize,
                     UseTabs = printerOptions.UseTabs,
                 },
+                Information = new PrintingContext.CodeInformation(false, false),
             };
             var doc = Node.Print(rootNode, printingContext);
             var formattedXml = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
