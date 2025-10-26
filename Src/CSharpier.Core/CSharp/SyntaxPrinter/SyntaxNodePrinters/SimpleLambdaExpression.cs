@@ -29,7 +29,7 @@ internal static class SimpleLambdaExpression
                 " ",
                 Node.Print(node.Body, context)
             ),
-            _ => Doc.Indent(Doc.Line, Node.Print(node.Body, context)),
+            _ => Doc.Group(Doc.Indent(Doc.Line, Node.Print(node.Body, context))),
         };
     }
 }
