@@ -13,18 +13,18 @@ import { Logger } from "../Logger";
 
 // This function calls `dotnet --info` and returns the result as a DotnetInfo object.
 export async function getDotnetInfo(dotNetCliPaths: string[], logger: Logger): Promise<DotnetInfo> {
-    const dotnetExecutablePath = getDotNetExecutablePath(dotNetCliPaths);
+    let dotnetExecutablePath = getDotNetExecutablePath(dotNetCliPaths);
 
-    const data = await runDotnetInfo(dotnetExecutablePath, logger);
+    let data = await runDotnetInfo(dotnetExecutablePath, logger);
     return await parseDotnetInfo(data, dotnetExecutablePath);
 }
 
 export function getDotNetExecutablePath(dotNetCliPaths: string[]): string | undefined {
-    const dotnetExeName = process.platform === "win32" ? "dotnet.exe" : "dotnet";
+    let dotnetExeName = process.platform === "win32" ? "dotnet.exe" : "dotnet";
     let dotnetExecutablePath: string | undefined;
 
-    for (const dotnetPath of dotNetCliPaths) {
-        const dotnetFullPath = join(dotnetPath, dotnetExeName);
+    for (let dotnetPath of dotNetCliPaths) {
+        let dotnetFullPath = join(dotnetPath, dotnetExeName);
         if (existsSync(dotnetFullPath)) {
             dotnetExecutablePath = dotnetFullPath;
             break;
@@ -41,13 +41,13 @@ async function runDotnetInfo(
         logger.debug("Trying to find dotnet on PATH using 'dotnet --info' ");
     }
 
-    const env = {
+    let env = {
         ...process.env,
         DOTNET_CLI_UI_LANGUAGE: "en-US",
     };
 
     try {
-        const command = dotnetExecutablePath ? `"${dotnetExecutablePath}"` : "dotnet";
+        let command = dotnetExecutablePath ? `"${dotnetExecutablePath}"` : "dotnet";
         return await execChildProcess(`${command} --info`, process.cwd(), env);
     } catch (error) {
         logger.error(error);
@@ -57,11 +57,11 @@ async function runDotnetInfo(
             try {
                 return await execChildProcess(`sh -c "dotnet --info"`, process.cwd(), env);
             } catch (error) {
-                const message = error instanceof Error ? error.message : `${error}`;
+                let message = error instanceof Error ? error.message : `${error}`;
                 throw new Error(`Error running dotnet --info: ${message}`);
             }
         } else {
-            const message = error instanceof Error ? error.message : `${error}`;
+            let message = error instanceof Error ? error.message : `${error}`;
             throw new Error(`Error running dotnet --info: ${message}`);
         }
     }
@@ -72,31 +72,31 @@ async function parseDotnetInfo(
     dotnetExecutablePath: string | undefined,
 ): Promise<DotnetInfo> {
     try {
-        const cliPath = dotnetExecutablePath;
+        let cliPath = dotnetExecutablePath;
 
         let version: string | undefined;
 
         let lines = dotnetInfo.replace(/\r/gm, "").split("\n");
-        for (const line of lines) {
+        for (let line of lines) {
             let match: RegExpMatchArray | null;
             if ((match = /^\s*Version:\s*([^\s].*)$/.exec(line))) {
                 version = match[1];
             }
         }
 
-        const runtimeVersions: { [runtime: string]: RuntimeInfo[] } = {};
-        const command = dotnetExecutablePath ? `"${dotnetExecutablePath}"` : "dotnet";
-        const listRuntimes = await execChildProcess(
+        let runtimeVersions: { [runtime: string]: RuntimeInfo[] } = {};
+        let command = dotnetExecutablePath ? `"${dotnetExecutablePath}"` : "dotnet";
+        let listRuntimes = await execChildProcess(
             `${command} --list-runtimes`,
             process.cwd(),
             process.env,
         );
         lines = listRuntimes.split(/\r?\n/);
-        for (const line of lines) {
+        for (let line of lines) {
             let match: RegExpMatchArray | null;
             if ((match = /^([\w.]+) ([^ ]+) \[([^\]]+)\]$/.exec(line))) {
-                const runtime = match[1];
-                const runtimeVersion = match[2];
+                let runtime = match[1];
+                let runtimeVersion = match[2];
                 if (runtime in runtimeVersions) {
                     runtimeVersions[runtime].push({
                         Version: semver.parse(runtimeVersion)!,
@@ -122,7 +122,7 @@ async function parseDotnetInfo(
 
         throw new Error("Failed to parse dotnet version information");
     } catch (error) {
-        const message = error instanceof Error ? error.message : `${error}`;
+        let message = error instanceof Error ? error.message : `${error}`;
         throw new Error(
             `Error parsing dotnet --info: ${message}, raw info was:${EOL}${dotnetInfo}`,
         );
@@ -134,7 +134,7 @@ function existsSync(path: string): boolean {
         fs.accessSync(path, fs.constants.F_OK);
         return true;
     } catch (err) {
-        const error = err as NodeJS.ErrnoException;
+        let error = err as NodeJS.ErrnoException;
         if (error.code === "ENOENT" || error.code === "ENOTDIR") {
             return false;
         } else {

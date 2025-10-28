@@ -87,6 +87,11 @@ internal static class Node
             return node.Value;
         }
 
+        if (node.NodeType is XmlNodeType.Whitespace)
+        {
+            return Doc.HardLine;
+        }
+
         throw new Exception("Need to handle + " + node.NodeType);
     }
 

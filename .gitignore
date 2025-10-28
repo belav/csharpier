@@ -63,9 +63,9 @@ Src/CSharpier.VSCode/.idea/prettier.xml
 /Tests/MsBuild/GeneratedScenarios
 Src/CSharpier.Rider/.intellijPlatform/self-update.lock
 Src/CSharpier.VisualStudio/.idea/.idea.CSharpier.VisualStudio/.idea/CSharpierPlugin.xml
-.idea/.idea.CSharpier/.idea/copilotDiffState.xml
-Src/CSharpier.VisualStudio/.idea/.idea.CSharpier.VisualStudio/.idea/copilotDiffState.xml
-.idea/.idea.CSharpier/.idea/copilot.data.migration.edit.xml
-.idea/.idea.CSharpier/.idea/copilot.data.migration.agent.xml
-.idea/.idea.CSharpier/.idea/copilot.data.migration.ask.xml
-.idea/.idea.CSharpier/.idea/copilot.data.migration.ask2agent.xml
+
+copilotDiffState.xml
+copilot.data.migration.agent.xml
+copilot.data.migration.ask.xml
+copilot.data.migration.ask2agent.xml
+copilot.data.migration.edit.xml
