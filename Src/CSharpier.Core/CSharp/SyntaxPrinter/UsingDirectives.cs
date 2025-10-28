@@ -303,8 +303,8 @@ internal static class UsingDirectives
             if (x?.Alias is not null && y?.Alias is not null)
             {
                 return string.Compare(
-                    x.Alias.ToFullString(),
-                    y.Alias.ToFullString(),
+                    x.Alias.ToFullString().Trim(),
+                    y.Alias.ToFullString().Trim(),
 #pragma warning disable CA1309
                     StringComparison.InvariantCultureIgnoreCase
 #pragma warning restore CA1309
@@ -312,8 +312,8 @@ internal static class UsingDirectives
             }
 
             return string.Compare(
-                x?.Name?.ToFullString(),
-                y?.Name?.ToFullString(),
+                x?.Name?.ToFullString().Trim(),
+                y?.Name?.ToFullString().Trim(),
 #pragma warning disable CA1309
                 StringComparison.InvariantCultureIgnoreCase
 #pragma warning restore CA1309
