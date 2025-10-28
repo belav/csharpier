@@ -248,7 +248,7 @@ internal static class MembersWithForcedLines
     {
         foreach (var item in member.GetLeadingTrivia())
         {
-            if (!vlb.Contains(item))
+            if (!vlb.Contains(item.Kind()))
             {
                 vlb.Append(item.RawSyntaxKind());
             }

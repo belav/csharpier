@@ -1,6 +1,7 @@
 using CSharpier.Core.CSharp;
 using CSharpier.Core.DocTypes;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpier.Core.Utilities;
 
@@ -146,5 +147,18 @@ internal static class ListExtensions
     public static bool AnyLeadingComment(this SyntaxNode syntaxNode)
     {
         return syntaxNode.GetLeadingTrivia().Any(o => o.IsComment());
+    }
+    
+    public static bool Contains(this ref ValueListBuilder<SyntaxKind> vlb, SyntaxKind item)
+    {
+        foreach (var element in vlb.AsSpan())
+        {
+            if (item == element)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
