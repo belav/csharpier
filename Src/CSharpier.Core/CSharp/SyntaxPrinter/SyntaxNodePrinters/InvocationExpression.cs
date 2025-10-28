@@ -56,8 +56,6 @@ internal static class InvocationExpression
             GroupPrintedNodesOnLines(ref groups, ref printedNodes);
         }
 
-        var oneLine = SelectManyDocsToArray(ref groups);
-
         var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(ref groups, parent);
 
         var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
@@ -111,22 +109,14 @@ internal static class InvocationExpression
 
         if (forceOneLine)
         {
+            var oneLine = SelectManyDocsToArray(ref groups);
             return Doc.Group(oneLine);
         }
 
-        var expanded = Doc.Concat(
-            Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
-            shouldMergeFirstTwoGroups
-                ? Doc.IndentIf(
-                    groups.Length > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc },
-                    Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
-                )
-                : Doc.Null,
-            PrintIndentedGroup(groups.AsSpan()[(shouldMergeFirstTwoGroups ? 2 : 1)..])
-        );
+        var expanded = IntoExpanded(groups, shouldMergeFirstTwoGroups);
 
         return
-            oneLine.AsSpan().Skip(1).Any(DocUtilities.ContainsBreak)
+            ContainsBreaks(ref groups)
             || groups[0]
                 .Any(o =>
                     o.Node
@@ -144,7 +134,46 @@ internal static class InvocationExpression
             )
             || groups.Length == 1
             ? expanded
-            : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+            : Doc.ConditionalGroup(SelectManyDocsToArray(ref groups), expanded);
+    }
+
+    private static Doc IntoExpanded(
+        ValueListBuilder<PrintedNode[]> groups,
+        bool shouldMergeFirstTwoGroups
+    )
+    {
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+
+        foreach (var item in groups[0])
+        {
+            docs.Append(item.Doc);
+        }
+
+        if (shouldMergeFirstTwoGroups)
+        {
+            if (groups.Length > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc })
+            {
+                docs.Append(Doc.Indent(Doc.Concat(groups[1].Select(o => o.Doc))));
+            }
+            else
+            {
+                foreach (var item in groups[1])
+                {
+                    docs.Append(item.Doc);
+                }
+            }
+        }
+
+        var indented = PrintIndentedGroup(groups.AsSpan()[(shouldMergeFirstTwoGroups ? 2 : 1)..]);
+
+        if (indented != Doc.Null)
+        {
+            docs.Append(indented);
+        }
+
+        var returnDoc = Doc.Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
     }
 
     private static void FlattenAndPrintNodes(
@@ -384,27 +413,21 @@ internal static class InvocationExpression
     }
 
     [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
-    private static Doc[] SelectManyDocsToArray(ref ValueListBuilder<PrintedNode[]> groups)
+    private static Doc SelectManyDocsToArray(ref ValueListBuilder<PrintedNode[]> groups)
     {
-        var arrayLength = 0;
-        foreach (var group in groups.AsSpan())
-        {
-            arrayLength += group.Length;
-        }
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
-        var outputArray = new Doc[arrayLength];
-
-        var pos = 0;
         foreach (var group in groups.AsSpan())
         {
             foreach (var node in group)
             {
-                outputArray[pos] = node.Doc;
-                pos++;
+                docs.Append(node.Doc);
             }
         }
 
-        return outputArray;
+        var returnDoc = Doc.Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
     }
 
     private static Doc PrintIndentedGroup(ReadOnlySpan<PrintedNode[]> groups)
@@ -419,10 +442,33 @@ internal static class InvocationExpression
                 Doc.HardLine,
                 Doc.Join(
                     Doc.HardLine,
-                    groups.ToArray().Select(o => Doc.Group(o.Select(p => p.Doc).ToArray()))
+                    groups.ToArray().Select(o => Doc.GroupEnum(o.Select(p => p.Doc)))
                 )
             )
         );
+    }
+
+    private static bool ContainsBreaks(ref ValueListBuilder<PrintedNode[]> groups)
+    {
+        int i = 0;
+        foreach (var group in groups.AsSpan())
+        {
+            foreach (var node in group)
+            {
+                i++;
+                if (i <= 1)
+                {
+                    continue;
+                }
+
+                if (DocUtilities.ContainsBreak(node.Doc))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     // There are cases where merging the first two groups looks better

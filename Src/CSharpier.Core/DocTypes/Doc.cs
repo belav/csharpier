@@ -59,6 +59,20 @@ internal abstract class Doc
     {
         return DocTypes.Concat.Create(contents.AsSpan());
     }
+    
+    public static Doc Concat(IEnumerable<Doc> contents)
+    {
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+
+        foreach (var item in contents)
+        {
+            docs.Append(item);
+        }
+
+        var returnDoc = Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
+    }
 
     public static Doc Join(Doc separator, IEnumerable<Doc> enumerable)
     {
@@ -88,6 +102,8 @@ internal abstract class Doc
     public static Group Group(List<Doc> contents) =>
         new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
 
+    public static Group GroupEnum(IEnumerable<Doc> contents) => new() { Contents = Concat(contents) };
+    
     public static Group GroupWithId(string groupId, List<Doc> contents)
     {
         var group = Group(contents);
