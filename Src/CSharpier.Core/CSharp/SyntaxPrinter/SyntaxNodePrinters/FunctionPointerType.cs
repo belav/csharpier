@@ -19,7 +19,7 @@ internal static class FunctionPointerType
                     Doc.SoftLine,
                     SeparatedSyntaxList.Print(
                         node.ParameterList.Parameters,
-                        (o, _) =>
+                        static (o, context) =>
                             Doc.Concat(
                                 AttributeLists.Print(o, o.AttributeLists, context),
                                 Modifiers.Print(o.Modifiers, context),
@@ -46,7 +46,7 @@ internal static class FunctionPointerType
                     Token.Print(node.UnmanagedCallingConventionList.OpenBracketToken, context),
                     SeparatedSyntaxList.Print(
                         node.UnmanagedCallingConventionList.CallingConventions,
-                        (o, _) => Token.Print(o.Name, context),
+                        static (o, context) => Token.Print(o.Name, context),
                         " ",
                         context
                     ),

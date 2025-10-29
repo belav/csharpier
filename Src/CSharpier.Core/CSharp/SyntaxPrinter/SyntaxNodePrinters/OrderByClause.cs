@@ -12,7 +12,7 @@ internal static class OrderByClause
             Token.Print(node.OrderByKeyword, context),
             SeparatedSyntaxList.Print(
                 node.Orderings,
-                (orderingNode, _) =>
+                static (orderingNode, context) =>
                     Doc.Concat(
                         " ",
                         Node.Print(orderingNode.Expression, context),
