@@ -60,10 +60,7 @@ internal static class ConditionalExpression
                     )
                 )
                 : Node.Print(node.Condition, context),
-            node.Parent is ConditionalExpressionSyntax or ArgumentSyntax or ReturnStatementSyntax
-            || node.Condition is InvocationExpressionSyntax
-                ? Doc.Indent(innerContents)
-                : Doc.Indent(innerContents),
+            Doc.Indent(innerContents),
         ];
 
         return node.Parent is ConditionalExpressionSyntax
