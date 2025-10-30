@@ -74,6 +74,8 @@ public string Example
                         IndentSize = 4,
                         UseTabs = false,
                     },
+
+                    Information = new PrintingContext.CodeInformation(false, false),
                 }
             )
             .ReplaceLineEndings("\n");

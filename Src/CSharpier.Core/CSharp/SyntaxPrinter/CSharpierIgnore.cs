@@ -78,15 +78,18 @@ internal static partial class CSharpierIgnore
 
         foreach (var node in list)
         {
-            if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
+            if (context.Information.HasCSharpierIgnore)
             {
-                statements.Add(unFormattedCode.AsSpan().Trim().ToString());
-                unFormattedCode.Clear();
-                printUnformatted = false;
-            }
-            else if (Token.HasLeadingCommentMatching(node, IgnoreStartRegex))
-            {
-                printUnformatted = true;
+                if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
+                {
+                    statements.Add(unFormattedCode.AsSpan().Trim().ToString());
+                    unFormattedCode.Clear();
+                    printUnformatted = false;
+                }
+                else if (Token.HasLeadingCommentMatching(node, IgnoreStartRegex))
+                {
+                    printUnformatted = true;
+                }
             }
 
             if (printUnformatted)

@@ -135,25 +135,28 @@ internal static partial class BaseMethodDeclaration
                 );
             }
 
-            if (modifiers is { Count: > 0 })
+            if (context.Information.HasCSharpierIgnore)
             {
-                if (CSharpierIgnore.HasIgnoreComment(modifiers.Value[0]))
+                if (modifiers is { Count: > 0 })
                 {
-                    PrintMethodUnformattedWithoutAttributes(
-                        modifiers.Value[0].LeadingTrivia,
-                        ref docs
-                    );
+                    if (CSharpierIgnore.HasIgnoreComment(modifiers.Value[0]))
+                    {
+                        PrintMethodUnformattedWithoutAttributes(
+                            modifiers.Value[0].LeadingTrivia,
+                            ref docs
+                        );
+                        var returnDoc = Doc.Group(ref docs);
+                        docs.Dispose();
+                        return returnDoc;
+                    }
+                }
+                else if (returnType is not null && CSharpierIgnore.HasIgnoreComment(returnType))
+                {
+                    PrintMethodUnformattedWithoutAttributes(returnType.GetLeadingTrivia(), ref docs);
                     var returnDoc = Doc.Group(ref docs);
                     docs.Dispose();
                     return returnDoc;
                 }
-            }
-            else if (returnType is not null && CSharpierIgnore.HasIgnoreComment(returnType))
-            {
-                PrintMethodUnformattedWithoutAttributes(returnType.GetLeadingTrivia(), ref docs);
-                var returnDoc = Doc.Group(ref docs);
-                docs.Dispose();
-                return returnDoc;
             }
         }
 
