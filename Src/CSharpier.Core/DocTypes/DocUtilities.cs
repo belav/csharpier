@@ -38,7 +38,7 @@ internal static class DocUtilities
         RemoveInitialDoubleHardLine(docs, ref removeNextHardLine);
     }
 
-    private static void RemoveInitialDoubleHardLine(IList<Doc> docs, ref bool removeNextHardLine)
+    private static void RemoveInitialDoubleHardLine(List<Doc> docs, ref bool removeNextHardLine)
     {
         var x = 0;
         while (x < docs.Count)

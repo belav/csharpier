@@ -10,6 +10,7 @@ internal class Indenter(PrinterOptions printerOptions)
 {
     protected readonly PrinterOptions PrinterOptions = printerOptions;
     protected readonly Dictionary<string, Indent> IncreaseIndentCache = [];
+    protected readonly List<Indent> Cache = [];
 
     public static Indent GenerateRoot()
     {
@@ -18,9 +19,18 @@ internal class Indenter(PrinterOptions printerOptions)
 
     public Indent IncreaseIndent(Indent indent)
     {
-        if (IncreaseIndentCache.TryGetValue(indent.Value, out var increasedIndent))
+        // if (IncreaseIndentCache.TryGetValue(indent.Value, out var increasedIndent))
+        // {
+        //     return increasedIndent;
+        // }
+        if (this.PrinterOptions.UseTabs && Cache.Count > indent.Length )
         {
-            return increasedIndent;
+            return Cache[indent.Length];
+        }
+        else if (Cache.Count > indent.Length / this.PrinterOptions.IndentSize)
+        {
+            return Cache[indent.Length/ this.PrinterOptions.IndentSize];
+            
         }
 
         var nextIndent = this.PrinterOptions.UseTabs
@@ -35,7 +45,8 @@ internal class Indenter(PrinterOptions printerOptions)
                 Length = indent.Length + this.PrinterOptions.IndentSize,
             };
 
-        IncreaseIndentCache[indent.Value] = nextIndent;
+        // IncreaseIndentCache[indent.Value] = nextIndent;
+        Cache.Add(nextIndent);
         return nextIndent;
     }
 }

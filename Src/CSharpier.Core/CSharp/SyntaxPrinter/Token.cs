@@ -67,7 +67,7 @@ internal static class Token
         bool skipTrailingTrivia
     )
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+        var docs = new ValueListBuilder<Doc>([null, null]);
 
         if (!skipLeadingTrivia)
         {
@@ -277,7 +277,7 @@ internal static class Token
         bool skipLastHardline
     )
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+        var docs = new ValueListBuilder<Doc>([null, null, null, null]);
 
         // we don't print any new lines until we run into a comment or directive
         // the PrintExtraNewLines method takes care of printing the initial new lines for a given node
@@ -445,7 +445,7 @@ internal static class Token
             return Doc.Null;
         }
 
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+        var docs = new ValueListBuilder<Doc>([null, null, null, null]);
         foreach (var trivia in trailingTrivia)
         {
             if (trivia.RawSyntaxKind() == SyntaxKind.SingleLineCommentTrivia)
