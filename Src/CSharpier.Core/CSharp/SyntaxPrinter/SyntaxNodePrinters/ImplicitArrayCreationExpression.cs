@@ -7,7 +7,7 @@ internal static class ImplicitArrayCreationExpression
 {
     public static Doc Print(ImplicitArrayCreationExpressionSyntax node, PrintingContext context)
     {
-        var commas = node.Commas.Select(o => Token.Print(o, context)).ToArray();
+        var commas = node.Commas.Select(o => Token.Print(o, context));
         return Doc.Group(
             Token.Print(node.NewKeyword, context),
             Token.Print(node.OpenBracketToken, context),

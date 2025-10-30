@@ -102,6 +102,6 @@ internal static class AttributeList
 
         docs.Append(Token.Print(node.CloseBracketToken, context));
 
-        return Doc.Group(docs.AsSpan().ToArray());
+        return Doc.Group(Doc.Concat(ref docs));
     }
 }

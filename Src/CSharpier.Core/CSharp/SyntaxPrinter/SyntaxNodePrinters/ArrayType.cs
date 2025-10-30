@@ -9,7 +9,7 @@ internal static class ArrayType
     {
         return Doc.Concat(
             Node.Print(node.ElementType, context),
-            Doc.Concat(node.RankSpecifiers.Select(o => Node.Print(o, context)).ToArray())
+            Doc.Concat(node.RankSpecifiers.Select(o => Node.Print(o, context)))
         );
     }
 }

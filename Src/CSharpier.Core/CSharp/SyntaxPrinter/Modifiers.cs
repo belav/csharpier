@@ -80,7 +80,6 @@ internal static class Modifiers
                             sortedModifiers
                                 .Skip(1)
                                 .Select(o => Token.PrintWithSuffix(o, " ", context))
-                                .ToArray()
                         )
                         : Doc.Null
                 )
