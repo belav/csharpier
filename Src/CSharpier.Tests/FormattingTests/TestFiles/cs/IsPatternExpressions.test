@@ -99,16 +99,16 @@ class ClassName
                 or SomeThirdType___________;
 
         var value =
-            someOtherValue
-                is SomeType___________________ { SomeProperty: SomeType or SomeOtherType };
+            someOtherValue is SomeType___________________
+            {
+                SomeProperty: SomeType or SomeOtherType
+            };
 
         var value =
-            someOtherValue
-                is SomeType___________________
-                {
-                    SomeProperty: SomeLongType_______________
-                        or SomeOtherLongType___________________
-                };
+            someOtherValue is SomeType___________________
+            {
+                SomeProperty: SomeLongType_______________ or SomeOtherLongType___________________
+            };
 
         var value =
             someOtherValue
@@ -258,5 +258,13 @@ class ClassName
         ) { }
 
         var needsUpdatedRoslyn = y is y ? [] : z ?? [];
+
+        var isOnArgumentListBracketOrComma =
+            targetToken.Parent is
+            (
+                kind: SyntaxKind.ArgumentList
+                    or SyntaxKind.AttributeArgumentList
+                    or SyntaxKind.ArrayRankSpecifier
+            );
     }
 }
