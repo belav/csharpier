@@ -19,13 +19,13 @@ export async function activate(context: ExtensionContext) {
     await initPlugin(context);
 }
 
-export const supportedLanguageIds = ["csharp", "xml"];
+export let supportedLanguageIds = ["csharp", "xml"];
 
-const initPlugin = async (context: ExtensionContext) => {
-    const enableDebugLogs =
+let initPlugin = async (context: ExtensionContext) => {
+    let enableDebugLogs =
         workspace.getConfiguration("csharpier").get<boolean>("enableDebugLogs") ?? false;
 
-    const logger = new Logger(enableDebugLogs);
+    let logger = new Logger(enableDebugLogs);
 
     logger.info("Initializing " + (process.env as any).EXTENSION_NAME);
 
@@ -42,19 +42,19 @@ const initPlugin = async (context: ExtensionContext) => {
 
     NullCSharpierProcess.create(logger);
 
-    const csharpierProcessProvider = new CSharpierProcessProvider(
+    let csharpierProcessProvider = new CSharpierProcessProvider(
         logger,
         context.extension,
         supportedLanguageIds,
     );
-    const formatDocumentProvider = new FormatDocumentProvider(logger, csharpierProcessProvider);
+    let formatDocumentProvider = new FormatDocumentProvider(logger, csharpierProcessProvider);
 
-    const diagnosticsService = new DiagnosticsService(
+    let diagnosticsService = new DiagnosticsService(
         formatDocumentProvider,
         supportedLanguageIds,
         logger,
     );
-    const fixAllCodeActionProvider = new FixAllCodeActionProvider(supportedLanguageIds);
+    let fixAllCodeActionProvider = new FixAllCodeActionProvider(supportedLanguageIds);
 
     new FormattingService(formatDocumentProvider, supportedLanguageIds);
     new FixAllCodeActionsCommand(context, formatDocumentProvider, logger);

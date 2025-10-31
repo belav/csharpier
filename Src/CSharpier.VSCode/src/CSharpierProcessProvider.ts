@@ -53,7 +53,7 @@ export class CSharpierProcessProvider implements Disposable {
     }
 
     private findAndWarmProcess(filePath: string) {
-        const directory = this.getDirectoryOfFile(filePath);
+        let directory = this.getDirectoryOfFile(filePath);
         if (this.warmingByDirectory[directory]) {
             return;
         }
@@ -78,7 +78,7 @@ export class CSharpierProcessProvider implements Disposable {
     }
 
     public getProcessFor = (filePath: string): ICSharpierProcess | ICSharpierProcess2 => {
-        const directory = this.getDirectoryOfFile(filePath);
+        let directory = this.getDirectoryOfFile(filePath);
         let version = this.csharpierVersionByDirectory[directory];
         if (!version) {
             this.findAndWarmProcess(filePath);
@@ -118,7 +118,7 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private getCSharpierVersion = (directoryThatContainsFile: string): string => {
-        const csharpierVersion = runFunctionsUntilResultFound(
+        let csharpierVersion = runFunctionsUntilResultFound(
             () => this.findVersionInCsProjOfParentsDirectories(directoryThatContainsFile),
             () => this.findCSharpierVersionInToolOutput(directoryThatContainsFile, false),
             () => this.findCSharpierVersionInToolOutput(directoryThatContainsFile, true),
@@ -128,7 +128,7 @@ export class CSharpierProcessProvider implements Disposable {
             return "";
         }
 
-        const versionWithoutHash = csharpierVersion.split("+")[0];
+        let versionWithoutHash = csharpierVersion.split("+")[0];
         this.logger.debug(`Using ${versionWithoutHash} as the version number.`);
         return versionWithoutHash;
     };
@@ -137,20 +137,20 @@ export class CSharpierProcessProvider implements Disposable {
         directoryThatContainsFile: string,
         isGlobal: boolean,
     ) => {
-        const command = `tool list${isGlobal ? " -g" : ""}`;
-        const output = execDotNet(command, directoryThatContainsFile).toString().trim();
+        let command = `tool list${isGlobal ? " -g" : ""}`;
+        let output = execDotNet(command, directoryThatContainsFile).toString().trim();
 
         this.logger.debug(`Running 'dotnet ${command}' to look for version`);
         this.logger.debug(`Output was: \n${output}`);
 
-        const lines = output
+        let lines = output
             .split("\n")
             .map(line => line.trim())
             .filter(line => line.length > 0);
 
         // The first two lines are headers
         for (let i = 2; i < lines.length; i++) {
-            const columns = lines[i].split(/\s{2,}/);
+            let columns = lines[i].split(/\s{2,}/);
             if (columns.length >= 2) {
                 if (columns[0].toLowerCase() === "csharpier") {
                     return columns[1];
@@ -167,7 +167,7 @@ export class CSharpierProcessProvider implements Disposable {
         let parentNumber = 0;
         while (parentNumber < 30) {
             try {
-                const csProjVersion = this.findVersionInCsProj(currentDirectory);
+                let csProjVersion = this.findVersionInCsProj(currentDirectory);
                 if (csProjVersion) {
                     return csProjVersion;
                 }
@@ -177,7 +177,7 @@ export class CSharpierProcessProvider implements Disposable {
             }
 
 
-            const nextDirectory = path.join(currentDirectory, "..");
+            let nextDirectory = path.join(currentDirectory, "..");
             if (nextDirectory === currentDirectory) {
                 break;
             }
@@ -187,27 +187,30 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private findVersionInCsProj = (currentDirectory: string) => {
+        if (currentDirectory.endsWith(":/") || currentDirectory.endsWith(":\\")) {
+            currentDirectory += ".";
+        }
         this.logger.debug(`Looking for ${currentDirectory}/*.csproj`);
-        const csProjFileNames = fs
+        let csProjFileNames = fs
             .readdirSync(currentDirectory)
             .filter(o => o.toLowerCase().endsWith(".csproj"));
-        for (const csProjFileName of csProjFileNames) {
-            const csProjPath = path.join(currentDirectory, csProjFileName);
+        for (let csProjFileName of csProjFileNames) {
+            let csProjPath = path.join(currentDirectory, csProjFileName);
             try {
                 this.logger.debug(`Looking at ${csProjPath}`);
-                const uglyProject = JSON.parse(
+                let uglyProject = JSON.parse(
                     convert.xml2json(fs.readFileSync(csProjPath).toString()),
                 );
-                for (const project of uglyProject.elements) {
+                for (let project of uglyProject.elements) {
                     if (project.name !== "Project") {
                         continue;
                     }
-                    for (const itemGroup of project.elements) {
+                    for (let itemGroup of project.elements) {
                         if (itemGroup.name !== "ItemGroup") {
                             continue;
                         }
 
-                        for (const packageReference of itemGroup.elements) {
+                        for (let packageReference of itemGroup.elements) {
                             if (packageReference.name !== "PackageReference") {
                                 continue;
                             }
@@ -216,7 +219,7 @@ export class CSharpierProcessProvider implements Disposable {
                                 continue;
                             }
 
-                            const version = packageReference.attributes["Version"];
+                            let version = packageReference.attributes["Version"];
                             if (version) {
                                 this.logger.debug(`Found version ${version} in ${csProjPath}`);
                                 return version;
@@ -246,13 +249,13 @@ export class CSharpierProcessProvider implements Disposable {
                 return NullCSharpierProcess.instance;
             }
 
-            const customPath = this.customPathInstaller.getPathForVersion(version);
+            let customPath = this.customPathInstaller.getPathForVersion(version);
 
             this.logger.debug(`Adding new version ${version} process for ${directory}`);
 
             let csharpierProcess: ICSharpierProcess;
 
-            const serverVersion = "0.29.0";
+            let serverVersion = "0.29.0";
 
             if (semver.gte(version, serverVersion) && !this.disableCSharpierServer) {
                 csharpierProcess = new CSharpierProcessServer(
@@ -302,7 +305,7 @@ export class CSharpierProcessProvider implements Disposable {
     };
 
     private killRunningProcesses = () => {
-        for (const key in this.csharpierProcessesByVersion) {
+        for (let key in this.csharpierProcessesByVersion) {
             this.logger.debug("disposing of process for version " + (key || "null"));
             this.csharpierProcessesByVersion[key]?.dispose();
         }

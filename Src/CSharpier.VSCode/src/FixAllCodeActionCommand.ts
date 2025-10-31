@@ -16,15 +16,15 @@ export class FixAllCodeActionsCommand {
 
     public execute = async (document: vscode.TextDocument): Promise<void> => {
         try {
-            const changes = await this.getChanges(document);
+            let changes = await this.getChanges(document);
             if (!changes) {
                 return;
             }
-            const range = new vscode.Range(
+            let range = new vscode.Range(
                 document.positionAt(0),
                 document.positionAt(document.getText().length),
             );
-            const workspaceEdit = new vscode.WorkspaceEdit();
+            let workspaceEdit = new vscode.WorkspaceEdit();
             workspaceEdit.replace(document.uri, range, changes);
             await vscode.workspace.applyEdit(workspaceEdit);
         } catch (e) {
@@ -33,7 +33,7 @@ export class FixAllCodeActionsCommand {
     };
 
     private async getChanges(document: vscode.TextDocument): Promise<string | null> {
-        const formattedSource = (await this.formatDocumentProvider.formatDocument(document)) ?? "";
+        let formattedSource = (await this.formatDocumentProvider.formatDocument(document)) ?? "";
         return formattedSource;
     }
 }

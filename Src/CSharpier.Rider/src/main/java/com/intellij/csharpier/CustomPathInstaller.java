@@ -126,7 +126,7 @@ public class CustomPathInstaller {
         var path = Path.of(userHome, ".cache/csharpier", version).toString();
 
         var arch = this.dotNetProvider.getArchitecture();
-        return arch.map(x -> Path.of(path, x).toString()).orElse(path);
+        return arch != null ? Path.of(path, arch).toString() : path;
     }
 
     public String getPathForVersion(String version) throws Exception {

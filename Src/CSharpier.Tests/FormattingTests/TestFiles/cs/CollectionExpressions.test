@@ -27,15 +27,13 @@ List<string> items =
     "Hello",
 ];
 
-items.AddRange(
-    [
-        "More really long words",
-        "which span multiple lines",
-        "are added here",
-        "and something bad",
-        "happens",
-    ]
-);
+items.AddRange([
+    "More really long words",
+    "which span multiple lines",
+    "are added here",
+    "and something bad",
+    "happens",
+]);
 
 someObject = new SomeObject
 {
@@ -65,19 +63,15 @@ CallMethod(
     ]
 );
 
-CallMethod(
-    [
-        // some comment
-    ]
-);
+CallMethod([
+    // some comment
+]);
 
-CallMethod(
-    [
-        1,
-        // some comment
-        // and more
-    ]
-);
+CallMethod([
+    1,
+    // some comment
+    // and more
+]);
 
 CallMethod(
     (parameter1, parameter2) =>
@@ -101,6 +95,25 @@ CallMethod(_ =>
         LongValue________________________________________________,
     ]
 );
+
+CallMethod([
+    LongValue________________________________________________,
+    LongValue________________________________________________,
+]);
+
+CallMethod(
+    parameterName:
+    [
+        LongValue________________________________________________,
+        LongValue________________________________________________,
+    ]
+);
+
+CallMethod([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+]);
 
 Dictionary<string, string[]> dictionary = new()
 {
@@ -158,18 +171,35 @@ class MyClass
     ];
 }
 
+[SomeAttribute([
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+    someValue,
+])]
+[SomeAttribute(
+    someName: [
+        SomeValue__________________________________________,
+        SomeValue__________________________________________,
+    ]
+)]
 [SomeAttribute(
     [
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
-        someValue,
+        SomeValue__________________________________________,
+        SomeValue__________________________________________,
+    ],
+    SomeArgument = false
+)]
+[SomeAttribute(
+    SomeArgument = [
+        SomeValue__________________________________________,
+        SomeValue__________________________________________,
     ]
 )]
 class ClassName { }
