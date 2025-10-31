@@ -42,11 +42,19 @@ class ClassName
 
         var useLine =
             node.OperatorToken.Kind()
-                is SyntaxKind.BarBarToken
-                    or SyntaxKind.BarToken
-                    or SyntaxKind.AmpersandAmpersandToken
-                    or SyntaxKind.AmpersandToken
-                    or SyntaxKind.PlusToken;
+            is SyntaxKind.BarBarToken
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken;
+        var useLine = (
+            node.OperatorToken.Kind()
+            is SyntaxKind.BarBarToken
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken
+        );
 
         if (
             someRandomValue___________________ is SomeRandomType someRandomType
@@ -75,20 +83,20 @@ class ClassName
 
         var value =
             someOtherValue
-                is SomeType___________________
-                    {
-                        SomeProperty: SomeOtherType_____________________________________________
-                    }
-                    or SomeThirdType___________;
+            is SomeType___________________
+                {
+                    SomeProperty: SomeOtherType_____________________________________________
+                }
+                or SomeThirdType___________;
 
         var value =
             someOtherValue
-                is SomeType___________________
-                    {
-                        SomeProperty: SomeOtherType_____________________________________________,
-                        AnotherProperty: SomeType
-                    }
-                    or SomeThirdType___________;
+            is SomeType___________________
+                {
+                    SomeProperty: SomeOtherType_____________________________________________,
+                    AnotherProperty: SomeType
+                }
+                or SomeThirdType___________;
 
         var value =
             someOtherValue
