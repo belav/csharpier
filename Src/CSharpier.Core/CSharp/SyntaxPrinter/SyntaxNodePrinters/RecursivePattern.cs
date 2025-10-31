@@ -29,6 +29,7 @@ internal static class RecursivePattern
             result.Append(
                 node.Parent
                     is SwitchExpressionArmSyntax
+                        or IsPatternExpressionSyntax
                         or CasePatternSwitchLabelSyntax
                         or BinaryPatternSyntax
                         {
