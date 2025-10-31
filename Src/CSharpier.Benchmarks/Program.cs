@@ -130,8 +130,10 @@ public static class Program
     {
         _ = BenchmarkRunner.Run<Benchmarks>();
         var bench = new Benchmarks();
-        for (int i = 0; i < 10; i++) { }
-        bench.Default_CodeFormatter_Complex();
+        for (int i = 0; i < 10; i++)
+        {
+            bench.Default_CodeFormatter_Complex();
+        }
         GC.Collect();
     }
 }

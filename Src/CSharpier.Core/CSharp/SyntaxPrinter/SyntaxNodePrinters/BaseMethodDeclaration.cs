@@ -152,7 +152,10 @@ internal static partial class BaseMethodDeclaration
                 }
                 else if (returnType is not null && CSharpierIgnore.HasIgnoreComment(returnType))
                 {
-                    PrintMethodUnformattedWithoutAttributes(returnType.GetLeadingTrivia(), ref docs);
+                    PrintMethodUnformattedWithoutAttributes(
+                        returnType.GetLeadingTrivia(),
+                        ref docs
+                    );
                     var returnDoc = Doc.Group(ref docs);
                     docs.Dispose();
                     return returnDoc;

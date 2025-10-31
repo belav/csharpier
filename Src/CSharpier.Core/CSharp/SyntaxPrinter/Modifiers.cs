@@ -71,18 +71,22 @@ internal static class Modifiers
             modifiers,
             context,
             static (sortedModifiers, context) =>
-                Doc.Group(
-                    Token.PrintWithoutLeadingTrivia(sortedModifiers[0], context),
-                    " ",
-                    sortedModifiers.Count > 1
-                        ? Doc.Concat(
-                            sortedModifiers
-                                .Skip(1)
-                                .Select(o => Token.PrintWithSuffix(o, " ", context))
-                                .ToArray()
-                        )
-                        : Doc.Null
-                )
+            {
+                var docs = new ValueListBuilder<Doc>(
+                    [null, null, null, null, null, null, null, null]
+                );
+                docs.Append(Token.PrintWithoutLeadingTrivia(sortedModifiers[0], context));
+                docs.Append(" ");
+
+                for (int i = 1; i < sortedModifiers.Count; i++)
+                {
+                    docs.Append(Token.PrintWithSuffix(sortedModifiers[i], " ", context));
+                }
+
+                var returnDoc = Doc.Group(ref docs);
+                docs.Dispose();
+                return returnDoc;
+            }
         );
     }
 

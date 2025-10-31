@@ -23,14 +23,13 @@ internal class Indenter(PrinterOptions printerOptions)
         // {
         //     return increasedIndent;
         // }
-        if (this.PrinterOptions.UseTabs && Cache.Count > indent.Length )
+        if (this.PrinterOptions.UseTabs && Cache.Count > indent.Length)
         {
             return Cache[indent.Length];
         }
         else if (Cache.Count > indent.Length / this.PrinterOptions.IndentSize)
         {
-            return Cache[indent.Length/ this.PrinterOptions.IndentSize];
-            
+            return Cache[indent.Length / this.PrinterOptions.IndentSize];
         }
 
         var nextIndent = this.PrinterOptions.UseTabs

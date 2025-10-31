@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.DocTypes;
@@ -59,7 +60,7 @@ internal abstract class Doc
     {
         return DocTypes.Concat.Create(contents.AsSpan());
     }
-    
+
     public static Doc Concat(IEnumerable<Doc> contents)
     {
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
@@ -74,23 +75,26 @@ internal abstract class Doc
         return returnDoc;
     }
 
+    [SkipLocalsInit]
     public static Doc Join(Doc separator, IEnumerable<Doc> enumerable)
     {
-        var docs = new List<Doc>();
+        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
 
         var x = 0;
         foreach (var doc in enumerable)
         {
             if (x != 0)
             {
-                docs.Add(separator);
+                docs.Append(separator);
             }
 
-            docs.Add(doc);
+            docs.Append(doc);
             x++;
         }
 
-        return docs.Count == 1 ? docs[0] : Concat(docs);
+        var returnDoc = Concat(ref docs);
+        docs.Dispose();
+        return returnDoc;
     }
 
     public static ForceFlat ForceFlat(List<Doc> contents) =>
@@ -102,8 +106,9 @@ internal abstract class Doc
     public static Group Group(List<Doc> contents) =>
         new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
 
-    public static Group GroupEnum(IEnumerable<Doc> contents) => new() { Contents = Concat(contents) };
-    
+    public static Group GroupEnum(IEnumerable<Doc> contents) =>
+        new() { Contents = Concat(contents) };
+
     public static Group GroupWithId(string groupId, List<Doc> contents)
     {
         var group = Group(contents);
@@ -153,6 +158,9 @@ internal abstract class Doc
         new() { Contents = Concat(contents) };
 
     public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
+
+    public static IndentDoc Indent(IEnumerable<Doc> contents) =>
+        new() { Contents = Concat(contents) };
 
     public static Doc IndentIf(bool condition, Doc contents)
     {

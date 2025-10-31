@@ -35,7 +35,7 @@ internal static class ConditionalExpression
             ? PrintWithRegularFormatting(c2, context)
             : Node.Print(node.WhenFalse, context);
 
-        Doc[] innerContents =
+        ReadOnlySpan<Doc> innerContents =
         [
             Doc.Line,
             Token.PrintWithSuffix(node.QuestionToken, " ", context),

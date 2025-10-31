@@ -11,7 +11,8 @@ internal static class AttributeList
         if (
             context.Information.HasCSharpierIgnore
             && node.Parent is BaseMethodDeclarationSyntax
-            && CSharpierIgnore.HasIgnoreComment(node))
+            && CSharpierIgnore.HasIgnoreComment(node)
+        )
         {
             return CSharpierIgnore.PrintWithoutFormatting(node, context).Trim();
         }

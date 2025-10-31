@@ -148,7 +148,7 @@ internal static class ListExtensions
     {
         return syntaxNode.GetLeadingTrivia().Any(o => o.IsComment());
     }
-    
+
     public static bool Contains(this ref ValueListBuilder<SyntaxKind> vlb, SyntaxKind item)
     {
         foreach (var element in vlb.AsSpan())
