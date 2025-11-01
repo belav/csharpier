@@ -24,7 +24,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter
                 throw new InTooDeepException();
             }
 
-            if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
+            if (context.Information.HasCSharpierIgnore && CSharpierIgnore.IsNodeIgnored(syntaxNode))
             {
                 return CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
             }

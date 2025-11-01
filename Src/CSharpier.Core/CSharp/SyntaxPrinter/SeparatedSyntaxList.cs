@@ -56,19 +56,22 @@ internal static class SeparatedSyntaxList
         {
             var member = list[x];
 
-            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
+            if (context.Information.HasCSharpierIgnore)
             {
-                docs.Append(unFormattedCode.AsSpan().Trim().ToString());
-                unFormattedCode.Clear();
-                printUnformatted = false;
-            }
-            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
-            {
-                if (!printUnformatted && x > 0)
+                if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
                 {
-                    docs.Append(Doc.HardLine);
+                    docs.Append(unFormattedCode.AsSpan().Trim().ToString());
+                    unFormattedCode.Clear();
+                    printUnformatted = false;
                 }
-                printUnformatted = true;
+                else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
+                {
+                    if (!printUnformatted && x > 0)
+                    {
+                        docs.Append(Doc.HardLine);
+                    }
+                    printUnformatted = true;
+                }
             }
 
             if (printUnformatted)
