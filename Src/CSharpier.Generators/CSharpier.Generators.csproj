@@ -16,7 +16,6 @@
     </PackageReference>
     <PackageReference Include="Scriban" IncludeAssets="Build" />
     <PackageReference Include="Microsoft.CSharp" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
