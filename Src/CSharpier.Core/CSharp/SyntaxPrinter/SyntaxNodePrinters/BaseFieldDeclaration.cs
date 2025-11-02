@@ -9,16 +9,14 @@ internal static class BaseFieldDeclaration
     public static Doc Print(BaseFieldDeclarationSyntax node, PrintingContext context)
     {
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null]);
-        docs.Append(AttributeLists.Print(node, node.AttributeLists, context));
-        docs.Append(Modifiers.PrintSorted(node.Modifiers, context));
+        docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
+        docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
         {
-            docs.Append(
-                Token.PrintWithSuffix(eventFieldDeclarationSyntax.EventKeyword, " ", context)
-            );
+            docs.Add(Token.PrintWithSuffix(eventFieldDeclarationSyntax.EventKeyword, " ", context));
         }
 
-        docs.Append(
+        docs.Add(
             VariableDeclaration.Print(node.Declaration, context),
             Token.Print(node.SemicolonToken, context)
         );

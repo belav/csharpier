@@ -9,14 +9,14 @@ internal static class SwitchSection
     public static Doc Print(SwitchSectionSyntax node, PrintingContext context)
     {
         var docs = new ValueListBuilder<Doc>([null, null]);
-        docs.Append(Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))));
+        docs.Add(Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))));
         if (node.Statements is [BlockSyntax blockSyntax])
         {
-            docs.Append(Block.Print(blockSyntax, context));
+            docs.Add(Block.Print(blockSyntax, context));
         }
         else
         {
-            docs.Append(
+            docs.Add(
                 Doc.Indent(
                     node.Statements.First() is BlockSyntax ? Doc.Null : Doc.HardLine,
                     Doc.Join(

@@ -15,10 +15,10 @@ internal static class Node
 
             foreach (var childNode in node.Nodes)
             {
-                result.Append(Print(childNode, context), Doc.HardLine);
+                result.Add(Print(childNode, context), Doc.HardLine);
             }
 
-            result.Append(Doc.HardLine);
+            result.Add(Doc.HardLine);
 
             return Doc.Concat(ref result);
         }

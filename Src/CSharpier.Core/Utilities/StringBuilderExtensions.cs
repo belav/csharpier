@@ -24,7 +24,7 @@ internal static class StringBuilderExtensions
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Append(this ref ValueListBuilder<char> builder, string text) =>
-        builder.Append(text.AsSpan());
+        builder.Add(text.AsSpan());
 
     public static void TrimStart(this StringBuilder value, params ReadOnlySpan<char> trimChars)
     {

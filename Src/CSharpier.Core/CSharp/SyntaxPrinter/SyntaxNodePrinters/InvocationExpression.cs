@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -117,7 +118,10 @@ internal static class InvocationExpression
                 }
             || (
                 parent is ExpressionStatementSyntax expressionStatementSyntax
-                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
+                && Enumerable.Any(
+                    expressionStatementSyntax.SemicolonToken.LeadingTrivia,
+                    o => o.IsComment()
+                )
             )
             || groups.Count == 1
             ? expanded
@@ -384,15 +388,51 @@ internal static class InvocationExpression
             return Doc.Null;
         }
 
-        return Doc.Indent(
-            Doc.Group(
-                Doc.HardLine,
-                Doc.Join(
-                    Doc.HardLine,
-                    groups.Select(o => Doc.Group(o.Select(p => p.Doc).ToArray()))
+        var result = new ValueListBuilder<Doc>(groups.Count * 2);
+
+        for (int index = 0; index < groups.Count; index++)
+        {
+            Doc GetPossibleContents()
+            {
+                if (index >= groups.Count)
+                {
+                    return Doc.Null;
+                }
+                var nextGroup = groups[index];
+                if (
+                    nextGroup[0].Node
+                    is not MemberAccessExpressionSyntax
+                    {
+                        Name: IdentifierNameSyntax { Identifier.Text: "ThenInclude" }
+                    }
                 )
-            )
-        );
+                {
+                    return Doc.Null;
+                }
+
+                index++;
+                return Doc.Indent(
+                    Doc.HardLine,
+                    Doc.Group(nextGroup.Select(p => p.Doc).ToArray()),
+                    GetPossibleContents()
+                );
+            }
+
+            var possibleContents = GetPossibleContents();
+            if (possibleContents != Doc.Null)
+            {
+                index--;
+                result.Add(possibleContents);
+            }
+            else
+            {
+                var group = groups[index];
+                result.Add(Doc.HardLine);
+                result.Add(Doc.Group(group.Select(p => p.Doc).ToArray()));
+            }
+        }
+
+        return Doc.Indent(Doc.Group(result.ToArray()));
     }
 
     // There are cases where merging the first two groups looks better

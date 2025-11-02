@@ -17,12 +17,12 @@ internal static class Argument
         var docs = new ValueListBuilder<Doc>([null, null]);
         if (node.NameColon != null)
         {
-            docs.Append(BaseExpressionColon.Print(node.NameColon, context));
+            docs.Add(BaseExpressionColon.Print(node.NameColon, context));
         }
 
         if (node.RefKindKeyword.RawSyntaxKind() != SyntaxKind.None)
         {
-            docs.Append(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
+            docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
         }
 
         return Doc.Concat(ref docs);

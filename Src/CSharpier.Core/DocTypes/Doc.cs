@@ -59,7 +59,7 @@ internal abstract class Doc
         {
             0 => Null,
             1 => contents[0],
-            _ => new Concat(contents.AsSpan().ToArray()),
+            _ => new Concat(contents.ToArray()),
         };
     }
 
