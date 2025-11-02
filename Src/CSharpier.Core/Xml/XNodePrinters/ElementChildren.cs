@@ -21,7 +21,7 @@ internal static class ElementChildren
         {
             if (childNode.NodeType is XmlNodeType.Whitespace)
             {
-                result.Append(Doc.HardLine);
+                result.Add(Doc.HardLine);
                 continue;
             }
 
@@ -42,15 +42,15 @@ internal static class ElementChildren
             {
                 if (prevBetweenLine is HardLine)
                 {
-                    prevParts.Append(Doc.HardLine);
+                    prevParts.Add(Doc.HardLine);
                 }
                 else if (childNode.PreviousNode?.NodeType is XmlNodeType.Text)
                 {
-                    leadingParts.Append(prevBetweenLine);
+                    leadingParts.Add(prevBetweenLine);
                 }
                 else
                 {
-                    leadingParts.Append(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
                 }
             }
 
@@ -60,17 +60,17 @@ internal static class ElementChildren
                 {
                     if (childNode.NextNode?.NodeType is XmlNodeType.Text)
                     {
-                        nextParts.Append(Doc.HardLine);
+                        nextParts.Add(Doc.HardLine);
                     }
                 }
                 else
                 {
-                    trailingParts.Append(nextBetweenLine);
+                    trailingParts.Add(nextBetweenLine);
                 }
             }
 
-            result.Append(prevParts.AsSpan());
-            result.Append(
+            result.Add(prevParts.AsSpan());
+            result.Add(
                 Doc.Group(
                     Doc.Concat(ref leadingParts),
                     Doc.GroupWithId(
@@ -80,7 +80,7 @@ internal static class ElementChildren
                     )
                 )
             );
-            result.Append(nextParts.AsSpan());
+            result.Add(nextParts.AsSpan());
             x++;
         }
 

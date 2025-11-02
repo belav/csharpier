@@ -11,10 +11,10 @@ internal static class IfStatement
         var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
         if (node.Parent is not ElseClauseSyntax)
         {
-            docs.Append(ExtraNewLines.Print(node));
+            docs.Add(ExtraNewLines.Print(node));
         }
 
-        docs.Append(
+        docs.Add(
             Token.Print(node.IfKeyword, context),
             " ",
             Doc.Group(
@@ -31,7 +31,7 @@ internal static class IfStatement
 
         if (node.Else != null)
         {
-            docs.Append(Doc.HardLine, Node.Print(node.Else, context));
+            docs.Add(Doc.HardLine, Node.Print(node.Else, context));
         }
 
         return Doc.Concat(ref docs);

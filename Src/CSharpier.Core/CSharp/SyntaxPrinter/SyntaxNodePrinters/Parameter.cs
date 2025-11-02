@@ -15,7 +15,7 @@ internal static class Parameter
 
         if (hasAttribute)
         {
-            docs.Append(AttributeLists.Print(node, node.AttributeLists, context));
+            docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
             if (
                 node.AttributeLists.Count < 2
                 && (
@@ -24,35 +24,35 @@ internal static class Parameter
                 )
             )
             {
-                docs.Append(" ");
+                docs.Add(" ");
             }
             else
             {
-                docs.Append(Doc.Indent(Doc.Line));
+                docs.Add(Doc.Indent(Doc.Line));
             }
         }
 
         if (node.Modifiers.Any())
         {
-            docs.Append(Modifiers.Print(node.Modifiers, context));
+            docs.Add(Modifiers.Print(node.Modifiers, context));
         }
 
         if (node.Type != null)
         {
-            docs.Append(Node.Print(node.Type, context));
+            docs.Add(Node.Print(node.Type, context));
 
             if (node.Identifier.RawSyntaxKind() is not SyntaxKind.None)
             {
-                docs.Append(" ");
+                docs.Add(" ");
             }
         }
 
-        docs.Append(Token.Print(node.Identifier, context));
+        docs.Add(Token.Print(node.Identifier, context));
         if (node.Default != null)
         {
-            docs.Append(EqualsValueClause.Print(node.Default, context));
+            docs.Add(EqualsValueClause.Print(node.Default, context));
         }
 
-        return hasAttribute ? Doc.Group(docs.AsSpan().ToArray()) : Doc.Concat(ref docs);
+        return hasAttribute ? Doc.Group(docs.ToArray()) : Doc.Concat(ref docs);
     }
 }

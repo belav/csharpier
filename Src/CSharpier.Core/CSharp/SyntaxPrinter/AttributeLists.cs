@@ -28,13 +28,11 @@ internal static class AttributeLists
             ? Doc.Line
             : Doc.HardLine;
 
-        docs.Append(
-            Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context)))
-        );
+        docs.Add(Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context))));
 
         if (node is not (ParameterSyntax or TypeParameterSyntax))
         {
-            docs.Append(separator);
+            docs.Add(separator);
         }
 
         return Doc.Concat(ref docs);

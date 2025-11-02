@@ -5,11 +5,11 @@ using System.Runtime.CompilerServices;
 namespace CSharpier.Core.Utilities;
 
 // From https://github.com/dotnet/runtime/blob/f5c73447ca9dcb3407d0143829bbf708c04170c1/src/libraries/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.cs#L10
-internal ref partial struct ValueListBuilder<T>
+internal ref struct ValueListBuilder<T>
 {
     private Span<T> span;
     private T[]? arrayFromPool;
-    private int pos;
+    private int position;
 
     public ValueListBuilder(Span<T?> scratchBuffer)
     {
@@ -23,12 +23,12 @@ internal ref partial struct ValueListBuilder<T>
 
     public int Length
     {
-        readonly get => this.pos;
+        readonly get => this.position;
         set
         {
             Debug.Assert(value >= 0);
             Debug.Assert(value <= this.span.Length);
-            this.pos = value;
+            this.position = value;
         }
     }
 
@@ -36,25 +36,25 @@ internal ref partial struct ValueListBuilder<T>
     {
         get
         {
-            Debug.Assert(index < this.pos);
+            Debug.Assert(index < this.position);
             return ref this.span[index];
         }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Clear() => Length = 0;
+    public void Clear() => this.Length = 0;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Append(T item)
+    public void Add(T item)
     {
-        var pos = this.pos;
+        var pos = this.position;
 
         // Workaround for https://github.com/dotnet/runtime/issues/72004
         var span = this.span;
         if ((uint)pos < (uint)span.Length)
         {
             span[pos] = item;
-            this.pos = pos + 1;
+            this.position = pos + 1;
         }
         else
         {
@@ -63,14 +63,14 @@ internal ref partial struct ValueListBuilder<T>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Append(params ReadOnlySpan<T> source)
+    public void Add(params ReadOnlySpan<T> source)
     {
-        var pos = this.pos;
+        var pos = this.position;
         var span = this.span;
         if (source.Length == 1 && (uint)pos < (uint)span.Length)
         {
             span[pos] = source[0];
-            this.pos = pos + 1;
+            this.position = pos + 1;
         }
         else
         {
@@ -81,82 +81,48 @@ internal ref partial struct ValueListBuilder<T>
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void AppendMultiChar(scoped ReadOnlySpan<T> source)
     {
-        if ((uint)(this.pos + source.Length) > (uint)this.span.Length)
+        if ((uint)(this.position + source.Length) > (uint)this.span.Length)
         {
-            this.Grow(this.span.Length - this.pos + source.Length);
+            this.Grow(this.span.Length - this.position + source.Length);
         }
 
-        source.CopyTo(this.span[this.pos..]);
-        this.pos += source.Length;
+        source.CopyTo(this.span[this.position..]);
+        this.position += source.Length;
     }
 
     public void Insert(int index, scoped ReadOnlySpan<T> source)
     {
         Debug.Assert(index == 0, "Implementation currently only supports index == 0");
 
-        if ((uint)(this.pos + source.Length) > (uint)this.span.Length)
+        if ((uint)(this.position + source.Length) > (uint)this.span.Length)
         {
             this.Grow(source.Length);
         }
 
-        this.span[..this.pos].CopyTo(this.span[source.Length..]);
+        this.span[..this.position].CopyTo(this.span[source.Length..]);
         source.CopyTo(this.span);
-        this.pos += source.Length;
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Span<T> AppendSpan(int length)
-    {
-        Debug.Assert(length >= 0);
-
-        var pos = this.pos;
-        var span = this.span;
-        if ((ulong)(uint)pos + (ulong)(uint)length <= (ulong)(uint)span.Length) // same guard condition as in Span<T>.Slice on 64-bit
-        {
-            this.pos = pos + length;
-            return span.Slice(pos, length);
-        }
-        else
-        {
-            return this.AppendSpanWithGrow(length);
-        }
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private Span<T> AppendSpanWithGrow(int length)
-    {
-        var pos = this.pos;
-        this.Grow(this.span.Length - pos + length);
-        this.pos += length;
-        return this.span.Slice(pos, length);
+        this.position += source.Length;
     }
 
     // Hide uncommon path
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void AddWithResize(T item)
     {
-        Debug.Assert(this.pos == this.span.Length);
-        var pos = this.pos;
+        Debug.Assert(this.position == this.span.Length);
+        var pos = this.position;
         this.Grow(1);
         this.span[pos] = item;
-        this.pos = pos + 1;
+        this.position = pos + 1;
     }
 
     public readonly ReadOnlySpan<T> AsSpan()
     {
-        return this.span[..this.pos];
+        return this.span[..this.position];
     }
 
-    public readonly bool TryCopyTo(Span<T> destination, out int itemsWritten)
+    public readonly T[] ToArray()
     {
-        if (this.span[..this.pos].TryCopyTo(destination))
-        {
-            itemsWritten = this.pos;
-            return true;
-        }
-
-        itemsWritten = 0;
-        return false;
+        return this.AsSpan().ToArray();
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
