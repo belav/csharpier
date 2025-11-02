@@ -118,10 +118,7 @@ internal static class InvocationExpression
                 }
             || (
                 parent is ExpressionStatementSyntax expressionStatementSyntax
-                && Enumerable.Any(
-                    expressionStatementSyntax.SemicolonToken.LeadingTrivia,
-                    o => o.IsComment()
-                )
+                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
             )
             || groups.Count == 1
             ? expanded
