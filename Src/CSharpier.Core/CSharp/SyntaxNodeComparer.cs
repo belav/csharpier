@@ -322,6 +322,17 @@ internal partial class SyntaxNodeComparer
             : NotEqual(originalTrivia.Span, formattedTrivia.Span);
     }
 
+    private bool CompareFullSpan(SyntaxNode originalStart, SyntaxNode formattedStart)
+    {
+        var originalSpan = OriginalSourceCode
+            .AsSpan()
+            .Slice(originalStart.FullSpan.Start, originalStart.FullSpan.Length);
+        var formattedSpan = NewSourceCode
+            .AsSpan()
+            .Slice(formattedStart.FullSpan.Start, formattedStart.FullSpan.Length);
+        return originalSpan == formattedSpan;
+    }
+
     private static CompareResult CompareComment(
         string originalComment,
         string formattedComment,
