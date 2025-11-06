@@ -34,7 +34,7 @@ internal class OptionsProvider
         this.logger = logger;
     }
 
-    public static async Task<OptionsProvider> Create(
+    public static async ValueTask<OptionsProvider> Create(
         string directoryName,
         string? configPath,
         string? ignorePath,
@@ -109,7 +109,7 @@ internal class OptionsProvider
         return optionsProvider;
     }
 
-    public async Task<PrinterOptions?> GetPrinterOptionsForAsync(
+    public async ValueTask<PrinterOptions?> GetPrinterOptionsForAsync(
         string filePath,
         CancellationToken cancellationToken
     )
@@ -147,30 +147,32 @@ internal class OptionsProvider
         return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
     }
 
-    private Task<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)
+    private ValueTask<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)
     {
         return this.FindFileAsync(
             directoryName,
             this.csharpierConfigsByDirectory,
-            searchingDirectory =>
-                this.fileSystem.Directory.EnumerateFiles(
+            (searchingDirectory, cancellationToken) =>
+                this
+                    .fileSystem.Directory.EnumerateFiles(
                         searchingDirectory,
                         ".csharpierrc*",
                         SearchOption.TopDirectoryOnly
                     )
                     .Any(),
-            searchingDirectory =>
+            (searchingDirectory, cancellationToken) =>
                 Task.FromResult(
                     CSharpierConfigParser.FindForDirectoryName(
                         searchingDirectory,
                         this.fileSystem,
                         this.logger
                     )
-                )
+                ),
+            CancellationToken.None
         );
     }
 
-    private async Task<EditorConfigSections?> FindEditorConfigAsync(
+    private async ValueTask<EditorConfigSections?> FindEditorConfigAsync(
         string directoryName,
         CancellationToken cancellationToken
     )
@@ -178,19 +180,20 @@ internal class OptionsProvider
         return await this.FindFileAsync(
             directoryName,
             this.editorConfigByDirectory,
-            searchingDirectory =>
+            (searchingDirectory, cancellationToken) =>
                 this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".editorconfig")),
-            async searchingDirectory =>
+            async (searchingDirectory, cancellationToken) =>
                 await EditorConfigLocator.FindForDirectoryNameAsync(
                     searchingDirectory,
                     this.fileSystem,
                     await this.FindIgnoreFileAsync(searchingDirectory, cancellationToken),
                     cancellationToken
-                )
+                ),
+            cancellationToken
         );
     }
 
-    private async Task<IgnoreFile> FindIgnoreFileAsync(
+    private async ValueTask<IgnoreFile> FindIgnoreFileAsync(
         string directoryName,
         CancellationToken cancellationToken
     )
@@ -198,13 +201,19 @@ internal class OptionsProvider
         var ignoreFile = await this.FindFileAsync(
             directoryName,
             this.ignoreFilesByDirectory,
-            (searchingDirectory) =>
+            (searchingDirectory, cancellationToken) =>
                 this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".gitignore"))
                 || this.fileSystem.File.Exists(
                     Path.Combine(searchingDirectory, ".csharpierignore")
                 ),
-            (searchingDirectory) =>
-                IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, null, cancellationToken)
+            (searchingDirectory, cancellationToken) =>
+                IgnoreFile.CreateAsync(
+                    searchingDirectory,
+                    this.fileSystem,
+                    null,
+                    cancellationToken
+                ),
+            cancellationToken
         );
 
 #pragma warning disable IDE0270
@@ -223,11 +232,12 @@ internal class OptionsProvider
     /// When trying to format a file in a given subdirectory if we've already found the appropriate file type then return it
     /// otherwise track it down (parsing if we need to) and set the references for any parent directories
     /// </summary>
-    private async Task<T?> FindFileAsync<T>(
+    private async ValueTask<T?> FindFileAsync<T>(
         string directoryName,
         ConcurrentDictionary<string, T?> dictionary,
-        Func<string, bool> shouldConsiderDirectory,
-        Func<string, Task<T?>> createFileAsync
+        Func<string, CancellationToken, bool> shouldConsiderDirectory,
+        Func<string, CancellationToken, Task<T?>> createFileAsync,
+        CancellationToken cancellationToken
     )
     {
         if (dictionary.TryGetValue(directoryName, out var result))
@@ -242,10 +252,11 @@ internal class OptionsProvider
             && !dictionary.TryGetValue(searchingDirectory.FullName, out result)
         )
         {
-            if (shouldConsiderDirectory(searchingDirectory.FullName))
+            if (shouldConsiderDirectory(searchingDirectory.FullName, cancellationToken))
             {
                 dictionary[searchingDirectory.FullName] = result = await createFileAsync(
-                    searchingDirectory.FullName
+                    searchingDirectory.FullName,
+                    cancellationToken
                 );
                 break;
             }
@@ -262,7 +273,7 @@ internal class OptionsProvider
         return result;
     }
 
-    public async Task<bool> IsIgnoredAsync(
+    public async ValueTask<bool> IsIgnoredAsync(
         string actualFilePath,
         CancellationToken cancellationToken
     )
