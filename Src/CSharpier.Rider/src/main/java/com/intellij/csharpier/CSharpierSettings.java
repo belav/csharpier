@@ -15,7 +15,7 @@ public class CSharpierSettings implements PersistentStateComponent<CSharpierSett
         return project.getService(CSharpierSettings.class);
     }
 
-    private boolean runOnSave;
+    private boolean runOnSave = true;
 
     public boolean getRunOnSave() {
         return this.runOnSave;
