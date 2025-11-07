@@ -4,10 +4,24 @@ namespace CSharpier.Core;
 
 internal class PrinterOptions(Formatter formatter)
 {
+    private int indentSize = formatter == Formatter.XML ? 2 : 4;
     public bool IncludeAST { get; init; }
     public bool IncludeDocTree { get; init; }
     public bool UseTabs { get; set; }
-    public int IndentSize { get; set; } = formatter == Formatter.XML ? 2 : 4;
+
+    public int IndentSize
+    {
+        get => this.indentSize;
+        set
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentException("An indent size of 0 is not valid");
+            }
+            this.indentSize = value;
+        }
+    }
+
     public int Width { get; set; } = 100;
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;

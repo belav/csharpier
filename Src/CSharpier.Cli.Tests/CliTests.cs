@@ -744,6 +744,19 @@ max_line_length = 10"
     }
 
     [Test]
+    public async Task Format_Should_Throw_With_IndentSize_Zero()
+    {
+        var unformattedContent = "public class ClassName { \n// break\n }\n";
+
+        await WriteFileAsync("Unformatted.cs", unformattedContent);
+        await WriteFileAsync(".csharpierrc", "indentSize: 0");
+        var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
+
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().Contain("An indent size of 0 is not valid");
+    }
+
+    [Test]
     public void Format_Should_Handle_Concurrent_Processes()
     {
         var unformattedContent = "public class ClassName {     }\n";
