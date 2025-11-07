@@ -4,11 +4,11 @@ namespace CSharpier.Core;
 
 internal class PrinterOptions(Formatter formatter)
 {
-    private int indentSize = formatter == Formatter.XML ? 2 : 4;
     public bool IncludeAST { get; init; }
     public bool IncludeDocTree { get; init; }
     public bool UseTabs { get; set; }
 
+    private int indentSize = formatter == Formatter.XML ? 2 : 4;
     public int IndentSize
     {
         get => this.indentSize;
