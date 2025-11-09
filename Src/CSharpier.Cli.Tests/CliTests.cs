@@ -476,7 +476,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Check_Should_Write_Unformatted_File()
+    public async Task Check_Should_Write_Error_With_Unformatted_File()
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
@@ -493,7 +493,24 @@ max_line_length = 10"
         result.ExitCode.Should().Be(1);
     }
 
-    // TODO overrides tests for piping files
+    [Test]
+    public async Task Check_Should_Write_Warning_With_Unformatted_File()
+    {
+        var unformattedContent = "public class ClassName1 {\n\n}";
+
+        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check CheckUnformatted.cs --unformatted-as-warnings")
+            .ExecuteAsync();
+
+        result
+            .Output.Replace('\\', '/')
+            .Should()
+            .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
+        result.ExitCode.Should().Be(0);
+    }
+
     [TestCase("\n")]
     [TestCase("\r\n")]
     public async Task PipeFiles_Should_Format_Multiple_Piped_Files(string lineEnding)

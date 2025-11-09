@@ -98,6 +98,13 @@ if ($result.Length -gt 1) {
 }
 Write-Host "::endgroup::"
 
+Write-Host "::group::UnformattedFileCausesWarning"
+$result = [TestHelper]::RunTestCase("UnformattedFileCausesWarning", $false)
+if ($result.Length -gt 1) {
+    $failureMessages += $result[1]
+}
+Write-Host "::endgroup::"
+
 Write-Host "::group::LogLevel"
 $result = [TestHelper]::RunTestCase("LogLevel", $true)
 if ($result.Length -gt 1) {

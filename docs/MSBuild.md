@@ -50,6 +50,14 @@ Valid options are:
 - Information (default)
 - Debug
 
+### Unformatted as Warnings
+If you do not want to fail the build when running `check` and encountering unformatted files you may set the following property.
+```xml
+  <PropertyGroup>
+    <CSharpier_UnformattedAsWarnings>true</CSharpier_UnformattedAsWarnings>
+  </PropertyGroup>
+```
+
 ### Target Frameworks
 CSharpier.MSBuild will be run with net8.0 or net9.0 if the project targets one of the three frameworks. In cases where the project targets something else (net48, netstandard2.0) `CSharpier_FrameworkVersion` will default to net8.0
 This can be controlled with the following property. This property is required if the csproj is targeting < net8.0 (netstandard2.0, net48, etc) and net8.0 is not installed.

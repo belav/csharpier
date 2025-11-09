@@ -371,7 +371,11 @@ internal static class CommandLineFormatter
     {
         if (
             (!commandLineOptions.CompilationErrorsAsWarnings && result.FailedCompilation > 0)
-            || (commandLineOptions.Check && result.UnformattedFiles > 0)
+            || (
+                commandLineOptions.Check
+                && result.UnformattedFiles > 0
+                && !commandLineOptions.UnformattedAsWarnings
+            )
             || result.FailedFormattingValidation > 0
             || result.ExceptionsFormatting > 0
             || result.ExceptionsValidatingSource > 0
@@ -546,7 +550,16 @@ internal static class CommandLineFormatter
                 codeFormattingResult.Code,
                 fileToFormatInfo.FileContents
             );
-            fileIssueLogger.WriteError($"Was not formatted.\n{difference}\n");
+            var message = $"Was not formatted.\n{difference}\n";
+            if (commandLineOptions.UnformattedAsWarnings)
+            {
+                fileIssueLogger.WriteWarning(message);
+            }
+            else
+            {
+                fileIssueLogger.WriteError(message);
+            }
+
             Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);
         }
 
