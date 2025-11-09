@@ -56,7 +56,7 @@ internal static class Token
             var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
             if (leadingTrivia != Doc.Null)
             {
-                docs.Append(leadingTrivia);
+                docs.Add(leadingTrivia);
             }
         }
 
@@ -77,7 +77,7 @@ internal static class Token
         )
         {
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
-            docs.Append(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
+            docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
         }
         else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
         {
@@ -109,7 +109,7 @@ internal static class Token
 
             var hasArgumentParent = syntaxToken.Parent.HasParent(typeof(ArgumentSyntax));
 
-            docs.Append(Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents)));
+            docs.Add(Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents)));
         }
         else if (
             syntaxToken.RawSyntaxKind()
@@ -117,11 +117,11 @@ internal static class Token
                 or SyntaxKind.InterpolatedRawStringEndToken
         )
         {
-            docs.Append(syntaxToken.Text.Trim());
+            docs.Add(syntaxToken.Text.Trim());
         }
         else
         {
-            docs.Append(StringDoc.Create(syntaxToken));
+            docs.Add(StringDoc.Create(syntaxToken));
         }
 
         if (!skipTrailingTrivia)
@@ -135,18 +135,18 @@ internal static class Token
                         == context.State.TrailingComma.TrailingComment
                 )
                 {
-                    docs.Append(context.State.TrailingComma.PrintedTrailingComma);
+                    docs.Add(context.State.TrailingComma.PrintedTrailingComma);
                     context.State.MovedTrailingTrivia = true;
                     context.State.TrailingComma = null;
                 }
 
-                docs.Append(trailingTrivia);
+                docs.Add(trailingTrivia);
             }
         }
 
         if (suffixDoc != null)
         {
-            docs.Append(suffixDoc);
+            docs.Add(suffixDoc);
         }
 
         var returnDoc = Doc.Concat(ref docs);
@@ -414,11 +414,11 @@ internal static class Token
         {
             if (trivia.RawSyntaxKind() == SyntaxKind.SingleLineCommentTrivia)
             {
-                docs.Append(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
+                docs.Add(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
             }
             else if (trivia.RawSyntaxKind() == SyntaxKind.MultiLineCommentTrivia)
             {
-                docs.Append(" ", Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine));
+                docs.Add(" ", Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine));
             }
         }
 

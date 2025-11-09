@@ -58,7 +58,7 @@ internal static class SeparatedSyntaxList
 
             if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
             {
-                docs.Append(unFormattedCode.AsSpan().Trim().ToString());
+                docs.Add(unFormattedCode.AsSpan().Trim().ToString());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
@@ -66,7 +66,7 @@ internal static class SeparatedSyntaxList
             {
                 if (!printUnformatted && x > 0)
                 {
-                    docs.Append(Doc.HardLine);
+                    docs.Add(Doc.HardLine);
                 }
                 printUnformatted = true;
             }
@@ -101,14 +101,14 @@ internal static class SeparatedSyntaxList
                 );
             }
 
-            docs.Append(printFunc(list[x], context));
+            docs.Add(printFunc(list[x], context));
 
             // if the syntax tree doesn't have a trailing comma but we want want, then add it
             if (x >= list.SeparatorCount)
             {
                 if (closingToken != null && firstTrailingComment == default)
                 {
-                    docs.Append(TrailingComma.Print(closingToken.Value, context));
+                    docs.Add(TrailingComma.Print(closingToken.Value, context));
                 }
 
                 continue;
@@ -127,27 +127,27 @@ internal static class SeparatedSyntaxList
                         && closingToken.Value.LeadingTrivia.Any(o => o.IsDirective)
                 )
                 {
-                    docs.Append(Token.Print(trailingSeparatorToken, context));
+                    docs.Add(Token.Print(trailingSeparatorToken, context));
                 }
                 else if (closingToken != null)
                 {
-                    docs.Append(TrailingComma.Print(closingToken.Value, context));
+                    docs.Add(TrailingComma.Print(closingToken.Value, context));
                 }
                 else
                 {
-                    docs.Append(Doc.IfBreak(Token.Print(list.GetSeparator(x), context), Doc.Null));
+                    docs.Add(Doc.IfBreak(Token.Print(list.GetSeparator(x), context), Doc.Null));
                 }
             }
             else
             {
-                docs.Append(Token.Print(list.GetSeparator(x), context));
-                docs.Append(afterSeparator);
+                docs.Add(Token.Print(list.GetSeparator(x), context));
+                docs.Add(afterSeparator);
             }
         }
 
         if (unFormattedCode.Length > 0)
         {
-            docs.Append(unFormattedCode.AsSpan().Trim().ToString());
+            docs.Add(unFormattedCode.AsSpan().Trim().ToString());
         }
 
         var output = Doc.Concat(ref docs);

@@ -14,9 +14,9 @@ class ClassName
             );
         var b2 = (
             System.Environment.SpecialFolder.AdminTools
-                is System.Environment.SpecialFolder.AdminTools
-                    or System.Environment.SpecialFolder.AdminTools
-                    or System.Environment.SpecialFolder.AdminTools
+            is System.Environment.SpecialFolder.AdminTools
+                or System.Environment.SpecialFolder.AdminTools
+                or System.Environment.SpecialFolder.AdminTools
         );
     }
 }

@@ -21,14 +21,15 @@ internal static class RecursivePattern
         var result = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
         if (node.Type != null && includeType)
         {
-            result.Append(Node.Print(node.Type, context));
+            result.Add(Node.Print(node.Type, context));
         }
 
         if (node.PositionalPatternClause != null)
         {
-            result.Append(
+            result.Add(
                 node.Parent
                     is SwitchExpressionArmSyntax
+                        or IsPatternExpressionSyntax
                         or CasePatternSwitchLabelSyntax
                         or BinaryPatternSyntax
                         {
@@ -68,13 +69,13 @@ internal static class RecursivePattern
             {
                 if (node.Type != null)
                 {
-                    result.Append(" ");
+                    result.Add(" ");
                 }
-                result.Append("{ }");
+                result.Add("{ }");
             }
             else
             {
-                result.Append(
+                result.Add(
                     Doc.Group(
                         node.Type != null
                         && !Enumerable.Any(
@@ -108,7 +109,7 @@ internal static class RecursivePattern
 
         if (node.Designation != null)
         {
-            result.Append(" ", Node.Print(node.Designation, context));
+            result.Add(" ", Node.Print(node.Designation, context));
         }
 
         return Doc.Concat(ref result);

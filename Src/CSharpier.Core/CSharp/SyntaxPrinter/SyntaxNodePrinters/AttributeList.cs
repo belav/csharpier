@@ -19,13 +19,13 @@ internal static class AttributeList
             && compilationUnitSyntax.AttributeLists.First() != node
         )
         {
-            docs.Append(ExtraNewLines.Print(node));
+            docs.Add(ExtraNewLines.Print(node));
         }
 
-        docs.Append(Token.Print(node.OpenBracketToken, context));
+        docs.Add(Token.Print(node.OpenBracketToken, context));
         if (node.Target != null)
         {
-            docs.Append(
+            docs.Add(
                 Token.Print(node.Target.Identifier, context),
                 Token.PrintWithSuffix(node.Target.ColonToken, " ", context)
             );
@@ -89,7 +89,7 @@ internal static class AttributeList
             context
         );
 
-        docs.Append(
+        docs.Add(
             node.Attributes.Count > 1
                 ? Doc.Indent(Doc.SoftLine, printSeparatedSyntaxList)
                 : printSeparatedSyntaxList
@@ -97,11 +97,11 @@ internal static class AttributeList
 
         if (node.Attributes.Count > 1)
         {
-            docs.Append(Doc.SoftLine);
+            docs.Add(Doc.SoftLine);
         }
 
-        docs.Append(Token.Print(node.CloseBracketToken, context));
+        docs.Add(Token.Print(node.CloseBracketToken, context));
 
-        return Doc.Group(docs.AsSpan().ToArray());
+        return Doc.Group(docs.ToArray());
     }
 }

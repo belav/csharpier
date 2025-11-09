@@ -14,7 +14,7 @@ internal static class CollectionExpression
                 or CastExpressionSyntax
                 or ExpressionElementSyntax
                 or InitializerExpressionSyntax
-                or SimpleLambdaExpressionSyntax
+                or LambdaExpressionSyntax
                 or AssignmentExpressionSyntax
                 {
                     Parent: not (
