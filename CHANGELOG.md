@@ -1,3 +1,182 @@
+# 1.2.0
+## What's Changed
+### Custom XML Parser [#1679](https://github.com/belav/csharpier/pull/1679)
+CSharpier now has a custom xml parser. `XmlDocument` and `XDocument` do not provide the original white space or the original attribute values from the file that was parsed which blocked the ability to implement supporting keeping empty new lines and not automatically encoding attributes.
+### Support for keeping empty lines in xml files [#1599](https://github.com/belav/csharpier/issues/1599)
+CSharpier now supports keeping a single empty line between elements in xml files. It will remove any initial or trailing empty lines.
+```xml
+<!-- input -->
+<Root>
+
+  <Element />
+
+
+  <Element />
+
+</Root>
+
+<!-- expected output -->
+<Root>
+  <Element />
+
+  <Element />
+</Root>
+
+<!-- 1.1.2 -->
+<Root>
+  <Element />
+  <Element />
+</Root>
+```
+### Xml - don't automatically encode attribute values [#1610](https://github.com/belav/csharpier/issues/1610)
+CSharpier will no longer encode attribute values. It will leave them encoded if they are supplied that way.
+```xml
+<!-- input & expected output -->
+<Target Name="Transform" BeforeTargets="Build">
+  <Message Importance="high" Text="@(MyItems->'MyItems has %(Identity)', ', ')" />
+</Target>
+
+<!-- 1.1.2 -->
+<Target Name="Transform" BeforeTargets="Build">
+  <Message Importance="high" Text="@(MyItems-&gt;'MyItems has %(Identity)', ', ')" />
+</Target>
+```
+### Add option to all integrations to report incorrect formatting as a warning instead of error [#1687](https://github.com/belav/csharpier/issues/1687)
+
+### Formatting "using" import split on multiple lines requires formatting it twice to get the expected result [#1698](https://github.com/belav/csharpier/issues/1698)
+When a using contained a newline before the namespace it was not being sorted properly.
+```c#
+// input
+using System.Net;
+using
+    SomeProject.Bar;
+using Microsoft.Extensions.Logging;
+
+// expected output
+using System.Net;
+using Microsoft.Extensions.Logging;
+using SomeProject.Bar;
+
+// 1.1.2
+using System.Net;
+using SomeProject.Bar;
+using Microsoft.Extensions.Logging;
+```
+
+### An empty line is inserted in lambda [#1694](https://github.com/belav/csharpier/issues/1694)
+CSharpier was inserting an extra blank line in some situations with a lambda and a collection expression
+```c#
+// input & expected output
+CallMethod(
+    (parameter1, parameter2) =>
+        [
+            LongValue________________________________________________,
+            LongValue________________________________________________,
+        ]
+);
+
+// 1.1.2
+CallMethod(
+    (parameter1, parameter2) =>
+
+        [
+            LongValue________________________________________________,
+            LongValue________________________________________________,
+        ]
+);
+```
+
+### Indent .ThenInclude() for clearer navigation hierarchy in EF Core queries [#1602](https://github.com/belav/csharpier/issues/1602)
+CSharpier now treats `.ThenInclude` as a special case to improve formatting of EF queries
+```c#
+// input & expected output
+websiteQueryable = websiteQueryable
+    .Include(o => o.Categories)
+    .Include(o => o.Categories)
+        .ThenInclude(c => c.Products)
+    .Include(o => o.Categories)
+        .ThenInclude(c => c.RuleManager)
+            .ThenInclude(rm => rm.RuleClauses)
+    .Include(o => o.Categories)
+        .ThenInclude(c => c.RuleManager)
+            .ThenInclude(rm => rm.RuleClauses)
+                .ThenInclude(rc => rc.RuleTypeOption);
+
+// 1.1.2
+websiteQueryable = websiteQueryable
+    .Include(o => o.Categories)
+    .Include(o => o.Categories)
+    .ThenInclude(c => c.Products)
+    .Include(o => o.Categories)
+    .ThenInclude(c => c.RuleManager)
+    .ThenInclude(rm => rm.RuleClauses)
+    .Include(o => o.Categories)
+    .ThenInclude(c => c.RuleManager)
+    .ThenInclude(rm => rm.RuleClauses)
+    .ThenInclude(rc => rc.RuleTypeOption);
+
+```
+### Inconsistent indentation between `is` and other operators [#1601](https://github.com/belav/csharpier/issues/1601)
+Pattern operators were being indented inconsistently with other operators. The formatting is now more consistent
+```c#
+// input & expected output
+var b2 = (
+    System.Environment.SpecialFolder.AdminTools
+    is System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+);
+
+var b2 =
+    System.Environment.SpecialFolder.AdminTools
+    is System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools;
+
+var b2 =
+    someLongValue____________________________________________
+    == someOtherLongValue______________________________
+        + someOtherLongValue______________________________;
+
+var b2 = (
+    someLongValue____________________________________________
+    == someOtherLongValue______________________________
+        + someOtherLongValue______________________________
+);
+
+// 1.1.2
+var b2 = (
+    System.Environment.SpecialFolder.AdminTools
+        is System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+);
+
+var b2 =
+    System.Environment.SpecialFolder.AdminTools
+        is System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools
+            or System.Environment.SpecialFolder.AdminTools;
+
+var b2 =
+    someLongValue____________________________________________
+    == someOtherLongValue______________________________
+        + someOtherLongValue______________________________;
+
+var b2 = (
+    someLongValue____________________________________________
+    == someOtherLongValue______________________________
+        + someOtherLongValue______________________________
+);
+
+```
+### Error when formatting with an indent size <= 0 [#1741](https://github.com/belav/csharpier/pull/1741)
+Previously csharpier would attempt to format code when indent size was set to 0. This was not intentional and had a number of bugs. CSharpier now error out when encountering an indent size of 0
+
+### Fix condition causing FirstTargetFramework build property erasure [#1696](https://github.com/belav/csharpier/pull/1696)
+In some situations CSharpier.Msbuild was running into a build failure.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.1.2...1.2.0
 # 1.1.2
 ## What's Changed
 ### Inconsistencies with null-coalescing wrapping on method chains [#1573](https://github.com/belav/csharpier/issues/1573)
@@ -3444,6 +3623,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
