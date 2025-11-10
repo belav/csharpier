@@ -1,3 +1,21 @@
+# 1.2.1
+## What's Changed
+### Multiline comments are now formatted in a single line in XML format [#1747](https://github.com/belav/csharpier/issues/1747)
+The 1.2.0 release was combining xml comments into a single line.
+```xml
+<!-- input & expected output -->
+<Root>
+  <!-- This is the first line comment-->
+  <!-- This is the second line of my comment-->
+</Root>
+
+<!-- 1.2.0 -->
+<Root>
+  <!-- This is the first line comment--><!-- This is the second line of my comment-->
+</Root>
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.0...1.2.1
 # 1.2.0
 ## What's Changed
 ### Custom XML Parser [#1679](https://github.com/belav/csharpier/pull/1679)
@@ -3623,6 +3641,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
