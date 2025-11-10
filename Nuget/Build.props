@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>1.1.2</Version>
+    <Version>1.2.0</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
