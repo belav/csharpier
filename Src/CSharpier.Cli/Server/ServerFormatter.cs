@@ -70,7 +70,8 @@ internal static class ServerFormatter
             foreach (
                 var address in (app as IApplicationBuilder)
                     .ServerFeatures.Get<IServerAddressesFeature>()
-                    ?.Addresses ?? []
+                    ?.Addresses
+                ?? []
             )
             {
                 var uri = new Uri(address);

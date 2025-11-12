@@ -43,13 +43,13 @@ internal static class AttributeList
 
                 var singleCollectionExpression =
                     attributeNode.ArgumentList.Arguments
-                        is [
-                            {
-                                Expression: CollectionExpressionSyntax,
-                                NameColon: null,
-                                NameEquals: null
-                            },
-                        ];
+                    is [
+                        {
+                            Expression: CollectionExpressionSyntax,
+                            NameColon: null,
+                            NameEquals: null
+                        },
+                    ];
 
                 return Doc.Group(
                     name,

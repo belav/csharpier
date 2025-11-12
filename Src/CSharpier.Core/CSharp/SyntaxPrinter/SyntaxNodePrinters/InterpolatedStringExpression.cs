@@ -49,8 +49,8 @@ internal static class InterpolatedStringExpression
     {
         var endDelimiterIsIndented =
             node.StringEndToken.Text.Replace("\r", string.Empty).Replace("\n", string.Empty)[0]
-                is '\t'
-                    or ' ';
+            is '\t'
+                or ' ';
 
         var contents = new List<Doc>
         {
