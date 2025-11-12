@@ -8,9 +8,18 @@ internal static class DelegateDeclaration
 {
     public static Doc Print(DelegateDeclarationSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>(
-            [null, null, null, null, null, null, null, null, null, null]
-        );
+        var docs = new ValueListBuilder<Doc>([
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+        ]);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         docs.Add(Token.PrintWithSuffix(node.DelegateKeyword, " ", context));

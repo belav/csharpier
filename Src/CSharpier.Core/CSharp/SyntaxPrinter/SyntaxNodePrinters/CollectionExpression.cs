@@ -28,8 +28,10 @@ internal static class CollectionExpression
             : Doc.IfBreak(Doc.Line, Doc.Null);
 
         var alwaysBreak =
-            node.Elements.FirstOrDefault()
-                is ExpressionElementSyntax { Expression: CollectionExpressionSyntax };
+            node.Elements.FirstOrDefault() is ExpressionElementSyntax
+            {
+                Expression: CollectionExpressionSyntax
+            };
 
         var result = Doc.Concat(
             separator,
