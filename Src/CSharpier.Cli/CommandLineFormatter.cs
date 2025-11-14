@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
@@ -292,12 +293,33 @@ internal static class CommandLineFormatter
                     return 1;
                 }
 
-                var tasks = fileSystem
-                    .Directory.EnumerateFiles(
+                var filePaths = new List<string>();
+
+                // special case for testing as we don't call the real file system
+                if (fileSystem is MockFileSystem)
+                {
+                    filePaths = fileSystem
+                        .Directory.EnumerateFiles(
+                            directoryOrFilePath,
+                            "*.*",
+                            SearchOption.AllDirectories
+                        )
+                        .ToList();
+                }
+                else
+                {
+                    var fileEnumerator = new ValidFilesEnumerator(
                         directoryOrFilePath,
-                        "*.*",
-                        SearchOption.AllDirectories
-                    )
+                        new EnumerationOptions() { RecurseSubdirectories = true }
+                    );
+
+                    while (fileEnumerator.MoveNext())
+                    {
+                        filePaths.Add(fileEnumerator.Current);
+                    }
+                }
+
+                var tasks = filePaths
                     .Select(o =>
                         FormatFile(o, o.Replace(directoryOrFilePath, originalDirectoryOrFile))
                     )
