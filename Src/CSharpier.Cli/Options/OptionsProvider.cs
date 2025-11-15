@@ -15,6 +15,10 @@ internal class OptionsProvider
         string,
         CSharpierConfigData?
     > csharpierConfigsByDirectory = new();
+    private readonly ConcurrentDictionary<
+        string,
+        IgnoreFile.IgnoreWithBasePath
+    > ignoreWithPathCache = new();
     private readonly ConcurrentDictionary<string, IgnoreFile?> ignoreFilesByDirectory = new();
     private readonly ConfigurationFileOptions? specifiedConfigFile;
     private readonly EditorConfigSections? specifiedEditorConfig;
@@ -60,6 +64,7 @@ internal class OptionsProvider
             directoryName,
             fileSystem,
             ignorePath,
+            null,
             cancellationToken
         );
 
@@ -204,7 +209,13 @@ internal class OptionsProvider
                     Path.Combine(searchingDirectory, ".csharpierignore")
                 ),
             (searchingDirectory) =>
-                IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, null, cancellationToken)
+                IgnoreFile.CreateAsync(
+                    searchingDirectory,
+                    this.fileSystem,
+                    null,
+                    ignoreWithPathCache,
+                    cancellationToken
+                )
         );
 
 #pragma warning disable IDE0270
