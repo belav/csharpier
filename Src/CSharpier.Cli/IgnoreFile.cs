@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
@@ -31,7 +32,15 @@ internal class IgnoreFile
 
     public bool IsIgnored(string filePath)
     {
-        filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        Span<char> pathRelativeToIgnoreFile =
+            filePath.Length <= 256 ? stackalloc char[256] : new char[filePath.Length];
+
+        pathRelativeToIgnoreFile = pathRelativeToIgnoreFile[..filePath.Length];
+        filePath.CopyTo(pathRelativeToIgnoreFile);
+        pathRelativeToIgnoreFile.Replace(
+            Path.AltDirectorySeparatorChar,
+            Path.DirectorySeparatorChar
+        );
 
         foreach (var ignore in this.Ignores)
         {
@@ -185,10 +194,19 @@ internal class IgnoreFile
                 return (false, false);
             }
 
-            var pathRelativeToIgnoreFile =
-                path.Length > basePath.Length
-                    ? path[basePath.Length..].Replace('\\', '/')
-                    : string.Empty;
+            var relativePathLength = path.Length - basePath.Length;
+            Span<char> pathRelativeToIgnoreFile =
+                relativePathLength <= 256 ? stackalloc char[256] : new char[path.Length];
+            if (path.Length > basePath.Length)
+            {
+                path.AsSpan()[basePath.Length..].CopyTo(pathRelativeToIgnoreFile);
+                pathRelativeToIgnoreFile = pathRelativeToIgnoreFile[..relativePathLength];
+                pathRelativeToIgnoreFile.Replace('\\', '/');
+            }
+            else
+            {
+                pathRelativeToIgnoreFile = [];
+            }
 
             var isIgnored = false;
             var hasMatchingRule = false;

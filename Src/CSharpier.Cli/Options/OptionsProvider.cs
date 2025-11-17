@@ -34,7 +34,7 @@ internal class OptionsProvider
         this.logger = logger;
     }
 
-    public static async Task<OptionsProvider> Create(
+    public static async ValueTask<OptionsProvider> Create(
         string directoryName,
         string? configPath,
         string? ignorePath,
@@ -109,7 +109,7 @@ internal class OptionsProvider
         return optionsProvider;
     }
 
-    public async Task<PrinterOptions?> GetPrinterOptionsForAsync(
+    public async ValueTask<PrinterOptions?> GetPrinterOptionsForAsync(
         string filePath,
         CancellationToken cancellationToken
     )
@@ -147,75 +147,106 @@ internal class OptionsProvider
         return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
     }
 
-    private Task<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)
+    private ValueTask<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)
     {
         return this.FindFileAsync(
             directoryName,
             this.csharpierConfigsByDirectory,
-            searchingDirectory =>
-                this.fileSystem.Directory.EnumerateFiles(
+            (searchingDirectory, cancellationToken) =>
+                this
+                    .fileSystem.Directory.EnumerateFiles(
                         searchingDirectory,
                         ".csharpierrc*",
                         SearchOption.TopDirectoryOnly
                     )
                     .Any(),
-            searchingDirectory =>
+            (searchingDirectory, cancellationToken) =>
                 Task.FromResult(
                     CSharpierConfigParser.FindForDirectoryName(
                         searchingDirectory,
                         this.fileSystem,
                         this.logger
                     )
-                )
+                ),
+            CancellationToken.None
         );
     }
 
-    private async Task<EditorConfigSections?> FindEditorConfigAsync(
+    private ValueTask<EditorConfigSections?> FindEditorConfigAsync(
         string directoryName,
         CancellationToken cancellationToken
     )
     {
-        return await this.FindFileAsync(
+        return this.FindFileAsync(
             directoryName,
             this.editorConfigByDirectory,
-            searchingDirectory =>
+            (searchingDirectory, cancellationToken) =>
                 this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".editorconfig")),
-            async searchingDirectory =>
+            async (searchingDirectory, cancellationToken) =>
                 await EditorConfigLocator.FindForDirectoryNameAsync(
                     searchingDirectory,
                     this.fileSystem,
                     await this.FindIgnoreFileAsync(searchingDirectory, cancellationToken),
                     cancellationToken
-                )
+                ),
+            cancellationToken
         );
     }
 
-    private async Task<IgnoreFile> FindIgnoreFileAsync(
+    private ValueTask<IgnoreFile> FindIgnoreFileAsync(
         string directoryName,
         CancellationToken cancellationToken
     )
     {
-        var ignoreFile = await this.FindFileAsync(
+        var ignoreFileTask = this.FindFileAsync(
             directoryName,
             this.ignoreFilesByDirectory,
-            (searchingDirectory) =>
+            (searchingDirectory, _) =>
                 this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".gitignore"))
                 || this.fileSystem.File.Exists(
                     Path.Combine(searchingDirectory, ".csharpierignore")
                 ),
-            (searchingDirectory) =>
-                IgnoreFile.CreateAsync(searchingDirectory, this.fileSystem, null, cancellationToken)
+            (searchingDirectory, cancellationToken) =>
+                IgnoreFile.CreateAsync(
+                    searchingDirectory,
+                    this.fileSystem,
+                    null,
+                    cancellationToken
+                ),
+            cancellationToken
         );
 
-#pragma warning disable IDE0270
-        if (ignoreFile is null)
+        if (ignoreFileTask.IsCompletedSuccessfully)
         {
-            // should never happen
-            throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
-        }
+#pragma warning disable IDE0270
+            if (ignoreFileTask.Result is null)
+            {
+                // should never happen
+                throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
+            }
 #pragma warning restore IDE0270
 
-        return ignoreFile;
+            return ignoreFileTask!;
+        }
+
+        return new ValueTask<IgnoreFile>(FindIgnoreFileAsyncInner(ignoreFileTask, directoryName));
+
+        static async Task<IgnoreFile> FindIgnoreFileAsyncInner(
+            ValueTask<IgnoreFile?> ignoreFileTask,
+            string directoryName
+        )
+        {
+            var ignoreFile = await ignoreFileTask;
+
+#pragma warning disable IDE0270
+            if (ignoreFile is null)
+            {
+                // should never happen
+                throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
+            }
+#pragma warning restore IDE0270
+            return ignoreFile;
+        }
     }
 
     /// <summary>
@@ -223,18 +254,37 @@ internal class OptionsProvider
     /// When trying to format a file in a given subdirectory if we've already found the appropriate file type then return it
     /// otherwise track it down (parsing if we need to) and set the references for any parent directories
     /// </summary>
-    private async Task<T?> FindFileAsync<T>(
+    private ValueTask<T?> FindFileAsync<T>(
         string directoryName,
         ConcurrentDictionary<string, T?> dictionary,
-        Func<string, bool> shouldConsiderDirectory,
-        Func<string, Task<T?>> createFileAsync
+        Func<string, CancellationToken, bool> shouldConsiderDirectory,
+        Func<string, CancellationToken, Task<T?>> createFileAsync,
+        CancellationToken cancellationToken
     )
     {
         if (dictionary.TryGetValue(directoryName, out var result))
         {
-            return result;
+            return new ValueTask<T?>(result);
         }
 
+        return FindFileAsyncInner(
+            directoryName,
+            dictionary,
+            shouldConsiderDirectory,
+            createFileAsync,
+            cancellationToken
+        );
+    }
+
+    private async ValueTask<T?> FindFileAsyncInner<T>(
+        string directoryName,
+        ConcurrentDictionary<string, T?> dictionary,
+        Func<string, CancellationToken, bool> shouldConsiderDirectory,
+        Func<string, CancellationToken, Task<T?>> createFileAsync,
+        CancellationToken cancellationToken
+    )
+    {
+        T? result = default;
         var directoriesToSet = new List<string>();
         var searchingDirectory = this.fileSystem.DirectoryInfo.New(directoryName);
         while (
@@ -242,10 +292,11 @@ internal class OptionsProvider
             && !dictionary.TryGetValue(searchingDirectory.FullName, out result)
         )
         {
-            if (shouldConsiderDirectory(searchingDirectory.FullName))
+            if (shouldConsiderDirectory(searchingDirectory.FullName, cancellationToken))
             {
                 dictionary[searchingDirectory.FullName] = result = await createFileAsync(
-                    searchingDirectory.FullName
+                    searchingDirectory.FullName,
+                    cancellationToken
                 );
                 break;
             }
@@ -262,17 +313,30 @@ internal class OptionsProvider
         return result;
     }
 
-    public async Task<bool> IsIgnoredAsync(
+    public ValueTask<bool> IsIgnoredAsync(
         string actualFilePath,
         CancellationToken cancellationToken
     )
     {
-        return (
-            await this.FindIgnoreFileAsync(
-                Path.GetDirectoryName(actualFilePath)!,
-                cancellationToken
-            )
-        ).IsIgnored(actualFilePath);
+        var ignoredTask = this.FindIgnoreFileAsync(
+            Path.GetDirectoryName(actualFilePath)!,
+            cancellationToken
+        );
+
+        if (ignoredTask.IsCompletedSuccessfully)
+        {
+            return new ValueTask<bool>(ignoredTask.Result.IsIgnored(actualFilePath));
+        }
+
+        return new ValueTask<bool>(IsIgnoredAsyncInner(ignoredTask, actualFilePath));
+
+        static async Task<bool> IsIgnoredAsyncInner(
+            ValueTask<IgnoreFile> task,
+            string actualFilePath
+        )
+        {
+            return (await task).IsIgnored(actualFilePath);
+        }
     }
 
     public string Serialize()
