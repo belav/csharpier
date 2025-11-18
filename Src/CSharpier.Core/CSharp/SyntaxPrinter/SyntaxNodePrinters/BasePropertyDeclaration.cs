@@ -11,7 +11,7 @@ internal static class BasePropertyDeclaration
     {
         EqualsValueClauseSyntax? initializer = null;
         ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifierSyntax = null;
-        Func<Doc>? identifier = null;
+        Func<SyntaxNode, PrintingContext, Doc>? identifier = null;
         Doc eventKeyword = Doc.Null;
         ArrowExpressionClauseSyntax? expressionBody = null;
         SyntaxToken? semicolonToken = null;
@@ -21,25 +21,37 @@ internal static class BasePropertyDeclaration
             expressionBody = propertyDeclarationSyntax.ExpressionBody;
             initializer = propertyDeclarationSyntax.Initializer;
             explicitInterfaceSpecifierSyntax = propertyDeclarationSyntax.ExplicitInterfaceSpecifier;
-            identifier = () => Token.Print(propertyDeclarationSyntax.Identifier, context);
+            identifier = static (node, context) =>
+            {
+                var propertyDeclarationSyntax = (PropertyDeclarationSyntax)node;
+                return Token.Print(propertyDeclarationSyntax.Identifier, context);
+            };
             semicolonToken = propertyDeclarationSyntax.SemicolonToken;
         }
         else if (node is IndexerDeclarationSyntax indexerDeclarationSyntax)
         {
             expressionBody = indexerDeclarationSyntax.ExpressionBody;
             explicitInterfaceSpecifierSyntax = indexerDeclarationSyntax.ExplicitInterfaceSpecifier;
-            identifier = () =>
-                Doc.Concat(
+            identifier = static (node, context) =>
+            {
+                var indexerDeclarationSyntax = (IndexerDeclarationSyntax)node;
+                return Doc.Concat(
                     Token.Print(indexerDeclarationSyntax.ThisKeyword, context),
                     Node.Print(indexerDeclarationSyntax.ParameterList, context)
                 );
+            };
+
             semicolonToken = indexerDeclarationSyntax.SemicolonToken;
         }
         else if (node is EventDeclarationSyntax eventDeclarationSyntax)
         {
             eventKeyword = Token.PrintWithSuffix(eventDeclarationSyntax.EventKeyword, " ", context);
             explicitInterfaceSpecifierSyntax = eventDeclarationSyntax.ExplicitInterfaceSpecifier;
-            identifier = () => Token.Print(eventDeclarationSyntax.Identifier, context);
+            identifier = static (node, context) =>
+            {
+                var eventDeclarationSyntax = (EventDeclarationSyntax)node;
+                return Token.Print(eventDeclarationSyntax.Identifier, context);
+            };
             semicolonToken = eventDeclarationSyntax.SemicolonToken;
         }
 
@@ -56,7 +68,7 @@ internal static class BasePropertyDeclaration
                         Token.Print(explicitInterfaceSpecifierSyntax.DotToken, context)
                     )
                     : Doc.Null,
-                identifier != null ? identifier() : Doc.Null,
+                identifier != null ? identifier(node, context) : Doc.Null,
                 Contents(node, expressionBody, context),
                 initializer != null ? EqualsValueClause.Print(initializer, context) : Doc.Null,
                 semicolonToken.HasValue ? Token.Print(semicolonToken.Value, context) : Doc.Null
