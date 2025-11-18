@@ -142,12 +142,12 @@ internal static class MembersWithForcedLines
             var printExtraNewLines = false;
             var triviaContainsEndIfOrRegion = false;
 
-            var leadingTrivia = member
-                .GetLeadingTrivia()
-                .Select(o => o.RawSyntaxKind())
-                .ToImmutableHashSet();
+            var leadingTrivia = new ValueListBuilder<SyntaxKind>(
+                [default, default, default, default, default, default, default, default]
+            );
+            AddUniqueKind(ref leadingTrivia, member);
 
-            foreach (var syntaxTrivia in leadingTrivia)
+            foreach (var syntaxTrivia in leadingTrivia.AsSpan())
             {
                 if (syntaxTrivia is SyntaxKind.EndOfLineTrivia || syntaxTrivia.IsComment())
                 {
@@ -221,6 +221,8 @@ internal static class MembersWithForcedLines
                 context.State.NextTriviaNeedsLine = true;
             }
 
+            leadingTrivia.Dispose();
+
             // this has a side effect (yuck) that fixes the trailing comma + trailing comment issue so we have to call it first
             var separator = GetSeparatorIfNeeded();
             result.Add(Doc.HardLine, Node.Print(member, context));
@@ -237,5 +239,19 @@ internal static class MembersWithForcedLines
         unFormattedCode.Dispose();
 
         return result;
+    }
+
+    private static void AddUniqueKind(
+        ref ValueListBuilder<SyntaxKind> vlb,
+        MemberDeclarationSyntax member
+    )
+    {
+        foreach (var item in member.GetLeadingTrivia())
+        {
+            if (!vlb.Contains(item.Kind()))
+            {
+                vlb.Add(item.Kind());
+            }
+        }
     }
 }
