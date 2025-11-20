@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace CSharpier.Core.Utilities;
 
 internal static class StringExtensions
@@ -35,7 +37,20 @@ internal static class StringExtensions
 #endif
 
     // some unicode characters should be considered size of 2 when calculating how big this string will be when printed
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static int GetPrintedWidth(this string value)
+    {
+#if NET8_0_OR_GREATER
+        if (!MemoryExtensions.ContainsAnyExceptInRange(value, (char)0, (char)0x10FF))
+        {
+            return value.Length;
+        }
+#endif
+
+        return CalculateActualWidth(value);
+    }
+
+    private static int CalculateActualWidth(string value)
     {
         var sum = 0;
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
