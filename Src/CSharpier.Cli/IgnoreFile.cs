@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
@@ -51,12 +52,18 @@ internal class IgnoreFile
         string baseDirectoryPath,
         IFileSystem fileSystem,
         string? ignorePath,
+        ConcurrentDictionary<string, IgnoreWithBasePath>? ignoreCache,
         CancellationToken cancellationToken
     )
     {
         async Task<IgnoreWithBasePath> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
         {
-            var ignore = new IgnoreWithBasePath(
+            if (ignoreCache is not null && ignoreCache.TryGetValue(ignoreFilePath, out var ignore))
+            {
+                return ignore;
+            }
+
+            ignore = new IgnoreWithBasePath(
                 overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!
             );
             AddDefaultRules(ignore);
@@ -67,6 +74,11 @@ internal class IgnoreFile
 
             ignore.AddPositives(positives.Merged);
             ignore.AddNegatives(negatives.Merged);
+
+            if (ignoreCache is not null)
+            {
+                ignoreCache[ignoreFilePath] = ignore;
+            }
 
             return ignore;
         }
@@ -173,7 +185,7 @@ internal class IgnoreFile
     // modified from the nuget library to include the directory
     // that the ignore file exists at
     // and to return if this ignore file has a rule for a given path
-    private class IgnoreWithBasePath(string basePath)
+    internal class IgnoreWithBasePath(string basePath)
     {
         private readonly List<Regex> positives = [];
         private readonly List<Regex> negatives = [];
