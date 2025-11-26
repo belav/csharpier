@@ -50,6 +50,23 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
             processBuilder.environment().put("DOTNET_ROOT", this.dotNetProvider.getDotNetRoot());
             var csharpierProcess = processBuilder.start();
 
+            var errorOutput = new StringBuilder();
+            var stderrThread = new Thread(() -> {
+                try (
+                    var errorReader = new BufferedReader(
+                        new InputStreamReader(csharpierProcess.getErrorStream())
+                    )
+                ) {
+                    String line;
+                    while ((line = errorReader.readLine()) != null) {
+                        errorOutput.append(line).append("\n");
+                    }
+                } catch (IOException e) {
+                    // Stream closed or process terminated - expected behavior
+                }
+            }, "CSharpier stderr reader");
+            stderrThread.start();
+
             var stdoutThread = new Thread(() -> {
                 try (
                     var reader = new BufferedReader(
@@ -76,18 +93,11 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
             csharpierProcess
                 .onExit()
                 .thenAccept(p -> {
-                    try (
-                        var errorReader = new BufferedReader(
-                            new InputStreamReader(csharpierProcess.getErrorStream())
-                        )
-                    ) {
-                        var error = new StringBuilder();
-                        errorReader.lines().forEach(o -> error.append(o + "\n"));
-                        this.logger.error("Process failed to start with " + error);
-                    } catch (Exception e) {
-                        this.logger.error("Process failed to start with " + e);
+                    if (errorOutput.length() > 0) {
+                        this.logger.error("Process failed to start with " + errorOutput);
+                    } else {
+                        this.logger.error("Process exited unexpectedly");
                     }
-
                     this.processFailedToStart = true;
                 });
         } catch (Exception e) {
