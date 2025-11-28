@@ -331,6 +331,7 @@ indent_style = space
 indent_size = 2
 max_line_length = 10
 end_of_line = crlf
+insert_final_newline = false
 "
         );
 
@@ -340,6 +341,7 @@ end_of_line = crlf
         result.IndentSize.Should().Be(2);
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.InsertFinalNewline.Should().BeFalse();
     }
 
     [Test]
@@ -360,6 +362,8 @@ indent_size = 2
 max_line_length = 10
 ; Windows-style line endings
 end_of_line = crlf
+; Remove final newlines
+insert_final_newline = false
 "
         );
 
@@ -369,6 +373,7 @@ end_of_line = crlf
         result.IndentSize.Should().Be(2);
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.InsertFinalNewline.Should().BeFalse();
     }
 
     [Test]

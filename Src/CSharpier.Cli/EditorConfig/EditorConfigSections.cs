@@ -53,6 +53,11 @@ internal class EditorConfigSections
             printerOptions.EndOfLine = endOfLine;
         }
 
+        if (resolvedConfiguration.InsertFinalNewline is { } insertFinalNewline)
+        {
+            printerOptions.InsertFinalNewline = insertFinalNewline;
+        }
+
         return printerOptions;
     }
 
@@ -63,6 +68,7 @@ internal class EditorConfigSections
         public int? TabWidth { get; }
         public int? MaxLineLength { get; }
         public EndOfLine? EndOfLine { get; }
+        public bool? InsertFinalNewline { get; }
         public string? Formatter { get; }
 
         public ResolvedConfiguration(List<Section> sections)
@@ -107,6 +113,14 @@ internal class EditorConfigSections
             if (Enum.TryParse(endOfLine, true, out EndOfLine result))
             {
                 this.EndOfLine = result;
+            }
+
+            var insertFinalNewline = sections
+                .LastOrDefault(o => o.InsertFinalNewline != null)
+                ?.InsertFinalNewline;
+            if (bool.TryParse(insertFinalNewline, out bool insertFinalNewlineValue))
+            {
+                this.InsertFinalNewline = insertFinalNewlineValue;
             }
 
             this.Formatter = sections.LastOrDefault(o => o.Formatter is not null)?.Formatter;

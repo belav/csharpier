@@ -52,7 +52,13 @@ internal class DocPrinter
         {
             this.Output.TrimStart('\n', '\r');
         }
-        var result = this.Output.ToString();
+
+        var result = this.Output.ToString().TrimEnd('\r', '\n');
+
+        if (this.PrinterOptions.InsertFinalNewline)
+        {
+            result += this.EndOfLine;
+        }
 
         return result;
     }

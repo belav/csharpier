@@ -24,6 +24,7 @@ internal class PrinterOptions(Formatter formatter)
 
     public int Width { get; set; } = 100;
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
+    public bool InsertFinalNewline { get; set; } = true;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
     public Formatter Formatter { get; set; } = formatter;
@@ -37,17 +38,8 @@ internal class PrinterOptions(Formatter formatter)
             return printerOptions.EndOfLine == EndOfLine.CRLF ? "\r\n" : "\n";
         }
 
-        var lineIndex = code.IndexOf('\n');
-        if (lineIndex <= 0)
-        {
-            return "\n";
-        }
-        if (code[lineIndex - 1] == '\r')
-        {
-            return "\r\n";
-        }
-
-        return "\n";
+        var fileHasClrfEnding = code.Contains("\r\n");
+        return fileHasClrfEnding ? "\r\n" : "\n";
     }
 
     public static Formatter GetFormatter(string filePath)

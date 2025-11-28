@@ -12,6 +12,7 @@ internal class Section(SectionData section, string directory)
     public string? TabWidth { get; } = section.Keys["tab_width"];
     public string? MaxLineLength { get; } = section.Keys["max_line_length"];
     public string? EndOfLine { get; } = section.Keys["end_of_line"];
+    public string? InsertFinalNewline { get; } = section.Keys["insert_final_newline"];
     public string? Formatter { get; } = section.Keys["csharpier_formatter"];
 
     public bool IsMatch(string fileName, bool ignoreDirectory)
