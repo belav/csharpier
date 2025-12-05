@@ -228,7 +228,7 @@ internal static class CommandLineFormatter
 
             async Task FormatFile(
                 string actualFilePath,
-                string originalFilePath,
+                string? originalFilePath = null,
                 bool warnForUnsupported = false
             )
             {
@@ -245,6 +245,11 @@ internal static class CommandLineFormatter
                 var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
                     actualFilePath,
                     cancellationToken
+                );
+
+                originalFilePath ??= actualFilePath.Replace(
+                    directoryOrFilePath,
+                    originalDirectoryOrFile
                 );
 
                 if (printerOptions is { Formatter: not Formatter.Unknown })
@@ -298,9 +303,7 @@ internal static class CommandLineFormatter
                         "*.*",
                         SearchOption.AllDirectories
                     )
-                    .Select(o =>
-                        FormatFile(o, o.Replace(directoryOrFilePath, originalDirectoryOrFile))
-                    )
+                    .Select(o => FormatFile(o))
                     .ToArray();
                 try
                 {
