@@ -15,7 +15,10 @@ internal static class Node
 
             foreach (var childNode in node.Nodes)
             {
-                result.Add(Print(childNode, context), Doc.HardLine);
+                result.Add(
+                    Print(childNode, context),
+                    childNode.NodeType is XmlNodeType.Whitespace ? Doc.Null : Doc.HardLine
+                );
             }
 
             result.Add(Doc.HardLine);
