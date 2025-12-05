@@ -10,7 +10,7 @@ public class SetUpFixture
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        EmptyFiles.Extensions.AddTextExtension(".test");
+        EmptyFiles.FileExtensions.AddTextExtension(".test");
 
         static string TargetLeftArguments(string temp, string target)
         {
@@ -29,8 +29,7 @@ public class SetUpFixture
         DiffTools.AddToolBasedOn(
             DiffTool.WinMerge,
             name: "WritableWinMerge",
-            targetLeftArguments: TargetLeftArguments,
-            targetRightArguments: TargetRightArguments
+            launchArguments: new LaunchArguments(TargetLeftArguments, TargetRightArguments)
         );
     }
 }
