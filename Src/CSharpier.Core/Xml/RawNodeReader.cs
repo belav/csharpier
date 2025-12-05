@@ -233,9 +233,7 @@ class RawNodeReader
         var node = new RawNode
         {
             Name = name,
-            NodeType = name is "xml"
-                ? XmlNodeType.XmlDeclaration
-                : XmlNodeType.ProcessingInstruction,
+            NodeType = XmlNodeType.ProcessingInstruction,
             Value = $"<?{name} {content}?>",
         };
 

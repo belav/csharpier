@@ -25,27 +25,6 @@ internal static class Node
 
             return Doc.Concat(ref result);
         }
-        if (node.NodeType == XmlNodeType.XmlDeclaration)
-        {
-            var version = node.Attributes.FirstOrDefault(o => o.Name == "version")?.Value;
-            var encoding = node.Attributes.FirstOrDefault(o => o.Name == "encoding")?.Value;
-            var standalone = node.Attributes.FirstOrDefault(o => o.Name == "standalone")?.Value;
-
-            var declaration = $"<?xml version=\"{version}\"";
-            if (!string.IsNullOrEmpty(encoding))
-            {
-                declaration += $" encoding=\"{encoding}\"";
-            }
-
-            if (!string.IsNullOrEmpty(standalone))
-            {
-                declaration += $" standalone=\"{standalone}\"";
-            }
-
-            declaration += "?>";
-
-            return declaration;
-        }
 
         if (node.NodeType == XmlNodeType.DocumentType)
         {
