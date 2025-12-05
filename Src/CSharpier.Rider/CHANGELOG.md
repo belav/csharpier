@@ -2,6 +2,9 @@
 
 # csharpier-rider Changelog
 
+## [2.2.4]
+- Fix Stream closed exception in Rider plugin
+
 ## [2.2.3]
 - Fix for error when Rider returns a composite file path for the location of a given file
 - Fix for when a directory is temporarily inaccessible
