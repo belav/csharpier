@@ -676,6 +676,25 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Gitignore_Evaluates_Negation_Patterns_Last()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Folder1/Folder2/IgnoreMe/File.cs", UnformattedClassContent);
+        context.WhenAFileExists(
+            ".gitignore",
+            """
+            Folder1/*
+            !Folder2/
+            IgnoreMe/
+            """
+        );
+
+        var result = Format(context);
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+    }
+
+    [Test]
     public void Gitignore_Outside_Git_Is_Not_Used()
     {
         var context = new TestContext();
