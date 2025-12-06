@@ -63,6 +63,9 @@ internal class IgnoreFile
 
             var content = await fileSystem.File.ReadAllTextAsync(ignoreFilePath, cancellationToken);
 
+            // TODO #1768 Gitignore Parser won't work as is, can maybe modify it. It is an apache license
+            // try out https://github.com/markashleybell/MAB.DotIgnore to see if that works and is fast
+            // if I remember correctly the modified version of https://github.com/goelhardik/ignore I originally used was too slow
             var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(content, true);
 
             ignore.AddPositives(positives.Merged);
