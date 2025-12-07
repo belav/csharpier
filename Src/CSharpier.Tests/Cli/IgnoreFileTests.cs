@@ -5,7 +5,6 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.Cli;
 
-// TODO #1768 figure out what I did to break all of these, it was definitely something in this commit
 [TestFixture]
 public class IgnoreFileTests
 {
@@ -61,7 +60,6 @@ foo
         );
     }
 
-    // TODO #1768 definitely need to fix this one and probably the one below it
     [Test]
     public void SimpleIgnore_WithFileInSubdirectory()
     {
@@ -614,7 +612,9 @@ foo
             .GetAwaiter()
             .GetResult();
 
-        var ignoreFileUnignoredFiles = files.Where(o => !ignoreFile!.IsIgnored(o, o.EndsWith('/')));
+        var ignoreFileUnignoredFiles = files.Where(o =>
+            !ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
+        );
 
         ignoreFileUnignoredFiles.Should().BeEquivalentTo(gitUntrackedFiles);
     }

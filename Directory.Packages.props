@@ -10,7 +10,6 @@
     <PackageVersion Include="DiffEngine" Version="7.3.0" />
     <PackageVersion Include="FluentAssertions" Version="8.8.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
-    <PackageVersion Include="GitignoreParserNet" Version="0.2.0.14" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.3" />
     <PackageVersion Include="LibGit2Sharp" Version="0.31.0" />
     <PackageVersion Include="LovettSoftware.XmlDiff" Version="1.1.0" />

@@ -13,7 +13,7 @@ internal class IgnoreFile
         this.Ignores = ignores;
     }
 
-    public bool IsIgnored(string filePath, bool isDirectory = false)
+    public bool IsIgnored(string filePath)
     {
         filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
@@ -21,7 +21,7 @@ internal class IgnoreFile
         {
             // when using one of the ignore files to determine if a given file is ignored or not
             // we can only consider that file if it actually has a matching rule for the filePath
-            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath, isDirectory);
+            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath);
             if (hasMatchingRule)
             {
                 return isIgnored;

@@ -10,16 +10,13 @@ internal class IgnoreRule
     private readonly Regex? regex;
     private readonly StringComparison stringComparison = StringComparison.Ordinal;
 
-    public MatchFlags MatchFlags { get; }
     public string Pattern { get; }
     public PatternFlags PatternFlags { get; }
 
-    public IgnoreRule(string pattern, MatchFlags flags = MatchFlags.PATHNAME)
+    public IgnoreRule(string pattern)
     {
         this.Pattern = pattern;
-        this.MatchFlags = flags;
 
-        // First, let's figure out some things about the pattern and set flags to pass to our match function
         this.PatternFlags = PatternFlags.NONE;
 
         // If the pattern starts with an exclamation mark, it's a negation pattern
@@ -48,33 +45,12 @@ internal class IgnoreRule
 
         this.wildcardIndex = this.Pattern.IndexOfAny(_wildcardChars);
 
-        // If CASEFOLD is set, string comparisons should ignore case too
-        if ((this.MatchFlags & MatchFlags.CASEFOLD) != 0)
-        {
-            this.stringComparison = StringComparison.OrdinalIgnoreCase;
-        }
-
-        // TODO: Currently, we are just setting PATHNAME for every rule
-        // This is because it seems to match the original behaviour:
-        // https://github.com/git/git/blob/c2c5f6b1e479f2c38e0e01345350620944e3527f/dir.c#L99
-
-        // If PATHNAME is set, single asterisks should not match slashes
-        if ((this.MatchFlags & MatchFlags.PATHNAME) == 0)
-        {
-            this.MatchFlags |= MatchFlags.PATHNAME;
-        }
-
         var rxPattern = Matcher.ToRegex(this.Pattern);
 
         // If rxPattern is null, an invalid pattern was passed to ToRegex, so it cannot match
         if (!string.IsNullOrEmpty(rxPattern))
         {
             var rxOptions = RegexOptions.Compiled;
-
-            if ((this.MatchFlags & MatchFlags.CASEFOLD) != 0)
-            {
-                rxOptions |= RegexOptions.IgnoreCase;
-            }
 
             this.regex = new Regex(rxPattern, rxOptions);
         }
@@ -125,5 +101,10 @@ internal class IgnoreRule
 
         // If the *path* doesn't contain any slashes, we should skip over the conditional above
         return Matcher.TryMatch(this.regex, path);
+    }
+
+    public override string ToString()
+    {
+        return this.Pattern;
     }
 }
