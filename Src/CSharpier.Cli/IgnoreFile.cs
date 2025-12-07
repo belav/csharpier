@@ -13,7 +13,7 @@ internal class IgnoreFile
         this.Ignores = ignores;
     }
 
-    public bool IsIgnored(string filePath)
+    public bool IsIgnored(string filePath, bool isDirectory = false)
     {
         filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
@@ -21,7 +21,7 @@ internal class IgnoreFile
         {
             // when using one of the ignore files to determine if a given file is ignored or not
             // we can only consider that file if it actually has a matching rule for the filePath
-            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath);
+            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath, isDirectory);
             if (hasMatchingRule)
             {
                 return isIgnored;
@@ -40,12 +40,12 @@ internal class IgnoreFile
     {
         Task<IgnoreList> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
         {
-            return IgnoreList.CreateAsync(fileSystem, ignoreFilePath, cancellationToken);
-
-            // TODO
-            // var ignore = new IgnoreWithBasePath(
-            //     overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!
-            // );
+            return IgnoreList.CreateAsync(
+                fileSystem,
+                overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!,
+                ignoreFilePath,
+                cancellationToken
+            );
         }
 
         return await SharedFunc<IgnoreFile?>
@@ -70,7 +70,12 @@ internal class IgnoreFile
                         if (ignoreFilePaths.Count == 0)
                         {
                             return new IgnoreFile([
-                                await IgnoreList.CreateAsync(fileSystem, null, cancellationToken),
+                                await IgnoreList.CreateAsync(
+                                    fileSystem,
+                                    baseDirectoryPath,
+                                    null,
+                                    cancellationToken
+                                ),
                             ]);
                         }
 

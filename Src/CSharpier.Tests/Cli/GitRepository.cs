@@ -25,10 +25,9 @@ public class GitRepository
 
     public void AddUntrackedFileToRepo(string relativePath, int numLines = 1)
     {
-        string lineContent = $"Fake content line.{Environment.NewLine}";
         this.AddUntrackedFileToRepo(
             relativePath,
-            string.Concat(Enumerable.Repeat(lineContent, numLines))
+            string.Concat(Enumerable.Repeat($"Fake content line.{Environment.NewLine}", numLines))
         );
     }
 

@@ -5,11 +5,12 @@ using NUnit.Framework;
 
 namespace CSharpier.Tests.Cli;
 
+// TODO #1768 figure out what I did to break all of these, it was definitely something in this commit
 [TestFixture]
 public class IgnoreFileTests
 {
     private GitRepository gitRepository = null!;
-    private FileSystem fileSystem = new();
+    private readonly FileSystem fileSystem = new();
 
     [SetUp]
     public void SetUp()
@@ -57,6 +58,18 @@ foo
 foo
 """,
             ["foo", "bar/foo", "foob/bar", "src/foo/bar", "src/foo/", "fooc"]
+        );
+    }
+
+    // TODO #1768 definitely need to fix this one and probably the one below it
+    [Test]
+    public void SimpleIgnore_WithFileInSubdirectory()
+    {
+        this.GitBasedTest(
+            """
+bar.txt
+""",
+            ["src/foo/bar.txt", "foo/bar.txt", "bar.txt"]
         );
     }
 
@@ -597,16 +610,11 @@ foo
             .ToList();
 
         var ignoreFile = IgnoreFile
-            .CreateAsync(
-                this.gitRepository.RepoPath,
-                this.fileSystem,
-                this.fileSystem.Path.Combine(this.gitRepository.RepoPath, ".gitignore"),
-                CancellationToken.None
-            )
+            .CreateAsync(this.gitRepository.RepoPath, this.fileSystem, null, CancellationToken.None)
             .GetAwaiter()
             .GetResult();
 
-        var ignoreFileUnignoredFiles = files.Where(o => !ignoreFile!.IsIgnored(o));
+        var ignoreFileUnignoredFiles = files.Where(o => !ignoreFile!.IsIgnored(o, o.EndsWith('/')));
 
         ignoreFileUnignoredFiles.Should().BeEquivalentTo(gitUntrackedFiles);
     }
