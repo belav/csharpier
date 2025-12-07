@@ -1,30 +1,14 @@
-using System.Diagnostics;
 using System.IO.Abstractions;
-using System.Text.RegularExpressions;
+using CSharpier.Cli.DotIgnore;
 using CSharpier.Core;
 
 namespace CSharpier.Cli;
 
 internal class IgnoreFile
 {
-    private List<IgnoreWithBasePath> Ignores { get; }
-    private static readonly string alwaysIgnoredText = """
-        **/bin
-        **/node_modules
-        **/obj
-        **/.git
-        """;
+    private List<IgnoreList> Ignores { get; }
 
-    private static readonly Lazy<(Regex positives, Regex negatives)> defaultRules = new(() =>
-    {
-        var (alwaysPositives, alwaysNegatives) = GitignoreParserNet.GitignoreParser.Parse(
-            alwaysIgnoredText,
-            true
-        );
-        return (alwaysPositives.Merged, alwaysNegatives.Merged);
-    });
-
-    private IgnoreFile(List<IgnoreWithBasePath> ignores)
+    private IgnoreFile(List<IgnoreList> ignores)
     {
         this.Ignores = ignores;
     }
@@ -54,24 +38,14 @@ internal class IgnoreFile
         CancellationToken cancellationToken
     )
     {
-        async Task<IgnoreWithBasePath> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
+        Task<IgnoreList> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
         {
-            var ignore = new IgnoreWithBasePath(
-                overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!
-            );
-            AddDefaultRules(ignore);
+            return IgnoreList.CreateAsync(fileSystem, ignoreFilePath, cancellationToken);
 
-            var content = await fileSystem.File.ReadAllTextAsync(ignoreFilePath, cancellationToken);
-
-            // TODO #1768 Gitignore Parser won't work as is, can maybe modify it. It is an apache license
-            // try out https://github.com/markashleybell/MAB.DotIgnore to see if that works and is fast
-            // if I remember correctly the modified version of https://github.com/goelhardik/ignore I originally used was too slow
-            var (positives, negatives) = GitignoreParserNet.GitignoreParser.Parse(content, true);
-
-            ignore.AddPositives(positives.Merged);
-            ignore.AddNegatives(negatives.Merged);
-
-            return ignore;
+            // TODO
+            // var ignore = new IgnoreWithBasePath(
+            //     overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!
+            // );
         }
 
         return await SharedFunc<IgnoreFile?>
@@ -95,12 +69,12 @@ internal class IgnoreFile
                         var ignoreFilePaths = FindIgnorePaths(baseDirectoryPath, fileSystem);
                         if (ignoreFilePaths.Count == 0)
                         {
-                            var ignore = new IgnoreWithBasePath(baseDirectoryPath);
-                            AddDefaultRules(ignore);
-                            return new IgnoreFile([ignore]);
+                            return new IgnoreFile([
+                                await IgnoreList.CreateAsync(fileSystem, null, cancellationToken),
+                            ]);
                         }
 
-                        var ignores = new List<IgnoreWithBasePath>();
+                        var ignores = new List<IgnoreList>();
                         foreach (var ignoreFilePath in ignoreFilePaths)
                         {
                             ignores.Add(await CreateIgnore(ignoreFilePath, null));
@@ -112,14 +86,6 @@ internal class IgnoreFile
                 cancellationToken
             )
             .ConfigureAwait(false);
-    }
-
-    private static void AddDefaultRules(IgnoreWithBasePath ignore)
-    {
-        var (positives, negatives) = defaultRules.Value;
-
-        ignore.AddPositives(positives);
-        ignore.AddNegatives(negatives);
     }
 
     // this will return the ignore paths in order of priority
@@ -171,73 +137,6 @@ internal class IgnoreFile
         }
 
         return result;
-    }
-
-    // modified from the nuget library to include the directory
-    // that the ignore file exists at
-    // and to return if this ignore file has a rule for a given path
-    private class IgnoreWithBasePath(string basePath)
-    {
-        private readonly List<Regex> positives = [];
-        private readonly List<Regex> negatives = [];
-
-        public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
-        {
-            if (!path.StartsWith(basePath, StringComparison.Ordinal))
-            {
-                return (false, false);
-            }
-
-            var pathRelativeToIgnoreFile =
-                path.Length > basePath.Length
-                    ? path[basePath.Length..].Replace('\\', '/')
-                    : string.Empty;
-
-            var isIgnored = false;
-            var hasMatchingRule = false;
-
-            foreach (var rule in this.positives)
-            {
-                var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
-                if (isMatch)
-                {
-                    hasMatchingRule = true;
-                    isIgnored = true;
-                    break;
-                }
-            }
-
-            foreach (var rule in this.negatives)
-            {
-                var isMatch = rule.IsMatch(pathRelativeToIgnoreFile);
-                if (isMatch)
-                {
-                    hasMatchingRule = true;
-                    if (isIgnored)
-                    {
-                        isIgnored = false;
-                        break;
-                    }
-                }
-            }
-
-            return (hasMatchingRule, isIgnored);
-        }
-
-        public void AddPositives(Regex rule)
-        {
-            this.positives.Add(rule);
-        }
-
-        public void AddNegatives(Regex rule)
-        {
-            this.negatives.Add(rule);
-        }
-
-        public override string ToString()
-        {
-            return "BasePath = " + basePath;
-        }
     }
 }
 

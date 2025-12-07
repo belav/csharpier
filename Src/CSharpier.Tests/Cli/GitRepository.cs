@@ -42,7 +42,7 @@ public class GitRepository
     {
         var filePath = this.fileSystem.Path.Combine(this.RepoPath, relativePath);
         var directoryInfo = Directory.GetParent(filePath);
-        Directory.CreateDirectory(directoryInfo.FullName);
+        Directory.CreateDirectory(directoryInfo!.FullName);
     }
 
     public IEnumerable<StatusEntry> GetUntrackedFiles()
@@ -56,7 +56,7 @@ public class GitRepository
     {
         var filePath = this.fileSystem.Path.Combine(this.RepoPath, relativePath);
         var directoryInfo = Directory.GetParent(filePath);
-        Directory.CreateDirectory(directoryInfo.FullName);
+        Directory.CreateDirectory(directoryInfo!.FullName);
         this.fileSystem.File.WriteAllText(
             this.fileSystem.Path.Combine(this.RepoPath, relativePath),
             content

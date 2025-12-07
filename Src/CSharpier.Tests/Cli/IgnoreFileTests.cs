@@ -581,7 +581,7 @@ foo
             .ToList()
             .ForEach(file =>
             {
-                if (file.EndsWith("/"))
+                if (file.EndsWith('/'))
                 {
                     this.gitRepository.AddUntrackedDirToRepo(file);
                 }
@@ -606,7 +606,7 @@ foo
             .GetAwaiter()
             .GetResult();
 
-        var ignoreFileUnignoredFiles = files.Where(o => !ignoreFile.IsIgnored(o));
+        var ignoreFileUnignoredFiles = files.Where(o => !ignoreFile!.IsIgnored(o));
 
         ignoreFileUnignoredFiles.Should().BeEquivalentTo(gitUntrackedFiles);
     }
