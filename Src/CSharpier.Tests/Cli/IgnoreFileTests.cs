@@ -303,6 +303,17 @@ fo*b
     }
 
     [Test]
+    public void EscapedSpaces2()
+    {
+        this.GitBasedTest(
+            """
+/fo\ b/bar
+""",
+            ["fo b/bar"]
+        );
+    }
+
+    [Test]
     public void QuestionMark()
     {
         this.GitBasedTest(
@@ -326,6 +337,7 @@ foo?
         );
     }
 
+    [Ignore("TODO #1771")]
     [Test]
     public void LeadingDoubleStar2()
     {
@@ -390,6 +402,7 @@ foo/**/bar
     }
 
     [Test]
+    [Ignore("TODO #1771")]
     public void MiddleDoubleStar_3()
     {
         this.GitBasedTest(

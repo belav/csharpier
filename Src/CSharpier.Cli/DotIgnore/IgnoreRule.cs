@@ -47,6 +47,8 @@ internal class IgnoreRule
 
         var rxPattern = Matcher.ToRegex(this.Pattern);
 
+        this.Pattern = this.Pattern.Replace("\\ ", " ");
+
         // If rxPattern is null, an invalid pattern was passed to ToRegex, so it cannot match
         if (!string.IsNullOrEmpty(rxPattern))
         {
@@ -94,7 +96,11 @@ internal class IgnoreRule
         // If the *pattern* does not contain any slashes, it should match *any*
         // occurence, *anywhere* within the path (e.g. '*.jpg' should match
         // 'a.jpg', 'a/b.jpg', 'a/b/c.jpg'), so try matching before each slash
-        if (!this.Pattern.Contains('/') && path.Contains('/'))
+        if (
+            (this.PatternFlags & PatternFlags.ABSOLUTE_PATH) == 0
+            && !this.Pattern.Contains('/')
+            && path.Contains('/')
+        )
         {
             return path.Split('/').Any(segment => Matcher.TryMatch(this.regex, segment));
         }

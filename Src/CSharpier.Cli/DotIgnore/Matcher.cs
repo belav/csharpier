@@ -136,45 +136,48 @@ internal static partial class Matcher
         // (escaping these in a glob pattern should have no effect)
         pattern = EscapedAlphaNumRegex.Replace(pattern, "$1");
 
-        var rx = new StringBuilder(pattern);
+        var regex = new StringBuilder(pattern);
 
         foreach (var literal in LiteralsToEscapeInRegex)
         {
-            rx.Replace(literal, @"\" + literal);
+            regex.Replace(literal, @"\" + literal);
         }
 
         foreach (var k in CharClassSubstitutions.Keys)
         {
-            rx.Replace(k, CharClassSubstitutions[k]);
+            regex.Replace(k, CharClassSubstitutions[k]);
         }
 
-        rx.Replace("!", "^");
-        rx.Replace("**", "[:STARSTAR:]");
-        rx.Replace("*", "[:STAR:]");
-        rx.Replace("?", "[:QM:]");
+        regex.Replace("\\!", "!");
+        regex.Replace("**", "[:STARSTAR:]");
+        regex.Replace("*", "[:STAR:]");
+        regex.Replace("?", "[:QM:]");
 
-        rx.Insert(0, "^");
-        rx.Append('$');
+        regex.Insert(0, "^");
+        regex.Append('$');
 
         // TODO: is this only true if PATHMATCH isn't specified?
         // Character class patterns shouldn't match slashes, so we prefix them with
         // negative lookaheads. This is rather harder than it seems, because class
         // patterns can also contain unescaped square brackets...
-        var rx2 = pattern.Contains('[')
-            ? new StringBuilder(NonPathMatchCharClasses(rx.ToString()))
-            : rx;
+        regex = pattern.Contains('[')
+            ? new StringBuilder(NonPathMatchCharClasses(regex.ToString()))
+            : regex;
 
         // Non-escaped question mark should match any single char except slash
-        rx2.Replace(@"\[:QM:]", @"\?");
-        rx2.Replace("[:QM:]", "[^/]");
+        regex.Replace(@"\[:QM:]", @"\?");
+        regex.Replace("[:QM:]", "[^/]");
 
         // Replace star patterns with equivalent regex patterns
-        rx2.Replace(@"\[:STAR:]", @"\*");
-        rx2.Replace("[:STAR:]", "[^/]*");
-        rx2.Replace("[:STARSTAR:]/", "(?:.*?/)?");
-        rx2.Replace("[:STARSTAR:]", "(?:.*?)?");
+        regex.Replace(@"\[:STAR:]", @"\*");
+        regex.Replace("[:STAR:]", "[^/]*");
+        regex.Replace("[:STARSTAR:]/", "(?:.*?/)?");
+        regex.Replace("[:STARSTAR:]", "(?:.*?)?");
 
-        return rx2.ToString();
+        // TODO #1771 why do we not need to do this in the regex? maybe some spaces in things files/directories won't work as expected
+        // regex.Replace("\\ ", " ");
+
+        return regex.ToString();
     }
 
     private static string NonPathMatchCharClasses(string p)
