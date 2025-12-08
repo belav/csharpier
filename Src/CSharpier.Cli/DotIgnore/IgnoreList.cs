@@ -1,10 +1,11 @@
-﻿using System.Collections.Concurrent;
+// based on the code at https://github.com/markashleybell/MAB.DotIgnore
+// simplified to remove unneeded features and fixed a couple of edgecases that were not handled correctly
+
+using System.Collections.Concurrent;
 using System.IO.Abstractions;
 
 namespace CSharpier.Cli.DotIgnore;
 
-// TODO #1768 performance test this to see how it compares to the previous regex version
-// TODO #1768 add link back to source repo
 internal class IgnoreList(string basePath)
 {
     private static readonly string[] alwaysIgnoredText =
