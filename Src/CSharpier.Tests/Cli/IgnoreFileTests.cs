@@ -1,3 +1,5 @@
+// based on the code at https://github.com/goelhardik/ignore/blob/main/src/Ignore.Tests/GitBasedTests.cs
+
 using System.IO.Abstractions;
 using CSharpier.Cli;
 using FluentAssertions;
