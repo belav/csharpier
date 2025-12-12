@@ -339,7 +339,6 @@ foo?
         );
     }
 
-    [Ignore("TODO #1771")]
     [Test]
     public void LeadingDoubleStar2()
     {
@@ -404,7 +403,6 @@ foo/**/bar
     }
 
     [Test]
-    [Ignore("TODO #1771")]
     public void MiddleDoubleStar_3()
     {
         this.GitBasedTest(
@@ -622,15 +620,17 @@ foo
             .Select(se => se.FilePath)
             .ToList();
 
+        var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o));
+
         var ignoreFile = IgnoreFile
             .CreateAsync(this.gitRepository.RepoPath, this.fileSystem, null, CancellationToken.None)
             .GetAwaiter()
             .GetResult();
 
-        var ignoreFileUnignoredFiles = files.Where(o =>
-            !ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
+        var csharpierIgnoredFiles = files.Where(o =>
+            ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
         );
 
-        ignoreFileUnignoredFiles.Should().BeEquivalentTo(gitUntrackedFiles);
+        csharpierIgnoredFiles.Should().BeEquivalentTo(gitIgnoredFiles);
     }
 }
