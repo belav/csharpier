@@ -15,7 +15,7 @@ internal static class BaseTypeDeclaration
         SyntaxList<TypeParameterConstraintClauseSyntax>? constraintClauses = null;
         SyntaxToken? recordKeyword = null;
         SyntaxToken? keyword = null;
-        Func<Doc>? members = null;
+        Func<CSharpSyntaxNode, PrintingContext, Doc>? members = null;
         SyntaxToken? semicolonToken = null;
 
         if (node is TypeDeclarationSyntax typeDeclarationSyntax)
@@ -24,14 +24,17 @@ internal static class BaseTypeDeclaration
             constraintClauses = typeDeclarationSyntax.ConstraintClauses;
             if (typeDeclarationSyntax.Members.Count > 0)
             {
-                members = () =>
-                    Doc.Indent(
+                members = static (node, context) =>
+                {
+                    var typeDeclarationSyntax = (TypeDeclarationSyntax)node;
+                    return Doc.Indent(
                         MembersWithForcedLines.Print(
                             typeDeclarationSyntax,
                             typeDeclarationSyntax.Members,
                             context
                         )
                     );
+                };
             }
 
             if (node is ClassDeclarationSyntax classDeclarationSyntax)
@@ -66,14 +69,17 @@ internal static class BaseTypeDeclaration
         {
             if (enumDeclarationSyntax.Members.Count > 0)
             {
-                members = () =>
-                    Doc.Indent(
+                members = static (node, context) =>
+                {
+                    var enumDeclarationSyntax = (EnumDeclarationSyntax)node;
+                    return Doc.Indent(
                         MembersWithForcedLines.Print(
                             enumDeclarationSyntax,
                             enumDeclarationSyntax.Members,
                             context
                         )
                     );
+                };
             }
 
             keyword = enumDeclarationSyntax.EnumKeyword;
@@ -151,7 +157,7 @@ internal static class BaseTypeDeclaration
 
         if (members != null)
         {
-            var membersContent = members();
+            var membersContent = members(node, context);
 
             DocUtilities.RemoveInitialDoubleHardLine(membersContent);
 
