@@ -271,7 +271,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
             ICSharpierProcess csharpierProcess;
             if (
                 Semver.gte(version, serverVersion) &&
-                !CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
+                !CSharpierSettings.getInstance().getDisableCSharpierServer()
             ) {
                 csharpierProcess = new CSharpierProcessServer(customPath, version, this.project);
             } else if (Semver.gte(version, "0.12.0")) {
@@ -279,7 +279,7 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
                 if (
                     Semver.gte(version, serverVersion) &&
-                    CSharpierSettings.getInstance(this.project).getDisableCSharpierServer()
+                    CSharpierSettings.getInstance().getDisableCSharpierServer()
                 ) {
                     this.logger.debug(
                             "CSharpier server is disabled, falling back to piping via stdin"
