@@ -91,8 +91,6 @@ internal static class ServerFormatter
 
         await app.RunAsync();
 
-        Console.ReadKey();
-
         return 0;
     }
 }
