@@ -1,7 +1,9 @@
 package com.intellij.csharpier;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBTextField;
@@ -14,8 +16,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class CSharpierSettingsComponent implements SearchableConfigurable {
 
+    Logger logger = CSharpierLogger.getInstance();
+
     private final Project project;
-    private JBCheckBox runOnSaveCheckBox = new JBCheckBox("Run on Save");
+    private final String[] runOnSaveOptions = new String[] {
+        "Don't run on save",
+        "Never run on save",
+        "Run on save",
+    };
+    private ComboBox<String> runOnSaveComboBox = new ComboBox<String>(runOnSaveOptions);
     private JBCheckBox globalRunOnSaveCheckBox = new JBCheckBox("Run on Save (Global)");
     private JBCheckBox disableCSharpierServerCheckBox = new JBCheckBox("Disable CSharpier Server");
     private JBCheckBox useCustomPath = new JBCheckBox("Override CSharpier Executable");
@@ -67,7 +76,12 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
         return FormBuilder.createFormBuilder()
             .addComponent(createSectionHeader("General Settings"))
             .setFormLeftIndent(leftIndent)
-            .addComponent(this.runOnSaveCheckBox, topInset)
+            .addLabeledComponent(
+                new JBLabel("Run on save (Project):"),
+                this.runOnSaveComboBox,
+                topInset,
+                false
+            )
             .addComponent(this.globalRunOnSaveCheckBox, topInset)
             .setFormLeftIndent(0)
             .addComponent(createSectionHeader("Developer Settings"), 20)
@@ -87,8 +101,8 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         return (
-            CSharpierSettings.getInstance(this.project).getRunOnSave() !=
-                this.runOnSaveCheckBox.isSelected() ||
+            CSharpierSettings.getInstance(this.project).getProjectRunOnSave() !=
+                this.toRunOnSaveOption() ||
             CSharpierGlobalSettings.getInstance(this.project).getRunOnSave() !=
             this.globalRunOnSaveCheckBox.isSelected() ||
             CSharpierSettings.getInstance(this.project).getCustomPath() !=
@@ -104,7 +118,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     public void apply() {
         var settings = CSharpierSettings.getInstance(this.project);
 
-        settings.setRunOnSave(this.runOnSaveCheckBox.isSelected());
+        settings.setProjectRunOnSave(this.toRunOnSaveOption());
         settings.setCustomPath(this.customPathTextField.getText());
         settings.setDisableCSharpierServer(this.disableCSharpierServerCheckBox.isSelected());
         settings.setUseCustomPath(this.useCustomPath.isSelected());
@@ -116,12 +130,39 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public void reset() {
         var settings = CSharpierSettings.getInstance(this.project);
-        this.runOnSaveCheckBox.setSelected(settings.getRunOnSave());
+        this.setSelectedRunOnSave(settings.getProjectRunOnSave());
         this.useCustomPath.setSelected(settings.getUseCustomPath());
         this.customPathTextField.setText(settings.getCustomPath());
         this.disableCSharpierServerCheckBox.setSelected(settings.getDisableCSharpierServer());
 
         var globalSettings = CSharpierGlobalSettings.getInstance(this.project);
         this.globalRunOnSaveCheckBox.setSelected(globalSettings.getRunOnSave());
+    }
+
+    private ProjectRunOnSaveOption toRunOnSaveOption() {
+        String selectedItem = (String) runOnSaveComboBox.getSelectedItem();
+
+        if (selectedItem == runOnSaveOptions[0]) {
+            return ProjectRunOnSaveOption.SoftNeverRun;
+        } else if (selectedItem == runOnSaveOptions[1]) {
+            return ProjectRunOnSaveOption.HardNeverRun;
+        } else if (selectedItem == runOnSaveOptions[2]) {
+            return ProjectRunOnSaveOption.RunOnSave;
+        }
+
+        this.logger.debug("invalid runOnSaveComboBox selection: " + selectedItem);
+        return ProjectRunOnSaveOption.SoftNeverRun;
+    }
+
+    private void setSelectedRunOnSave(ProjectRunOnSaveOption saveOption) {
+        if (saveOption == ProjectRunOnSaveOption.SoftNeverRun) {
+            this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[0]);
+        } else if (saveOption == ProjectRunOnSaveOption.HardNeverRun) {
+            this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[1]);
+        } else if (saveOption == ProjectRunOnSaveOption.RunOnSave) {
+            this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[2]);
+        }
+
+        this.logger.debug("tried to set invalid ProjectRunOnSaveOption: " + saveOption);
     }
 }

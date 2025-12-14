@@ -25,6 +25,16 @@ public class CSharpierSettings implements PersistentStateComponent<CSharpierSett
         this.runOnSave = value;
     }
 
+    private ProjectRunOnSaveOption projectRunOnSaveOption = ProjectRunOnSaveOption.SoftNeverRun;
+
+    public ProjectRunOnSaveOption getProjectRunOnSave() {
+        return this.projectRunOnSaveOption;
+    }
+
+    public void setProjectRunOnSave(ProjectRunOnSaveOption value) {
+        this.projectRunOnSaveOption = value;
+    }
+
     private boolean useCustomPath;
 
     public boolean getUseCustomPath() {
@@ -63,5 +73,21 @@ public class CSharpierSettings implements PersistentStateComponent<CSharpierSett
     @Override
     public void loadState(@NotNull CSharpierSettings state) {
         XmlSerializerUtil.copyBean(state, this);
+        migrate();
     }
+
+    private void migrate() {
+        // If runOnSave was enabled it becomes ProjectRunOnSaveOption.RunOnSave
+        // we reset runOnSave to false - this value will never be used after this
+        if (getRunOnSave()) {
+            setRunOnSave(false);
+            setProjectRunOnSave(ProjectRunOnSaveOption.RunOnSave);
+        }
+    }
+}
+
+enum ProjectRunOnSaveOption {
+    SoftNeverRun,
+    HardNeverRun,
+    RunOnSave,
 }
