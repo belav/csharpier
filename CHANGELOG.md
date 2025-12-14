@@ -1,7 +1,7 @@
 # 1.2.3
 ## What's Changed
 ### Large directories ignored in .gitignore significantly impact performance. [#1776](https://github.com/belav/csharpier/issues/1776)
-CSharpier was enumerating all files within all subdirectories and then determining if they should be formating or not. That logic was optimized to only enumerate files in directories that are not ignored.
+CSharpier was enumerating all files within all subdirectories and then determining if they should be formatted or not. That logic was optimized to only enumerate files in directories that are not ignored.
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/1.2.2...1.2.3
 # 1.2.2
