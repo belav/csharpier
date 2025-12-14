@@ -300,7 +300,7 @@ public class CliTests
         {
             ArgumentList =
             {
-                Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll"),
+                Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll"),
                 "format",
             },
             RedirectStandardInput = false,
