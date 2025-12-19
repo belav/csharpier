@@ -13,6 +13,5 @@
   - follow existing naming conventions
   - always `this.`
   - no pointless comments
-- [ ] I have written tests that prove my fix is effective or my feature works
 - [ ] I will not force push after a code review of my PR has started
 - [ ] I have added tests that cover my changes
