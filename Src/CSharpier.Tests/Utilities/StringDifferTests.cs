@@ -1,11 +1,8 @@
-﻿using CSharpier.Core.Utilities;
-using FluentAssertions;
-using NUnit.Framework;
+﻿using AwesomeAssertions;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Tests.Utilities;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class StringDifferTests
 {
     [Test]
@@ -238,8 +235,9 @@ four
         );
     }
 
-    [TestCase("\r\n")]
-    [TestCase("\n")]
+    [Test]
+    [Arguments("\r\n")]
+    [Arguments("\n")]
     public void PrintDifference_Should_Make_Extra_New_Line_Obvious(string lineEnding)
     {
         var result = PrintDifference($";{lineEnding}", $";{lineEnding}{lineEnding}");
@@ -247,8 +245,9 @@ four
         result.Should().Be("The file did not end with a single newline.");
     }
 
-    [TestCase("\r\n")]
-    [TestCase("\n")]
+    [Test]
+    [Arguments("\r\n")]
+    [Arguments("\n")]
     public void PrintDifference_Should_Make_Missing_New_Line_Obvious(string lineEnding)
     {
         var result = PrintDifference($";{lineEnding}", ";");
@@ -256,8 +255,9 @@ four
         result.Should().Be("The file did not end with a single newline.");
     }
 
-    [TestCase("\r\n")]
-    [TestCase("\n")]
+    [Test]
+    [Arguments("\r\n")]
+    [Arguments("\n")]
     public void PrintDifference_Should_Pass_With_Proper_Line_Ending(string lineEnding)
     {
         var result = PrintDifference($";{lineEnding}", $";{lineEnding}");

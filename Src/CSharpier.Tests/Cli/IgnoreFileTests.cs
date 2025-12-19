@@ -1,25 +1,23 @@
 // based on the code at https://github.com/goelhardik/ignore/blob/main/src/Ignore.Tests/GitBasedTests.cs
 
 using System.IO.Abstractions;
+using AwesomeAssertions;
 using CSharpier.Cli;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.Cli;
 
-[TestFixture]
 public class IgnoreFileTests
 {
     private GitRepository gitRepository = null!;
     private readonly FileSystem fileSystem = new();
 
-    [SetUp]
+    [Before(Test)]
     public void SetUp()
     {
         this.gitRepository = new(this.fileSystem);
     }
 
-    [TearDown]
+    [After(Test)]
     public void TearDown()
     {
         this.gitRepository.DeleteRepoDirectory();

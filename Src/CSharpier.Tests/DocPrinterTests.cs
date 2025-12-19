@@ -1,13 +1,10 @@
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.DocPrinter;
 using CSharpier.Core.DocTypes;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class DocPrinterTests
 {
     [Test]
@@ -385,8 +382,9 @@ public class DocPrinterTests
         PrintedDocShouldBe(doc, "indent");
     }
 
-    [TestCase(" ")]
-    [TestCase("   ")]
+    [Test]
+    [Arguments(" ")]
+    [Arguments("   ")]
     public void Trim_Should_Trim_Current_Line(string indent)
     {
         var doc = Doc.Concat($"1{indent}", Doc.Trim);
@@ -394,8 +392,9 @@ public class DocPrinterTests
         PrintedDocShouldBe(doc, "1");
     }
 
-    [TestCase("1")]
-    [TestCase("")]
+    [Test]
+    [Arguments("1")]
+    [Arguments("")]
     public void Trim_Should_Not_Trim_NonWhitespace(string value)
     {
         var doc = Doc.Concat(value, Doc.Trim);
@@ -714,12 +713,13 @@ public class DocPrinterTests
         PrintedDocShouldBe(doc, "(1)(1)", 10);
     }
 
-    [TestCase(0, "\n")]
-    [TestCase(0, "\r\n")]
-    [TestCase(1, "\n")]
-    [TestCase(1, "\r\n")]
-    [TestCase(2, "\n")]
-    [TestCase(2, "\r\n")]
+    [Test]
+    [Arguments(0, "\n")]
+    [Arguments(0, "\r\n")]
+    [Arguments(1, "\n")]
+    [Arguments(1, "\r\n")]
+    [Arguments(2, "\n")]
+    [Arguments(2, "\r\n")]
     public void Print_Should_Include_Single_NewLine_To_End_File(int instances, string endOfLine)
     {
         var doc = "1";
