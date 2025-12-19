@@ -13,6 +13,7 @@ body:
         - I've read the [documentation](https://csharpier.com/) and this isn't expected behavior
         - I'm using the latest version of CSharpier [NuGet](https://img.shields.io/nuget/v/CSharpier)
         - I'm using the latest version of the IDE plugin/extension
+
   - type: textarea
     id: description
     attributes:
@@ -21,6 +22,7 @@ body:
       placeholder: Describe the bug...
     validations:
       required: true
+
   - type: textarea
     id: reproduction
     attributes:
@@ -30,6 +32,7 @@ body:
         Include test code and any relevant configuration.
     validations:
       required: true
+
   - type: textarea
     id: expected
     attributes:
