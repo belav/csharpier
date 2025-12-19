@@ -12,7 +12,7 @@ body:
         - I've searched [existing issues](https://github.com/belav/csharpier/issues) to ensure this isn't a duplicate
         - I've read the [documentation](https://csharpier.com/) and this isn't expected behavior
         - I'm using the latest version of CSharpier ![CSharpier](https://img.shields.io/nuget/v/CSharpier)
-        - I'm using the latest version of the IDE plugin/extension
+        - I'm using the latest version of CSharpier's IDE plugin and understand it is versioned independently of CSharpier
 
   - type: textarea
     id: description
