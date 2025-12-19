@@ -1,0 +1,47 @@
+name: Bug
+description: Report a bug or unexpected behavior
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the information below to help us investigate.
+
+        **Before submitting**, please check:
+        - I've searched [existing issues](https://github.com/belav/csharpier/issues) to ensure this isn't a duplicate
+        - I've read the [documentation](https://csharpier.com/) and this isn't expected behavior
+        - I'm using the latest version of CSharpier [NuGet](https://img.shields.io/nuget/v/CSharpier)
+        - I'm using the latest version of the IDE plugin/extension
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Describe the bug...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: |
+        Please provide a minimal code example that reproduces the issue or a link to a repository that reproduces the problem.
+        Include test code and any relevant configuration.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+
