@@ -8,7 +8,7 @@
     <PackageVersion Include="BenchmarkDotNet.Annotations" Version="0.15.5" />
     <PackageVersion Include="CliWrap" Version="3.9.0" />
     <PackageVersion Include="DiffEngine" Version="7.3.0" />
-    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
+    <PackageVersion Include="AwesomeAssertions" Version="9.3.0" />
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="ini-parser-netstandard" Version="2.5.3" />
     <PackageVersion Include="LibGit2Sharp" Version="0.31.0" />
@@ -19,10 +19,8 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="4.14.0" />
     <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.10" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageVersion Include="NReco.Logging.File" Version="1.2.2" />
-    <PackageVersion Include="NUnit" Version="4.4.0" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" />
+    <PackageVersion Include="TUnit" Version="1.5.80" />
     <PackageVersion Include="PolySharp" Version="1.15.0" />
     <PackageVersion Include="Scriban" Version="6.5.0" />
     <PackageVersion Include="Serilog.Extensions.Logging.File" Version="3.0.0" />

@@ -1,14 +1,11 @@
-using System.IO;
 using DiffEngine;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.FormattingTests;
 
-[SetUpFixture]
-public class SetUpFixture
+public class AssemblyHooks
 {
-    [OneTimeSetUp]
-    public void OneTimeSetUp()
+    [Before(Assembly)]
+    public static void AssemblySetup()
     {
         EmptyFiles.Extensions.AddTextExtension(".test");
 
