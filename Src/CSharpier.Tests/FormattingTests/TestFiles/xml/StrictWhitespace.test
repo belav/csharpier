@@ -3,8 +3,7 @@
     
     Because whitespace is strict
     The indentation of the closing element can't change
-      </Element
-  >
+      </Element>
   <Element>
     Shorter Text with indentation that can't change
     </Element>

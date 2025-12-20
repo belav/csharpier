@@ -126,9 +126,31 @@ internal static class Tag
          *        ^^^
          *     >
          */
+        // TODO #1790 we really want this last condition only if the indentation of the last line of the text value matches
+        // the indentation of the start element. Bleh.
+        /*
+may have to handle one of these vs the second
+<Root>
+  <Element Attribute="TheSign">
+    Life is demanding.
+    </Element>
+</Root>
+<Root>
+  <Element Attribute="TheSign">
+    Life is demanding.
+  </Element>
+</Root>
+there is also this case
+<Root>
+       <Element >
+    Life is demanding.
+         </Element>
+</Root>
+         */
         return rawNode.NextNode is null
             && rawNode.IsTextLike()
-            && rawNode.GetLastDescendant().NodeType is XmlNodeType.Text;
+            && rawNode.GetLastDescendant() is { NodeType: XmlNodeType.Text } textNode
+            && !textNode.Value.Contains('\n');
     }
 
     public static bool NeedsToBorrowParentOpeningTagEndMarker(RawNode rawNode)

@@ -1,6 +1,7 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
 
 namespace CSharpier.Core.Utilities;
 
@@ -175,5 +176,11 @@ internal ref struct ValueListBuilder<T>
         {
             ArrayPool<T>.Shared.Return(toReturn);
         }
+    }
+
+    public override string ToString()
+    {
+        // TODO get this to actually show something useful
+        return JsonSerializer.Serialize(this.ToArray());
     }
 }
