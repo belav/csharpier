@@ -11,7 +11,7 @@ internal static class Node
     {
         if (node.NodeType is XmlNodeType.Document)
         {
-            var result = new ValueListBuilder<Doc>(node.Nodes.Count * 2 + 1);
+            var result = new DocListBuilder(node.Nodes.Count * 2 + 1);
 
             foreach (var childNode in node.Nodes)
             {

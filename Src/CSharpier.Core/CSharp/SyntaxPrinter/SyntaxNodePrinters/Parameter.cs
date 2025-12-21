@@ -11,7 +11,7 @@ internal static class Parameter
     {
         var hasAttribute = node.AttributeLists.Any();
 
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
+        var docs = new DocListBuilder(8);
 
         if (hasAttribute)
         {

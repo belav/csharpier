@@ -49,7 +49,7 @@ internal static class Token
             return Doc.Null;
         }
 
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+        var docs = new DocListBuilder(8);
 
         if (!skipLeadingTrivia)
         {
@@ -409,7 +409,7 @@ internal static class Token
             return Doc.Null;
         }
 
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null, null]);
+        var docs = new DocListBuilder(8);
         foreach (var trivia in trailingTrivia)
         {
             if (trivia.RawSyntaxKind() == SyntaxKind.SingleLineCommentTrivia)

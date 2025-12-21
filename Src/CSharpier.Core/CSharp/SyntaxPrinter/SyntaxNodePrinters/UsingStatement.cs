@@ -9,7 +9,7 @@ internal static class UsingStatement
 {
     public static Doc Print(UsingStatementSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null]);
+        var docs = new DocListBuilder(4);
         docs.Add(ExtraNewLines.Print(node));
         docs.Add(
             Doc.Group(
