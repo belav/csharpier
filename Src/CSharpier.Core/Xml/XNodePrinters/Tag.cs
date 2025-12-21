@@ -150,7 +150,7 @@ there is also this case
         return rawNode.NextNode is null
             && rawNode.IsTextLike()
             && rawNode.GetLastDescendant() is { NodeType: XmlNodeType.Text } textNode
-            && !textNode.Value.Contains('\n');
+            && textNode.Value[^1] is not (' ' or '\r' or '\n');
     }
 
     public static bool NeedsToBorrowParentOpeningTagEndMarker(RawNode rawNode)

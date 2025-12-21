@@ -69,7 +69,7 @@ internal static class Element
 
             if (
                 rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && rawNode.Nodes[0].Value.Contains('\n')
+                && rawNode.Nodes[0].Value[^1] is ' ' or '\r' or '\n'
             )
             {
                 return Doc.Null;

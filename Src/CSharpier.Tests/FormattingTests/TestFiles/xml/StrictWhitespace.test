@@ -7,4 +7,12 @@
   <Element>
     Shorter Text with indentation that can't change
     </Element>
+  <returns>
+    <para
+      >A <see cref="T:System.Int32" /> containing a value that reflects the sort order of
+  <paramref name="x" /> as compared to <paramref name="y" />. The following table defines the conditions
+  under which the returned value is a negative number, zero, or a positive
+  number.</para
+    >
+  </returns>
 </Root>
