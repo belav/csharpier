@@ -32,7 +32,7 @@ internal class RawNode
         return this.NodeType is XmlNodeType.Element ? this.Nodes.LastOrDefault() ?? this : this;
     }
 
-    public override string ToString()
+    public override string? ToString()
     {
         if (this.IsTextLike())
         {
