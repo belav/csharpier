@@ -7,12 +7,13 @@ namespace CSharpier.Cli;
 
 internal static class HasMismatchedCliAndMsBuildVersions
 {
-    public static bool Check(string directoryName, IFileSystem fileSystem, ILogger logger)
+    public static async Task<bool> Check(
+        string directoryName,
+        IFileSystem fileSystem,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
     {
-        var csProjPaths = fileSystem
-            .Directory.EnumerateFiles(directoryName, "*.csproj", SearchOption.AllDirectories)
-            .ToArray();
-
         var versionOfDotnetTool = typeof(CommandLineFormatter)
             .Assembly.GetName()
             .Version!.ToString(3);
@@ -51,14 +52,38 @@ internal static class HasMismatchedCliAndMsBuildVersions
             return null;
         }
 
-        foreach (var pathToCsProj in csProjPaths)
+        IEnumerable<string> EnumerateFiles(string directory)
+        {
+            // using optionsProvider is slower so just hard coding the ones that could cause performance issues
+            if (fileSystem.Path.GetDirectoryName(directory) is "node_modules" or ".git")
+            {
+                yield break;
+            }
+
+            foreach (var file in fileSystem.Directory.EnumerateFiles(directory, "*.csproj"))
+            {
+                yield return file;
+            }
+
+            foreach (var subDirectory in fileSystem.Directory.EnumerateDirectories(directory))
+            {
+                foreach (var file in EnumerateFiles(subDirectory))
+                {
+                    yield return file;
+                }
+            }
+        }
+
+        foreach (var pathToCsProj in EnumerateFiles(directoryName))
         {
             // this could potentially use the Microsoft.Build.Evaluation class, but that was
             // throwing exceptions trying to load project files with "The SDK 'Microsoft.NET.Sdk' specified could not be found."
             XElement csProjXElement;
             try
             {
-                csProjXElement = XElement.Parse(fileSystem.File.ReadAllText(pathToCsProj));
+                csProjXElement = XElement.Parse(
+                    await fileSystem.File.ReadAllTextAsync(pathToCsProj, cancellationToken)
+                );
             }
             catch (Exception ex)
             {
