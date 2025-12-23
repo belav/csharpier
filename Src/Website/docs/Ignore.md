@@ -49,7 +49,7 @@ _See [Configuration](CLI.md) for including these files_
 
 #### Special Case Files
 
-- Any file that matches the gitignore syntax
+- Any file that matches the gitignore syntax 
     - `**/node_modules`
     - `**/obj`
     - `**/.git`
