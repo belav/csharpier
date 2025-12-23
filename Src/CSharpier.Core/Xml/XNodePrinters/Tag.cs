@@ -53,7 +53,7 @@ internal static class Tag
     {
         var lastChild = rawNode.Nodes.LastOrDefault();
 
-        return lastChild is not null && NeedsToBorrowParentClosingTagStartMarker(lastChild)
+        return lastChild is not null && PrintParentClosingTagStartWithContent(lastChild)
             ? Doc.Null
             : PrintClosingTagStartMarker(rawNode, context);
     }
@@ -78,7 +78,7 @@ internal static class Tag
 
     public static Doc PrintClosingTagSuffix(RawNode rawNode, PrintingContext context)
     {
-        return NeedsToBorrowParentClosingTagStartMarker(rawNode)
+        return PrintParentClosingTagStartWithContent(rawNode)
                 ? PrintClosingTagStartMarker(rawNode.Parent!, context)
             : NeedsToBorrowNextOpeningTagStartMarker(rawNode)
                 ? PrintOpeningTagStartMarker(rawNode.NextNode!, context)
@@ -113,7 +113,7 @@ internal static class Tag
         ;
     }
 
-    private static bool NeedsToBorrowParentClosingTagStartMarker(RawNode rawNode)
+    private static bool PrintParentClosingTagStartWithContent(RawNode rawNode)
     {
         /*
          *     <p>

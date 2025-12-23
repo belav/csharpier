@@ -22,6 +22,11 @@
   <exception cref="T:System.InvalidOperationException"
     >The current instance is read-only and a set operation was attempted. </exception
   >
+  <example>
+    <code>public void MethodName() {
+}
+        </code>
+  </example>
   <Root>
     <Element />
     <!--
