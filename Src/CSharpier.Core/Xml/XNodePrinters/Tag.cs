@@ -152,6 +152,7 @@ there is also this case
             && rawNode.GetLastDescendant() is { NodeType: XmlNodeType.Text } textNode
             && (
                 textNode.Value[^1] is not (' ' or '\r' or '\n')
+                || !textNode.Value.Contains('\n')
                 || rawNode.Parent!.Nodes.Any(o => !o.IsTextLike())
             );
     }

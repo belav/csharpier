@@ -19,6 +19,9 @@
   <para
     >Some loooooooooooooooooooooooooooooooooong text with this <br /> and a space after this. </para
   >
+  <exception cref="T:System.InvalidOperationException"
+    >The current instance is read-only and a set operation was attempted. </exception
+  >
   <Root>
     <Element />
     <!--
