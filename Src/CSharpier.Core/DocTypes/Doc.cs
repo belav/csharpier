@@ -53,7 +53,7 @@ internal abstract class Doc
 
     public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
-    public static Doc Concat(ref ValueListBuilder<Doc> contents)
+    public static Doc Concat(ref DocListBuilder contents)
     {
         return contents.Length switch
         {

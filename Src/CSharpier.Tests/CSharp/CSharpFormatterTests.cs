@@ -1,13 +1,10 @@
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.CSharp;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 internal sealed class CSharpFormatterTests
 {
     [Test]
@@ -125,8 +122,9 @@ var someVariable =   someValue;
         result.Code.Should().Be(code.Replace(" =   ", " = "));
     }
 
-    [TestCase("\n")]
-    [TestCase("\r\n")]
+    [Test]
+    [Arguments("\n")]
+    [Arguments("\r\n")]
     public void Format_Should_Get_Line_Endings_With_SyntaxTree(string lineEnding)
     {
         var code = $"public class ClassName {{{lineEnding}}}";

@@ -1,11 +1,8 @@
+using AwesomeAssertions;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.CSharp;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class DisabledTextComparerTests
 {
     [Test]

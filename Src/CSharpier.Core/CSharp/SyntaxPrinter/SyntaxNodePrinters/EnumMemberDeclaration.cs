@@ -8,7 +8,7 @@ internal static class EnumMemberDeclaration
 {
     public static Doc Print(EnumMemberDeclarationSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null]);
+        var docs = new DocListBuilder(4);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Modifiers.Print(node.Modifiers, context));
         docs.Add(Token.Print(node.Identifier, context));

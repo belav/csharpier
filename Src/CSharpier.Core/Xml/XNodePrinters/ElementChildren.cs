@@ -15,7 +15,7 @@ internal static class ElementChildren
             groupIds.Add(context.GroupFor("symbol"));
         }
 
-        var result = new ValueListBuilder<Doc>(node.Nodes.Count * 5);
+        var result = new DocListBuilder(node.Nodes.Count * 5);
         var x = 0;
         foreach (var childNode in node.Nodes)
         {
@@ -25,10 +25,10 @@ internal static class ElementChildren
                 continue;
             }
 
-            var prevParts = new ValueListBuilder<Doc>([null, null]);
-            var leadingParts = new ValueListBuilder<Doc>([null, null]);
-            var trailingParts = new ValueListBuilder<Doc>([null, null]);
-            var nextParts = new ValueListBuilder<Doc>([null, null]);
+            var prevParts = new DocListBuilder(2);
+            var leadingParts = new DocListBuilder(2);
+            var trailingParts = new DocListBuilder(2);
+            var nextParts = new DocListBuilder(2);
 
             var prevBetweenLine = childNode.PreviousNode is not null
                 ? PrintBetweenLine(childNode.PreviousNode, childNode)

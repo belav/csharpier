@@ -23,9 +23,9 @@ public class DontReorderThis
     string Field;
 
     // leading comment should reorder modifiers
-    static public void Method() { }
+    public static void Method() { }
 
-    static 
+    static
     // midway comment should not reorder modifiers
     public void Method1() { }
 }

@@ -1,25 +1,23 @@
 // based on the code at https://github.com/goelhardik/ignore/blob/main/src/Ignore.Tests/GitBasedTests.cs
 
 using System.IO.Abstractions;
+using AwesomeAssertions;
 using CSharpier.Cli;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.Cli;
 
-[TestFixture]
 public class IgnoreFileTests
 {
     private GitRepository gitRepository = null!;
     private readonly FileSystem fileSystem = new();
 
-    [SetUp]
+    [Before(Test)]
     public void SetUp()
     {
         this.gitRepository = new(this.fileSystem);
     }
 
-    [TearDown]
+    [After(Test)]
     public void TearDown()
     {
         this.gitRepository.DeleteRepoDirectory();
@@ -339,7 +337,6 @@ foo?
         );
     }
 
-    [Ignore("TODO #1771")]
     [Test]
     public void LeadingDoubleStar2()
     {
@@ -404,7 +401,6 @@ foo/**/bar
     }
 
     [Test]
-    [Ignore("TODO #1771")]
     public void MiddleDoubleStar_3()
     {
         this.GitBasedTest(
@@ -622,15 +618,17 @@ foo
             .Select(se => se.FilePath)
             .ToList();
 
+        var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o));
+
         var ignoreFile = IgnoreFile
             .CreateAsync(this.gitRepository.RepoPath, this.fileSystem, null, CancellationToken.None)
             .GetAwaiter()
             .GetResult();
 
-        var ignoreFileUnignoredFiles = files.Where(o =>
-            !ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
+        var csharpierIgnoredFiles = files.Where(o =>
+            ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
         );
 
-        ignoreFileUnignoredFiles.Should().BeEquivalentTo(gitUntrackedFiles);
+        csharpierIgnoredFiles.Should().BeEquivalentTo(gitIgnoredFiles);
     }
 }

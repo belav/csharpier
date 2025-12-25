@@ -73,7 +73,11 @@ internal static class BinaryExpression
 
             // This group ensures that something like == 0 does not end up on its own line
             var shouldGroup =
-                binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
+                (
+                    binaryExpressionSyntax.Kind() != SyntaxKind.CoalesceExpression
+                    || ShouldGroupNullCoalescingSyntax(binaryExpressionSyntax)
+                )
+                && binaryExpressionSyntax.Kind() != binaryExpressionSyntax.Parent!.Kind()
                 && GetPrecedence(binaryExpressionSyntax)
                     != GetPrecedence(binaryExpressionSyntax.Parent!)
                 && binaryExpressionSyntax.Left.GetType() != binaryExpressionSyntax.GetType()
@@ -84,62 +88,12 @@ internal static class BinaryExpression
             var binaryOnTheRight = binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
             if (binaryOnTheRight)
             {
-                var chain = 0;
-                var possibleInvocation = binaryExpressionSyntax.Left;
-                while (possibleInvocation is not null)
-                {
-                    if (possibleInvocation is InvocationExpressionSyntax invocationExpression)
-                    {
-                        possibleInvocation = invocationExpression.Expression;
-                        chain++;
-                    }
-                    else if (
-                        possibleInvocation
-                        is MemberAccessExpressionSyntax memberAccessExpressionSyntax
-                    )
-                    {
-                        possibleInvocation = memberAccessExpressionSyntax.Expression;
-                        chain++;
-                    }
-                    else if (
-                        possibleInvocation
-                        is ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax
-                    )
-                    {
-                        possibleInvocation = conditionalAccessExpressionSyntax.Expression;
-                        chain++;
-                    }
-                    else if (
-                        possibleInvocation
-                        is ElementAccessExpressionSyntax elementAccessExpressionSyntax
-                    )
-                    {
-                        possibleInvocation = elementAccessExpressionSyntax.Expression;
-                        chain++;
-                    }
-                    else
-                    {
-                        possibleInvocation = null;
-                    }
-                }
-                var leftDoc = Node.Print(binaryExpressionSyntax.Left, context);
-                if (chain > 3)
-                {
-                    docs.Add(
-                        Doc.Group(leftDoc, Doc.Line),
-                        Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                        " "
-                    );
-                }
-                else
-                {
-                    docs.Add(
-                        leftDoc,
-                        Doc.Line,
-                        Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                        " "
-                    );
-                }
+                docs.Add(
+                    Node.Print(binaryExpressionSyntax.Left, context),
+                    Doc.Line,
+                    Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                    " "
+                );
             }
 
             var possibleBinary = binaryOnTheRight
@@ -184,6 +138,106 @@ internal static class BinaryExpression
         finally
         {
             context.State.PrintingDepth--;
+        }
+    }
+
+    private static bool ShouldGroupNullCoalescingSyntax(
+        BinaryExpressionSyntax binaryExpressionSyntax
+    )
+    {
+        if (binaryExpressionSyntax.Kind() != SyntaxKind.CoalesceExpression)
+        {
+            return false;
+        }
+
+        var left = binaryExpressionSyntax.Left;
+        return IsTerminalInvocation(left)
+            || left is ParenthesizedExpressionSyntax
+            || left is CastExpressionSyntax { Expression: ParenthesizedExpressionSyntax }
+            || left is SwitchExpressionSyntax;
+
+        static bool IsTerminalInvocation(ExpressionSyntax expression)
+        {
+            return expression switch
+            {
+                InvocationExpressionSyntax invocation =>
+                    !HasInvocationExcludingLeftmostParenthesized(invocation.Expression),
+                ConditionalAccessExpressionSyntax conditionalAccess =>
+                    IsTerminalInvocationInWhenNotNull(conditionalAccess.WhenNotNull)
+                        && !HasInvocationExcludingLeftmostParenthesized(
+                            conditionalAccess.Expression
+                        ),
+                AwaitExpressionSyntax awaitExpression => IsTerminalInvocation(
+                    awaitExpression.Expression
+                ),
+                _ => false,
+            };
+        }
+
+        static bool IsTerminalInvocationInWhenNotNull(ExpressionSyntax whenNotNull)
+        {
+            var rightmost = GetRightmostExpression(whenNotNull);
+            if (rightmost is not InvocationExpressionSyntax)
+            {
+                return false;
+            }
+            return !whenNotNull
+                .DescendantNodesAndSelf()
+                .OfType<InvocationExpressionSyntax>()
+                .Where(invocation => invocation != rightmost)
+                .Any();
+        }
+
+        static ExpressionSyntax GetRightmostExpression(ExpressionSyntax expression)
+        {
+            return expression switch
+            {
+                InvocationExpressionSyntax invocation => invocation,
+                ConditionalAccessExpressionSyntax conditional => GetRightmostExpression(
+                    conditional.WhenNotNull
+                ),
+                MemberAccessExpressionSyntax memberAccess => GetRightmostExpression(
+                    memberAccess.Expression
+                ),
+                _ => expression,
+            };
+        }
+
+        static bool HasInvocationExcludingLeftmostParenthesized(ExpressionSyntax expression)
+        {
+            var leftmost = GetLeftmostExpression(expression);
+            return expression
+                .DescendantNodesAndSelf()
+                .Where(node =>
+                    leftmost is not ParenthesizedExpressionSyntax excludedNode
+                    || !IsDescendantOrSelf(node, excludedNode)
+                )
+                .Any(node =>
+                    node is InvocationExpressionSyntax or ConditionalAccessExpressionSyntax
+                );
+        }
+
+        static ExpressionSyntax GetLeftmostExpression(ExpressionSyntax expression)
+        {
+            return expression switch
+            {
+                MemberAccessExpressionSyntax memberAccess => GetLeftmostExpression(
+                    memberAccess.Expression
+                ),
+                InvocationExpressionSyntax invocation => GetLeftmostExpression(
+                    invocation.Expression
+                ),
+                ConditionalAccessExpressionSyntax conditional => GetLeftmostExpression(
+                    conditional.Expression
+                ),
+                AwaitExpressionSyntax awaitExpr => GetLeftmostExpression(awaitExpr.Expression),
+                _ => expression,
+            };
+        }
+
+        static bool IsDescendantOrSelf(SyntaxNode node, SyntaxNode ancestor)
+        {
+            return node == ancestor || node.Ancestors().Contains(ancestor);
         }
     }
 

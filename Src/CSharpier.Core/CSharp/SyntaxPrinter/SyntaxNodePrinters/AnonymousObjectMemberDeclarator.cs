@@ -8,7 +8,7 @@ internal static class AnonymousObjectMemberDeclarator
 {
     public static Doc Print(AnonymousObjectMemberDeclaratorSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null]);
+        var docs = new DocListBuilder(4);
         if (
             node.Parent is AnonymousObjectCreationExpressionSyntax parent
             && node != parent.Initializers.First()

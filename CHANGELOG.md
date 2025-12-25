@@ -1,3 +1,110 @@
+# 1.2.4
+## What's Changed
+### Weird enter in closing when formatting XAML TextBlock [#1785](https://github.com/belav/csharpier/issues/1785)
+CSharpier was breaking an end element to a new line when it did not need to.
+```xml
+<!-- input & expected output -->
+<root>
+  <TextBlock Foreground="DarkGray">
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock>
+  <TextBlock>
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock>
+</root>
+
+<!-- 1.2.3 -->
+<root>
+  <TextBlock Foreground="DarkGray">
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock
+  >
+  <TextBlock>
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock>
+</root>
+```
+### Order Modifiers (IDE0036) not formatting when code is preceded by a comment. [#1784](https://github.com/belav/csharpier/issues/1784)
+When incorrectly ordered modifiers were preceded by a comment they were not being reordered. Thanks go to @TimothyMakkison for the contribution
+```c#
+// input & 1.2.3
+
+// Comment
+required public int Prop1 { get; set; }
+
+// expected output
+// Comment
+public required int Prop1 { get; set; }
+```
+### Performance issue when running CLI in project with pnpm on Windows [#1781](https://github.com/belav/csharpier/issues/1781)
+The code to determine if there is a version of CSharpier.MsBuild referenced that does not match the version of CSharpier being run has been optimized to not look in node_modules or .git. This significantly speeds things up in some setups.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.3...1.2.4
+# 1.2.3
+## What's Changed
+### Large directories ignored in .gitignore significantly impact performance. [#1776](https://github.com/belav/csharpier/issues/1776)
+CSharpier was enumerating all files within all subdirectories and then determining if they should be formatted or not. That logic was optimized to only enumerate files in directories that are not ignored.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.2...1.2.3
+# 1.2.2
+## What's Changed
+
+### The null coalescing operator is grouped in an unexpected place [#1769](https://github.com/belav/csharpier/issues/1769)
+Null coalescing is now consistently broken thanks to a contribution from @ogaken-1
+
+```c#
+// input & expected output
+var x =
+    someValue.SomeCall().SomeProperty.SomeProperty
+    ?? someValue.SomeCall().SomeProperty.SomeProperty;
+
+var x =
+    someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty
+    ?? someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty;
+
+var x =
+    someValue.SomeCall().A_______.B_______.C_______
+    ?? someValue.SomeCall().A_______.B_______.C_______;
+
+// 1.2.1
+var x =
+    someValue.SomeCall().SomeProperty.SomeProperty ?? someValue
+        .SomeCall()
+        .SomeProperty.SomeProperty;
+
+var x =
+    someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty ?? someValue
+        .SomeCall()
+        .SomeProperty?.SomeCall()
+        .SomeProperty;
+
+var x =
+    someValue.SomeCall().A_______.B_______.C_______ ?? someValue
+        .SomeCall()
+        .A_______.B_______.C_______;
+```
+### Xml formatter should not add a second line [#1760](https://github.com/belav/csharpier/issues/1760)
+When formatting an xml file with a declaration and extra blank line was being added.
+```xml
+<!-- input & expected output -->
+<?xml version="1.0" encoding="utf-8"?>
+
+<Element />
+
+<!-- 1.2.1 -->
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<Element />
+```
+
+### Git ignore patterns do not work the same as git [#1759](https://github.com/belav/csharpier/issues/1759)
+The handling of ignore patterns did not properly match how git handles them. The logic has been reworked and now has tests that compare it directly to git.
+
+### Fix server crash when launched without console [#1774](https://github.com/belav/csharpier/pull/1774)
+If a plugin launched `csharpier server` without a console it would crash. This has been resolved thanks to @rcdailey
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.1...1.2.2
 # 1.2.1
 ## What's Changed
 ### Multiline comments are now formatted in a single line in XML format [#1747](https://github.com/belav/csharpier/issues/1747)
@@ -3641,6 +3748,9 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
+
+
 
 
 

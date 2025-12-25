@@ -14,7 +14,7 @@ internal static class Argument
 
     public static Doc PrintModifiers(ArgumentSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null]);
+        var docs = new DocListBuilder(2);
         if (node.NameColon != null)
         {
             docs.Add(BaseExpressionColon.Print(node.NameColon, context));

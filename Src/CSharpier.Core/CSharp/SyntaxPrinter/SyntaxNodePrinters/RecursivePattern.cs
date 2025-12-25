@@ -18,7 +18,7 @@ internal static class RecursivePattern
 
     private static Doc Print(RecursivePatternSyntax node, bool includeType, PrintingContext context)
     {
-        var result = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
+        var result = new DocListBuilder(8);
         if (node.Type != null && includeType)
         {
             result.Add(Node.Print(node.Type, context));
