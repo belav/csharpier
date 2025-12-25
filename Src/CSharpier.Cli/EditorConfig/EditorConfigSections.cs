@@ -53,6 +53,11 @@ internal class EditorConfigSections
             printerOptions.EndOfLine = endOfLine;
         }
 
+        if (resolvedConfiguration.XmlWhitespaceSensitivity is { } xmlWhitespaceSensitivity)
+        {
+            printerOptions.XmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
+        }
+
         return printerOptions;
     }
 
@@ -63,6 +68,7 @@ internal class EditorConfigSections
         public int? TabWidth { get; }
         public int? MaxLineLength { get; }
         public EndOfLine? EndOfLine { get; }
+        public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; set; }
         public string? Formatter { get; }
 
         public ResolvedConfiguration(List<Section> sections)
@@ -104,9 +110,23 @@ internal class EditorConfigSections
             }
 
             var endOfLine = sections.LastOrDefault(o => o.EndOfLine != null)?.EndOfLine;
-            if (Enum.TryParse(endOfLine, true, out EndOfLine result))
+            if (Enum.TryParse(endOfLine, true, out EndOfLine parsedEndOfLine))
             {
-                this.EndOfLine = result;
+                this.EndOfLine = parsedEndOfLine;
+            }
+
+            var xmlWhitespaceSensitivity = sections
+                .LastOrDefault(o => o.XmlWhitespaceSensitivity != null)
+                ?.XmlWhitespaceSensitivity;
+            if (
+                Enum.TryParse(
+                    xmlWhitespaceSensitivity,
+                    true,
+                    out XmlWhitespaceSensitivity parsedXmlWhitespaceSensitivity
+                )
+            )
+            {
+                this.XmlWhitespaceSensitivity = parsedXmlWhitespaceSensitivity;
             }
 
             this.Formatter = sections.LastOrDefault(o => o.Formatter is not null)?.Formatter;
