@@ -98,16 +98,20 @@ public class OptionsProviderTests
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.csharpierrc.json",
-            @"{ 
-    ""printWidth"": 10, 
-    ""endOfLine"": ""crlf""
-}"
+            """
+{ 
+    "printWidth": 10, 
+    "endOfLine": "crlf",
+    "xmlWhitespaceSensitivity": "xaml"
+}
+"""
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
     }
 
     [Test]
@@ -118,16 +122,18 @@ public class OptionsProviderTests
         var context = new TestContext();
         context.WhenAFileExists(
             $"c:/test/.csharpierrc.{extension}",
-            @"
+            """
 printWidth: 10
 endOfLine: crlf
-"
+xmlWhitespaceSensitivity: xaml
+"""
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
     }
 
     [Test]
@@ -252,11 +258,12 @@ endOfLine: crlf
         context.WhenAFileExists(
             "c:/test/.csharpierrc",
             """
-            overrides:
-                - files: "*.{override,another}"
-                  formatter: "csharp"
-                  indentSize: 2
-            """
+overrides:
+    - files: "*.{override,another}"
+      formatter: "csharp"
+      indentSize: 2
+      xmlWhitespaceSensitivity: ignore
+"""
         );
 
         var result = await context.CreateProviderAndGetOptionsFor(
@@ -265,6 +272,7 @@ endOfLine: crlf
         );
 
         result.IndentSize.Should().Be(2);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
     }
 
     [Test]
@@ -274,16 +282,17 @@ endOfLine: crlf
         context.WhenAFileExists(
             "c:/test/.csharpierrc",
             """
-            {
-                "overrides": [
-                    {
-                        "files": "*.{override,another}",
-                        "formatter": "csharp",
-                        "indentSize": 2
-                    }
-                ]
-            }
-            """
+{
+    "overrides": [
+        {
+            "files": "*.{override,another}",
+            "formatter": "csharp",
+            "indentSize": 2,
+            "xmlWhitespaceSensitivity": "ignore"
+        }
+    ]
+}
+"""
         );
 
         var result = await context.CreateProviderAndGetOptionsFor(
@@ -292,6 +301,7 @@ endOfLine: crlf
         );
 
         result.IndentSize.Should().Be(2);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
     }
 
     [Test]
@@ -333,13 +343,15 @@ endOfLine: crlf
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_style = space
-indent_size = 2
-max_line_length = 10
-end_of_line = crlf
-"
+            """
+
+            [*]
+            indent_style = space
+            indent_size = 2
+            max_line_length = 10
+            end_of_line = crlf
+            csharpier_xml_whitespace_sensitivity = xaml
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -348,6 +360,7 @@ end_of_line = crlf
         result.IndentSize.Should().Be(2);
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
     }
 
     [Test]
@@ -356,19 +369,21 @@ end_of_line = crlf
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-# EditorConfig is awesome: https://EditorConfig.org
+            """
 
-# top-most EditorConfig file
-root = true
+            # EditorConfig is awesome: https://EditorConfig.org
 
-[*]
-indent_style = space
-indent_size = 2
-max_line_length = 10
-; Windows-style line endings
-end_of_line = crlf
-"
+            # top-most EditorConfig file
+            root = true
+
+            [*]
+            indent_style = space
+            indent_size = 2
+            max_line_length = 10
+            ; Windows-style line endings
+            end_of_line = crlf
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -385,13 +400,15 @@ end_of_line = crlf
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_size = 2
+            """
 
-[*]
-indent_size = 4
-"
+            [*]
+            indent_size = 2
+
+            [*]
+            indent_size = 4
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -405,11 +422,13 @@ indent_size = 4
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_size = 2
-indent_size = 4
-"
+            """
+
+            [*]
+            indent_size = 2
+            indent_size = 4
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -423,10 +442,12 @@ indent_size = 4
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*
-indent_size==
-"
+            """
+
+            [*
+            indent_size==
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -442,11 +463,13 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            $@"
-    [*]
-    indent_style = tab
-    {propertyName} = 2
-    "
+            $"""
+
+                [*]
+                indent_style = tab
+                {propertyName} = 2
+                
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -461,12 +484,14 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_style = tab
-    indent_size = 1
-    tab_width = 3
-    "
+            """
+
+                [*]
+                indent_style = tab
+                indent_size = 1
+                tab_width = 3
+                
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -481,11 +506,13 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_size = tab
-    tab_width = 3
-    "
+            """
+
+                [*]
+                indent_size = tab
+                tab_width = 3
+                
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -499,19 +526,23 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/subfolder/.editorconfig",
-            @"
-    [*]
-    indent_size = 1
-    "
+            """
+
+                [*]
+                indent_size = 1
+                
+            """
         );
 
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_size = 2
-    max_line_length = 10
-    "
+            """
+
+                [*]
+                indent_size = 2
+                max_line_length = 10
+                
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor(
@@ -528,18 +559,22 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/subfolder/.editorconfig",
-            @"
-    [*]
-    indent_size = unset
-    "
+            """
+
+                [*]
+                indent_size = unset
+                
+            """
         );
 
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_size = 2
-    "
+            """
+
+                [*]
+                indent_size = 2
+                
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor(
@@ -555,20 +590,24 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/subfolder/.editorconfig",
-            @"
-    root = true
+            """
 
-    [*]
-    indent_size = 2
-    "
+                root = true
+
+                [*]
+                indent_size = 2
+                
+            """
         );
 
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-    [*]
-    max_line_length = 2
-    "
+            """
+
+                [*]
+                max_line_length = 2
+                
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor(
@@ -584,13 +623,15 @@ indent_size==
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_size = 1
+            """
 
-[*.cs]
-indent_size = 2
-"
+            [*]
+            indent_size = 1
+
+            [*.cs]
+            indent_size = 2
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -603,13 +644,15 @@ indent_size = 2
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_size = 1
+            """
 
-[*.{cs}]
-indent_size = 2
-"
+            [*]
+            indent_size = 1
+
+            [*.{cs}]
+            indent_size = 2
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -622,13 +665,15 @@ indent_size = 2
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_size = 1
+            """
 
-[*.{csx,cs}]
-indent_size = 2
-"
+            [*]
+            indent_size = 1
+
+            [*.{csx,cs}]
+            indent_size = 2
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -636,7 +681,7 @@ indent_size = 2
     }
 
     [Test]
-    public async Task Should_Return_IndentSize_For_Formatter_In_Editorconfig()
+    public async Task Should_Return_Overrides_In_Editorconfig()
     {
         var context = new TestContext();
         context.WhenAFileExists(
@@ -645,12 +690,14 @@ indent_size = 2
             [*.cst]
             indent_size = 2
             csharpier_formatter = csharp
+            csharpier_xml_whitespace_sensitivity = ignore
             """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cst");
 
         result.IndentSize.Should().Be(2);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
     }
 
     [Test]
@@ -659,10 +706,12 @@ indent_size = 2
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*.cs]
-indent_size = 2
-"
+            """
+
+            [*.cs]
+            indent_size = 2
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor(
@@ -678,10 +727,12 @@ indent_size = 2
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*.cs]
-indent_size = 2
-"
+            """
+
+            [*.cs]
+            indent_size = 2
+
+            """
         );
         context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
@@ -695,10 +746,12 @@ indent_size = 2
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/subfolder/.editorconfig",
-            @"
-[*.cs]
-indent_size = 2
-"
+            """
+
+            [*.cs]
+            indent_size = 2
+
+            """
         );
         context.WhenAFileExists("c:/test/.csharpierrc", "indentSize: 1");
 
@@ -715,11 +768,13 @@ indent_size = 2
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*]
-indent_size = 2
-INVALID
-"
+            """
+
+            [*]
+            indent_size = 2
+            INVALID
+
+            """
         );
 
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
@@ -733,18 +788,22 @@ INVALID
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/subfolder/.editorconfig",
-            @"
-    [*]
-    indent_size = 2
-    "
+            """
+
+                [*]
+                indent_size = 2
+                
+            """
         );
 
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-    [*]
-    indent_size = 1
-    "
+            """
+
+                [*]
+                indent_size = 1
+                
+            """
         );
 
         context.WhenAFileExists("c:/test/.csharpierignore", "/subfolder/.editorconfig");
@@ -762,10 +821,12 @@ INVALID
         var context = new TestContext();
         context.WhenAFileExists(
             "c:/test/.editorconfig",
-            @"
-[*.cs]
-indent_size = 2
-"
+            """
+
+            [*.cs]
+            indent_size = 2
+
+            """
         );
         context.WhenAFileExists("c:/test/subfolder/.csharpierrc", "indentSize: 1");
 
@@ -790,6 +851,7 @@ indent_size = 2
         printerOptions.IndentSize.Should().Be(2);
         printerOptions.UseTabs.Should().BeFalse();
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
+        printerOptions.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Strict);
     }
 
     private sealed class TestContext

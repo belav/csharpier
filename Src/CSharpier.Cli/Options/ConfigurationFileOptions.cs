@@ -10,6 +10,10 @@ internal class ConfigurationFileOptions
     public int? IndentSize { get; init; }
     public bool UseTabs { get; init; }
 
+    [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
+    public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; } =
+        XmlWhitespaceSensitivity.Strict;
+
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
 
@@ -38,6 +42,7 @@ internal class ConfigurationFileOptions
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
+                XmlWhitespaceSensitivity = matchingOverride.XmlWhitespaceSensitivity,
             };
         }
 
@@ -50,6 +55,7 @@ internal class ConfigurationFileOptions
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
+                XmlWhitespaceSensitivity = this.XmlWhitespaceSensitivity,
             };
         }
 
@@ -72,6 +78,10 @@ internal class Override
     public int PrintWidth { get; init; } = 100;
     public int IndentSize { get; init; } = 4;
     public bool UseTabs { get; init; }
+
+    [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
+    public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; } =
+        XmlWhitespaceSensitivity.Strict;
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
