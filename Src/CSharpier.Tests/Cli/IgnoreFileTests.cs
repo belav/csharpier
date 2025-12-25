@@ -642,7 +642,13 @@ public class IgnoreFileTests
         }
 
         var ignoreFile = IgnoreFile
-            .CreateAsync(this.gitRepository.RepoPath, this.fileSystem, null, CancellationToken.None)
+            .CreateAsync(
+                this.gitRepository.RepoPath,
+                this.fileSystem,
+                null,
+                null,
+                CancellationToken.None
+            )
             .GetAwaiter()
             .GetResult();
 
