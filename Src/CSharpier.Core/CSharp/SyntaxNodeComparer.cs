@@ -50,6 +50,7 @@ internal partial class SyntaxNodeComparer
             cSharpParseOptions,
             cancellationToken: cancellationToken
         );
+        this.CompareFunc = Compare;
     }
 
     public string CompareSource()
@@ -148,14 +149,16 @@ internal partial class SyntaxNodeComparer
         return Equal;
     }
 
+#pragma warning disable CA1822
     private CompareResult CompareLists<T>(
-        IReadOnlyList<T> originalList,
-        IReadOnlyList<T> formattedList,
-        Func<T, T, CompareResult> comparer,
-        Func<T, TextSpan> getSpan,
+        T originalList,
+        T formattedList,
+        Func<SyntaxToken, SyntaxToken, CompareResult> comparer,
+        Func<SyntaxToken, TextSpan> getSpan,
         TextSpan originalParentSpan,
         TextSpan newParentSpan
     )
+        where T : IReadOnlyList<SyntaxToken>
     {
         for (var x = 0; x < originalList.Count || x < formattedList.Count; x++)
         {
@@ -169,25 +172,71 @@ internal partial class SyntaxNodeComparer
                 return NotEqual(getSpan(originalList[x]), newParentSpan);
             }
 
-            if (
-                originalList[x] is SyntaxNode originalNode
-                && formattedList[x] is SyntaxNode formattedNode
-            )
+            var result = comparer(originalList[x], formattedList[x]);
+            if (result.IsInvalid)
             {
-                this.originalStack.Push((originalNode, originalNode.Parent));
-                this.formattedStack.Push((formattedNode, formattedNode.Parent));
-            }
-            else
-            {
-                var result = comparer(originalList[x], formattedList[x]);
-                if (result.IsInvalid)
-                {
-                    return result;
-                }
+                return result;
             }
         }
 
         return Equal;
+    }
+#pragma warning restore CA1822
+
+    private CompareResult CompareLists<T>(
+        T originalList,
+        T formattedList,
+        Func<SyntaxNode, SyntaxNode, CompareResult> comparer,
+        Func<SyntaxNode, TextSpan> getSpan,
+        TextSpan originalParentSpan,
+        TextSpan newParentSpan
+    )
+        where T : IReadOnlyList<SyntaxNode>
+    {
+        for (var x = 0; x < originalList.Count || x < formattedList.Count; x++)
+        {
+            if (x == originalList.Count)
+            {
+                return NotEqual(originalParentSpan, getSpan(formattedList[x]));
+            }
+
+            if (x == formattedList.Count)
+            {
+                return NotEqual(getSpan(originalList[x]), newParentSpan);
+            }
+
+            var originalNode = originalList[x];
+            var formattedNode = formattedList[x];
+            this.originalStack.Push((originalNode, originalNode.Parent));
+            this.formattedStack.Push((formattedNode, formattedNode.Parent));
+        }
+
+        return Equal;
+    }
+
+    private static SyntaxToken[] AllSeparatorsButLast(in SeparatedSyntaxList<SyntaxNode> list)
+    {
+        if (list.Count <= 1)
+        {
+            return [];
+        }
+
+        var tokens = new SyntaxToken[list.Count - 1];
+        var tokenIndex = 0;
+
+        foreach (var element in list.GetWithSeparators())
+        {
+            if (element.IsToken)
+            {
+                tokens[tokenIndex++] = element.AsToken();
+                if (tokenIndex == tokens.Length)
+                {
+                    break;
+                }
+            }
+        }
+
+        return tokens;
     }
 
     private static CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
@@ -209,6 +258,8 @@ internal partial class SyntaxNodeComparer
             NewSpan = formattedSpan,
         };
     }
+
+    private Func<SyntaxToken, SyntaxToken, CompareResult> CompareFunc { get; }
 
     private CompareResult Compare(SyntaxToken originalToken, SyntaxToken formattedToken)
     {
