@@ -4,7 +4,7 @@ using CSharpier.Core;
 
 namespace CSharpier.Tests.Cli.Options;
 
-public class EditorConfigFileParserTests
+public class CSharpierConfigParserTests
 {
     [Test]
     public void Should_Parse_Yaml_With_Overrides()
