@@ -9,7 +9,11 @@ internal static class Argument
 {
     public static Doc Print(ArgumentSyntax node, PrintingContext context)
     {
-        return Doc.Concat(PrintModifiers(node, context), Node.Print(node.Expression, context));
+        var modifiers = PrintModifiers(node, context);
+
+        return modifiers == Doc.Null
+            ? Node.Print(node.Expression, context)
+            : Doc.Concat(modifiers, Node.Print(node.Expression, context));
     }
 
     public static Doc PrintModifiers(ArgumentSyntax node, PrintingContext context)
