@@ -115,7 +115,7 @@ internal static class BasePropertyDeclaration
         PrintingContext context
     )
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null]);
+        var docs = new DocListBuilder(6);
         if (
             node.AttributeLists.Count > 1
             || node.Body != null

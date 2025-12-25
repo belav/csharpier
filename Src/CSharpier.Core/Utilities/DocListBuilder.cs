@@ -1,22 +1,19 @@
 using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Utilities;
 
 // From https://github.com/dotnet/runtime/blob/f5c73447ca9dcb3407d0143829bbf708c04170c1/src/libraries/System.Private.CoreLib/src/System/Collections/Generic/ValueListBuilder.cs#L10
-internal ref struct ValueListBuilder<T>
+internal ref struct DocListBuilder
 {
-    private Span<T> span;
-    private T[]? arrayFromPool;
+    private Span<Doc> span;
+    private Doc[]? arrayFromPool;
     private int position;
 
-    public ValueListBuilder(Span<T?> scratchBuffer)
-    {
-        this.span = scratchBuffer!;
-    }
-
-    public ValueListBuilder(int capacity)
+    public DocListBuilder(int capacity)
     {
         this.Grow(capacity);
     }
@@ -32,7 +29,7 @@ internal ref struct ValueListBuilder<T>
         }
     }
 
-    public ref T this[int index]
+    public ref Doc this[int index]
     {
         get
         {
@@ -45,7 +42,7 @@ internal ref struct ValueListBuilder<T>
     public void Clear() => this.Length = 0;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Add(T item)
+    public void Add(Doc item)
     {
         var pos = this.position;
 
@@ -63,7 +60,7 @@ internal ref struct ValueListBuilder<T>
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Add(params ReadOnlySpan<T> source)
+    public void Add(params ReadOnlySpan<Doc> source)
     {
         var pos = this.position;
         var span = this.span;
@@ -79,7 +76,7 @@ internal ref struct ValueListBuilder<T>
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private void AppendMultiChar(scoped ReadOnlySpan<T> source)
+    private void AppendMultiChar(scoped ReadOnlySpan<Doc> source)
     {
         if ((uint)(this.position + source.Length) > (uint)this.span.Length)
         {
@@ -90,7 +87,7 @@ internal ref struct ValueListBuilder<T>
         this.position += source.Length;
     }
 
-    public void Insert(int index, scoped ReadOnlySpan<T> source)
+    public void Insert(int index, scoped ReadOnlySpan<Doc> source)
     {
         Debug.Assert(index == 0, "Implementation currently only supports index == 0");
 
@@ -106,7 +103,7 @@ internal ref struct ValueListBuilder<T>
 
     // Hide uncommon path
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private void AddWithResize(T item)
+    private void AddWithResize(Doc item)
     {
         Debug.Assert(this.position == this.span.Length);
         var pos = this.position;
@@ -115,12 +112,12 @@ internal ref struct ValueListBuilder<T>
         this.position = pos + 1;
     }
 
-    public readonly ReadOnlySpan<T> AsSpan()
+    public readonly ReadOnlySpan<Doc> AsSpan()
     {
         return this.span[..this.position];
     }
 
-    public readonly T[] ToArray()
+    public readonly Doc[] ToArray()
     {
         return this.AsSpan().ToArray();
     }
@@ -132,7 +129,7 @@ internal ref struct ValueListBuilder<T>
         if (toReturn != null)
         {
             this.arrayFromPool = null;
-            ArrayPool<T>.Shared.Return(toReturn);
+            ArrayPool<Doc>.Shared.Return(toReturn);
         }
     }
 
@@ -166,14 +163,19 @@ internal ref struct ValueListBuilder<T>
             );
         }
 
-        var array = ArrayPool<T>.Shared.Rent(nextCapacity);
+        var array = ArrayPool<Doc>.Shared.Rent(nextCapacity);
         this.span.CopyTo(array);
 
         var toReturn = this.arrayFromPool;
         this.span = this.arrayFromPool = array;
         if (toReturn != null)
         {
-            ArrayPool<T>.Shared.Return(toReturn);
+            ArrayPool<Doc>.Shared.Return(toReturn);
         }
+    }
+
+    public override readonly string ToString()
+    {
+        return DocSerializer.Serialize(Doc.Concat(this.AsSpan().ToArray()));
     }
 }

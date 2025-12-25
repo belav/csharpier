@@ -20,13 +20,13 @@ internal static class MembersWithForcedLines
     )
         where T : MemberDeclarationSyntax
     {
-        var result = new List<Doc>();
+        var result = new List<Doc>(members.Count * 3);
         if (!skipFirstHardLine)
         {
             result.Add(Doc.HardLine);
         }
 
-        var unFormattedCode = new ValueListBuilder<char>(stackalloc char[64]);
+        var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
         for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
@@ -37,7 +37,7 @@ internal static class MembersWithForcedLines
             if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
             {
                 skipAddingLineBecauseIgnoreEnded = true;
-                result.Add(unFormattedCode.AsSpan().Trim().ToString());
+                result.Add(unFormattedCode.ToString().Trim());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
@@ -231,10 +231,8 @@ internal static class MembersWithForcedLines
 
         if (unFormattedCode.Length > 0)
         {
-            result.Add(unFormattedCode.AsSpan().ToString().Trim());
+            result.Add(unFormattedCode.ToString().Trim());
         }
-
-        unFormattedCode.Dispose();
 
         return result;
     }

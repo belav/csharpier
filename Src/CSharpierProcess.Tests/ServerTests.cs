@@ -1,15 +1,13 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http.Json;
+using AwesomeAssertions;
 using CliWrap;
 using CliWrap.EventStream;
 using CSharpier.Cli.Server;
-using FluentAssertions;
-using NUnit.Framework;
 
-namespace CSharpier.Cli.Tests;
+namespace CSharpierProcess.Tests;
 
-[TestFixture]
 public class ServerTests
 {
     private static readonly HttpClient httpClient = new();
@@ -19,7 +17,7 @@ public class ServerTests
     // ignore file
     // option file
     [Test]
-    [Ignore("Not working on GH, test locally on linux?")]
+    [Skip("Not working on GH, test locally on linux?")]
     public async Task Stuff()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
@@ -72,7 +70,7 @@ public class ServerTests
     }
 
     [Test]
-    [Ignore("leaves things running when it fails and probably won't work on GH")]
+    [Skip("leaves things running when it fails and probably won't work on GH")]
     public void RunTwo()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");

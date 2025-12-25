@@ -18,7 +18,7 @@ internal static class RecursivePattern
 
     private static Doc Print(RecursivePatternSyntax node, bool includeType, PrintingContext context)
     {
-        var result = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
+        var result = new DocListBuilder(8);
         if (node.Type != null && includeType)
         {
             result.Add(Node.Print(node.Type, context));
@@ -78,9 +78,8 @@ internal static class RecursivePattern
                 result.Add(
                     Doc.Group(
                         node.Type != null
-                        && !Enumerable.Any(
-                            node.PropertyPatternClause.OpenBraceToken.LeadingTrivia,
-                            o => o.IsDirective || o.IsComment()
+                        && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.Any(o =>
+                            o.IsDirective || o.IsComment()
                         )
                             ? Doc.Line
                             : Doc.Null,

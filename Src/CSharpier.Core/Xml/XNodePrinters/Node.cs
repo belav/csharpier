@@ -11,37 +11,19 @@ internal static class Node
     {
         if (node.NodeType is XmlNodeType.Document)
         {
-            var result = new ValueListBuilder<Doc>(node.Nodes.Count * 2 + 1);
+            var result = new DocListBuilder(node.Nodes.Count * 2 + 1);
 
             foreach (var childNode in node.Nodes)
             {
-                result.Add(Print(childNode, context), Doc.HardLine);
+                result.Add(
+                    Print(childNode, context),
+                    childNode.NodeType is XmlNodeType.Whitespace ? Doc.Null : Doc.HardLine
+                );
             }
 
             result.Add(Doc.HardLine);
 
             return Doc.Concat(ref result);
-        }
-        if (node.NodeType == XmlNodeType.XmlDeclaration)
-        {
-            var version = node.Attributes.FirstOrDefault(o => o.Name == "version")?.Value;
-            var encoding = node.Attributes.FirstOrDefault(o => o.Name == "encoding")?.Value;
-            var standalone = node.Attributes.FirstOrDefault(o => o.Name == "standalone")?.Value;
-
-            var declaration = $"<?xml version=\"{version}\"";
-            if (!string.IsNullOrEmpty(encoding))
-            {
-                declaration += $" encoding=\"{encoding}\"";
-            }
-
-            if (!string.IsNullOrEmpty(standalone))
-            {
-                declaration += $" standalone=\"{standalone}\"";
-            }
-
-            declaration += "?>";
-
-            return declaration;
         }
 
         if (node.NodeType == XmlNodeType.DocumentType)

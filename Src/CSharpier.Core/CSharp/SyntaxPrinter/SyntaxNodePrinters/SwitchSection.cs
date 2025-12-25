@@ -8,7 +8,7 @@ internal static class SwitchSection
 {
     public static Doc Print(SwitchSectionSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null]);
+        var docs = new DocListBuilder(2);
         docs.Add(Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))));
         if (node.Statements is [BlockSyntax blockSyntax])
         {

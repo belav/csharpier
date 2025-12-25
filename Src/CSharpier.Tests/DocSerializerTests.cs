@@ -1,12 +1,9 @@
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.DocTypes;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 internal sealed class DocSerializerTests
 {
     [Test]
@@ -195,8 +192,9 @@ internal sealed class DocSerializerTests
         );
     }
 
-    [TestCase(CommentType.SingleLine)]
-    [TestCase(CommentType.MultiLine)]
+    [Test]
+    [Arguments(CommentType.SingleLine)]
+    [Arguments(CommentType.MultiLine)]
     public void Should_Print_LeadingComment(CommentType commentType)
     {
         var doc = Doc.LeadingComment("1", commentType);
@@ -206,8 +204,9 @@ internal sealed class DocSerializerTests
         ActualShouldBe(actual, @$"Doc.LeadingComment(""1"", CommentType.{commentType})");
     }
 
-    [TestCase(CommentType.SingleLine)]
-    [TestCase(CommentType.MultiLine)]
+    [Test]
+    [Arguments(CommentType.SingleLine)]
+    [Arguments(CommentType.MultiLine)]
     public void Should_Print_TrailingComment(CommentType commentType)
     {
         var doc = Doc.TrailingComment("1", commentType);

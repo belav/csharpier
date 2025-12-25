@@ -1,16 +1,14 @@
 #pragma warning disable
 
+using AwesomeAssertions;
 using CSharpier.Core.Xml;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
 public class RawNodeReaderTests
 {
     [Test]
-    [Ignore("TODO 1599 make this work when keeping lines is working")]
+    [Skip("TODO 1599 make this work when keeping lines is working")]
     public void Should_Keep_Only_Whitespace()
     {
         var xml = "<JustWhitespace> </JustWhitespace>";
@@ -91,11 +89,11 @@ public class RawNodeReaderTests
         attributes[1].Value.Should().Be("2");
     }
 
-    [TestCase("<Element Attribute=\"x->x\"/>", "x->x")]
-    [TestCase("<Element Attribute='SomeText\"'/>", "SomeText\"")]
-    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
-    [TestCase("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
-    [TestCase(
+    [Arguments("<Element Attribute=\"x->x\"/>", "x->x")]
+    [Arguments("<Element Attribute='SomeText\"'/>", "SomeText\"")]
+    [Arguments("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [Arguments("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
+    [Arguments(
         """
             <Element
               Attribute=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
