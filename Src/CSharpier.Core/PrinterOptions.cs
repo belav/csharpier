@@ -27,6 +27,8 @@ internal class PrinterOptions(Formatter formatter)
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
     public Formatter Formatter { get; set; } = formatter;
+    public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; } =
+        XmlWhitespaceSensitivity.Strict;
 
     public const int WidthUsedByTests = 100;
 
