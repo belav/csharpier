@@ -1,0 +1,24 @@
+name: "Close stale issues and PRs"
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  stale:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v10
+        with:
+          exempt-all-milestones: "true"
+          exempt-issue-labels: "status:needs discussion,priority:low,priority:medium,priority:high,priority:wishful thinking,type:bug,type:enhancement"
+          stale-issue-message: "This issue is stale because it has been open 90 days with no activity and was not assigned a label or milestone. Leave a comment if this still needs to be addressed or this will be closed in 7 days."
+          stale-pr-message: "This PR is stale because it has been open 90 days with no activity. Leave a comment if this is still needed or this will be closed in 7 days."
+          close-issue-message: "This issue was closed because it has been stalled for 7 days with no activity."
+          close-pr-message: "This PR was closed because it has been stalled for 7 days with no activity."
+          days-before-issue-stale: 90
+          days-before-pr-stale: 90
+          days-before-issue-close: 7
+          days-before-pr-close: 7
+          operations-per-run: "90"

@@ -31,7 +31,8 @@ repos:
       - id: dotnet-tool-restore
         name: Install .NET tools
         entry: dotnet tool restore
-        language: system
+        # for pre-commit < 4.4.0 use language: system
+        language: unsupported
         always_run: true
         pass_filenames: false
         stages:

@@ -73,14 +73,14 @@ internal static partial class CSharpierIgnore
         where T : SyntaxNode
     {
         var statements = new List<Doc>();
-        var unFormattedCode = new ValueListBuilder<char>(stackalloc char[64]);
+        var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
 
         foreach (var node in list)
         {
             if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
-                statements.Add(unFormattedCode.AsSpan().Trim().ToString());
+                statements.Add(unFormattedCode.ToString().Trim());
                 unFormattedCode.Clear();
                 printUnformatted = false;
             }
@@ -101,10 +101,8 @@ internal static partial class CSharpierIgnore
 
         if (unFormattedCode.Length > 0)
         {
-            statements.Add(unFormattedCode.AsSpan().Trim().ToString());
+            statements.Add(unFormattedCode.ToString().Trim());
         }
-
-        unFormattedCode.Dispose();
 
         return statements;
     }

@@ -1,14 +1,11 @@
 using System.Text;
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
 using Microsoft.CodeAnalysis;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.Samples;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class Samples
 {
     [Test]

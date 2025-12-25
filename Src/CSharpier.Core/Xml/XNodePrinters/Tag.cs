@@ -53,7 +53,7 @@ internal static class Tag
     {
         var lastChild = rawNode.Nodes.LastOrDefault();
 
-        return lastChild is not null && NeedsToBorrowParentClosingTagStartMarker(lastChild)
+        return lastChild is not null && PrintParentClosingTagStartWithContent(lastChild)
             ? Doc.Null
             : PrintClosingTagStartMarker(rawNode, context);
     }
@@ -78,7 +78,7 @@ internal static class Tag
 
     public static Doc PrintClosingTagSuffix(RawNode rawNode, PrintingContext context)
     {
-        return NeedsToBorrowParentClosingTagStartMarker(rawNode)
+        return PrintParentClosingTagStartWithContent(rawNode)
                 ? PrintClosingTagStartMarker(rawNode.Parent!, context)
             : NeedsToBorrowNextOpeningTagStartMarker(rawNode)
                 ? PrintOpeningTagStartMarker(rawNode.NextNode!, context)
@@ -113,7 +113,7 @@ internal static class Tag
         ;
     }
 
-    private static bool NeedsToBorrowParentClosingTagStartMarker(RawNode rawNode)
+    private static bool PrintParentClosingTagStartWithContent(RawNode rawNode)
     {
         /*
          *     <p>
@@ -126,9 +126,35 @@ internal static class Tag
          *        ^^^
          *     >
          */
+        // TODO #1790 we really want this last condition only if the indentation of the last line of the text value matches
+        // the indentation of the start element. Bleh.
+        /*
+may have to handle one of these vs the second
+<Root>
+  <Element Attribute="TheSign">
+    Life is demanding.
+    </Element>
+</Root>
+<Root>
+  <Element Attribute="TheSign">
+    Life is demanding.
+  </Element>
+</Root>
+there is also this case
+<Root>
+       <Element >
+    Life is demanding.
+         </Element>
+</Root>
+         */
         return rawNode.NextNode is null
             && rawNode.IsTextLike()
-            && rawNode.GetLastDescendant().NodeType is XmlNodeType.Text;
+            && rawNode.GetLastDescendant() is { NodeType: XmlNodeType.Text } textNode
+            && (
+                textNode.Value[^1] is not (' ' or '\r' or '\n')
+                || !textNode.Value.Contains('\n')
+                || rawNode.Parent!.Nodes.Any(o => !o.IsTextLike())
+            );
     }
 
     public static bool NeedsToBorrowParentOpeningTagEndMarker(RawNode rawNode)

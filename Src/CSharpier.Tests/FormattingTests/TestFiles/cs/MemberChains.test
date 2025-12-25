@@ -280,3 +280,15 @@ SomeObject<SomeThing>.SomeProperty.SomeOtherProperty = 1;
 
 // CommentOnGenericDoesNotBreakChain
 SomeObject<SomeThing>.SomeProperty.CallMethod();
+
+websiteQueryable = websiteQueryable
+    .Include(o => o.Categories)
+    .Include(o => o.Categories)
+        .ThenInclude(c => c.Products)
+    .Include(o => o.Categories)
+        .ThenInclude(c => c.RuleManager)
+            .ThenInclude(rm => rm.RuleClauses)
+    .Include(o => o.Categories)
+        .ThenInclude(c => c.RuleManager)
+            .ThenInclude(rm => rm.RuleClauses)
+                .ThenInclude(rc => rc.RuleTypeOption);

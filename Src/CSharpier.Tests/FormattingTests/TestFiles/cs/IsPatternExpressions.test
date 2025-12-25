@@ -42,11 +42,19 @@ class ClassName
 
         var useLine =
             node.OperatorToken.Kind()
-                is SyntaxKind.BarBarToken
-                    or SyntaxKind.BarToken
-                    or SyntaxKind.AmpersandAmpersandToken
-                    or SyntaxKind.AmpersandToken
-                    or SyntaxKind.PlusToken;
+            is SyntaxKind.BarBarToken
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken;
+        var useLine = (
+            node.OperatorToken.Kind()
+            is SyntaxKind.BarBarToken
+                or SyntaxKind.BarToken
+                or SyntaxKind.AmpersandAmpersandToken
+                or SyntaxKind.AmpersandToken
+                or SyntaxKind.PlusToken
+        );
 
         if (
             someRandomValue___________________ is SomeRandomType someRandomType
@@ -75,32 +83,32 @@ class ClassName
 
         var value =
             someOtherValue
-                is SomeType___________________
-                    {
-                        SomeProperty: SomeOtherType_____________________________________________
-                    }
-                    or SomeThirdType___________;
-
-        var value =
-            someOtherValue
-                is SomeType___________________
-                    {
-                        SomeProperty: SomeOtherType_____________________________________________,
-                        AnotherProperty: SomeType
-                    }
-                    or SomeThirdType___________;
-
-        var value =
-            someOtherValue
-                is SomeType___________________ { SomeProperty: SomeType or SomeOtherType };
-
-        var value =
-            someOtherValue
-                is SomeType___________________
+            is SomeType___________________
                 {
-                    SomeProperty: SomeLongType_______________
-                        or SomeOtherLongType___________________
-                };
+                    SomeProperty: SomeOtherType_____________________________________________
+                }
+                or SomeThirdType___________;
+
+        var value =
+            someOtherValue
+            is SomeType___________________
+                {
+                    SomeProperty: SomeOtherType_____________________________________________,
+                    AnotherProperty: SomeType
+                }
+                or SomeThirdType___________;
+
+        var value =
+            someOtherValue is SomeType___________________
+            {
+                SomeProperty: SomeType or SomeOtherType
+            };
+
+        var value =
+            someOtherValue is SomeType___________________
+            {
+                SomeProperty: SomeLongType_______________ or SomeOtherLongType___________________
+            };
 
         var value =
             someOtherValue
@@ -250,5 +258,13 @@ class ClassName
         ) { }
 
         var needsUpdatedRoslyn = y is y ? [] : z ?? [];
+
+        var isOnArgumentListBracketOrComma =
+            targetToken.Parent is
+            (
+                kind: SyntaxKind.ArgumentList
+                    or SyntaxKind.AttributeArgumentList
+                    or SyntaxKind.ArrayRankSpecifier
+            );
     }
 }

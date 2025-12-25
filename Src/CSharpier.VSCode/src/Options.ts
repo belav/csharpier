@@ -14,7 +14,7 @@ class OptionsImpl implements Options {
     }
 }
 
-export const options: Options = new OptionsImpl();
+export let options: Options = new OptionsImpl();
 
 function readOptionFromConfig<T>(
     config: vscode.WorkspaceConfiguration,
