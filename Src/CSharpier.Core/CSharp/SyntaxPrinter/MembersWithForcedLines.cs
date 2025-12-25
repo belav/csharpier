@@ -20,7 +20,7 @@ internal static class MembersWithForcedLines
     )
         where T : MemberDeclarationSyntax
     {
-        var result = new List<Doc>();
+        var result = new List<Doc>(members.Count * 3);
         if (!skipFirstHardLine)
         {
             result.Add(Doc.HardLine);
