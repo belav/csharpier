@@ -19,7 +19,7 @@ internal static class Parameter
             if (
                 node.AttributeLists.Count < 2
                 && (
-                    Enumerable.Any(node.GetLeadingTrivia(), o => o.IsComment())
+                    node.GetLeadingTrivia().Any(o => o.IsComment())
                     || node.Parent is ParameterListSyntax { Parameters.Count: 0 }
                 )
             )
