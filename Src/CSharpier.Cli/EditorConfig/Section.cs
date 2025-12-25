@@ -13,6 +13,8 @@ internal class Section(SectionData section, string directory)
     public string? MaxLineLength { get; } = section.Keys["max_line_length"];
     public string? EndOfLine { get; } = section.Keys["end_of_line"];
     public string? Formatter { get; } = section.Keys["csharpier_formatter"];
+    public string? XmlWhitespaceSensitivity { get; } =
+        section.Keys["csharpier_xml_whitespace_sensitivity"];
 
     public bool IsMatch(string fileName, bool ignoreDirectory)
     {
