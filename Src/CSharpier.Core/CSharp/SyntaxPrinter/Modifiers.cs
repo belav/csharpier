@@ -1,4 +1,5 @@
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter;
