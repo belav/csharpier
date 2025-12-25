@@ -1,11 +1,9 @@
+using AwesomeAssertions;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.Cli.Options;
 
-[TestFixture]
 public class EditorConfigFileParserTests
 {
     [Test]

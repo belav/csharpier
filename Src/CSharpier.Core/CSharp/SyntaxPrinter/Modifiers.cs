@@ -1,4 +1,5 @@
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter;
@@ -101,9 +102,11 @@ internal static class Modifiers
         // reordering modifiers inside of #ifs can lead to code that doesn't compile
         var willReorderModifiers =
             modifiers.Count > 1
-            && !modifiers.Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()));
+            && !modifiers.Skip(1).Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()))
+            && !modifiers[0].LeadingTrivia.Any(p => p.IsDirective);
 
         var sortedModifiers = modifiers.ToArray();
+        var leadingToken = sortedModifiers.FirstOrDefault();
         if (willReorderModifiers)
         {
             Array.Sort(sortedModifiers, Comparer);
@@ -112,6 +115,15 @@ internal static class Modifiers
         if (willReorderModifiers && !sortedModifiers.SequenceEqual(modifiers))
         {
             context.State.ReorderedModifiers = true;
+
+            var leadingTrivia = leadingToken.LeadingTrivia;
+            var leadingTokenIndex = Array.FindIndex(
+                sortedModifiers,
+                token => token == leadingToken
+            );
+            sortedModifiers[leadingTokenIndex] = sortedModifiers[leadingTokenIndex]
+                .WithLeadingTrivia(new SyntaxTriviaList());
+            sortedModifiers[0] = sortedModifiers[0].WithLeadingTrivia(leadingTrivia);
         }
 
         return print(sortedModifiers);

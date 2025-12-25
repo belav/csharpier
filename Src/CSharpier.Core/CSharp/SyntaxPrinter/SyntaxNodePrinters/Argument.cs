@@ -18,15 +18,15 @@ internal static class Argument
 
     public static Doc PrintModifiers(ArgumentSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null]);
+        var docs = new DocListBuilder(2);
         if (node.NameColon != null)
         {
-            docs.Append(BaseExpressionColon.Print(node.NameColon, context));
+            docs.Add(BaseExpressionColon.Print(node.NameColon, context));
         }
 
         if (node.RefKindKeyword.RawSyntaxKind() != SyntaxKind.None)
         {
-            docs.Append(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
+            docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
         }
 
         return Doc.Concat(ref docs);

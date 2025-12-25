@@ -1,19 +1,15 @@
 #pragma warning disable CA1707
+using TUnit.Core;
 
-using NUnit.Framework;
+namespace CSharpier.Tests.FormattingTests;
 
-namespace CSharpier.Tests.FormattingTests
+public class FormattingTests_{{ FileExtension }} : BaseTest
 {
-    [TestFixture]
-    [Parallelizable(ParallelScope.All)]
-    public class FormattingTests_{{ FileExtension }} : BaseTest
+    {{- for test in Tests }}
+    [Test]
+    public Task {{ test.Name }}()
     {
-        {{- for test in Tests }}
-        [Test]
-        public Task {{ test.Name }}()
-        {
-            return this.RunTest("{{ test.Name }}", "{{ test.FileExtension }}"{{ if test.UseTabs }}, true{{ end }});
-        }
-        {{- end }}
+        return this.RunTest("{{ test.Name }}", "{{ test.FileExtension }}"{{ if test.UseTabs }}, true{{ end }});
     }
+    {{- end }}
 }
