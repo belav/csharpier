@@ -19,7 +19,7 @@ internal static class AttributeLists
             return Doc.Null;
         }
 
-        var docs = new ValueListBuilder<Doc>([null, null]);
+        var docs = new DocListBuilder(2);
         Doc separator = node
             is TypeParameterSyntax
                 or ParameterSyntax

@@ -303,10 +303,11 @@ internal static class CommandLineFormatter
             {
                 if (
                     !commandLineOptions.NoMSBuildCheck
-                    && HasMismatchedCliAndMsBuildVersions.Check(
+                    && await HasMismatchedCliAndMsBuildVersions.Check(
                         directoryOrFilePath,
                         fileSystem,
-                        logger
+                        logger,
+                        cancellationToken
                     )
                 )
                 {
@@ -500,7 +501,10 @@ internal static class CommandLineFormatter
         {
             IFormattingValidator? formattingValidator = null;
 
-            if (printerOptions.Formatter is Formatter.CSharp or Formatter.CSharpScript)
+            if (
+                printerOptions.Formatter is Formatter.CSharp or Formatter.CSharpScript
+                && fileToFormatInfo.FileContents != codeFormattingResult.Code
+            )
             {
                 var sourceCodeKind =
                     printerOptions.Formatter is Formatter.CSharpScript

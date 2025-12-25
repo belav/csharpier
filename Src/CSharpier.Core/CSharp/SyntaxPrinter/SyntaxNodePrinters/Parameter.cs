@@ -11,7 +11,7 @@ internal static class Parameter
     {
         var hasAttribute = node.AttributeLists.Any();
 
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null, null]);
+        var docs = new DocListBuilder(8);
 
         if (hasAttribute)
         {
@@ -19,7 +19,7 @@ internal static class Parameter
             if (
                 node.AttributeLists.Count < 2
                 && (
-                    Enumerable.Any(node.GetLeadingTrivia(), o => o.IsComment())
+                    node.GetLeadingTrivia().Any(o => o.IsComment())
                     || node.Parent is ParameterListSyntax { Parameters.Count: 0 }
                 )
             )
