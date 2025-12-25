@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { FixAllCodeActionsCommand } from "./FixAllCodeActionCommand";
 
-const noChanges: vscode.CodeAction[] = [];
+let noChanges: vscode.CodeAction[] = [];
 
 export class FixAllCodeActionProvider implements vscode.CodeActionProvider, vscode.Disposable {
     public static readonly fixAllCodeActionKind =
@@ -40,8 +40,8 @@ export class FixAllCodeActionProvider implements vscode.CodeActionProvider, vsco
         ) {
             return noChanges;
         }
-        const title = "Format code using CSharpier";
-        const action = new vscode.CodeAction(title, FixAllCodeActionProvider.fixAllCodeActionKind);
+        let title = "Format code using CSharpier";
+        let action = new vscode.CodeAction(title, FixAllCodeActionProvider.fixAllCodeActionKind);
         action.command = {
             title,
             command: FixAllCodeActionsCommand.Id,

@@ -1,3 +1,8 @@
+## 2.1.0
+- Improved support for users that work with multiple dotnet architectures by splitting out installs of csharpier based on the architecture they were installed with.
+- Improve formatting of documents to avoid scroll jumping around
+- Improve support for virtual drives
+
 ## 2.0.8
 - Update readme
 

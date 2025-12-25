@@ -53,13 +53,13 @@ internal abstract class Doc
 
     public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
-    public static Doc Concat(ref ValueListBuilder<Doc> contents)
+    public static Doc Concat(ref DocListBuilder contents)
     {
         return contents.Length switch
         {
             0 => Null,
             1 => contents[0],
-            _ => new Concat(contents.AsSpan().ToArray()),
+            _ => new Concat(contents.ToArray()),
         };
     }
 
@@ -110,8 +110,7 @@ internal abstract class Doc
 
     public static Group GroupWithNewId(out string groupId, Doc contents)
     {
-        groupId = "Group_" + groupNumber;
-        Interlocked.Increment(ref groupNumber);
+        groupId = "Group_" + Interlocked.Increment(ref groupNumber);
         var group = Group(contents);
         group.GroupId = groupId;
         return group;

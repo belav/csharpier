@@ -66,6 +66,15 @@ internal static class Element
             {
                 return Doc.Null;
             }
+
+            if (
+                rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is 'r' or '\n'
+            )
+            {
+                return Doc.Null;
+            }
+
             return Doc.SoftLine;
         }
 

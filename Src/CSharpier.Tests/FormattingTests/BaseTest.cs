@@ -1,10 +1,10 @@
 using System.IO.Abstractions;
 using System.Text;
+using AwesomeAssertions;
 using CSharpier.Cli;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
 using DiffEngine;
-using FluentAssertions;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Tests.FormattingTests;
@@ -13,11 +13,47 @@ public class BaseTest
 {
     private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("CSharpier.Tests");
 
-    protected async Task RunTest(
-        string fileName,
-        string fileExtensionWithoutDot,
-        bool useTabs = false
-    )
+    public void BuildTests<T>(DynamicTestBuilderContext context, string folder)
+        where T : BaseTest
+    {
+        var testFilesDirectory = new DirectoryInfo(
+            Path.Combine(this.rootDirectory.FullName, "FormattingTests/TestFiles/" + folder)
+        );
+
+        var files = testFilesDirectory
+            .EnumerateFiles("*.test", SearchOption.AllDirectories)
+            .Where(o =>
+                !o.FullName.EndsWith(".actual.test", StringComparison.OrdinalIgnoreCase)
+                && !o.FullName.EndsWith(".expected.test", StringComparison.OrdinalIgnoreCase)
+            );
+
+        foreach (var group in files.GroupBy(o => o.Directory!.Name))
+        {
+            var formattingType = group.Key;
+
+            foreach (var file in group)
+            {
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+                var useTabs = fileNameWithoutExtension.EndsWith("_Tabs", StringComparison.Ordinal);
+
+                context.AddTest(
+                    new DynamicTest<T>
+                    {
+                        TestMethod = @class => @class.RunTest(string.Empty, string.Empty, false),
+                        TestMethodArguments =
+                        [
+                            fileNameWithoutExtension,
+                            file.Directory!.Name,
+                            useTabs,
+                        ],
+                        DisplayName = fileNameWithoutExtension,
+                    }
+                );
+            }
+        }
+    }
+
+    public async Task RunTest(string fileName, string fileExtensionWithoutDot, bool useTabs = false)
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,

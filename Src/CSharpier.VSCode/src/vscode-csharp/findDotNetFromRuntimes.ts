@@ -9,11 +9,11 @@ import * as path from "path";
 import { existsSync } from "fs";
 
 export function findDotNetFromRuntimes(dotnetInfo: DotnetInfo) {
-    const requiredRuntimeVersion = "6.0.0";
+    let requiredRuntimeVersion = "6.0.0";
 
-    const coreRuntimeVersions = dotnetInfo.Runtimes["Microsoft.NETCore.App"];
+    let coreRuntimeVersions = dotnetInfo.Runtimes["Microsoft.NETCore.App"];
     let matchingRuntime: RuntimeInfo | undefined = undefined;
-    for (const runtime of coreRuntimeVersions) {
+    for (let runtime of coreRuntimeVersions) {
         // We consider a match if the runtime is greater than or equal to the required version since we roll forward.
         if (semver.gte(runtime.Version, requiredRuntimeVersion)) {
             matchingRuntime = runtime;
@@ -35,9 +35,9 @@ export function findDotNetFromRuntimes(dotnetInfo: DotnetInfo) {
     //
     // Since dotnet --list-runtimes will always use the real assembly path to output the runtime folder (no symlinks!)
     // we know the dotnet executable will be two folders up in the install root.
-    const runtimeFolderPath = matchingRuntime.Path;
-    const installFolder = path.dirname(path.dirname(runtimeFolderPath));
-    const dotnetExecutablePath = path.join(
+    let runtimeFolderPath = matchingRuntime.Path;
+    let installFolder = path.dirname(path.dirname(runtimeFolderPath));
+    let dotnetExecutablePath = path.join(
         installFolder,
         process.platform === "win32" ? "dotnet.exe" : "dotnet",
     );

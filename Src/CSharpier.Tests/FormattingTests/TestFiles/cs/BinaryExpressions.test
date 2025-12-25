@@ -203,7 +203,158 @@ class TestClass
         var x =
             someValue
                 .Property.CallLongMethod_____________________________________()
+                .CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            ?? someOtherValue;
+
+        var x =
+            someValue.CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
+
+        var x =
+            someValue?.CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            ) ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            ).CallMethod() ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )?.CallMethod() ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )?.CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )
+                .CallMethod()
+                .CallMethod()
+            ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            ).SomeProperty.CallMethod() ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )?.SomeProperty.CallMethod() ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )?.SomeProperty?.CallMethod() ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )
+                .SomeProperty.CallMethod()
+                .CallMethod()
+            ?? someOtherValue;
+
+        var x =
+            (
+                CallMethod(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            )
+                ?.SomeProperty.CallMethod()
+                .CallMethod()
+            ?? someOtherValue;
+
+        var x =
+            await CallMethodAsync(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
+
+        var x =
+            await SomeObject.CallMethodAsync(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            ) ?? someOtherValue;
+
+        var x =
+            await SomeObject
+                .CallMethod()
+                .CallMethodAsync(
+                    someLongValue__________________________________________,
+                    someLongValue__________________________________________
+                )
+            ?? someOtherValue;
+
+        var x =
+            (IEnumerable<SomeClass>?)
+                someValue.CallLongMethod____________________________________________________()
+            ?? someOtherValue;
+
+        var x =
+            (IEnumerable<SomeClass>?)(
+                someLongValue____________________________________________
+                ?? someLongValue____________________________________________
+            ) ?? someOtherValue;
+
+        var x =
+            someValue
+                .Property.CallLongMethod_____________________________________()
                 .CallMethod__________()
+            ?? throw new Exception();
+
+        var x =
+            someValue
+                .Property.CallLongMethod_____________________________________()
+                .CallMethod__________(someParameter)
             ?? throw new Exception();
 
         var x =
@@ -224,6 +375,42 @@ class TestClass
 
         return parameterDescriptor.BindingInfo.Binder
             ?? Binders.GetBinder(parameterDescriptor.ParameterType);
+
+        var x =
+            someValue.SomeCall()?.SomeCall().SomeProperty
+            ?? someValue.SomeCall()?.SomeCall().SomeProperty;
+
+        var x =
+            someValue.SomeCall().SomeProperty.SomeProperty
+            ?? someValue.SomeCall().SomeProperty.SomeProperty;
+
+        var x =
+            someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty
+            ?? someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty;
+
+        var x =
+            someValue.SomeCall()?.SomeProperty_______________________
+            ?? someValue.SomeCall()?.SomeProperty_______________________;
+
+        var x =
+            someValue.SomeCall().SomeProperty_______________________
+            ?? someValue.SomeCall().SomeProperty_______________________;
+
+        var x =
+            someValue.SomeCall()?.A______().B______().C______()
+            ?? someValue.SomeCall()?.A______().B______().C______();
+
+        var x =
+            someValue.SomeCall().A_______.B_______.C_______
+            ?? someValue.SomeCall().A_______.B_______.C_______;
+
+        var x =
+            someValue switch
+            {
+                "" => someLongValue_________________________________,
+                null => someLongValue_________________________________,
+                _ => someLongValue_________________________________,
+            } ?? someOtherValue;
 
         var notIdealSee355 =
             variable

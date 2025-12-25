@@ -1,18 +1,16 @@
-using System.Text;
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.FormattingTests;
 
-[TestFixture]
 internal sealed class LineEndingEdgeCase
 {
-    [TestCase("\n", EndOfLine.LF)]
-    [TestCase("\r\n", EndOfLine.LF)]
-    [TestCase("\n", EndOfLine.CRLF)]
-    [TestCase("\r\n", EndOfLine.CRLF)]
+    [Test]
+    [Arguments("\n", EndOfLine.LF)]
+    [Arguments("\r\n", EndOfLine.LF)]
+    [Arguments("\n", EndOfLine.CRLF)]
+    [Arguments("\r\n", EndOfLine.CRLF)]
     public async Task Preprocessor_Symbols_With_CSharpier_Ignore_Gets_Proper_Line_Endings(
         string lineEnding,
         EndOfLine endOfLine
