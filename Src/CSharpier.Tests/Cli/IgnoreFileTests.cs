@@ -621,7 +621,13 @@ foo
         var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o));
 
         var ignoreFile = IgnoreFile
-            .CreateAsync(this.gitRepository.RepoPath, this.fileSystem, null, CancellationToken.None)
+            .CreateAsync(
+                this.gitRepository.RepoPath,
+                this.fileSystem,
+                null,
+                null,
+                CancellationToken.None
+            )
             .GetAwaiter()
             .GetResult();
 
