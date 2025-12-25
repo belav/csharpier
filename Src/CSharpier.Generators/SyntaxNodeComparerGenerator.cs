@@ -141,6 +141,18 @@ namespace CSharpier.Core.CSharp
             """
         );
 
+        if (
+            type.BaseType?.ToDisplayString()
+                == "Microsoft.CodeAnalysis.CSharp.Syntax.TypeDeclarationSyntax"
+            || type.ToDisplayString()
+                == "Microsoft.CodeAnalysis.CSharp.Syntax.MethodDeclarationSyntax"
+        )
+        {
+            sourceBuilder.AppendLine(
+                $"            if (CompareFullSpan(originalNode, formattedNode)) return Equal;"
+            );
+        }
+
         foreach (var propertySymbol in type.GetAllProperties().OrderBy(o => o.Name))
         {
             var propertyName = propertySymbol.Name;
