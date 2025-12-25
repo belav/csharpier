@@ -303,10 +303,11 @@ internal static class CommandLineFormatter
             {
                 if (
                     !commandLineOptions.NoMSBuildCheck
-                    && HasMismatchedCliAndMsBuildVersions.Check(
+                    && await HasMismatchedCliAndMsBuildVersions.Check(
                         directoryOrFilePath,
                         fileSystem,
-                        logger
+                        logger,
+                        cancellationToken
                     )
                 )
                 {

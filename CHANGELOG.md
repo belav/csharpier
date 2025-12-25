@@ -1,3 +1,45 @@
+# 1.2.4
+## What's Changed
+### Weird enter in closing when formatting XAML TextBlock [#1785](https://github.com/belav/csharpier/issues/1785)
+CSharpier was breaking an end element to a new line when it did not need to.
+```xml
+<!-- input & expected output -->
+<root>
+  <TextBlock Foreground="DarkGray">
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock>
+  <TextBlock>
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock>
+</root>
+
+<!-- 1.2.3 -->
+<root>
+  <TextBlock Foreground="DarkGray">
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock
+  >
+  <TextBlock>
+    I saw the sign. When I opened up my eyes, I saw the sign.
+  </TextBlock>
+</root>
+```
+### Order Modifiers (IDE0036) not formatting when code is preceded by a comment. [#1784](https://github.com/belav/csharpier/issues/1784)
+When incorrectly ordered modifiers were preceded by a comment they were not being reordered. Thanks go to @TimothyMakkison for the contribution
+```c#
+// input & 1.2.3
+
+// Comment
+required public int Prop1 { get; set; }
+
+// expected output
+// Comment
+public required int Prop1 { get; set; }
+```
+### Performance issue when running CLI in project with pnpm on Windows [#1781](https://github.com/belav/csharpier/issues/1781)
+The code to determine if there is a version of CSharpier.MsBuild referenced that does not match the version of CSharpier being run has been optimized to not look in node_modules or .git. This significantly speeds things up in some setups.
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.3...1.2.4
 # 1.2.3
 ## What's Changed
 ### Large directories ignored in .gitignore significantly impact performance. [#1776](https://github.com/belav/csharpier/issues/1776)
@@ -3706,6 +3748,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 

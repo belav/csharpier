@@ -8,7 +8,7 @@ internal static class QueryBody
 {
     public static Doc Print(QueryBodySyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null]);
+        var docs = new DocListBuilder(5);
         docs.Add(Doc.Join(Doc.Line, node.Clauses.Select(o => Node.Print(o, context))));
 
         if (node.Clauses.Count > 0)

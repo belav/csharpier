@@ -385,7 +385,7 @@ internal static class InvocationExpression
             return Doc.Null;
         }
 
-        var result = new ValueListBuilder<Doc>(groups.Count * 2);
+        var result = new DocListBuilder(groups.Count * 2);
 
         for (int index = 0; index < groups.Count; index++)
         {

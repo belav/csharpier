@@ -137,7 +137,7 @@ namespace CSharpier.Core.CSharp
             $$"""
                   private CompareResult Compare{{type.Name}}({{type.Name}} originalNode, {{type.Name}} formattedNode)
                   {
-                      CompareResult result;
+                       CompareResult result;
             """
         );
 
@@ -240,10 +240,13 @@ namespace CSharpier.Core.CSharp
                 }
                 else
                 {
-                    var compare = propertyType.Name == nameof(SyntaxTokenList) ? "Compare" : "null";
+                    var compare =
+                        propertyType.Name == nameof(SyntaxTokenList)
+                            ? "CompareFunc"
+                            : "static (_, _) => default";
                     if (propertyName == "Modifiers")
                     {
-                        propertyName += ".OrderBy(o => o.Text).ToList()";
+                        propertyName += ".OrderBy(o => o.Text).ToArray()";
                     }
 
                     sourceBuilder.AppendLine(
@@ -261,13 +264,13 @@ namespace CSharpier.Core.CSharp
             )
             {
                 sourceBuilder.AppendLine(
-                    $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, null, o => o.Span, originalNode.Span, formattedNode.Span);"
+                    $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, static (_, _) => default, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
                 sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
 
                 // Omit the last separator when comparing the original node with the formatted node, as it legitimately may be added or removed
                 sourceBuilder.AppendLine(
-                    $"            result = this.CompareLists(originalNode.{propertyName}.GetSeparators().Take(originalNode.{propertyName}.Count() - 1).ToList(), formattedNode.{propertyName}.GetSeparators().Take(formattedNode.{propertyName}.Count() - 1).ToList(), Compare, o => o.Span, originalNode.Span, formattedNode.Span);"
+                    $"            result = this.CompareLists(AllSeparatorsButLast(originalNode.{propertyName}), AllSeparatorsButLast(formattedNode.{propertyName}), CompareFunc, o => o.Span, originalNode.Span, formattedNode.Span);"
                 );
                 sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
             }

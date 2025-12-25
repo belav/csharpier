@@ -11,4 +11,7 @@
             AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
             AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
   />
+  <Element Attribute="TheSign">
+    Life is demanding.
+  </Element>
 </Root>
