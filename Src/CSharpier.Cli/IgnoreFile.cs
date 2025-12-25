@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using CSharpier.Cli.DotIgnore;
 using CSharpier.Core;
@@ -35,17 +36,27 @@ internal class IgnoreFile
         string baseDirectoryPath,
         IFileSystem fileSystem,
         string? ignorePath,
+        ConcurrentDictionary<string, IgnoreList>? ignoreCache,
         CancellationToken cancellationToken
     )
     {
-        Task<IgnoreList> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
+        async Task<IgnoreList> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
         {
-            return IgnoreList.CreateAsync(
+            if (ignoreCache is not null && ignoreCache.TryGetValue(ignoreFilePath, out var ignore))
+            {
+                return ignore;
+            }
+
+            ignore = await IgnoreList.CreateAsync(
                 fileSystem,
                 overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!,
                 ignoreFilePath,
                 cancellationToken
             );
+
+            ignoreCache?[ignoreFilePath] = ignore;
+
+            return ignore;
         }
 
         return await SharedFunc<IgnoreFile?>
