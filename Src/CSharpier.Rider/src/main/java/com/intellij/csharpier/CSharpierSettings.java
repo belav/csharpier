@@ -1,9 +1,9 @@
 package com.intellij.csharpier;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class CSharpierSettings implements PersistentStateComponent<CSharpierSettings> {
 
     @NotNull
-    static CSharpierSettings getInstance(@NotNull Project project) {
-        return project.getService(CSharpierSettings.class);
+    static CSharpierSettings getInstance() {
+        return ApplicationManager.getApplication().getService(CSharpierSettings.class);
     }
 
     private boolean runOnSave;
