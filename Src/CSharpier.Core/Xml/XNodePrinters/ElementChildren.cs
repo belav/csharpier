@@ -38,6 +38,17 @@ internal static class ElementChildren
                 ? PrintBetweenLine(childNode, childNode.NextNode)
                 : Doc.Null;
 
+            if (
+                context.Options.XmlWhitespaceSensitivity is not XmlWhitespaceSensitivity.Strict
+                && childNode.PreviousNode is null
+                && childNode.NextNode is null
+                && childNode.IsTextLike()
+            )
+            {
+                prevBetweenLine = Doc.SoftLine;
+                nextBetweenLine = Doc.SoftLine;
+            }
+
             if (prevBetweenLine is not NullDoc)
             {
                 if (prevBetweenLine is HardLine)
@@ -50,7 +61,14 @@ internal static class ElementChildren
                 }
                 else
                 {
-                    leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    if (groupIds.Count > 1)
+                    {
+                        leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    }
+                    else
+                    {
+                        leadingParts.Add(prevBetweenLine);
+                    }
                 }
             }
 

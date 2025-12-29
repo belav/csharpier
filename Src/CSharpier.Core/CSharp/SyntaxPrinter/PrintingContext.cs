@@ -36,6 +36,7 @@ internal class PrintingContext
         public required string LineEnding { get; init; }
         public required int IndentSize { get; init; }
         public required bool UseTabs { get; init; }
+        public required XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; }
     }
 
     public class PrintingContextState

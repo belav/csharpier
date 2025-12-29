@@ -155,6 +155,7 @@ public static class CSharpFormatter
                     LineEnding = lineEnding,
                     IndentSize = printerOptions.IndentSize,
                     UseTabs = printerOptions.UseTabs,
+                    XmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict,
                 },
             };
             var document = Node.Print(rootNode, printingContext);
@@ -181,6 +182,7 @@ public static class CSharpFormatter
                         LineEnding = lineEnding,
                         IndentSize = printerOptions.IndentSize,
                         UseTabs = printerOptions.UseTabs,
+                        XmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict,
                     },
                 };
                 document = Node.Print(
