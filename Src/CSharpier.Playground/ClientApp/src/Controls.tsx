@@ -13,6 +13,8 @@ export const Controls = observer(() => {
         setUseTabs,
         formatter,
         setFormatter,
+        xmlWhitespaceSensitivity,
+        setXmlWhitespaceSensitivity,
         showDoc,
         setShowDoc,
         hideNull,
@@ -47,6 +49,19 @@ export const Controls = observer(() => {
                     <option value="CSharpScript">C# Script</option>
                     <option value="XML">XML</option>
                 </select>
+                {formatter === "XML" && (
+                    <>
+                        <label>Whitespace Sensitivity</label>
+                        <select
+                            value={xmlWhitespaceSensitivity}
+                            onChange={e => setXmlWhitespaceSensitivity(e.target.value)}
+                        >
+                            <option value="Strict">Strict</option>
+                            <option value="Xaml">Xaml</option>
+                            <option value="Ignore">Ignore</option>
+                        </select>
+                    </>
+                )}
             </div>
             <div>
                 <h3>Debug</h3>

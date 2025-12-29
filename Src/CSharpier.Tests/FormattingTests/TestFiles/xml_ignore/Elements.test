@@ -1,0 +1,10 @@
+<Root>
+  <LongElement____________________________________________>TextValue</LongElement____________________________________________>
+  <LongElementWithAttribute Attribute="AttributeValue_________________">TextValue</LongElementWithAttribute>
+  <ShortElement>
+    TextValue
+  </ShortElement>
+  <ShortElementWithAttribute Attribute="1">
+    TextValue
+  </ShortElementWithAttribute>
+</Root>

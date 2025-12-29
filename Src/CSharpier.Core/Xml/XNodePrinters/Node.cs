@@ -40,7 +40,7 @@ internal static class Node
         {
             List<Doc> doc =
             [
-                Tag.PrintOpeningTagPrefix(node),
+                Tag.PrintOpeningTagPrefix(node, context),
                 GetTextValue(node),
                 Tag.PrintClosingTagSuffix(node, context),
             ];

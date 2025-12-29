@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using CSharpier.Core;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 
 namespace CSharpier.Tests.CSharp.SyntaxPrinter;
@@ -71,6 +72,7 @@ public string Example
                         LineEnding = Environment.NewLine,
                         IndentSize = 4,
                         UseTabs = false,
+                        XmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict,
                     },
                 }
             )

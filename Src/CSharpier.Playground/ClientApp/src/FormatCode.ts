@@ -8,11 +8,12 @@ export const formatCode = async (
     indentSize: number,
     useTabs: boolean,
     formatter: string,
+    xmlWhitespaceSensitivity: string,
 ) => {
     const makeRequest = async () => {
         const response = await fetch("/Format", {
             method: "POST",
-            body: JSON.stringify({ code, printWidth, indentSize, useTabs, formatter }),
+            body: JSON.stringify({ code, printWidth, indentSize, useTabs, formatter, xmlWhitespaceSensitivity }),
             headers: {
                 "Content-Type": "application/json",
                 "cache-control": "no-cache",
