@@ -20,9 +20,9 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
     private final Project project;
     private final String[] runOnSaveOptions = new String[] {
+        "True",
         "Use Global Setting",
         "False",
-        "True",
     };
     private ComboBox<String> runOnSaveComboBox = new ComboBox<String>(runOnSaveOptions);
     private JBCheckBox globalRunOnSaveCheckBox = new JBCheckBox("Run on Save (Global)");
@@ -143,11 +143,11 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
         String selectedItem = (String) runOnSaveComboBox.getSelectedItem();
 
         if (selectedItem == runOnSaveOptions[0]) {
-            return SolutionRunOnSaveOption.UseGlobalSetting;
-        } else if (selectedItem == runOnSaveOptions[1]) {
-            return SolutionRunOnSaveOption.False;
-        } else if (selectedItem == runOnSaveOptions[2]) {
             return SolutionRunOnSaveOption.True;
+        } else if (selectedItem == runOnSaveOptions[1]) {
+            return SolutionRunOnSaveOption.UseGlobalSetting;
+        } else if (selectedItem == runOnSaveOptions[2]) {
+            return SolutionRunOnSaveOption.False;
         }
 
         this.logger.debug("invalid runOnSaveComboBox selection: " + selectedItem);
@@ -155,11 +155,11 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     }
 
     private void setSelectedRunOnSave(SolutionRunOnSaveOption saveOption) {
-        if (saveOption == SolutionRunOnSaveOption.UseGlobalSetting) {
+        if (saveOption == SolutionRunOnSaveOption.True) {
             this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[0]);
-        } else if (saveOption == SolutionRunOnSaveOption.False) {
+        } else if (saveOption == SolutionRunOnSaveOption.UseGlobalSetting) {
             this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[1]);
-        } else if (saveOption == SolutionRunOnSaveOption.True) {
+        } else if (saveOption == SolutionRunOnSaveOption.False) {
             this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[2]);
         }
 
