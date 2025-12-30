@@ -20,9 +20,9 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
 
     private final Project project;
     private final String[] runOnSaveOptions = new String[] {
-        "Don't run on save",
-        "Never run on save",
-        "Run on save",
+        "Use Global Setting",
+        "False",
+        "True",
     };
     private ComboBox<String> runOnSaveComboBox = new ComboBox<String>(runOnSaveOptions);
     private JBCheckBox globalRunOnSaveCheckBox = new JBCheckBox("Run on Save (Global)");
@@ -77,7 +77,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
             .addComponent(createSectionHeader("General Settings"))
             .setFormLeftIndent(leftIndent)
             .addLabeledComponent(
-                new JBLabel("Run on save (Project):"),
+                new JBLabel("Run on save (Solution):"),
                 this.runOnSaveComboBox,
                 topInset,
                 false
@@ -101,7 +101,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public boolean isModified() {
         return (
-            CSharpierSettings.getInstance(this.project).getProjectRunOnSave() !=
+            CSharpierSettings.getInstance(this.project).getSolutionRunOnSave() !=
                 this.toRunOnSaveOption() ||
             CSharpierGlobalSettings.getInstance(this.project).getRunOnSave() !=
             this.globalRunOnSaveCheckBox.isSelected() ||
@@ -118,7 +118,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     public void apply() {
         var settings = CSharpierSettings.getInstance(this.project);
 
-        settings.setProjectRunOnSave(this.toRunOnSaveOption());
+        settings.setSolutionRunOnSave(this.toRunOnSaveOption());
         settings.setCustomPath(this.customPathTextField.getText());
         settings.setDisableCSharpierServer(this.disableCSharpierServerCheckBox.isSelected());
         settings.setUseCustomPath(this.useCustomPath.isSelected());
@@ -130,7 +130,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     @Override
     public void reset() {
         var settings = CSharpierSettings.getInstance(this.project);
-        this.setSelectedRunOnSave(settings.getProjectRunOnSave());
+        this.setSelectedRunOnSave(settings.getSolutionRunOnSave());
         this.useCustomPath.setSelected(settings.getUseCustomPath());
         this.customPathTextField.setText(settings.getCustomPath());
         this.disableCSharpierServerCheckBox.setSelected(settings.getDisableCSharpierServer());
@@ -139,30 +139,30 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
         this.globalRunOnSaveCheckBox.setSelected(globalSettings.getRunOnSave());
     }
 
-    private ProjectRunOnSaveOption toRunOnSaveOption() {
+    private SolutionRunOnSaveOption toRunOnSaveOption() {
         String selectedItem = (String) runOnSaveComboBox.getSelectedItem();
 
         if (selectedItem == runOnSaveOptions[0]) {
-            return ProjectRunOnSaveOption.SoftNeverRun;
+            return SolutionRunOnSaveOption.UseGlobalSetting;
         } else if (selectedItem == runOnSaveOptions[1]) {
-            return ProjectRunOnSaveOption.HardNeverRun;
+            return SolutionRunOnSaveOption.False;
         } else if (selectedItem == runOnSaveOptions[2]) {
-            return ProjectRunOnSaveOption.RunOnSave;
+            return SolutionRunOnSaveOption.True;
         }
 
         this.logger.debug("invalid runOnSaveComboBox selection: " + selectedItem);
-        return ProjectRunOnSaveOption.SoftNeverRun;
+        return SolutionRunOnSaveOption.UseGlobalSetting;
     }
 
-    private void setSelectedRunOnSave(ProjectRunOnSaveOption saveOption) {
-        if (saveOption == ProjectRunOnSaveOption.SoftNeverRun) {
+    private void setSelectedRunOnSave(SolutionRunOnSaveOption saveOption) {
+        if (saveOption == SolutionRunOnSaveOption.UseGlobalSetting) {
             this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[0]);
-        } else if (saveOption == ProjectRunOnSaveOption.HardNeverRun) {
+        } else if (saveOption == SolutionRunOnSaveOption.False) {
             this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[1]);
-        } else if (saveOption == ProjectRunOnSaveOption.RunOnSave) {
+        } else if (saveOption == SolutionRunOnSaveOption.True) {
             this.runOnSaveComboBox.setSelectedItem(runOnSaveOptions[2]);
         }
 
-        this.logger.debug("tried to set invalid ProjectRunOnSaveOption: " + saveOption);
+        this.logger.debug("tried to set invalid SolutionRunOnSaveOption: " + saveOption);
     }
 }

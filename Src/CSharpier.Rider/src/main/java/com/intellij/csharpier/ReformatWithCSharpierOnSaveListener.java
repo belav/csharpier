@@ -22,12 +22,12 @@ public class ReformatWithCSharpierOnSaveListener implements FileDocumentManagerL
         var cSharpierSettings = CSharpierSettings.getInstance(project);
         var cSharpierGlobalSettings = CSharpierGlobalSettings.getInstance(project);
 
-        if (cSharpierSettings.getProjectRunOnSave() == ProjectRunOnSaveOption.HardNeverRun) {
+        if (cSharpierSettings.getSolutionRunOnSave() == SolutionRunOnSaveOption.False) {
             return;
         }
 
         if (
-            !(cSharpierSettings.getProjectRunOnSave() == ProjectRunOnSaveOption.RunOnSave ||
+            !(cSharpierSettings.getSolutionRunOnSave() == SolutionRunOnSaveOption.True ||
                 cSharpierGlobalSettings.getRunOnSave())
         ) {
             return;

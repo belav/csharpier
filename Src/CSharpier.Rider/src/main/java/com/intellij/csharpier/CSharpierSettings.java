@@ -25,14 +25,15 @@ public class CSharpierSettings implements PersistentStateComponent<CSharpierSett
         this.runOnSave = value;
     }
 
-    private ProjectRunOnSaveOption projectRunOnSaveOption = ProjectRunOnSaveOption.SoftNeverRun;
+    private SolutionRunOnSaveOption solutionRunOnSaveOption =
+        SolutionRunOnSaveOption.UseGlobalSetting;
 
-    public ProjectRunOnSaveOption getProjectRunOnSave() {
-        return this.projectRunOnSaveOption;
+    public SolutionRunOnSaveOption getSolutionRunOnSave() {
+        return this.solutionRunOnSaveOption;
     }
 
-    public void setProjectRunOnSave(ProjectRunOnSaveOption value) {
-        this.projectRunOnSaveOption = value;
+    public void setSolutionRunOnSave(SolutionRunOnSaveOption value) {
+        this.solutionRunOnSaveOption = value;
     }
 
     private boolean useCustomPath;
@@ -77,17 +78,17 @@ public class CSharpierSettings implements PersistentStateComponent<CSharpierSett
     }
 
     private void migrate() {
-        // If runOnSave was enabled it becomes ProjectRunOnSaveOption.RunOnSave
+        // If runOnSave was enabled it becomes SolutionRunOnSaveOption.True
         // we reset runOnSave to false - this value will never be used after this
         if (getRunOnSave()) {
             setRunOnSave(false);
-            setProjectRunOnSave(ProjectRunOnSaveOption.RunOnSave);
+            setSolutionRunOnSave(SolutionRunOnSaveOption.True);
         }
     }
 }
 
-enum ProjectRunOnSaveOption {
-    SoftNeverRun,
-    HardNeverRun,
-    RunOnSave,
+enum SolutionRunOnSaveOption {
+    UseGlobalSetting,
+    False,
+    True,
 }
