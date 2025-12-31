@@ -1,3 +1,12 @@
+# 1.2.5
+## What's Changed
+### Performance issue when running CLI in project with pnpm on Windows [#1781](https://github.com/belav/csharpier/issues/1781)
+**1.2.4 did not properly address this**
+
+The code to determine if there is a version of CSharpier.MsBuild referenced that does not match the version of CSharpier being run has been optimized to not look in node_modules or .git. This significantly speeds things up in some setups.
+
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.4...1.2.5
 # 1.2.4
 ## What's Changed
 ### Weird enter in closing when formatting XAML TextBlock [#1785](https://github.com/belav/csharpier/issues/1785)
@@ -3748,6 +3757,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
