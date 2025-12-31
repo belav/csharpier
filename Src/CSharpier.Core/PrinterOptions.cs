@@ -26,7 +26,7 @@ internal class PrinterOptions(Formatter formatter)
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
-    public Formatter Formatter { get; set; } = formatter;
+    public Formatter Formatter { get; } = formatter;
     public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; } =
         XmlWhitespaceSensitivity.Strict;
 

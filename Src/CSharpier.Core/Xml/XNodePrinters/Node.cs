@@ -40,8 +40,8 @@ internal static class Node
         {
             List<Doc> doc =
             [
-                Tag.PrintOpeningTagPrefix(node),
-                GetTextValue(node),
+                Tag.PrintOpeningTagPrefix(node, context),
+                GetTextValue(node, context),
                 Tag.PrintClosingTagSuffix(node, context),
             ];
 
@@ -77,13 +77,18 @@ internal static class Node
         throw new Exception("Need to handle + " + node.NodeType);
     }
 
-    private static Doc GetTextValue(RawNode rawNode)
+    private static Doc GetTextValue(RawNode rawNode, PrintingContext context)
     {
         var textValue = rawNode.Value;
 
         if (string.IsNullOrEmpty(textValue))
         {
             return Doc.Null;
+        }
+
+        if (context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Ignore)
+        {
+            textValue = textValue.Trim();
         }
 
         if (rawNode.Parent?.Nodes.First() == rawNode)

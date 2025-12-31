@@ -117,6 +117,11 @@ internal class OptionsProvider
         CancellationToken cancellationToken
     )
     {
+        // TODO #1794 the xml whitespace should default based on the file
+        // possible defaults
+        // xaml files = xaml
+        // msbuild ones = ignore
+        // everything else = strict
         if (this.specifiedConfigFile is not null)
         {
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
