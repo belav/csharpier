@@ -651,10 +651,11 @@ public class CliTests
 
     private const string CsprojContentWithCSharpierMsBuild99 = """
         <Project Sdk="Microsoft.NET.Sdk">
-            <ItemGroup>
-                <PackageReference Include="CSharpier.MsBuild" Version="99" />
-            </ItemGroup>
+          <ItemGroup>
+            <PackageReference Include="CSharpier.MsBuild" Version="99" />
+          </ItemGroup>
         </Project>
+
         """;
 
     [Test]
