@@ -394,8 +394,10 @@ public class CliTests
     {
         await WriteFileAsync(
             ".editorconfig",
-            @"[*]
-max_line_length = 10"
+            """
+            [*]
+            max_line_length = 10
+            """
         );
 
         var formattedContent1 = "var x =\n    _________________longName;\n";
@@ -647,17 +649,18 @@ max_line_length = 10"
         result.Output.Should().StartWith("Warning The csproj at ");
     }
 
+    private const string CsprojContentWithCSharpierMsBuild99 = """
+        <Project Sdk="Microsoft.NET.Sdk">
+            <ItemGroup>
+                <PackageReference Include="CSharpier.MsBuild" Version="99" />
+            </ItemGroup>
+        </Project>
+        """;
+
     [Test]
     public async Task Format_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <ItemGroup>
-        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
-    </ItemGroup>
-</Project>"
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess()
             .WithArguments("format --no-msbuild-check .")
@@ -671,17 +674,7 @@ max_line_length = 10"
     [Test]
     public async Task Check_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="CSharpier.MsBuild" Version="99" />
-              </ItemGroup>
-            </Project>
-
-            """
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess()
             .WithArguments("check --no-msbuild-check .")
@@ -695,14 +688,7 @@ max_line_length = 10"
     [Test]
     public async Task Format_Should_Fail_On_Mismatched_MSBuild()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <ItemGroup>
-        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
-    </ItemGroup>
-</Project>"
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
 
@@ -713,16 +699,23 @@ max_line_length = 10"
     }
 
     [Test]
+    [Arguments("node_modules")]
+    [Arguments("test/node_modules")]
+    [Arguments(".git")]
+    [Arguments("bin")]
+    [Arguments("obj")]
+    public async Task Format_Should_Not_Look_In_Some_Folders_For_MSBuild(string subfolder)
+    {
+        await WriteFileAsync($"{subfolder}/Test.csproj", CsprojContentWithCSharpierMsBuild99);
+
+        var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
     public async Task Check_Should_Fail_On_Mismatched_MSBuild()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <ItemGroup>
-        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
-    </ItemGroup>
-</Project>"
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess().WithArguments("check .").ExecuteAsync();
 

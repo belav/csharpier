@@ -55,7 +55,13 @@ internal static class HasMismatchedCliAndMsBuildVersions
         IEnumerable<string> EnumerateFiles(string directory)
         {
             // using optionsProvider is slower so just hard coding the ones that could cause performance issues
-            if (fileSystem.Path.GetDirectoryName(directory) is "node_modules" or ".git")
+            if (
+                fileSystem.DirectoryInfo.New(directory).Name
+                is "node_modules"
+                    or ".git"
+                    or "bin"
+                    or "obj"
+            )
             {
                 yield break;
             }
