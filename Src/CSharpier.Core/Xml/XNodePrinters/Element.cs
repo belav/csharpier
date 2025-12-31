@@ -34,19 +34,27 @@ internal static class Element
             }
 
             if (
-                rawNode.Nodes.FirstOrDefault() is
-                { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
+                context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.Nodes.FirstOrDefault()
+                    is { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
             )
             {
                 return Doc.LiteralLine;
             }
 
-            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
+            if (
+                rawNode.Attributes.Length == 0
+                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+            )
             {
                 return Doc.Null;
             }
 
-            if (rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n')))
+            if (
+                context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n'))
+            )
             {
                 return Doc.HardLine;
             }
@@ -62,7 +70,11 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
+            if (
+                rawNode.Attributes.Length == 0
+                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+            )
             {
                 return Doc.Null;
             }
