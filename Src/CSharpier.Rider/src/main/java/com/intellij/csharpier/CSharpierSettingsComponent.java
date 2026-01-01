@@ -8,7 +8,6 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.util.ui.FormBuilder;
 import java.awt.*;
-import java.util.Arrays;
 import javax.swing.*;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -96,14 +95,15 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
             .getPanel();
     }
 
-    private Boolean getSelected() {
+    private Boolean getSelectedSolutionRunOnSave() {
         return ((ComboItem) this.solutionRunOnSaveComboBox.getSelectedItem()).value;
     }
 
     @Override
     public boolean isModified() {
         return (
-            CSharpierSettings.getInstance(this.project).getRunOnSave() != this.getSelected() ||
+            CSharpierSettings.getInstance(this.project).getRunOnSave() !=
+                this.getSelectedSolutionRunOnSave() ||
             CSharpierSettings.getInstance(this.project).getCustomPath() !=
             this.customPathTextField.getText() ||
             CSharpierSettings.getInstance(this.project).getUseCustomPath() !=
@@ -117,7 +117,7 @@ public class CSharpierSettingsComponent implements SearchableConfigurable {
     public void apply() {
         var settings = CSharpierSettings.getInstance(this.project);
 
-        settings.setRunOnSave(this.getSelected());
+        settings.setRunOnSave(this.getSelectedSolutionRunOnSave());
         settings.setCustomPath(this.customPathTextField.getText());
         settings.setDisableCSharpierServer(this.disableCSharpierServerCheckBox.isSelected());
         settings.setUseCustomPath(this.useCustomPath.isSelected());
