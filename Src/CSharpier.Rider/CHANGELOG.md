@@ -16,6 +16,9 @@
 ## [2.3.0]
 - Add a global format on save option
 
+## [2.3.0]
+- Add a global format on save option
+
 ## [2.2.4]
 - Fix Stream closed exception in Rider plugin
 

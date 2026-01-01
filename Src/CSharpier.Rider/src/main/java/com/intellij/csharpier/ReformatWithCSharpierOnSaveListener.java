@@ -20,7 +20,11 @@ public class ReformatWithCSharpierOnSaveListener implements FileDocumentManagerL
         }
 
         var cSharpierSettings = CSharpierSettings.getInstance(project);
-        if (!cSharpierSettings.getRunOnSave()) {
+        var shouldRunOnSave =
+            Boolean.TRUE.equals(cSharpierSettings.getRunOnSave()) ||
+            (cSharpierSettings.getRunOnSave() == null &&
+                CSharpierGlobalSettings.getInstance().getRunOnSave());
+        if (!shouldRunOnSave) {
             return;
         }
 
