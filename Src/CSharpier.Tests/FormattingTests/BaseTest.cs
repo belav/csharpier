@@ -64,7 +64,7 @@ public class BaseTest
                 context.AddTest(
                     new DynamicTest<T>
                     {
-                        TestMethod = @class => @class.RunTest(string.Empty, string.Empty, null),
+                        TestMethod = @class => @class.RunTest(string.Empty, string.Empty, null!),
                         TestMethodArguments =
                         [
                             fileNameWithoutExtension,
