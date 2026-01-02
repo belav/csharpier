@@ -1,31 +1,32 @@
 <Root>
   <Element Attribute="SomeValue">
-    
-    Because whitespace is strict
-    The indentation of the closing element can't change
-      </Element>
-  <Element>
-    Shorter Text with indentation that can't change
-    </Element>
+    Because whitespace is strict The indentation of the closing element can't
+    change
+  </Element>
+  <Element>Shorter Text with indentation that can't change</Element>
   <returns>
-    <para
-      >A <see cref="T:System.Int32" /> containing a value that reflects the sort order of
-  <paramref name="x" /> as compared to <paramref name="y" />. The following table defines the conditions
-  under which the returned value is a negative number, zero, or a positive
-  number.</para
-    >
+    <para>
+      A
+      <see cref="T:System.Int32" />
+      containing a value that reflects the sort order of
+      <paramref name="x" />
+      as compared to
+      <paramref name="y" />
+      . The following table defines the conditions under which the returned
+      value is a negative number, zero, or a positive number.
+    </para>
   </returns>
-  <para>Some text that ends with a space. </para>
-  <para
-    >Some loooooooooooooooooooooooooooooooooong text with this <br /> and a space after this. </para
-  >
-  <exception cref="T:System.InvalidOperationException"
-    >The current instance is read-only and a set operation was attempted. </exception
-  >
+  <para>Some text that ends with a space.</para>
+  <para>
+    Some loooooooooooooooooooooooooooooooooong text with this
+    <br />
+    and a space after this.
+  </para>
+  <exception cref="T:System.InvalidOperationException">
+    The current instance is read-only and a set operation was attempted.
+  </exception>
   <example>
-    <code>public void MethodName() {
-}
-        </code>
+    <code>public void MethodName() { }</code>
   </example>
   <Root>
     <Element />
