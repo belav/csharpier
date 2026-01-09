@@ -44,22 +44,49 @@ export const Controls = observer(() => {
                     Use Tabs
                 </label>
                 <label>Parser</label>
-                <select value={formatter} onChange={e => setFormatter(e.target.value)}>
-                    <option value="CSharp">C#</option>
-                    <option value="CSharpScript">C# Script</option>
-                    <option value="XML">XML</option>
-                </select>
+                <label>
+                    <input type="radio" checked={formatter === "CSharp"} onClick={e => setFormatter("CSharp")} />
+                    C#
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        checked={formatter === "CSharpScript"}
+                        onClick={e => setFormatter("CSharpScript")}
+                    />
+                    C# Script
+                </label>
+                <label>
+                    <input type="radio" checked={formatter === "XML"} onClick={e => setFormatter("XML")} />
+                    XML
+                </label>
                 {formatter === "XML" && (
                     <>
                         <label>Whitespace Sensitivity</label>
-                        <select
-                            value={xmlWhitespaceSensitivity}
-                            onChange={e => setXmlWhitespaceSensitivity(e.target.value)}
-                        >
-                            <option value="Strict">Strict</option>
-                            <option value="Xaml">Xaml</option>
-                            <option value="Ignore">Ignore</option>
-                        </select>
+                        <label>
+                            <input
+                                type="radio"
+                                checked={xmlWhitespaceSensitivity === "Strict"}
+                                onClick={() => setXmlWhitespaceSensitivity("Strict")}
+                            />
+                            Strict
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                checked={xmlWhitespaceSensitivity === "Xaml"}
+                                onClick={() => setXmlWhitespaceSensitivity("Xaml")}
+                            />
+                            Xaml
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                checked={xmlWhitespaceSensitivity === "Ignore"}
+                                onClick={() => setXmlWhitespaceSensitivity("Ignore")}
+                            />
+                            Ignore
+                        </label>
                     </>
                 )}
             </div>

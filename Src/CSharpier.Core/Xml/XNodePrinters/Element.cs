@@ -52,7 +52,7 @@ internal static class Element
             }
 
             if (
-                context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                rawNode.Nodes.Count > 1
                 && rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n'))
             )
             {
@@ -80,8 +80,9 @@ internal static class Element
             }
 
             if (
-                rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is 'r' or '\n'
+                context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is '\r' or '\n'
             )
             {
                 return Doc.Null;

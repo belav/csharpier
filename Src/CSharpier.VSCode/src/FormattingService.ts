@@ -89,7 +89,7 @@ export class FormattingService {
 
     private minimalEdit(document: TextDocument, newText: string) {
         let existingText = document.getText();
-        
+
         let i = 0;
         while (i < existingText.length && i < newText.length && existingText[i] === newText[i]) {
             ++i;
