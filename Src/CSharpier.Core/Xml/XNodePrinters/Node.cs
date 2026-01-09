@@ -88,7 +88,15 @@ internal static class Node
 
         if (context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Ignore)
         {
-            textValue = textValue.Trim();
+            if (rawNode.PreviousNode is null)
+            {
+                textValue = textValue.TrimStart();
+            }
+
+            if (rawNode.NextNode is null)
+            {
+                textValue = textValue.TrimEnd();
+            }
         }
 
         if (rawNode.Parent?.Nodes.First() == rawNode)
