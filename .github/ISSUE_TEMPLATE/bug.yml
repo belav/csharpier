@@ -13,9 +13,9 @@ body:
         - I've read the [documentation](https://csharpier.com/) and this isn't expected behavior
         - For formatting issues I have recreated the issue on the [playground](https://playground.csharpier.com/)
         - I'm using the latest version of CSharpier ![CSharpier](https://img.shields.io/nuget/v/CSharpier)
-        -- `< 10.0.0`
+         - `< 10.0.0`
         - I'm using the latest version of CSharpier's IDE plugin and understand it is versioned independently of CSharpier
-        -- `>= 10.0.0`
+         - `>= 10.0.0`
 
   - type: textarea
     id: description
