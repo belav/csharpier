@@ -26,7 +26,7 @@ namespace CSharpier.VisualStudio
             // if new languages are added, follow this guide to update VSCT
             // https://learn.microsoft.com/en-us/visualstudio/extensibility/walkthrough-creating-a-view-adornment-commands-and-settings-column-guides?view=vs-2022
             // at this point it will probably just be adding new command placements + guidSymbols like the xaml one
-            return language is "CSharp" or "XML" or "XAML";
+            return language is "CSharp" or "XML" or "XAML" or "AXAML";
         }
 
         public void Format(Document document)
