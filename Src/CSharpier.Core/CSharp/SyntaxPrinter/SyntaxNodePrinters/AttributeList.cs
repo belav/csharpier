@@ -33,7 +33,7 @@ internal static class AttributeList
 
         var printSeparatedSyntaxList = SeparatedSyntaxList.Print(
             node.Attributes,
-            (attributeNode, _) =>
+            static (attributeNode, context) =>
             {
                 var name = Node.Print(attributeNode.Name, context);
                 if (attributeNode.ArgumentList == null)
@@ -60,7 +60,7 @@ internal static class AttributeList
                             singleCollectionExpression ? Doc.Null : Doc.SoftLine,
                             SeparatedSyntaxList.Print(
                                 attributeNode.ArgumentList.Arguments,
-                                (attributeArgumentNode, _) =>
+                                static (attributeArgumentNode, context) =>
                                     Doc.Concat(
                                         attributeArgumentNode.NameEquals != null
                                             ? NameEquals.Print(
