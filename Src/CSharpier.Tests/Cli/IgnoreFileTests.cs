@@ -28,10 +28,10 @@ public class IgnoreFileTests
     {
         this.GitBasedTest(
             """
-# empty lines, nothing is ignored
+            # empty lines, nothing is ignored
 
 
-""",
+            """,
             ["foo", "bar"]
         );
     }
@@ -41,9 +41,9 @@ public class IgnoreFileTests
     {
         this.GitBasedTest(
             """
-# trailing whitespaces handled
-foo   
-""",
+            # trailing whitespaces handled
+            foo   
+            """,
             ["foo", "bar"]
         );
     }
@@ -53,9 +53,9 @@ foo
     {
         this.GitBasedTest(
             """
-# exclude foo
-foo
-""",
+            # exclude foo
+            foo
+            """,
             ["foo", "bar/foo", "foob/bar", "src/foo/bar", "src/foo/", "fooc"]
         );
     }
@@ -65,8 +65,8 @@ foo
     {
         this.GitBasedTest(
             """
-bar.txt
-""",
+            bar.txt
+            """,
             ["src/foo/bar.txt", "foo/bar.txt", "bar.txt"]
         );
     }
@@ -76,9 +76,9 @@ bar.txt
     {
         this.GitBasedTest(
             """
-# exclude foo/bar
-foo/bar
-""",
+            # exclude foo/bar
+            foo/bar
+            """,
             [
                 "src/foo/bar",
                 "foo/bar/",
@@ -95,8 +95,8 @@ foo/bar
     {
         this.GitBasedTest(
             """
-foo/
-""",
+            foo/
+            """,
             ["foo/bar", "bar/foo", "foo/har", "tar/foo/bar", "tar/bar/foo"]
         );
     }
@@ -106,8 +106,8 @@ foo/
     {
         this.GitBasedTest(
             """
-foo
-""",
+            foo
+            """,
             ["src/testfoo", "testfoo", "testfoox", "bar/foo", "bar/tfoo"]
         );
     }
@@ -117,8 +117,8 @@ foo
     {
         this.GitBasedTest(
             """
-.foo/
-""",
+            .foo/
+            """,
             [".foo/bar", ".bar/foo", ".foo/har", "tar/.foo/bar", "tar/bar/.foo"]
         );
     }
@@ -128,8 +128,8 @@ foo
     {
         this.GitBasedTest(
             """
-.foo/*
-""",
+            .foo/*
+            """,
             [".foo/bar", ".foo/.foo/bar", ".foo/har"]
         );
     }
@@ -139,8 +139,8 @@ foo
     {
         this.GitBasedTest(
             """
-*.mm.*
-""",
+            *.mm.*
+            """,
             ["file.mm", "commonFile.txt"]
         );
     }
@@ -150,8 +150,8 @@ foo
     {
         this.GitBasedTest(
             """
-.*
-""",
+            .*
+            """,
             [
                 ".dotfile",
                 "no.dotfile",
@@ -170,8 +170,8 @@ foo
     {
         this.GitBasedTest(
             """
-*.cs
-""",
+            *.cs
+            """,
             ["foo.cs", "foo/bar/foo.cs", "foo/bar/bar.csproj"]
         );
     }
@@ -181,8 +181,8 @@ foo
     {
         this.GitBasedTest(
             """
-!*.cs
-""",
+            !*.cs
+            """,
             ["foo.cs", "foo/bar/foo.cs", "foo/bar/bar.csproj"]
         );
     }
@@ -192,8 +192,8 @@ foo
     {
         this.GitBasedTest(
             """
-/*.cs
-""",
+            /*.cs
+            """,
             ["foo.cs", "foo/bar/foo.cs", "foo/bar/bar.csproj"]
         );
     }
@@ -203,8 +203,8 @@ foo
     {
         this.GitBasedTest(
             """
-foo/*.cs
-""",
+            foo/*.cs
+            """,
             ["foo.cs", "foo/bar/foo.cs", "foo/foo.cs", "foo/bar/bar.csproj"]
         );
     }
@@ -214,8 +214,8 @@ foo/*.cs
     {
         this.GitBasedTest(
             """
-foo*
-""",
+            foo*
+            """,
             ["fooc", "foo/bar/foo", "foo/foob.cs", "foo/bar/bar.csproj", "bar/foo"]
         );
     }
@@ -225,8 +225,8 @@ foo*
     {
         this.GitBasedTest(
             """
-\!.foo/*
-""",
+            \!.foo/*
+            """,
             ["!.foo/bar", ".foo/.foo/bar", ".foo/har"]
         );
     }
@@ -236,8 +236,8 @@ foo*
     {
         this.GitBasedTest(
             """
-\#.foo/*
-""",
+            \#.foo/*
+            """,
             ["!#foo/bar", ".foo/.foo/bar", "#.foo/har"]
         );
     }
@@ -247,9 +247,9 @@ foo*
     {
         this.GitBasedTest(
             """
-# * ignores everything
-*
-""",
+            # * ignores everything
+            *
+            """,
             ["foo", "bar"]
         );
     }
@@ -259,8 +259,8 @@ foo*
     {
         this.GitBasedTest(
             """
-*+
-""",
+            *+
+            """,
             ["foo", "bar+", "foo+bar"]
         );
     }
@@ -270,9 +270,9 @@ foo*
     {
         this.GitBasedTest(
             """
-# intermediate *
-fo*b
-""",
+            # intermediate *
+            fo*b
+            """,
             ["foobar", "bar", "foob"]
         );
     }
@@ -282,10 +282,10 @@ fo*b
     {
         this.GitBasedTest(
             """
-# leading slash
-/fo*b
-/bar
-""",
+            # leading slash
+            /fo*b
+            /bar
+            """,
             ["foobar", "bar", "foob"]
         );
     }
@@ -295,9 +295,9 @@ fo*b
     {
         this.GitBasedTest(
             """
-# escaped spaces
-/fo\ b
-""",
+            # escaped spaces
+            /fo\ b
+            """,
             ["foobar", "bar", "fo b", "spacebar"]
         );
     }
@@ -307,8 +307,8 @@ fo*b
     {
         this.GitBasedTest(
             """
-/fo\ b/bar
-""",
+            /fo\ b/bar
+            """,
             ["fo b/bar"]
         );
     }
@@ -318,9 +318,9 @@ fo*b
     {
         this.GitBasedTest(
             """
-# ?
-foo?
-""",
+            # ?
+            foo?
+            """,
             ["foob", "foo"]
         );
     }
@@ -330,9 +330,9 @@ foo?
     {
         this.GitBasedTest(
             """
-# leading **
-**/foo
-""",
+            # leading **
+            **/foo
+            """,
             ["src/foo", "foo/bar", "src/bar/foo"]
         );
     }
@@ -342,9 +342,9 @@ foo?
     {
         this.GitBasedTest(
             """
-# leading **
-**foo.txt
-""",
+            # leading **
+            **foo.txt
+            """,
             ["src/foo.txt", "foo/bar/foo.txt", "foo.txt", "foo.bar"]
         );
     }
@@ -354,9 +354,9 @@ foo?
     {
         this.GitBasedTest(
             """
-/**/foo.json
-/**/*_generated.csproj
-""",
+            /**/foo.json
+            /**/*_generated.csproj
+            """,
             [
                 "foo.json",
                 "bar/foo.json",
@@ -375,9 +375,9 @@ foo?
     {
         this.GitBasedTest(
             """
-# middle **
-foo/**/
-""",
+            # middle **
+            foo/**/
+            """,
             ["src/foo/bar/char", "src/foo/tar", "src/foo/har/char/tar/har"]
         );
     }
@@ -387,9 +387,9 @@ foo/**/
     {
         this.GitBasedTest(
             """
-# middle **
-foo/**/bar
-""",
+            # middle **
+            foo/**/bar
+            """,
             [
                 "foo/bar",
                 "foo/tar/bar",
@@ -405,9 +405,9 @@ foo/**/bar
     {
         this.GitBasedTest(
             """
-# middle **
-foo/**.ps
-""",
+            # middle **
+            foo/**.ps
+            """,
             ["foo/bar/tar.ps", "foo/bar.ps", "foo/bar.js", "foo.ps"]
         );
     }
@@ -417,9 +417,9 @@ foo/**.ps
     {
         this.GitBasedTest(
             """
-# middle **
-foo/**/**/bar
-""",
+            # middle **
+            foo/**/**/bar
+            """,
             ["foo/bar", "src/foo/tar/bar", "foo/har/char/tar/bar", "foo/tar/bar", "foobar"]
         );
     }
@@ -429,9 +429,9 @@ foo/**/**/bar
     {
         this.GitBasedTest(
             """
-# middle **
-**/test/**/*.json
-""",
+            # middle **
+            **/test/**/*.json
+            """,
             ["foo/test/unit/bar/car.json", "foo/test/tar.json", "src/foo/tar/car.json"]
         );
     }
@@ -441,9 +441,9 @@ foo/**/**/bar
     {
         this.GitBasedTest(
             """
-# trailing **
-foo/**
-""",
+            # trailing **
+            foo/**
+            """,
             ["foo/bar", "src/foo/tar/bar", "foo/har/char/tar/bar", "foo/tar/bar", "foobar"]
         );
     }
@@ -453,9 +453,9 @@ foo/**
     {
         this.GitBasedTest(
             """
-# trailing **
-src/foo/**
-""",
+            # trailing **
+            src/foo/**
+            """,
             [
                 "src/foo/bar",
                 "src/foo/tar/bar",
@@ -472,9 +472,9 @@ src/foo/**
     {
         this.GitBasedTest(
             """
-# trailing **
-src/foo
-""",
+            # trailing **
+            src/foo
+            """,
             ["src/foo/bar", "foo/src/foo"]
         );
     }
@@ -484,9 +484,9 @@ src/foo
     {
         this.GitBasedTest(
             """
-# trailing **
-src/foo/
-""",
+            # trailing **
+            src/foo/
+            """,
             ["src/foo"]
         );
     }
@@ -496,9 +496,9 @@ src/foo/
     {
         this.GitBasedTest(
             """
-# trailing **
-src/foo/
-""",
+            # trailing **
+            src/foo/
+            """,
             ["src/foo/", "foo/xy.txt", "src/foo/bar", "tar/src/foo/bar"]
         );
     }
@@ -508,9 +508,9 @@ src/foo/
     {
         this.GitBasedTest(
             """
-# trailing **
-src/
-""",
+            # trailing **
+            src/
+            """,
             ["src/foo", "foo/src/bar", "mysrc/foo"]
         );
     }
@@ -520,12 +520,12 @@ src/
     {
         this.GitBasedTest(
             """
-[Bb]in/
-[Oo]bj/
-[Oo]ut/
-[Ll]og/
-[Ll]ogs/foo
-""",
+            [Bb]in/
+            [Oo]bj/
+            [Oo]ut/
+            [Ll]og/
+            [Ll]ogs/foo
+            """,
             ["foo/bar", "WpfObj/bar", "MyLog/foo", "Logs/foo", "src/Logs/foo/bar"]
         );
     }
@@ -535,9 +535,9 @@ src/
     {
         this.GitBasedTest(
             """
-# negate
-!foo
-""",
+            # negate
+            !foo
+            """,
             ["foo", "bar", "src/foo/tar", "har/foo", "src/bar/foo", "har/bar/foo/tar"]
         );
     }
@@ -547,10 +547,10 @@ src/
     {
         this.GitBasedTest(
             """
-# negate
-foo
-!foo
-""",
+            # negate
+            foo
+            !foo
+            """,
             ["foo", "bar"]
         );
     }
@@ -560,10 +560,10 @@ foo
     {
         this.GitBasedTest(
             """
-# negate
-foo
-!foo
-""",
+            # negate
+            foo
+            !foo
+            """,
             ["foo", "bar", "src/foo", "src/bar/foo"]
         );
     }
@@ -573,12 +573,12 @@ foo
     {
         this.GitBasedTest(
             """
-# negate
-/*
-!/foo
-/foo/*
-!/foo/bar
-""",
+            # negate
+            /*
+            !/foo
+            /foo/*
+            !/foo/bar
+            """,
             ["foo/bar", "bar", "src/foo", "src/bar/foo/bar"]
         );
     }
@@ -588,9 +588,9 @@ foo
     {
         this.GitBasedTest(
             """
-# range regex
-*.py[cod]
-""",
+            # range regex
+            *.py[cod]
+            """,
             ["foo.py", "bar.p", "foo.pyc", "foo.pyco", "foo.pyd"]
         );
     }
