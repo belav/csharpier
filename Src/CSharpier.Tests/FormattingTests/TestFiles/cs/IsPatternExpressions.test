@@ -1,270 +1,284 @@
-class ClassName
+if (expr is Type v)
 {
-    void MethodName()
-    {
-        if (expr is Type v)
-        {
-            return;
-        }
-
-        if (expr is not null)
-        {
-            return;
-        }
-
-        if (expr is < 'A' or > 'Z')
-        {
-            return;
-        }
-
-        Debug.Assert(result is Exception or IPAddress[] or IPHostEntry);
-
-        if (expr is string { Length: 5 } s)
-        {
-            return;
-        }
-
-        if (expr is { Length: 5 })
-        {
-            return;
-        }
-
-        if (
-            expr is
-            {
-                SomeProperty: "someValue________________",
-                SomeOtherProperty: "someOtherValue______________"
-            }
-        )
-        {
-            return;
-        }
-
-        var useLine =
-            node.OperatorToken.Kind()
-            is SyntaxKind.BarBarToken
-                or SyntaxKind.BarToken
-                or SyntaxKind.AmpersandAmpersandToken
-                or SyntaxKind.AmpersandToken
-                or SyntaxKind.PlusToken;
-        var useLine = (
-            node.OperatorToken.Kind()
-            is SyntaxKind.BarBarToken
-                or SyntaxKind.BarToken
-                or SyntaxKind.AmpersandAmpersandToken
-                or SyntaxKind.AmpersandToken
-                or SyntaxKind.PlusToken
-        );
-
-        if (
-            someRandomValue___________________ is SomeRandomType someRandomType
-            && someRandomType.IsEnum
-        )
-        {
-            return;
-        }
-
-        if (x is Y { NoExtraSpaceAfterThisNextBrace: true } && newGroup)
-        {
-            return;
-        }
-
-        if (expr is { } noExtraSpaceBeforeOpenBrace)
-        {
-            return;
-        }
-
-        if (
-            someValue_________________________ is SomeType_________________ someType
-            && someType.SomeProperty
-        ) { }
-
-        var value = someOtherValue is { Property: true };
-
-        var value =
-            someOtherValue
-            is SomeType___________________
-                {
-                    SomeProperty: SomeOtherType_____________________________________________
-                }
-                or SomeThirdType___________;
-
-        var value =
-            someOtherValue
-            is SomeType___________________
-                {
-                    SomeProperty: SomeOtherType_____________________________________________,
-                    AnotherProperty: SomeType
-                }
-                or SomeThirdType___________;
-
-        var value =
-            someOtherValue is SomeType___________________
-            {
-                SomeProperty: SomeType or SomeOtherType
-            };
-
-        var value =
-            someOtherValue is SomeType___________________
-            {
-                SomeProperty: SomeLongType_______________ or SomeOtherLongType___________________
-            };
-
-        var value =
-            someOtherValue
-                is SomeType___________________
-                    or SomeOtherType___________________
-                    or SomeThirdType___________
-            && someLongValue_________________;
-
-        if (someOtherValue is (SomeType or SomeOtherType))
-        {
-            return;
-        }
-
-        if (someOtherValue is not (SomeType or SomeOtherType))
-        {
-            return;
-        }
-
-        if (
-            someOtherValue_____________
-            is (SomeLongType_____________ or SomeOtherLongType_____________)
-        )
-        {
-            return;
-        }
-
-        if (
-            someOtherValue_____________
-            is not (SomeLongType_____________ or SomeOtherLongType_____________)
-        )
-        {
-            return;
-        }
-
-        if (
-            someOtherValue_____________
-            is (
-                SomeLongType_____________________________________
-                or SomeLongType_____________________________________
-            )
-        )
-        {
-            return;
-        }
-
-        if (
-            node is SomeType_______________
-            {
-                SomeProperty: SomeOtherType_____________________________
-            }
-        )
-        {
-            return;
-        }
-
-        if (
-            node is PrefixUnaryExpressionSyntax
-            {
-                Operand: ParenthesizedExpressionSyntax
-                {
-                    Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax
-                },
-            }
-        )
-        {
-            return;
-        }
-
-        if (
-            node is PrefixUnaryExpressionSyntax
-            {
-                Operand:
-                {
-                    Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax______________
-                },
-            }
-        )
-        {
-            return;
-        }
-
-        if (
-            !(
-                node is PrefixUnaryExpressionSyntax
-                {
-                    Operand: ParenthesizedExpressionSyntax or IsPatternExpressionSyntax
-                }
-            )
-        )
-        {
-            return;
-        }
-
-        if (
-            someLongName____________________________________________________ is
-            { } anotherLongName______________________
-        )
-        {
-            return;
-        }
-
-        if (
-            someLongVariableName____________
-            is SomeLongTypeName______________________________ someOtherLongVariableName_____________
-        )
-        {
-            return;
-        }
-
-        if (
-            someArray[index]
-            is SomeLongTypeName______________________________ someOtherLongVariableName_____________
-        )
-        {
-            return;
-        }
-
-        if (
-            someLongName_____________
-            is SomeObjectType
-                or SomeOtherObjectType
-                or YetAnotherObjectType
-        )
-        {
-            return;
-        }
-
-        if (
-            someCondition
-            && someLongName_____________
-                is { Kind: SomeObjectType, Value: "___________________________________" }
-        ) { }
-
-        if (expr is { Property.Length: 5 })
-        {
-            return;
-        }
-
-        if (
-            e is
-#pragma warning disable CS0618
-            BadHttpRequestException
-#pragma warning restore CS0618
-            {
-                Message: "______________________________________________________________________________________________________________"
-            }
-        ) { }
-
-        var needsUpdatedRoslyn = y is y ? [] : z ?? [];
-
-        var isOnArgumentListBracketOrComma =
-            targetToken.Parent is
-            (
-                kind: SyntaxKind.ArgumentList
-                    or SyntaxKind.AttributeArgumentList
-                    or SyntaxKind.ArrayRankSpecifier
-            );
-    }
+    return;
 }
+
+if (expr is not null)
+{
+    return;
+}
+
+if (expr is < 'A' or > 'Z')
+{
+    return;
+}
+
+Debug.Assert(result is Exception or IPAddress[] or IPHostEntry);
+
+if (expr is string { Length: 5 } s)
+{
+    return;
+}
+
+if (expr is { Length: 5 })
+{
+    return;
+}
+
+if (
+    expr is
+    {
+        SomeProperty: "someValue____________________",
+        SomeOtherProperty: "someOtherValue__________________"
+    }
+)
+{
+    return;
+}
+
+var useLine =
+    node.OperatorToken.Kind()
+    is SyntaxKind.BarBarToken
+        or SyntaxKind.BarToken
+        or SyntaxKind.AmpersandAmpersandToken
+        or SyntaxKind.AmpersandToken
+        or SyntaxKind.PlusToken;
+var useLine = (
+    node.OperatorToken.Kind()
+    is SyntaxKind.BarBarToken
+        or SyntaxKind.BarToken
+        or SyntaxKind.AmpersandAmpersandToken
+        or SyntaxKind.AmpersandToken
+        or SyntaxKind.PlusToken
+);
+
+if (
+    someRandomValue_______________________ is SomeRandomType someRandomType
+    && someRandomType.IsEnum
+)
+{
+    return;
+}
+
+if (x is Y { NoExtraSpaceAfterThisNextBrace: true } && newGroup)
+{
+    return;
+}
+
+if (expr is { } noExtraSpaceBeforeOpenBrace)
+{
+    return;
+}
+
+if (
+    someValue_________________________ is SomeType_________________ someType
+    && someType.SomeProperty
+) { }
+
+var value = someOtherValue is { Property: true };
+
+var value =
+    someOtherValue
+    is SomeType___________________
+        {
+            SomeProperty: SomeOtherType_____________________________________________
+        }
+        or SomeThirdType___________;
+
+var value =
+    someOtherValue
+    is SomeType___________________
+        {
+            SomeProperty: SomeOtherType_____________________________________________,
+            AnotherProperty: SomeType
+        }
+        or SomeThirdType___________;
+
+var value =
+    someOtherValue is SomeType___________________________
+    {
+        SomeProperty: SomeType or SomeOtherType
+    };
+
+var value =
+    someOtherValue is SomeType___________________
+    {
+        SomeProperty: SomeLongType_______________ or SomeOtherLongType___________________
+    };
+
+var value =
+    someOtherValue
+        is SomeType___________________
+            or SomeOtherType___________________
+            or SomeThirdType___________
+    && someLongValue_________________;
+
+var value =
+    someOtherValue is
+    {
+        // Property: true
+    };
+
+var value =
+    someOtherValue is
+    {
+        SomeProperty: true,
+        // Property: true
+    };
+
+var value =
+    someOtherValue is
+    {
+        // SomeProperty: true,
+        Property: true,
+    };
+
+if (someOtherValue is (SomeType or SomeOtherType))
+{
+    return;
+}
+
+if (someOtherValue is not (SomeType or SomeOtherType))
+{
+    return;
+}
+
+if (
+    someOtherValue_________________
+    is (SomeLongType_______________ or SomeOtherLongType_______________)
+)
+{
+    return;
+}
+
+if (
+    someOtherValue_________________
+    is not (SomeLongType_____________ or SomeOtherLongType_____________)
+)
+{
+    return;
+}
+
+if (
+    someOtherValue_____________
+    is (
+        SomeLongType_____________________________________
+        or SomeLongType_____________________________________
+    )
+)
+{
+    return;
+}
+
+if (
+    node is SomeType_______________________
+    {
+        SomeProperty: SomeOtherType_____________________________
+    }
+)
+{
+    return;
+}
+
+if (
+    node is PrefixUnaryExpressionSyntax
+    {
+        Operand: ParenthesizedExpressionSyntax
+        {
+            Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax
+        },
+    }
+)
+{
+    return;
+}
+
+if (
+    node is PrefixUnaryExpressionSyntax
+    {
+        Operand:
+        {
+            Expression: IsPatternExpressionSyntax or IsPatternExpressionSyntax______________________
+        },
+    }
+)
+{
+    return;
+}
+
+if (
+    !(
+        node is PrefixUnaryExpressionSyntax
+        {
+            Operand: ParenthesizedExpressionSyntax or IsPatternExpressionSyntax
+        }
+    )
+)
+{
+    return;
+}
+
+if (
+    someLongName____________________________________________________ is
+    { } anotherLongName______________________
+)
+{
+    return;
+}
+
+if (
+    someLongVariableName____________
+    is SomeLongTypeName______________________________ someOtherLongVariableName_____________
+)
+{
+    return;
+}
+
+if (
+    someArray[index]
+    is SomeLongTypeName______________________________ someOtherLongVariableName_____________
+)
+{
+    return;
+}
+
+if (
+    someLongName_____________________
+    is SomeObjectType
+        or SomeOtherObjectType
+        or YetAnotherObjectType
+)
+{
+    return;
+}
+
+if (
+    someCondition
+    && someLongName_____________
+        is { Kind: SomeObjectType, Value: "___________________________________" }
+) { }
+
+if (expr is { Property.Length: 5 })
+{
+    return;
+}
+
+if (
+    e is
+#pragma warning disable CS0618
+    BadHttpRequestException
+#pragma warning restore CS0618
+    {
+        Message: "______________________________________________________________________________________________________________"
+    }
+) { }
+
+var needsUpdatedRoslyn = y is y ? [] : z ?? [];
+
+var isOnArgumentListBracketOrComma =
+    targetToken.Parent is
+    (
+        kind: SyntaxKind.ArgumentList
+            or SyntaxKind.AttributeArgumentList
+            or SyntaxKind.ArrayRankSpecifier
+    );
