@@ -1,6 +1,9 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # csharpier-rider Changelog
+## [10.0.1]
+- Re-add a global format on save option
+
 ## 10.0.0
 - Make version a number that won't conflict with CSharpier itself.
 
