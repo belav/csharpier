@@ -595,6 +595,31 @@ public class IgnoreFileTests
         );
     }
 
+    [Test]
+    public void EdgeCase1()
+    {
+        this.GitBasedTest(
+            """
+            *
+            !/CsharpierIgnoreTest/IncludedSourceFolder/**/*.cs
+            """,
+            ["CsharpierIgnoreTest/IncludedSourceFolder/IncludedClass.cs"]
+        );
+    }
+
+    [Test]
+    public void EdgeCase2()
+    {
+        this.GitBasedTest(
+            """
+            *
+            !*/
+            !/CsharpierIgnoreTest/IncludedSourceFolder/**/*.cs
+            """,
+            ["CsharpierIgnoreTest/IncludedSourceFolder/IncludedClass.cs"]
+        );
+    }
+
     private void GitBasedTest(string gitignore, string[] files)
     {
         this.gitRepository.AddTrackedFileToRepo(".gitignore", gitignore);
@@ -618,7 +643,14 @@ public class IgnoreFileTests
             .Select(se => se.FilePath)
             .ToList();
 
-        var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o));
+        var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o)).ToList();
+
+        foreach (var file in files)
+        {
+            Console.WriteLine(
+                (gitIgnoredFiles.Contains(file) ? "Ignored    " : "Not Ignored") + " - " + file
+            );
+        }
 
         var ignoreFile = IgnoreFile
             .CreateAsync(
