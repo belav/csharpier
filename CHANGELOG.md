@@ -1,3 +1,61 @@
+# 1.2.6
+## What's Changed
+### [Bug]: XML with DOCTYPE results in "invalid xml" warning [#1809](https://github.com/belav/csharpier/issues/1809)
+CSharpier was not formatting xml that included a doctype and instead reporting that it was invalid xml.
+```xml
+<?xml version="1.0"?>
+<!DOCTYPE staff SYSTEM "staff.dtd"[
+    <!ENTITY ent1 "es">
+]>
+<staff></staff>
+```
+### [Bug]: Initializing a span using `stackalloc` leads to different formatting compared to `new` [#1808](https://github.com/belav/csharpier/issues/1808)
+When initializing a spacn using stackalloc, it was not being formatting consistently with other code
+```c#
+// input & expected output
+Span<int> metatable = new int[]
+{
+    00000000000000000000000001,
+    00000000000000000000000002,
+    00000000000000000000000003,
+};
+
+Span<int> metatable = stackalloc int[]
+{
+    00000000000000000000000001,
+    00000000000000000000000002,
+    00000000000000000000000003,
+};
+
+// 1.2.5
+Span<int> metatable = new int[]
+{
+    00000000000000000000000001,
+    00000000000000000000000002,
+    00000000000000000000000003,
+};
+
+Span<int> metatable =
+    stackalloc int[] {
+        00000000000000000000000001,
+        00000000000000000000000002,
+        00000000000000000000000003,
+    };
+
+```
+### [Bug]: Comments in otherwise empty object pattern disappear when formatting [#1804](https://github.com/belav/csharpier/issues/1804)
+CSharpier was removing comments if they were the only content of an object pattern.
+```c#
+// input & expected output
+var match = obj is {
+    //Property: 123
+};
+
+// 1.2.5
+var match = obj is { };
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.2.5...1.2.6
 # 1.2.5
 ## What's Changed
 ### Performance issue when running CLI in project with pnpm on Windows [#1781](https://github.com/belav/csharpier/issues/1781)
@@ -3757,6 +3815,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
