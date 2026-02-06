@@ -126,7 +126,6 @@ internal static class RightHandSide
             or InterpolatedStringExpressionSyntax
             or IsPatternExpressionSyntax
             or LiteralExpressionSyntax
-            or StackAllocArrayCreationExpressionSyntax
             or QueryExpressionSyntax => Layout.BreakAfterOperator,
             _ => Layout.Fluid,
         };
