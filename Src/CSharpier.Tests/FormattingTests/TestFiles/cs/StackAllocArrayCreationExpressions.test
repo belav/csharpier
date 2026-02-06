@@ -3,6 +3,9 @@ Span<int> a = stackalloc int[3] { 1, 2, 3 };
 Span<int> a = stackalloc int[] { 1, 2, 3 };
 Span<int> a = stackalloc[] { 1, 2, 3 };
 
+Span<byte> someLongName_________________________ =
+    stackalloc byte[JsonConstants.MaximumEscapedDateTimeOffsetParseLength];
+
 Span<int> metatable = stackalloc int[]
 {
     00000000000000000000000001,
