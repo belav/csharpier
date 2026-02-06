@@ -29,8 +29,6 @@ public class BaseTest
 
         foreach (var group in files.GroupBy(o => o.Directory!.Name))
         {
-            var formattingType = group.Key;
-
             foreach (var file in group)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
@@ -122,6 +120,7 @@ public class BaseTest
 
         result.CompilationErrors.Should().BeEmpty();
         result.FailureMessage.Should().BeEmpty();
+        result.WarningMessage.Should().BeEmpty();
 
         if (normalizedCode != expectedCode && !BuildServerDetector.Detected)
         {
