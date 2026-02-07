@@ -61,12 +61,12 @@ class ClassName
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
             TAccountClaimsPrincipalFactory
     >(this IRemoteAuthenticationBuilder<RemoteAuthenticationState, RemoteUserAccount> builder)
-        where TAccountClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount> =>
-        builder.AddAccountClaimsPrincipalFactory<
-            RemoteAuthenticationState,
-            RemoteUserAccount,
-            TAccountClaimsPrincipalFactory
-        >();
+        where TAccountClaimsPrincipalFactory : AccountClaimsPrincipalFactory<RemoteUserAccount>
+        => builder.AddAccountClaimsPrincipalFactory<
+                RemoteAuthenticationState,
+                RemoteUserAccount,
+                TAccountClaimsPrincipalFactory
+            >();
 
     private static readonly Action<IApplicationBuilder> ActionNotImplemented =
         new Action<IApplicationBuilder>(_ =>
@@ -88,37 +88,35 @@ class ClassName
         }
     }
 
-    public void Condition(
-        Func<ConditionParameters<TSource, TDestination, TMember>, bool> condition
-    ) =>
-        PathMapActions.Add(pm =>
-        {
-            Expression<
-                Func<TSource, TDestination, TMember, TMember, ResolutionContext, bool>
-            > expr = (src, dest, srcMember, destMember, ctxt) =>
-                condition(
-                    new ConditionParameters<TSource, TDestination, TMember>(
-                        src,
-                        dest,
-                        srcMember,
-                        destMember,
-                        ctxt
-                    )
-                );
-            pm.Condition = expr;
-        });
+    public void Condition(Func<ConditionParameters<TSource, TDestination, TMember>, bool> condition)
+        => PathMapActions.Add(pm =>
+            {
+                Expression<
+                    Func<TSource, TDestination, TMember, TMember, ResolutionContext, bool>
+                > expr = (src, dest, srcMember, destMember, ctxt) =>
+                    condition(
+                        new ConditionParameters<TSource, TDestination, TMember>(
+                            src,
+                            dest,
+                            srcMember,
+                            destMember,
+                            ctxt
+                        )
+                    );
+                pm.Condition = expr;
+            });
 
     public override Type SourceType
     {
-        get =>
-            _sourceType ??=
-                CustomMapExpression?.ReturnType
-                ?? CustomMapFunction?.ReturnType
-                ?? (
-                    _sourceMembers.Length > 0
-                        ? _sourceMembers[_sourceMembers.Length - 1].GetMemberType()
-                        : Parameter.ParameterType
-                );
+        get
+            => _sourceType ??=
+                    CustomMapExpression?.ReturnType
+                    ?? CustomMapFunction?.ReturnType
+                    ?? (
+                        _sourceMembers.Length > 0
+                            ? _sourceMembers[_sourceMembers.Length - 1].GetMemberType()
+                            : Parameter.ParameterType
+                    );
         protected set => _sourceType = value;
     }
 
@@ -126,14 +124,18 @@ class ClassName
         this Expression expression,
         Expression then,
         Expression @else
-    ) =>
-        expression.Type.IsValueType
-            ? (
-                expression.Type.IsNullableType()
-                    ? Condition(Property(expression, "HasValue"), ToType(@else, then.Type), then)
-                    : @else
-            )
-            : Condition(ReferenceEqual(expression, Null), then, ToType(@else, then.Type));
+    )
+        => expression.Type.IsValueType
+                ? (
+                    expression.Type.IsNullableType()
+                        ? Condition(
+                            Property(expression, "HasValue"),
+                            ToType(@else, then.Type),
+                            then
+                        )
+                        : @else
+                )
+                : Condition(ReferenceEqual(expression, Null), then, ToType(@else, then.Type));
 
     private bool VisitChildForCompare(Pair<XmlNode> tuple, ref int result)
     {

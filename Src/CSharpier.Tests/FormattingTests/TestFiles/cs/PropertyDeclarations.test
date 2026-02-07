@@ -28,8 +28,8 @@ public class ClassName
 
     public string LambdaBod => this.Property;
 
-    public string LongNameForcesALineBreakSoWeCanTestEvenLonger____________________ =>
-        this.Property;
+    public string LongNameForcesALineBreakSoWeCanTestEvenLonger____________________
+        => this.Property;
 
     public string Property
     {
