@@ -1,5 +1,6 @@
 using CSharpier.Core.DocTypes;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace CSharpier.Core.Utilities;
 
@@ -107,5 +108,18 @@ internal static class ListExtensions
         }
 
         return true;
+    }
+
+    public static bool Contains(this ref ValueListBuilder<SyntaxKind> kinds, SyntaxKind kind)
+    {
+        foreach (var element in kinds.AsSpan())
+        {
+            if (element == kind)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
