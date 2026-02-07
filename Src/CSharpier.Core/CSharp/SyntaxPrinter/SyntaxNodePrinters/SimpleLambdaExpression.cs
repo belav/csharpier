@@ -14,7 +14,7 @@ internal static class SimpleLambdaExpression
     {
         return Doc.Concat(
             Modifiers.PrintSorted(node.Modifiers, context),
-            Node.Print(node.Parameter, context),
+            Doc.Group(Node.Print(node.Parameter, context)),
             " ",
             Token.Print(node.ArrowToken, context)
         );
@@ -29,7 +29,7 @@ internal static class SimpleLambdaExpression
                 " ",
                 Node.Print(node.Body, context)
             ),
-            _ => Doc.Indent(Doc.Line, Node.Print(node.Body, context)),
+            _ => Doc.Group(Doc.Indent(Doc.Line, Node.Print(node.Body, context))),
         };
     }
 }

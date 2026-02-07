@@ -72,8 +72,7 @@ this.SomeMethod(
 
 roleNames
     .ToList()
-    .ForEach(role =>
-        this.SomeProperty.Setup(o => longThing_______________________________________)
+    .ForEach(role => this.SomeProperty.Setup(o => longThing_______________________________________)
     );
 
 roleNames
