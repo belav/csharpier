@@ -1,3 +1,6 @@
+## 10.0.1
+- Disable Q&A. Please use GitHub
+
 ## 10.0.0
 - Make version a number that won't conflict with CSharpier itself.
 
