@@ -1,4 +1,7 @@
-﻿## [10.0.1]
+﻿## [10.0.2]
+- Disable Q&A. Please use GitHub
+
+## [10.0.1]
 - Add right click format command for AXAML. Requires csharpier configuration for < 1.3.0
 
 ## [2.2.0]
