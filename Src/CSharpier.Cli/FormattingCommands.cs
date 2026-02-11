@@ -159,7 +159,8 @@ internal static class FormattingCommands
     )
     {
         var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel, logFormat);
+        SarifLogger? sarifLogger = logFormat == LogFormat.Sarif ? new SarifLogger(console, logLevel) : null;
+        ILogger logger = (ILogger?)sarifLogger ?? new ConsoleLogger(console, logLevel, logFormat);
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;
@@ -204,13 +205,20 @@ internal static class FormattingCommands
             LogFormat = logFormat,
         };
 
-        return await CommandLineFormatter.Format(
+        var exitCode = await CommandLineFormatter.Format(
             commandLineOptions,
             new FileSystem(),
             console,
             logger,
             cancellationToken
         );
+
+        if (!commandLineOptions.WriteStdout)
+        {
+            sarifLogger?.WriteSarifLog();
+        }
+
+        return exitCode;
     }
 
     private static Argument<string[]> AddDirectoryOrFileArgument(Command command)
@@ -256,6 +264,7 @@ internal static class FormattingCommands
         Log output format
           Console (default) - Formats messages in a human readable way for console interaction.
           MsBuild - Formats messages in standard error/warning format for MSBuild.
+          Sarif - Emits a SARIF 2.1.0 log document containing warnings and errors.
         """
     );
 

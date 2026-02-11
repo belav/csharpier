@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
+using System.Text.Json;
 using AwesomeAssertions;
 using CliWrap;
 using CliWrap.Buffered;
@@ -518,6 +519,79 @@ public class CliTests
             .Should()
             .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Check_Should_Write_Sarif_Error_With_Unformatted_File()
+    {
+        var unformattedContent = "public class ClassName1 {\n\n}";
+        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check CheckUnformatted.cs --log-format sarif")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(1);
+
+        using var document = JsonDocument.Parse(result.Output);
+        var sarifResult = document.RootElement.GetProperty("runs")[0].GetProperty("results")[0];
+        sarifResult.GetProperty("level").GetString().Should().Be("error");
+        sarifResult
+            .GetProperty("message")
+            .GetProperty("text")
+            .GetString()
+            .Should()
+            .Contain("Was not formatted.");
+        sarifResult
+            .GetProperty("locations")[0]
+            .GetProperty("physicalLocation")
+            .GetProperty("artifactLocation")
+            .GetProperty("uri")
+            .GetString()!
+            .Replace('\\', '/')
+            .Should()
+            .Be("./CheckUnformatted.cs");
+    }
+
+    [Test]
+    public async Task Check_Should_Write_Sarif_Warning_With_Unformatted_File()
+    {
+        var unformattedContent = "public class ClassName1 {\n\n}";
+        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check CheckUnformatted.cs --unformatted-as-warnings --log-format sarif")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+
+        using var document = JsonDocument.Parse(result.Output);
+        var sarifResult = document.RootElement.GetProperty("runs")[0].GetProperty("results")[0];
+        sarifResult.GetProperty("level").GetString().Should().Be("warning");
+        sarifResult
+            .GetProperty("message")
+            .GetProperty("text")
+            .GetString()
+            .Should()
+            .Contain("Was not formatted.");
+    }
+
+    [Test]
+    public async Task Format_With_StdIn_Should_Not_Write_Sarif_Log()
+    {
+        var unformattedContent = "public class ClassName1 {\n\n}";
+        var formattedContent = "public class ClassName1 { }\n";
+
+        var result = await new CsharpierProcess()
+            .WithArguments("format --log-format sarif")
+            .WithPipedInput(unformattedContent)
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().Be(formattedContent);
     }
 
     [Test]

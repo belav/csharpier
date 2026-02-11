@@ -20,6 +20,7 @@ internal class FileIssueLogger(string filePath, ILogger logger, LogFormat logFor
         {
             LogFormat.MsBuild => "{Path}: error: {Message}",
             LogFormat.Console => "{Path} - {Message}",
+            LogFormat.Sarif => "{Path} - {Message}",
             _ => throw new NotImplementedException($"LogFormat: {Enum.GetName(logFormat)}"),
         };
     }
