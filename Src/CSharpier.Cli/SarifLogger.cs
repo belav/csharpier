@@ -78,17 +78,23 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
             return;
         }
 
-        var (path, messageFromState, lineNumber, columnNumber) = ExtractState(state);
-        var messageText = messageFromState ?? formatter(state, exception!);
+        var (path, region, extractedRuleId, message) = LoggerExtensions.ExtractState(state);
+        var messageText = message ?? formatter(state, exception!);
 
         if (exception is not null)
         {
             messageText += "\n" + exception;
         }
 
-        var ruleId = DetermineRuleId(messageText, exception);
-        var region = (lineNumber.HasValue || columnNumber.HasValue)
-            ? new SarifRegion { StartLine = lineNumber, StartColumn = columnNumber }
+        var ruleId = extractedRuleId ?? DetermineRuleId(messageText, exception);
+        var sarifRegion = region is not null
+            ? new SarifRegion
+            {
+                StartLine = region.StartLine,
+                StartColumn = region.StartCharacter,
+                EndLine = region.EndLine,
+                EndColumn = region.EndCharacter
+            }
             : null;
 
         this.results.Enqueue(
@@ -102,7 +108,7 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
                     ? null
                     : [new SarifLocation
                     {
-                        PhysicalLocation = CreatePhysicalLocation(path, region)
+                        PhysicalLocation = CreatePhysicalLocation(path, sarifRegion)
                     }],
             }
         );
@@ -140,38 +146,7 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
         };
     }
 
-    private static (string? Path, string? Message, int? LineNumber, int? ColumnNumber) ExtractState<TState>(TState state)
-    {
-        string? path = null;
-        string? message = null;
-        int? lineNumber = null;
-        int? columnNumber = null;
 
-        if (state is IEnumerable<KeyValuePair<string, object?>> keyValuePairs)
-        {
-            foreach (var keyValuePair in keyValuePairs)
-            {
-                if (keyValuePair.Key == "Path")
-                {
-                    path = keyValuePair.Value?.ToString();
-                }
-                else if (keyValuePair.Key == "Message")
-                {
-                    message = keyValuePair.Value?.ToString();
-                }
-                else if (keyValuePair.Key == "LineNumber" && keyValuePair.Value is int line)
-                {
-                    lineNumber = line;
-                }
-                else if (keyValuePair.Key == "ColumnNumber" && keyValuePair.Value is int column)
-                {
-                    columnNumber = column;
-                }
-            }
-        }
-
-        return (path, message, lineNumber, columnNumber);
-    }
 
     private static SarifPhysicalLocation CreatePhysicalLocation(string path, SarifRegion? region = null)
     {
@@ -324,6 +299,12 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
 
         [JsonPropertyName("startColumn")]
         public int? StartColumn { get; set; }
+
+        [JsonPropertyName("endLine")]
+        public int? EndLine { get; set; }
+
+        [JsonPropertyName("endColumn")]
+        public int? EndColumn { get; set; }
     }
 
     private class SarifArtifactLocation

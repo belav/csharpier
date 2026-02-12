@@ -265,6 +265,55 @@ four
         result.Should().BeNullOrEmpty();
     }
 
+    [Test]
+    public void GetFirstDifferenceLineNumber_Should_Return_Null_If_Values_Are_Identical()
+    {
+        var result = StringDiffer.GetFirstDifferenceLineNumber("value\n", "value\n");
+
+        result.Should().BeNull();
+    }
+
+    [Test]
+    public void GetFirstDifferenceLineNumber_Should_Return_Line_1_For_Single_Line_Difference()
+    {
+        var result = StringDiffer.GetFirstDifferenceLineNumber("one\n", "two\n");
+
+        result.Should().Be(1);
+    }
+
+    [Test]
+    public void GetFirstDifferenceLineNumber_Should_Return_Correct_Line_For_Multi_Line_Difference()
+    {
+        var expected = "one\ntwo\nfour\n";
+        var actual = "one\ntwo\nthree\nfour\n";
+
+        var result = StringDiffer.GetFirstDifferenceLineNumber(expected, actual);
+
+        result.Should().Be(3);
+    }
+
+    [Test]
+    public void GetFirstDifferenceLineNumber_Should_Return_Correct_Line_For_Extra_Line()
+    {
+        var expected = "one\ntwo\nthree\n";
+        var actual = "one\ntwo\nthree\nfour\n";
+
+        var result = StringDiffer.GetFirstDifferenceLineNumber(expected, actual);
+
+        result.Should().Be(4);
+    }
+
+    [Test]
+    public void GetFirstDifferenceLineNumber_Should_Return_Correct_Line_For_Missing_Line()
+    {
+        var expected = "one\ntwo\nthree\nfour\n";
+        var actual = "one\ntwo\nfour\n";
+
+        var result = StringDiffer.GetFirstDifferenceLineNumber(expected, actual);
+
+        result.Should().Be(3);
+    }
+
     private static string AddNewLinesAndFindDifference(string expected, string actual)
     {
         return StringDiffer.PrintFirstDifference(

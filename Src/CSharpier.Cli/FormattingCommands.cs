@@ -160,7 +160,7 @@ internal static class FormattingCommands
     {
         var console = new SystemConsole();
         SarifLogger? sarifLogger = logFormat == LogFormat.Sarif ? new SarifLogger(console, logLevel) : null;
-        ILogger logger = (ILogger?)sarifLogger ?? new ConsoleLogger(console, logLevel, logFormat);
+        ILogger logger = (ILogger?)sarifLogger ?? new ConsoleLogger(console, logLevel);
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;

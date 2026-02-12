@@ -99,6 +99,57 @@ internal static class StringDiffer
         return "The file contained different line endings than formatting it would result in.";
     }
 
+    /// <summary>
+    /// Gets the line number of the first difference between two strings.
+    /// Returns 1-based line number if a difference is found, or null if strings are identical.
+    /// </summary>
+    public static int? GetFirstDifferenceLineNumber(string expected, string actual)
+    {
+        if (expected == actual)
+        {
+            return null;
+        }
+
+        if (!EndsWithExactlyOneNewline(actual))
+        {
+            // Different line ending, typically occurs at the end, but we'll check the end
+            return CountLinesInString(actual);
+        }
+
+        using var expectedReader = new StringReader(expected);
+        using var actualReader = new StringReader(actual);
+
+        var expectedLine = expectedReader.ReadLine();
+        var actualLine = actualReader.ReadLine();
+        var lineNumber = 1;
+
+        while (expectedLine != null || actualLine != null)
+        {
+            if (expectedLine != actualLine)
+            {
+                return lineNumber;
+            }
+
+            lineNumber++;
+            expectedLine = expectedReader.ReadLine();
+            actualLine = actualReader.ReadLine();
+        }
+
+        return null;
+    }
+
+    private static int CountLinesInString(string value)
+    {
+        var count = 1;
+        var index = 0;
+        while ((index = value.IndexOf('\n', index)) != -1)
+        {
+            count++;
+            index++;
+        }
+        return count;
+    }
+
     private static bool EndsWithExactlyOneNewline(string value)
     {
         return (

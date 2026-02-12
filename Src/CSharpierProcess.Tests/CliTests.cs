@@ -552,6 +552,15 @@ public class CliTests
             .Replace('\\', '/')
             .Should()
             .Be("./CheckUnformatted.cs");
+        // Check that line numbers are included in the region
+        sarifResult
+            .GetProperty("locations")[0]
+            .GetProperty("physicalLocation")
+            .TryGetProperty("region", out var region)
+            .Should()
+            .Be(true);
+        region.GetProperty("startLine").GetInt32().Should().BeGreaterThan(0);
+        region.GetProperty("endLine").GetInt32().Should().BeGreaterThan(0);
     }
 
     [Test]
@@ -576,6 +585,15 @@ public class CliTests
             .GetString()
             .Should()
             .Contain("Was not formatted.");
+        // Check that line numbers are included in the region
+        sarifResult
+            .GetProperty("locations")[0]
+            .GetProperty("physicalLocation")
+            .TryGetProperty("region", out var region)
+            .Should()
+            .Be(true);
+        region.GetProperty("startLine").GetInt32().Should().BeGreaterThan(0);
+        region.GetProperty("endLine").GetInt32().Should().BeGreaterThan(0);
     }
 
     [Test]

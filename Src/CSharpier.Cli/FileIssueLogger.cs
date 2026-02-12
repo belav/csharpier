@@ -2,31 +2,42 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
+internal record Region
+{
+    public int StartLine { get; set; }
+    public int StartCharacter { get; set; }
+    public int EndLine { get; set; }
+    public int EndCharacter { get; set; }
+}
+
 internal class FileIssueLogger(string filePath, ILogger logger, LogFormat logFormat)
 {
-    public void WriteError(string value, Exception? exception = null)
+    public void WriteError(
+        string message,
+        Exception? exception = null,
+        string? ruleId = null,
+        Region? region = null
+    )
     {
-        logger.LogError(exception, this.GetMessageTemplate(), this.GetPath(), value);
+        logger.LogError(
+            exception,
+            "{Path}{Region}{RuleId}{Message}",
+            filePath,
+            region,
+            ruleId,
+            message
+        );
     }
 
-    public void WriteWarning(string value)
+    public void WriteWarning(string message, string? ruleId = null, Region? region = null)
     {
-        logger.LogWarning(this.GetMessageTemplate(), this.GetPath(), value);
-    }
-
-    private string GetMessageTemplate()
-    {
-        return logFormat switch
-        {
-            LogFormat.MsBuild => "{Path}: error: {Message}",
-            LogFormat.Console => "{Path} - {Message}",
-            LogFormat.Sarif => "{Path} - {Message}",
-            _ => throw new NotImplementedException($"LogFormat: {Enum.GetName(logFormat)}"),
-        };
-    }
-
-    private string GetPath()
-    {
-        return filePath;
+        logger.LogWarning(
+            "{Path}{Region}{RuleId}{Message}",
+            filePath,
+            region,
+            ruleId,
+            message
+        );
     }
 }
+
