@@ -1,10 +1,16 @@
 using Microsoft.Extensions.Logging;
 
+#if !NET9_0_OR_GREATER
+using Lock = object;
+#else
+using Lock = System.Threading.Lock;
+#endif
+
 namespace CSharpier.Cli;
 
 internal class ConsoleLogger(IConsole console, LogLevel loggingLevel) : ILogger
 {
-    private static readonly object ConsoleLock = new();
+    private static readonly Lock ConsoleLock = new();
 
     public void Log<TState>(
         LogLevel logLevel,
@@ -33,7 +39,7 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel) : ILogger
             if (logLevel >= LogLevel.Warning)
             {
                 console.ForegroundColor = GetColorLevel(logLevel);
-                console.Write($"{logLevel.ToString().ToUpper()}: ");
+                console.Write($"{logLevel.ToString().ToUpperInvariant()}: ");
                 console.ResetColor();
             }
 
