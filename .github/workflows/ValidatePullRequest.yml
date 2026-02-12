@@ -11,6 +11,37 @@ jobs:
       - uses: actions/setup-dotnet@v3
       - run: >
           dotnet test --solution CSharpier.slnx
+  integration_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: csharpier
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: csharpier/global.json
+      - uses: actions/checkout@v4
+        with:
+          repository: belav/csharpier-repos
+          path: csharpier-repos
+          sparse-checkout: |
+            moq4
+      - run: dotnet build csharpier/Src/CSharpier.Cli/CSharpier.Cli.csproj -c release
+      - run: dotnet csharpier/Src/CSharpier.Cli/bin/release/net9.0/CSharpier.dll check csharpier-repos/moq4 --log-format sarif >>moq4.sarif
+      - uses: advanced-security/filter-sarif@v1
+        with:
+          patterns: |
+            +**/MatchExpressionFixture.cs
+          input: moq4.sarif
+          output: moq4-filtered.sarif
+      - name: Validate filtered SARIF has one result
+        run: |
+          RESULT_COUNT=$(jq '.runs[0].results | length' moq4-filtered.sarif)
+          if [ "$RESULT_COUNT" -ne 1 ]; then
+            echo "Error: Expected 1 result in SARIF file, but found $RESULT_COUNT"
+            exit 1
+          fi
+          echo "✓ SARIF file contains exactly 1 result"
   no_warnings:
     runs-on: ubuntu-latest
     name: No Warnings
