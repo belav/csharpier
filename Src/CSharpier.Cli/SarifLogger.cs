@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,9 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         WriteIndented = true,
     };
+
+    private readonly string toolVersion = GetToolVersion();
+    private readonly string workingDirectory = Directory.GetCurrentDirectory();
 
     public void WriteSarifLog()
     {
@@ -29,14 +33,30 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
                         Driver = new SarifDriver
                         {
                             Name = "CSharpier",
+                            Version = toolVersion,
                             InformationUri = "https://csharpier.com",
+                            Rules =
+                            [
+                                new SarifRule { Id = "CSharpier/Formatting", ShortDescription = new SarifMessage { Text = "Formatting issue" } },
+                                new SarifRule { Id = "CSharpier/Compilation", ShortDescription = new SarifMessage { Text = "Compilation error" } },
+                                new SarifRule { Id = "CSharpier/Validation", ShortDescription = new SarifMessage { Text = "Validation failure" } },
+                            ],
                         },
                     },
+                    Invocations =
+                    [
+                        new SarifInvocation
+                        {
+                            ToolExecutionSuccessful = true,
+                            ExecutionSuccessful = true,
+                            WorkingDirectory = new SarifArtifactLocation { Uri = new Uri(workingDirectory).AbsoluteUri },
+                        }
+                    ],
                     Results = [.. this.results],
                 },
             ],
         };
-        
+
         console.WriteLine(
             JsonSerializer.Serialize(
                 report,
@@ -58,7 +78,7 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
             return;
         }
 
-        var (path, messageFromState) = ExtractState(state);
+        var (path, messageFromState, lineNumber, columnNumber) = ExtractState(state);
         var messageText = messageFromState ?? formatter(state, exception!);
 
         if (exception is not null)
@@ -66,15 +86,24 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
             messageText += "\n" + exception;
         }
 
+        var ruleId = DetermineRuleId(messageText, exception);
+        var region = (lineNumber.HasValue || columnNumber.HasValue)
+            ? new SarifRegion { StartLine = lineNumber, StartColumn = columnNumber }
+            : null;
+
         this.results.Enqueue(
             new SarifResult
             {
-                RuleId = "CSharpier",
+                RuleId = ruleId,
+                Kind = "fail",
                 Level = MapLevel(logLevel),
                 Message = new SarifMessage { Text = messageText },
                 Locations = path is null
                     ? null
-                    : [new SarifLocation { PhysicalLocation = CreatePhysicalLocation(path) }],
+                    : [new SarifLocation
+                    {
+                        PhysicalLocation = CreatePhysicalLocation(path, region)
+                    }],
             }
         );
     }
@@ -100,10 +129,23 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
         };
     }
 
-    private static (string? Path, string? Message) ExtractState<TState>(TState state)
+    private static string DetermineRuleId(string message, Exception? exception)
+    {
+        return (message, exception) switch
+        {
+            (var m, _) when m.Contains("compilation", StringComparison.OrdinalIgnoreCase) => "CSharpier/Compilation",
+            (var m, _) when m.Contains("validation", StringComparison.OrdinalIgnoreCase) => "CSharpier/Validation",
+            (var m, _) when m.Contains("format", StringComparison.OrdinalIgnoreCase) => "CSharpier/Formatting",
+            _ => "CSharpier/Formatting",
+        };
+    }
+
+    private static (string? Path, string? Message, int? LineNumber, int? ColumnNumber) ExtractState<TState>(TState state)
     {
         string? path = null;
         string? message = null;
+        int? lineNumber = null;
+        int? columnNumber = null;
 
         if (state is IEnumerable<KeyValuePair<string, object?>> keyValuePairs)
         {
@@ -117,17 +159,26 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
                 {
                     message = keyValuePair.Value?.ToString();
                 }
+                else if (keyValuePair.Key == "LineNumber" && keyValuePair.Value is int line)
+                {
+                    lineNumber = line;
+                }
+                else if (keyValuePair.Key == "ColumnNumber" && keyValuePair.Value is int column)
+                {
+                    columnNumber = column;
+                }
             }
         }
 
-        return (path, message);
+        return (path, message, lineNumber, columnNumber);
     }
 
-    private static SarifPhysicalLocation CreatePhysicalLocation(string path)
+    private static SarifPhysicalLocation CreatePhysicalLocation(string path, SarifRegion? region = null)
     {
         return new SarifPhysicalLocation
         {
             ArtifactLocation = new SarifArtifactLocation { Uri = BuildUri(path) },
+            Region = region,
         };
     }
 
@@ -148,56 +199,136 @@ internal class SarifLogger(IConsole console, LogLevel loggingLevel) : ILogger
         return path.Replace('\\', '/');
     }
 
+    private static string GetToolVersion()
+    {
+        try
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
+            return version?.ToString() ?? "unknown";
+        }
+        catch
+        {
+            return "unknown";
+        }
+    }
+
     private class SarifLog
     {
         [JsonPropertyName("$schema")]
         public string Schema { get; set; } = string.Empty;
+
+        [JsonPropertyName("version")]
         public string Version { get; set; } = string.Empty;
+
+        [JsonPropertyName("runs")]
         public SarifRun[] Runs { get; set; } = [];
     }
 
     private class SarifRun
     {
+        [JsonPropertyName("tool")]
         public SarifTool Tool { get; set; } = new();
+
+        [JsonPropertyName("invocations")]
+        public SarifInvocation[]? Invocations { get; set; }
+
+        [JsonPropertyName("results")]
         public SarifResult[] Results { get; set; } = [];
     }
 
     private class SarifTool
     {
+        [JsonPropertyName("driver")]
         public SarifDriver Driver { get; set; } = new();
     }
 
     private class SarifDriver
     {
+        [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
+
+        [JsonPropertyName("version")]
+        public string? Version { get; set; }
+
+        [JsonPropertyName("informationUri")]
         public string? InformationUri { get; set; }
+
+        [JsonPropertyName("rules")]
+        public SarifRule[]? Rules { get; set; }
+    }
+
+    private class SarifRule
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("shortDescription")]
+        public SarifMessage? ShortDescription { get; set; }
+    }
+
+    private class SarifInvocation
+    {
+        [JsonPropertyName("executionSuccessful")]
+        public bool ExecutionSuccessful { get; set; }
+
+        [JsonPropertyName("toolExecutionSuccessful")]
+        public bool ToolExecutionSuccessful { get; set; }
+
+        [JsonPropertyName("workingDirectory")]
+        public SarifArtifactLocation? WorkingDirectory { get; set; }
     }
 
     private class SarifResult
     {
+        [JsonPropertyName("ruleId")]
         public string RuleId { get; set; } = string.Empty;
+
+        [JsonPropertyName("kind")]
+        public string? Kind { get; set; }
+
+        [JsonPropertyName("level")]
         public string Level { get; set; } = string.Empty;
+
+        [JsonPropertyName("message")]
         public SarifMessage Message { get; set; } = new();
+
+        [JsonPropertyName("locations")]
         public SarifLocation[]? Locations { get; set; }
     }
 
     private class SarifMessage
     {
+        [JsonPropertyName("text")]
         public string Text { get; set; } = string.Empty;
     }
 
     private class SarifLocation
     {
+        [JsonPropertyName("physicalLocation")]
         public SarifPhysicalLocation PhysicalLocation { get; set; } = new();
     }
 
     private class SarifPhysicalLocation
     {
+        [JsonPropertyName("artifactLocation")]
         public SarifArtifactLocation ArtifactLocation { get; set; } = new();
+
+        [JsonPropertyName("region")]
+        public SarifRegion? Region { get; set; }
+    }
+
+    private class SarifRegion
+    {
+        [JsonPropertyName("startLine")]
+        public int? StartLine { get; set; }
+
+        [JsonPropertyName("startColumn")]
+        public int? StartColumn { get; set; }
     }
 
     private class SarifArtifactLocation
     {
+        [JsonPropertyName("uri")]
         public string Uri { get; set; } = string.Empty;
     }
 }
