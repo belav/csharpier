@@ -1035,7 +1035,7 @@ class ClassName
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information, logFormat);
+        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information);
         var exitCode = CommandLineFormatter
             .Format(
                 new CommandLineOptions

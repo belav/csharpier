@@ -458,30 +458,52 @@ internal static class CommandLineFormatter
         }
         catch (Exception ex)
         {
-            fileIssueLogger.WriteError("Threw exception while formatting.", ex);
+            fileIssueLogger.WriteError(
+                "Threw exception while formatting.",
+                ex,
+                ruleId: "CSharpier.Formatting"
+            );
             Interlocked.Increment(ref commandLineFormatterResult.ExceptionsFormatting);
             return;
         }
 
         if (codeFormattingResult.CompilationErrors.Any())
         {
-            var errorMessage = new StringBuilder();
-            errorMessage.AppendLine("Failed to compile so was not formatted.");
-            foreach (var message in codeFormattingResult.CompilationErrors)
-            {
-                errorMessage.AppendLine(message.ToString());
-            }
-
             if (!commandLineOptions.CompilationErrorsAsWarnings)
             {
-                fileIssueLogger.WriteError(errorMessage.ToString());
-            }
-            else
-            {
-                fileIssueLogger.WriteWarning(errorMessage.ToString());
+                Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
             }
 
-            Interlocked.Increment(ref commandLineFormatterResult.FailedCompilation);
+            foreach (var diagnostic in codeFormattingResult.CompilationErrors)
+            {
+                var message = "Failed to compile so was not formatted: " + diagnostic;
+                var lineSpan = diagnostic.Location.GetLineSpan();
+                var region = new Region
+                {
+                    StartLine = lineSpan.StartLinePosition.Line + 1,
+                    StartCharacter = lineSpan.StartLinePosition.Character + 1,
+                    EndLine = lineSpan.EndLinePosition.Line + 1,
+                    EndCharacter = lineSpan.EndLinePosition.Character + 1,
+                };
+
+                if (!commandLineOptions.CompilationErrorsAsWarnings)
+                {
+                    fileIssueLogger.WriteError(
+                        message,
+                        ruleId: "CSharpier.Compilation",
+                        region: region
+                    );
+                }
+                else
+                {
+                    fileIssueLogger.WriteWarning(
+                        message,
+                        ruleId: "CSharpier.Compilation",
+                        region: region
+                    );
+                }
+            }
+
             return;
         }
 
@@ -493,7 +515,10 @@ internal static class CommandLineFormatter
 
         if (!string.IsNullOrEmpty(codeFormattingResult.FailureMessage))
         {
-            fileIssueLogger.WriteError(codeFormattingResult.FailureMessage);
+            fileIssueLogger.WriteError(
+                codeFormattingResult.FailureMessage,
+                ruleId: "CSharpier.Formatting"
+            );
             return;
         }
 
@@ -545,7 +570,8 @@ internal static class CommandLineFormatter
                             ref commandLineFormatterResult.FailedFormattingValidation
                         );
                         fileIssueLogger.WriteError(
-                            $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "/n" + validatorResult.FailureMessage)}"
+                            $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "/n" + validatorResult.FailureMessage)}",
+                            ruleId: "CSharpier.Validation"
                         );
                     }
                 }
@@ -557,7 +583,8 @@ internal static class CommandLineFormatter
 
                     fileIssueLogger.WriteError(
                         "Failed with exception during syntax tree validation.",
-                        ex
+                        ex,
+                        ruleId: "CSharpier.Validation"
                     );
                 }
             }
@@ -573,13 +600,30 @@ internal static class CommandLineFormatter
                 fileToFormatInfo.FileContents
             );
             var message = $"Was not formatted.\n{difference}\n";
+            
+            var lineNumber = StringDiffer.GetFirstDifferenceLineNumber(
+                codeFormattingResult.Code,
+                fileToFormatInfo.FileContents
+            );
+            Region? region = null;
+            if (lineNumber.HasValue)
+            {
+                region = new Region
+                {
+                    StartLine = lineNumber.Value,
+                    StartCharacter = 1,
+                    EndLine = lineNumber.Value,
+                    EndCharacter = 1,
+                };
+            }
+            
             if (commandLineOptions.UnformattedAsWarnings)
             {
-                fileIssueLogger.WriteWarning(message);
+                fileIssueLogger.WriteWarning(message, ruleId: "CSharpier.Formatting", region: region);
             }
             else
             {
-                fileIssueLogger.WriteError(message);
+                fileIssueLogger.WriteError(message, ruleId: "CSharpier.Formatting", region: region);
             }
 
             Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);

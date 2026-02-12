@@ -61,6 +61,8 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
   Log output format
   - Console (default) - Formats messages in a human readable way for console interaction.
   - MsBuild - Formats messages in standard error/warning format for MSBuild.
+  - Sarif - Emits a SARIF 2.1.0 log document containing warnings and errors.
+  - Note: when formatting results are being written to stdout (stdin/`--write-stdout`), SARIF output is suppressed.
 
 - `--log-level`
 

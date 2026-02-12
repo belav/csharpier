@@ -1,15 +1,18 @@
 using Microsoft.Extensions.Logging;
-#if NET8_0
+
+#if !NET9_0_OR_GREATER
 using Lock = object;
+#else
+using Lock = System.Threading.Lock;
 #endif
 
 namespace CSharpier.Cli;
 
-internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat logFormat) : ILogger
+internal class ConsoleLogger(IConsole console, LogLevel loggingLevel) : ILogger
 {
     private static readonly Lock ConsoleLock = new();
 
-    public virtual void Log<TState>(
+    public void Log<TState>(
         LogLevel logLevel,
         EventId eventId,
         TState state,
@@ -22,70 +25,35 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
             return;
         }
 
-        void Write(string value)
-        {
-            if (logLevel >= LogLevel.Error)
-            {
-                console.WriteError(value);
-            }
-            else
-            {
-                console.Write(value);
-            }
-        }
-
-        void WriteLine(string? value = null)
-        {
-            if (logLevel >= LogLevel.Error)
-            {
-                console.WriteErrorLine(value);
-            }
-            else
-            {
-                console.WriteLine(value);
-            }
-        }
-
-        if (!this.IsEnabled(logLevel))
+        if (!IsEnabled(logLevel))
         {
             return;
         }
 
         lock (ConsoleLock)
         {
-            var message = formatter(state, exception!);
+            var (path, region, _, message) = LoggerExtensions.ExtractState(state);
 
-            if (logFormat == LogFormat.Console && logLevel >= LogLevel.Warning)
+            var messageToLog = message ?? formatter(state, exception!);
+
+            if (logLevel >= LogLevel.Warning)
             {
                 console.ForegroundColor = GetColorLevel(logLevel);
-                Write($"{logLevel} ");
+                console.Write($"{logLevel.ToString().ToUpperInvariant()}: ");
                 console.ResetColor();
             }
 
-            var stringReader = new StringReader(message);
-            var line = stringReader.ReadLine();
-            WriteLine(line);
-            while ((line = stringReader.ReadLine()) != null)
-            {
-                WriteLine("  " + line);
-            }
+            var regionString =
+                region == null
+                    ? ""
+                    : $"{region.StartLine}:{region.StartCharacter} ";
+            
+            console.WriteLine($"{path}{regionString}{messageToLog}");
 
-            if (exception == null)
+            if (exception != null)
             {
-                return;
+                console.WriteLine(exception.ToString());
             }
-
-            WriteLine("  " + exception.Message);
-            if (exception.StackTrace != null)
-            {
-                stringReader = new StringReader(exception.StackTrace);
-                while ((line = stringReader.ReadLine()) != null)
-                {
-                    WriteLine("  " + line);
-                }
-            }
-
-            WriteLine();
         }
     }
 
@@ -93,19 +61,14 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
         logLevel switch
         {
             LogLevel.Critical => ConsoleColor.DarkRed,
-            LogLevel.Error => ConsoleColor.DarkRed,
-            LogLevel.Warning => ConsoleColor.DarkYellow,
-            _ => ConsoleColor.White,
+            LogLevel.Error => ConsoleColor.Red,
+            LogLevel.Warning => ConsoleColor.Yellow,
+            _ => ConsoleColor.White
         };
 
-    public bool IsEnabled(LogLevel logLevel)
-    {
-        return true;
-    }
+    public bool IsEnabled(LogLevel logLevel) => logLevel != LogLevel.None;
 
     public IDisposable BeginScope<TState>(TState state)
-        where TState : notnull
-    {
+        where TState : notnull =>
         throw new NotImplementedException();
-    }
 }

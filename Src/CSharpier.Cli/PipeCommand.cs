@@ -25,7 +25,7 @@ internal static class PipeCommand
             var logLevel = LogLevel.Information;
 
             var console = new SystemConsole();
-            var logger = new ConsoleLogger(console, logLevel, LogFormat.Console);
+            var logger = new ConsoleLogger(console, logLevel);
 
             var cancellationToken = context.GetCancellationToken();
             context.ExitCode = await PipeMultipleFilesFormatter.StartServer(

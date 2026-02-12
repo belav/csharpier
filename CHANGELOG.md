@@ -1,3 +1,7 @@
+# 1.3.0
+## What's Changed
+### [Feature]: Sarif formatting support [#1398](https://github.com/belav/csharpier/issues/1398)
+Enable CSharpier error output that matches what GH actions expect.
 # 1.2.6
 ## What's Changed
 ### [Bug]: XML with DOCTYPE results in "invalid xml" warning [#1809](https://github.com/belav/csharpier/issues/1809)
