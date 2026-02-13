@@ -329,7 +329,6 @@ public class DocPrinterTests
             .Should()
             .Throw<Exception>()
             .WithMessage("You cannot use an ifBreak before the group it targets.");
-        ;
     }
 
     [Test]

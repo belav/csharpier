@@ -1,4 +1,3 @@
-using CSharpier.Core.CSharp;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -398,7 +397,6 @@ internal partial class SyntaxNodeComparer
 
                 next++;
             }
-            ;
 
             return result;
         }

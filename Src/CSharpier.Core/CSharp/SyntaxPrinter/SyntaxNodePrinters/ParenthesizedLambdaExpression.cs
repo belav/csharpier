@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using CSharpier.Core.DocTypes;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
