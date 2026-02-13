@@ -107,6 +107,8 @@ public class RawNodeReaderTests
                 AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' 
             """
     )]
+    
+    [Test]
     public void Should_Read_Various_Attributes(string xml, string attributeValue)
     {
         var nodes = ReadAllNodes(xml);
