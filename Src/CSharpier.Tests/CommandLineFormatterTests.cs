@@ -563,6 +563,75 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Multiple_Files_Should_Be_Formatted()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("SubFolder/1/File1.cs", UnformattedClassContent);
+        context.WhenAFileExists("SubFolder/2/File2.cs", UnformattedClassContent);
+
+        var result = Format(
+            context,
+            directoryOrFilePaths: ["SubFolder/1/File1.cs", "SubFolder/2/File2.cs"]
+        );
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 2 files in ");
+        context.GetFileContent("SubFolder/1/File1.cs").Should().Be(FormattedClassContent);
+        context.GetFileContent("SubFolder/2/File2.cs").Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public void Multiple_Files_Should_Respect_Per_Directory_Config()
+    {
+        var context = new TestContext();
+        // file1 has a narrow printWidth, file2 uses default
+        context.WhenAFileExists("SubFolder/1/.csharpierrc", "printWidth: 10");
+        context.WhenAFileExists(
+            "SubFolder/1/File1.cs",
+            "var myVariable = someLongValue;"
+        );
+        context.WhenAFileExists(
+            "SubFolder/2/File2.cs",
+            "var myVariable = someLongValue;"
+        );
+
+        var result = Format(
+            context,
+            directoryOrFilePaths: ["SubFolder/1/File1.cs", "SubFolder/2/File2.cs"]
+        );
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 2 files in ");
+        // file1 should wrap due to printWidth: 10
+        context
+            .GetFileContent("SubFolder/1/File1.cs")
+            .Should()
+            .Be("var myVariable =\n    someLongValue;\n");
+        // file2 should not wrap (default printWidth: 100)
+        context
+            .GetFileContent("SubFolder/2/File2.cs")
+            .Should()
+            .Be("var myVariable = someLongValue;\n");
+    }
+
+    [Test]
+    public void Mixed_Files_And_Directory_Should_Format_All()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("DirA/File1.cs", UnformattedClassContent);
+        context.WhenAFileExists("DirA/File2.cs", UnformattedClassContent);
+        context.WhenAFileExists("SingleFile.cs", UnformattedClassContent);
+
+        var result = Format(
+            context,
+            directoryOrFilePaths: ["DirA", "SingleFile.cs"]
+        );
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 3 files in ");
+        context.GetFileContent("DirA/File1.cs").Should().Be(FormattedClassContent);
+        context.GetFileContent("DirA/File2.cs").Should().Be(FormattedClassContent);
+        context.GetFileContent("SingleFile.cs").Should().Be(FormattedClassContent);
+    }
+
+    [Test]
     public void Multiple_Files_Should_Use_Multiple_Ignores()
     {
         var context = new TestContext();
@@ -1089,6 +1158,26 @@ class ClassName
             path = this.FileSystem.Path.Combine(GetRootPath(), path);
             return this.FileSystem.File.ReadAllText(path);
         }
+    }
+
+    [Test]
+    [Arguments("/a/b/c", "/a/b/d", "/a/b")]
+    [Arguments("/a/b", "/a/b", "/a/b")]
+    [Arguments("/a/b/c/d", "/a/b", "/a/b")]
+    [Arguments("/a/x/y", "/a/z/w", "/a")]
+    [Arguments("/x/y", "/z/w", "")]
+    public void GetCommonAncestor_Returns_Common_Path(
+        string pathA,
+        string pathB,
+        string expected
+    )
+    {
+        var sep = Path.DirectorySeparatorChar;
+        var result = CommandLineFormatter.GetCommonAncestor(
+            pathA.Replace('/', sep),
+            pathB.Replace('/', sep)
+        );
+        result.Should().Be(expected.Replace('/', sep));
     }
 
     private sealed record FormatResult(
