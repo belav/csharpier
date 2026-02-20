@@ -5,6 +5,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.rider.runtime.RiderDotNetActiveRuntimeHost;
+import com.jetbrains.rider.runtime.dotNetCore.DotNetCoreRuntime;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -46,13 +47,12 @@ public class DotNetProvider {
             var dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project)
                 .getDotNetCoreRuntime()
                 .getValue();
+            this.cliExePath = getCliExePath(dotNetCoreRuntime);
 
-            if (dotNetCoreRuntime != null && dotNetCoreRuntime.getCliExePath() != null) {
+            if (this.cliExePath != null) {
                 this.logger.debug(
-                        "Using dotnet found from RiderDotNetActiveRuntimeHost at " +
-                        dotNetCoreRuntime.getCliExePath()
+                        "Using dotnet found from RiderDotNetActiveRuntimeHost at " + this.cliExePath
                     );
-                this.cliExePath = dotNetCoreRuntime.getCliExePath();
             } else {
                 return false;
             }
@@ -64,6 +64,32 @@ public class DotNetProvider {
             logger.error(ex);
 
             return false;
+        }
+    }
+
+    // based on the version of rider, this method will return different types. So use reflection to call it and figure that out
+    private String getCliExePath(DotNetCoreRuntime dotNetCoreRuntime) {
+        if (dotNetCoreRuntime == null) {
+            return null;
+        }
+
+        try {
+            var method = dotNetCoreRuntime.getClass().getMethod("getCliExePath");
+            var result = method.invoke(dotNetCoreRuntime);
+            if (result == null) {
+                return null;
+            }
+            if (result instanceof String) {
+                return (String) result;
+            }
+            if (result instanceof File) {
+                return ((File) result).getAbsolutePath();
+            }
+            // For RdPath and other types, toString() should return the path
+            return result.toString();
+        } catch (Exception e) {
+            this.logger.warn("Exception when trying to getCliExePath " + e);
+            return null;
         }
     }
 

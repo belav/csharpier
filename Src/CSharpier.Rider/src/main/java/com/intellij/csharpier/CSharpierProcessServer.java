@@ -51,20 +51,23 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
             var csharpierProcess = processBuilder.start();
 
             var errorOutput = new StringBuilder();
-            var stderrThread = new Thread(() -> {
-                try (
-                    var errorReader = new BufferedReader(
-                        new InputStreamReader(csharpierProcess.getErrorStream())
-                    )
-                ) {
-                    String line;
-                    while ((line = errorReader.readLine()) != null) {
-                        errorOutput.append(line).append("\n");
+            var stderrThread = new Thread(
+                () -> {
+                    try (
+                        var errorReader = new BufferedReader(
+                            new InputStreamReader(csharpierProcess.getErrorStream())
+                        )
+                    ) {
+                        String line;
+                        while ((line = errorReader.readLine()) != null) {
+                            errorOutput.append(line).append("\n");
+                        }
+                    } catch (IOException e) {
+                        // Stream closed or process terminated - expected behavior
                     }
-                } catch (IOException e) {
-                    // Stream closed or process terminated - expected behavior
-                }
-            }, "CSharpier stderr reader");
+                },
+                "CSharpier stderr reader"
+            );
             stderrThread.start();
 
             var stdoutThread = new Thread(() -> {
