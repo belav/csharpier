@@ -150,7 +150,7 @@ there is also this case
          </Element>
 </Root>
          */
-        return context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+        return rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
             && rawNode.NextNode is null
             && rawNode.IsTextLike()
             && rawNode.GetLastDescendant() is { NodeType: XmlNodeType.Text } textNode
@@ -175,7 +175,7 @@ there is also this case
          *       ><a
          *       ^
          */
-        return context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+        return rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
             && rawNode.PreviousNode is null
             && rawNode.NodeType is XmlNodeType.Text
             && rawNode.Value![0] is not ('\r' or '\n');

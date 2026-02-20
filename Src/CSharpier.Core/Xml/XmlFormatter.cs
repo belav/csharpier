@@ -27,7 +27,11 @@ public static class XmlFormatter
             var validationTask = ValidateXmlAsync(xml);
 
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var rootNode = RawNodeReader.ParseXml(xml, lineEnding);
+            var rootNode = RawNodeReader.ParseXml(
+                xml,
+                lineEnding,
+                printerOptions.XmlWhitespaceSensitivity
+            );
             var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions

@@ -1,0 +1,13 @@
+<Root>
+  <ShortElement xml:space="preserve">
+    TextValue
+  </ShortElement>
+  <Preserve xml:space="preserve">
+    <ShortElement>
+      TextValue
+    </ShortElement>
+    <ShortElement xml:space="default">
+      TextValue
+    </ShortElement>
+  </Preserve>
+</Root>

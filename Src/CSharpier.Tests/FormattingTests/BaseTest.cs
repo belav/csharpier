@@ -39,9 +39,8 @@ public class BaseTest
                 {
                     var parts = directoryName.Split('_');
                     directoryName = parts[0];
-                    xmlWhitespaceSensitivity =
-                        parts[1] is "ignore" ? XmlWhitespaceSensitivity.Ignore
-                        : parts[1] is "xaml" ? XmlWhitespaceSensitivity.Xaml
+                    xmlWhitespaceSensitivity = parts[1] is "ignore"
+                        ? XmlWhitespaceSensitivity.Ignore
                         : XmlWhitespaceSensitivity.Strict;
                 }
 

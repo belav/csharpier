@@ -34,7 +34,7 @@ internal static class Element
             }
 
             if (
-                context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
                 && rawNode.Nodes.FirstOrDefault()
                     is { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
             )
@@ -45,7 +45,7 @@ internal static class Element
             if (
                 rawNode.Attributes.Length == 0
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
             )
             {
                 return Doc.Null;
@@ -73,14 +73,14 @@ internal static class Element
             if (
                 rawNode.Attributes.Length == 0
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
             )
             {
                 return Doc.Null;
             }
 
             if (
-                context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
                 && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is '\r' or '\n'
             )

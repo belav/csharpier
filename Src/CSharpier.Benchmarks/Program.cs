@@ -28,7 +28,11 @@ public class Benchmarks
     [Benchmark]
     public void CustomParser_Parse()
     {
-        _ = RawNodeReader.ParseXml(this.largeXmlCode, Environment.NewLine);
+        _ = RawNodeReader.ParseXml(
+            this.largeXmlCode,
+            Environment.NewLine,
+            XmlWhitespaceSensitivity.Strict
+        );
     }
 
     [Benchmark]

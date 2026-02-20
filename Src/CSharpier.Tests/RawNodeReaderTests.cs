@@ -1,6 +1,7 @@
 #pragma warning disable
 
 using AwesomeAssertions;
+using CSharpier.Core;
 using CSharpier.Core.Xml;
 
 namespace CSharpier.Tests;
@@ -116,8 +117,74 @@ public class RawNodeReaderTests
         attribute.Value.Should().Be(attributeValue.Replace("\"", "&quot;"));
     }
 
-    private static List<RawNode> ReadAllNodes(string xml)
+    [Test]
+    public void Should_Set_Top_Level_Whitespace()
     {
-        return RawNodeReader.ParseXml(xml, Environment.NewLine).Nodes;
+        var nodes = ReadAllNodes(
+            """
+            <root></root>
+            """,
+            XmlWhitespaceSensitivity.Ignore
+        );
+        nodes.First().XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
+    }
+
+    [Test]
+    public void Should_Override_Whitespace()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root xml:space="preserve"></root>
+            """,
+            XmlWhitespaceSensitivity.Ignore
+        );
+        nodes.First().XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Strict);
+    }
+
+    [Test]
+    public void Should_Override_Whitespace_On_Children()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root xml:space="preserve">
+                <child />
+            </root>
+            """,
+            XmlWhitespaceSensitivity.Ignore
+        );
+        nodes
+            .First()
+            .Nodes.First()
+            .XmlWhitespaceSensitivity.Should()
+            .Be(XmlWhitespaceSensitivity.Strict);
+    }
+
+    [Test]
+    public void Should_Override_Whitespace_On_Children2()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root xml:space="preserve">
+                <child>
+                    <grandChild xml:space="default" />
+                </child>
+            </root>
+            """,
+            XmlWhitespaceSensitivity.Ignore
+        );
+        nodes
+            .First()
+            .Nodes.First()
+            .Nodes.First()
+            .XmlWhitespaceSensitivity.Should()
+            .Be(XmlWhitespaceSensitivity.Ignore);
+    }
+
+    private static List<RawNode> ReadAllNodes(
+        string xml,
+        XmlWhitespaceSensitivity xmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict
+    )
+    {
+        return RawNodeReader.ParseXml(xml, Environment.NewLine, xmlWhitespaceSensitivity).Nodes;
     }
 }

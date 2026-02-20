@@ -86,7 +86,7 @@ internal static class Node
             return Doc.Null;
         }
 
-        if (context.Options.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Ignore)
+        if (rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Ignore)
         {
             if (rawNode.PreviousNode is null)
             {

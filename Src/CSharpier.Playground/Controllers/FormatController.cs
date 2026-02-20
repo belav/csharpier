@@ -58,7 +58,6 @@ public class FormatController : ControllerBase
                 XmlWhitespaceSensitivity = model.XmlWhitespaceSensitivity switch
                 {
                     "Ignore" => XmlWhitespaceSensitivity.Ignore,
-                    "Xaml" => XmlWhitespaceSensitivity.Xaml,
                     _ => XmlWhitespaceSensitivity.Strict,
                 },
             },
