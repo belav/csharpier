@@ -1,8 +1,5 @@
-using System.IO;
-using System.Threading.Tasks;
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
-using CSharpier.Core.DocTypes;
+using CSharpier.Core.CSharp.SyntaxPrinter; 
 using Node = CSharpier.Core.Xml.XNodePrinters.Node;
 
 namespace CSharpier.Core.Xml;

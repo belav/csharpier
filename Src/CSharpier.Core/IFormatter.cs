@@ -1,5 +1,3 @@
-using CSharpier.Core;
-
 namespace CSharpier.Core;
 
 internal interface IFormatter
