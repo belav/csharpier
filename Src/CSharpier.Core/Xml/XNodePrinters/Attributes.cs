@@ -42,7 +42,7 @@ internal static class Attributes
              */
             (
                 rawNode.Nodes.Count != 0
-                && Tag.NeedsToBorrowParentOpeningTagEndMarker(rawNode.Nodes.First())
+                && Tag.NeedsToBorrowParentOpeningTagEndMarker(rawNode.Nodes.First(), context)
             ) || doNotBreakAttributes
         )
         {

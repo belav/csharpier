@@ -21,6 +21,7 @@ internal class RawNode
     public RawAttribute[] Attributes { get; set; } = [];
     public List<RawNode> Nodes { get; set; } = [];
     public string Value { get; set; } = string.Empty;
+    public required XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; }
 
     public bool IsTextLike()
     {

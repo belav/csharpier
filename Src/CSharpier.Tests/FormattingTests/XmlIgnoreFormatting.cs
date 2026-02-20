@@ -1,10 +1,10 @@
 namespace CSharpier.Tests.FormattingTests;
 
-public class XmlFormatting : BaseTest
+public class XmlIgnoreFormatting : BaseTest
 {
     [DynamicTestBuilder]
     public void BuildTests(DynamicTestBuilderContext context)
     {
-        this.BuildTests<XmlFormatting>(context, "xml");
+        this.BuildTests<XmlIgnoreFormatting>(context, "xml_ignore");
     }
 }

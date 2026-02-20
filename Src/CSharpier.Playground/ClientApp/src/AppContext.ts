@@ -37,6 +37,7 @@ class AppState {
     showAst = getBoolean("showAst", false);
     showDoc = getBoolean("showDoc", false);
     hideNull = getBoolean("hideNull", false);
+    xmlWhitespaceSensitivity = getString("xmlWhitespaceSensitivity", "Strict");
     doc = "";
     isLoading = false;
     hasErrors = false;
@@ -51,6 +52,11 @@ class AppState {
     setFormatter = (value: string) => {
         window.sessionStorage.setItem("formatter", value);
         this.formatter = value;
+    };
+
+    setXmlWhitespaceSensitivity = (value: string) => {
+        window.sessionStorage.setItem("xmlWhitespaceSensitivity", value);
+        this.xmlWhitespaceSensitivity = value;
     };
 
     setIndentSize = (value: number) => {
@@ -119,6 +125,7 @@ class AppState {
                 this.indentSize,
                 this.useTabs,
                 this.formatter,
+                this.xmlWhitespaceSensitivity,
             );
 
             runInAction(() => {

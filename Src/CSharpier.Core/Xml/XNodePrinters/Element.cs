@@ -34,19 +34,27 @@ internal static class Element
             }
 
             if (
-                rawNode.Nodes.FirstOrDefault() is
-                { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
+                rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.Nodes.FirstOrDefault()
+                    is { NodeType: XmlNodeType.Text, Value: ['\n', ..] or ['\r', ..] }
             )
             {
                 return Doc.LiteralLine;
             }
 
-            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
+            if (
+                rawNode.Attributes.Length == 0
+                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+            )
             {
                 return Doc.Null;
             }
 
-            if (rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n')))
+            if (
+                rawNode.Nodes.Count > 1
+                && rawNode.Nodes.Any(o => o.NodeType is XmlNodeType.Text && o.Value.Contains('\n'))
+            )
             {
                 return Doc.HardLine;
             }
@@ -62,14 +70,19 @@ internal static class Element
                 return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
             }
 
-            if (rawNode.Attributes.Length == 0 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }])
+            if (
+                rawNode.Attributes.Length == 0
+                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+            )
             {
                 return Doc.Null;
             }
 
             if (
-                rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is 'r' or '\n'
+                rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
+                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
+                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is '\r' or '\n'
             )
             {
                 return Doc.Null;

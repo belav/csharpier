@@ -1,0 +1,12 @@
+<Root>
+  <HtmlTypeElement>
+    Some text
+    <a href="http://url.com">url.com</a>
+    more text.
+  </HtmlTypeElement>
+  <HtmlTypeElement>
+    Some long text to make things break
+    <a href="http://url.com">url.com</a>
+    more text.
+  </HtmlTypeElement>
+</Root>

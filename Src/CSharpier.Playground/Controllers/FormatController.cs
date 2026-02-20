@@ -32,6 +32,7 @@ public class FormatController : ControllerBase
         public int IndentSize { get; set; }
         public bool UseTabs { get; set; }
         public string Formatter { get; set; } = string.Empty;
+        public string XmlWhitespaceSensitivity { get; set; } = string.Empty;
     }
 
     [HttpPost]
@@ -54,6 +55,11 @@ public class FormatController : ControllerBase
                 Width = model.PrintWidth,
                 IndentSize = model.IndentSize,
                 UseTabs = model.UseTabs,
+                XmlWhitespaceSensitivity = model.XmlWhitespaceSensitivity switch
+                {
+                    "Ignore" => XmlWhitespaceSensitivity.Ignore,
+                    _ => XmlWhitespaceSensitivity.Strict,
+                },
             },
             cancellationToken
         );

@@ -33,16 +33,42 @@ public class BaseTest
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
                 var useTabs = fileNameWithoutExtension.EndsWith("_Tabs", StringComparison.Ordinal);
+                var directoryName = file.Directory!.Name;
+                var xmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict;
+                if (directoryName.Contains('_'))
+                {
+                    var parts = directoryName.Split('_');
+                    directoryName = parts[0];
+                    xmlWhitespaceSensitivity = parts[1] is "ignore"
+                        ? XmlWhitespaceSensitivity.Ignore
+                        : XmlWhitespaceSensitivity.Strict;
+                }
+
+                var formatter = directoryName switch
+                {
+                    "cs" => Formatter.CSharp,
+                    "csx" => Formatter.CSharpScript,
+                    "xml" => Formatter.XML,
+                    _ => Formatter.Unknown,
+                };
+
+                var printerOptions = new PrinterOptions(formatter)
+                {
+                    UseTabs = useTabs,
+                    Width = PrinterOptions.WidthUsedByTests,
+                    IndentSize = formatter == Formatter.XML ? 2 : 4,
+                    XmlWhitespaceSensitivity = xmlWhitespaceSensitivity,
+                };
 
                 context.AddTest(
                     new DynamicTest<T>
                     {
-                        TestMethod = @class => @class.RunTest(string.Empty, string.Empty, false),
+                        TestMethod = @class => @class.RunTest(string.Empty, string.Empty, null!),
                         TestMethodArguments =
                         [
                             fileNameWithoutExtension,
                             file.Directory!.Name,
-                            useTabs,
+                            printerOptions,
                         ],
                         DisplayName = fileNameWithoutExtension,
                     }
@@ -51,13 +77,17 @@ public class BaseTest
         }
     }
 
-    public async Task RunTest(string fileName, string fileExtensionWithoutDot, bool useTabs = false)
+    internal async Task RunTest(
+        string fileName,
+        string directoryName,
+        PrinterOptions printerOptions
+    )
     {
         var filePath = Path.Combine(
             this.rootDirectory.FullName,
             "FormattingTests",
             "TestFiles",
-            fileExtensionWithoutDot,
+            directoryName,
             fileName + ".test"
         );
         var fileReaderResult = await FileReader.ReadFileAsync(
@@ -66,22 +96,9 @@ public class BaseTest
             CancellationToken.None
         );
 
-        var formatter = fileExtensionWithoutDot switch
-        {
-            "cs" => Formatter.CSharp,
-            "csx" => Formatter.CSharpScript,
-            "xml" => Formatter.XML,
-            _ => Formatter.Unknown,
-        };
-
         var result = await CodeFormatter.FormatAsync(
             fileReaderResult.FileContents,
-            new PrinterOptions(formatter)
-            {
-                Width = PrinterOptions.WidthUsedByTests,
-                UseTabs = useTabs,
-                IndentSize = formatter == Formatter.XML ? 2 : 4,
-            },
+            printerOptions,
             CancellationToken.None
         );
 

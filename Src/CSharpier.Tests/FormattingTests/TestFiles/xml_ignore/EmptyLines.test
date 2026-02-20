@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Root>
+  <Element />
+  <Element />
+
+  <Element />
+
+  <Element>
+    <ChildElement />
+
+    <ChildElement />
+  </Element>
+</Root>
