@@ -36,6 +36,13 @@ jobs:
           rm -r -f ./Tests/CSharpier.MsBuild.Test
           dotnet tool restore
           dotnet csharpier check .
+          cd Src/CSharpier.Rider
+          npm install
+          npm run prettier:check
+          cd ..
+          cd CSharpier.Playground/ClientApp
+          npm install
+          npm run prettier:check
   check_todos:
     runs-on: ubuntu-latest
     name: Check TODOs
