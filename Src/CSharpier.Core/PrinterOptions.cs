@@ -2,7 +2,10 @@ using System.Globalization;
 
 namespace CSharpier.Core;
 
-internal class PrinterOptions(Formatter formatter)
+internal class PrinterOptions(
+    Formatter formatter,
+    XmlWhitespaceSensitivity xmlWhitespaceSensitivity
+)
 {
     public bool IncludeAST { get; init; }
     public bool IncludeDocTree { get; init; }
@@ -26,9 +29,9 @@ internal class PrinterOptions(Formatter formatter)
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
-    public Formatter Formatter { get; set; } = formatter;
+    public Formatter Formatter { get; } = formatter;
     public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; } =
-        XmlWhitespaceSensitivity.Strict;
+        xmlWhitespaceSensitivity;
 
     public const int WidthUsedByTests = 100;
 
@@ -62,15 +65,31 @@ internal class PrinterOptions(Formatter formatter)
 
         var extension = possibleExtension[1..].ToLower(CultureInfo.InvariantCulture);
 
-        var formatter = extension switch
+        return extension switch
         {
             "cs" => Formatter.CSharp,
             "csx" => Formatter.CSharpScript,
-            "config" or "csproj" or "props" or "slnx" or "targets" or "xaml" or "xml" =>
+            "config" or "csproj" or "props" or "slnx" or "targets" or "xaml" or "xml" or "axaml" =>
                 Formatter.XML,
             _ => Formatter.Unknown,
         };
-        return formatter;
+    }
+
+    public static XmlWhitespaceSensitivity GetXmlWhitespaceSensitivity(string filePath)
+    {
+        var possibleExtension = Path.GetExtension(filePath);
+        if (possibleExtension == string.Empty)
+        {
+            return XmlWhitespaceSensitivity.Strict;
+        }
+
+        var extension = possibleExtension[1..].ToLower(CultureInfo.InvariantCulture);
+
+        return extension switch
+        {
+            "xaml" or "axaml" => XmlWhitespaceSensitivity.Ignore,
+            _ => XmlWhitespaceSensitivity.Strict,
+        };
     }
 }
 

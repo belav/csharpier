@@ -32,6 +32,7 @@ public class FormatController : ControllerBase
         public int IndentSize { get; set; }
         public bool UseTabs { get; set; }
         public string Formatter { get; set; } = string.Empty;
+        public string XmlWhitespaceSensitivity { get; set; } = string.Empty;
     }
 
     [HttpPost]
@@ -47,7 +48,14 @@ public class FormatController : ControllerBase
 
         var result = await CodeFormatter.FormatAsync(
             model.Code,
-            new PrinterOptions(parsedFormatter)
+            new PrinterOptions(
+                parsedFormatter,
+                model.XmlWhitespaceSensitivity switch
+                {
+                    "Ignore" => XmlWhitespaceSensitivity.Ignore,
+                    _ => XmlWhitespaceSensitivity.Strict,
+                }
+            )
             {
                 IncludeAST = true,
                 IncludeDocTree = true,

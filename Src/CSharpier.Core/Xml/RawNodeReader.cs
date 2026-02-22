@@ -12,6 +12,7 @@ class RawNodeReader
 {
     private readonly string originalXml;
     private readonly string lineEnding;
+    private XmlWhitespaceSensitivity currentXmlWhitespaceSensitivity;
     private int position;
     private readonly Stack<RawNode> elementStack = new();
 
@@ -22,7 +23,11 @@ class RawNodeReader
     private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
 #endif
 
-    private RawNodeReader(string xml, string lineEnding)
+    private RawNodeReader(
+        string xml,
+        string lineEnding,
+        XmlWhitespaceSensitivity xmlWhitespaceSensitivity
+    )
     {
         this.originalXml = NewlineRegex
 #if !NETSTANDARD2_0
@@ -30,17 +35,26 @@ class RawNodeReader
 #endif
         .Replace(xml, "\n");
         this.lineEnding = lineEnding;
+        this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
     }
 
-    public static RawNode ParseXml(string originalXml, string lineEnding)
+    public static RawNode ParseXml(
+        string originalXml,
+        string lineEnding,
+        XmlWhitespaceSensitivity xmlWhitespaceSensitivity
+    )
     {
-        var reader = new RawNodeReader(originalXml, lineEnding);
+        var reader = new RawNodeReader(originalXml, lineEnding, xmlWhitespaceSensitivity);
         return reader.ParseXml();
     }
 
     private RawNode ParseXml()
     {
-        var rootNode = new RawNode { NodeType = XmlNodeType.Document };
+        var rootNode = new RawNode
+        {
+            NodeType = XmlNodeType.Document,
+            XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+        };
         this.elementStack.Push(rootNode);
         while (this.position < this.originalXml.Length)
         {
@@ -63,7 +77,14 @@ class RawNodeReader
                 // we turn all whitespace into a single new line if it has more than a single newline in it
                 // then we remove the leading/trailing whitespace nodes from a nodes child nodes before sending it to printing
                 // then during printing when we find this we add a new line
-                this.AddNode(new RawNode { NodeType = XmlNodeType.Whitespace, Value = "\n" });
+                this.AddNode(
+                    new RawNode
+                    {
+                        NodeType = XmlNodeType.Whitespace,
+                        Value = "\n",
+                        XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+                    }
+                );
             }
 
             this.SkipWhitespace();
@@ -169,7 +190,12 @@ class RawNodeReader
             this.position++;
         }
 
-        var node = new RawNode { NodeType = XmlNodeType.Comment, Value = $"<!--{content}-->" };
+        var node = new RawNode
+        {
+            NodeType = XmlNodeType.Comment,
+            Value = $"<!--{content}-->",
+            XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+        };
 
         this.AddNode(node);
     }
@@ -198,7 +224,12 @@ class RawNodeReader
             this.position++;
         }
 
-        var node = new RawNode { NodeType = XmlNodeType.CDATA, Value = $"<![CDATA[{content}]]>" };
+        var node = new RawNode
+        {
+            NodeType = XmlNodeType.CDATA,
+            Value = $"<![CDATA[{content}]]>",
+            XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+        };
 
         this.AddNode(node);
     }
@@ -235,6 +266,7 @@ class RawNodeReader
             Name = name,
             NodeType = XmlNodeType.ProcessingInstruction,
             Value = $"<?{name} {content}?>",
+            XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
         };
 
         this.AddNode(node);
@@ -250,6 +282,7 @@ class RawNodeReader
         if (this.elementStack.Count > 0)
         {
             var element = this.elementStack.Pop();
+            this.currentXmlWhitespaceSensitivity = element.XmlWhitespaceSensitivity;
             // we don't want to keep around any leading or trailing newlines in an elements children
             // it is easier to remove them here instead of dealing with it in the printer
             for (var x = element.Nodes.Count - 1; x >= 0; x--)
@@ -296,12 +329,24 @@ class RawNodeReader
 
         this.SkipToChar('>');
 
+        var xmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity;
+
+        var spaceAttribute = attributes.FirstOrDefault(o => o.Name == "xml:space");
+        if (spaceAttribute != null)
+        {
+            xmlWhitespaceSensitivity =
+                spaceAttribute.Value == "preserve"
+                    ? XmlWhitespaceSensitivity.Strict
+                    : XmlWhitespaceSensitivity.Ignore;
+        }
+
         var node = new RawNode
         {
             Name = name,
             NodeType = XmlNodeType.Element,
             IsEmpty = isEmpty,
             Attributes = attributes.ToArray(),
+            XmlWhitespaceSensitivity = xmlWhitespaceSensitivity,
         };
 
         this.AddNode(node);
@@ -309,6 +354,7 @@ class RawNodeReader
         if (!isEmpty)
         {
             this.elementStack.Push(node);
+            this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
         }
     }
 
@@ -339,7 +385,12 @@ class RawNodeReader
         {
             return;
         }
-        var node = new RawNode { NodeType = XmlNodeType.Text, Value = text };
+        var node = new RawNode
+        {
+            NodeType = XmlNodeType.Text,
+            Value = text,
+            XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+        };
 
         this.AddNode(node);
     }
@@ -516,7 +567,12 @@ class RawNodeReader
             this.position++;
         }
 
-        var node = new RawNode { NodeType = XmlNodeType.DocumentType, Value = content.ToString() };
+        var node = new RawNode
+        {
+            NodeType = XmlNodeType.DocumentType,
+            Value = content.ToString(),
+            XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+        };
 
         this.AddNode(node);
     }

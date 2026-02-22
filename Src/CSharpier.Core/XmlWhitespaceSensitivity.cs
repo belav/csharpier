@@ -1,8 +1,7 @@
 namespace CSharpier.Core;
 
-internal enum XmlWhitespaceSensitivity
+public enum XmlWhitespaceSensitivity
 {
     Strict,
-    Xaml,
     Ignore,
 }
