@@ -119,17 +119,8 @@ internal class OptionsProvider
     {
         // TODO #1794 what other tests do we need for xml:space preserve? compare the strict to ignore tests to see what changed
         // TODO #1794 do a lot more testing with this, can review the repos once the file extension stuff is figured out.
-        // TODO #1794 the xml whitespace should default based on the file
-        // possible defaults
-        // xaml/axaml files = ignore
-        // everything else = strict - csproj - the whitespace before/after properties has to be handled where you use it, otherwise it can cause issues
-        /* this will include the whitespace around 'One', so you can't use Condition="'$(MyProperty)' == 'One'", you have to trim it
-         <PropertyGroup>
-            <MyProperty>
-               One
-            </MyProperty>
-         </PropertyGroup>
-         */
+        // TODO #1794 do we need other tests for xml whitespace? I think it still defaults properly based on file extension even with no value in config files
+
         if (this.specifiedConfigFile is not null)
         {
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);
@@ -160,7 +151,9 @@ internal class OptionsProvider
         }
 
         var formatter = PrinterOptions.GetFormatter(filePath);
-        return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
+        return formatter != Formatter.Unknown
+            ? new PrinterOptions(formatter, PrinterOptions.GetXmlWhitespaceSensitivity(filePath))
+            : null;
     }
 
     private Task<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)

@@ -26,7 +26,10 @@ internal class EditorConfigSections
             return null;
         }
 
-        var printerOptions = new PrinterOptions(parsedFormatter);
+        var printerOptions = new PrinterOptions(
+            parsedFormatter,
+            PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
+        );
 
         if (resolvedConfiguration.MaxLineLength is { } maxLineLength)
         {

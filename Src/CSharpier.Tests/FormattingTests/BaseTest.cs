@@ -52,12 +52,11 @@ public class BaseTest
                     _ => Formatter.Unknown,
                 };
 
-                var printerOptions = new PrinterOptions(formatter)
+                var printerOptions = new PrinterOptions(formatter, xmlWhitespaceSensitivity)
                 {
                     UseTabs = useTabs,
                     Width = PrinterOptions.WidthUsedByTests,
                     IndentSize = formatter == Formatter.XML ? 2 : 4,
-                    XmlWhitespaceSensitivity = xmlWhitespaceSensitivity,
                 };
 
                 context.AddTest(

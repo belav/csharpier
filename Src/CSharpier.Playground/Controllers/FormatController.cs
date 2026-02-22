@@ -48,18 +48,20 @@ public class FormatController : ControllerBase
 
         var result = await CodeFormatter.FormatAsync(
             model.Code,
-            new PrinterOptions(parsedFormatter)
+            new PrinterOptions(
+                parsedFormatter,
+                model.XmlWhitespaceSensitivity switch
+                {
+                    "Ignore" => XmlWhitespaceSensitivity.Ignore,
+                    _ => XmlWhitespaceSensitivity.Strict,
+                }
+            )
             {
                 IncludeAST = true,
                 IncludeDocTree = true,
                 Width = model.PrintWidth,
                 IndentSize = model.IndentSize,
                 UseTabs = model.UseTabs,
-                XmlWhitespaceSensitivity = model.XmlWhitespaceSensitivity switch
-                {
-                    "Ignore" => XmlWhitespaceSensitivity.Ignore,
-                    _ => XmlWhitespaceSensitivity.Strict,
-                },
             },
             cancellationToken
         );

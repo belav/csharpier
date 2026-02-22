@@ -21,14 +21,19 @@ public class OptionsProviderTests
     }
 
     [Test]
-    public async Task Should_Return_Default_Xml_Options_With_Empty_Json()
+    [Arguments("xml")]
+    [Arguments("xaml")]
+    public async Task Should_Return_Default_Xml_Options_With_Empty_Json(string extension)
     {
         var context = new TestContext();
         context.WhenAFileExists("c:/test/.csharpierrc", "{}");
 
-        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.xml");
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test." + extension
+        );
 
-        ShouldHaveDefaultXmlOptions(result);
+        ShouldHaveDefaultXmlOptions(result, extension);
     }
 
     [Test]
@@ -65,7 +70,7 @@ public class OptionsProviderTests
             "c:/test/test." + extension
         );
 
-        ShouldHaveDefaultXmlOptions(result);
+        ShouldHaveDefaultXmlOptions(result, extension);
     }
 
     [Test]
@@ -276,6 +281,7 @@ overrides:
 
     [Test]
     [Arguments("xml")]
+    [Arguments("xaml")]
     [Arguments("csproj")]
     [Arguments("props")]
     [Arguments("targets")]
@@ -289,7 +295,7 @@ overrides:
             "c:/test",
             "c:/test/test." + extension
         );
-        ShouldHaveDefaultXmlOptions(result);
+        ShouldHaveDefaultXmlOptions(result, extension);
     }
 
     [Test]
@@ -766,6 +772,25 @@ overrides:
         result.IndentSize.Should().Be(1);
     }
 
+    [Test]
+    [Arguments("xml", XmlWhitespaceSensitivity.Strict)]
+    [Arguments("xaml", XmlWhitespaceSensitivity.Ignore)]
+    [Arguments("axaml", XmlWhitespaceSensitivity.Ignore)]
+    public async Task Should_Default_XmlWhitespaceSensitivity(
+        string fileExtension,
+        XmlWhitespaceSensitivity expectedXmlWhitespaceSensitivity
+    )
+    {
+        var context = new TestContext();
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/file." + fileExtension
+        );
+
+        result.XmlWhitespaceSensitivity.Should().Be(expectedXmlWhitespaceSensitivity);
+    }
+
     private static void ShouldHaveDefaultCSharpOptions(PrinterOptions printerOptions)
     {
         printerOptions.Width.Should().Be(100);
@@ -774,13 +799,19 @@ overrides:
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
     }
 
-    private static void ShouldHaveDefaultXmlOptions(PrinterOptions printerOptions)
+    private static void ShouldHaveDefaultXmlOptions(PrinterOptions printerOptions, string extension)
     {
         printerOptions.Width.Should().Be(100);
         printerOptions.IndentSize.Should().Be(2);
         printerOptions.UseTabs.Should().BeFalse();
         printerOptions.EndOfLine.Should().Be(EndOfLine.Auto);
-        printerOptions.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Strict);
+        printerOptions
+            .XmlWhitespaceSensitivity.Should()
+            .Be(
+                extension is "xaml" or "axaml"
+                    ? XmlWhitespaceSensitivity.Ignore
+                    : XmlWhitespaceSensitivity.Strict
+            );
     }
 
     private sealed class TestContext
