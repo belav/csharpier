@@ -113,12 +113,10 @@ public class ClassName
             || t.OtherLongColumn________________________________
         );
 
-        Select______________________________________(superLongName_________________________ =>
-            true
+        Select______________________________________(superLongName_________________________ => true
         );
 
-        this.Select_________________________________(selector: static longName_____________ =>
-            true
+        this.Select_________________________________(selector: static longName_____________ => true
         );
 
         this.Select_________________________________________(
@@ -135,6 +133,37 @@ public class ClassName
         {
             return x;
         });
+
+        this.Where___________________(
+            x // Comment
+            =>
+            {
+                return x;
+            }
+        );
+
+        this.Where___________________(
+            // Comment
+            x =>
+            {
+                return x;
+            }
+        );
+
+        this.Where___________________(
+            // Comment
+            () =>
+            {
+                return 1;
+            }
+        );
+
+        this.Where___________________(
+            // Comment
+            x => true,
+            // Comment
+            x => true
+        );
 
         this.Where______________________________________(
             superLongName________________________________ =>
