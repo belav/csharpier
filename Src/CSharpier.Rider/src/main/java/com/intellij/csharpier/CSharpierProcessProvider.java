@@ -207,11 +207,15 @@ public class CSharpierProcessProvider implements DocumentListener, Disposable, I
 
     private String findVersionInCsProj(Path currentDirectory) {
         this.logger.debug("Looking for " + currentDirectory + "/*.csproj");
-        File[] csProjFiles = currentDirectory.toFile()
+        File[] csProjFiles = currentDirectory
+            .toFile()
             .listFiles((dir, name) -> name.toLowerCase().endsWith(".csproj"));
         if (csProjFiles == null) {
-            this.logger.debug("Unable to list files in directory: " + currentDirectory +
-                " (directory may not exist, not be a directory, or be temporarily inaccessible)");
+            this.logger.debug(
+                    "Unable to list files in directory: " +
+                    currentDirectory +
+                    " (directory may not exist, not be a directory, or be temporarily inaccessible)"
+                );
             return null;
         }
         for (var pathToCsProj : csProjFiles) {
