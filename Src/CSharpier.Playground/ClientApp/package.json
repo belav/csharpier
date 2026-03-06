@@ -27,6 +27,7 @@
     "scripts": {
         "build": "tsc && vite build",
         "prettier": "prettier --parser typescript ./src/**/*.{ts,tsx} --write",
+        "prettier:check": "prettier --parser typescript ./src/**/*.{ts,tsx} --check",
         "start": "echo Starting the development server && vite"
     },
     "browserslist": {
