@@ -53,7 +53,6 @@ internal static class Element
 
             return Doc.SoftLine;
         }
-        ;
 
         Doc PrintLineAfterChildren()
         {
