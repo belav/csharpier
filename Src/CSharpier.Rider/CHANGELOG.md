@@ -1,6 +1,9 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # csharpier-rider Changelog
+## [10.0.4]
+- Fix Rider plugin IOException for non-local VFS files
+
 ## [10.0.3]
 - Supporting 2026.1 EAP
 
