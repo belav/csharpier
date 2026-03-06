@@ -178,6 +178,8 @@ internal static class CommandLineFormatter
             writer = new FileSystemFormattedFileWriter(fileSystem);
         }
 
+        var pendingFiles = new List<(string DirectoryName, string ActualPath, string OriginalPath)>();
+
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
             var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[x];
@@ -193,11 +195,26 @@ internal static class CommandLineFormatter
                 return 1;
             }
 
-            var directoryName = isFile
-                ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
-                : directoryOrFilePath;
+            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[x];
 
-            ArgumentNullException.ThrowIfNull(directoryName);
+            if (!Path.IsPathRooted(originalDirectoryOrFile))
+            {
+                if (!originalDirectoryOrFile.StartsWith('.'))
+                {
+                    originalDirectoryOrFile =
+                        "." + Path.DirectorySeparatorChar + originalDirectoryOrFile;
+                }
+            }
+
+            if (isFile)
+            {
+                var fileDirectoryName = fileSystem.Path.GetDirectoryName(directoryOrFilePath);
+                ArgumentNullException.ThrowIfNull(fileDirectoryName);
+                pendingFiles.Add((fileDirectoryName, directoryOrFilePath, originalDirectoryOrFile));
+                continue;
+            }
+
+            var directoryName = directoryOrFilePath;
 
             var optionsProvider = await OptionsProvider.Create(
                 directoryName,
@@ -208,23 +225,12 @@ internal static class CommandLineFormatter
                 cancellationToken
             );
 
-            var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[x];
-
             var formattingCache = await FormattingCacheFactory.InitializeAsync(
                 commandLineOptions,
                 optionsProvider,
                 fileSystem,
                 cancellationToken
             );
-
-            if (!Path.IsPathRooted(originalDirectoryOrFile))
-            {
-                if (!originalDirectoryOrFile.StartsWith('.'))
-                {
-                    originalDirectoryOrFile =
-                        "." + Path.DirectorySeparatorChar + originalDirectoryOrFile;
-                }
-            }
 
             async IAsyncEnumerable<string> EnumerateNonignoredFiles(string directory)
             {
@@ -295,11 +301,7 @@ internal static class CommandLineFormatter
                 }
             }
 
-            if (isFile)
-            {
-                await FormatFile(directoryOrFilePath, originalDirectoryOrFile, true);
-            }
-            else if (isDirectory)
+            if (isDirectory)
             {
                 if (
                     !commandLineOptions.NoMSBuildCheck
@@ -340,7 +342,111 @@ internal static class CommandLineFormatter
             await formattingCache.ResolveAsync(cancellationToken);
         }
 
+        if (pendingFiles.Count == 0)
+        {
+            return 0;
+        }
+
+        var commonRoot = pendingFiles[0].DirectoryName;
+        for (var i = 1; i < pendingFiles.Count; i++)
+        {
+            commonRoot = GetCommonAncestor(commonRoot, pendingFiles[i].DirectoryName);
+        }
+
+        var batchOptionsProvider = await OptionsProvider.Create(
+            commonRoot,
+            commandLineOptions.ConfigPath,
+            commandLineOptions.IgnorePath,
+            fileSystem,
+            logger,
+            cancellationToken
+        );
+
+        var batchFormattingCache = await FormattingCacheFactory.InitializeAsync(
+            commandLineOptions,
+            batchOptionsProvider,
+            fileSystem,
+            cancellationToken
+        );
+
+        var pendingTasks = new List<Task>();
+
+        foreach (var (_, actualPath, originalPath) in pendingFiles)
+        {
+            pendingTasks.Add(
+                FormatPendingFile(
+                    actualPath,
+                    originalPath,
+                    batchOptionsProvider,
+                    batchFormattingCache
+                )
+            );
+        }
+
+        try
+        {
+            await Task.WhenAll(pendingTasks).WaitAsync(cancellationToken);
+        }
+        catch (OperationCanceledException ex)
+        {
+            if (ex.CancellationToken != cancellationToken)
+            {
+                throw;
+            }
+        }
+
+        await batchFormattingCache.ResolveAsync(cancellationToken);
+
         return 0;
+
+        async Task FormatPendingFile(
+            string actualFilePath,
+            string originalFilePath,
+            OptionsProvider optionsProvider,
+            IFormattingCache formattingCache
+        )
+        {
+            if (
+                (
+                    !commandLineOptions.IncludeGenerated
+                    && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
+                ) || await optionsProvider.IsIgnoredAsync(actualFilePath, cancellationToken)
+            )
+            {
+                return;
+            }
+
+            var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
+                actualFilePath,
+                cancellationToken
+            );
+
+            if (printerOptions is { Formatter: not Formatter.Unknown })
+            {
+                printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
+                await FormatPhysicalFile(
+                    actualFilePath,
+                    originalFilePath,
+                    fileSystem,
+                    logger,
+                    commandLineFormatterResult,
+                    writer,
+                    commandLineOptions,
+                    printerOptions,
+                    formattingCache,
+                    cancellationToken
+                );
+            }
+            else
+            {
+                var fileIssueLogger = new FileIssueLogger(
+                    originalFilePath,
+                    logger,
+                    logFormat: LogFormat.Console
+                );
+                fileIssueLogger.WriteWarning("Is an unsupported file type.");
+            }
+        }
     }
 
     private static async Task FormatPhysicalFile(
@@ -384,6 +490,29 @@ internal static class CommandLineFormatter
             formattingCache,
             cancellationToken
         );
+    }
+
+    internal static string GetCommonAncestor(string pathA, string pathB)
+    {
+        var separators = new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
+        var partsA = pathA.Split(separators);
+        var partsB = pathB.Split(separators);
+        var commonLength = 0;
+        for (var i = 0; i < Math.Min(partsA.Length, partsB.Length); i++)
+        {
+            if (string.Equals(partsA[i], partsB[i], StringComparison.Ordinal))
+            {
+                commonLength = i + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return commonLength > 0
+            ? string.Join(Path.DirectorySeparatorChar, partsA.Take(commonLength))
+            : pathA;
     }
 
     private static int ReturnExitCode(
