@@ -25,7 +25,7 @@ public class ServerTests
             fileContents = "public class TestClass    { }",
         };
 
-        var result = await this.RunServer(data);
+        var result = await RunServer(data);
 
         result.errorMessage.Should().BeNullOrEmpty();
         result.status.Should().Be(Status.Formatted);
@@ -41,14 +41,14 @@ public class ServerTests
             fileContents = "public class TestClass    { }",
         };
 
-        var result = await this.RunServer(data, "--server-port 51123");
+        var result = await RunServer(data, "--server-port 51123");
 
         result.errorMessage.Should().BeNullOrEmpty();
         result.status.Should().Be(Status.Formatted);
         result.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
     }
 
-    private async Task<FormatFileResult> RunServer(
+    private static async Task<FormatFileResult> RunServer(
         FormatFileParameter data,
         string? arguments = null
     )
