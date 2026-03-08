@@ -17,12 +17,12 @@ public class ServerTests
     // ignore file
     // option file
     [Test]
-    [Skip("Not working on GH, test locally on linux?")]
+    // [Skip("Not working on GH, test locally on linux?")]
     public async Task Stuff()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
 
-        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} --server")
+        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} server")
         {
             UseShellExecute = false,
             ErrorDialog = false,
@@ -60,8 +60,9 @@ public class ServerTests
                 Assert.Fail("Result is null");
             }
 
-            result!.status.Should().Be(Status.Formatted);
-            result!.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
+            result!.errorMessage.Should().BeEmpty();
+            result.status.Should().Be(Status.Formatted);
+            result.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
         }
         finally
         {
