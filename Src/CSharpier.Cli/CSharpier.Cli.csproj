@@ -22,7 +22,6 @@
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" />
     <PackageReference Include="System.IO.Hashing" />
     <PackageReference Include="YamlDotNet" />
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
     <PackageReference Include="Microsoft.Extensions.Logging" />
