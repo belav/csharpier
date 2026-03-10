@@ -90,6 +90,11 @@ internal static class FormattingCommands
         );
         var directoryOrFileArgument = AddDirectoryOrFileArgument(checkCommand);
 
+        var useCacheOption = new Option<bool>(
+            ["--use-cache"],
+            "Use the cache to determine if a file needs to be formatted."
+        );
+        checkCommand.AddOption(useCacheOption);
         checkCommand.AddOption(ConfigPathOption);
         checkCommand.AddOption(IgnorePathOption);
         checkCommand.AddOption(LogFormatOption);
@@ -102,6 +107,7 @@ internal static class FormattingCommands
         checkCommand.SetHandler(async context =>
         {
             var directoryOrFile = context.ParseResult.GetValueForArgument(directoryOrFileArgument);
+            var useCache = context.ParseResult.GetValueForOption(useCacheOption);
             var noMSBuildCheck = context.ParseResult.GetValueForOption(NoMsBuildCheckOption);
             var includeGenerated = context.ParseResult.GetValueForOption(IncludeGeneratedOption);
             var compilationErrorsAsWarnings = context.ParseResult.GetValueForOption(
@@ -122,7 +128,7 @@ internal static class FormattingCommands
                 skipValidation: false,
                 skipWrite: false,
                 writeStdout: false,
-                noCache: false,
+                noCache: !useCache,
                 noMSBuildCheck,
                 includeGenerated,
                 compilationErrorsAsWarnings,
