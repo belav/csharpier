@@ -55,8 +55,8 @@ public class ClassName
 
     private Doc ShortMethod() => Method();
 
-    private Doc ShortishMethod(SomeClass one) =>
-        CallSomeOtherLongMethodSoThatItBreaks____________________(one);
+    private Doc ShortishMethod(SomeClass one)
+        => CallSomeOtherLongMethodSoThatItBreaks____________________(one);
 
     private Doc MethodWithParameters_______________________(
         SomeClass one,

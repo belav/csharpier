@@ -136,28 +136,28 @@ class MyClass
         _items ??= [];
     }
 
-    public TheoryData<string[]> ArgsData =>
-        [
-            [],
-            [ArgConstants.UseProgramMain],
-            [ArgConstants.GlobalInteractivity, ArgConstants.WebAssemblyInteractivity],
-            [
-                ArgConstants.NoInteractivity,
-                ArgConstants.UseProgramMain,
-                ArgConstants.NoHttps,
-                ArgConstants.Empty,
-            ],
-        ];
+    public TheoryData<string[]> ArgsData
+        => [
+                [],
+                [ArgConstants.UseProgramMain],
+                [ArgConstants.GlobalInteractivity, ArgConstants.WebAssemblyInteractivity],
+                [
+                    ArgConstants.NoInteractivity,
+                    ArgConstants.UseProgramMain,
+                    ArgConstants.NoHttps,
+                    ArgConstants.Empty,
+                ],
+            ];
 
-    public ReadOnlySpan<HttpMethod> Methods() =>
-        [
-            HttpMethod.None,
-            HttpMethod.Put,
-            HttpMethod.Post,
-            HttpMethod.Patch,
-            HttpMethod.None,
-            HttpMethod.Connect,
-        ];
+    public ReadOnlySpan<HttpMethod> Methods()
+        => [
+                HttpMethod.None,
+                HttpMethod.Put,
+                HttpMethod.Post,
+                HttpMethod.Patch,
+                HttpMethod.None,
+                HttpMethod.Connect,
+            ];
 
     public List<DayOfWeek> DaysOfWeek { get; } =
     [

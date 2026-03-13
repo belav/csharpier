@@ -69,18 +69,18 @@ class ClassName
                 );
     }
 
-    public SomeExpressionBodyMethod() =>
-        nonChainFormatting = anotherVariable1 = (
-            someCondition________________________________
-            || someOtherCondition___________________________
-        );
+    public SomeExpressionBodyMethod()
+        => nonChainFormatting = anotherVariable1 = (
+                someCondition________________________________
+                || someOtherCondition___________________________
+            );
 
-    public SomeExpressionBodyMethod() =>
-        chainFormatting =
-            anotherVariable1 =
-            anotherVariable2 =
-                (
-                    someCondition________________________________
-                    || someOtherCondition___________________________
-                );
+    public SomeExpressionBodyMethod()
+        => chainFormatting =
+                anotherVariable1 =
+                anotherVariable2 =
+                    (
+                        someCondition________________________________
+                        || someOtherCondition___________________________
+                    );
 }
