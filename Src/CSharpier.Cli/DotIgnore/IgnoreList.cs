@@ -37,6 +37,7 @@ internal class IgnoreList(string basePath)
 
     private void AddRules(IEnumerable<string> newRules)
     {
+        // TODO it seems like we have two rules that are both "*", they most likely have different pattern flags to account for the ! and the /
         this.rules.AddRange(
             newRules
                 .Select(o => o.Trim())
@@ -64,6 +65,7 @@ internal class IgnoreList(string basePath)
             return (true, true);
         }
 
+        // TODO we also call this, even though we are looking at IgnoreTest which is a directory
         return this.IsPathIgnored(pathRelativeToIgnoreFile, false);
     }
 
