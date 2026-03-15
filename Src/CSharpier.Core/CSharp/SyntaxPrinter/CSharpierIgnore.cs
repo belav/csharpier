@@ -62,6 +62,7 @@ internal static partial class CSharpierIgnore
                     or SyntaxKind.Block
                     or SyntaxKind.CompilationUnit
                     or SyntaxKind.NamespaceDeclaration
+                    or SyntaxKind.SwitchSection
             && HasIgnoreComment(syntaxNode);
     }
 

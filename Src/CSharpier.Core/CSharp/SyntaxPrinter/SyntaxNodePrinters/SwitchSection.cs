@@ -16,13 +16,14 @@ internal static class SwitchSection
         }
         else
         {
+            var statements = CSharpierIgnore.PrintNodesRespectingRangeIgnore(
+                node.Statements,
+                context
+            );
             docs.Add(
                 Doc.Indent(
                     node.Statements.First() is BlockSyntax ? Doc.Null : Doc.HardLine,
-                    Doc.Join(
-                        Doc.HardLine,
-                        node.Statements.Select(o => Node.Print(o, context)).ToArray()
-                    )
+                    Doc.Join(Doc.HardLine, statements)
                 )
             );
         }
