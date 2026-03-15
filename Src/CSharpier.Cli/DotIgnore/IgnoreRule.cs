@@ -111,6 +111,6 @@ internal class IgnoreRule
 
     public override string ToString()
     {
-        return this.Pattern;
+        return this.Pattern + " " + this.PatternFlags;
     }
 }
