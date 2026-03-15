@@ -46,7 +46,7 @@ internal class IgnoreList(string basePath)
         );
     }
 
-    public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path)
+    public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path, bool isDirectory)
     {
         if (!path.StartsWith(basePath, StringComparison.Ordinal))
         {
@@ -65,8 +65,7 @@ internal class IgnoreList(string basePath)
             return (true, true);
         }
 
-        // TODO we also call this, even though we are looking at IgnoreTest which is a directory
-        return this.IsPathIgnored(pathRelativeToIgnoreFile, false);
+        return this.IsPathIgnored(pathRelativeToIgnoreFile, isDirectory);
     }
 
     private bool IsAnyParentDirectoryIgnored(string path)

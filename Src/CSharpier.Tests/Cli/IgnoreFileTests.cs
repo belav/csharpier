@@ -647,7 +647,10 @@ public class IgnoreFileTests
             .GetResult();
 
         var csharpierIgnoredFiles = files.Where(o =>
-            ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
+            ignoreFile!.IsIgnored(
+                this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o),
+                false
+            )
         );
 
         csharpierIgnoredFiles.Should().BeEquivalentTo(gitIgnoredFiles);

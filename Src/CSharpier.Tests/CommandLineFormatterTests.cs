@@ -716,8 +716,6 @@ public class CommandLineFormatterTests
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
     }
 
-    // TODO but this fails because CommandLineFormatter tries to optimize which files to look at, and it thinks IgnoreTest is ignored
-    // seems like the rules don't properly handle !*/
     [Test]
     public void Gitignore_Can_Unignore_All_Directories()
     {
