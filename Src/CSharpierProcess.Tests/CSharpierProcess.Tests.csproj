@@ -6,11 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CliWrap" />
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="GitHubActionsTestLogger" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="TUnit" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj" />

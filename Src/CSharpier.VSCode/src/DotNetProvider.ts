@@ -8,22 +8,22 @@ import * as path from "path";
 export type ExecDotNet = (command: string, cwd?: string | undefined) => Buffer;
 
 let dotNetRoot = "";
-export const getDotNetRoot = () => dotNetRoot;
+export let getDotNetRoot = () => dotNetRoot;
 
 let exec: ExecDotNet = () => {
     throw new Error("Did not call setExecDotNet");
 };
-export const execDotNet = (command: string, cwd?: string | undefined) => {
+export let execDotNet = (command: string, cwd?: string | undefined) => {
     return exec(command, cwd);
 };
 
-export const findDotNet = async (logger: Logger) => {
-    const dotnetPathOption = options.dotnetPath;
-    const dotNetCliPaths = options.dotNetCliPaths;
-    const paths = [dotnetPathOption, ...dotNetCliPaths];
+export let findDotNet = async (logger: Logger) => {
+    let dotnetPathOption = options.dotnetPath;
+    let dotNetCliPaths = options.dotNetCliPaths;
+    let paths = [dotnetPathOption, ...dotNetCliPaths];
 
     try {
-        const dotnetInfo = await getDotnetInfo(paths, logger);
+        let dotnetInfo = await getDotnetInfo(paths, logger);
 
         let dotnetExecutablePath = dotnetInfo.CliPath;
         if (dotnetExecutablePath !== undefined) {
@@ -36,7 +36,7 @@ export const findDotNet = async (logger: Logger) => {
         dotNetRoot = path.dirname(dotnetExecutablePath);
 
         exec = (command: string, cwd: string | undefined): Buffer => {
-            const options = {
+            let options = {
                 cwd,
                 env: { ...process.env, DOTNET_NOLOGO: "1" },
             };
@@ -50,4 +50,16 @@ export const findDotNet = async (logger: Logger) => {
 
         return false;
     }
+};
+
+export let getArchitecture = () => {
+    let lines = execDotNet("--info").toString().trim().split(/\r?\n/);
+    for (let line of lines) {
+        if (line.includes(" Architecture: ")) {
+            let parts = line.split(":");
+            return parts.length > 1 ? parts[1].trim() : line;
+        }
+    }
+
+    return null;
 };

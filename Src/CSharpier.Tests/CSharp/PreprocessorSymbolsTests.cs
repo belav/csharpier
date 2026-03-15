@@ -1,15 +1,14 @@
+using AwesomeAssertions;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.CSharp;
 
-[TestFixture]
 public class PreprocessorSymbolsTests
 {
-    [TestCase("DEBUG")]
-    [TestCase("NET48")]
-    [TestCase("NET48_OR_GREATER")]
+    [Test]
+    [Arguments("DEBUG")]
+    [Arguments("NET48")]
+    [Arguments("NET48_OR_GREATER")]
     public void GetSets_Should_Handle_Basic_If(string symbol)
     {
         RunTest(

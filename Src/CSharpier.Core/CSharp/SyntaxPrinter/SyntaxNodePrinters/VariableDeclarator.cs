@@ -8,16 +8,16 @@ internal static class VariableDeclarator
 {
     public static Doc Print(VariableDeclaratorSyntax node, PrintingContext context)
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null]);
-        docs.Append(Token.Print(node.Identifier, context));
+        var docs = new DocListBuilder(3);
+        docs.Add(Token.Print(node.Identifier, context));
 
         if (node.ArgumentList != null)
         {
-            docs.Append(BracketedArgumentList.Print(node.ArgumentList, context));
+            docs.Add(BracketedArgumentList.Print(node.ArgumentList, context));
         }
         if (node.Initializer != null)
         {
-            docs.Append(EqualsValueClause.Print(node.Initializer, context));
+            docs.Add(EqualsValueClause.Print(node.Initializer, context));
         }
         return Doc.Concat(ref docs);
     }

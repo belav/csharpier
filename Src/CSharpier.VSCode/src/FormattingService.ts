@@ -31,13 +31,13 @@ export class FormattingService {
         document: TextDocument,
         range: Range,
     ): Promise<TextEdit[]> => {
-        const differences = await this.getDifferences(document);
-        const edits: TextEdit[] = [];
+        let differences = await this.getDifferences(document);
+        let edits: TextEdit[] = [];
 
-        for (const difference of differences) {
-            const diffRange = this.getRange(document, difference);
+        for (let difference of differences) {
+            let diffRange = this.getRange(document, difference);
             if (range.contains(diffRange)) {
-                const textEdit = this.getTextEdit(diffRange, difference);
+                let textEdit = this.getTextEdit(diffRange, difference);
                 if (textEdit) {
                     edits.push(textEdit);
                 }
@@ -61,38 +61,57 @@ export class FormattingService {
     }
 
     private async getDifferences(document: TextDocument) {
-        const source = document.getText();
-        const formattedSource =
+        let source = document.getText();
+        let formattedSource =
             (await this.formatDocumentProvider.formatDocument(document)) ?? source;
         return generateDifferences(source, formattedSource);
     }
 
     private getRange(document: TextDocument, difference: Difference): Range {
         if (difference.operation === generateDifferences.INSERT) {
-            const start = document.positionAt(difference.offset);
+            let start = document.positionAt(difference.offset);
             return new Range(start.line, start.character, start.line, start.character);
         }
-        const start = document.positionAt(difference.offset);
-        const end = document.positionAt(difference.offset + difference.deleteText!.length);
+        let start = document.positionAt(difference.offset);
+        let end = document.positionAt(difference.offset + difference.deleteText!.length);
         return new Range(start.line, start.character, end.line, end.character);
     }
 
     private provideDocumentFormattingEdits = async (document: TextDocument) => {
-        const updateText = (newText: string) => {
-            return [TextEdit.replace(FormattingService.fullDocumentRange(document), newText)];
-        };
-
-        const formattedSource = await this.formatDocumentProvider.formatDocument(document);
+        let formattedSource = await this.formatDocumentProvider.formatDocument(document);
 
         if (formattedSource) {
-            return updateText(formattedSource);
+            return [this.minimalEdit(document, formattedSource)];
         }
 
         return [];
     };
 
+    private minimalEdit(document: TextDocument, newText: string) {
+        let existingText = document.getText();
+        
+        let i = 0;
+        while (i < existingText.length && i < newText.length && existingText[i] === newText[i]) {
+            ++i;
+        }
+
+        let j = 0;
+        while (
+            i + j < existingText.length &&
+            i + j < newText.length &&
+            existingText[existingText.length - j - 1] === newText[newText.length - j - 1]
+        ) {
+            ++j;
+        }
+        let minimalChangedText = newText.substring(i, newText.length - j);
+        let pos0 = document.positionAt(i);
+        let pos1 = document.positionAt(existingText.length - j);
+
+        return TextEdit.replace(new Range(pos0, pos1), minimalChangedText);
+    }
+
     private static fullDocumentRange(document: TextDocument): Range {
-        const lastLineId = document.lineCount - 1;
+        let lastLineId = document.lineCount - 1;
         return new Range(0, 0, lastLineId, document.lineAt(lastLineId).text.length);
     }
 }

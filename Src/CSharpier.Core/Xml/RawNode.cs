@@ -31,4 +31,29 @@ internal class RawNode
     {
         return this.NodeType is XmlNodeType.Element ? this.Nodes.LastOrDefault() ?? this : this;
     }
+
+    public override string? ToString()
+    {
+        if (this.IsTextLike())
+        {
+            return this.Value;
+        }
+
+        if (this.NodeType is XmlNodeType.Element)
+        {
+            if (this.IsEmpty)
+            {
+                return "<" + this.Name + " />";
+            }
+
+            return "<" + this.Name;
+        }
+
+        if (this.NodeType is XmlNodeType.EndElement)
+        {
+            return "</" + this.Name + ">";
+        }
+
+        return base.ToString();
+    }
 }

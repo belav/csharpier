@@ -5,6 +5,7 @@ import com.intellij.notification.NotificationType;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.jetbrains.rider.runtime.RiderDotNetActiveRuntimeHost;
+import com.jetbrains.rider.runtime.dotNetCore.DotNetCoreRuntime;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -46,13 +47,12 @@ public class DotNetProvider {
             var dotNetCoreRuntime = RiderDotNetActiveRuntimeHost.Companion.getInstance(project)
                 .getDotNetCoreRuntime()
                 .getValue();
+            this.cliExePath = getCliExePath(dotNetCoreRuntime);
 
-            if (dotNetCoreRuntime != null && dotNetCoreRuntime.getCliExePath() != null) {
+            if (this.cliExePath != null) {
                 this.logger.debug(
-                        "Using dotnet found from RiderDotNetActiveRuntimeHost at " +
-                        dotNetCoreRuntime.getCliExePath()
+                        "Using dotnet found from RiderDotNetActiveRuntimeHost at " + this.cliExePath
                     );
-                this.cliExePath = dotNetCoreRuntime.getCliExePath();
             } else {
                 return false;
             }
@@ -67,32 +67,41 @@ public class DotNetProvider {
         }
     }
 
-    /// Detects the .Net SDK architecture by running `dotnet --info` and looks for the relevant
-    /// line, for example.
-    ///
-    /// ```
-    /// ...
-    /// Host:
-    ///   Version:      9.0.1
-    ///   Architecture: arm64
-    ///   Commit:       c8acea2262
-    /// ...
-    /// ```
-    ///
-    /// The use case is to help {@link CustomPathInstaller} installs csharpier into different
-    /// location per architecture. So that users who need to use multiple SDKs of different
-    /// architectures doesn't need to reinstall it everytime.
-    ///
-    /// @return e.g. x64, arm64, x86, ...
-    public Optional<String> getArchitecture() {
-        String[] lines = execDotNet(List.of("--info"), null).split(System.lineSeparator());
-        for (String line : lines) {
+    // based on the version of rider, this method will return different types. So use reflection to call it and figure that out
+    private String getCliExePath(DotNetCoreRuntime dotNetCoreRuntime) {
+        if (dotNetCoreRuntime == null) {
+            return null;
+        }
+
+        try {
+            var method = dotNetCoreRuntime.getClass().getMethod("getCliExePath");
+            var result = method.invoke(dotNetCoreRuntime);
+            if (result == null) {
+                return null;
+            }
+            if (result instanceof String) {
+                return (String) result;
+            }
+            if (result instanceof File) {
+                return ((File) result).getAbsolutePath();
+            }
+            // For RdPath and other types, toString() should return the path
+            return result.toString();
+        } catch (Exception e) {
+            this.logger.warn("Exception when trying to getCliExePath " + e);
+            return null;
+        }
+    }
+
+    public String getArchitecture() {
+        var lines = execDotNet(List.of("--info"), null).split(System.lineSeparator());
+        for (var line : lines) {
             if (line.contains(" Architecture: ")) {
                 var parts = line.split(":");
-                return Optional.of(parts.length > 1 ? parts[1].trim() : line);
+                return parts.length > 1 ? parts[1].trim() : line;
             }
         }
-        return Optional.empty();
+        return null;
     }
 
     public String execDotNet(List<String> command, File workingDirectory) {

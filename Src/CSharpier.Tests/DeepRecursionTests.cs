@@ -1,11 +1,9 @@
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[Parallelizable(ParallelScope.All)]
 public class DeepRecursionTests
 {
     [Test]

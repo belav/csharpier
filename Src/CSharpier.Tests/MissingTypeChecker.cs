@@ -1,20 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using FluentAssertions;
+using AwesomeAssertions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class MissingTypeChecker
 {
     [Test]
-    [Ignore(
+    [Skip(
         "this can be run to see what types are in a new language version that we don't handle yet"
     )]
     public void Ensure_There_Are_No_Missing_Types()

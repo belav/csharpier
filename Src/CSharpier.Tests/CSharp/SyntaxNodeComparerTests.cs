@@ -1,12 +1,9 @@
+using AwesomeAssertions;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
 using Microsoft.CodeAnalysis;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.CSharp;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class SyntaxNodeComparerTests
 {
     [Test]
@@ -299,9 +296,10 @@ public class SyntaxNodeComparerTests
         );
     }
 
-    [TestCase("@")]
-    [TestCase("@$")]
-    [TestCase("$@")]
+    [Test]
+    [Arguments("@")]
+    [Arguments("@$")]
+    [Arguments("$@")]
     public void Mismatched_Line_Endings_In_Verbatim_String_Should_Not_Print_Error(string start)
     {
         var left =
@@ -570,8 +568,9 @@ public class SyntaxNodeComparerTests
         result.Should().BeEmpty();
     }
 
-    [TestCase("namespace Namespace { }")]
-    [TestCase("namespace Namespace;")]
+    [Test]
+    [Arguments("namespace Namespace { }")]
+    [Arguments("namespace Namespace;")]
     public void Usings_With_Directives_Pass_Validation(string content)
     {
         // The problem is that the #endif leading trivia to the ClassDeclaration

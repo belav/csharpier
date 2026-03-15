@@ -1,6 +1,6 @@
-const webpack = require("webpack");
-const path = require("path");
-const extensionPackage = require("./package.json");
+let webpack = require("webpack");
+let path = require("path");
+let extensionPackage = require("./package.json");
 
 module.exports = env => {
     return {

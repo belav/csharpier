@@ -58,6 +58,7 @@ internal static class InitializerExpression
                 is not (
                     ObjectCreationExpressionSyntax
                     or ArrayCreationExpressionSyntax
+                    or StackAllocArrayCreationExpressionSyntax
                     or ImplicitArrayCreationExpressionSyntax
                     or ImplicitObjectCreationExpressionSyntax
                 )

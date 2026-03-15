@@ -23,9 +23,11 @@ internal static class ServerCommand
             var logLevel = LogLevel.Information;
 
             var serverPort = context.ParseResult.GetValueForOption(serverPortOption);
+            var cancellationToken = context.GetCancellationToken();
             context.ExitCode = await ServerFormatter.StartServer(
                 serverPort,
-                new ConsoleLogger(new SystemConsole(), logLevel, LogFormat.Console)
+                new ConsoleLogger(new SystemConsole(), logLevel, LogFormat.Console),
+                cancellationToken
             );
         });
 

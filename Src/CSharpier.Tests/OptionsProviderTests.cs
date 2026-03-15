@@ -1,13 +1,12 @@
 using System.IO.Abstractions.TestingHelpers;
+using AwesomeAssertions;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
-using FluentAssertions;
 using Microsoft.Extensions.Logging.Abstractions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
+[NotInParallel]
 public class OptionsProviderTests
 {
     [Test]
@@ -32,8 +31,9 @@ public class OptionsProviderTests
         ShouldHaveDefaultXmlOptions(result);
     }
 
-    [TestCase("cs")]
-    [TestCase("csx")]
+    [Test]
+    [Arguments("cs")]
+    [Arguments("csx")]
     public async Task Should_Return_Default_Options_With_No_Config_File_And_Known_CSharp_Extension(
         string extension
     )
@@ -47,13 +47,14 @@ public class OptionsProviderTests
         ShouldHaveDefaultCSharpOptions(result);
     }
 
-    [TestCase("config")]
-    [TestCase("csproj")]
-    [TestCase("props")]
-    [TestCase("slnx")]
-    [TestCase("targets")]
-    [TestCase("xaml")]
-    [TestCase("xml")]
+    [Test]
+    [Arguments("config")]
+    [Arguments("csproj")]
+    [Arguments("props")]
+    [Arguments("slnx")]
+    [Arguments("targets")]
+    [Arguments("xaml")]
+    [Arguments("xml")]
     public async Task Should_Return_Default_Options_With_No_File_And_Known_Xml_Extension(
         string extension
     )
@@ -77,9 +78,10 @@ public class OptionsProviderTests
         await result.Should().ThrowAsync<Exception>();
     }
 
-    [TestCase(".csharpierrc")]
-    [TestCase(".csharpierrc.json")]
-    [TestCase(".csharpierrc.yaml")]
+    [Test]
+    [Arguments(".csharpierrc")]
+    [Arguments(".csharpierrc.json")]
+    [Arguments(".csharpierrc.yaml")]
     public async Task Should_Return_Default_Options_With_Empty_File(string fileName)
     {
         var context = new TestContext();
@@ -107,8 +109,9 @@ public class OptionsProviderTests
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
-    [TestCase("yaml")]
-    [TestCase("yml")]
+    [Test]
+    [Arguments("yaml")]
+    [Arguments("yml")]
     public async Task Should_Return_Yaml_Extension_Options(string extension)
     {
         var context = new TestContext();
@@ -126,8 +129,9 @@ endOfLine: crlf
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
     }
 
-    [TestCase("{ \"printWidth\": 10 }")]
-    [TestCase("printWidth: 10")]
+    [Test]
+    [Arguments("{ \"printWidth\": 10 }")]
+    [Arguments("printWidth: 10")]
     public async Task Should_Read_ExtensionLess_File(string contents)
     {
         var context = new TestContext();
@@ -138,11 +142,12 @@ endOfLine: crlf
         result.Width.Should().Be(10);
     }
 
-    [TestCase("", "printWidth: 10")]
-    [TestCase("", "{ \"printWidth\": 10 }")]
-    [TestCase(".yml", "printWidth: 10")]
-    [TestCase(".yaml", "printWidth: 10")]
-    [TestCase(".json", "{ \"printWidth\": 10 }")]
+    [Test]
+    [Arguments("", "printWidth: 10")]
+    [Arguments("", "{ \"printWidth\": 10 }")]
+    [Arguments(".yml", "printWidth: 10")]
+    [Arguments(".yaml", "printWidth: 10")]
+    [Arguments(".json", "{ \"printWidth\": 10 }")]
     public async Task Should_Find_Configuration_In_Parent_Directory(
         string extension,
         string contents
@@ -288,8 +293,9 @@ endOfLine: crlf
         result.IndentSize.Should().Be(2);
     }
 
-    [TestCase("cs")]
-    [TestCase("csx")]
+    [Test]
+    [Arguments("cs")]
+    [Arguments("csx")]
     public async Task Should_Return_Default_CSharp_Options_With_Empty_EditorConfig(string extension)
     {
         var context = new TestContext();
@@ -302,11 +308,12 @@ endOfLine: crlf
         ShouldHaveDefaultCSharpOptions(result);
     }
 
-    [TestCase("xml")]
-    [TestCase("csproj")]
-    [TestCase("props")]
-    [TestCase("targets")]
-    [TestCase("config")]
+    [Test]
+    [Arguments("xml")]
+    [Arguments("csproj")]
+    [Arguments("props")]
+    [Arguments("targets")]
+    [Arguments("config")]
     public async Task Should_Return_Default_Xml_Options_With_Empty_EditorConfig(string extension)
     {
         var context = new TestContext();
@@ -426,8 +433,9 @@ indent_size==
         result.IndentSize.Should().Be(4);
     }
 
-    [TestCase("tab_width")]
-    [TestCase("indent_size")]
+    [Test]
+    [Arguments("tab_width")]
+    [Arguments("indent_size")]
     public async Task Should_Support_EditorConfig_Tabs(string propertyName)
     {
         var context = new TestContext();

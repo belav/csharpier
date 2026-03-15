@@ -115,7 +115,7 @@ internal static class BasePropertyDeclaration
         PrintingContext context
     )
     {
-        var docs = new ValueListBuilder<Doc>([null, null, null, null, null, null]);
+        var docs = new DocListBuilder(6);
         if (
             node.AttributeLists.Count > 1
             || node.Body != null
@@ -126,27 +126,27 @@ internal static class BasePropertyDeclaration
             )
         )
         {
-            docs.Append(Doc.HardLine);
+            docs.Add(Doc.HardLine);
         }
         else
         {
-            docs.Append(separator);
+            docs.Add(separator);
         }
 
-        docs.Append(AttributeLists.Print(node, node.AttributeLists, context));
-        docs.Append(Modifiers.PrintSorted(node.Modifiers, context));
-        docs.Append(Token.Print(node.Keyword, context));
+        docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
+        docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
+        docs.Add(Token.Print(node.Keyword, context));
 
         if (node.Body != null)
         {
-            docs.Append(Block.Print(node.Body, context));
+            docs.Add(Block.Print(node.Body, context));
         }
         else if (node.ExpressionBody != null)
         {
-            docs.Append(ArrowExpressionClause.Print(node.ExpressionBody, context));
+            docs.Add(ArrowExpressionClause.Print(node.ExpressionBody, context));
         }
 
-        docs.Append(Token.Print(node.SemicolonToken, context));
+        docs.Add(Token.Print(node.SemicolonToken, context));
 
         return Doc.Concat(ref docs);
     }

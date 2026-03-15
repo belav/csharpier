@@ -3,7 +3,7 @@ function CSH-ReviewBranch {
         [string]$folder,
         [string]$pathToTestingRepo,
         [switch]$skipValidation = $true,
-        [switch]$onlyXml = $false
+        [switch]$xml = $false
     )
 
     $repositoryRoot = Join-Path $PSScriptRoot ".."
@@ -76,10 +76,18 @@ function CSH-ReviewBranch {
         & git reset --hard
         & git checkout -b $preBranch
 
-        if ($onlyXml) {
+        if ($xml) {
             Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.cs"
+        } else {
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.config" 
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.csproj" 
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.props" 
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.slnx" 
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.targets" 
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.xaml" 
+            Add-Content -Path "$pathToTestingRepo/.csharpierignore" -Value "**/*.xml"
         }
-        
+
         dotnet $csharpierDllPath format . $skipValidationParam --no-cache
         # there is some weirdness with a couple files with #if where
         # they need to be formatted twice to get them stable

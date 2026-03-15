@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.0-rc.1 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.0 AS base
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0.100-rc.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.100 AS build
 
 RUN set -uex \
     && apt-get update \

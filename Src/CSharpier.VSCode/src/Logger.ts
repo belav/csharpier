@@ -73,13 +73,13 @@ export class Logger {
     }
 
     private logObject(data: unknown): void {
-        const message = JSON.stringify(data, null, 2);
+        let message = JSON.stringify(data, null, 2);
 
         this.outputChannel.appendLine(message);
     }
 
     private logMessage(message: any, logLevel: LogLevel): void {
-        const title = new Date().toLocaleTimeString();
+        let title = new Date().toLocaleTimeString();
         this.outputChannel.appendLine(`["${logLevel}" - ${title}] ${message}`);
         console.log(message);
     }

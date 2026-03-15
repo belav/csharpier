@@ -7,12 +7,12 @@ internal static class StackAllocArrayCreationExpression
 {
     public static Doc Print(StackAllocArrayCreationExpressionSyntax node, PrintingContext context)
     {
-        return Doc.Concat(
+        return Doc.Group(
             Token.PrintWithSuffix(node.StackAllocKeyword, " ", context),
             Node.Print(node.Type, context),
             node.Initializer != null
-                ? Doc.Concat(" ", InitializerExpression.Print(node.Initializer, context))
-                : string.Empty
+                ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
+                : Doc.Null
         );
     }
 }

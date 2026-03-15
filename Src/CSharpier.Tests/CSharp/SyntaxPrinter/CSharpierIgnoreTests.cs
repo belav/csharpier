@@ -1,10 +1,8 @@
+using AwesomeAssertions;
 using CSharpier.Core.CSharp.SyntaxPrinter;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.CSharp.SyntaxPrinter;
 
-[TestFixture]
 public class CSharpierIgnoreTests
 {
     [Test]

@@ -38,13 +38,13 @@ export class InstallerService {
             return;
         }
 
-        const globalButton = "Install as global tool";
-        const localButton = "Install as local tool";
+        let globalButton = "Install as global tool";
+        let localButton = "Install as local tool";
 
-        const items = [globalButton];
+        let items = [globalButton];
         let solutionRoot: string;
         if (workspace.workspaceFolders) {
-            for (const folder of workspace.workspaceFolders) {
+            for (let folder of workspace.workspaceFolders) {
                 if (directoryThatContainsFile.startsWith(folder.uri.fsPath)) {
                     solutionRoot = folder.uri.fsPath;
                     items.unshift(localButton);
@@ -53,7 +53,7 @@ export class InstallerService {
             }
         }
 
-        const isOnlyGlobal = items.length === 1;
+        let isOnlyGlobal = items.length === 1;
         let message: string;
 
         if (isOnlyGlobal) {
@@ -76,14 +76,14 @@ export class InstallerService {
         window.showErrorMessage(message, ...items).then(
             selection => {
                 if (selection === globalButton) {
-                    const command = "dotnet tool install -g csharpier";
+                    let command = "dotnet tool install -g csharpier";
                     this.logger.info("Installing csharpier globally with " + command);
-                    const output = execDotNet(command).toString();
+                    let output = execDotNet(command).toString();
                     this.logger.info(output);
                 } else if (selection === localButton) {
                     if (solutionRoot) {
                         try {
-                            const manifestPath = path.join(
+                            let manifestPath = path.join(
                                 solutionRoot,
                                 ".config/dotnet-tools.json",
                             );
@@ -127,7 +127,7 @@ export class InstallerService {
     };
 
     private ignoreDirectory(directoryThatContainsFile: string) {
-        const normalizedPath = directoryThatContainsFile.replace(/\\/g, "/");
+        let normalizedPath = directoryThatContainsFile.replace(/\\/g, "/");
         return (
             normalizedPath.indexOf("/DecompilationMetadataAsSourceFileProvider/") >= 0 ||
             normalizedPath === "/"

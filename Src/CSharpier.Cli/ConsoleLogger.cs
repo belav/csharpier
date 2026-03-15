@@ -1,10 +1,13 @@
 using Microsoft.Extensions.Logging;
+#if NET8_0
+using Lock = object;
+#endif
 
 namespace CSharpier.Cli;
 
 internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat logFormat) : ILogger
 {
-    private static readonly object ConsoleLock = new();
+    private static readonly Lock ConsoleLock = new();
 
     public virtual void Log<TState>(
         LogLevel logLevel,

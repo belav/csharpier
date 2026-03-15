@@ -70,6 +70,7 @@ public static class XmlFormatter
             ValidationType = ValidationType.None,
             CheckCharacters = true,
             Async = true,
+            DtdProcessing = DtdProcessing.Ignore,
         };
 
         using var xmlReader = XmlReader.Create(stringReader, settings);

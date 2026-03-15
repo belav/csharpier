@@ -69,6 +69,7 @@ internal static class FormattingCommands
                 noMSBuildCheck,
                 includeGenerated,
                 compilationErrorsAsWarnings,
+                false,
                 configPath,
                 ignorePath,
                 stdinPath,
@@ -96,6 +97,7 @@ internal static class FormattingCommands
         checkCommand.AddOption(IncludeGeneratedOption);
         checkCommand.AddOption(NoMsBuildCheckOption);
         checkCommand.AddOption(CompilationErrorsAsWarningsOption);
+        checkCommand.AddOption(UnformattedAsWarningsOption);
 
         checkCommand.SetHandler(async context =>
         {
@@ -104,6 +106,9 @@ internal static class FormattingCommands
             var includeGenerated = context.ParseResult.GetValueForOption(IncludeGeneratedOption);
             var compilationErrorsAsWarnings = context.ParseResult.GetValueForOption(
                 CompilationErrorsAsWarningsOption
+            );
+            var unformattedAsWarningsOption = context.ParseResult.GetValueForOption(
+                UnformattedAsWarningsOption
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
             var ignorePath = context.ParseResult.GetValueForOption(IgnorePathOption);
@@ -121,6 +126,7 @@ internal static class FormattingCommands
                 noMSBuildCheck,
                 includeGenerated,
                 compilationErrorsAsWarnings,
+                unformattedAsWarningsOption,
                 configPath,
                 ignorePath,
                 null,
@@ -143,6 +149,7 @@ internal static class FormattingCommands
         bool noMSBuildCheck,
         bool includeGenerated,
         bool compilationErrorsAsWarnings,
+        bool unformattedAsWarnings,
         string? configPath,
         string? ignorePath,
         string? stdinPath,
@@ -193,6 +200,7 @@ internal static class FormattingCommands
             ConfigPath = configPath,
             IgnorePath = ignorePath,
             CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
+            UnformattedAsWarnings = unformattedAsWarnings,
             LogFormat = logFormat,
         };
 
@@ -270,5 +278,10 @@ internal static class FormattingCommands
     private static readonly Option<bool> CompilationErrorsAsWarningsOption = new(
         ["--compilation-errors-as-warnings"],
         "Treat compilation errors from files as warnings instead of errors."
+    );
+
+    private static readonly Option<bool> UnformattedAsWarningsOption = new(
+        ["--unformatted-as-warnings"],
+        "Treat unformatted files as warnings instead of errors."
     );
 }

@@ -43,7 +43,7 @@ export default function Home() {
                         <li>It is fast.</li>
                         <li>Provides only basic options</li>
                         <li>Integrates with the major c# IDEs</li>
-                        <li>Works with c# &lt;= 13</li>
+                        <li>Works with c# &lt;= 14</li>
                         <li>Supports validating the changes it makes.</li>
                     </ul>
                 </div>

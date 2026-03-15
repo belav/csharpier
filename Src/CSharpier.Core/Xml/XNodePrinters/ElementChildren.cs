@@ -15,14 +15,20 @@ internal static class ElementChildren
             groupIds.Add(context.GroupFor("symbol"));
         }
 
-        var result = new ValueListBuilder<Doc>(node.Nodes.Count * 5);
+        var result = new DocListBuilder(node.Nodes.Count * 5);
         var x = 0;
         foreach (var childNode in node.Nodes)
         {
-            var prevParts = new ValueListBuilder<Doc>([null, null]);
-            var leadingParts = new ValueListBuilder<Doc>([null, null]);
-            var trailingParts = new ValueListBuilder<Doc>([null, null]);
-            var nextParts = new ValueListBuilder<Doc>([null, null]);
+            if (childNode.NodeType is XmlNodeType.Whitespace)
+            {
+                result.Add(Doc.HardLine);
+                continue;
+            }
+
+            var prevParts = new DocListBuilder(2);
+            var leadingParts = new DocListBuilder(2);
+            var trailingParts = new DocListBuilder(2);
+            var nextParts = new DocListBuilder(2);
 
             var prevBetweenLine = childNode.PreviousNode is not null
                 ? PrintBetweenLine(childNode.PreviousNode, childNode)
@@ -36,15 +42,15 @@ internal static class ElementChildren
             {
                 if (prevBetweenLine is HardLine)
                 {
-                    prevParts.Append(Doc.HardLine);
+                    prevParts.Add(Doc.HardLine);
                 }
                 else if (childNode.PreviousNode?.NodeType is XmlNodeType.Text)
                 {
-                    leadingParts.Append(prevBetweenLine);
+                    leadingParts.Add(prevBetweenLine);
                 }
                 else
                 {
-                    leadingParts.Append(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
                 }
             }
 
@@ -54,17 +60,17 @@ internal static class ElementChildren
                 {
                     if (childNode.NextNode?.NodeType is XmlNodeType.Text)
                     {
-                        nextParts.Append(Doc.HardLine);
+                        nextParts.Add(Doc.HardLine);
                     }
                 }
                 else
                 {
-                    trailingParts.Append(nextBetweenLine);
+                    trailingParts.Add(nextBetweenLine);
                 }
             }
 
-            result.Append(prevParts.AsSpan());
-            result.Append(
+            result.Add(prevParts.AsSpan());
+            result.Add(
                 Doc.Group(
                     Doc.Concat(ref leadingParts),
                     Doc.GroupWithId(
@@ -74,7 +80,7 @@ internal static class ElementChildren
                     )
                 )
             );
-            result.Append(nextParts.AsSpan());
+            result.Add(nextParts.AsSpan());
             x++;
         }
 
@@ -107,7 +113,18 @@ internal static class ElementChildren
     public static Doc PrintBetweenLine(RawNode prevNode, RawNode nextNode)
     {
         return
-            (prevNode.IsTextLike() && nextNode.IsTextLike())
+            (
+                prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
+                && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
+            )
+            || (
+                prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
+                && nextNode.NodeType is XmlNodeType.Comment
+            )
+            || (
+                prevNode.NodeType is XmlNodeType.Comment
+                && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
+            )
             || (
                 prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
                 && nextNode.NodeType is XmlNodeType.Element

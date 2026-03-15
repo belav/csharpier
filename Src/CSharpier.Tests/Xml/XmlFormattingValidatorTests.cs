@@ -1,12 +1,9 @@
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.Xml;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests.Xml;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class XmlFormattingValidatorTests
 {
     [Test]

@@ -5,8 +5,8 @@ import { Logger } from "./Logger";
 import { FormatDocumentProvider } from "./FormatDocumentProvider";
 import { workspace } from "vscode";
 
-const DIAGNOSTICS_ID = "csharpier";
-const DIAGNOSTICS_SOURCE_ID = "diagnostic";
+let DIAGNOSTICS_ID = "csharpier";
+let DIAGNOSTICS_SOURCE_ID = "diagnostic";
 
 export interface CsharpierDiff {
     source: string;
@@ -42,7 +42,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
     }
 
     public dispose(): void {
-        for (const disposable of this.disposables) {
+        for (let disposable of this.disposables) {
             disposable.dispose();
         }
         this.diagnosticCollection.dispose();
@@ -52,12 +52,12 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
     private onChangeTimeout: NodeJS.Timeout | undefined;
 
     private registerEditorEvents(): void {
-        const activeDocument = vscode.window.activeTextEditor?.document;
+        let activeDocument = vscode.window.activeTextEditor?.document;
         if (activeDocument) {
             void this.runDiagnostics(activeDocument);
         }
 
-        const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(e => {
+        let onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(e => {
             if (
                 e.contentChanges.length &&
                 vscode.window.activeTextEditor?.document === e.document &&
@@ -71,13 +71,13 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
             }
         });
 
-        const onDidSaveTextDocument = vscode.workspace.onDidSaveTextDocument(document => {
+        let onDidSaveTextDocument = vscode.workspace.onDidSaveTextDocument(document => {
             if (vscode.window.activeTextEditor?.document === document) {
                 void this.runDiagnostics(document);
             }
         });
 
-        const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(editor => {
+        let onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(editor => {
             if (editor) {
                 void this.runDiagnostics(editor.document);
             }
@@ -95,7 +95,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         document: vscode.TextDocument,
         onlyAllowLessDiagnostics = false,
     ): Promise<void> {
-        const shouldRunDiagnostics =
+        let shouldRunDiagnostics =
             !!vscode.workspace.getWorkspaceFolder(document.uri) &&
             (workspace.getConfiguration("csharpier").get<boolean>("enableDiagnostics") ?? true);
 
@@ -110,16 +110,16 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         }
 
         try {
-            const source = document.getText();
-            const formattedSource =
+            let source = document.getText();
+            let formattedSource =
                 (await this.formatDocumentProvider.formatDocument(document, false)) ?? source;
-            const differences = generateDifferences(source, formattedSource);
-            const diff = {
+            let differences = generateDifferences(source, formattedSource);
+            let diff = {
                 source,
                 formattedSource,
                 differences,
             };
-            const diagnostics = this.getDiagnostics(document, diff);
+            let diagnostics = this.getDiagnostics(document, diff);
             if (onlyAllowLessDiagnostics) {
                 let currentCount = !currentDiagnostics ? 0 : currentDiagnostics.length;
                 if (diagnostics.length >= currentCount) {
@@ -136,8 +136,8 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         document: vscode.TextDocument,
         diff: CsharpierDiff,
     ): vscode.Diagnostic[] {
-        const diagnostics: vscode.Diagnostic[] = [];
-        for (const difference of diff.differences) {
+        let diagnostics: vscode.Diagnostic[] = [];
+        for (let difference of diff.differences) {
             let range = this.getRange(document, difference);
             let message = this.getMessage(difference);
             let diagnostic = new vscode.Diagnostic(range, message);
@@ -170,11 +170,11 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
 
     private getRange(document: vscode.TextDocument, difference: Difference): vscode.Range {
         if (difference.operation === generateDifferences.INSERT) {
-            const start = document.positionAt(difference.offset);
+            let start = document.positionAt(difference.offset);
             return new vscode.Range(start.line, start.character, start.line, start.character);
         }
-        const start = document.positionAt(difference.offset);
-        const end = document.positionAt(difference.offset + difference.deleteText!.length);
+        let start = document.positionAt(difference.offset);
+        let end = document.positionAt(difference.offset + difference.deleteText!.length);
         return new vscode.Range(start.line, start.character, end.line, end.character);
     }
 
@@ -183,7 +183,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         range: vscode.Range | vscode.Selection,
     ): vscode.CodeAction[] {
         let totalDiagnostics = 0;
-        const codeActions: vscode.CodeAction[] = [];
+        let codeActions: vscode.CodeAction[] = [];
         this.diagnosticCollection.forEach(
             (uri: vscode.Uri, diagnostics: readonly vscode.Diagnostic[]) => {
                 if (document.uri.fsPath !== uri.fsPath) {
@@ -194,7 +194,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
                     if (!range.isEqual(diagnostic.range)) {
                         return;
                     }
-                    const difference = this.diagnosticDifferenceMap.get(diagnostic);
+                    let difference = this.diagnosticDifferenceMap.get(diagnostic);
                     codeActions.push(
                         this.getQuickFixCodeAction(document.uri, diagnostic, difference!),
                     );
@@ -212,7 +212,7 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         diagnostic: vscode.Diagnostic,
         difference: Difference,
     ): vscode.CodeAction {
-        const action = new vscode.CodeAction(
+        let action = new vscode.CodeAction(
             `Fix this ${DIAGNOSTICS_ID} problem`,
             DiagnosticsService.quickFixCodeActionKind,
         );
@@ -231,8 +231,8 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         document: vscode.TextDocument,
         totalDiagnostics: number,
     ): vscode.CodeAction {
-        const title = `Fix all ${DIAGNOSTICS_ID} problems (${totalDiagnostics})`;
-        const action = new vscode.CodeAction(title, DiagnosticsService.quickFixCodeActionKind);
+        let title = `Fix all ${DIAGNOSTICS_ID} problems (${totalDiagnostics})`;
+        let action = new vscode.CodeAction(title, DiagnosticsService.quickFixCodeActionKind);
         action.command = {
             title,
             command: FixAllCodeActionsCommand.Id,

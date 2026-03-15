@@ -10,19 +10,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="DiffEngine" />
-    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="AwesomeAssertions" />
     <PackageReference Include="GitHubActionsTestLogger" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
-    <PackageReference Include="NUnit" />
-    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="LibGit2Sharp" />
+    <PackageReference Include="TUnit" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj" />
-    <ProjectReference
-      Include="..\CSharpier.Tests.Generators\CSharpier.Tests.Generators.csproj"
-      OutputItemType="Analyzer"
-      ReferenceOutputAssembly="false"
-    />
     <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
   </ItemGroup>
   <ItemGroup>

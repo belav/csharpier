@@ -15,6 +15,7 @@ internal class CommandLineOptions
     public bool NoCache { get; init; }
     public bool NoMSBuildCheck { get; init; }
     public bool CompilationErrorsAsWarnings { get; init; }
+    public bool UnformattedAsWarnings { get; init; }
     public bool IncludeGenerated { get; init; }
     public string? StandardInFileContents { get; init; }
     public string? ConfigPath { get; init; }

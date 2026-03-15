@@ -56,6 +56,8 @@ _See [Configuration](CLI.md) for including these files_
 
 ## Ignoring Code
 
+#### Only supported in c# currently see [1788](https://github.com/belav/csharpier/issues/1788)
+
 Add a `// csharpier-ignore` comment to exclude the next node from formatting. This is valid on statements and members.
 
 ```csharp

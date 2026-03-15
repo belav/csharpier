@@ -9,6 +9,7 @@
     <CSharpierCommand>format</CSharpierCommand>
     <CSharpierCommand Condition="'$(CSharpier_Check)' == 'true'">check</CSharpierCommand>
     <CSharpierArgs Condition="'$(CSharpier_LogLevel)' != ''">$(CSharpierArgs) --log-level $(CSharpier_LogLevel)</CSharpierArgs>
+    <CSharpierArgs Condition="'$(CSharpier_UnformattedAsWarnings)' == 'true'">$(CSharpierArgs) --unformatted-as-warnings</CSharpierArgs>
     <FirstTargetFramework Condition=" '$(TargetFrameworks)' == '' ">$(TargetFramework)</FirstTargetFramework>
     <FirstTargetFramework Condition=" '$(FirstTargetFramework)' == '' ">$(TargetFrameworks.Split(';')[0])</FirstTargetFramework>
     <NullOutput>NUL</NullOutput>

@@ -1,30 +1,61 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http.Json;
+using AwesomeAssertions;
 using CliWrap;
 using CliWrap.EventStream;
 using CSharpier.Cli.Server;
-using FluentAssertions;
-using NUnit.Framework;
 
-namespace CSharpier.Cli.Tests;
+namespace CSharpierProcess.Tests;
 
-[TestFixture]
 public class ServerTests
 {
     private static readonly HttpClient httpClient = new();
 
     // TODO server add other tests
-    // starting on port
     // ignore file
     // option file
+
     [Test]
-    [Ignore("Not working on GH, test locally on linux?")]
-    public async Task Stuff()
+    public async Task Server_Should_Use_Empty_Port()
+    {
+        var data = new FormatFileParameter
+        {
+            fileName = "/tmp/test.cs",
+            fileContents = "public class TestClass    { }",
+        };
+
+        var result = await RunServer(data);
+
+        result.errorMessage.Should().BeNullOrEmpty();
+        result.status.Should().Be(Status.Formatted);
+        result.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
+    }
+
+    [Test]
+    public async Task Server_Should_Use_Defined_Port()
+    {
+        var data = new FormatFileParameter
+        {
+            fileName = "/tmp/test.cs",
+            fileContents = "public class TestClass    { }",
+        };
+
+        var result = await RunServer(data, "--server-port 51123");
+
+        result.errorMessage.Should().BeNullOrEmpty();
+        result.status.Should().Be(Status.Formatted);
+        result.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
+    }
+
+    private static async Task<FormatFileResult> RunServer(
+        FormatFileParameter data,
+        string? arguments = null
+    )
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
 
-        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} --server")
+        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} server {arguments}")
         {
             UseShellExecute = false,
             ErrorDialog = false,
@@ -45,11 +76,6 @@ public class ServerTests
                 string.Empty
             );
             var port = int.Parse(portString, CultureInfo.InvariantCulture);
-            var data = new FormatFileParameter
-            {
-                fileName = "/Temp/test.cs",
-                fileContents = "public class TestClass    { }",
-            };
 
             var response = await httpClient.PostAsJsonAsync(
                 $"http://127.0.0.1:{port}/format",
@@ -62,8 +88,7 @@ public class ServerTests
                 Assert.Fail("Result is null");
             }
 
-            result!.status.Should().Be(Status.Formatted);
-            result!.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
+            return result!;
         }
         finally
         {
@@ -72,20 +97,19 @@ public class ServerTests
     }
 
     [Test]
-    [Ignore("leaves things running when it fails and probably won't work on GH")]
+    [Skip("this doesn't kill the processes after it starts them")]
     public void RunTwo()
     {
         var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
 
         async Task NewFunction()
         {
-            var command = CliWrap
-                .Cli.Wrap("dotnet")
-                .WithArguments(path + " --server")
+            var command = Cli.Wrap("dotnet")
+                .WithArguments(path + " server")
                 .WithValidation(CommandResultValidation.None);
 
             using var cts = new CancellationTokenSource();
-            cts.CancelAfter(TimeSpan.FromSeconds(5));
+            cts.CancelAfter(TimeSpan.FromSeconds(15));
 
             await foreach (var cmdEvent in command.ListenAsync(cancellationToken: cts.Token))
             {
@@ -106,6 +130,13 @@ public class ServerTests
             }
         }
 
-        Task.WaitAll(NewFunction(), NewFunction());
+        var tasks = new[] { NewFunction(), NewFunction(), Task.Delay(TimeSpan.FromSeconds(10)) };
+
+        var taskIndex = Task.WaitAny(tasks);
+
+        if (taskIndex >= 0 && tasks[taskIndex].Exception is { } exception)
+        {
+            throw exception;
+        }
     }
 }

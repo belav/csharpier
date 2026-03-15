@@ -1,97 +1,101 @@
 using System.Globalization;
 using System.Net;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server.Features;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using System.Net.Sockets;
+using System.Text;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using NReco.Logging.File;
 
 namespace CSharpier.Cli.Server;
 
-internal static class ServerFormatter
+internal class ServerFormatter
 {
-    public static async Task<int> StartServer(int? port, ConsoleLogger logger)
+    public static async Task<int> StartServer(
+        int? port,
+        ConsoleLogger logger,
+        CancellationToken cancellationToken
+    )
     {
-        // Editor plugins, like the Rider extension, run the server in the root directory
-        // of a solution. Using the root directory as the content root for an ASP.NET application
-        // is a bad idea, because the default host setup installs a recursive file system watch on the entire
-        // directory. This file system watch does not honor any ignore files and will quickly exhaust OS resource
-        // with large solutions/multiple server processes.
-        // We thus configure the server to run against a temporary, empty directory instead. This also means that
-        // the server won't pick up the default appsettings.json files in the working directory.
-        // We probably don't want this anyway because these appsettings could be intended for the user's solution,
-        // not for csharpier.
-        var emptyContentRoot = Directory.CreateTempSubdirectory("csharpier-empty-content-root");
-        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-            Directory.Delete(emptyContentRoot.FullName, true);
-        var builder = WebApplication.CreateBuilder(
-            new WebApplicationOptions { ContentRootPath = emptyContentRoot.FullName }
-        );
-        builder.WebHost.ConfigureKestrel(
-            (_, serverOptions) =>
-            {
-                serverOptions.Listen(IPAddress.Loopback, port ?? 0);
-            }
-        );
-        builder.Logging.ClearProviders();
-        var values = new Dictionary<string, string?>
+        if (port is null or 0)
         {
-            ["Logging:File:MaxRollingFiles"] = "1",
-            ["Logging:File:FileSizeLimitBytes"] = "10000",
-        };
-        builder.Configuration.AddInMemoryCollection(values);
-        var currentPort = port ?? 0;
-        builder.Services.AddLogging(loggingBuilder =>
+            var tcp = new TcpListener(IPAddress.Loopback, 0);
+            tcp.Start();
+            port = ((IPEndPoint)tcp.LocalEndpoint).Port;
+            tcp.Stop();
+        }
+
+        using var listener = new HttpListener();
+        listener.Prefixes.Add($"http://{IPAddress.Loopback}:{port}/");
+
+        listener.Start();
+
+        var loggerFactory = LoggerFactory.Create(builder =>
         {
-            loggingBuilder.AddFile(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"),
-                o =>
-                {
-                    // name files based on the port so that multiple processes can log without fighting over a file
-                    // however before the server is started fully we won't have a port
-                    // this empty error handler will make sure if two processes both try to use that initial file
-                    // at the same time they won't crash
-                    o.HandleFileError = _ => { };
-                    o.FormatLogFileName = name =>
-                        string.Format(
-                            CultureInfo.InvariantCulture,
-                            name,
-                            currentPort == 0 ? string.Empty : currentPort
-                        );
-                }
-            );
+            builder
+                .SetMinimumLevel(LogLevel.Information)
+                .AddFile(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"),
+                    o =>
+                    {
+                        o.MaxRollingFiles = 1;
+                        o.FileSizeLimitBytes = 10000;
+                        o.HandleFileError = _ => { };
+                        o.FormatLogFileName = name =>
+                            string.Format(CultureInfo.InvariantCulture, name, port);
+                    }
+                );
         });
 
-        var app = builder.Build();
-        app.Lifetime.ApplicationStarted.Register(() =>
-        {
-            foreach (
-                var address in (app as IApplicationBuilder)
-                    .ServerFeatures.Get<IServerAddressesFeature>()
-                    ?.Addresses ?? []
-            )
-            {
-                var uri = new Uri(address);
-                currentPort = uri.Port;
-                logger.LogInformation("Started on " + uri.Port);
-            }
-        });
+        logger.LogInformation("Started on " + port);
+
+        var fileLogger = loggerFactory.CreateLogger<ServerFormatter>();
         var service = new CSharpierServiceImplementation(
             // we want any further logging to happen in the file log, not out to the console
-            app.Services.GetRequiredService<ILogger<CSharpierServiceImplementation>>()
-        );
-        app.MapPost(
-            "/format",
-            (FormatFileParameter formatFileDto, CancellationToken cancellationToken) =>
-                service.FormatFile(formatFileDto, cancellationToken)
+            fileLogger
         );
 
-        await app.RunAsync();
+        while (true)
+        {
+            var context = await listener.GetContextAsync();
+            _ = Task.Run(() => ProcessRequestAsync(context, service), cancellationToken);
+        }
+    }
 
-        Console.ReadKey();
+    private static async Task ProcessRequestAsync(
+        HttpListenerContext context,
+        CSharpierServiceImplementation service
+    )
+    {
+        var request = context.Request;
+        var response = context.Response;
 
-        return 0;
+        if (request.Url?.AbsolutePath == "/format" && request.HttpMethod == "POST")
+        {
+            using var reader = new StreamReader(
+                context.Request.InputStream,
+                context.Request.ContentEncoding
+            );
+            var body = await reader.ReadToEndAsync();
+
+            var formatFileDto = JsonSerializer.Deserialize<FormatFileParameter>(body);
+            if (formatFileDto is null)
+            {
+                throw new Exception("No body!");
+            }
+
+            var result = await service.FormatFile(formatFileDto, CancellationToken.None);
+
+            response.ContentType = "application/json";
+
+            var buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(result));
+            response.ContentLength64 = buffer.Length;
+            await response.OutputStream.WriteAsync(buffer);
+        }
+        else
+        {
+            response.StatusCode = 405;
+        }
+
+        response.OutputStream.Close();
     }
 }

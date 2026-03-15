@@ -79,7 +79,7 @@ internal static class CommandLineFormatter
                     // this only considers the ignore files when a path is supplied
                     && (
                         !pathSupplied
-                        || !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
+                        || !await optionsProvider.IsFileIgnoredAsync(filePath, cancellationToken)
                     )
                 )
                 {
@@ -226,6 +226,32 @@ internal static class CommandLineFormatter
                 }
             }
 
+            async IAsyncEnumerable<string> EnumerateNonignoredFiles(string directory)
+            {
+                foreach (var file in fileSystem.Directory.EnumerateFiles(directory))
+                {
+                    yield return file;
+                }
+
+                foreach (var subdirectory in fileSystem.Directory.EnumerateDirectories(directory))
+                {
+                    if (
+                        await optionsProvider.IsDirectoryIgnoredAsync(
+                            subdirectory,
+                            cancellationToken
+                        )
+                    )
+                    {
+                        continue;
+                    }
+
+                    await foreach (var file in EnumerateNonignoredFiles(subdirectory))
+                    {
+                        yield return file;
+                    }
+                }
+            }
+
             async Task FormatFile(
                 string actualFilePath,
                 string originalFilePath,
@@ -236,7 +262,7 @@ internal static class CommandLineFormatter
                     (
                         !commandLineOptions.IncludeGenerated
                         && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    ) || await optionsProvider.IsIgnoredAsync(actualFilePath, cancellationToken)
+                    ) || await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
                 )
                 {
                     return;
@@ -282,26 +308,27 @@ internal static class CommandLineFormatter
             {
                 if (
                     !commandLineOptions.NoMSBuildCheck
-                    && HasMismatchedCliAndMsBuildVersions.Check(
+                    && await HasMismatchedCliAndMsBuildVersions.Check(
                         directoryOrFilePath,
                         fileSystem,
-                        logger
+                        logger,
+                        cancellationToken
                     )
                 )
                 {
                     return 1;
                 }
 
-                var tasks = fileSystem
-                    .Directory.EnumerateFiles(
-                        directoryOrFilePath,
-                        "*.*",
-                        SearchOption.AllDirectories
-                    )
-                    .Select(o =>
-                        FormatFile(o, o.Replace(directoryOrFilePath, originalDirectoryOrFile))
-                    )
-                    .ToArray();
+                var tasks = new List<Task>();
+                await foreach (
+                    var file in EnumerateNonignoredFiles(directoryOrFilePath)
+                        .WithCancellation(cancellationToken)
+                )
+                {
+                    var relativePath = file.Replace(directoryOrFilePath, originalDirectoryOrFile);
+                    tasks.Add(FormatFile(file, relativePath));
+                }
+
                 try
                 {
                     await Task.WhenAll(tasks).WaitAsync(cancellationToken);
@@ -371,7 +398,11 @@ internal static class CommandLineFormatter
     {
         if (
             (!commandLineOptions.CompilationErrorsAsWarnings && result.FailedCompilation > 0)
-            || (commandLineOptions.Check && result.UnformattedFiles > 0)
+            || (
+                commandLineOptions.Check
+                && result.UnformattedFiles > 0
+                && !commandLineOptions.UnformattedAsWarnings
+            )
             || result.FailedFormattingValidation > 0
             || result.ExceptionsFormatting > 0
             || result.ExceptionsValidatingSource > 0
@@ -546,7 +577,16 @@ internal static class CommandLineFormatter
                 codeFormattingResult.Code,
                 fileToFormatInfo.FileContents
             );
-            fileIssueLogger.WriteError($"Was not formatted.\n{difference}\n");
+            var message = $"Was not formatted.\n{difference}\n";
+            if (commandLineOptions.UnformattedAsWarnings)
+            {
+                fileIssueLogger.WriteWarning(message);
+            }
+            else
+            {
+                fileIssueLogger.WriteError(message);
+            }
+
             Interlocked.Increment(ref commandLineFormatterResult.UnformattedFiles);
         }
 

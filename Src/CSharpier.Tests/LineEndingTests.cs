@@ -1,12 +1,9 @@
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 internal sealed class LineEndingTests
 {
     [Test]
@@ -63,8 +60,9 @@ four"";
         lfResult.Code.Should().Be(crLfResult.Code.Replace("\r\n", "\n"));
     }
 
-    [TestCase("\r\n", EndOfLine.LF)]
-    [TestCase("\n", EndOfLine.CRLF)]
+    [Test]
+    [Arguments("\r\n", EndOfLine.LF)]
+    [Arguments("\n", EndOfLine.CRLF)]
     public async Task LineEndings_In_Verbatim_String_Should_Respect_Options(
         string newLine,
         EndOfLine endOfLine
@@ -81,8 +79,9 @@ four"";
         result.Code.Should().NotContain($"one{newLine}two");
     }
 
-    [TestCase("\\r\\n", EndOfLine.LF)]
-    [TestCase("\\n", EndOfLine.CRLF)]
+    [Test]
+    [Arguments("\\r\\n", EndOfLine.LF)]
+    [Arguments("\\n", EndOfLine.CRLF)]
     public async Task Escaped_LineEndings_In_Verbatim_String_Should_Remain(
         string escapedNewLine,
         EndOfLine endOfLine

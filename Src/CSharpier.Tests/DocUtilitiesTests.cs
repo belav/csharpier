@@ -1,14 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
+using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.DocTypes;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
-[Parallelizable(ParallelScope.All)]
 public class DocUtilitiesTests
 {
     [Test]

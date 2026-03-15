@@ -1,3 +1,14 @@
+## 10.0.1
+- Disable Q&A. Please use GitHub
+
+## 10.0.0
+- Make version a number that won't conflict with CSharpier itself.
+
+## 2.1.0
+- Improved support for users that work with multiple dotnet architectures by splitting out installs of csharpier based on the architecture they were installed with.
+- Improve formatting of documents to avoid scroll jumping around
+- Improve support for virtual drives
+
 ## 2.0.8
 - Update readme
 

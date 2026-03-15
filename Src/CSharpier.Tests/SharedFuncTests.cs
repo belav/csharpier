@@ -1,14 +1,12 @@
+using AwesomeAssertions;
 using CSharpier.Core;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace CSharpier.Tests;
 
-[TestFixture]
 public class SharedFuncTests
 {
     [Test]
-    public static async Task TwoAwaitsOneRunAsync()
+    public async Task TwoAwaitsOneRunAsync()
     {
         var result = 0;
         await Task.WhenAll(

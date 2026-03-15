@@ -262,17 +262,25 @@ internal class OptionsProvider
         return result;
     }
 
-    public async Task<bool> IsIgnoredAsync(
-        string actualFilePath,
+    public Task<bool> IsFileIgnoredAsync(string filePath, CancellationToken cancellationToken)
+    {
+        return this.IsIgnoredAsync(filePath, false, cancellationToken);
+    }
+
+    public Task<bool> IsDirectoryIgnoredAsync(string filePath, CancellationToken cancellationToken)
+    {
+        return this.IsIgnoredAsync(filePath, true, cancellationToken);
+    }
+
+    private async Task<bool> IsIgnoredAsync(
+        string path,
+        bool isDirectory,
         CancellationToken cancellationToken
     )
     {
         return (
-            await this.FindIgnoreFileAsync(
-                Path.GetDirectoryName(actualFilePath)!,
-                cancellationToken
-            )
-        ).IsIgnored(actualFilePath);
+            await this.FindIgnoreFileAsync(Path.GetDirectoryName(path)!, cancellationToken)
+        ).IsIgnored(path, isDirectory);
     }
 
     public string Serialize()

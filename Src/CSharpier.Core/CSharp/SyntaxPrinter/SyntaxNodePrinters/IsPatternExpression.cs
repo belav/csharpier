@@ -9,8 +9,7 @@ internal static class IsPatternExpression
     {
         if (
             node.Parent
-            is not (IfStatementSyntax or ParenthesizedExpressionSyntax)
-                or ParenthesizedExpressionSyntax { Parent: EqualsValueClauseSyntax }
+            is not (IfStatementSyntax or ParenthesizedExpressionSyntax or EqualsValueClauseSyntax)
         )
         {
             return Doc.Group(

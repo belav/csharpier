@@ -1,6 +1,6 @@
-export const runFunctionsUntilResultFound = <T>(...functions: (() => T)[]) => {
-    for (const possibleFunction of functions) {
-        const result = possibleFunction();
+export let runFunctionsUntilResultFound = <T>(...functions: (() => T)[]) => {
+    for (let possibleFunction of functions) {
+        let result = possibleFunction();
         if (result) {
             return result;
         }

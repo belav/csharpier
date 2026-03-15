@@ -8,8 +8,6 @@ using System.Xml;
 
 namespace CSharpier.VisualStudio
 {
-    using NuGet.Versioning;
-
     public class CSharpierProcessProvider : IProcessKiller
     {
         private readonly CustomPathInstaller customPathInstaller;

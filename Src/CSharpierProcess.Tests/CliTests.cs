@@ -2,12 +2,12 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
+using AwesomeAssertions;
 using CliWrap;
 using CliWrap.Buffered;
-using FluentAssertions;
-using NUnit.Framework;
+using CSharpier.Cli;
 
-namespace CSharpier.Cli.Tests;
+namespace CSharpierProcess.Tests;
 
 // these tests are kind of nice as c# because they run in the same place.
 // except the one test that has issues with console input redirection
@@ -15,13 +15,14 @@ namespace CSharpier.Cli.Tests;
 // that worked in by writing js, but that felt worse than powershell
 // the CSharpierProcess abstraction is also a little fragile, but makes for clean tests when they
 // are written properly
+[NotInParallel] // tries to access .formattingCache at the same time, can we make that work somehow?
 public class CliTests
 {
     private static readonly string testFileDirectory = Directory
         .CreateTempSubdirectory("CsharpierTestFies")
         .FullName;
 
-    [SetUp]
+    [Before(Test)]
     public void BeforeEachTest()
     {
         if (File.Exists(FormattingCacheFactory.CacheFilePath))
@@ -32,7 +33,7 @@ public class CliTests
         Directory.CreateDirectory(testFileDirectory);
     }
 
-    [TearDown]
+    [After(Test)]
     public void AfterEachTest()
     {
         static void DeleteDirectory()
@@ -54,8 +55,9 @@ public class CliTests
         }
     }
 
-    [TestCase("\n")]
-    [TestCase("\r\n")]
+    [Test]
+    [Arguments("\n")]
+    [Arguments("\r\n")]
     public async Task Format_Should_Format_Basic_File(string lineEnding)
     {
         var formattedContent = "public class ClassName { }" + lineEnding;
@@ -73,8 +75,9 @@ public class CliTests
         (await ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
 
-    [TestCase("Subdirectory")]
-    [TestCase("./Subdirectory")]
+    [Test]
+    [Arguments("Subdirectory")]
+    [Arguments("./Subdirectory")]
     public async Task Format_Should_Format_Subdirectory(string subdirectory)
     {
         var formattedContent = "public class ClassName { }\n";
@@ -205,12 +208,13 @@ public class CliTests
         result.ExitCode.Should().Be(0);
     }
 
-    [TestCase(".git")]
-    [TestCase("subdirectory/.git")]
-    [TestCase("node_modules")]
-    [TestCase("subdirectory/node_modules")]
-    [TestCase("obj")]
-    [TestCase("subdirectory/obj")]
+    [Test]
+    [Arguments(".git")]
+    [Arguments("subdirectory/.git")]
+    [Arguments("node_modules")]
+    [Arguments("subdirectory/node_modules")]
+    [Arguments("obj")]
+    [Arguments("subdirectory/obj")]
     public async Task Should_Ignore_Special_Case_Files(string path)
     {
         var unformattedContent = "public class Unformatted {     }";
@@ -287,7 +291,7 @@ public class CliTests
     {
         if (Console.IsInputRedirected)
         {
-            Assert.Ignore(
+            Skip.Test(
                 "This test cannot run if Console.IsInputRedirected is true. Running it from the command line is required. See https://github.com/dotnet/runtime/issues/1147\""
             );
         }
@@ -300,7 +304,7 @@ public class CliTests
         {
             ArgumentList =
             {
-                Path.Combine(Directory.GetCurrentDirectory(), "dotnet-csharpier.dll"),
+                Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll"),
                 "format",
             },
             RedirectStandardInput = false,
@@ -318,8 +322,9 @@ public class CliTests
             .Contain("directoryOrFile is required when not piping stdin to CSharpier");
     }
 
-    [TestCase("\n")]
-    [TestCase("\r\n")]
+    [Test]
+    [Arguments("\n")]
+    [Arguments("\r\n")]
     public async Task Format_Should_Format_Piped_File(string lineEnding)
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
@@ -389,8 +394,10 @@ public class CliTests
     {
         await WriteFileAsync(
             ".editorconfig",
-            @"[*]
-max_line_length = 10"
+            """
+            [*]
+            max_line_length = 10
+            """
         );
 
         var formattedContent1 = "var x =\n    _________________longName;\n";
@@ -421,9 +428,10 @@ max_line_length = 10"
         result.ExitCode.Should().Be(0);
     }
 
-    [TestCase("BasicFile.cs")]
-    [TestCase("./BasicFile.cs")]
-    [TestCase("/BasicFile.cs")]
+    [Test]
+    [Arguments("BasicFile.cs")]
+    [Arguments("./BasicFile.cs")]
+    [Arguments("/BasicFile.cs")]
     public async Task Format_Should_Print_NotFound(string path)
     {
         var result = await new CsharpierProcess().WithArguments($"format {path}").ExecuteAsync();
@@ -433,9 +441,10 @@ max_line_length = 10"
         result.ExitCode.Should().Be(1);
     }
 
-    [TestCase("BasicFile.cs")]
-    [TestCase("./BasicFile.cs")]
-    [TestCase("/BasicFile.cs")]
+    [Test]
+    [Arguments("BasicFile.cs")]
+    [Arguments("./BasicFile.cs")]
+    [Arguments("/BasicFile.cs")]
     public async Task Check_Should_Print_NotFound(string path)
     {
         var result = await new CsharpierProcess().WithArguments($"check {path}").ExecuteAsync();
@@ -476,7 +485,7 @@ max_line_length = 10"
     }
 
     [Test]
-    public async Task Check_Should_Write_Unformatted_File()
+    public async Task Check_Should_Write_Error_With_Unformatted_File()
     {
         var unformattedContent = "public class ClassName1 {\n\n}";
 
@@ -493,9 +502,27 @@ max_line_length = 10"
         result.ExitCode.Should().Be(1);
     }
 
-    // TODO overrides tests for piping files
-    [TestCase("\n")]
-    [TestCase("\r\n")]
+    [Test]
+    public async Task Check_Should_Write_Warning_With_Unformatted_File()
+    {
+        var unformattedContent = "public class ClassName1 {\n\n}";
+
+        await WriteFileAsync("CheckUnformatted.cs", unformattedContent);
+
+        var result = await new CsharpierProcess()
+            .WithArguments("check CheckUnformatted.cs --unformatted-as-warnings")
+            .ExecuteAsync();
+
+        result
+            .Output.Replace('\\', '/')
+            .Should()
+            .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    [Arguments("\n")]
+    [Arguments("\r\n")]
     public async Task PipeFiles_Should_Format_Multiple_Piped_Files(string lineEnding)
     {
         var formattedContent1 = "public class ClassName1 { }" + lineEnding;
@@ -519,8 +546,9 @@ max_line_length = 10"
         results[1].Should().Be(formattedContent2);
     }
 
-    [TestCase("InvalidFile.cs", "./InvalidFile.cs")]
-    [TestCase("./InvalidFile.cs", "./InvalidFile.cs")]
+    [Test]
+    [Arguments("InvalidFile.cs", "./InvalidFile.cs")]
+    [Arguments("./InvalidFile.cs", "./InvalidFile.cs")]
     public async Task PipeFiles_Should_Write_Error_With_Multiple_Piped_Files(
         string input,
         string output
@@ -621,17 +649,19 @@ max_line_length = 10"
         result.Output.Should().StartWith("Warning The csproj at ");
     }
 
+    private const string CsprojContentWithCSharpierMsBuild99 = """
+        <Project Sdk="Microsoft.NET.Sdk">
+          <ItemGroup>
+            <PackageReference Include="CSharpier.MsBuild" Version="99" />
+          </ItemGroup>
+        </Project>
+
+        """;
+
     [Test]
     public async Task Format_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <ItemGroup>
-        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
-    </ItemGroup>
-</Project>"
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess()
             .WithArguments("format --no-msbuild-check .")
@@ -645,17 +675,7 @@ max_line_length = 10"
     [Test]
     public async Task Check_Should_Not_Fail_On_Mismatched_MSBuild_With_No_Check()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            """
-            <Project Sdk="Microsoft.NET.Sdk">
-              <ItemGroup>
-                <PackageReference Include="CSharpier.MsBuild" Version="99" />
-              </ItemGroup>
-            </Project>
-
-            """
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess()
             .WithArguments("check --no-msbuild-check .")
@@ -669,14 +689,7 @@ max_line_length = 10"
     [Test]
     public async Task Format_Should_Fail_On_Mismatched_MSBuild()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <ItemGroup>
-        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
-    </ItemGroup>
-</Project>"
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
 
@@ -687,16 +700,23 @@ max_line_length = 10"
     }
 
     [Test]
+    [Arguments("node_modules")]
+    [Arguments("test/node_modules")]
+    [Arguments(".git")]
+    [Arguments("bin")]
+    [Arguments("obj")]
+    public async Task Format_Should_Not_Look_In_Some_Folders_For_MSBuild(string subfolder)
+    {
+        await WriteFileAsync($"{subfolder}/Test.csproj", CsprojContentWithCSharpierMsBuild99);
+
+        var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
     public async Task Check_Should_Fail_On_Mismatched_MSBuild()
     {
-        await WriteFileAsync(
-            "Test.csproj",
-            @"<Project Sdk=""Microsoft.NET.Sdk"">
-    <ItemGroup>
-        <PackageReference Include=""CSharpier.MsBuild"" Version=""99"" />
-    </ItemGroup>
-</Project>"
-        );
+        await WriteFileAsync("Test.csproj", CsprojContentWithCSharpierMsBuild99);
 
         var result = await new CsharpierProcess().WithArguments("check .").ExecuteAsync();
 
@@ -744,6 +764,19 @@ max_line_length = 10"
     }
 
     [Test]
+    public async Task Format_Should_Throw_With_IndentSize_Zero()
+    {
+        var unformattedContent = "public class ClassName { \n// break\n }\n";
+
+        await WriteFileAsync("Unformatted.cs", unformattedContent);
+        await WriteFileAsync(".csharpierrc", "indentSize: 0");
+        var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
+
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().Contain("An indent size of 0 is not valid");
+    }
+
+    [Test]
     public void Format_Should_Handle_Concurrent_Processes()
     {
         var unformattedContent = "public class ClassName {     }\n";
@@ -779,7 +812,7 @@ max_line_length = 10"
     }
 
     [Test]
-    [Ignore(
+    [Skip(
         "This is somewhat useful for testing locally, but doesn't reliably reproduce a problem and takes a while to run. Commenting out the delete cache file line helps to reproduce problems"
     )]
     public async Task Format_Should_Handle_Concurrent_Processes_2()

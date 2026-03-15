@@ -1,0 +1,6 @@
+using System.Net;
+using
+    SomeProject.Bar;
+using Microsoft.Extensions.Logging;
+
+public class Foo { }

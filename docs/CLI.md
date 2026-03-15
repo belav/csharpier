@@ -159,10 +159,14 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
 `dotnet csharpier check [<directoryOrFile\>]`
 
 Used to check if your files are already formatted. Outputs any files that have not already been formatted.
-This will return exit code 1 if there are unformatted files which is useful for CI pipelines.
+By default this will return exit code 1 if there are unformatted files which is useful for CI pipelines.
 
 #### Options
-See the `format` command for descriptions of these options
+`--unformatted-as-warnings`
+
+Treat unformatted files as a warning instead of an error. If there are unformatted files they will be printed to the output as a warning and the process will return an exit code of 0.
+
+See the `format` command for descriptions of these additional options
 - `--include-generated`
 - `--no-msbuild-check`
 - `--compilation-errors-as-warnings`
