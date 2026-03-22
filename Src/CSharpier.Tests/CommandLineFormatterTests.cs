@@ -717,6 +717,28 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Gitignore_Can_Unignore_All_Directories()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "IgnoreTest/IncludedSourceFolder/Test/File.cs",
+            UnformattedClassContent
+        );
+        context.WhenAFileExists(
+            ".gitignore",
+            """
+            *
+            !*/
+            !/IgnoreTest/IncludedSourceFolder/**/*.cs
+            """
+        );
+
+        var result = Format(context);
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+    }
+
+    [Test]
     public void Write_Stdout_Should_Only_Write_File()
     {
         var context = new TestContext();

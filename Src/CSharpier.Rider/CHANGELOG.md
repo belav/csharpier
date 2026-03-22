@@ -1,6 +1,10 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # csharpier-rider Changelog
+
+## [10.0.5]
+- Re-add a global format on save option
+
 ## [10.0.4]
 - Fix Rider plugin IOException for non-local VFS files
 

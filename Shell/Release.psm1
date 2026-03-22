@@ -25,6 +25,11 @@ function CSH-Release {
 
     Set-Content -Encoding UTF8 -Path $changeLogPath -Value ($changeLog + $changeLogValue)
 
+    $bugFilePath = $PSScriptRoot + "/../.github/ISSUE_TEMPLATE/bug.yml"
+    $replacementText = "- [ ] I'm using the latest version of CSharpier ``$versionNumber``"
+    (Get-Content $bugFilePath) -replace '- \[ \] I''m using the latest version of CSharpier `\d+(\.\d+)*`', $replacementText |
+        Set-Content -Encoding UTF8 $bugFilePath
+    
     foreach ($file in Get-ChildItem ($PSScriptRoot + "/../docs") -Filter "*.md")
     {
         Copy-Item $file.FullName ($PSScriptRoot + "/../Src/Website/docs/" + $file.Name)

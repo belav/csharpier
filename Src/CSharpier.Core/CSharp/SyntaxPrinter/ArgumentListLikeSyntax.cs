@@ -15,7 +15,10 @@ internal static class ArgumentListLike
     )
     {
         Doc? args;
-        if (arguments is [{ Expression: SimpleLambdaExpressionSyntax lambda1 }])
+        if (
+            arguments is [{ Expression: SimpleLambdaExpressionSyntax simpleLambda }]
+            && !simpleLambda.GetLeadingTrivia().Any(o => o.IsComment())
+        )
         {
             var groupId = context.GroupFor("LambdaArguments");
             args = Doc.Concat(
@@ -24,15 +27,15 @@ internal static class ArgumentListLike
                     Doc.Indent(
                         Doc.SoftLine,
                         Argument.PrintModifiers(arguments[0], context),
-                        SimpleLambdaExpression.PrintHead(lambda1, context)
+                        SimpleLambdaExpression.PrintHead(simpleLambda, context)
                     )
                 ),
                 Doc.IfBreak(
-                    Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(lambda1, context))),
-                    SimpleLambdaExpression.PrintBody(lambda1, context),
+                    Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(simpleLambda, context))),
+                    SimpleLambdaExpression.PrintBody(simpleLambda, context),
                     groupId
                 ),
-                lambda1.Body
+                simpleLambda.Body
                     is BlockSyntax
                         or ObjectCreationExpressionSyntax
                         or AnonymousObjectCreationExpressionSyntax
@@ -41,8 +44,15 @@ internal static class ArgumentListLike
             );
         }
         else if (
-            arguments is [{ Expression: ParenthesizedLambdaExpressionSyntax lambda }]
-            && lambda is { ParameterList.Parameters: [] }
+            arguments
+            is [
+                {
+                    Expression: ParenthesizedLambdaExpressionSyntax
+                    {
+                        ParameterList.Parameters: []
+                    } lambda
+                },
+            ]
         )
         {
             var groupId = context.GroupFor("LambdaArguments");

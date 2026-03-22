@@ -79,7 +79,7 @@ internal static class CommandLineFormatter
                     // this only considers the ignore files when a path is supplied
                     && (
                         !pathSupplied
-                        || !await optionsProvider.IsIgnoredAsync(filePath, cancellationToken)
+                        || !await optionsProvider.IsFileIgnoredAsync(filePath, cancellationToken)
                     )
                 )
                 {
@@ -235,7 +235,12 @@ internal static class CommandLineFormatter
 
                 foreach (var subdirectory in fileSystem.Directory.EnumerateDirectories(directory))
                 {
-                    if (await optionsProvider.IsIgnoredAsync(subdirectory, cancellationToken))
+                    if (
+                        await optionsProvider.IsDirectoryIgnoredAsync(
+                            subdirectory,
+                            cancellationToken
+                        )
+                    )
                     {
                         continue;
                     }
@@ -257,7 +262,7 @@ internal static class CommandLineFormatter
                     (
                         !commandLineOptions.IncludeGenerated
                         && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-                    ) || await optionsProvider.IsIgnoredAsync(actualFilePath, cancellationToken)
+                    ) || await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
                 )
                 {
                     return;
