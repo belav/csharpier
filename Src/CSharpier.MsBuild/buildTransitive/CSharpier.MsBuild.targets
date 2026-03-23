@@ -1,3 +1,0 @@
-<Project>
-    <Import Project="$(MSBuildThisFileDirectory)..\build\CSharpier.MsBuild.targets" />
-</Project>
