@@ -14,6 +14,7 @@ body:
         - [ ] For formatting issues I have recreated the issue on the [playground](https://playground.csharpier.com/)
         - [ ] I'm using the latest version of CSharpier `1.2.5`
         - [ ] I'm using the latest version of my IDE's CSharpier plugin `>= 10.0.0`
+          - [ ] I have [enabled debug logging and am including relavant logs](https://csharpier.com/docs/EditorsTroubleshooting)
         
 
   - type: textarea
