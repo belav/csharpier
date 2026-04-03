@@ -54,6 +54,7 @@ public class OptionsProviderTests
     [Arguments("slnx")]
     [Arguments("targets")]
     [Arguments("xaml")]
+    [Arguments("axaml")]
     [Arguments("xml")]
     public async Task Should_Return_Default_Options_With_No_File_And_Known_Xml_Extension(
         string extension
