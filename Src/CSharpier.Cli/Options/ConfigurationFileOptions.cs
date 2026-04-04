@@ -45,6 +45,7 @@ internal class ConfigurationFileOptions
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
+                XmlWhitespaceSensitivity = matchingOverride.XmlWhitespaceSensitivity,
             };
         }
 
@@ -61,6 +62,7 @@ internal class ConfigurationFileOptions
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
+                XmlWhitespaceSensitivity = this.XmlWhitespaceSensitivity,
             };
         }
 

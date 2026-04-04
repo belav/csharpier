@@ -111,6 +111,29 @@ public class ClassName
             // csharpier-ignore-end
         };
     }
+
+    void SwitchStatements()
+    {
+        switch (1)
+        {
+            case 2:
+                // csharpier-ignore
+                var unformatted      = true;
+                var formatted = true;
+                break;
+            case 3:
+                // csharpier-ignore-start
+                var unformatted_3    = true;
+                // csharpier-ignore-end
+                break;
+            case 4:
+                // csharpier-ignore
+                var unformatted_4 =
+@"Multiline
+value";
+                break;
+        }
+    }
 }
 
 public class ClassName2

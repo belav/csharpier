@@ -53,7 +53,7 @@ internal class CSharpierServiceImplementation(ILogger logger)
 
             if (
                 GeneratedCodeUtilities.IsGeneratedCodeFile(fileName)
-                || await optionsProvider.IsIgnoredAsync(fileName, cancellationToken)
+                || await optionsProvider.IsFileIgnoredAsync(fileName, cancellationToken)
             )
             {
                 return new FormatFileResult(Status.Ignored);

@@ -10,6 +10,24 @@
 ## [2.3.0]
 - Add a global format on save option
 
+## [10.0.5]
+- Re-add a global format on save option
+
+## [10.0.4]
+- Fix Rider plugin IOException for non-local VFS files
+
+## [10.0.3]
+- Supporting 2026.1 EAP
+
+## [10.0.1]
+- Re-add a global format on save option
+
+## 10.0.0
+- Make version a number that won't conflict with CSharpier itself.
+
+## [2.3.0]
+- Add a global format on save option
+
 ## [2.2.4]
 - Fix Stream closed exception in Rider plugin
 

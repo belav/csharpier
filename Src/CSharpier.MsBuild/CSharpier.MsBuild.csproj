@@ -21,6 +21,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="build/*" PackagePath="build/" />
+    <Content Include="build/*" PackagePath="buildMultitargeting/" />
+    <Content Include="build/*" PackagePath="buildTransitive/" />
     <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
   </ItemGroup>
 </Project>

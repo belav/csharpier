@@ -14,15 +14,15 @@ internal class IgnoreFile
         this.Ignores = ignores;
     }
 
-    public bool IsIgnored(string filePath)
+    public bool IsIgnored(string path, bool isDirectory)
     {
-        filePath = filePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        path = path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 
         foreach (var ignore in this.Ignores)
         {
             // when using one of the ignore files to determine if a given file is ignored or not
             // we can only consider that file if it actually has a matching rule for the filePath
-            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(filePath);
+            var (hasMatchingRule, isIgnored) = ignore.IsIgnored(path, isDirectory);
             if (hasMatchingRule)
             {
                 return isIgnored;

@@ -595,6 +595,20 @@ public class IgnoreFileTests
         );
     }
 
+    // TODO this passes because the ignorefile says the file is not ignored
+    [Test]
+    public void Thing()
+    {
+        this.GitBasedTest(
+            """
+            *
+            !*/
+            !/IgnoreTest/IncludedSourceFolder/**/*.cs
+            """,
+            ["IgnoreTest/IncludedSourceFolder/Test/Test.cs"]
+        );
+    }
+
     private void GitBasedTest(string gitignore, string[] files)
     {
         this.gitRepository.AddTrackedFileToRepo(".gitignore", gitignore);
@@ -618,7 +632,14 @@ public class IgnoreFileTests
             .Select(se => se.FilePath)
             .ToList();
 
-        var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o));
+        var gitIgnoredFiles = files.Where(o => !gitUntrackedFiles.Contains(o)).ToList();
+
+        foreach (var file in files)
+        {
+            Console.WriteLine(
+                (gitIgnoredFiles.Contains(file) ? "Ignored    " : "Not Ignored") + " - " + file
+            );
+        }
 
         var ignoreFile = IgnoreFile
             .CreateAsync(
@@ -632,7 +653,10 @@ public class IgnoreFileTests
             .GetResult();
 
         var csharpierIgnoredFiles = files.Where(o =>
-            ignoreFile!.IsIgnored(this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o))
+            ignoreFile!.IsIgnored(
+                this.fileSystem.Path.Combine(this.gitRepository.RepoPath, o),
+                false
+            )
         );
 
         csharpierIgnoredFiles.Should().BeEquivalentTo(gitIgnoredFiles);

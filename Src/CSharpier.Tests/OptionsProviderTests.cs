@@ -59,6 +59,7 @@ public class OptionsProviderTests
     [Arguments("slnx")]
     [Arguments("targets")]
     [Arguments("xaml")]
+    [Arguments("axaml")]
     [Arguments("xml")]
     public async Task Should_Return_Default_Options_With_No_File_And_Known_Xml_Extension(
         string extension
@@ -94,6 +95,50 @@ public class OptionsProviderTests
         var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
 
         ShouldHaveDefaultCSharpOptions(result);
+    }
+
+    [Test]
+    public async Task Should_Return_Json_Extension_Options()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.csharpierrc.json",
+            """
+{ 
+    "printWidth": 10, 
+    "endOfLine": "crlf",
+    "xmlWhitespaceSensitivity": "xaml"
+}
+"""
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
+    }
+
+    [Test]
+    [Arguments("yaml")]
+    [Arguments("yml")]
+    public async Task Should_Return_Yaml_Extension_Options(string extension)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            $"c:/test/.csharpierrc.{extension}",
+            """
+printWidth: 10
+endOfLine: crlf
+xmlWhitespaceSensitivity: xaml
+"""
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
     }
 
     [Test]
@@ -296,6 +341,32 @@ overrides:
             "c:/test/test." + extension
         );
         ShouldHaveDefaultXmlOptions(result, extension);
+    }
+
+    [Test]
+    public async Task Should_Support_EditorConfig_Basic()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.editorconfig",
+            """
+
+            [*]
+            indent_style = space
+            indent_size = 2
+            max_line_length = 10
+            end_of_line = crlf
+            csharpier_xml_whitespace_sensitivity = xaml
+            """
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor("c:/test", "c:/test/test.cs");
+
+        result.UseTabs.Should().BeFalse();
+        result.IndentSize.Should().Be(2);
+        result.Width.Should().Be(10);
+        result.EndOfLine.Should().Be(EndOfLine.CRLF);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
     }
 
     [Test]

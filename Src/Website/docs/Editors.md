@@ -28,3 +28,21 @@ Use [neoformat](https://github.com/sbdchd/neoformat)
 
 ### Emacs
 Use [format-all](https://github.com/lassik/emacs-format-all-the-code)
+
+### Zed
+
+Add the following to your `settings.json` (Zed -> Open Settings File)
+
+```json
+  "languages": {
+    "CSharp": {
+      "format_on_save": "on",
+      "formatter": {
+        "external": {
+          "command": "dotnet",
+          "arguments": ["csharpier", "format"]
+        }
+      }
+    }
+  }
+```

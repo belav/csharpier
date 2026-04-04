@@ -69,7 +69,7 @@ internal class PrinterOptions(
         {
             "cs" => Formatter.CSharp,
             "csx" => Formatter.CSharpScript,
-            "config" or "csproj" or "props" or "slnx" or "targets" or "xaml" or "xml" or "axaml" =>
+            "config" or "csproj" or "props" or "slnx" or "targets" or "xaml" or "xml" =>
                 Formatter.XML,
             _ => Formatter.Unknown,
         };

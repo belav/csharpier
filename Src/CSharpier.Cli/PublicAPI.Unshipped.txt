@@ -1,2 +1,1 @@
-﻿Program
-Program.Program() -> void
+﻿
