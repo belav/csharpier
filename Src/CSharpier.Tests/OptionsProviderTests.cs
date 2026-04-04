@@ -107,7 +107,7 @@ public class OptionsProviderTests
 { 
     "printWidth": 10, 
     "endOfLine": "crlf",
-    "xmlWhitespaceSensitivity": "xaml"
+    "xmlWhitespaceSensitivity": "ignore"
 }
 """
         );
@@ -116,7 +116,7 @@ public class OptionsProviderTests
 
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
-        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
     }
 
     [Test]
@@ -130,7 +130,7 @@ public class OptionsProviderTests
             """
 printWidth: 10
 endOfLine: crlf
-xmlWhitespaceSensitivity: xaml
+xmlWhitespaceSensitivity: ignore
 """
         );
 
@@ -138,7 +138,7 @@ xmlWhitespaceSensitivity: xaml
 
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
-        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
     }
 
     [Test]
@@ -356,7 +356,7 @@ overrides:
             indent_size = 2
             max_line_length = 10
             end_of_line = crlf
-            csharpier_xml_whitespace_sensitivity = xaml
+            csharpier_xml_whitespace_sensitivity = ignore
             """
         );
 
@@ -366,7 +366,7 @@ overrides:
         result.IndentSize.Should().Be(2);
         result.Width.Should().Be(10);
         result.EndOfLine.Should().Be(EndOfLine.CRLF);
-        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Xaml);
+        result.XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Ignore);
     }
 
     [Test]
