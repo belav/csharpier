@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Xml;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
@@ -96,6 +97,16 @@ internal static class Node
             if (rawNode.NextNode is null)
             {
                 textValue = textValue.TrimEnd();
+            }
+
+            if (rawNode.Parent.Nodes.Count == 1)
+            {
+                if (textValue.Length > 2)
+                {
+                    var innerValue = textValue[1..^1];
+                    textValue =
+                        textValue[0] + Regex.Replace(innerValue, "\\s+", " ") + textValue[^1];
+                }
             }
         }
 

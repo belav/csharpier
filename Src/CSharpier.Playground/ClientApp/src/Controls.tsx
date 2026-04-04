@@ -74,14 +74,6 @@ export const Controls = observer(() => {
                         <label>
                             <input
                                 type="radio"
-                                checked={xmlWhitespaceSensitivity === "Xaml"}
-                                onClick={() => setXmlWhitespaceSensitivity("Xaml")}
-                            />
-                            Xaml
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
                                 checked={xmlWhitespaceSensitivity === "Ignore"}
                                 onClick={() => setXmlWhitespaceSensitivity("Ignore")}
                             />

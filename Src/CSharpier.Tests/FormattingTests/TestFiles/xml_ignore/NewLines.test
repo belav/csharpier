@@ -1,0 +1,6 @@
+<Root>
+  <Element Attribute="SomeValue">
+    Because whitespace is ignore The indentation of the closing element can change, and the newline above goes away
+  </Element>
+  <Element>Shorter Text with indentation that can change</Element>
+</Root>
