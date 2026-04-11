@@ -12,23 +12,27 @@ internal static class ElementChildren
         var groupIds = new List<string>();
         foreach (var _ in node.Nodes)
         {
-            groupIds.Add(context.GroupFor("symbol"));
+            groupIds.Add(context.GroupFor("children group"));
         }
 
-        var result = new DocListBuilder(node.Nodes.Count * 5);
+        var result = new List<Doc>();
         var x = 0;
         foreach (var childNode in node.Nodes)
         {
             if (childNode.NodeType is XmlNodeType.Whitespace)
             {
-                result.Add(Doc.HardLine);
+                if (childNode.NextNode is not { NodeType: XmlNodeType.Text })
+                {
+                    result.Add(Doc.HardLine);
+                }
+
                 continue;
             }
 
-            var prevParts = new DocListBuilder(2);
-            var leadingParts = new DocListBuilder(2);
-            var trailingParts = new DocListBuilder(2);
-            var nextParts = new DocListBuilder(2);
+            var prevParts = new List<Doc>();
+            var leadingParts = new List<Doc>();
+            var trailingParts = new List<Doc>();
+            var nextParts = new List<Doc>();
 
             var prevBetweenLine = childNode.PreviousNode is not null
                 ? PrintBetweenLine(childNode.PreviousNode, childNode)
@@ -50,7 +54,14 @@ internal static class ElementChildren
                 }
                 else
                 {
-                    leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    if (groupIds.Count > 1)
+                    {
+                        leadingParts.Add(Doc.IfBreak(Doc.Null, Doc.SoftLine, groupIds[x - 1]));
+                    }
+                    else
+                    {
+                        leadingParts.Add(prevBetweenLine);
+                    }
                 }
             }
 
@@ -69,22 +80,22 @@ internal static class ElementChildren
                 }
             }
 
-            result.Add(prevParts.AsSpan());
+            result.AddRange(prevParts);
             result.Add(
                 Doc.Group(
-                    Doc.Concat(ref leadingParts),
+                    Doc.Concat(leadingParts),
                     Doc.GroupWithId(
                         groupIds[x],
                         PrintChild(childNode, context),
-                        Doc.Concat(ref trailingParts)
+                        Doc.Concat(trailingParts)
                     )
                 )
             );
-            result.Add(nextParts.AsSpan());
+            result.AddRange(nextParts);
             x++;
         }
 
-        return Doc.Concat(ref result);
+        return Doc.Concat(result);
     }
 
     public static Doc PrintChild(RawNode child, PrintingContext context)
@@ -113,7 +124,8 @@ internal static class ElementChildren
     public static Doc PrintBetweenLine(RawNode prevNode, RawNode nextNode)
     {
         return
-            (
+            (prevNode.NodeType is XmlNodeType.Whitespace && nextNode.NodeType is XmlNodeType.Text)
+            || (
                 prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
                 && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
             )

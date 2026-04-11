@@ -13,7 +13,10 @@ internal sealed class PrinterOptionsTests
         var code = "tester\n";
         var result = PrinterOptions.GetLineEnding(
             code,
-            new PrinterOptions(Formatter.CSharp) { EndOfLine = endOfLine }
+            new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+            {
+                EndOfLine = endOfLine,
+            }
         );
 
         result.Should().Be(expected);
@@ -26,7 +29,10 @@ internal sealed class PrinterOptionsTests
     [Arguments("tester", "\n")]
     public void GetLineEndings_With_Auto_Should_Detect(string code, string expected)
     {
-        var result = PrinterOptions.GetLineEnding(code, new PrinterOptions(Formatter.CSharp));
+        var result = PrinterOptions.GetLineEnding(
+            code,
+            new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+        );
 
         result.Should().Be(expected);
     }

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using System.Xml;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
@@ -5,8 +6,17 @@ using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
-internal static class Node
+internal static partial class Node
 {
+#if NET6_0_OR_GREATER
+    [GeneratedRegex("\\s+")]
+    private static partial Regex WhitespaceRegexGenerator();
+
+    private static readonly Regex WhitespaceRegex = WhitespaceRegexGenerator();
+#else
+    private static readonly Regex WhitespaceRegex = new("\\s+");
+#endif
+
     internal static Doc Print(RawNode node, PrintingContext context)
     {
         if (node.NodeType is XmlNodeType.Document)
@@ -40,8 +50,8 @@ internal static class Node
         {
             List<Doc> doc =
             [
-                Tag.PrintOpeningTagPrefix(node),
-                GetTextValue(node),
+                Tag.PrintOpeningTagPrefix(node, context),
+                GetTextValue(node, context),
                 Tag.PrintClosingTagSuffix(node, context),
             ];
 
@@ -77,13 +87,36 @@ internal static class Node
         throw new Exception("Need to handle + " + node.NodeType);
     }
 
-    private static Doc GetTextValue(RawNode rawNode)
+    private static Doc GetTextValue(RawNode rawNode, PrintingContext context)
     {
         var textValue = rawNode.Value;
 
         if (string.IsNullOrEmpty(textValue))
         {
             return Doc.Null;
+        }
+
+        if (rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Ignore)
+        {
+            if (rawNode.PreviousNode is null)
+            {
+                textValue = textValue.TrimStart();
+            }
+
+            if (rawNode.NextNode is null)
+            {
+                textValue = textValue.TrimEnd();
+            }
+
+            if (rawNode.Parent?.Nodes.Count == 1)
+            {
+                if (textValue.Length > 2)
+                {
+                    var innerValue = textValue[1..^1];
+                    textValue =
+                        textValue[0] + WhitespaceRegex.Replace(innerValue, " ") + textValue[^1];
+                }
+            }
         }
 
         if (rawNode.Parent?.Nodes.First() == rawNode)

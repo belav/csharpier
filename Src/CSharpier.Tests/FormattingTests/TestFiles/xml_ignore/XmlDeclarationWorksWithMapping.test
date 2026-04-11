@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Sequence>
+  <SequenceOf name="Policies" optional="true">
+    <AsnType typeName="System.Security.Cryptography.Pkcs.Asn1.PolicyInformation" />
+  </SequenceOf>
+</Sequence>

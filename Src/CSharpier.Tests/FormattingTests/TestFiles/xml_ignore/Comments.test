@@ -1,0 +1,12 @@
+<!-- comment -->
+<Root>
+  <!-- comment -->
+  <NoWarn>
+    CA1031; <!-- Since this is not a library project, catching general exceptions is OK -->
+    IDE0005; <!-- Allow unused usings -->
+  </NoWarn>
+  <element>
+    <!-- This is the first line comment-->
+    <!-- This is the second line of my comment-->
+  </element>
+</Root>

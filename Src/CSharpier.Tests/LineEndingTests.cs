@@ -22,7 +22,7 @@ four"";
         var codeWithLf = code.Replace("\r\n", "\n");
         var codeWithCrLf = codeWithLf.Replace("\n", "\r\n");
 
-        var printerOptions = new PrinterOptions(Formatter.CSharp)
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
         {
             EndOfLine = EndOfLine.Auto,
             Width = 80,
@@ -49,7 +49,7 @@ four"";
         var codeWithLf = code.Replace("\r\n", "\n");
         var codeWithCrLf = codeWithLf.Replace("\n", "\r\n");
 
-        var printerOptions = new PrinterOptions(Formatter.CSharp)
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
         {
             EndOfLine = EndOfLine.Auto,
             Width = 80,
@@ -74,7 +74,10 @@ four"";
     string value = @""one{newLine}two"";
 }}
 ";
-        var printerOptions = new PrinterOptions(Formatter.CSharp) { EndOfLine = endOfLine };
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+        {
+            EndOfLine = endOfLine,
+        };
         var result = await CSharpFormatter.FormatAsync(code, printerOptions);
         result.Code.Should().NotContain($"one{newLine}two");
     }
@@ -93,7 +96,10 @@ four"";
     string value = @""one{escapedNewLine}two"";
 }}
 ";
-        var printerOptions = new PrinterOptions(Formatter.CSharp) { EndOfLine = endOfLine };
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+        {
+            EndOfLine = endOfLine,
+        };
         var result = await CSharpFormatter.FormatAsync(code, printerOptions);
         result.Code.Should().Contain(escapedNewLine);
     }

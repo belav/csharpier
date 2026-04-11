@@ -11,8 +11,7 @@ internal class ConfigurationFileOptions
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
-    public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; } =
-        XmlWhitespaceSensitivity.Strict;
+    public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
@@ -36,26 +35,32 @@ internal class ConfigurationFileOptions
                 return null;
             }
 
-            return new PrinterOptions(parsedFormatter)
+            return new PrinterOptions(
+                parsedFormatter,
+                matchingOverride.XmlWhitespaceSensitivity
+                    ?? PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
+            )
             {
                 IndentSize = matchingOverride.IndentSize,
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
-                XmlWhitespaceSensitivity = matchingOverride.XmlWhitespaceSensitivity,
             };
         }
 
         var formatter = PrinterOptions.GetFormatter(filePath);
         if (formatter != Formatter.Unknown)
         {
-            return new PrinterOptions(formatter)
+            return new PrinterOptions(
+                formatter,
+                this.XmlWhitespaceSensitivity
+                    ?? PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
+            )
             {
                 IndentSize = this.IndentSize ?? (formatter == Formatter.XML ? 2 : 4),
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
-                XmlWhitespaceSensitivity = this.XmlWhitespaceSensitivity,
             };
         }
 
@@ -80,8 +85,7 @@ internal class Override
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
-    public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; } =
-        XmlWhitespaceSensitivity.Strict;
+    public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }

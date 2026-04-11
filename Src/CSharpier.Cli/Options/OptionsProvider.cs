@@ -147,7 +147,9 @@ internal class OptionsProvider
         }
 
         var formatter = PrinterOptions.GetFormatter(filePath);
-        return formatter != Formatter.Unknown ? new PrinterOptions(formatter) : null;
+        return formatter != Formatter.Unknown
+            ? new PrinterOptions(formatter, PrinterOptions.GetXmlWhitespaceSensitivity(filePath))
+            : null;
     }
 
     private Task<CSharpierConfigData?> FindCSharpierConfigAsync(string directoryName)

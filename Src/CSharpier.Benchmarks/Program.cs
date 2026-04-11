@@ -28,7 +28,11 @@ public class Benchmarks
     [Benchmark]
     public void CustomParser_Parse()
     {
-        _ = RawNodeReader.ParseXml(this.largeXmlCode, Environment.NewLine);
+        _ = RawNodeReader.ParseXml(
+            this.largeXmlCode,
+            Environment.NewLine,
+            XmlWhitespaceSensitivity.Strict
+        );
     }
 
     [Benchmark]
@@ -49,7 +53,10 @@ public class Benchmarks
     public void Default_CodeFormatter_Tests()
     {
         CSharpFormatter
-            .FormatAsync(this.largeTestCode, new PrinterOptions(Formatter.CSharp))
+            .FormatAsync(
+                this.largeTestCode,
+                new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+            )
             .GetAwaiter()
             .GetResult();
     }
@@ -58,7 +65,10 @@ public class Benchmarks
     public void Default_CodeFormatter_Complex()
     {
         CSharpFormatter
-            .FormatAsync(this.largeComplexCode, new PrinterOptions(Formatter.CSharp))
+            .FormatAsync(
+                this.largeComplexCode,
+                new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+            )
             .GetAwaiter()
             .GetResult();
     }

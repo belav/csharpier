@@ -15,6 +15,7 @@ function CSH-UpdateCSharpierRepos()
     $repositories += "https://github.com/dotnet/runtime.git"
     $repositories += "https://github.com/mono/mono.git"
     $repositories += "https://github.com/increase-POS/Res-Server.git"
+    $repositories += "https://github.com/stride3d/stride.git"
 
     $tempLocation = "c:\temp\UpdateRepos"
 
@@ -46,7 +47,7 @@ function CSH-UpdateCSharpierRepos()
     Set-Location $destination
     & git checkout main
 
-    $extensions = (".csproj", ".props", ".targets", ".xml", ".config", ".cs")
+    $extensions = (".csproj", ".props", ".targets", ".xml", ".config", ".cs", ".xaml", ".axaml")
     
     foreach ($extension in $extensions)
     {

@@ -27,7 +27,11 @@ public static class XmlFormatter
             var validationTask = ValidateXmlAsync(xml);
 
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var rootNode = RawNodeReader.ParseXml(xml, lineEnding);
+            var rootNode = RawNodeReader.ParseXml(
+                xml,
+                lineEnding,
+                printerOptions.XmlWhitespaceSensitivity
+            );
             var printingContext = new PrintingContext
             {
                 Options = new PrintingContext.PrintingContextOptions
@@ -35,6 +39,7 @@ public static class XmlFormatter
                     LineEnding = lineEnding,
                     IndentSize = printerOptions.IndentSize,
                     UseTabs = printerOptions.UseTabs,
+                    XmlWhitespaceSensitivity = printerOptions.XmlWhitespaceSensitivity,
                 },
             };
             var doc = Node.Print(rootNode, printingContext);
