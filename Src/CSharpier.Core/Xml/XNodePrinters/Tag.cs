@@ -87,11 +87,6 @@ internal static class Tag
 
     private static Doc PrintOpeningTagStartMarker(RawNode rawNode, PrintingContext context)
     {
-        if (rawNode.NodeType != XmlNodeType.Element)
-        {
-            return "<" + rawNode.Name;
-        }
-
         return $"<{rawNode.Name}";
     }
 

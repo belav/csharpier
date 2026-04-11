@@ -14,9 +14,15 @@ internal abstract class Doc
         return StringDoc.Create(value);
     }
 
-    public static NullDoc Null => NullDoc.Instance;
+    public static NullDoc Null
+    {
+        get { return NullDoc.Instance; }
+    }
 
-    public static Doc BreakParent => new BreakParent();
+    public static Doc BreakParent
+    {
+        get { return new BreakParent(); }
+    }
 
     public static readonly HardLine HardLine = new();
 
@@ -39,19 +45,33 @@ internal abstract class Doc
 
     public static readonly Trim Trim = new();
 
-    public static LeadingComment LeadingComment(string comment, CommentType commentType) =>
-        new() { Type = commentType, Comment = comment };
+    public static LeadingComment LeadingComment(string comment, CommentType commentType)
+    {
+        return new LeadingComment { Type = commentType, Comment = comment };
+    }
 
-    public static TrailingComment TrailingComment(string comment, CommentType commentType) =>
-        new() { Type = commentType, Comment = comment };
+    public static TrailingComment TrailingComment(string comment, CommentType commentType)
+    {
+        return new TrailingComment { Type = commentType, Comment = comment };
+    }
 
-    public static Doc Concat(List<Doc> contents) =>
-        contents.Count == 1 ? contents[0] : new Concat(contents);
+    public static Doc Concat(List<Doc> contents)
+    {
+        return contents.Count == 0 ? Doc.Null
+            : contents.Count == 1 ? contents[0]
+            : new Concat(contents);
+    }
 
     // prevents allocating an array if there is only a single parameter
-    public static Doc Concat(Doc contents) => contents;
+    public static Doc Concat(Doc contents)
+    {
+        return contents;
+    }
 
-    public static Doc Concat(params Doc[] contents) => new Concat(contents);
+    public static Doc Concat(params Doc[] contents)
+    {
+        return new Concat(contents);
+    }
 
     public static Doc Concat(ref DocListBuilder contents)
     {
@@ -82,14 +102,20 @@ internal abstract class Doc
         return docs.Count == 1 ? docs[0] : Concat(docs);
     }
 
-    public static ForceFlat ForceFlat(List<Doc> contents) =>
-        new() { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
+    public static ForceFlat ForceFlat(List<Doc> contents)
+    {
+        return new ForceFlat { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
+    }
 
-    public static ForceFlat ForceFlat(params Doc[] contents) =>
-        new() { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
+    public static ForceFlat ForceFlat(params Doc[] contents)
+    {
+        return new ForceFlat { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
+    }
 
-    public static Group Group(List<Doc> contents) =>
-        new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
+    public static Group Group(List<Doc> contents)
+    {
+        return new Group { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
+    }
 
     public static Group GroupWithId(string groupId, List<Doc> contents)
     {
@@ -124,45 +150,76 @@ internal abstract class Doc
     }
 
     // prevents allocating an array if there is only a single parameter
-    public static Group Group(Doc contents) => new() { Contents = contents };
+    public static Group Group(Doc contents)
+    {
+        return new Group { Contents = contents };
+    }
 
-    public static Group Group(params Doc[] contents) => new() { Contents = Concat(contents) };
+    public static Group Group(params Doc[] contents)
+    {
+        return new Group { Contents = Concat(contents) };
+    }
 
     // prevents allocating an array if there is only a single parameter
-    public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
+    public static IndentDoc Indent(Doc contents)
+    {
+        return new IndentDoc { Contents = contents };
+    }
 
-    public static IndentDoc Indent(params Doc[] contents) => new() { Contents = Concat(contents) };
+    public static IndentDoc Indent(params Doc[] contents)
+    {
+        return new IndentDoc { Contents = Concat(contents) };
+    }
 
-    public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
+    public static IndentDoc Indent(List<Doc> contents)
+    {
+        return new IndentDoc { Contents = Concat(contents) };
+    }
 
     public static Doc IndentIf(bool condition, Doc contents)
     {
         return condition ? Indent(contents) : contents;
     }
 
-    public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null) =>
-        new()
+    public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null)
+    {
+        return new IfBreak
         {
             FlatContents = flatContents,
             BreakContents = breakContents,
             GroupId = groupId,
         };
+    }
 
-    public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
-        new(contents, groupId);
+    public static IndentIfBreak IndentIfBreak(Doc contents, string groupId)
+    {
+        return new IndentIfBreak(contents, groupId);
+    }
 
-    public static Doc Directive(string value) => new StringDoc(value, true);
+    public static Doc Directive(string value)
+    {
+        return new StringDoc(value, true);
+    }
 
-    public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
+    public static ConditionalGroup ConditionalGroup(params Doc[] options)
+    {
+        return new ConditionalGroup(options);
+    }
 
     public static AlwaysFits AlwaysFits(Doc printedTrivia)
     {
         return new AlwaysFits(printedTrivia);
     }
 
-    public static Region BeginRegion(string text) => new(text);
+    public static Region BeginRegion(string text)
+    {
+        return new Region(text);
+    }
 
-    public static Region EndRegion(string text) => new(text) { IsEnd = true };
+    public static Region EndRegion(string text)
+    {
+        return new Region(text) { IsEnd = true };
+    }
 }
 
 internal enum CommentType

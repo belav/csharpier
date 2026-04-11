@@ -6,8 +6,17 @@ using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
-internal static class Node
+internal static partial class Node
 {
+#if NET6_0_OR_GREATER
+    [GeneratedRegex("\\s+")]
+    private static partial Regex WhitespaceRegexGenerator();
+
+    private static readonly Regex WhitespaceRegex = WhitespaceRegexGenerator();
+#else
+    private static readonly Regex WhitespaceRegex = new("\\s+");
+#endif
+
     internal static Doc Print(RawNode node, PrintingContext context)
     {
         if (node.NodeType is XmlNodeType.Document)
@@ -99,13 +108,13 @@ internal static class Node
                 textValue = textValue.TrimEnd();
             }
 
-            if (rawNode.Parent.Nodes.Count == 1)
+            if (rawNode.Parent?.Nodes.Count == 1)
             {
                 if (textValue.Length > 2)
                 {
                     var innerValue = textValue[1..^1];
                     textValue =
-                        textValue[0] + Regex.Replace(innerValue, "\\s+", " ") + textValue[^1];
+                        textValue[0] + WhitespaceRegex.Replace(innerValue, " ") + textValue[^1];
                 }
             }
         }

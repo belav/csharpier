@@ -117,9 +117,6 @@ internal class OptionsProvider
         CancellationToken cancellationToken
     )
     {
-        // TODO #1794 what other tests do we need for xml:space preserve? compare the strict to ignore tests to see what changed
-        // TODO #1794 do a lot more testing with this, can review the repos once the file extension stuff is figured out.
-
         if (this.specifiedConfigFile is not null)
         {
             return this.specifiedConfigFile.ConvertToPrinterOptions(filePath);

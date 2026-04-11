@@ -21,7 +21,11 @@ internal static class ElementChildren
         {
             if (childNode.NodeType is XmlNodeType.Whitespace)
             {
-                result.Add(Doc.HardLine);
+                if (childNode.NextNode is not { NodeType: XmlNodeType.Text })
+                {
+                    result.Add(Doc.HardLine);
+                }
+
                 continue;
             }
 
@@ -120,7 +124,8 @@ internal static class ElementChildren
     public static Doc PrintBetweenLine(RawNode prevNode, RawNode nextNode)
     {
         return
-            (
+            (prevNode.NodeType is XmlNodeType.Whitespace && nextNode.NodeType is XmlNodeType.Text)
+            || (
                 prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
                 && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
             )
