@@ -6,7 +6,9 @@
   <ElementWithAttribute Attribute="AttributeValue________________">TextValue</ElementWithAttribute>
   <ElementWithAttribute Attribute="AttributeValue_________________">TextValue</ElementWithAttribute>
   <ElementWithAttribute Attribute="AttributeValue__________________"
-    >TextValue</ElementWithAttribute
-  >
+    >TextValue</ElementWithAttribute>
+  <LongElementWithAttribute
+    Attribute="AttributeValue_________________________________________________________"
+    >TextValue</LongElementWithAttribute>
   <ElementWithEncodedText>&lt;b&gt;SomeText&lt;/b&gt;</ElementWithEncodedText>
 </Root>

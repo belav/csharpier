@@ -71,6 +71,14 @@ internal static class Element
             }
 
             if (
+                rawNode.Nodes.LastOrDefault() is { } node
+                && Tag.PrintParentClosingTagStartWithContent(node, context)
+            )
+            {
+                return Doc.Null;
+            }
+
+            if (
                 rawNode.Attributes.Length == 0
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
                 && rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
