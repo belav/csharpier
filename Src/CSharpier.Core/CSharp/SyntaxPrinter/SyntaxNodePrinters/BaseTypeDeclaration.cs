@@ -54,7 +54,7 @@ internal static class BaseTypeDeclaration
                 keyword = recordDeclarationSyntax.ClassOrStructKeyword;
                 parameterList = recordDeclarationSyntax.ParameterList;
             }
-            else if (node is ExtensionDeclarationSyntax extensionDeclarationSyntax)
+            else if (node is ExtensionBlockDeclarationSyntax extensionDeclarationSyntax)
             {
                 keyword = extensionDeclarationSyntax.Keyword;
                 parameterList = extensionDeclarationSyntax.ParameterList;
@@ -98,7 +98,7 @@ internal static class BaseTypeDeclaration
 
         if (keyword != null)
         {
-            if (node is ExtensionDeclarationSyntax)
+            if (node is ExtensionBlockDeclarationSyntax)
             {
                 docs.Add(Token.Print(keyword.Value, context));
             }
