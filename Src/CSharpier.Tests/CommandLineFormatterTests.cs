@@ -782,6 +782,20 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public void Should_Format_StandardInput_When_StdinFilePath_Directory_Does_Not_Exist()
+    {
+        var context = new TestContext();
+        var result = Format(
+            context,
+            standardInFileContents: UnformattedClassContent,
+            directoryOrFilePaths: "NonExistent/SubDir/File.cs"
+        );
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedClassContent);
+    }
+
+    [Test]
     public void File_With_Mismatched_Line_Endings_In_Verbatim_String_Should_Pass_Validation()
     {
         var context = new TestContext();
