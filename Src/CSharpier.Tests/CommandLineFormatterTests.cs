@@ -144,7 +144,7 @@ public class CommandLineFormatterTests
         var unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -347,7 +347,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        Format(context, directoryOrFilePaths: "Unformatted.cs");
+        await Format(context, directoryOrFilePaths: "Unformatted.cs");
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -359,7 +359,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        Format(context, skipWrite: true);
+        await Format(context, skipWrite: true);
 
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
     }
@@ -948,7 +948,7 @@ class ClassName
         var configPath = context.WhenAFileExists("config/.csharpierrc", "printWidth: 10");
         context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
 
-        Format(context, configPath: configPath);
+        await Format(context, configPath: configPath);
 
         context.GetFileContent("file1.cs").Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -966,7 +966,7 @@ class ClassName
         );
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
 
-        Format(context, configPath: configPath);
+        await Format(context, configPath: configPath);
 
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -984,7 +984,7 @@ class ClassName
         );
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable   = someLongValue;");
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent(fileName).Should().Be("var myVariable = someLongValue;\n");
     }
@@ -1005,7 +1005,7 @@ class ClassName
         context.WhenAFileExists(ignoreFileName, ".editorconfig");
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -1021,7 +1021,7 @@ class ClassName
             """
         );
 
-        Format(context, directoryOrFilePaths: "LICENSE");
+        await Format(context, directoryOrFilePaths: "LICENSE");
     }
 
     [Test]
@@ -1045,7 +1045,7 @@ class ClassName
 
         context.WhenAFileExists("Xml.xml", content.ToString());
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent("Xml.xml").Should().Be(content.ToString());
     }
