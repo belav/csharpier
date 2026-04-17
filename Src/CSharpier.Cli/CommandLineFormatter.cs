@@ -40,6 +40,15 @@ internal static class CommandLineFormatter
                     filePath = directoryPath;
                     directoryPath = fileSystem.Path.GetDirectoryName(directoryPath);
                     ArgumentNullException.ThrowIfNull(directoryPath);
+
+                    // The directory from --stdin-path may not exist on disk.
+                    // Walk up to the nearest existing ancestor for config resolution.
+                    while (!fileSystem.Directory.Exists(directoryPath))
+                    {
+                        directoryPath = fileSystem.Path.GetDirectoryName(directoryPath);
+                        ArgumentNullException.ThrowIfNull(directoryPath);
+                    }
+
                     pathSupplied = true;
                 }
                 // otherwise someone is running this as a single command and not sending a path
