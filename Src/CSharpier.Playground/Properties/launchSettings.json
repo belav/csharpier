@@ -1,16 +1,5 @@
 ﻿{
   "profiles": {
-    "Watch": {
-      "commandName": "Executable",
-      "executablePath": "dotnet",
-      "comments": "hot reload was not reloading any changes to the csharpier project, just to playground",
-      "commandLineArgs": "watch run --no-hot-reload",
-      "workingDirectory": "$(ProjectDir)",
-      "launchBrowser": true,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "Playground": {
       "commandName": "Project",
       "launchBrowser": true,

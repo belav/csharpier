@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Watch Playground" type="RunDotNetWatch" factoryName="RunDotNetWatch">
+    <option name="exePath" value="$PROJECT_DIR$/Src/CSharpier.Playground/bin/Debug/net10.0/CSharpier.Playground.exe" />
+    <option name="programParameters" value="" />
+    <option name="projectFilePath" value="$PROJECT_DIR$/Src/CSharpier.Playground/CSharpier.Playground.csproj" />
+    <option name="projectTfm" value="net10.0" />
+    <option name="suppressHotReload" value="true" />
+    <option name="terminalMode" value="Auto" />
+    <option name="watchParameters" value="" />
+    <option name="workingDirectory" value="$PROJECT_DIR$/Src/CSharpier.Playground" />
+    <method v="2" />
+  </configuration>
+</component>
