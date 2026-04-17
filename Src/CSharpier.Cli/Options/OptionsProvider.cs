@@ -253,7 +253,10 @@ internal class OptionsProvider
             && !dictionary.TryGetValue(searchingDirectory.FullName, out result)
         )
         {
-            if (shouldConsiderDirectory(searchingDirectory.FullName))
+            if (
+                this.fileSystem.Directory.Exists(searchingDirectory.FullName)
+                && shouldConsiderDirectory(searchingDirectory.FullName)
+            )
             {
                 dictionary[searchingDirectory.FullName] = result = await createFileAsync(
                     searchingDirectory.FullName
