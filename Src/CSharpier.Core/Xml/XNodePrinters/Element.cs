@@ -8,6 +8,13 @@ internal static class Element
 {
     internal static Doc Print(RawNode rawNode, PrintingContext context)
     {
+        if (rawNode.PreviousNode?.IsCSharpierIgnore is true)
+        {
+            return context
+                .NormalizedXml[rawNode.StartPosition..rawNode.EndPosition]
+                .Replace("\n", context.Options.LineEnding);
+        }
+
         var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
 

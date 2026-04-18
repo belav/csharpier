@@ -145,6 +145,7 @@ internal static class ElementChildren
                 prevNode.NodeType is XmlNodeType.Element
                 && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
             )
+            || prevNode.IsCSharpierIgnore
             ? Doc.Null
             : Doc.HardLine;
     }

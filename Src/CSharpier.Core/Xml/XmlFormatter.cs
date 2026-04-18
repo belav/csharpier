@@ -27,13 +27,14 @@ public static class XmlFormatter
             var validationTask = ValidateXmlAsync(xml);
 
             var lineEnding = PrinterOptions.GetLineEnding(xml, printerOptions);
-            var rootNode = RawNodeReader.ParseXml(
+            var (rootNode, normalizedXml) = RawNodeReader.ParseXml(
                 xml,
                 lineEnding,
                 printerOptions.XmlWhitespaceSensitivity
             );
             var printingContext = new PrintingContext
             {
+                NormalizedXml = normalizedXml,
                 Options = new PrintingContext.PrintingContextOptions
                 {
                     LineEnding = lineEnding,

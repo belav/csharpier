@@ -6,6 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
 internal class PrintingContext
 {
+    public required string NormalizedXml { get; init; }
     public required PrintingContextOptions Options { get; init; }
     public PrintingContextState State { get; } = new();
 

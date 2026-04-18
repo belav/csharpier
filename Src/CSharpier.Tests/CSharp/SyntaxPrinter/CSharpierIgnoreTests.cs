@@ -67,6 +67,7 @@ public string Example
                 code,
                 new PrintingContext
                 {
+                    NormalizedXml = code,
                     Options = new PrintingContext.PrintingContextOptions
                     {
                         LineEnding = Environment.NewLine,

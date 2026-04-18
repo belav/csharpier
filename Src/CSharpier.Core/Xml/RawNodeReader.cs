@@ -10,16 +10,26 @@ partial
 #endif
 class RawNodeReader
 {
-    private readonly string originalXml;
+    private readonly string normalizedXml;
     private readonly string lineEnding;
     private XmlWhitespaceSensitivity currentXmlWhitespaceSensitivity;
     private int position;
     private readonly Stack<RawNode> elementStack = new();
 
 #if !NETSTANDARD2_0
+    [GeneratedRegex("^ csharpier-ignore ($|- )")]
+    private static partial Regex IgnoreRegexGenerator();
+
     [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
-    private static partial Regex NewlineRegex();
+    private static partial Regex NewlineRegexGenerator();
+
+    private static readonly Regex IgnoreRegex = IgnoreRegexGenerator();
+    private static readonly Regex NewlineRegex = NewlineRegexGenerator();
 #else
+    private static readonly Regex IgnoreRegex = new(
+        "^ csharpier-ignore ($|- )",
+        RegexOptions.Compiled
+    );
     private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
 #endif
 
@@ -29,16 +39,12 @@ class RawNodeReader
         XmlWhitespaceSensitivity xmlWhitespaceSensitivity
     )
     {
-        this.originalXml = NewlineRegex
-#if !NETSTANDARD2_0
-            ()
-#endif
-        .Replace(xml, "\n");
+        this.normalizedXml = NewlineRegex.Replace(xml, "\n");
         this.lineEnding = lineEnding;
         this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
     }
 
-    public static RawNode ParseXml(
+    public static (RawNode rawNode, string normalizedXml) ParseXml(
         string originalXml,
         string lineEnding,
         XmlWhitespaceSensitivity xmlWhitespaceSensitivity
@@ -48,7 +54,7 @@ class RawNodeReader
         return reader.ParseXml();
     }
 
-    private RawNode ParseXml()
+    private (RawNode rawNode, string normalizedXml) ParseXml()
     {
         var rootNode = new RawNode
         {
@@ -56,15 +62,15 @@ class RawNodeReader
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
         };
         this.elementStack.Push(rootNode);
-        while (this.position < this.originalXml.Length)
+        while (this.position < this.normalizedXml.Length)
         {
             var newLines = 0;
             while (
-                this.position < this.originalXml.Length
-                && char.IsWhiteSpace(this.originalXml[this.position])
+                this.position < this.normalizedXml.Length
+                && char.IsWhiteSpace(this.normalizedXml[this.position])
             )
             {
-                if (this.originalXml[this.position] == '\n')
+                if (this.normalizedXml[this.position] == '\n')
                 {
                     newLines++;
                 }
@@ -88,12 +94,12 @@ class RawNodeReader
             }
 
             this.SkipWhitespace();
-            if (this.position >= this.originalXml.Length)
+            if (this.position >= this.normalizedXml.Length)
             {
                 break;
             }
 
-            if (this.originalXml[this.position] == '<')
+            if (this.normalizedXml[this.position] == '<')
             {
                 this.ParseTag();
             }
@@ -107,14 +113,14 @@ class RawNodeReader
             }
         }
 
-        return rootNode;
+        return (rootNode, this.normalizedXml);
     }
 
     private void SkipWhitespace()
     {
         while (
-            this.position < this.originalXml.Length
-            && char.IsWhiteSpace(this.originalXml[this.position])
+            this.position < this.normalizedXml.Length
+            && char.IsWhiteSpace(this.normalizedXml[this.position])
         )
         {
             this.position++;
@@ -123,40 +129,40 @@ class RawNodeReader
 
     private void ParseTag()
     {
-        if (this.position + 1 >= this.originalXml.Length)
+        if (this.position + 1 >= this.normalizedXml.Length)
         {
             return;
         }
 
-        if (this.originalXml[this.position + 1] == '!')
+        if (this.normalizedXml[this.position + 1] == '!')
         {
             if (
-                this.position + 4 < this.originalXml.Length
-                && this.originalXml.Substring(this.position, 4) == "<!--"
+                this.position + 4 < this.normalizedXml.Length
+                && this.normalizedXml.Substring(this.position, 4) == "<!--"
             )
             {
                 this.ParseComment();
             }
             else if (
-                this.position + 9 < this.originalXml.Length
-                && this.originalXml.Substring(this.position, 9) == "<![CDATA["
+                this.position + 9 < this.normalizedXml.Length
+                && this.normalizedXml.Substring(this.position, 9) == "<![CDATA["
             )
             {
                 this.ParseCData();
             }
             else if (
-                this.position + 9 < this.originalXml.Length
-                && this.originalXml.Substring(this.position, 9) == "<!DOCTYPE"
+                this.position + 9 < this.normalizedXml.Length
+                && this.normalizedXml.Substring(this.position, 9) == "<!DOCTYPE"
             )
             {
                 this.ParseDocType();
             }
         }
-        else if (this.originalXml[this.position + 1] == '?')
+        else if (this.normalizedXml[this.position + 1] == '?')
         {
             this.ParseProcessingInstruction();
         }
-        else if (this.originalXml[this.position + 1] == '/')
+        else if (this.normalizedXml[this.position + 1] == '/')
         {
             this.ParseEndElement();
         }
@@ -171,30 +177,33 @@ class RawNodeReader
         this.position += 4; // Skip "<!--"
 
         var content = new StringBuilder();
-        while (this.position + 2 < this.originalXml.Length)
+        while (this.position + 2 < this.normalizedXml.Length)
         {
-            if (this.originalXml.Substring(this.position, 3) == "-->")
+            if (this.normalizedXml.Substring(this.position, 3) == "-->")
             {
                 this.position += 3;
                 break;
             }
 
-            if (this.originalXml[this.position] == '\n')
+            if (this.normalizedXml[this.position] == '\n')
             {
                 content.Append(this.lineEnding);
             }
             else
             {
-                content.Append(this.originalXml[this.position]);
+                content.Append(this.normalizedXml[this.position]);
             }
             this.position++;
         }
 
+        var actualContent = content.ToString();
+
         var node = new RawNode
         {
             NodeType = XmlNodeType.Comment,
-            Value = $"<!--{content}-->",
+            Value = $"<!--{actualContent}-->",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            IsCSharpierIgnore = IgnoreRegex.IsMatch(actualContent),
         };
 
         this.AddNode(node);
@@ -205,21 +214,21 @@ class RawNodeReader
         this.position += 9; // Skip "<![CDATA["
 
         var content = new StringBuilder();
-        while (this.position + 2 < this.originalXml.Length)
+        while (this.position + 2 < this.normalizedXml.Length)
         {
-            if (this.originalXml.Substring(this.position, 3) == "]]>")
+            if (this.normalizedXml.Substring(this.position, 3) == "]]>")
             {
                 this.position += 3;
                 break;
             }
 
-            if (this.originalXml[this.position] == '\n')
+            if (this.normalizedXml[this.position] == '\n')
             {
                 content.Append(this.lineEnding);
             }
             else
             {
-                content.Append(this.originalXml[this.position]);
+                content.Append(this.normalizedXml[this.position]);
             }
             this.position++;
         }
@@ -242,21 +251,21 @@ class RawNodeReader
         this.SkipWhitespace();
 
         var content = new StringBuilder();
-        while (this.position + 1 < this.originalXml.Length)
+        while (this.position + 1 < this.normalizedXml.Length)
         {
-            if (this.originalXml.Substring(this.position, 2) == "?>")
+            if (this.normalizedXml.Substring(this.position, 2) == "?>")
             {
                 this.position += 2;
                 break;
             }
 
-            if (this.originalXml[this.position] == '\n')
+            if (this.normalizedXml[this.position] == '\n')
             {
                 content.Append(this.lineEnding);
             }
             else
             {
-                content.Append(this.originalXml[this.position]);
+                content.Append(this.normalizedXml[this.position]);
             }
             this.position++;
         }
@@ -279,49 +288,60 @@ class RawNodeReader
         this.ReadName();
         this.SkipToChar('>');
 
-        if (this.elementStack.Count > 0)
+        if (this.elementStack.Count <= 0)
         {
-            var element = this.elementStack.Pop();
-            this.currentXmlWhitespaceSensitivity = element.XmlWhitespaceSensitivity;
-            // we don't want to keep around any leading or trailing newlines in an elements children
-            // it is easier to remove them here instead of dealing with it in the printer
-            for (var x = element.Nodes.Count - 1; x >= 0; x--)
+            return;
+        }
+
+        var element = this.elementStack.Pop();
+        element.EndPosition = this.position;
+        this.currentXmlWhitespaceSensitivity = element.XmlWhitespaceSensitivity;
+        // we don't want to keep around any leading or trailing newlines in an elements children
+        // it is easier to remove them here instead of dealing with it in the printer
+        for (var x = element.Nodes.Count - 1; x >= 0; x--)
+        {
+            if (
+                (x == element.Nodes.Count - 1 || x == 0)
+                && element.Nodes[x].NodeType is XmlNodeType.Whitespace
+            )
             {
-                if (
-                    (x == element.Nodes.Count - 1 || x == 0)
-                    && element.Nodes[x].NodeType is XmlNodeType.Whitespace
-                )
-                {
-                    element.Nodes.RemoveAt(x);
-                }
+                element.Nodes.RemoveAt(x);
+            }
+        }
+
+        for (var x = 0; x < element.Nodes.Count; x++)
+        {
+            if (x > 0)
+            {
+                element.Nodes[x - 1].NextNode = element.Nodes[x];
+                element.Nodes[x].PreviousNode = element.Nodes[x - 1];
             }
 
-            for (var x = 0; x < element.Nodes.Count; x++)
+            if (x == element.Nodes.Count - 2)
             {
-                if (x > 0)
-                {
-                    element.Nodes[x - 1].NextNode = element.Nodes[x];
-                    element.Nodes[x].PreviousNode = element.Nodes[x - 1];
-                }
-
-                if (x == element.Nodes.Count - 2)
-                {
-                    element.Nodes[x].NextNode = element.Nodes[x + 1];
-                    element.Nodes[x + 1].PreviousNode = element.Nodes[x];
-                }
+                element.Nodes[x].NextNode = element.Nodes[x + 1];
+                element.Nodes[x + 1].PreviousNode = element.Nodes[x];
             }
         }
     }
 
     private void ParseStartElement()
     {
+        var originalPosition = this.position;
+        while (
+            originalPosition > 0 && this.normalizedXml[originalPosition - 1] is ' ' or '\n' or '\r'
+        )
+        {
+            originalPosition--;
+        }
+
         this.position++; // Skip "<"
 
         var name = this.ReadName();
         var attributes = this.ParseAttributes();
 
         var isEmpty = false;
-        if (this.position < this.originalXml.Length && this.originalXml[this.position] == '/')
+        if (this.position < this.normalizedXml.Length && this.normalizedXml[this.position] == '/')
         {
             isEmpty = true;
             this.position++;
@@ -347,6 +367,8 @@ class RawNodeReader
             IsEmpty = isEmpty,
             Attributes = attributes.ToArray(),
             XmlWhitespaceSensitivity = xmlWhitespaceSensitivity,
+            StartPosition = originalPosition,
+            EndPosition = this.position, // set to the end of the start tag which is correct for empty elements and will be adjusted later for non-empty
         };
 
         this.AddNode(node);
@@ -362,20 +384,22 @@ class RawNodeReader
     {
         var content = new StringBuilder();
         // we skip all whitespace in the main read, so for parsing text go backwards until we find the actual start
-        while (this.position >= 0 && this.originalXml[this.position - 1] != '>')
+        while (this.position >= 0 && this.normalizedXml[this.position - 1] != '>')
         {
             this.position--;
         }
 
-        while (this.position < this.originalXml.Length && this.originalXml[this.position] != '<')
+        while (
+            this.position < this.normalizedXml.Length && this.normalizedXml[this.position] != '<'
+        )
         {
-            if (this.originalXml[this.position] == '\n')
+            if (this.normalizedXml[this.position] == '\n')
             {
                 content.Append(this.lineEnding);
             }
             else
             {
-                content.Append(this.originalXml[this.position]);
+                content.Append(this.normalizedXml[this.position]);
             }
             this.position++;
         }
@@ -399,13 +423,13 @@ class RawNodeReader
     {
         var attributes = new List<RawAttribute>();
 
-        while (this.position < this.originalXml.Length)
+        while (this.position < this.normalizedXml.Length)
         {
             this.SkipWhitespace();
             if (
-                this.position >= this.originalXml.Length
-                || this.originalXml[this.position] == '>'
-                || this.originalXml[this.position] == '/'
+                this.position >= this.normalizedXml.Length
+                || this.normalizedXml[this.position] == '>'
+                || this.normalizedXml[this.position] == '/'
             )
             {
                 break;
@@ -414,7 +438,10 @@ class RawNodeReader
             var attrName = this.ReadName();
             this.SkipWhitespace();
 
-            if (this.position < this.originalXml.Length && this.originalXml[this.position] == '=')
+            if (
+                this.position < this.normalizedXml.Length
+                && this.normalizedXml[this.position] == '='
+            )
             {
                 this.position++;
                 this.SkipWhitespace();
@@ -437,17 +464,17 @@ class RawNodeReader
     {
         var name = new StringBuilder();
         while (
-            this.position < this.originalXml.Length
+            this.position < this.normalizedXml.Length
             && (
-                char.IsLetterOrDigit(this.originalXml[this.position])
-                || this.originalXml[this.position] == '_'
-                || this.originalXml[this.position] == ':'
-                || this.originalXml[this.position] == '-'
-                || this.originalXml[this.position] == '.'
+                char.IsLetterOrDigit(this.normalizedXml[this.position])
+                || this.normalizedXml[this.position] == '_'
+                || this.normalizedXml[this.position] == ':'
+                || this.normalizedXml[this.position] == '-'
+                || this.normalizedXml[this.position] == '.'
             )
         )
         {
-            name.Append(this.originalXml[this.position]);
+            name.Append(this.normalizedXml[this.position]);
             this.position++;
         }
         return name.ToString();
@@ -455,12 +482,12 @@ class RawNodeReader
 
     private string ReadQuotedValue()
     {
-        if (this.position >= this.originalXml.Length)
+        if (this.position >= this.normalizedXml.Length)
         {
             return string.Empty;
         }
 
-        var quote = this.originalXml[this.position];
+        var quote = this.normalizedXml[this.position];
         if (quote is not ('"' or '\''))
         {
             return string.Empty;
@@ -469,20 +496,22 @@ class RawNodeReader
         this.position++; // Skip opening quote
 
         var value = new StringBuilder();
-        while (this.position < this.originalXml.Length && this.originalXml[this.position] != quote)
+        while (
+            this.position < this.normalizedXml.Length && this.normalizedXml[this.position] != quote
+        )
         {
-            if (this.originalXml[this.position] == '\n')
+            if (this.normalizedXml[this.position] == '\n')
             {
                 value.Append(this.lineEnding);
             }
             else
             {
-                value.Append(this.originalXml[this.position]);
+                value.Append(this.normalizedXml[this.position]);
             }
             this.position++;
         }
 
-        if (this.position < this.originalXml.Length)
+        if (this.position < this.normalizedXml.Length)
         {
             this.position++; // Skip closing quote
         }
@@ -492,12 +521,14 @@ class RawNodeReader
 
     private void SkipToChar(char target)
     {
-        while (this.position < this.originalXml.Length && this.originalXml[this.position] != target)
+        while (
+            this.position < this.normalizedXml.Length && this.normalizedXml[this.position] != target
+        )
         {
             this.position++;
         }
 
-        if (this.position < this.originalXml.Length)
+        if (this.position < this.normalizedXml.Length)
         {
             this.position++; // Skip the target character
         }
@@ -524,9 +555,9 @@ class RawNodeReader
         var inQuotes = false;
         var quoteChar = '\0';
 
-        while (this.position < this.originalXml.Length)
+        while (this.position < this.normalizedXml.Length)
         {
-            var ch = this.originalXml[this.position];
+            var ch = this.normalizedXml[this.position];
 
             if (!inQuotes)
             {

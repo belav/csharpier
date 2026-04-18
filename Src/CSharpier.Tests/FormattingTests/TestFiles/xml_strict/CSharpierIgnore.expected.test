@@ -1,0 +1,16 @@
+<Root>
+  <Child>
+    <Element />
+    <!-- csharpier-ignore -->
+    <Element   />
+    <!-- csharpier-ignore - some comment -->
+    <Element   SomeAttribute = "yeah"   />
+  </Child>
+  <Child>
+    <!-- csharpier-ignore -->
+    <ElementWithChildren>
+              <Element />
+        <Element />
+    </ElementWithChildren>
+  </Child>
+</Root>
