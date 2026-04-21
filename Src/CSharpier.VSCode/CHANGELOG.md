@@ -1,3 +1,6 @@
+## 10.0.2
+- Include source maps in published extension
+
 ## 10.0.1
 - Disable Q&A. Please use GitHub
 
