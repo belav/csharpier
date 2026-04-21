@@ -71,7 +71,7 @@ public class ServerTests
         {
             process.Start();
 
-            var portString = (await process.StandardOutput.ReadLineAsync() ?? string.Empty).Replace(
+            var portString = (await process.StandardError.ReadLineAsync() ?? string.Empty).Replace(
                 "Started on ",
                 string.Empty
             );
