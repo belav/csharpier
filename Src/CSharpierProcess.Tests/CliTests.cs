@@ -390,6 +390,30 @@ public class CliTests
     }
 
     [Test]
+    [Arguments("cs")]
+    [Arguments("xml")]
+    public async Task Format_Should_Exit_1_When_Invalid_File(string extension)
+    {
+        var unformattedContent1 = "var invalidCode\n";
+
+        var result = await new CsharpierProcess()
+            .WithArguments($"format --stdin-path ./Stdin/Test.{extension}")
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
+
+        using (Assert.Multiple())
+        {
+            await Assert.That(result.ExitCode).IsEqualTo(1);
+            await Assert
+                .That(result.ErrorOutput)
+                .StartsWith(
+                    $"Error ./Stdin/Test.{extension} - Failed to compile so was not formatted."
+                );
+            await Assert.That(result.Output).IsNullOrEmpty();
+        }
+    }
+
+    [Test]
     public async Task Format_Should_Format_Piped_File_With_EditorConfig()
     {
         await WriteFileAsync(

@@ -7,6 +7,8 @@ namespace CSharpier.Cli;
 
 internal class IgnoreFile
 {
+    public static IgnoreFile NullIgnore = new([]);
+
     private List<IgnoreList> Ignores { get; }
 
     private IgnoreFile(List<IgnoreList> ignores)
