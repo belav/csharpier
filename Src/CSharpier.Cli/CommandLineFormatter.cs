@@ -480,6 +480,7 @@ internal static class CommandLineFormatter
         if (codeFormattingResult.CompilationErrors.Any())
         {
             var errorMessage = new StringBuilder();
+            // TODO #1854 this isn't really "compiling" when talking about xml. Maybe use Parse?
             errorMessage.AppendLine("Failed to compile so was not formatted.");
             foreach (var message in codeFormattingResult.CompilationErrors)
             {

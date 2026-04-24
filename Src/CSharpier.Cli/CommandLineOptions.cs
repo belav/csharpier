@@ -14,6 +14,8 @@ internal class CommandLineOptions
     public bool WriteStdout { get; init; }
     public bool NoCache { get; init; }
     public bool NoMSBuildCheck { get; init; }
+
+    // TODO #1854 rename this to be more generic? ParsingErrorAsWarnings?
     public bool CompilationErrorsAsWarnings { get; init; }
     public bool UnformattedAsWarnings { get; init; }
     public bool IncludeGenerated { get; init; }
