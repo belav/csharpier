@@ -185,6 +185,8 @@ public class RawNodeReaderTests
         XmlWhitespaceSensitivity xmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict
     )
     {
-        return RawNodeReader.ParseXml(xml, Environment.NewLine, xmlWhitespaceSensitivity).Nodes;
+        return RawNodeReader
+            .ParseXml(xml, Environment.NewLine, xmlWhitespaceSensitivity)
+            .rawNode.Nodes;
     }
 }

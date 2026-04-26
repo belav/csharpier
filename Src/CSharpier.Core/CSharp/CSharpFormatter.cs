@@ -150,6 +150,7 @@ public static class CSharpFormatter
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
             var printingContext = new PrintingContext
             {
+                NormalizedXml = string.Empty,
                 Options = new PrintingContext.PrintingContextOptions
                 {
                     LineEnding = lineEnding,
@@ -177,6 +178,7 @@ public static class CSharpFormatter
 
                 var formattingContext2 = new PrintingContext
                 {
+                    NormalizedXml = string.Empty,
                     Options = new PrintingContext.PrintingContextOptions
                     {
                         LineEnding = lineEnding,

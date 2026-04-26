@@ -1,0 +1,23 @@
+<Root>
+  <Child>
+    <Element  />
+    <!-- csharpier-ignore -->
+    <Element   />
+    <!-- csharpier-ignore - some comment -->
+    <Element   SomeAttribute = "yeah"   />
+  </Child>
+  <Child>
+    <!-- csharpier-ignore -->
+    <ElementWithChildren>
+              <Element />
+        <Element />
+    </ElementWithChildren>
+  </Child>
+  <Child>
+    <Element  />
+    <!-- csharpier-ignore-start -->
+    <Element   />
+    <Element   SomeAttribute = "yeah"   />
+    <!-- csharpier-ignore-end - some comment -->
+  </Child>
+</Root>

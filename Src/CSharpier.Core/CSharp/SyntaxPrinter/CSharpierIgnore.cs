@@ -29,10 +29,22 @@ internal static partial class CSharpierIgnore
     public static readonly Regex IgnoreEndRegex = IgnoreEndRegexGenerator();
     public static readonly Regex WhiteSpaceLineEndingsRegex = WhiteSpaceLineEndingsGenerator();
 #else
-    private static readonly Regex IgnoreRegex = new("^// csharpier-ignore($| -)");
-    public static readonly Regex IgnoreStartRegex = new("^// csharpier-ignore-start($| -)");
-    public static readonly Regex IgnoreEndRegex = new("^// csharpier-ignore-end($| -)");
-    public static readonly Regex WhiteSpaceLineEndingsRegex = new(@"[\t\v\f ]*(\r\n?|\n)");
+    private static readonly Regex IgnoreRegex = new(
+        "^// csharpier-ignore($| -)",
+        RegexOptions.Compiled
+    );
+    public static readonly Regex IgnoreStartRegex = new(
+        "^// csharpier-ignore-start($| -)",
+        RegexOptions.Compiled
+    );
+    public static readonly Regex IgnoreEndRegex = new(
+        "^// csharpier-ignore-end($| -)",
+        RegexOptions.Compiled
+    );
+    public static readonly Regex WhiteSpaceLineEndingsRegex = new(
+        @"[\t\v\f ]*(\r\n?|\n)",
+        RegexOptions.Compiled
+    );
 #endif
 
     public static bool HasIgnoreComment(SyntaxNode syntaxNode) =>

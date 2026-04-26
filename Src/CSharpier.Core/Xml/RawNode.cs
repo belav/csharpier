@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using System.Xml;
+using CSharpier.Core.CSharp.SyntaxPrinter;
 
 namespace CSharpier.Core.Xml;
 
@@ -22,6 +23,9 @@ internal class RawNode
     public List<RawNode> Nodes { get; set; } = [];
     public string Value { get; set; } = string.Empty;
     public required XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; }
+    public int StartPosition { get; set; }
+    public int EndPosition { get; set; }
+    public CSharpierIgnoreType CSharpierIgnoreType { get; set; }
 
     public bool IsTextLike()
     {
@@ -57,4 +61,12 @@ internal class RawNode
 
         return base.ToString();
     }
+}
+
+internal enum CSharpierIgnoreType
+{
+    None,
+    Ignore,
+    IgnoreStart,
+    IgnoreEnd,
 }
