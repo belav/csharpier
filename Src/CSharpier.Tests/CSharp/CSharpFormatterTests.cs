@@ -14,7 +14,7 @@ internal sealed class CSharpFormatterTests
         var result = CSharpFormatter.Format(code);
 
         result.Code.Should().Be("var someVariable = someValue;\n");
-        result.CompilationErrors.Should().BeEmpty();
+        result.ErrorDiagnostics.Should().BeEmpty();
     }
 
     [Test]
@@ -24,7 +24,7 @@ internal sealed class CSharpFormatterTests
         var result = CSharpFormatter.Format(code);
 
         result.Code.Should().Be(code);
-        result.CompilationErrors.Should().ContainSingle();
+        result.ErrorDiagnostics.Should().ContainSingle();
     }
 
     [Test]

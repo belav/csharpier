@@ -75,7 +75,7 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 cancellationToken
             );
 
-            if (result.CompilationErrors.Any())
+            if (result.ErrorDiagnostics.Any())
             {
                 return new FormatFileResult(Status.Failed)
                 {

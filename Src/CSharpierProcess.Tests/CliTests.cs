@@ -390,6 +390,30 @@ public class CliTests
     }
 
     [Test]
+    [Arguments("cs")]
+    [Arguments("xml")]
+    public async Task Format_Should_Exit_1_When_Invalid_File(string extension)
+    {
+        var unformattedContent1 = "var invalidCode\n";
+
+        var result = await new CsharpierProcess()
+            .WithArguments($"format --stdin-path ./Stdin/Test.{extension}")
+            .WithPipedInput(unformattedContent1)
+            .ExecuteAsync();
+
+        using (Assert.Multiple())
+        {
+            await Assert.That(result.ExitCode).IsEqualTo(1);
+            await Assert
+                .That(result.ErrorOutput)
+                .StartsWith(
+                    $"Error ./Stdin/Test.{extension} - Was not formatted due to syntax errors."
+                );
+            await Assert.That(result.Output).IsNullOrEmpty();
+        }
+    }
+
+    [Test]
     public async Task Format_Should_Format_Piped_File_With_EditorConfig()
     {
         await WriteFileAsync(
@@ -466,7 +490,7 @@ public class CliTests
 
         result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
+        result.ErrorOutput.Should().Contain("Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -481,7 +505,7 @@ public class CliTests
 
         result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
+        result.ErrorOutput.Should().Contain("Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -564,7 +588,7 @@ public class CliTests
         result
             .ErrorOutput.Should()
             .StartWith(
-                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }}"
+                $"Error {output} - Was not formatted due to syntax errors.{Environment.NewLine}  (1,26): error CS1513: }}"
             );
         result.ExitCode.Should().Be(1);
     }

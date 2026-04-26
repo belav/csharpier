@@ -45,7 +45,13 @@ internal static class Tag
     {
         return Doc.Concat(
             rawNode.IsEmpty ? Doc.Null : PrintClosingTagStart(rawNode, context),
-            PrintClosingTagEnd(rawNode, context)
+            rawNode.Nodes.LastOrDefault() is { } node
+            && PrintParentClosingTagStartWithContent(node, context)
+                ? Doc.Null
+                : Doc.Concat(
+                    PrintClosingTagEndMarker(rawNode),
+                    PrintClosingTagSuffix(rawNode, context)
+                )
         );
     }
 
@@ -63,14 +69,6 @@ internal static class Tag
         return $"</{rawNode.Name}";
     }
 
-    public static Doc PrintClosingTagEnd(RawNode rawNode, PrintingContext context)
-    {
-        return Doc.Concat(
-            PrintClosingTagEndMarker(rawNode),
-            PrintClosingTagSuffix(rawNode, context)
-        );
-    }
-
     public static Doc PrintClosingTagEndMarker(RawNode rawNode)
     {
         return rawNode.IsEmpty ? "/>" : ">";
@@ -79,7 +77,10 @@ internal static class Tag
     public static Doc PrintClosingTagSuffix(RawNode rawNode, PrintingContext context)
     {
         return PrintParentClosingTagStartWithContent(rawNode, context)
-                ? PrintClosingTagStartMarker(rawNode.Parent!, context)
+                ? Doc.Concat(
+                    PrintClosingTagStartMarker(rawNode.Parent!, context),
+                    PrintClosingTagEndMarker(rawNode.Parent!)
+                )
             : NeedsToBorrowNextOpeningTagStartMarker(rawNode)
                 ? PrintOpeningTagStartMarker(rawNode.NextNode!, context)
             : Doc.Null;
@@ -92,38 +93,23 @@ internal static class Tag
 
     private static bool NeedsToBorrowNextOpeningTagStartMarker(RawNode rawNode)
     {
-        /*
-         *     123<p
-         *        ^^
-         *     >
-         */
+        /* 123<p
+              ^^
+            > */
         return rawNode.NextNode is not null
             && !rawNode.NextNode.IsTextLike()
             && rawNode.IsTextLike()
-            && rawNode.NodeType is XmlNodeType.Text and not XmlNodeType.CDATA
-        // && node.isTrailingSpaceSensitive
-        // prettier does something with removing end of line nodes and setting this value, I don't know
-        // that we have that functionality
-        // && !node.hasTrailingSpaces
-        ;
+            && rawNode.NodeType is XmlNodeType.Text and not XmlNodeType.CDATA;
     }
 
-    private static bool PrintParentClosingTagStartWithContent(
+    public static bool PrintParentClosingTagStartWithContent(
         RawNode rawNode,
         PrintingContext context
     )
     {
-        /*
-         *     <p>
-         *       123</p
-         *          ^^^
-         *     >
-         *
-         *         123</b
-         *       ></a
-         *        ^^^
-         *     >
-         */
+        /* <p>
+             123</p>
+                ^^^^*/
         // TODO #1790 we really want this last condition only if the indentation of the last line of the text value matches
         // the indentation of the start element. Bleh.
         /*
@@ -161,15 +147,12 @@ there is also this case
         PrintingContext context
     )
     {
-        /*
-         *     <p
-         *       >123
-         *       ^
-         *
-         *     <p
-         *       ><a
-         *       ^
-         */
+        /* <p
+             >123
+             ^
+           <p
+             ><a
+             ^ */
         return rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
             && rawNode.PreviousNode is null
             && rawNode.NodeType is XmlNodeType.Text

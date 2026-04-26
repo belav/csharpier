@@ -66,13 +66,7 @@ internal class OptionsProvider
             cancellationToken
         );
 
-#pragma warning disable IDE0270
-        if (ignoreFile is null)
-        {
-            // should never happen
-            throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
-        }
-#pragma warning restore IDE0270
+        ignoreFile ??= IgnoreFile.NullIgnore;
 
         var specifiedEditorConfig = editorConfigPath is not null
             ? await EditorConfigLocator.FindForDirectoryNameAsync(
@@ -218,15 +212,7 @@ internal class OptionsProvider
                 )
         );
 
-#pragma warning disable IDE0270
-        if (ignoreFile is null)
-        {
-            // should never happen
-            throw new Exception("Unable to locate an IgnoreFile for " + directoryName);
-        }
-#pragma warning restore IDE0270
-
-        return ignoreFile;
+        return ignoreFile ?? IgnoreFile.NullIgnore;
     }
 
     /// <summary>
