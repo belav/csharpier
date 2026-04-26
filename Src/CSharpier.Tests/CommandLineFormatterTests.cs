@@ -25,7 +25,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Was not formatted due to syntax errors.");
 
         result.ExitCode.Should().Be(1);
     }
@@ -36,13 +36,13 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         context.WhenAFileExists("Invalid.cs", "asdfasfasdf");
 
-        var result = await Format(context, compilationErrorsAsWarnings: true);
+        var result = await Format(context, syntaxErrorsAsWarnings: true);
 
         result
             .OutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Warning ./Invalid.cs - Was not formatted due to syntax errors.");
 
         result.ExitCode.Should().Be(0);
     }
@@ -59,7 +59,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Subdirectory/Invalid.cs - Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -78,7 +78,7 @@ public class CommandLineFormatterTests
             .Replace('\\', '/')
             .Should()
             .Be(
-                $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Failed to compile so was not formatted."
+                $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Was not formatted due to syntax errors."
             );
     }
 
@@ -94,7 +94,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Directory/Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Directory/Invalid.cs - Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -829,7 +829,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -1057,7 +1057,7 @@ class ClassName
         LogFormat logFormat = LogFormat.Console,
         bool writeStdout = false,
         bool includeGenerated = false,
-        bool compilationErrorsAsWarnings = false,
+        bool syntaxErrorsAsWarnings = false,
         string? standardInFileContents = null,
         string? configPath = null,
         params string[] directoryOrFilePaths
@@ -1090,7 +1090,7 @@ class ClassName
                 WriteStdout = writeStdout || standardInFileContents != null,
                 StandardInFileContents = standardInFileContents,
                 IncludeGenerated = includeGenerated,
-                CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
+                SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
             },
             context.FileSystem,
             fakeConsole,

@@ -151,9 +151,9 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     Skip writing changes. Generally used for testing to ensure csharpier doesn't throw any errors or cause syntax tree validation failures.
 
 
-- `--compilation-errors-as-warnings`
+- `--syntax-errors-as-warnings`
 
-    Treat compilation errors from files as warnings instead of errors.
+    Treat syntax errors from files as warnings instead of errors.
 
 ### Check
 `dotnet csharpier check [<directoryOrFile\>]`
@@ -169,7 +169,7 @@ Treat unformatted files as a warning instead of an error. If there are unformatt
 See the `format` command for descriptions of these additional options
 - `--include-generated`
 - `--no-msbuild-check`
-- `--compilation-errors-as-warnings`
+- `--syntax-errors-as-warnings`
 - `--config-path`
 - `--log-format`
 - `--log-level`
