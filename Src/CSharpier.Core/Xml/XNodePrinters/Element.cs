@@ -8,7 +8,7 @@ internal static class Element
 {
     internal static Doc Print(RawNode rawNode, PrintingContext context)
     {
-        if (rawNode.PreviousNode?.IsCSharpierIgnore is true)
+        if (rawNode.PreviousNode?.CSharpierIgnoreType is CSharpierIgnoreType.Ignore)
         {
             return context
                 .NormalizedXml[rawNode.StartPosition..rawNode.EndPosition]

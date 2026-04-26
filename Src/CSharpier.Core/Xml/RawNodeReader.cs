@@ -20,14 +20,30 @@ class RawNodeReader
     [GeneratedRegex("^ csharpier-ignore ($|- )")]
     private static partial Regex IgnoreRegexGenerator();
 
+    [GeneratedRegex("^ csharpier-ignore-start ($|- )")]
+    private static partial Regex IgnoreStartRegexGenerator();
+
+    [GeneratedRegex("^ csharpier-ignore-end ($|- )")]
+    private static partial Regex IgnoreEndRegexGenerator();
+
     [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
     private static partial Regex NewlineRegexGenerator();
 
     private static readonly Regex IgnoreRegex = IgnoreRegexGenerator();
+    private static readonly Regex IgnoreStartRegex = IgnoreStartRegexGenerator();
+    private static readonly Regex IgnoreEndRegex = IgnoreEndRegexGenerator();
     private static readonly Regex NewlineRegex = NewlineRegexGenerator();
 #else
     private static readonly Regex IgnoreRegex = new(
         "^ csharpier-ignore ($|- )",
+        RegexOptions.Compiled
+    );
+    private static readonly Regex IgnoreStartRegex = new(
+        "^ csharpier-ignore-start ($|- )",
+        RegexOptions.Compiled
+    );
+    private static readonly Regex IgnoreEndRegex = new(
+        "^ csharpier-ignore-end ($|- )",
         RegexOptions.Compiled
     );
     private static readonly Regex NewlineRegex = new(@"\r\n|\n|\r", RegexOptions.Compiled);
@@ -203,7 +219,11 @@ class RawNodeReader
             NodeType = XmlNodeType.Comment,
             Value = $"<!--{actualContent}-->",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
-            IsCSharpierIgnore = IgnoreRegex.IsMatch(actualContent),
+            CSharpierIgnoreType =
+                IgnoreRegex.IsMatch(actualContent) ? CSharpierIgnoreType.Ignore
+                : IgnoreStartRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreStart
+                : IgnoreEndRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreEnd
+                : CSharpierIgnoreType.None,
         };
 
         this.AddNode(node);
