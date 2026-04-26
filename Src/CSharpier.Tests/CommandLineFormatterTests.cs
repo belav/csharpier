@@ -25,7 +25,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Was not formatted due to syntax errors.");
 
         result.ExitCode.Should().Be(1);
     }
@@ -36,13 +36,13 @@ public class CommandLineFormatterTests
         var context = new TestContext();
         context.WhenAFileExists("Invalid.cs", "asdfasfasdf");
 
-        var result = await Format(context, compilationErrorsAsWarnings: true);
+        var result = await Format(context, syntaxErrorsAsWarnings: true);
 
         result
             .OutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Warning ./Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Warning ./Invalid.cs - Was not formatted due to syntax errors.");
 
         result.ExitCode.Should().Be(0);
     }
@@ -59,7 +59,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Subdirectory/Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Subdirectory/Invalid.cs - Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -78,7 +78,7 @@ public class CommandLineFormatterTests
             .Replace('\\', '/')
             .Should()
             .Be(
-                $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Failed to compile so was not formatted."
+                $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Was not formatted due to syntax errors."
             );
     }
 
@@ -94,7 +94,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Directory/Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Directory/Invalid.cs - Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -144,7 +144,7 @@ public class CommandLineFormatterTests
         var unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -347,7 +347,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        Format(context, directoryOrFilePaths: "Unformatted.cs");
+        await Format(context, directoryOrFilePaths: "Unformatted.cs");
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -359,7 +359,7 @@ public class CommandLineFormatterTests
         const string unformattedFilePath = "Unformatted.cs";
         context.WhenAFileExists(unformattedFilePath, UnformattedClassContent);
 
-        Format(context, skipWrite: true);
+        await Format(context, skipWrite: true);
 
         context.GetFileContent(unformattedFilePath).Should().Be(UnformattedClassContent);
     }
@@ -829,7 +829,7 @@ public class CommandLineFormatterTests
             .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
-            .Be("Error ./Invalid.cs - Failed to compile so was not formatted.");
+            .Be("Error ./Invalid.cs - Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -948,7 +948,7 @@ class ClassName
         var configPath = context.WhenAFileExists("config/.csharpierrc", "printWidth: 10");
         context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
 
-        Format(context, configPath: configPath);
+        await Format(context, configPath: configPath);
 
         context.GetFileContent("file1.cs").Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -966,7 +966,7 @@ class ClassName
         );
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
 
-        Format(context, configPath: configPath);
+        await Format(context, configPath: configPath);
 
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -984,7 +984,7 @@ class ClassName
         );
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable   = someLongValue;");
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent(fileName).Should().Be("var myVariable = someLongValue;\n");
     }
@@ -1005,7 +1005,7 @@ class ClassName
         context.WhenAFileExists(ignoreFileName, ".editorconfig");
         var fileName = context.WhenAFileExists("file1.cs", "var myVariable = someLongValue;");
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent(fileName).Should().Be("var myVariable =\n    someLongValue;\n");
     }
@@ -1021,7 +1021,7 @@ class ClassName
             """
         );
 
-        Format(context, directoryOrFilePaths: "LICENSE");
+        await Format(context, directoryOrFilePaths: "LICENSE");
     }
 
     [Test]
@@ -1045,7 +1045,7 @@ class ClassName
 
         context.WhenAFileExists("Xml.xml", content.ToString());
 
-        Format(context);
+        await Format(context);
 
         context.GetFileContent("Xml.xml").Should().Be(content.ToString());
     }
@@ -1057,7 +1057,7 @@ class ClassName
         LogFormat logFormat = LogFormat.Console,
         bool writeStdout = false,
         bool includeGenerated = false,
-        bool compilationErrorsAsWarnings = false,
+        bool syntaxErrorsAsWarnings = false,
         string? standardInFileContents = null,
         string? configPath = null,
         params string[] directoryOrFilePaths
@@ -1090,7 +1090,7 @@ class ClassName
                 WriteStdout = writeStdout || standardInFileContents != null,
                 StandardInFileContents = standardInFileContents,
                 IncludeGenerated = includeGenerated,
-                CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
+                SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
             },
             context.FileSystem,
             fakeConsole,

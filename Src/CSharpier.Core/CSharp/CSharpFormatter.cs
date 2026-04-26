@@ -129,7 +129,7 @@ public static class CSharpFormatter
                 compilationResult = new CodeFormatterResult
                 {
                     Code = syntaxTree.ToString(),
-                    CompilationErrors = diagnostics,
+                    ErrorDiagnostics = diagnostics,
                     AST = printerOptions.IncludeAST ? PrintAST(rootNode) : string.Empty,
                 };
 
