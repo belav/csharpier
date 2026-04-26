@@ -13,7 +13,7 @@ CSharpier.Core.CodeFormatterOptions.IndentStyle.init -> void
 
 CSharpier.Core.CodeFormatterResult
 CSharpier.Core.CodeFormatterResult.Code.get -> string!
-CSharpier.Core.CodeFormatterResult.CompilationErrors.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
+CSharpier.Core.CodeFormatterResult.ErrorDiagnostics.get -> System.Collections.Generic.IEnumerable<Microsoft.CodeAnalysis.Diagnostic!>!
 CSharpier.Core.CodeFormatterOptions.IncludeGenerated.get -> bool
 CSharpier.Core.CodeFormatterOptions.IncludeGenerated.init -> void
 
