@@ -406,7 +406,7 @@ internal static class CommandLineFormatter
     )
     {
         if (
-            (!commandLineOptions.CompilationErrorsAsWarnings && result.FailedCompilation > 0)
+            (!commandLineOptions.SyntaxErrorsAsWarnings && result.FailedCompilation > 0)
             || (
                 commandLineOptions.Check
                 && result.UnformattedFiles > 0
@@ -477,17 +477,16 @@ internal static class CommandLineFormatter
             return;
         }
 
-        if (codeFormattingResult.CompilationErrors.Any())
+        if (codeFormattingResult.ErrorDiagnostics.Any())
         {
             var errorMessage = new StringBuilder();
-            // TODO #1854 this isn't really "compiling" when talking about xml. Maybe use Parse?
-            errorMessage.AppendLine("Failed to compile so was not formatted.");
-            foreach (var message in codeFormattingResult.CompilationErrors)
+            errorMessage.AppendLine("Was not formatted due to syntax errors.");
+            foreach (var message in codeFormattingResult.ErrorDiagnostics)
             {
                 errorMessage.AppendLine(message.ToString());
             }
 
-            if (!commandLineOptions.CompilationErrorsAsWarnings)
+            if (!commandLineOptions.SyntaxErrorsAsWarnings)
             {
                 fileIssueLogger.WriteError(errorMessage.ToString());
             }

@@ -33,7 +33,7 @@ internal static class FormattingCommands
             "Write the results of formatting any files to stdout."
         );
         formatCommand.AddOption(writeStdoutOption);
-        formatCommand.AddOption(CompilationErrorsAsWarningsOption);
+        formatCommand.AddOption(SyntaxErrorsAsWarningsOption);
         formatCommand.AddOption(ConfigPathOption);
         formatCommand.AddOption(IgnorePathOption);
         formatCommand.AddOption(StdinPathOption);
@@ -49,8 +49,8 @@ internal static class FormattingCommands
             var noCache = context.ParseResult.GetValueForOption(noCacheOption);
             var noMSBuildCheck = context.ParseResult.GetValueForOption(NoMsBuildCheckOption);
             var includeGenerated = context.ParseResult.GetValueForOption(IncludeGeneratedOption);
-            var compilationErrorsAsWarnings = context.ParseResult.GetValueForOption(
-                CompilationErrorsAsWarningsOption
+            var syntaxErrorsAsWarnings = context.ParseResult.GetValueForOption(
+                SyntaxErrorsAsWarningsOption
             );
             var configPath = context.ParseResult.GetValueForOption(ConfigPathOption);
             var ignorePath = context.ParseResult.GetValueForOption(IgnorePathOption);
@@ -68,7 +68,7 @@ internal static class FormattingCommands
                 noCache,
                 noMSBuildCheck,
                 includeGenerated,
-                compilationErrorsAsWarnings,
+                syntaxErrorsAsWarnings,
                 false,
                 configPath,
                 ignorePath,
@@ -101,7 +101,7 @@ internal static class FormattingCommands
         checkCommand.AddOption(LogLevelOption);
         checkCommand.AddOption(IncludeGeneratedOption);
         checkCommand.AddOption(NoMsBuildCheckOption);
-        checkCommand.AddOption(CompilationErrorsAsWarningsOption);
+        checkCommand.AddOption(SyntaxErrorsAsWarningsOption);
         checkCommand.AddOption(UnformattedAsWarningsOption);
 
         checkCommand.SetHandler(async context =>
@@ -110,8 +110,8 @@ internal static class FormattingCommands
             var useCache = context.ParseResult.GetValueForOption(useCacheOption);
             var noMSBuildCheck = context.ParseResult.GetValueForOption(NoMsBuildCheckOption);
             var includeGenerated = context.ParseResult.GetValueForOption(IncludeGeneratedOption);
-            var compilationErrorsAsWarnings = context.ParseResult.GetValueForOption(
-                CompilationErrorsAsWarningsOption
+            var syntaxErrorsAsWarnings = context.ParseResult.GetValueForOption(
+                SyntaxErrorsAsWarningsOption
             );
             var unformattedAsWarningsOption = context.ParseResult.GetValueForOption(
                 UnformattedAsWarningsOption
@@ -131,7 +131,7 @@ internal static class FormattingCommands
                 noCache: !useCache,
                 noMSBuildCheck,
                 includeGenerated,
-                compilationErrorsAsWarnings,
+                syntaxErrorsAsWarnings,
                 unformattedAsWarningsOption,
                 configPath,
                 ignorePath,
@@ -154,7 +154,7 @@ internal static class FormattingCommands
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
-        bool compilationErrorsAsWarnings,
+        bool syntaxErrorsAsWarnings,
         bool unformattedAsWarnings,
         string? configPath,
         string? ignorePath,
@@ -205,7 +205,7 @@ internal static class FormattingCommands
             IncludeGenerated = includeGenerated,
             ConfigPath = configPath,
             IgnorePath = ignorePath,
-            CompilationErrorsAsWarnings = compilationErrorsAsWarnings,
+            SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
             UnformattedAsWarnings = unformattedAsWarnings,
             LogFormat = logFormat,
         };
@@ -281,9 +281,9 @@ internal static class FormattingCommands
         "Bypass the check to determine if a csproj files references a different version of CSharpier.MsBuild."
     );
 
-    private static readonly Option<bool> CompilationErrorsAsWarningsOption = new(
-        ["--compilation-errors-as-warnings"],
-        "Treat compilation errors from files as warnings instead of errors."
+    private static readonly Option<bool> SyntaxErrorsAsWarningsOption = new(
+        ["--syntax-errors-as-warnings"],
+        "Treat syntax errors from files as warnings instead of errors."
     );
 
     private static readonly Option<bool> UnformattedAsWarningsOption = new(

@@ -134,7 +134,7 @@ public class BaseTest
             CancellationToken.None
         );
 
-        result.CompilationErrors.Should().BeEmpty();
+        result.ErrorDiagnostics.Should().BeEmpty();
         result.FailureMessage.Should().BeEmpty();
         result.WarningMessage.Should().BeEmpty();
 

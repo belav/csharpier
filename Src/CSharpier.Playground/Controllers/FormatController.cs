@@ -81,7 +81,7 @@ public class FormatController : ControllerBase
             Code = result.Code,
             Json = result.AST,
             Doc = result.DocTree,
-            Errors = result.CompilationErrors.Select(this.ConvertError).ToList(),
+            Errors = result.ErrorDiagnostics.Select(this.ConvertError).ToList(),
             SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None),
         };
     }

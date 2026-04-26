@@ -63,7 +63,7 @@ public static class XmlFormatter
             return new CodeFormatterResult
             {
                 Code = xml,
-                CompilationErrors = [CreateDiagnosticFromXmlException(xml, ex)],
+                ErrorDiagnostics = [CreateDiagnosticFromXmlException(xml, ex)],
                 WarningMessage = "Appeared to be invalid xml so was not formatted.",
             };
         }

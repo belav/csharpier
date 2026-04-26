@@ -407,7 +407,7 @@ public class CliTests
             await Assert
                 .That(result.ErrorOutput)
                 .StartsWith(
-                    $"Error ./Stdin/Test.{extension} - Failed to compile so was not formatted."
+                    $"Error ./Stdin/Test.{extension} - Was not formatted due to syntax errors."
                 );
             await Assert.That(result.Output).IsNullOrEmpty();
         }
@@ -490,7 +490,7 @@ public class CliTests
 
         result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
+        result.ErrorOutput.Should().Contain("Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -505,7 +505,7 @@ public class CliTests
 
         result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(1);
-        result.ErrorOutput.Should().Contain("Failed to compile so was not formatted");
+        result.ErrorOutput.Should().Contain("Was not formatted due to syntax errors.");
     }
 
     [Test]
@@ -588,7 +588,7 @@ public class CliTests
         result
             .ErrorOutput.Should()
             .StartWith(
-                $"Error {output} - Failed to compile so was not formatted.{Environment.NewLine}  (1,26): error CS1513: }}"
+                $"Error {output} - Was not formatted due to syntax errors.{Environment.NewLine}  (1,26): error CS1513: }}"
             );
         result.ExitCode.Should().Be(1);
     }
