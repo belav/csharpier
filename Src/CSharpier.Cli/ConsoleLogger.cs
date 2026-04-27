@@ -24,26 +24,12 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
 
         void Write(string value)
         {
-            if (logLevel >= LogLevel.Error)
-            {
-                console.WriteError(value);
-            }
-            else
-            {
-                console.Write(value);
-            }
+            console.WriteError(value);
         }
 
         void WriteLine(string? value = null)
         {
-            if (logLevel >= LogLevel.Error)
-            {
-                console.WriteErrorLine(value);
-            }
-            else
-            {
-                console.WriteLine(value);
-            }
+            console.WriteErrorLine(value);
         }
 
         if (!this.IsEnabled(logLevel))

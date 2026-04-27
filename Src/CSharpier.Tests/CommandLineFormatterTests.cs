@@ -38,8 +38,9 @@ public class CommandLineFormatterTests
 
         var result = await Format(context, syntaxErrorsAsWarnings: true);
 
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.First()
+            .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
             .Be("Warning ./Invalid.cs - Was not formatted due to syntax errors.");
@@ -105,8 +106,9 @@ public class CommandLineFormatterTests
 
         var result = await Format(context, directoryOrFilePaths: "Unsupported.js");
 
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.First()
+            .ErrorOutputLines.First()
             .Replace('\\', '/')
             .Should()
             .Be("Warning ./Unsupported.js - Is an unsupported file type.");
@@ -134,7 +136,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
-        result.OutputLines.First().Should().StartWith("Formatted 0 files");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.First().Should().StartWith("Formatted 0 files");
     }
 
     [Test]
@@ -166,7 +169,8 @@ public class CommandLineFormatterTests
         );
 
         var result = await Format(context);
-        result.OutputLines.First().Should().StartWith("Formatted 1 files");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.First().Should().StartWith("Formatted 1 files");
 
         context
             .GetFileContent(unformattedFilePath)
@@ -197,7 +201,8 @@ public class CommandLineFormatterTests
         );
 
         var result = await Format(context);
-        result.OutputLines.First().Should().StartWith("Formatted 1 files");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.First().Should().StartWith("Formatted 1 files");
 
         context.GetFileContent(unformattedFilePath).Should().Be(FormattedClassContent);
     }
@@ -228,7 +233,8 @@ public class CommandLineFormatterTests
         if (shouldPass)
         {
             result.ExitCode.Should().Be(0);
-            result.ErrorOutputLines.Should().BeEmpty();
+            result.OutputLines.Should().BeEmpty();
+            result.ErrorOutputLines.Should().NotContain("Test.csproj uses version");
         }
         else
         {
@@ -260,8 +266,9 @@ public class CommandLineFormatterTests
         var result = await Format(context);
 
         result.ExitCode.Should().Be(0);
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.First()
+            .ErrorOutputLines.First()
             .Should()
             .EndWith($"Test.csproj uses an unknown version of CSharpier.MsBuild");
     }
@@ -305,11 +312,13 @@ public class CommandLineFormatterTests
         if (shouldPass)
         {
             result.ExitCode.Should().Be(0);
-            result.ErrorOutputLines.Should().BeEmpty();
+            result.OutputLines.Should().BeEmpty();
+            result.ErrorOutputLines.Should().NotContain("Test.csproj uses version");
         }
         else
         {
             result.ExitCode.Should().Be(1);
+            result.OutputLines.Should().BeEmpty();
             result
                 .ErrorOutputLines.First()
                 .Should()
@@ -337,7 +346,7 @@ public class CommandLineFormatterTests
         var result = await Format(context);
 
         result.ExitCode.Should().Be(0);
-        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.Should().BeEmpty();
     }
 
     [Test]
@@ -442,7 +451,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -459,7 +469,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context, includeGenerated: true);
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
     }
 
     [Test]
@@ -521,7 +532,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -543,7 +555,8 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory)
         );
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -561,7 +574,8 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: [unformattedFilePath1, unformattedFilePath2]
         );
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -584,7 +598,8 @@ public class CommandLineFormatterTests
             directoryOrFilePaths: [unformattedFilePath1, unformattedFilePath2]
         );
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -597,7 +612,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context, directoryOrFilePaths: "Directory.WithPeriod");
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -611,7 +627,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context, directoryOrFilePaths: unformattedFilePath1);
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -632,8 +649,9 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.FirstOrDefault()
+            .ErrorOutputLines.FirstOrDefault()
             .Should()
             .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
     }
@@ -656,8 +674,9 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.FirstOrDefault()
+            .ErrorOutputLines.FirstOrDefault()
             .Should()
             .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
     }
@@ -680,8 +699,9 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.FirstOrDefault()
+            .ErrorOutputLines.FirstOrDefault()
             .Should()
             .StartWith(isIgnored ? "Formatted 0 files in " : "Formatted 1 files in ");
     }
@@ -702,7 +722,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
     }
 
     [Test]
@@ -715,7 +736,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context, directoryOrFilePaths: "Sub");
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
     }
 
     [Test]
@@ -737,7 +759,8 @@ public class CommandLineFormatterTests
 
         var result = await Format(context);
 
-        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
     }
 
     [Test]
@@ -871,8 +894,8 @@ class ClassName
             .GetFileContent("file1.cs")
             .Should()
             .Be(contents.Replace("static public", "public static"));
-        result.ErrorOutputLines.Should().BeEmpty();
-        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.First().Should().StartWith("Formatted 1 files in");
     }
 
     [Test]
@@ -899,8 +922,8 @@ class ClassName
 
         var result = await Format(context);
 
-        result.ErrorOutputLines.Should().BeEmpty();
-        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.First().Should().StartWith("Formatted 1 files in");
     }
 
     [Test]
@@ -919,8 +942,8 @@ class ClassName
 
         var result = await Format(context);
 
-        result.ErrorOutputLines.Should().BeEmpty();
-        result.OutputLines.First().Should().StartWith("Formatted 1 files in");
+        result.OutputLines.Should().BeEmpty();
+        result.ErrorOutputLines.First().Should().StartWith("Formatted 1 files in");
     }
 
     [Test]
@@ -935,8 +958,9 @@ class ClassName
 
         var result = await Format(context);
 
+        result.OutputLines.Should().BeEmpty();
         result
-            .OutputLines.First()
+            .ErrorOutputLines.First()
             .Should()
             .Be($"Warning The configuration file at {configPath} was empty.");
     }
