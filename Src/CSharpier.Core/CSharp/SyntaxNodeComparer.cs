@@ -1,4 +1,3 @@
-using CSharpier.Core.CSharp;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -139,7 +138,10 @@ internal partial class SyntaxNodeComparer
         this.formattedStack.Push((formattedStart, formattedStart));
         while (this.originalStack.Count > 0)
         {
-            var result = this.Compare(this.originalStack.Pop(), this.formattedStack.Pop());
+            var lhs = this.originalStack.Pop();
+            var rhs = this.formattedStack.Pop();
+            var result = this.Compare(lhs, rhs);
+            //   var result = this.Compare(this.originalStack.Pop(), this.formattedStack.Pop());
             if (result.IsInvalid)
             {
                 return result;
@@ -543,6 +545,25 @@ internal partial class SyntaxNodeComparer
         }
 
         return Equal;
+    }
+
+    private CompareResult CompareModifierToken(
+        SyntaxToken originalToken,
+        SyntaxToken formattedToken
+    )
+    {
+        if (this.ReorderedModifiers)
+        {
+            // Ignore trivia when modifiers are reordered as trivia move with modifiers
+            if (originalToken.ValueText != formattedToken.ValueText)
+            {
+                return NotEqual(originalToken.Span, formattedToken.Span);
+            }
+
+            return Equal;
+        }
+
+        return this.Compare(originalToken, formattedToken);
     }
 }
 
