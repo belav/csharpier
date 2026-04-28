@@ -114,7 +114,7 @@ namespace CSharpier.Core.CSharp
 #endif
             }
         }
-        
+
 """
         );
 
@@ -242,7 +242,7 @@ namespace CSharpier.Core.CSharp
                 {
                     var compare =
                         propertyType.Name == nameof(SyntaxTokenList)
-                            ? "CompareFunc"
+                            ? (propertyName == "Modifiers" ? "CompareModifierToken" : "CompareFunc")
                             : "static (_, _) => default";
                     if (propertyName == "Modifiers")
                     {

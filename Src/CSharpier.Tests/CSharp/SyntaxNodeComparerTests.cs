@@ -548,7 +548,7 @@ public class SyntaxNodeComparerTests
     public void Sorted_Usings_With_Header_Pass_Validation()
     {
         var left = """
-            // some copyright 
+            // some copyright
 
             using Zebra;
             using Apple;
@@ -1000,6 +1000,30 @@ var someValue = $"""
         result.Should().BeEmpty();
     }
 
+    [Test]
+    public void Unsorted_Modifiers_With_Comment_Pass_Validation()
+    {
+        var left = """
+                public class OrderListItemModel : BindableBase
+                {
+                    // foobar
+                    override public int GetHashCode() => 1;
+                }
+            """;
+
+        var right = """
+                public class OrderListItemModel : BindableBase
+                {
+                    // foobar
+                    public override int GetHashCode() => 1;
+                }
+            """;
+
+        var result = CompareSource(left, right, reorderedModifiers: true);
+
+        result.Should().BeEmpty();
+    }
+
     private static void ResultShouldBe(string actual, string expected)
     {
         actual.ReplaceLineEndings().Should().Be(expected.ReplaceLineEndings());
@@ -1009,13 +1033,14 @@ var someValue = $"""
         string left,
         string right,
         bool reorderedUsingsWithDisabledText = false,
-        bool movedTrailingTrivia = false
+        bool movedTrailingTrivia = false,
+        bool reorderedModifiers = false
     )
     {
         var result = new SyntaxNodeComparer(
             left,
             right,
-            false,
+            reorderedModifiers,
             reorderedUsingsWithDisabledText,
             movedTrailingTrivia,
             SourceCodeKind.Regular,
