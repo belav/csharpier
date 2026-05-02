@@ -138,10 +138,7 @@ internal partial class SyntaxNodeComparer
         this.formattedStack.Push((formattedStart, formattedStart));
         while (this.originalStack.Count > 0)
         {
-            var lhs = this.originalStack.Pop();
-            var rhs = this.formattedStack.Pop();
-            var result = this.Compare(lhs, rhs);
-            //   var result = this.Compare(this.originalStack.Pop(), this.formattedStack.Pop());
+            var result = this.Compare(this.originalStack.Pop(), this.formattedStack.Pop());
             if (result.IsInvalid)
             {
                 return result;
