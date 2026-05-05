@@ -95,9 +95,15 @@ export class DiagnosticsService implements vscode.CodeActionProvider, vscode.Dis
         document: vscode.TextDocument,
         onlyAllowLessDiagnostics = false,
     ): Promise<void> {
+        const defaultFormatter = vscode.workspace
+            .getConfiguration("editor", document)
+            .get<string>("defaultFormatter");
+
         let shouldRunDiagnostics =
             !!vscode.workspace.getWorkspaceFolder(document.uri) &&
-            (workspace.getConfiguration("csharpier").get<boolean>("enableDiagnostics") ?? true);
+            (workspace.getConfiguration("csharpier").get<boolean>("enableDiagnostics") ?? true) &&
+            (defaultFormatter == null || defaultFormatter === "csharpier.csharpier-vscode");
+
 
         let currentDiagnostics = this.diagnosticCollection.get(document.uri);
 
