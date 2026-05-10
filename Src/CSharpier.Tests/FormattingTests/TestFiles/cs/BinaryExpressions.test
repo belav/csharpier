@@ -201,8 +201,8 @@ class TestClass
             ) ?? someOtherValue;
 
         var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
+            someValue.Property
+                .CallLongMethod_____________________________________()
                 .CallMethod(
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
@@ -273,7 +273,8 @@ class TestClass
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
                 )
-            ).SomeProperty.CallMethod() ?? someOtherValue;
+            ).SomeProperty
+                .CallMethod() ?? someOtherValue;
 
         var x =
             (
@@ -281,7 +282,8 @@ class TestClass
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
                 )
-            )?.SomeProperty.CallMethod() ?? someOtherValue;
+            )?.SomeProperty
+                .CallMethod() ?? someOtherValue;
 
         var x =
             (
@@ -289,7 +291,8 @@ class TestClass
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
                 )
-            )?.SomeProperty?.CallMethod() ?? someOtherValue;
+            )?.SomeProperty
+                ?.CallMethod() ?? someOtherValue;
 
         var x =
             (
@@ -297,8 +300,8 @@ class TestClass
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
                 )
-            )
-                .SomeProperty.CallMethod()
+            ).SomeProperty
+                .CallMethod()
                 .CallMethod()
             ?? someOtherValue;
 
@@ -308,8 +311,8 @@ class TestClass
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
                 )
-            )
-                ?.SomeProperty.CallMethod()
+            )?.SomeProperty
+                .CallMethod()
                 .CallMethod()
             ?? someOtherValue;
 
@@ -346,20 +349,20 @@ class TestClass
             ) ?? someOtherValue;
 
         var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
+            someValue.Property
+                .CallLongMethod_____________________________________()
                 .CallMethod__________()
             ?? throw new Exception();
 
         var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
+            someValue.Property
+                .CallLongMethod_____________________________________()
                 .CallMethod__________(someParameter)
             ?? throw new Exception();
 
         var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
+            someValue.Property
+                .CallLongMethod_____________________________________()
                 .CallLongMethod___________________________________________________()
             ?? throw new Exception();
 

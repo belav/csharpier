@@ -47,12 +47,12 @@ var someValue = someOtherValue!
     .Where(o => someLongCondition__________________________)
     .Where(o => someLongCondition__________________________);
 
-var someValue = someOtherValue!
-    .Thing!.Where(o => someLongCondition__________________________)
+var someValue = someOtherValue!.Thing!
+    .Where(o => someLongCondition__________________________)
     .Where(o => someLongCondition__________________________);
 
-var someValue = someOtherValue
-    .Thing.Where(o => someLongCondition__________________________)
+var someValue = someOtherValue.Thing
+    .Where(o => someLongCondition__________________________)
     .Where(o => someLongCondition__________________________);
 
 var someValue = someOtherValue
@@ -76,8 +76,8 @@ roleNames
         this.SomeProperty.Setup(o => longThing_______________________________________)
     );
 
-roleNames
-    .Value.Where(o => o.SomeProperty____________________________________)
+roleNames.Value
+    .Where(o => o.SomeProperty____________________________________)
     .Select(o => o.SomethingElse);
 
 return someCondition
@@ -105,9 +105,10 @@ CallSomeMethod(
     someParameter____________________________________
 )!;
 
-var someVariable = someObject.Property.CallMethod(someValue =>
-    someValue.SomeProperty == someOtherValue___________________________________
-);
+var someVariable = someObject.Property
+    .CallMethod(someValue =>
+        someValue.SomeProperty == someOtherValue___________________________________
+    );
 
 CallMethod(
         firstParameter________________________________,
@@ -226,42 +227,46 @@ var someValue = CallMethod______________________(
     )
     .CallMethod__________________();
 
-someThing_______________________
-    .Property.CallMethod__________________()
+someThing_______________________.Property
+    .CallMethod__________________()
     .CallMethod__________________();
 
-someThing_______________________
-    ?.Property.CallMethod__________________()
+someThing_______________________?.Property
+    .CallMethod__________________()
     .CallMethod__________________();
 
-someThing_______________________
-    .Property!.CallMethod__________________()
+someThing_______________________.Property!
+    .CallMethod__________________()
     .CallMethod__________________();
 
 IEnumerable<ValueProviderFactory> valueProviderFactories =
     new ModelBinderAttribute_______().GetValueProviderFactories(config);
 
-var something________________________________________ = x
-    .SomeProperty.CallMethod(longParameter_____________, longParameter_____________)
+var something________________________________________ = x.SomeProperty
+    .CallMethod(longParameter_____________, longParameter_____________)
     .CallMethod();
 
 CallMethod(o =>
-    o.Property.CallMethod_____________________________________________________()
+    o.Property
+        .CallMethod_____________________________________________________()
         .CallMethod_____________________________________________________()
 );
 
 CallMethod(
     o,
-    o.Property.CallMethod_____________________________________________________()
+    o.Property
+        .CallMethod_____________________________________________________()
         .CallMethod_____________________________________________________()
 );
 
 var someValue =
     someValue
-    && o.Property.CallMethod_____________________________________________________()
+    && o.Property
+        .CallMethod_____________________________________________________()
         .CallMethod_____________________________________________________();
 
-o.Property.CallMethod(
+o.Property
+    .CallMethod(
         someParameter_____________________________,
         someParameter_____________________________
     )
