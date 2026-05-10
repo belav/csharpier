@@ -1,18 +1,18 @@
-var someVariable =
-    someObject____________.Property_______________.CallMethod______________________();
+var someVariable = someObject____________
+    .Property_______________
+    .CallMethod______________________();
 
-var someVariable = someObject.Property.CallMethod(someValue =>
-    someValue.SomeProperty == someOtherValue___________________________
-);
+var someVariable = someObject
+    .Property
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
 
 var someVariable = someObject
     .Property()
     .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
 
 var someVariable = someObject
-    .Property.CallMethod(someValue =>
-        someValue.SomeProperty == someOtherValue___________________________
-    )
+    .Property
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
     .CallMethod();
 
 var someVariable = someObject
@@ -31,10 +31,8 @@ var someVariable = this.CallMethod()
 var someVariable = this.Array[1]
     .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________);
 
-var someVariable = this
-    .Property.CallMethod(someValue =>
-        someValue.SomeProperty == someOtherValue___________________________
-    )
+var someVariable = this.Property
+    .CallMethod(someValue => someValue.SomeProperty == someOtherValue___________________________)
     .CallMethod();
 
 var someVariable = this.CallMethod()
