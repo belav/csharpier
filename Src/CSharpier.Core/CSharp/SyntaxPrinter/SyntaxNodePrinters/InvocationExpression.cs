@@ -28,25 +28,21 @@ internal static class InvocationExpression
 
         var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups, parent);
 
-        var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-
         var forceOneLine =
             (
-                groups.Count <= cutoff
+                groups.Count <= 2
                 && (
-                    groups
-                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                        .Any(o =>
-                            o.Last().Node
-                                is not (
-                                    InvocationExpressionSyntax
-                                    or ElementAccessExpressionSyntax
-                                    or PostfixUnaryExpressionSyntax
-                                    {
-                                        Operand: InvocationExpressionSyntax
-                                    }
-                                )
-                        )
+                    groups.Any(o =>
+                        o.Last().Node
+                            is not (
+                                InvocationExpressionSyntax
+                                or ElementAccessExpressionSyntax
+                                or PostfixUnaryExpressionSyntax
+                                {
+                                    Operand: InvocationExpressionSyntax
+                                }
+                            )
+                    )
                     // if the last group contains just a !, make sure it doesn't end up on a new line
                     || (
                         groups.Last().Count == 1
@@ -353,6 +349,14 @@ internal static class InvocationExpression
         if (groups.Count < 2 || groups[0].Count != 1)
         {
             return false;
+        }
+
+        if (
+            groups[1]
+                .None(o => o.Node is InvocationExpressionSyntax or ElementAccessExpressionSyntax)
+        )
+        {
+            return true;
         }
 
         var firstNode = groups[0][0].Node;

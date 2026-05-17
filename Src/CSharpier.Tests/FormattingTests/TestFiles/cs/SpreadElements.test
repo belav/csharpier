@@ -10,8 +10,7 @@ int[] someOtherArray =
 
 List<KeyValuePair<string, string>> list =
 [
-    .. attribute
-        .Targets
+    .. attribute.Targets
         .Select(target =>
             KeyValuePair.Create(
                 target,

@@ -47,13 +47,11 @@ var someValue = someOtherValue!
     .Where(o => someLongCondition__________________________)
     .Where(o => someLongCondition__________________________);
 
-var someValue = someOtherValue!
-    .Thing!
+var someValue = someOtherValue!.Thing!
     .Where(o => someLongCondition__________________________)
     .Where(o => someLongCondition__________________________);
 
-var someValue = someOtherValue
-    .Thing
+var someValue = someOtherValue.Thing
     .Where(o => someLongCondition__________________________)
     .Where(o => someLongCondition__________________________);
 
@@ -78,8 +76,7 @@ roleNames
         this.SomeProperty.Setup(o => longThing_______________________________________)
     );
 
-roleNames
-    .Value
+roleNames.Value
     .Where(o => o.SomeProperty____________________________________)
     .Select(o => o.SomethingElse);
 
@@ -108,8 +105,7 @@ CallSomeMethod(
     someParameter____________________________________
 )!;
 
-var someVariable = someObject
-    .Property
+var someVariable = someObject.Property
     .CallMethod(someValue =>
         someValue.SomeProperty == someOtherValue___________________________________
     );
@@ -231,18 +227,15 @@ var someValue = CallMethod______________________(
     )
     .CallMethod__________________();
 
-someThing_______________________
-    .Property
+someThing_______________________.Property
     .CallMethod__________________()
     .CallMethod__________________();
 
-someThing_______________________
-    ?.Property
+someThing_______________________?.Property
     .CallMethod__________________()
     .CallMethod__________________();
 
-someThing_______________________
-    .Property!
+someThing_______________________.Property!
     .CallMethod__________________()
     .CallMethod__________________();
 
