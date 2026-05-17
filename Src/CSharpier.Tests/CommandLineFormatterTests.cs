@@ -719,6 +719,23 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public async Task Gitignore_Above_Worktree_Is_Not_Used()
+    {
+        // In a git worktree, `.git` is a file containing a `gitdir:` pointer rather than
+        // a directory. The walk that collects .gitignore files must still stop at this
+        // boundary, otherwise the parent repo's .gitignore (which typically excludes the
+        // worktree path) will mark every file in the worktree as ignored.
+        var context = new TestContext();
+        context.WhenAFileExists("Sub/File.cs", UnformattedClassContent);
+        context.WhenAFileExists(".gitignore", "*.cs");
+        context.WhenAFileExists("Sub/.git", "gitdir: ../.git/worktrees/foo");
+
+        var result = await Format(context, directoryOrFilePaths: "Sub");
+
+        result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 1 files in ");
+    }
+
+    [Test]
     public async Task Gitignore_Can_Unignore_All_Directories()
     {
         var context = new TestContext();
