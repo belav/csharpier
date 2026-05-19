@@ -107,9 +107,17 @@ internal static class Token
 
             contents.Add(linesIncludingQuotes[^1].TrimStart());
 
-            var hasArgumentParent = syntaxToken.Parent.HasParent(typeof(ArgumentSyntax));
+            var argument = syntaxToken.Parent.FindParent<ArgumentSyntax>();
 
-            docs.Add(Doc.IndentIf(!hasArgumentParent, Doc.Concat(contents)));
+            docs.Add(
+                Doc.IndentIf(
+                    argument is null
+                        || argument.Expression
+                            is ParenthesizedLambdaExpressionSyntax
+                                or SimpleLambdaExpressionSyntax,
+                    Doc.Concat(contents)
+                )
+            );
         }
         else if (
             syntaxToken.RawSyntaxKind()

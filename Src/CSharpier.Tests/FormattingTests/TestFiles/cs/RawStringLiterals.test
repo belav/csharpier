@@ -97,3 +97,31 @@ CallMethod(
     SomeRawString
     """.CallMethod().CallMethod().CallMethod()
 );
+
+CallMethod(() =>
+{
+    var someString = """
+        SomeRawString
+        """;
+});
+
+CallMethod(_ =>
+{
+    var someString = """
+        SomeRawString
+        """;
+});
+
+CallMethod(() =>
+{
+    var someString = $$"""
+        SomeRawString
+        """;
+});
+
+CallMethod(_ =>
+{
+    var someString = $$"""
+        SomeRawString
+        """;
+});
