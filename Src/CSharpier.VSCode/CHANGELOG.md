@@ -1,3 +1,6 @@
+## 10.0.3
+- Only show csharpier diagnostics if csharpier is configured as the formatter
+
 ## 10.0.2
 - Include source maps in published extension
 
