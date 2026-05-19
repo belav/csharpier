@@ -51,12 +51,13 @@ public class ClassName
                 .ThenAnotherMethod_____________________________________()
         );
 
-        var task = Task.Factory.StartNew(async () =>
-        {
-            return await new WebClient().DownloadStringTaskAsync____________________(
-                "http://example.com"
-            );
-        });
+        var task = Task.Factory
+            .StartNew(async () =>
+            {
+                return await new WebClient().DownloadStringTaskAsync____________________(
+                    "http://example.com"
+                );
+            });
 
         Action find = () =>
             EntryPointDiscoverer.FindStaticEntryMethod(typeof(IEnumerable<>).Assembly);
