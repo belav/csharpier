@@ -102,6 +102,14 @@ internal static class InterpolatedStringExpression
         );
         contents.Add(Token.Print(node.StringEndToken, context));
 
-        return Doc.IndentIf(!node.HasParent(typeof(ArgumentSyntax)), Doc.Concat(contents));
+        var argument = node.FindParent<ArgumentSyntax>();
+
+        return Doc.IndentIf(
+            argument is null
+                || argument.Expression
+                    is ParenthesizedLambdaExpressionSyntax
+                        or SimpleLambdaExpressionSyntax,
+            Doc.Concat(contents)
+        );
     }
 }
