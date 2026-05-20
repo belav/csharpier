@@ -69,8 +69,8 @@ public class CliTests
             .WithArguments("format BasicFile.cs")
             .ExecuteAsync();
 
-        result.ErrorOutput.Should().BeNullOrEmpty();
-        result.Output.Should().StartWith("Formatted 1 files in ");
+        result.Output.Should().BeNullOrEmpty();
+        result.ErrorOutput.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await ReadAllTextAsync("BasicFile.cs")).Should().Be(formattedContent);
     }
@@ -89,7 +89,7 @@ public class CliTests
             .WithArguments($"format {subdirectory}")
             .ExecuteAsync();
 
-        result.Output.Should().StartWith("Formatted 1 files in ");
+        result.ErrorOutput.Should().StartWith("Formatted 1 files in ");
         result.ExitCode.Should().Be(0);
         (await ReadAllTextAsync("Subdirectory/BasicFile.cs")).Should().Be(formattedContent);
     }
@@ -538,7 +538,7 @@ public class CliTests
             .ExecuteAsync();
 
         result
-            .Output.Replace('\\', '/')
+            .ErrorOutput.Replace('\\', '/')
             .Should()
             .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(0);
@@ -656,8 +656,8 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
 
-        result.Output.Should().StartWith("Formatted 0 files in ");
-        result.ErrorOutput.Should().BeEmpty();
+        result.ErrorOutput.Should().StartWith("Formatted 0 files in ");
+        result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
     }
 
@@ -668,9 +668,9 @@ public class CliTests
 
         var result = await new CsharpierProcess().WithArguments("format .").ExecuteAsync();
 
-        result.ErrorOutput.Should().BeEmpty();
+        result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Warning The csproj at ");
+        result.ErrorOutput.Should().StartWith("Warning The csproj at ");
     }
 
     private const string CsprojContentWithCSharpierMsBuild99 = """
@@ -691,9 +691,9 @@ public class CliTests
             .WithArguments("format --no-msbuild-check .")
             .ExecuteAsync();
 
-        result.ErrorOutput.Should().BeEmpty();
+        result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Formatted 1 files in ");
+        result.ErrorOutput.Should().StartWith("Formatted 1 files in ");
     }
 
     [Test]
@@ -705,9 +705,9 @@ public class CliTests
             .WithArguments("check --no-msbuild-check .")
             .ExecuteAsync();
 
-        result.ErrorOutput.Should().BeEmpty();
+        result.Output.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Checked 1 files in ");
+        result.ErrorOutput.Should().StartWith("Checked 1 files in ");
     }
 
     [Test]
@@ -828,7 +828,7 @@ public class CliTests
             var result = await new CsharpierProcess()
                 .WithArguments($"format {folder}")
                 .ExecuteAsync();
-            result.ErrorOutput.Should().BeEmpty();
+            result.Output.Should().BeEmpty();
         }
 
         var formatTasks = folders.Select(FormatFolder).ToArray();
