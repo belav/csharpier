@@ -1,0 +1,53 @@
+public class ClassName
+{
+    public string LambdaBod => this.Property;
+
+    public string LongNameForcesALineBreakSoWeCanTestEvenLonger____________________
+        => this.Property;
+
+    public SomeExpressionBodyMethod()
+        => nonChainFormatting = anotherVariable1 = (
+                someCondition________________________________
+                || someOtherCondition___________________________
+            );
+
+    public SomeExpressionBodyMethod()
+        => chainFormatting =
+                anotherVariable1 =
+                anotherVariable2 =
+                    (
+                        someCondition________________________________
+                        || someOtherCondition___________________________
+                    );
+
+    public void MethodName()
+    {
+        CallMethod(() =>
+            CallOtherMethod___________________________________________________________()
+        );
+    }
+
+    public void Complicated()
+    {
+        someLongAssObject.SomeLongAssFunction(
+            (someLongAssArg, someLongerAsserArg) =>
+                someLongAssArg.SomeLongAssMethod(someLongerAsserArg.SomeLongAssProperty)
+        );
+    }
+
+    private bool ShouldNotBeDescribedKind(ITypeDefinition typeDefinition)
+        => typeDefinition.Kind switch
+            {
+                TypeKind.Class => (_configuration.Kinds & DescribeKind.Class) != DescribeKind.Class,
+                TypeKind.Interface => (_configuration.Kinds & DescribeKind.Interface)
+                    != DescribeKind.Interface,
+                TypeKind.Struct => (_configuration.Kinds & DescribeKind.Struct)
+                    != DescribeKind.Struct,
+                TypeKind.Delegate => (_configuration.Kinds & DescribeKind.Delegate)
+                    != DescribeKind.Delegate,
+                TypeKind.Enum => (_configuration.Kinds & DescribeKind.Enum) != DescribeKind.Enum,
+                TypeKind.Void or TypeKind.NInt or TypeKind.NUInt or TypeKind.FunctionPointer =>
+                    throw new UnreachableException(),
+                _ => true,
+            };
+}
