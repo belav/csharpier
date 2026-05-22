@@ -89,8 +89,10 @@ public class ClassName
             }
         }
 
-        switch (someLongValue +
-            someOtherLongValue_________________________________________________________)
+        switch (
+            someLongValue
+            + someOtherLongValue_________________________________________________________
+        )
         {
             default:
                 return;

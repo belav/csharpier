@@ -1,38 +1,38 @@
 class TestClass
 {
     public string SomeProperty =>
-        "someLongStringValue__________________________" +
-        "someOtherLongStringValue_______________________________";
+        "someLongStringValue__________________________"
+        + "someOtherLongStringValue_______________________________";
 
     void TestMethod()
     {
         var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
 
         var someLongVariableName =
-            "a long string with just concatenation" +
-            "will break this way" +
-            "because of reasons such as the fact it is too long";
+            "a long string with just concatenation"
+            + "will break this way"
+            + "because of reasons such as the fact it is too long";
 
         var someLongVariableName =
-            "a really loooooooooooooooong string" +
-            someMethodCall("with long args") +
-            "really long string";
+            "a really loooooooooooooooong string"
+            + someMethodCall("with long args")
+            + "really long string";
 
         var samePrecedenceAligns =
-            one_________________________________ +
-            two_______________________________ -
-            three_____________________________ +
-            four______________________________;
+            one_________________________________
+            + two_______________________________
+            - three_____________________________
+            + four______________________________;
 
         var coalesceIsSpecial =
-            someValue_________________________ ??
-            someOtherValue_______________________ ??
-            someOtherValue_______________________;
+            someValue_________________________
+            ?? someOtherValue_______________________
+            ?? someOtherValue_______________________;
 
         coalesceIsSpecial ??=
-            someValue_________________________ ??
-            someOtherValue_______________________ ??
-            someOtherValue_______________________;
+            someValue_________________________
+            ?? someOtherValue_______________________
+            ?? someOtherValue_______________________;
 
         CallSomeLongMethodWithStringConcatenationThatShouldNotBreak(
             csharpDirectory + ".generated.cs",
@@ -53,116 +53,140 @@ class TestClass
             true || false;
 
         var conditionalIndentation = someBoolean
-            ? someLongValue____________________________________ +
-                someLongValue____________________________________
-            : someLongValue____________________________________ +
-                someLongValue____________________________________;
+            ? someLongValue____________________________________
+                + someLongValue____________________________________
+            : someLongValue____________________________________
+                + someLongValue____________________________________;
 
         var someValue =
-            value1__________________ == value2_________________ !=
-            (value3_______________________ == value4___________________);
+            value1__________________ == value2_________________
+            != (value3_______________________ == value4___________________);
 
-        if (one == two ||
-            someValue_______________ ==
-                thisWillIndent_______________________________________________________________) { }
+        if (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        ) { }
 
-        while (one == two ||
-            someValue_______________ ==
-                thisWillIndent_______________________________________________________________) { }
+        while (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        ) { }
 
-        switch (one == two ||
-            someValue_______________ ==
-                thisWillIndent_______________________________________________________________) { }
+        switch (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        ) { }
 
         do
         {
             CallSomething();
-        } while (one == two ||
-            someValue_______________ ==
-                thisWillIndent_______________________________________________________________);
+        } while (
+            one == two
+            || someValue_______________
+                == thisWillIndent_______________________________________________________________
+        );
 
         CallMethod(
-            "shouldIndentToMakeItClearWhereParametersAre" +
-                "someLongString_________________________________",
+            "shouldIndentToMakeItClearWhereParametersAre"
+                + "someLongString_________________________________",
             "SecondParameter"
         );
 
         var y = someList.Where(o =>
-            someLongValue_______________________ &&
-            theseShouldNotIndent_________________ &&
-            theseShouldNotIndent_________________ >
-                butThisOneShould_________________________________________
+            someLongValue_______________________
+            && theseShouldNotIndent_________________
+            && theseShouldNotIndent_________________
+                > butThisOneShould_________________________________________
         );
 
         var someVariable =
             CallMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            ) &&
-            CallMethod() == someValue;
+            )
+            && CallMethod() == someValue;
 
         var someValue =
             someLongThing___________________________.someLongThing_____________ ?? someOtherThing;
 
-        if (one - two == three ||
-            one + two == three ||
-            one * two == three ||
-            one / two == three ||
-            one % two == three ||
-            one != three ||
-            one < two ||
-            one > two ||
-            one <= two ||
-            one >= two ||
-            one is null ||
-            one as Something == null ||
-            one - two > three ||
-            someLongThing - someOtherLongThing__________________________________ > anotherLongThing)
-        { }
+        if (
+            one - two == three
+            || one + two == three
+            || one * two == three
+            || one / two == three
+            || one % two == three
+            || one != three
+            || one < two
+            || one > two
+            || one <= two
+            || one >= two
+            || one is null
+            || one as Something == null
+            || one - two > three
+            || someLongThing - someOtherLongThing__________________________________
+                > anotherLongThing
+        ) { }
 
-        if (CallSomeMethod(
-                someParameter_____________________________________,
-                someParameter_____________________________________
-            ) == 0) { }
-
-        if (someValue &&
+        if (
             CallSomeMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            ) == 0) { }
+            ) == 0
+        ) { }
 
-        if (CallSomeMethod(
+        if (
+            someValue
+            && CallSomeMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            ) == 0 &&
-            someValue) { }
+            ) == 0
+        ) { }
 
-        if (CallMethod(
+        if (
+            CallSomeMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            ) &&
+            ) == 0
+            && someValue
+        ) { }
+
+        if (
             CallMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            )) { }
-
-        if (CallMethod(
+            )
+            && CallMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            ) || CallMethod(shortValue, "shortValue")) { }
+            )
+        ) { }
 
-        if (CallMethod(
+        if (
+            CallMethod(
                 someParameter_____________________________________,
                 someParameter_____________________________________
-            ) ||
-            CallMethod(shortValue, "shortValue") ||
-            CallMethod(shortValue1, "shortValue1")) { }
+            ) || CallMethod(shortValue, "shortValue")
+        ) { }
 
-        if (CallSomeMethod(someParameter) ==
-            someLongerValue_______________________________________________________________) { }
+        if (
+            CallMethod(
+                someParameter_____________________________________,
+                someParameter_____________________________________
+            )
+            || CallMethod(shortValue, "shortValue")
+            || CallMethod(shortValue1, "shortValue1")
+        ) { }
 
-        return someValue != someOtherValue &&
-            someLongValue_____________________ == someOtherLongValue_____________________;
+        if (
+            CallSomeMethod(someParameter)
+            == someLongerValue_______________________________________________________________
+        ) { }
+
+        return someValue != someOtherValue
+            && someLongValue_____________________ == someOtherLongValue_____________________;
 
         var someValue =
             CallSomething(
@@ -182,8 +206,8 @@ class TestClass
                 .CallMethod(
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
-                ) ??
-            someOtherValue;
+                )
+            ?? someOtherValue;
 
         var x =
             someValue.CallMethod(
@@ -240,8 +264,8 @@ class TestClass
                 )
             )
                 .CallMethod()
-                .CallMethod() ??
-            someOtherValue;
+                .CallMethod()
+            ?? someOtherValue;
 
         var x =
             (
@@ -275,8 +299,8 @@ class TestClass
                 )
             )
                 .SomeProperty.CallMethod()
-                .CallMethod() ??
-            someOtherValue;
+                .CallMethod()
+            ?? someOtherValue;
 
         var x =
             (
@@ -286,8 +310,8 @@ class TestClass
                 )
             )
                 ?.SomeProperty.CallMethod()
-                .CallMethod() ??
-            someOtherValue;
+                .CallMethod()
+            ?? someOtherValue;
 
         var x =
             await CallMethodAsync(
@@ -307,78 +331,78 @@ class TestClass
                 .CallMethodAsync(
                     someLongValue__________________________________________,
                     someLongValue__________________________________________
-                ) ??
-            someOtherValue;
+                )
+            ?? someOtherValue;
 
         var x =
             (IEnumerable<SomeClass>?)
-                someValue.CallLongMethod____________________________________________________() ??
-            someOtherValue;
+                someValue.CallLongMethod____________________________________________________()
+            ?? someOtherValue;
 
         var x =
             (IEnumerable<SomeClass>?)(
-                someLongValue____________________________________________ ??
                 someLongValue____________________________________________
+                ?? someLongValue____________________________________________
             ) ?? someOtherValue;
 
         var x =
             someValue
                 .Property.CallLongMethod_____________________________________()
-                .CallMethod__________() ??
-            throw new Exception();
+                .CallMethod__________()
+            ?? throw new Exception();
 
         var x =
             someValue
                 .Property.CallLongMethod_____________________________________()
-                .CallMethod__________(someParameter) ??
-            throw new Exception();
+                .CallMethod__________(someParameter)
+            ?? throw new Exception();
 
         var x =
             someValue
                 .Property.CallLongMethod_____________________________________()
-                .CallLongMethod___________________________________________________() ??
-            throw new Exception();
+                .CallLongMethod___________________________________________________()
+            ?? throw new Exception();
 
-        return SomeObject.CallSomeMethod___________() ??
-            SomeObject.CallSomeMethod___________() ??
-            new SomeObject();
+        return SomeObject.CallSomeMethod___________()
+            ?? SomeObject.CallSomeMethod___________()
+            ?? new SomeObject();
 
         var storeObject =
-            entityType.GetSchemaQualifiedTableName() ??
-            entityType.GetInsertStoredProcedure()?.GetSchemaQualifiedName() ??
-            entityType.GetDeleteStoredProcedure()?.GetSchemaQualifiedName() ??
-            entityType.GetUpdateStoredProcedure()?.GetSchemaQualifiedName();
+            entityType.GetSchemaQualifiedTableName()
+            ?? entityType.GetInsertStoredProcedure()?.GetSchemaQualifiedName()
+            ?? entityType.GetDeleteStoredProcedure()?.GetSchemaQualifiedName()
+            ?? entityType.GetUpdateStoredProcedure()?.GetSchemaQualifiedName();
 
-        return parameterDescriptor.BindingInfo.Binder ??
-            Binders.GetBinder(parameterDescriptor.ParameterType);
-
-        var x =
-            someValue.SomeCall()?.SomeCall().SomeProperty ??
-            someValue.SomeCall()?.SomeCall().SomeProperty;
+        return parameterDescriptor.BindingInfo.Binder
+            ?? Binders.GetBinder(parameterDescriptor.ParameterType);
 
         var x =
-            someValue.SomeCall().SomeProperty.SomeProperty ??
-            someValue.SomeCall().SomeProperty.SomeProperty;
+            someValue.SomeCall()?.SomeCall().SomeProperty
+            ?? someValue.SomeCall()?.SomeCall().SomeProperty;
 
         var x =
-            someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty ??
-            someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty;
+            someValue.SomeCall().SomeProperty.SomeProperty
+            ?? someValue.SomeCall().SomeProperty.SomeProperty;
 
         var x =
-            someValue.SomeCall()?.SomeProperty_______________________ ??
-            someValue.SomeCall()?.SomeProperty_______________________;
+            someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty
+            ?? someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty;
 
         var x =
-            someValue.SomeCall().SomeProperty_______________________ ??
-            someValue.SomeCall().SomeProperty_______________________;
+            someValue.SomeCall()?.SomeProperty_______________________
+            ?? someValue.SomeCall()?.SomeProperty_______________________;
 
         var x =
-            someValue.SomeCall()?.A______().B______().C______() ??
-            someValue.SomeCall()?.A______().B______().C______();
+            someValue.SomeCall().SomeProperty_______________________
+            ?? someValue.SomeCall().SomeProperty_______________________;
 
         var x =
-            someValue.SomeCall().A_______.B_______.C_______ ??
-            someValue.SomeCall().A_______.B_______.C_______;
+            someValue.SomeCall()?.A______().B______().C______()
+            ?? someValue.SomeCall()?.A______().B______().C______();
+
+        var x =
+            someValue.SomeCall().A_______.B_______.C_______
+            ?? someValue.SomeCall().A_______.B_______.C_______;
 
         var x =
             someValue switch
@@ -394,10 +418,10 @@ class TestClass
                 .Replace(someParameter_______________________, '.') + ".";
 
         UglyButConsistentWithPrettier(
-            someValue ==
-                someLongThing__________________________________________________________________ ||
-                someOtherValue ==
-                    someOtherLongThing________________________________________________,
+            someValue
+                == someLongThing__________________________________________________________________
+                || someOtherValue
+                    == someOtherLongThing________________________________________________,
             secondParameter
         );
 

@@ -53,8 +53,8 @@ class ClassName
 
         for (
             var shorterName = 0;
-            someLongName____________ <
-                someOtherLongName__________________________________________________;
+            someLongName____________
+                < someOtherLongName__________________________________________________;
             someLongishName_________________________++
         )
         {

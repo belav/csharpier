@@ -88,11 +88,13 @@ internal static class BinaryExpression
             var binaryOnTheRight = binaryExpressionSyntax.Kind() == SyntaxKind.CoalesceExpression;
             if (binaryOnTheRight)
             {
+                var isResharper =
+                    context.Options.FormattingStyle == FormattingStyle.Resharper;
                 docs.Add(
                     Node.Print(binaryExpressionSyntax.Left, context),
-                    " ",
+                    isResharper ? " " : Doc.Line,
                     Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                    Doc.Line
+                    isResharper ? Doc.Line : (Doc)" "
                 );
             }
 
@@ -125,12 +127,21 @@ internal static class BinaryExpression
                 return shouldGroup ? [docs[0], Doc.Group(docs.Skip(1).ToList())] : docs;
             }
 
-            var right = Doc.Concat(
-                " ",
-                Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                Doc.Line,
-                Node.Print(binaryExpressionSyntax.Right, context)
-            );
+            var isResharperStyle =
+                context.Options.FormattingStyle == FormattingStyle.Resharper;
+            var right = isResharperStyle
+                ? Doc.Concat(
+                    " ",
+                    Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                    Doc.Line,
+                    Node.Print(binaryExpressionSyntax.Right, context)
+                )
+                : Doc.Concat(
+                    Doc.Line,
+                    Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                    " ",
+                    Node.Print(binaryExpressionSyntax.Right, context)
+                );
 
             docs.Add(shouldGroup ? Doc.Group(right) : right);
             return docs;

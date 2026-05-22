@@ -49,8 +49,8 @@ class ClassName
             throw new Exception();
         }
         catch (Exception exception)
-            when (exception.Message.Contains("someLongValueThatMakesThisLineTooLong") &&
-                someLongCondition == someOtherLongValue
+            when (exception.Message.Contains("someLongValueThatMakesThisLineTooLong")
+                && someLongCondition == someOtherLongValue
             )
         {
             return;

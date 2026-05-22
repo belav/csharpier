@@ -29,8 +29,8 @@ public class ClassName
 				: someOtherThirdValue_______________________;
 
 		var value =
-			someLongValue__________________________________ &&
-			someOtherValue__________________________________
+			someLongValue__________________________________
+			&& someOtherValue__________________________________
 				? trueValue
 				: falseValue;
 
@@ -39,12 +39,12 @@ public class ClassName
 			someCondition
 				? trueValue________________________________
 				: falseValue_______________________________,
-			someCondition_____________________________________ &&
-			someOtherCondition__________________________________
+			someCondition_____________________________________
+			&& someOtherCondition__________________________________
 				? trueValue________________________________
 				: falseValue_______________________________,
-			someCondition_____________________________________ &&
-				someOtherCondition__________________________________
+			someCondition_____________________________________
+				&& someOtherCondition__________________________________
 		);
 
 		var fileContents = File.ReadAllText(
@@ -68,28 +68,28 @@ public class ClassName
 			: falseValue________________________________;
 
 		return
-			someLongCondition____________________________________ &&
-			someOtherLongCondition____________________________________
+			someLongCondition____________________________________
+			&& someOtherLongCondition____________________________________
 			? trueValue________________________________
 			: falseValue_______________________________;
 
 		return
-			someLongCondition____________________________________ is
-			SomeLongType___________________________
+			someLongCondition____________________________________
+			is SomeLongType___________________________
 			? trueValue________________________________
 			: falseValue_______________________________;
 
 		return (
-			someLongCondition____________________________________ &&
-			someOtherLongCondition____________________________________
+			someLongCondition____________________________________
+			&& someOtherLongCondition____________________________________
 		)
 			? trueValue________________________________
 			: falseValue_______________________________;
 
 		return
-			someLongCondition____________________________________ ==
-				someThingElse______________________ &&
-			someOtherLongCondition____________________________________
+			someLongCondition____________________________________
+				== someThingElse______________________
+			&& someOtherLongCondition____________________________________
 			? trueValue________________________________
 			: falseValue_______________________________;
 

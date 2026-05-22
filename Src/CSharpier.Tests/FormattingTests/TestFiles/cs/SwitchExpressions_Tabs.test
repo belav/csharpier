@@ -41,9 +41,9 @@ class ClassName
 			),
 			VeryLongObject_______________________________________________________________
 				when count > 0 => CallSomeMethod(someValue),
-			OneMore => "someStrings" +
-				"moreStrings" +
-				"andMoreStrings_________________________________________",
+			OneMore => "someStrings"
+				+ "moreStrings"
+				+ "andMoreStrings_________________________________________",
 			SomeOtherObject or AnotherObject or OrEvenSomeOtherObject_________________ =>
 				CallSomeMethod(someValue),
 			SomeOtherObject { SomeProperty: SomeOtherProject } or AnotherObject => CallSomeMethod(

@@ -11,7 +11,9 @@ internal sealed class AllowFieldAttributeOnSameLineTests
         return new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
         {
             Width = 100,
-            AllowFieldAttributeOnSameLine = allowFieldAttributeOnSameLine,
+            FormattingStyle = allowFieldAttributeOnSameLine
+                ? FormattingStyle.Resharper
+                : FormattingStyle.Default,
         };
     }
 

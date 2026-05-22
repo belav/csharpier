@@ -18,7 +18,8 @@ public class ClassName
 {
     public bool SomeProperty =>
 #if !DEBUG
-        someValue && // trailing comment with endif should work properly
+        someValue
+        && // trailing comment with endif should work properly
 #endif
         someOtherValue;
 

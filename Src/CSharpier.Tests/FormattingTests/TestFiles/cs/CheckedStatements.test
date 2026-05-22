@@ -13,8 +13,8 @@ class ClassName
             );
 
             checked(
-                printsLikeInvocations +
-                whenItLongBreaks_______________________________________________
+                printsLikeInvocations
+                + whenItLongBreaks_______________________________________________
             );
         }
     }

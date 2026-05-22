@@ -80,7 +80,8 @@ internal static class ArgumentListLike
             args = SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context);
         }
         else if (
-            arguments.Count >= 2
+            context.Options.FormattingStyle == FormattingStyle.Resharper
+            && arguments.Count >= 2
             && arguments[arguments.Count - 1].Expression
                 is ParenthesizedLambdaExpressionSyntax { Block.Statements.Count: > 0 }
                     or SimpleLambdaExpressionSyntax { Body: BlockSyntax { Statements.Count: > 0 } }

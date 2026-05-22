@@ -7,13 +7,19 @@ internal static class WhileStatement
 {
     public static Doc Print(WhileStatementSyntax node, PrintingContext context)
     {
+        var isResharper = context.Options.FormattingStyle == FormattingStyle.Resharper;
         var result = Doc.Concat(
             ExtraNewLines.Print(node),
             Doc.Group(
                 Token.Print(node.WhileKeyword, context),
                 " ",
                 Token.Print(node.OpenParenToken, context),
-                Doc.Indent(Node.Print(node.Condition, context)),
+                isResharper
+                    ? Doc.Indent(Node.Print(node.Condition, context))
+                    : Doc.Group(
+                        Doc.Indent(Doc.SoftLine, Node.Print(node.Condition, context)),
+                        Doc.SoftLine
+                    ),
                 Token.Print(node.CloseParenToken, context)
             ),
             node.Statement switch

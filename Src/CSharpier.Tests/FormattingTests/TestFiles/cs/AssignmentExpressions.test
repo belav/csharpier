@@ -17,8 +17,8 @@ class ClassName
             editAssignmentViewModel.InstructionalTextxxxxxxxxxx ?? string.Empty;
 
         value =
-            someLongValue__________________________________ &&
-            someOtherValue__________________________________
+            someLongValue__________________________________
+            && someOtherValue__________________________________
                 ? trueValue
                 : falseValue;
 
@@ -71,8 +71,8 @@ class ClassName
 
     public SomeExpressionBodyMethod() =>
         nonChainFormatting = anotherVariable1 = (
-            someCondition________________________________ ||
-            someOtherCondition___________________________
+            someCondition________________________________
+            || someOtherCondition___________________________
         );
 
     public SomeExpressionBodyMethod() =>
@@ -80,7 +80,7 @@ class ClassName
             anotherVariable1 =
             anotherVariable2 =
                 (
-                    someCondition________________________________ ||
-                    someOtherCondition___________________________
+                    someCondition________________________________
+                    || someOtherCondition___________________________
                 );
 }

@@ -109,8 +109,8 @@ public class ClassName
         );
 
         this.Where(t =>
-            t.SomeVeryLongColumn________________________________ ||
-            t.OtherLongColumn________________________________
+            t.SomeVeryLongColumn________________________________
+            || t.OtherLongColumn________________________________
         );
 
         Select______________________________________(superLongName_________________________ =>

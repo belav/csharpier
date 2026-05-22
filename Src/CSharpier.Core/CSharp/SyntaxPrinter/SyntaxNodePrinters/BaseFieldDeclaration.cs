@@ -9,7 +9,7 @@ internal static class BaseFieldDeclaration
     public static Doc Print(BaseFieldDeclarationSyntax node, PrintingContext context)
     {
         var canSameLine =
-            context.Options.AllowFieldAttributeOnSameLine
+            context.Options.FormattingStyle == FormattingStyle.Resharper
             && node.AttributeLists.Count > 0
             && AttributeLists.GetTotalAttributeCount(node.AttributeLists) <= 2
             && !AttributeLists.HasOriginalLineBreaks(node.AttributeLists);

@@ -16,7 +16,8 @@ internal class ConfigurationFileOptions
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
 
-    public bool AllowFieldAttributeOnSameLine { get; init; }
+    [JsonConverter(typeof(CaseInsensitiveEnumConverter<FormattingStyle>))]
+    public FormattingStyle FormattingStyle { get; init; }
 
     public Override[] Overrides { get; init; } = [];
 
@@ -47,7 +48,7 @@ internal class ConfigurationFileOptions
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
-                AllowFieldAttributeOnSameLine = this.AllowFieldAttributeOnSameLine,
+                FormattingStyle = this.FormattingStyle,
             };
         }
 
@@ -64,7 +65,7 @@ internal class ConfigurationFileOptions
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
-                AllowFieldAttributeOnSameLine = this.AllowFieldAttributeOnSameLine,
+                FormattingStyle = this.FormattingStyle,
             };
         }
 

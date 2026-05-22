@@ -49,9 +49,9 @@ class ClassName
                     SomeObject_______________________________________________
                 ) =>
                 "LongString_____________________________________________________________________",
-            OneMore => "someStrings" +
-                "moreStrings" +
-                "andMoreStrings_________________________________________",
+            OneMore => "someStrings"
+                + "moreStrings"
+                + "andMoreStrings_________________________________________",
             SomeOtherObject or AnotherObject or OrEvenSomeOtherObject_________________ =>
                 CallSomeMethod(someValue),
             SomeOtherObject { SomeProperty: SomeOtherProject } or AnotherObject => CallSomeMethod(

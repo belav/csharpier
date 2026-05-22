@@ -37,7 +37,7 @@ internal static class AttributeLists
 
         var isFieldSameLine =
             node is BaseFieldDeclarationSyntax
-            && context.Options.AllowFieldAttributeOnSameLine;
+            && context.Options.FormattingStyle == FormattingStyle.Resharper;
 
         if (isFieldSameLine)
         {

@@ -34,8 +34,8 @@ class ClassName
         var complexWhere =
             from c in customers
             where
-                c.Value == "true" &&
-                someLongValueThatForcesABreak_________________________ != someOtherValue
+                c.Value == "true"
+                && someLongValueThatForcesABreak_________________________ != someOtherValue
             select d;
 
         var selectIntoQuery = from c in customers select c into d select d;

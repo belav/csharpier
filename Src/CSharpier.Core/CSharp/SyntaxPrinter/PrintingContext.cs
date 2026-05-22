@@ -38,7 +38,7 @@ internal class PrintingContext
         public required int IndentSize { get; init; }
         public required bool UseTabs { get; init; }
         public required XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; }
-        public bool AllowFieldAttributeOnSameLine { get; init; }
+        public FormattingStyle FormattingStyle { get; init; }
     }
 
     public class PrintingContextState

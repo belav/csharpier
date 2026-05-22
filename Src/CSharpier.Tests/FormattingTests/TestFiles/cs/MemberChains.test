@@ -257,8 +257,8 @@ CallMethod(
 );
 
 var someValue =
-    someValue &&
-    o.Property.CallMethod_____________________________________________________()
+    someValue
+    && o.Property.CallMethod_____________________________________________________()
         .CallMethod_____________________________________________________();
 
 o.Property.CallMethod(

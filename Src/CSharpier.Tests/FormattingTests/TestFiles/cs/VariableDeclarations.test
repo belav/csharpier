@@ -54,8 +54,8 @@ class ClassName
             SqlParameterCollectionExtensions.DefaultValueColumnWidth + DefaultValueColumnWidth
         ];
         var muchLongerOne_________________ = new byte[
-            SqlParameterCollectionExtensions.DefaultValueColumnWidth +
-                SqlParameterCollectionExtensions.DefaultValueColumnWidth
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth
+                + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
         var elementAccessExpression1 = anArray[100];
@@ -72,8 +72,8 @@ class ClassName
             DefaultValueColumnWidth_________ + DefaultValueColumnWidth_______
         ];
         var shortOne______ = anArray[
-            SqlParameterCollectionExtensions.DefaultValueColumnWidth +
-                SqlParameterCollectionExtensions.DefaultValueColumnWidth
+            SqlParameterCollectionExtensions.DefaultValueColumnWidth
+                + SqlParameterCollectionExtensions.DefaultValueColumnWidth
         ];
 
         var someLongValue_________________ = memberAccessExpression[
@@ -94,17 +94,17 @@ class ClassName
             (ArrayType[])CallMethod();
 
         var conditionalIndentation = someBoolean
-            ? someLongValue____________________________________ +
-                someLongValue____________________________________
-            : someLongValue____________________________________ +
-                someLongValue____________________________________;
+            ? someLongValue____________________________________
+                + someLongValue____________________________________
+            : someLongValue____________________________________
+                + someLongValue____________________________________;
 
         var longEnoughToMakeThisBreak =
             something == somethingElse ? shortValue__________ : otherShortValue;
 
         var value =
-            someLongValue__________________________________ &&
-            someOtherValue__________________________________
+            someLongValue__________________________________
+            && someOtherValue__________________________________
                 ? trueValue
                 : falseValue;
 
@@ -175,8 +175,8 @@ withLineEnding"
             : someOtherValue;
 
         var someValue =
-            someLongCondition___________________________________ &&
-            someOtheLongCondition___________________________________
+            someLongCondition___________________________________
+            && someOtheLongCondition___________________________________
                 ? someValue
                 : someValue;
 
