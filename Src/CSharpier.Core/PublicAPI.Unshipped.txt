@@ -1,4 +1,6 @@
-﻿CSharpier.Core.CodeFormatterOptions.XmlWhitespaceSensitivity.get -> CSharpier.Core.XmlWhitespaceSensitivity
+﻿CSharpier.Core.CodeFormatterOptions.AllowFieldAttributeOnSameLine.get -> bool
+CSharpier.Core.CodeFormatterOptions.AllowFieldAttributeOnSameLine.init -> void
+CSharpier.Core.CodeFormatterOptions.XmlWhitespaceSensitivity.get -> CSharpier.Core.XmlWhitespaceSensitivity
 CSharpier.Core.CodeFormatterOptions.XmlWhitespaceSensitivity.init -> void
 CSharpier.Core.XmlWhitespaceSensitivity
 CSharpier.Core.XmlWhitespaceSensitivity.Ignore = 1 -> CSharpier.Core.XmlWhitespaceSensitivity

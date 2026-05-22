@@ -29,6 +29,7 @@ internal class PrinterOptions(
     public EndOfLine EndOfLine { get; set; } = EndOfLine.Auto;
     public bool TrimInitialLines { get; init; } = true;
     public bool IncludeGenerated { get; set; }
+    public bool AllowFieldAttributeOnSameLine { get; set; }
     public Formatter Formatter { get; } = formatter;
     public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; } =
         xmlWhitespaceSensitivity;

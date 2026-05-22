@@ -17,9 +17,11 @@ internal static class DoStatement
             Node.Print(node.Statement, context),
             node.Statement is BlockSyntax ? " " : Doc.HardLine,
             Token.PrintWithSuffix(node.WhileKeyword, " ", context),
-            Token.Print(node.OpenParenToken, context),
-            Doc.Group(Doc.Indent(Doc.SoftLine, Node.Print(node.Condition, context)), Doc.SoftLine),
-            Token.Print(node.CloseParenToken, context),
+            Doc.Group(
+                Token.Print(node.OpenParenToken, context),
+                Doc.Indent(Node.Print(node.Condition, context)),
+                Token.Print(node.CloseParenToken, context)
+            ),
             Token.Print(node.SemicolonToken, context)
         );
     }

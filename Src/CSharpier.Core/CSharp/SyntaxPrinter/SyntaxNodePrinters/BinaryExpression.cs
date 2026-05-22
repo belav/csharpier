@@ -15,8 +15,8 @@ internal static class BinaryExpression
 
         if (node.Parent is IfStatementSyntax)
         {
-            // avoid grouping here so that the ifBreaks in IfStatement can understand when
-            // this BinaryExpression breaks
+            // avoid grouping here so that the outer Group in IfStatement controls
+            // when all Doc.Line breaks in this BinaryExpression fire
             return Doc.Concat(docs);
         }
 
@@ -90,9 +90,9 @@ internal static class BinaryExpression
             {
                 docs.Add(
                     Node.Print(binaryExpressionSyntax.Left, context),
-                    Doc.Line,
+                    " ",
                     Token.Print(binaryExpressionSyntax.OperatorToken, context),
-                    " "
+                    Doc.Line
                 );
             }
 
@@ -126,9 +126,9 @@ internal static class BinaryExpression
             }
 
             var right = Doc.Concat(
-                Doc.Line,
-                Token.Print(binaryExpressionSyntax.OperatorToken, context),
                 " ",
+                Token.Print(binaryExpressionSyntax.OperatorToken, context),
+                Doc.Line,
                 Node.Print(binaryExpressionSyntax.Right, context)
             );
 

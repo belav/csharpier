@@ -12,11 +12,9 @@ class ClassName
             return;
         }
 
-        while (
-            directoryInfo.Name != "Test"
-            && directoryInfo.Parent != null
-            && someLongCondition == "test"
-        )
+        while (directoryInfo.Name != "Test" &&
+            directoryInfo.Parent != null &&
+            someLongCondition == "test")
         {
             directoryInfo = directoryInfo.Parent;
         }
@@ -32,9 +30,8 @@ class ClassName
             return;
         }
 
-        while (
-            justOver100 || moreTextToMakeItWork__________________________________________________
-        )
+        while (justOver100 ||
+            moreTextToMakeItWork__________________________________________________)
         {
             return;
         }
@@ -45,9 +42,8 @@ class ClassName
         while (someLongerStatement && someOtherLongerStatement________________)
             return someLongerValue;
 
-        while (
-            someEvenLongerStatement && someOtherEvenLongerStatement________________________________
-        )
+        while (someEvenLongerStatement &&
+            someOtherEvenLongerStatement________________________________)
             return someLongerValue;
 
         while (true)

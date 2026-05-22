@@ -112,9 +112,9 @@ class ClassName
     {
         get =>
             _sourceType ??=
-                CustomMapExpression?.ReturnType
-                ?? CustomMapFunction?.ReturnType
-                ?? (
+                CustomMapExpression?.ReturnType ??
+                CustomMapFunction?.ReturnType ??
+                (
                     _sourceMembers.Length > 0
                         ? _sourceMembers[_sourceMembers.Length - 1].GetMemberType()
                         : Parameter.ParameterType
@@ -138,14 +138,14 @@ class ClassName
     private bool VisitChildForCompare(Pair<XmlNode> tuple, ref int result)
     {
         int r;
-        return 0
-            != (
+        return 0 !=
+            (
                 result =
                     (null == tuple.Item1) ? -1
                     : (null == tuple.Item2) ? +1
                     : 0 != (r = comparer.Compare(tuple.Item1.LocalName, tuple.Item2.LocalName)) ? r
-                    : 0
-                    != (r = comparer.Compare(tuple.Item1.NamespaceURI, tuple.Item2.NamespaceURI))
+                    : 0 !=
+                    (r = comparer.Compare(tuple.Item1.NamespaceURI, tuple.Item2.NamespaceURI))
                         ? r
                     : 0
             );

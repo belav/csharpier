@@ -190,8 +190,8 @@ class ClassName
             SomeOtherMethod(),
             this.CallSomeMethod________________________________________()
                 .CallSomeMethod________________________________________(),
+            someLongCondition___________________________________ &&
             someLongCondition___________________________________
-            && someLongCondition___________________________________
                 ? one
                 : two,
         };

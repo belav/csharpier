@@ -3,14 +3,14 @@ class ClassName
     void MethodName()
     {
         var x =
-            query
-            && (
-                currentChar == '='
-                || currentChar == '<'
-                || currentChar == '!'
-                || currentChar == '>'
-                || currentChar == '|'
-                || currentChar == '&'
+            query &&
+            (
+                currentChar == '=' ||
+                currentChar == '<' ||
+                currentChar == '!' ||
+                currentChar == '>' ||
+                currentChar == '|' ||
+                currentChar == '&'
             );
         var b2 = (
             System.Environment.SpecialFolder.AdminTools

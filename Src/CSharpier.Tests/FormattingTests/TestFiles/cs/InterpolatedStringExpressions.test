@@ -3,8 +3,7 @@ public class ClassName
     public string Test = $"test";
 
     public string LeadingCommentWithInterpolatedString =
-        $"one"
-        +
+        $"one" +
         // comment stays on this line
         $"two";
 

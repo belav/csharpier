@@ -13,8 +13,8 @@ class ClassName
             );
 
             unchecked(
-                printsLikeInvocations
-                + whenItLongBreaks_______________________________________________
+                printsLikeInvocations +
+                whenItLongBreaks_______________________________________________
             );
         }
     }

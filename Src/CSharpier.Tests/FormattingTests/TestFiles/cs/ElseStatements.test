@@ -24,10 +24,8 @@ public class ClassName
         {
             DoIf();
         }
-        else if (
-            jklasdfklalsdkfjlkasdflkaslkjfjsdkf
-            || kljadsfklaskldflkjasdfklaskjdfjklasdfjlkasdfjlkasdf
-        )
+        else if (jklasdfklalsdkfjlkasdflkaslkjfjsdkf ||
+            kljadsfklaskldflkjasdfklaskjdfjklasdfjlkasdfjlkasdf)
         {
             DoElse();
         }

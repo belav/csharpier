@@ -8,10 +8,10 @@ public class ClassName
 
     private static readonly Regex FrontEndResourceRelativePathRegex = new Regex(
         @".*?/Themes/.*?/.*?/(.*)",
-        RegexOptions.Compiled
-            | RegexOptions.CultureInvariant
-            | RegexOptions.IgnoreCase
-            | RegexOptions.MakeThisBreak
+        RegexOptions.Compiled |
+            RegexOptions.CultureInvariant |
+            RegexOptions.IgnoreCase |
+            RegexOptions.MakeThisBreak
     );
 
     private SomeObject SomeLongerName = new SomeObject(

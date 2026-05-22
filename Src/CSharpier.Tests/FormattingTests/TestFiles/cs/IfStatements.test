@@ -30,22 +30,18 @@ public class ClassName
         else
             DoSomeLongMethodCall________________________________________();
 
-        if (
-            longStatementName
-            && longerStatementName
-            && evenLongerStatementName
-            && superLongStatementName
-        )
+        if (longStatementName &&
+            longerStatementName &&
+            evenLongerStatementName &&
+            superLongStatementName)
         {
             return;
         }
 
-        if (
-            longStatementName
-            && longerStatementName
-            && evenLongerStatementName
-            && superLongStatementName
-        )
+        if (longStatementName &&
+            longerStatementName &&
+            evenLongerStatementName &&
+            superLongStatementName)
             return;
 
         if (!true) { }
@@ -67,18 +63,14 @@ public class ClassName
             // just fits
         }
 
-        if (
-            someLongStatement == true
-            || someOtherStatement________________________________ == false
-        )
+        if (someLongStatement == true ||
+            someOtherStatement________________________________ == false)
         {
             // just too big
         }
 
-        if (
-            someLongStatement == true
-            || someOtherStatement_________________________________ == false
-        )
+        if (someLongStatement == true ||
+            someOtherStatement_________________________________ == false)
         {
             // also too big
         }

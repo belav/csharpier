@@ -13,10 +13,7 @@ internal static class WhileStatement
                 Token.Print(node.WhileKeyword, context),
                 " ",
                 Token.Print(node.OpenParenToken, context),
-                Doc.Group(
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Condition, context)),
-                    Doc.SoftLine
-                ),
+                Doc.Indent(Node.Print(node.Condition, context)),
                 Token.Print(node.CloseParenToken, context)
             ),
             node.Statement switch

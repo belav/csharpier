@@ -33,13 +33,12 @@ internal static class SwitchStatement
             Doc.Group(
                 Token.PrintWithoutLeadingTrivia(node.SwitchKeyword, context),
                 " ",
-                Token.Print(node.OpenParenToken, context),
                 Doc.GroupWithId(
                     groupId,
-                    Doc.Indent(Doc.SoftLine, Node.Print(node.Expression, context)),
-                    Doc.SoftLine
+                    Token.Print(node.OpenParenToken, context),
+                    Doc.Indent(Node.Print(node.Expression, context)),
+                    Token.Print(node.CloseParenToken, context)
                 ),
-                Token.Print(node.CloseParenToken, context),
                 node.Sections.Count == 0 ? " " : Doc.Line,
                 Token.Print(node.OpenBraceToken, context),
                 sections,
