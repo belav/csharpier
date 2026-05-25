@@ -5,7 +5,7 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
     <LangVersion>13</LangVersion>
-    <NoWarn>SYSLIB0013</NoWarn>
+    <NoWarn>SYSLIB0013;NU1903</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Common" />

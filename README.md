@@ -6,25 +6,67 @@
 
 ---
 
-## Quick Start
+## 环境要求
 
-### 安装
+| 依赖 | 版本 |
+|---|---|
+| .NET SDK | 8.0 / 9.0 / 10.0（任一即可） |
+| 操作系统 | Windows / macOS / Linux |
+
+---
+
+## 安装
+
+### 方式一：从 NuGet 安装（推荐）
 
 ```bash
-# 从源码构建（需要 .NET 10 SDK）
+dotnet tool install CSharpier-Flex -g
+```
+
+安装后即可在任意目录使用 `csharpier-flex` 命令。
+
+### 方式二：从源码构建
+
+```bash
 git clone https://github.com/AnyAnq/csharpier-flex.git
 cd csharpier-flex
 dotnet build Src/CSharpier.Cli/CSharpier.Cli.csproj
 ```
 
-### 使用
+---
+
+## 使用
 
 ```bash
-# 格式化当前目录
-dotnet run --project Src/CSharpier.Cli/CSharpier.Cli.csproj -- format .
+# 格式化当前目录下所有 .cs 文件
+csharpier-flex format .
 
-# 格式化单个文件并输出到标准输出
-dotnet run --project Src/CSharpier.Cli/CSharpier.Cli.csproj -- format --write-stdout "MyFile.cs"
+# 格式化单个文件
+csharpier-flex format MyFile.cs
+
+# 格式化并输出到标准输出（不修改文件）
+csharpier-flex format --write-stdout MyFile.cs
+
+# 检查格式化是否一致（CI 用）
+csharpier-flex check .
+```
+
+如果通过源码构建，使用 `dotnet run` 替代：
+
+```bash
+dotnet run --project Src/CSharpier.Cli/CSharpier.Cli.csproj -- format .
+```
+
+---
+
+## 更新 & 卸载
+
+```bash
+# 更新到最新版
+dotnet tool update CSharpier-Flex -g
+
+# 卸载
+dotnet tool uninstall CSharpier-Flex -g
 ```
 
 ---

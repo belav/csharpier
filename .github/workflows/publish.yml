@@ -11,6 +11,7 @@ jobs:
     permissions:
       packages: write
       contents: read
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
@@ -23,4 +24,7 @@ jobs:
         run: dotnet pack Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -o ./nupkg
 
       - name: Push to GitHub Packages
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+        run: dotnet nuget push ./nupkg/*.nupkg --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+
+      - name: Push to nuget.org
+        run: dotnet nuget push ./nupkg/*.nupkg --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} --source "https://api.nuget.org/v3/index.json"
