@@ -1,4 +1,4 @@
-# CSharpier-Flex 魔改记录
+# CSharpier-Flex 扩展记录
 
 本文档记录对 CSharpier 原版所做的所有定制化修改。
 
@@ -6,7 +6,7 @@
 
 ## 配置方式
 
-所有魔改行为统一由 `formattingStyle` 配置项控制：
+所有扩展行为统一由 `formattingStyle` 配置项控制：
 
 ```json
 // .csharpierrc
