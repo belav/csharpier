@@ -7,6 +7,7 @@ public class CodeFormatterOptions
     public int IndentSize { get; init; } = 4;
     public EndOfLine EndOfLine { get; init; } = EndOfLine.Auto;
     public bool IncludeGenerated { get; init; }
+    public FormattingStyle FormattingStyle { get; init; }
     public XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; } =
         XmlWhitespaceSensitivity.Strict;
 
@@ -19,6 +20,7 @@ public class CodeFormatterOptions
             IndentSize = this.IndentSize,
             EndOfLine = this.EndOfLine,
             IncludeGenerated = this.IncludeGenerated,
+            FormattingStyle = this.FormattingStyle,
         };
     }
 }

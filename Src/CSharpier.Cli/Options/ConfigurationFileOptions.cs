@@ -16,6 +16,9 @@ internal class ConfigurationFileOptions
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
     public EndOfLine EndOfLine { get; init; }
 
+    [JsonConverter(typeof(CaseInsensitiveEnumConverter<FormattingStyle>))]
+    public FormattingStyle FormattingStyle { get; init; }
+
     public Override[] Overrides { get; init; } = [];
 
     public PrinterOptions? ConvertToPrinterOptions(string filePath)
@@ -45,6 +48,7 @@ internal class ConfigurationFileOptions
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
+                FormattingStyle = this.FormattingStyle,
             };
         }
 
@@ -61,6 +65,7 @@ internal class ConfigurationFileOptions
                 UseTabs = this.UseTabs,
                 Width = this.PrintWidth,
                 EndOfLine = this.EndOfLine,
+                FormattingStyle = this.FormattingStyle,
             };
         }
 

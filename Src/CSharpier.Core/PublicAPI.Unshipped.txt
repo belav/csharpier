@@ -1,5 +1,10 @@
-﻿CSharpier.Core.CodeFormatterOptions.XmlWhitespaceSensitivity.get -> CSharpier.Core.XmlWhitespaceSensitivity
+﻿CSharpier.Core.CodeFormatterOptions.FormattingStyle.get -> CSharpier.Core.FormattingStyle
+CSharpier.Core.CodeFormatterOptions.FormattingStyle.init -> void
+CSharpier.Core.CodeFormatterOptions.XmlWhitespaceSensitivity.get -> CSharpier.Core.XmlWhitespaceSensitivity
 CSharpier.Core.CodeFormatterOptions.XmlWhitespaceSensitivity.init -> void
+CSharpier.Core.FormattingStyle
+CSharpier.Core.FormattingStyle.Default = 0 -> CSharpier.Core.FormattingStyle
+CSharpier.Core.FormattingStyle.Resharper = 1 -> CSharpier.Core.FormattingStyle
 CSharpier.Core.XmlWhitespaceSensitivity
 CSharpier.Core.XmlWhitespaceSensitivity.Ignore = 1 -> CSharpier.Core.XmlWhitespaceSensitivity
 CSharpier.Core.XmlWhitespaceSensitivity.Strict = 0 -> CSharpier.Core.XmlWhitespaceSensitivity

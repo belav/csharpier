@@ -14,20 +14,36 @@ internal static class IfStatement
             docs.Add(ExtraNewLines.Print(node));
         }
 
-        docs.Add(
-            Token.Print(node.IfKeyword, context),
-            " ",
-            Doc.Group(
-                Token.Print(node.OpenParenToken, context),
-                Doc.Indent(
-                    Doc.IfBreak(Doc.SoftLine, Doc.Null),
-                    Node.Print(node.Condition, context)
+        if (context.Options.FormattingStyle == FormattingStyle.Resharper)
+        {
+            docs.Add(
+                Token.Print(node.IfKeyword, context),
+                " ",
+                Doc.Group(
+                    Token.Print(node.OpenParenToken, context),
+                    Doc.Indent(Node.Print(node.Condition, context)),
+                    Token.Print(node.CloseParenToken, context)
                 ),
-                Doc.IfBreak(Doc.SoftLine, Doc.Null)
-            ),
-            Token.Print(node.CloseParenToken, context),
-            OptionalBraces.Print(node.Statement, context)
-        );
+                OptionalBraces.Print(node.Statement, context)
+            );
+        }
+        else
+        {
+            docs.Add(
+                Token.Print(node.IfKeyword, context),
+                " ",
+                Doc.Group(
+                    Token.Print(node.OpenParenToken, context),
+                    Doc.Indent(
+                        Doc.IfBreak(Doc.SoftLine, Doc.Null),
+                        Node.Print(node.Condition, context)
+                    ),
+                    Doc.IfBreak(Doc.SoftLine, Doc.Null)
+                ),
+                Token.Print(node.CloseParenToken, context),
+                OptionalBraces.Print(node.Statement, context)
+            );
+        }
 
         if (node.Else != null)
         {

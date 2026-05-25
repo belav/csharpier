@@ -1,5 +1,6 @@
 using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -77,6 +78,43 @@ internal static class ArgumentListLike
         else if (arguments is [{ Expression: CollectionExpressionSyntax, NameColon: null }])
         {
             args = SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context);
+        }
+        else if (
+            context.Options.FormattingStyle == FormattingStyle.Resharper
+            && arguments.Count >= 2
+            && arguments[arguments.Count - 1].Expression
+                is ParenthesizedLambdaExpressionSyntax { Block.Statements.Count: > 0 }
+                    or SimpleLambdaExpressionSyntax { Body: BlockSyntax { Statements.Count: > 0 } }
+        )
+        {
+            var docs = new DocListBuilder(arguments.Count * 3 + 2);
+
+            for (var i = 0; i < arguments.Count - 1; i++)
+            {
+                docs.Add(Argument.Print(arguments[i], context));
+                if (i < arguments.SeparatorCount)
+                {
+                    docs.Add(Token.Print(arguments.GetSeparator(i), context));
+                    docs.Add(" ");
+                }
+            }
+
+            var lastArg = arguments[arguments.Count - 1];
+            docs.Add(Argument.PrintModifiers(lastArg, context));
+
+            if (lastArg.Expression is ParenthesizedLambdaExpressionSyntax pLambda)
+            {
+                docs.Add(ParenthesizedLambdaExpression.PrintHead(pLambda, context));
+                docs.Add(ParenthesizedLambdaExpression.PrintBody(pLambda, context));
+            }
+            else if (lastArg.Expression is SimpleLambdaExpressionSyntax sLambda)
+            {
+                docs.Add(SimpleLambdaExpression.PrintHead(sLambda, context));
+                docs.Add(SimpleLambdaExpression.PrintBody(sLambda, context));
+            }
+
+            args = Doc.Concat(ref docs);
+            docs.Dispose();
         }
         else if (arguments.Count > 0)
         {

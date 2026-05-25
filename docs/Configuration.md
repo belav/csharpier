@@ -17,7 +17,8 @@ JSON
   "printWidth": 100,
   "useTabs": false,
   "indentSize": 4,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "allowFieldAttributeOnSameLine": false
 }
 ```
 YAML
@@ -26,6 +27,7 @@ printWidth: 100
 useTabs: false
 indentSize: 4
 endOfLine: auto
+allowFieldAttributeOnSameLine: false
 ```
 
 #### Print Width
@@ -51,6 +53,28 @@ Valid options:
 - "crlf" - Carriage Return + Line Feed characters (\r\n), common on Windows
 
 Default `auto`
+
+#### Allow Field Attribute On Same Line
+When set to `true`, field attributes are allowed to stay on the same line, with tiered behavior based on attribute count. If the combined line exceeds the print width, it will also break.
+
+```csharp
+// true (1-2 attrs): all on same line
+//   [SerializeField] private Button _buttonQuit;
+// true (3 attrs): attributes on same line, field on new line
+//   [SerializeField] [HideInInspector] [Header("X")]
+//   private Text _label;
+// true (4+ attrs): each on its own line
+//   [SerializeField]
+//   [HideInInspector]
+//   [Header("Title")]
+//   [Tooltip("tip")]
+//   private Text _labelTitle;
+// false: always break (original behavior)
+//   [SerializeField]
+//   private Button _buttonQuit;
+```
+
+Default `false`
 
 ### Configuration Overrides ###
 Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`

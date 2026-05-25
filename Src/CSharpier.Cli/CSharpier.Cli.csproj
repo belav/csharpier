@@ -3,11 +3,11 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn);NU1510</NoWarn>
     <OutputType>Exe</OutputType>
-    <PackageId>CSharpier</PackageId>
+    <PackageId>CSharpier-Flex</PackageId>
     <AssemblyName>CSharpier</AssemblyName>
     <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
-    <ToolCommandName>csharpier</ToolCommandName>
+    <ToolCommandName>csharpier-flex</ToolCommandName>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
     <RollForward>Major</RollForward>
     <SignAssembly>True</SignAssembly>
