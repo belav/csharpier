@@ -108,7 +108,7 @@
         "@types/prettier-linter-helpers": "^1.0.4",
         "@types/semver": "7.3.9",
         "@types/vscode": "1.60.0",
-        "@vscode/vsce": "3.2.2",
+        "@vscode/vsce": "^3.9.1",
         "prettier": "2.4.1",
         "rimraf": "3.0.2",
         "semver": "7.6.0",
