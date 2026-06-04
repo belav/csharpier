@@ -43,4 +43,82 @@ internal sealed class LineEndingEdgeCase
             .Code.Should()
             .Be(unformattedCode.ReplaceLineEndings(endOfLine == EndOfLine.LF ? "\n" : "\r\n"));
     }
+
+    [Test]
+    public async Task CSharpier_Ignore_Preserves_Preceding_Blank_Line()
+    {
+        var unformattedCode = """
+            void X()
+            {
+                int i = 1;
+
+                int x = 1;
+
+                // csharpier-ignore
+                int y=1;
+            }
+            """
+            + "\n";
+
+        var expectedCode = """
+            void X()
+            {
+                int i = 1;
+
+                int x = 1;
+
+                // csharpier-ignore
+                int y=1;
+            }
+            """
+            + "\n";
+
+        var result = await CSharpFormatter.FormatAsync(
+            unformattedCode,
+            new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict),
+            CancellationToken.None
+        );
+
+        result.Code.Should().Be(expectedCode);
+    }
+
+    [Test]
+    public async Task CSharpier_Ignore_Start_Preserves_Preceding_Blank_Line()
+    {
+        var unformattedCode = """
+            void X()
+            {
+                int i = 1;
+
+                int x = 1;
+
+                // csharpier-ignore-start
+                int y=1;
+                // csharpier-ignore-end
+            }
+            """
+            + "\n";
+
+        var expectedCode = """
+            void X()
+            {
+                int i = 1;
+
+                int x = 1;
+
+                // csharpier-ignore-start
+                int y=1;
+                // csharpier-ignore-end
+            }
+            """
+            + "\n";
+
+        var result = await CSharpFormatter.FormatAsync(
+            unformattedCode,
+            new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict),
+            CancellationToken.None
+        );
+
+        result.Code.Should().Be(expectedCode);
+    }
 }

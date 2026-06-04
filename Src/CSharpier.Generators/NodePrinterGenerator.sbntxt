@@ -26,7 +26,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter
 
             if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
             {
-                return CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
+                return CSharpierIgnore.PrintNodeWithoutFormatting(syntaxNode, context);
             }
 
             context.State.PrintingDepth++;

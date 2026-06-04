@@ -16,6 +16,7 @@ public class ClassName
     {
         // csharpier-ignore
         var unformatted    = true;
+
         // csharpier-ignore
         var trimsTrailingHere  = true;
 

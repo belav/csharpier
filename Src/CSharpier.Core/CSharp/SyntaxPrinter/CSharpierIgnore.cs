@@ -88,17 +88,22 @@ internal static partial class CSharpierIgnore
         var statements = new List<Doc>();
         var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
+        SyntaxNode? firstUnformattedNode = null;
 
         foreach (var node in list)
         {
             if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
-                statements.Add(unFormattedCode.ToString().Trim());
+                statements.Add(
+                    PrintWithoutFormattingDoc(firstUnformattedNode, unFormattedCode.ToString())
+                );
                 unFormattedCode.Clear();
+                firstUnformattedNode = null;
                 printUnformatted = false;
             }
             else if (Token.HasLeadingCommentMatching(node, IgnoreStartRegex))
             {
+                firstUnformattedNode ??= node;
                 printUnformatted = true;
             }
 
@@ -114,10 +119,28 @@ internal static partial class CSharpierIgnore
 
         if (unFormattedCode.Length > 0)
         {
-            statements.Add(unFormattedCode.ToString().Trim());
+            statements.Add(
+                PrintWithoutFormattingDoc(firstUnformattedNode, unFormattedCode.ToString())
+            );
         }
 
         return statements;
+    }
+
+    public static Doc PrintNodeWithoutFormatting(SyntaxNode syntaxNode, PrintingContext context)
+    {
+        return PrintWithoutFormattingDoc(
+            syntaxNode,
+            PrintWithoutFormatting(syntaxNode.GetText().ToString(), context)
+        );
+    }
+
+    private static Doc PrintWithoutFormattingDoc(SyntaxNode? syntaxNode, string unformattedCode)
+    {
+        var doc = (Doc)unformattedCode.Trim();
+        return syntaxNode is StatementSyntax statementSyntax
+            ? Doc.Concat(ExtraNewLines.Print(statementSyntax), doc)
+            : doc;
     }
 
     public static string PrintWithoutFormatting(SyntaxNode syntaxNode, PrintingContext context)
