@@ -1,0 +1,5 @@
+// csharpier-ignore
+var x =   1;
+
+// csharpier-ignore - also ignored
+var y =  2;

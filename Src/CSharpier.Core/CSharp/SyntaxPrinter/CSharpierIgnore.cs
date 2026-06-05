@@ -88,17 +88,27 @@ internal static partial class CSharpierIgnore
         var statements = new List<Doc>();
         var unFormattedCode = new StringBuilder();
         var printUnformatted = false;
+        SyntaxNode? firstUnformattedNode = null;
 
         foreach (var node in list)
         {
             if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
-                statements.Add(unFormattedCode.ToString().Trim());
+                statements.Add(
+                    firstUnformattedNode is StatementSyntax statementSyntax
+                        ? Doc.Concat(
+                            ExtraNewLines.Print(statementSyntax),
+                            unFormattedCode.ToString().Trim()
+                        )
+                        : unFormattedCode.ToString().Trim()
+                );
                 unFormattedCode.Clear();
+                firstUnformattedNode = null;
                 printUnformatted = false;
             }
             else if (Token.HasLeadingCommentMatching(node, IgnoreStartRegex))
             {
+                firstUnformattedNode ??= node;
                 printUnformatted = true;
             }
 
@@ -114,7 +124,14 @@ internal static partial class CSharpierIgnore
 
         if (unFormattedCode.Length > 0)
         {
-            statements.Add(unFormattedCode.ToString().Trim());
+            statements.Add(
+                firstUnformattedNode is StatementSyntax statementSyntax
+                    ? Doc.Concat(
+                        ExtraNewLines.Print(statementSyntax),
+                        unFormattedCode.ToString().Trim()
+                    )
+                    : unFormattedCode.ToString().Trim()
+            );
         }
 
         return statements;

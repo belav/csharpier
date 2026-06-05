@@ -26,7 +26,10 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter
 
             if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
             {
-                return CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
+                var unformattedCode = CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
+                return syntaxNode is StatementSyntax statementSyntax
+                    ? Doc.Concat(ExtraNewLines.Print(statementSyntax), unformattedCode)
+                    : unformattedCode;
             }
 
             context.State.PrintingDepth++;

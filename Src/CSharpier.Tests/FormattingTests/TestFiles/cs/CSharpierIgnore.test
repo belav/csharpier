@@ -40,6 +40,20 @@ public class ClassName
         var formatMe =    true;
     }
     
+    void RangeIgnorWithBlankLines()
+    {
+        var x = 1;
+    
+        // csharpier-ignore-start
+        var y=1;
+        // csharpier-ignore-end
+
+
+        // csharpier-ignore-start
+        var z=1;
+        // csharpier-ignore-end
+    }
+    
     void MultipleStatements()
     {
         // csharpier-ignore-start
