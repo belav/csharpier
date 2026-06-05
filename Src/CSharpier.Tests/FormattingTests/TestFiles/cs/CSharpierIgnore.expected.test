@@ -40,6 +40,19 @@ public class ClassName
         var formatMe = true;
     }
 
+    void RangeIgnorWithBlankLines()
+    {
+        var x = 1;
+
+        // csharpier-ignore-start
+        var y=1;
+        // csharpier-ignore-end
+
+        // csharpier-ignore-start
+        var z = 1;
+        // csharpier-ignore-end
+    }
+
     void MultipleStatements()
     {
         // csharpier-ignore-start
@@ -266,31 +279,4 @@ public class TrailingComma
             "SomeValue" // SomeComment
         // csharpier-ignore-end
     };
-}
-
-public class PreserveBlankLineBeforeIgnore
-{
-    void X()
-    {
-        int i = 1;
-
-        int x = 1;
-
-        // csharpier-ignore
-        int y=1;
-    }
-}
-
-public class PreserveBlankLineBeforeRangeIgnore
-{
-    void X()
-    {
-        int i = 1;
-
-        int x = 1;
-
-        // csharpier-ignore-start
-        int y=1;
-        // csharpier-ignore-end
-    }
 }

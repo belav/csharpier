@@ -63,7 +63,7 @@ public string Example
     private static string PrintWithoutFormatting(string code)
     {
         return CSharpierIgnore
-            .NormalizeUnformattedCodeLineEndings(
+            .PrintWithoutFormatting(
                 code,
                 new PrintingContext
                 {

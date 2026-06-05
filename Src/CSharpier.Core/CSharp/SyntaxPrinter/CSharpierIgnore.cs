@@ -95,7 +95,12 @@ internal static partial class CSharpierIgnore
             if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
                 statements.Add(
-                    CreateUnformattedDoc(firstUnformattedNode, unFormattedCode.ToString())
+                    firstUnformattedNode is StatementSyntax statementSyntax
+                        ? Doc.Concat(
+                            ExtraNewLines.Print(statementSyntax),
+                            unFormattedCode.ToString().Trim()
+                        )
+                        : unFormattedCode.ToString().Trim()
                 );
                 unFormattedCode.Clear();
                 firstUnformattedNode = null;
@@ -109,7 +114,7 @@ internal static partial class CSharpierIgnore
 
             if (printUnformatted)
             {
-                unFormattedCode.Append(GetUnformattedCode(node, context));
+                unFormattedCode.Append(PrintWithoutFormatting(node, context));
             }
             else
             {
@@ -120,35 +125,24 @@ internal static partial class CSharpierIgnore
         if (unFormattedCode.Length > 0)
         {
             statements.Add(
-                CreateUnformattedDoc(firstUnformattedNode, unFormattedCode.ToString())
+                firstUnformattedNode is StatementSyntax statementSyntax
+                    ? Doc.Concat(
+                        ExtraNewLines.Print(statementSyntax),
+                        unFormattedCode.ToString().Trim()
+                    )
+                    : unFormattedCode.ToString().Trim()
             );
         }
 
         return statements;
     }
 
-    public static Doc PrintNodeWithoutFormattingAsDoc(SyntaxNode syntaxNode, PrintingContext context)
+    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, PrintingContext context)
     {
-        return CreateUnformattedDoc(
-            syntaxNode,
-            NormalizeUnformattedCodeLineEndings(syntaxNode.GetText().ToString(), context)
-        );
+        return PrintWithoutFormatting(syntaxNode.GetText().ToString(), context);
     }
 
-    private static Doc CreateUnformattedDoc(SyntaxNode? syntaxNode, string unformattedCode)
-    {
-        var doc = (Doc)unformattedCode.Trim();
-        return syntaxNode is StatementSyntax statementSyntax
-            ? Doc.Concat(ExtraNewLines.Print(statementSyntax), doc)
-            : doc;
-    }
-
-    public static string GetUnformattedCode(SyntaxNode syntaxNode, PrintingContext context)
-    {
-        return NormalizeUnformattedCodeLineEndings(syntaxNode.GetText().ToString(), context);
-    }
-
-    public static string NormalizeUnformattedCodeLineEndings(string code, PrintingContext context)
+    public static string PrintWithoutFormatting(string code, PrintingContext context)
     {
         // trim trailing whitespace + replace only existing line endings
         return WhiteSpaceLineEndingsRegex.Replace(code, context.Options.LineEnding);

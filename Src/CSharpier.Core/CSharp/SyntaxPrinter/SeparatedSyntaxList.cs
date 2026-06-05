@@ -70,7 +70,7 @@ internal static class SeparatedSyntaxList
 
             if (printUnformatted)
             {
-                unFormattedCode.Append(CSharpierIgnore.GetUnformattedCode(member, context));
+                unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
                 if (x < list.SeparatorCount)
                 {
                     unFormattedCode.Append(list.GetSeparator(x).ToFullString().Trim());

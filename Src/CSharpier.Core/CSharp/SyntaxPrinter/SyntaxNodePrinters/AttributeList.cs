@@ -10,7 +10,7 @@ internal static class AttributeList
     {
         if (node.Parent is BaseMethodDeclarationSyntax && CSharpierIgnore.HasIgnoreComment(node))
         {
-            return CSharpierIgnore.GetUnformattedCode(node, context).Trim();
+            return CSharpierIgnore.PrintWithoutFormatting(node, context).Trim();
         }
 
         var docs = new DocListBuilder(8);

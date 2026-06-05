@@ -53,7 +53,7 @@ internal static class MembersWithForcedLines
 
             if (printUnformatted)
             {
-                unFormattedCode.Append(CSharpierIgnore.GetUnformattedCode(member, context));
+                unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
                 continue;
             }
 
