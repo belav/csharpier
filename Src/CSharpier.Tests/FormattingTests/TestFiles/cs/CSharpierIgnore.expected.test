@@ -267,3 +267,30 @@ public class TrailingComma
         // csharpier-ignore-end
     };
 }
+
+public class PreserveBlankLineBeforeIgnore
+{
+    void X()
+    {
+        int i = 1;
+
+        int x = 1;
+
+        // csharpier-ignore
+        int y=1;
+    }
+}
+
+public class PreserveBlankLineBeforeRangeIgnore
+{
+    void X()
+    {
+        int i = 1;
+
+        int x = 1;
+
+        // csharpier-ignore-start
+        int y=1;
+        // csharpier-ignore-end
+    }
+}
