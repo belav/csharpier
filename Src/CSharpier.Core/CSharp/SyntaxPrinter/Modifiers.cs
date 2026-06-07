@@ -99,18 +99,23 @@ internal static class Modifiers
             return Doc.Null;
         }
 
+        var modifierArray = modifiers.ToArray();
+
         // reordering modifiers inside of #ifs can lead to code that doesn't compile
         var willReorderModifiers =
-            modifiers.Count > 1
-            && !modifiers.Skip(1).Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()))
-            && !modifiers[0].LeadingTrivia.Any(p => p.IsDirective);
+            modifierArray.Length > 1
+            && !modifierArray
+                .Skip(1)
+                .Any(o => o.LeadingTrivia.Any(p => p.IsDirective || p.IsComment()))
+            && !modifierArray[0].LeadingTrivia.Any(p => p.IsDirective);
 
-        var sortedModifiers = modifiers.ToArray();
-        var leadingToken = sortedModifiers.FirstOrDefault();
+        var leadingToken = modifierArray.FirstOrDefault();
         if (willReorderModifiers)
         {
-            Array.Sort(sortedModifiers, Comparer);
+            Array.Sort(modifierArray, Comparer);
         }
+
+        var sortedModifiers = modifierArray;
 
         if (willReorderModifiers && !sortedModifiers.SequenceEqual(modifiers))
         {
