@@ -18,7 +18,7 @@ With strict xml whitespace handling, csharpier now keeps the closing bracket for
 <ElementWithAttribute Attribute="AttributeValue__________________"
   >TextValue</ElementWithAttribute>
 
-<!-- 1.2.1 -->
+<!-- 1.2.6 -->
 <ElementWithAttribute Attribute="AttributeValue__________________"
   >TextValue</ElementWithAttribute
 >
@@ -44,7 +44,7 @@ var x = 1;
 // csharpier-ignore
 var y=1;
 
-/// 1.2.1
+/// 1.2.6
 var x = 1;
 // csharpier-ignore
 var y=1;
@@ -61,7 +61,7 @@ CallMethod(() =>
         """;
 });
 
-// 1.2.1
+// 1.2.6
 CallMethod(() =>
 {
     var someString = """
@@ -90,7 +90,7 @@ CSharpier was breaking the end element in some cases when it should not be.
   >Some long text to make things break <a href="http://url.com"
     >url.com</a> more text.</HtmlTypeElement>
 
-<!-- 1.2.1 -->
+<!-- 1.2.6 -->
 <HtmlTypeElement
   >Some long text to make things break <a href="http://url.com"
     >url.com</a
@@ -122,7 +122,7 @@ this.Where___________________(
     }
 );
 
-// 1.2.1
+// 1.2.6
 this.Where___________________(
     // Comment
     x =>
