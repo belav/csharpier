@@ -49,14 +49,14 @@ _See [Configuration](CLI.md) for including these files_
 
 #### Special Case Files
 
-- Any file that matches the gitignore syntax 
+- Any file that matches the gitignore syntax
     - `**/node_modules`
     - `**/obj`
     - `**/.git`
 
 ## Ignoring Code
 
-#### Only supported in c# currently see [1788](https://github.com/belav/csharpier/issues/1788)
+### C#
 
 Add a `// csharpier-ignore` comment to exclude the next node from formatting. This is valid on statements and members.
 
@@ -136,7 +136,7 @@ public class ClassName
 }
 ```
 
-As of 0.23.0 both types of ignores can include a description as part of the comment. The description must be seperated from the comment by at least one - character.
+both types of ignores can include a description as part of the comment. The description must be seperated from the comment by at least one - character.
 
 ```csharp
 // csharpier-ignore - class copied as-is from another project
@@ -148,4 +148,33 @@ public class Unformatted     {
 public class Unformatted1     { }
 public class Unformatted2     { }
 // csharpier-ignore-end
+```
+
+### XML
+
+Ignoring code in xml is similar to c#.
+```xml
+<Root>
+  <Child>
+    <Element  />
+    <!-- csharpier-ignore -->
+    <Element   />
+    <!-- csharpier-ignore - some comment -->
+    <Element   SomeAttribute = "yeah"   />
+  </Child>
+  <Child>
+    <!-- csharpier-ignore -->
+    <ElementWithChildren>
+              <Element />
+        <Element />
+    </ElementWithChildren>
+  </Child>
+  <Child>
+    <Element  />
+    <!-- csharpier-ignore-start -->
+    <Element   />
+    <Element   SomeAttribute = "yeah"   />
+    <!-- csharpier-ignore-end - some comment -->
+  </Child>
+</Root>
 ```
