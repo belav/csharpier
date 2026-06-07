@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
@@ -9,13 +8,6 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
-// This is based on prettier/src/language-js/print/member-chain.js
-// various discussions/prs about how to potentially improve the formatting
-// https://github.com/prettier/prettier/issues/5737
-// https://github.com/prettier/prettier/issues/7884
-// https://github.com/prettier/prettier/issues/8003
-// https://github.com/prettier/prettier/issues/8902
-// https://github.com/prettier/prettier/pull/7889
 internal static class InvocationExpression
 {
     public static Doc Print(InvocationExpressionSyntax node, PrintingContext context)
@@ -30,33 +22,27 @@ internal static class InvocationExpression
 
         FlattenAndPrintNodes(node, printedNodes, context);
 
-        var groups = printedNodes.Any(o => o.Node is InvocationExpressionSyntax)
-            ? GroupPrintedNodesPrettierStyle(printedNodes)
-            : GroupPrintedNodesOnLines(printedNodes);
+        var groups = GroupPrintedNodesOnLines(printedNodes);
 
         var oneLine = SelectManyDocsToArray(groups);
 
         var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups, parent);
 
-        var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-
         var forceOneLine =
             (
-                groups.Count <= cutoff
+                groups.Count <= 2
                 && (
-                    groups
-                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                        .Any(o =>
-                            o.Last().Node
-                                is not (
-                                    InvocationExpressionSyntax
-                                    or ElementAccessExpressionSyntax
-                                    or PostfixUnaryExpressionSyntax
-                                    {
-                                        Operand: InvocationExpressionSyntax
-                                    }
-                                )
-                        )
+                    groups.Any(o =>
+                        o.Last().Node
+                            is not (
+                                InvocationExpressionSyntax
+                                or ElementAccessExpressionSyntax
+                                or PostfixUnaryExpressionSyntax
+                                {
+                                    Operand: InvocationExpressionSyntax
+                                }
+                            )
+                    )
                     // if the last group contains just a !, make sure it doesn't end up on a new line
                     || (
                         groups.Last().Count == 1
@@ -266,95 +252,6 @@ internal static class InvocationExpression
         return groups;
     }
 
-    private static List<List<PrintedNode>> GroupPrintedNodesPrettierStyle(
-        List<PrintedNode> printedNodes
-    )
-    {
-        // We want to group the printed nodes in the following manner
-        //
-        //   a().b.c().d().e
-        // will be grouped as
-        //   [
-        //     [Identifier, InvocationExpression],
-        //     [MemberAccessExpression], [MemberAccessExpression, InvocationExpression],
-        //     [MemberAccessExpression, InvocationExpression],
-        //     [MemberAccessExpression],
-        //   ]
-
-        // so that we can print it as
-        //   a()
-        //     .b.c()
-        //     .d()
-        //     .e
-
-        // TODO #451 this whole thing could possibly just turn into a big loop
-        // based on the current node, and the next/previous node, decide when to create new groups.
-        // certain nodes need to stay in the current group, other nodes indicate that a new group needs to be created.
-        var groups = new List<List<PrintedNode>>();
-        var currentGroup = new List<PrintedNode> { printedNodes[0] };
-        var index = 1;
-        for (; index < printedNodes.Count; index++)
-        {
-            if (printedNodes[index].Node is InvocationExpressionSyntax)
-            {
-                currentGroup.Add(printedNodes[index]);
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        if (
-            printedNodes[0].Node is not (InvocationExpressionSyntax or PostfixUnaryExpressionSyntax)
-            && index < printedNodes.Count
-            && printedNodes[index].Node
-                is ElementAccessExpressionSyntax
-                    or PostfixUnaryExpressionSyntax
-        )
-        {
-            currentGroup.Add(printedNodes[index]);
-            index++;
-        }
-
-        groups.Add(currentGroup);
-        currentGroup = [];
-
-        var hasSeenNodeThatRequiresBreak = false;
-        for (; index < printedNodes.Count; index++)
-        {
-            if (
-                hasSeenNodeThatRequiresBreak
-                && printedNodes[index].Node
-                    is MemberAccessExpressionSyntax
-                        or ConditionalAccessExpressionSyntax
-            )
-            {
-                groups.Add(currentGroup);
-                currentGroup = [];
-                hasSeenNodeThatRequiresBreak = false;
-            }
-
-            if (
-                printedNodes[index].Node
-                is InvocationExpressionSyntax
-                    or ElementAccessExpressionSyntax
-            )
-            {
-                hasSeenNodeThatRequiresBreak = true;
-            }
-            currentGroup.Add(printedNodes[index]);
-        }
-
-        if (currentGroup.Count != 0)
-        {
-            groups.Add(currentGroup);
-        }
-
-        return groups;
-    }
-
-    [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
     private static Doc[] SelectManyDocsToArray(List<List<PrintedNode>> groups)
     {
         var arrayLength = 0;
@@ -454,6 +351,14 @@ internal static class InvocationExpression
             return false;
         }
 
+        if (
+            groups[1]
+                .None(o => o.Node is InvocationExpressionSyntax or ElementAccessExpressionSyntax)
+        )
+        {
+            return true;
+        }
+
         var firstNode = groups[0][0].Node;
 
         if (
@@ -469,8 +374,6 @@ internal static class InvocationExpression
             return false;
         }
 
-        // TODO maybe some things to fix in here
-        // https://github.com/belav/csharpier-repos/pull/100/files
         if (
             groups[1].Count == 1
             || parent
