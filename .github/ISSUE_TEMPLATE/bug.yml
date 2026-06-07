@@ -12,9 +12,9 @@ body:
         - [ ] I've searched [existing issues](https://github.com/belav/csharpier/issues) to ensure this isn't a duplicate
         - [ ] I've read the [documentation](https://csharpier.com/) and this isn't expected behavior
         - [ ] For formatting issues I have recreated the issue on the [playground](https://playground.csharpier.com/)
-        - [ ] I'm using the latest version of CSharpier `1.2.5`
-        - [ ] I'm using the latest version of my IDE's CSharpier plugin `>= 10.0.0`
-          - [ ] I have [enabled debug logging and am including relavant logs](https://csharpier.com/docs/EditorsTroubleshooting)
+        - [ ] I'm using the latest version of CSharpier `1.3.0` (determines HOW things are formatted)
+        - [ ] I'm using the latest version of my IDE's CSharpier plugin `>= 10.0.0` (communicates with whichever version of CSharpier is installed/configured) 
+          - [ ] I have [enabled debug logging and am including relevant logs](https://csharpier.com/docs/EditorsTroubleshooting)
         
 
   - type: textarea
