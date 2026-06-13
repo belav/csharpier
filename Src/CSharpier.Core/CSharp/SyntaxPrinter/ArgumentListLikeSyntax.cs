@@ -2,6 +2,7 @@ using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
@@ -77,6 +78,21 @@ internal static class ArgumentListLike
         else if (arguments is [{ Expression: CollectionExpressionSyntax, NameColon: null }])
         {
             args = SeparatedSyntaxList.Print(arguments, Argument.Print, Doc.Line, context);
+        }
+        else if (
+            arguments.Count > 1
+            && arguments[^1].Expression is LambdaExpressionSyntax lastLambda
+            && !arguments
+                .Take(arguments.Count - 1)
+                .Any(o => o.Expression is AnonymousFunctionExpressionSyntax)
+            && !openParenToken
+                .Parent!.DescendantTrivia(
+                    TextSpan.FromBounds(openParenToken.SpanStart, lastLambda.ArrowToken.SpanStart)
+                )
+                .Any(o => o.IsComment() || o.IsDirective)
+        )
+        {
+            args = ArgumentListWithTrailingLambda.Print(arguments, lastLambda, context);
         }
         else if (arguments.Count > 0)
         {

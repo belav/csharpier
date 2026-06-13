@@ -9,9 +9,8 @@ class ClassName
     internal StackObjectPool<
         Dictionary<object, KeyedItemInfo>
     > KeyedItemInfoDictionaryPool { get; } =
-        new StackObjectPool<Dictionary<object, KeyedItemInfo>>(
-            maxPreservedItems: 10,
-            () => new Dictionary<object, KeyedItemInfo>()
+        new StackObjectPool<Dictionary<object, KeyedItemInfo>>(maxPreservedItems: 10, () =>
+            new Dictionary<object, KeyedItemInfo>()
         );
 
     RenderFragment<AuthenticationState> customNotAuthorized = state =>

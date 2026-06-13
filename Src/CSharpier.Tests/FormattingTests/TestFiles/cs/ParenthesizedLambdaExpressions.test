@@ -104,8 +104,26 @@ public class ClassName
             CallAnotherMethod______________________________________________________123()
         );
 
+        CallMethod(CallAnotherMethod_________________(), () =>
+            CallAnotherMethod_________________()
+        );
+
         CallMethod(
             CallAnotherMethod_________________(),
+            // Comment
+            () => CallAnotherMethod_________________()
+        );
+
+        CallMethod(
+#if DEBUG
+            CallAnotherMethod_________________(),
+#endif
+            () => CallAnotherMethod_________________()
+        );
+
+        CallMethod(
+            CallAnotherMethod_________________(),
+            () => CallAnotherMethod_________________(),
             () => CallAnotherMethod_________________()
         );
     }
