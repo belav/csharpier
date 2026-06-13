@@ -1,0 +1,20 @@
+using C;
+// csharpier-ignore-start
+#if BUILD_MSI_TASKS
+
+
+using System;
+using Microsoft.
+Build.Framework;
+
+// csharpier-ignore-end
+
+
+using B;
+using A;
+#endif
+
+using D;
+namespace RepoTasks;
+
+class ClassName { }

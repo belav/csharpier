@@ -1,0 +1,9 @@
+// csharpier-ignore-start
+
+using B;
+
+using A;
+
+// csharpier-ignore-end
+using D;
+using C;
