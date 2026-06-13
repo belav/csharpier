@@ -13,7 +13,6 @@ internal static class ArgumentListWithTrailingLambda
         PrintingContext context
     )
     {
-        // Build chop fall back (can't use headParts from below because ForceFlat)
         var chop = Doc.Concat(
             Doc.Indent(
                 Doc.SoftLine,
@@ -39,22 +38,16 @@ internal static class ArgumentListWithTrailingLambda
         else if (lastLambda is ParenthesizedLambdaExpressionSyntax parenthesizedLambda)
         {
             bodyIsBraced = parenthesizedLambda.Block is not null;
-
             lambdaHead = ParenthesizedLambdaExpression.PrintHead(parenthesizedLambda, context);
-
-            // PrintBody wraps expression bodies in a group, which could fit on the head's
-            // line and leave the closing paren on its own line, so break it ourselves
             lambdaBody = bodyIsBraced
                 ? ParenthesizedLambdaExpression.PrintBody(parenthesizedLambda, context)
                 : Doc.Indent(Doc.Line, Node.Print(parenthesizedLambda.Body, context));
         }
         else
         {
-            // New lambda type, default to chopping
             return chop;
         }
 
-        // Accumulate the head parts: flat arguments with lambda parameters and "=>" symbol
         var flatParts = new List<Doc>((arguments.Count - 1) * 3 + 2);
         for (var x = 0; x < arguments.Count - 1; x++)
         {
@@ -66,23 +59,17 @@ internal static class ArgumentListWithTrailingLambda
         flatParts.Add(Argument.PrintModifiers(arguments[^1], context));
         flatParts.Add(lambdaHead);
 
-        // If any flat part has a break then just chop immediately
         if (flatParts.Any(DocUtilities.ContainsBreak))
         {
             return chop;
         }
 
-        // Build wrapped lambda - either flat or with the lambda body starting on a new line
         var wrap = Doc.Concat(
             Doc.ForceFlat(flatParts),
             lambdaBody,
             bodyIsBraced ? Doc.Null : Doc.SoftLine
         );
 
-        return Doc.ConditionalGroup(
-            wrap, // Try flat (all arguments fit on one line)
-            wrap, // Try break (all arguments syntax except the lamba's body)
-            chop // Default to chopping
-        );
+        return Doc.ConditionalGroup(wrap, wrap, chop);
     }
 }
