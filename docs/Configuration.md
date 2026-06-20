@@ -17,7 +17,8 @@ JSON
   "printWidth": 100,
   "useTabs": false,
   "indentSize": 4,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "xmlWhitespaceSensitivity": "strict"
 }
 ```
 YAML
@@ -26,6 +27,7 @@ printWidth: 100
 useTabs: false
 indentSize: 4
 endOfLine: auto
+xmlWhitespaceSensitivity: strict
 ```
 
 #### Print Width
@@ -51,6 +53,47 @@ Valid options:
 - "crlf" - Carriage Return + Line Feed characters (\r\n), common on Windows
 
 Default `auto`
+
+#### Xml Whitespace Sensitivity
+
+CSharpier can deal with whitespace in xml files in two different ways, which will produce different formatting results.
+
+**Strict**
+Treats whitespace as significant and will not add/remove new lines at the beginning/end of text elements.
+
+**Ignore** -
+Treats whitespace as insignificant and will add/remove new line at the beginning/end of text elements.
+
+For example, given the following xml
+```xml
+<ElementWithAttribute Attribute="AttributeValue__________________">TextValue</ElementWithAttribute>
+```
+
+Strict formatting will break this onto multiple lines, but not add/remove whitespeace around `TextValue`
+```xml
+<ElementWithAttribute Attribute="AttributeValue__________________"
+  >TextValue</ElementWithAttribute>
+```
+
+Ignore formatting will add new lines
+```xml
+<ElementWithAttribute Attribute="AttributeValue__________________">
+  TextValue
+</ElementWithAttribute>
+```
+
+`strict` is the default value for all file extensions except for `xaml` and `axaml`.  
+Changing to `ignore` for `csproj` can cause issues because `msbuild` does treat whitespace in the following as significant.
+```xml
+  <PropertyGroup>
+    <MyProperty>
+      true
+    </MyProperty>
+  </PropertyGroup>
+  <Target Name="MyTarget" BeforeTargets="Build" Condition=" '$(MyProperty)' == 'true' ">
+    <!-- will never be used because '/ntrue/n' != 'true' -->
+  </Target>
+```
 
 ### Configuration Overrides ###
 Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
