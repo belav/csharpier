@@ -10,8 +10,8 @@ int[] someOtherArray =
 
 List<KeyValuePair<string, string>> list =
 [
-    .. attribute
-        .Targets.Select(target =>
+    .. attribute.Targets
+        .Select(target =>
             KeyValuePair.Create(
                 target,
                 context.EntityDefinitions.TryGetValue(target, out var type) ? type.ClassName : null
