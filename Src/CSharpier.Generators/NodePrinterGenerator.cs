@@ -74,6 +74,7 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 nameof(SyntaxKind.RecordStructDeclaration),
                 nameof(SyntaxKind.EnumDeclaration),
                 nameof(SyntaxKind.ExtensionBlockDeclaration),
+                "(SyntaxKind)9082", // SyntaxKind.UnionDeclaration in .NET 11 Preview 5
             }
         },
         {
@@ -275,7 +276,12 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 PrinterName = fileName,
                 SyntaxNodeName = $"{fileName}Syntax",
                 SyntaxKinds = SpecialCase.TryGetValue($"{fileName}Syntax", out var kinds)
-                    ? string.Join(" or ", kinds.Select(x => $"SyntaxKind.{x}"))
+                    ? string.Join(
+                        " or ",
+                        kinds.Select(x =>
+                            x.StartsWith("(", StringComparison.Ordinal) ? x : $"SyntaxKind.{x}"
+                        )
+                    )
                     : $"SyntaxKind.{fileName}",
             })
             .OrderBy(o => o.SyntaxNodeName)

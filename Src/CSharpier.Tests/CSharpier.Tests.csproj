@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../RoslynPreviewSdkReferences.props" />
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <RootNamespace>CSharpier.Tests</RootNamespace>

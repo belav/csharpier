@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../../Nuget/Build.props" />
+  <Import Project="../../RoslynPreviewSdkReferences.props" />
   <PropertyGroup>
     <NoWarn>$(NoWarn);NU1510</NoWarn>
     <OutputType>Exe</OutputType>

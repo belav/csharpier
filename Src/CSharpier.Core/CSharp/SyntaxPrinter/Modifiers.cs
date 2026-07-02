@@ -21,6 +21,7 @@ internal static class Modifiers
             "new",
             "virtual",
             "abstract",
+            "closed",
             "sealed",
             "override",
             "readonly",

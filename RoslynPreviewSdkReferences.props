@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <RoslynPreviewSdkPath>/usr/share/dotnet/sdk/11.0.100-preview.5.26302.115/Roslyn/bincore</RoslynPreviewSdkPath>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <!--
+      DRAFT PR HACK: use the Roslyn bits from .NET 11 Preview 5 so CSharpier can
+      parse C# 15 closed/union syntax before matching NuGet packages are published.
+      Replace this import with Microsoft.CodeAnalysis.CSharp from NuGet once available.
+    -->
+    <Reference Include="Microsoft.CodeAnalysis">
+      <HintPath>$(RoslynPreviewSdkPath)/Microsoft.CodeAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>$(RoslynPreviewSdkPath)/Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
