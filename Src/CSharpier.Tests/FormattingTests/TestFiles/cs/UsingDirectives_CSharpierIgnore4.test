@@ -1,0 +1,21 @@
+// csharpier-ignore-start
+
+using B;
+
+using A;
+
+// csharpier-ignore-end
+using D;
+using C;
+
+
+
+
+// csharpier-ignore-start
+
+using F;
+
+using E;
+
+// csharpier-ignore-end
+

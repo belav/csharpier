@@ -10,6 +10,9 @@
 ## [2.3.0]
 - Add a global format on save option
 
+## [10.0.6]
+- Supporting 2026.2 EAP
+
 ## [10.0.5]
 - Re-add a global format on save option
 

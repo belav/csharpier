@@ -21,12 +21,12 @@ var options = new CodeFormatterOptions { Width = 60 };
 var narrowerCode = CSharpFormatter.Format(unformattedCode, options);
 var asyncNarrowerCode = await CSharpFormatter.FormatAsync(unformattedCode, options);
 
-var codeWithCompilationErrors = "public class ClassName   {";
-var result = CSharpFormatter.Format(codeFormCompilationErrors);
-if (result.CompilationErrors.Any())
+var codeWithErrorDiagnostics = "public class ClassName   {";
+var result = CSharpFormatter.Format(codeWithErrorDiagnostics);
+if (result.ErrorDiagnostics.Any())
 {
     // result.Code will still be the unformatted code, it is not possible to format code that can't compile
-    // result.CompilationErrors will contain all the errors from attempting to compile the code
+    // result.ErrorDiagnostics will contain all the errors from attempting to format the code
 }
 ```
 
