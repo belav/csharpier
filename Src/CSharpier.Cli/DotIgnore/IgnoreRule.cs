@@ -54,7 +54,18 @@ internal class IgnoreRule
         {
             var rxOptions = RegexOptions.Compiled;
 
-            this.regex = new Regex(rxPattern, rxOptions);
+            try
+            {
+                this.regex = new Regex(rxPattern, rxOptions);
+            }
+            catch (RegexParseException ex)
+                when (ex.Message
+                    == "Invalid pattern '^Icon(?!/)[$' at offset 12. Unterminated [] set."
+                )
+            {
+                // old macOS uses 'Icon\r' in folder names, which needs this in a .gitignore Icon[\r]\n
+                // instead of dealing with that, just don't treat this line as regex
+            }
         }
     }
 

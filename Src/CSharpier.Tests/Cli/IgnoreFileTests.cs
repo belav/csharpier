@@ -595,6 +595,13 @@ public class IgnoreFileTests
         );
     }
 
+    [Test]
+    public void MacOs()
+    {
+        // we can't actually test a folder name with \r in it, but this makes sure that we at least parse it
+        this.GitBasedTest("# General\nBin\nIcon[\r]\nObj\n", ["Bin/file.txt", "Obj/file.txt"]);
+    }
+
     // TODO this passes because the ignorefile says the file is not ignored
     [Test]
     public void Thing()
