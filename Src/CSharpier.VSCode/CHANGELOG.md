@@ -1,3 +1,8 @@
+## 11.0.0
+This release drops support for two features added by outside contributors which I have no interest in continuing to support. 
+- Drop support for diagnostics
+- Drop support for formatting selection
+
 ## 10.0.3
 - Only show csharpier diagnostics if csharpier is configured as the formatter
 
