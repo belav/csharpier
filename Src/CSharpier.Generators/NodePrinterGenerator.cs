@@ -1,7 +1,6 @@
-﻿using System;
+﻿#pragma warning disable RSEXPERIMENTAL006
+
 using System.Collections.Immutable;
-using System.IO;
-using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -14,12 +13,11 @@ namespace CSharpier.Generators;
 [Generator]
 public class NodePrinterGenerator : IIncrementalGenerator
 {
-    private static readonly Dictionary<string, string[]> SpecialCase = new()
+    private static readonly Dictionary<string, string[]> NodePrintUsedByOtherNodes = new()
     {
         {
             nameof(AssignmentExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.SimpleAssignmentExpression),
                 nameof(SyntaxKind.AddAssignmentExpression),
                 nameof(SyntaxKind.SubtractAssignmentExpression),
@@ -33,53 +31,50 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 nameof(SyntaxKind.RightShiftAssignmentExpression),
                 nameof(SyntaxKind.UnsignedRightShiftAssignmentExpression),
                 nameof(SyntaxKind.CoalesceAssignmentExpression),
-            }
+            ]
         },
         {
             nameof(BaseExpressionColonSyntax),
-            new[] { nameof(SyntaxKind.ExpressionColon), nameof(SyntaxKind.NameColon) }
+            [nameof(SyntaxKind.ExpressionColon), nameof(SyntaxKind.NameColon)]
         },
         {
             nameof(BaseFieldDeclarationSyntax),
-            new[] { nameof(SyntaxKind.FieldDeclaration), nameof(SyntaxKind.EventFieldDeclaration) }
+            [nameof(SyntaxKind.FieldDeclaration), nameof(SyntaxKind.EventFieldDeclaration)]
         },
         {
             nameof(BaseMethodDeclarationSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.MethodDeclaration),
                 nameof(SyntaxKind.OperatorDeclaration),
                 nameof(SyntaxKind.ConversionOperatorDeclaration),
                 nameof(SyntaxKind.ConstructorDeclaration),
                 nameof(SyntaxKind.DestructorDeclaration),
-            }
+            ]
         },
         {
             nameof(BasePropertyDeclarationSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.PropertyDeclaration),
                 nameof(SyntaxKind.EventDeclaration),
                 nameof(SyntaxKind.IndexerDeclaration),
-            }
+            ]
         },
         {
             nameof(BaseTypeDeclarationSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.ClassDeclaration),
-                nameof(SyntaxKind.StructDeclaration),
+                nameof(SyntaxKind.EnumDeclaration),
+                nameof(SyntaxKind.ExtensionBlockDeclaration),
                 nameof(SyntaxKind.InterfaceDeclaration),
                 nameof(SyntaxKind.RecordDeclaration),
                 nameof(SyntaxKind.RecordStructDeclaration),
-                nameof(SyntaxKind.EnumDeclaration),
-                nameof(SyntaxKind.ExtensionBlockDeclaration),
-            }
+                nameof(SyntaxKind.StructDeclaration),
+                nameof(SyntaxKind.UnionDeclaration),
+            ]
         },
         {
             nameof(BinaryExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.AddExpression),
                 nameof(SyntaxKind.SubtractExpression),
                 nameof(SyntaxKind.MultiplyExpression),
@@ -102,56 +97,49 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 nameof(SyntaxKind.IsExpression),
                 nameof(SyntaxKind.AsExpression),
                 nameof(SyntaxKind.CoalesceExpression),
-            }
+            ]
         },
         {
             nameof(BinaryPatternSyntax),
-            new[] { nameof(SyntaxKind.OrPattern), nameof(SyntaxKind.AndPattern) }
+            [nameof(SyntaxKind.OrPattern), nameof(SyntaxKind.AndPattern)]
         },
         {
             nameof(CheckedExpressionSyntax),
-            new[] { nameof(SyntaxKind.CheckedExpression), nameof(SyntaxKind.UncheckedExpression) }
+            [nameof(SyntaxKind.CheckedExpression), nameof(SyntaxKind.UncheckedExpression)]
         },
         {
             nameof(CheckedStatementSyntax),
-            new[] { nameof(SyntaxKind.CheckedStatement), nameof(SyntaxKind.UncheckedStatement) }
+            [nameof(SyntaxKind.CheckedStatement), nameof(SyntaxKind.UncheckedStatement)]
         },
         {
             nameof(ClassOrStructConstraintSyntax),
-            new[] { nameof(SyntaxKind.ClassConstraint), nameof(SyntaxKind.StructConstraint) }
+            [nameof(SyntaxKind.ClassConstraint), nameof(SyntaxKind.StructConstraint)]
         },
         {
             nameof(CommonForEachStatementSyntax),
-            new[]
-            {
-                nameof(SyntaxKind.ForEachStatement),
-                nameof(SyntaxKind.ForEachVariableStatement),
-            }
+            [nameof(SyntaxKind.ForEachStatement), nameof(SyntaxKind.ForEachVariableStatement)]
         },
         {
             nameof(GotoStatementSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.GotoStatement),
                 nameof(SyntaxKind.GotoCaseStatement),
                 nameof(SyntaxKind.GotoDefaultStatement),
-            }
+            ]
         },
         {
             nameof(InitializerExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.ObjectInitializerExpression),
                 nameof(SyntaxKind.CollectionInitializerExpression),
                 nameof(SyntaxKind.ArrayInitializerExpression),
                 nameof(SyntaxKind.ComplexElementInitializerExpression),
                 nameof(SyntaxKind.WithInitializerExpression),
-            }
+            ]
         },
         {
             nameof(LiteralExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.ArgListExpression),
                 nameof(SyntaxKind.NumericLiteralExpression),
                 nameof(SyntaxKind.StringLiteralExpression),
@@ -161,29 +149,26 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 nameof(SyntaxKind.FalseLiteralExpression),
                 nameof(SyntaxKind.NullLiteralExpression),
                 nameof(SyntaxKind.DefaultLiteralExpression),
-            }
+            ]
         },
         {
             nameof(MemberAccessExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.SimpleMemberAccessExpression),
                 nameof(SyntaxKind.PointerMemberAccessExpression),
-            }
+            ]
         },
         {
             nameof(PostfixUnaryExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.PostIncrementExpression),
                 nameof(SyntaxKind.PostDecrementExpression),
                 nameof(SyntaxKind.SuppressNullableWarningExpression),
-            }
+            ]
         },
         {
             nameof(PrefixUnaryExpressionSyntax),
-            new[]
-            {
+            [
                 nameof(SyntaxKind.UnaryPlusExpression),
                 nameof(SyntaxKind.UnaryMinusExpression),
                 nameof(SyntaxKind.BitwiseNotExpression),
@@ -193,16 +178,12 @@ public class NodePrinterGenerator : IIncrementalGenerator
                 nameof(SyntaxKind.AddressOfExpression),
                 nameof(SyntaxKind.PointerIndirectionExpression),
                 nameof(SyntaxKind.IndexExpression),
-            }
+            ]
         },
-        { nameof(UnaryPatternSyntax), new[] { nameof(SyntaxKind.NotPattern) } },
+        { nameof(UnaryPatternSyntax), [nameof(SyntaxKind.NotPattern)] },
         {
             nameof(YieldStatementSyntax),
-            new[]
-            {
-                nameof(SyntaxKind.YieldReturnStatement),
-                nameof(SyntaxKind.YieldBreakStatement),
-            }
+            [nameof(SyntaxKind.YieldReturnStatement), nameof(SyntaxKind.YieldBreakStatement)]
         },
     };
 
@@ -274,7 +255,10 @@ public class NodePrinterGenerator : IIncrementalGenerator
             {
                 PrinterName = fileName,
                 SyntaxNodeName = $"{fileName}Syntax",
-                SyntaxKinds = SpecialCase.TryGetValue($"{fileName}Syntax", out var kinds)
+                SyntaxKinds = NodePrintUsedByOtherNodes.TryGetValue(
+                    $"{fileName}Syntax",
+                    out var kinds
+                )
                     ? string.Join(" or ", kinds.Select(x => $"SyntaxKind.{x}"))
                     : $"SyntaxKind.{fileName}",
             })

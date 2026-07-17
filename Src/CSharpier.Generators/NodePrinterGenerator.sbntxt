@@ -1,3 +1,5 @@
+#pragma warning disable RSEXPERIMENTAL006
+
 using System;
 using System.Diagnostics;
 using CSharpier.Core;
@@ -42,7 +44,6 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter
                         return {{ nodeType.PrinterName }}.Print(({{ nodeType.SyntaxNodeName }})syntaxNode, context);
                     {{- end }}
                     default:
-                        Debug.Assert(syntaxNode is not ({{- SyntaxNodeTypes -}}), $"{syntaxNode.GetType().Name} needs a Printer at Src/CSharpier.Core/CSharp/SyntaxPrinter/SyntaxNodePrinters/{syntaxNode.GetType().Name.Replace("Syntax", "")}.cs");
                         return UnhandledNode.Print(syntaxNode, context);
                 }
             }
