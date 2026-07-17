@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "10.0.3",
+    "version": "11.0.0",
     "publisher": "csharpier",
     "qna": "https://github.com/belav/csharpier/issues",
     "author": "CSharpier",
@@ -50,28 +50,6 @@
                         "default": false,
                         "description": "Enable debug logs."
                     },
-                    "csharpier.diagnosticsLevel": {
-                        "type": "string",
-                        "enum": [
-                            "0",
-                            "1",
-                            "2",
-                            "3"
-                        ],
-                        "enumItemLabels": [
-                            "Error",
-                            "Warning",
-                            "Information",
-                            "Hint"
-                        ],
-                        "default": "1",
-                        "description": "Determines the severity level of diagnostics if they are enabled."
-                    },
-                    "csharpier.enableDiagnostics": {
-                        "type": "boolean",
-                        "default": true,
-                        "description": "Enable diagnostics that highlight code that is not formatted with CSharpier."
-                    },
                     "csharpier.dev.customPath": {
                         "title": "blah",
                         "type": "string",
@@ -94,9 +72,11 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run build",
-        "actualBuild": "webpack --env NODE_ENV=production",
-        "build": "rimraf build && npm run actualBuild",
-        "start": "rimraf build && webpack --env NODE_ENV=development --watch",
+        "build": "npm run check-types && node esbuild.js --production",
+        "check-types": "tsc --noEmit",
+        "start": "npm-run-all -p watch:*",
+        "watch:esbuild": "node esbuild.js --watch",
+        "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
         "prettier": "prettier ./**/*.{ts,js} --write",
         "vsix": "vsce package"
     },
@@ -104,23 +84,19 @@
         "@types/glob": "7.1.4",
         "@types/mocha": "9.0.0",
         "@types/node": "14.x",
-        "@types/node-fetch": "^2.6.11",
-        "@types/prettier-linter-helpers": "^1.0.4",
+        "@types/node-fetch": "2.6.11",
         "@types/semver": "7.3.9",
         "@types/vscode": "1.60.0",
-        "@vscode/vsce": "^3.9.1",
+        "@vscode/vsce": "3.9.2",
+        "esbuild": "0.28.1",
+        "npm-run-all": "4.1.5",
         "prettier": "2.4.1",
-        "rimraf": "3.0.2",
         "semver": "7.6.0",
-        "ts-loader": "9.2.5",
-        "typescript": "4.4.3",
-        "webpack": "^5.97.1",
-        "webpack-cli": "4.9.1",
+        "typescript": "5.9.3",
         "xml-js": "1.6.11"
     },
     "dependencies": {
-        "node-fetch": "^2.7.0",
-        "prettier-linter-helpers": "^1.0.0"
+        "node-fetch": "^2.7.0"
     },
     "volta": {
         "node": "22.13.0"
