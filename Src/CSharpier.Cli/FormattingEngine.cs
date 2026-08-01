@@ -21,22 +21,31 @@ internal class FormattingEngine(
     CommandLineFormatterResult result
 )
 {
+    private static readonly int DefaultMaxDegreeOfParallelism = Environment.ProcessorCount * 2;
+
     public async Task FormatDirectory(
         string directoryPath,
         string originalPath,
         CancellationToken cancellationToken
     )
     {
-        var tasks = new List<Task>();
-        await foreach (var file in this.EnumerateNonignoredFiles(directoryPath, cancellationToken))
+        var parallelOptions = new ParallelOptions
         {
-            var relativePath = file.Replace(directoryPath, originalPath);
-            tasks.Add(this.FormatPhysicalFile(file, relativePath, false, cancellationToken));
-        }
+            MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism,
+            CancellationToken = cancellationToken,
+        };
 
         try
         {
-            await Task.WhenAll(tasks).WaitAsync(cancellationToken);
+            await Parallel.ForEachAsync(
+                this.EnumerateNonignoredFiles(directoryPath, cancellationToken),
+                parallelOptions,
+                async (file, formattingToken) =>
+                {
+                    var relativePath = originalPath + file[directoryPath.Length..];
+                    await this.FormatPhysicalFile(file, relativePath, false, formattingToken);
+                }
+            );
         }
         catch (OperationCanceledException ex)
         {
@@ -129,7 +138,7 @@ internal class FormattingEngine(
             var fileIssueLogger = new FileIssueLogger(
                 originalFilePath,
                 logger,
-                logFormat: LogFormat.Console
+                logFormat: commandLineOptions.LogFormat
             );
             fileIssueLogger.WriteWarning("Is an unsupported file type.");
         }
@@ -164,7 +173,7 @@ internal class FormattingEngine(
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        CodeFormatterResult? codeFormattingResult;
+        CodeFormatterResult codeFormattingResult;
 
         try
         {
@@ -309,7 +318,7 @@ internal class FormattingEngine(
                 {
                     Interlocked.Increment(ref result.FailedFormattingValidation);
                     fileIssueLogger.WriteError(
-                        $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "/n" + validatorResult.FailureMessage)}"
+                        $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "\n" + validatorResult.FailureMessage)}"
                     );
                 }
             }

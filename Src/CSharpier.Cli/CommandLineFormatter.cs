@@ -95,12 +95,20 @@ internal class CommandLineFormatter(
             directoryPath = fileSystem.Path.GetDirectoryName(directoryPath);
             ArgumentNullException.ThrowIfNull(directoryPath);
 
-            // The directory from --stdin-path may not exist on disk.
-            // Walk up to the nearest existing ancestor for config resolution.
+            // The directory from --stdin-path may not exist on disk, but config
+            // resolution enumerates files in it (CSharpierConfigParser) and throws
+            // DirectoryNotFoundException when it is missing, so walk up to the
+            // nearest existing ancestor. Stop at the filesystem root (GetDirectoryName
+            // returns null) so a path with no existing ancestor cannot loop unbounded.
             while (!fileSystem.Directory.Exists(directoryPath))
             {
-                directoryPath = fileSystem.Path.GetDirectoryName(directoryPath);
-                ArgumentNullException.ThrowIfNull(directoryPath);
+                var parentDirectory = fileSystem.Path.GetDirectoryName(directoryPath);
+                if (parentDirectory is null)
+                {
+                    break;
+                }
+
+                directoryPath = parentDirectory;
             }
 
             pathSupplied = true;
@@ -108,7 +116,7 @@ internal class CommandLineFormatter(
         // otherwise someone is running this as a single command and not sending a path
         else
         {
-            filePath = Path.Combine(directoryPath, Guid.NewGuid().ToString());
+            filePath = fileSystem.Path.Combine(directoryPath, Guid.NewGuid().ToString());
             if (standardInFileContents.TrimStart().StartsWith('<'))
             {
                 filePath += ".xml";
@@ -251,12 +259,12 @@ internal class CommandLineFormatter(
             cancellationToken
         );
 
-        if (!Path.IsPathRooted(originalDirectoryOrFile))
+        if (!fileSystem.Path.IsPathRooted(originalDirectoryOrFile))
         {
             if (!originalDirectoryOrFile.StartsWith('.'))
             {
                 originalDirectoryOrFile =
-                    "." + Path.DirectorySeparatorChar + originalDirectoryOrFile;
+                    "." + fileSystem.Path.DirectorySeparatorChar + originalDirectoryOrFile;
             }
         }
 
