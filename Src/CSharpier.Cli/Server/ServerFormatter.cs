@@ -77,12 +77,9 @@ internal class ServerFormatter
             );
             var body = await reader.ReadToEndAsync();
 
-            var formatFileDto = JsonSerializer.Deserialize<FormatFileParameter>(body);
-            if (formatFileDto is null)
-            {
-                throw new Exception("No body!");
-            }
-
+            var formatFileDto =
+                JsonSerializer.Deserialize<FormatFileParameter>(body)
+                ?? throw new Exception("No body!");
             var result = await service.FormatFile(formatFileDto, CancellationToken.None);
 
             response.ContentType = "application/json";

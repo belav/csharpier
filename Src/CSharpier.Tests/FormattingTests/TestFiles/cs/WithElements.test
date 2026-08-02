@@ -1,5 +1,20 @@
-string[] values = ["one", "two", "three"];
-
-List<string> names = [with(capacity: values.Length * 2), .. values];
-
 HashSet<string> set = [with(StringComparer.OrdinalIgnoreCase), "Hello", "HELLO", "hello"];
+
+HashSet<string> set =
+[
+    with(StringComparer.OrdinalIgnoreCase_______________________________),
+    "Hello",
+    "HELLO",
+    "hello",
+];
+
+HashSet<string> set =
+[
+    with(
+        StringComparer.OrdinalIgnoreCase_______________________________,
+        StringComparer.OrdinalIgnoreCase_______________________________
+    ),
+    "Hello",
+    "HELLO",
+    "hello",
+];

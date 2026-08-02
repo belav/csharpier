@@ -9,6 +9,9 @@ internal static class WithElement
     [Experimental("RSEXPERIMENTAL006")]
     public static Doc Print(WithElementSyntax node, PrintingContext context)
     {
-        return "TODO";
+        return Doc.Concat(
+            Token.Print(node.WithKeyword, context),
+            ArgumentList.Print(node.ArgumentList, context)
+        );
     }
 }

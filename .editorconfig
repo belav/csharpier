@@ -2,6 +2,10 @@
 indent_size = 2
 indent_style = space
 
+[*.vsct]
+csharpier_formatter = xml
+
+[*.{cs,vb}]
 csharp_using_directive_placement = outside_namespace
 csharp_style_inlined_variable_declaration = true
 csharp_style_pattern_matching_over_is_with_cast_check = true
@@ -9,10 +13,6 @@ csharp_style_var_elsewhere = true
 csharp_style_var_for_built_in_types = true
 csharp_style_var_when_type_is_apparent = true
 
-[*.vsct]
-csharpier_formatter = xml
-
-[*.{cs,vb}]
 dotnet_diagnostic.CA1707.severity = none
 dotnet_diagnostic.CA1848.severity = none
 dotnet_diagnostic.CA2201.severity = none
