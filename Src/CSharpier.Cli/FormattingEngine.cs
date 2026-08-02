@@ -24,8 +24,8 @@ internal class FormattingEngine(
     private static readonly int DefaultMaxDegreeOfParallelism = Environment.ProcessorCount * 2;
 
     public async Task FormatDirectory(
-        string directoryPath,
-        string originalPath,
+        string actualPath,
+        string suppliedPath,
         CancellationToken cancellationToken
     )
     {
@@ -38,11 +38,11 @@ internal class FormattingEngine(
         try
         {
             await Parallel.ForEachAsync(
-                this.EnumerateNonignoredFiles(directoryPath, cancellationToken),
+                this.EnumerateNonignoredFiles(actualPath, cancellationToken),
                 parallelOptions,
                 async (file, formattingToken) =>
                 {
-                    var relativePath = originalPath + file[directoryPath.Length..];
+                    var relativePath = suppliedPath + file[actualPath.Length..];
                     await this.FormatPhysicalFile(file, relativePath, false, formattingToken);
                 }
             );
@@ -57,16 +57,16 @@ internal class FormattingEngine(
     }
 
     private async IAsyncEnumerable<string> EnumerateNonignoredFiles(
-        string directory,
+        string directoryPath,
         [EnumeratorCancellation] CancellationToken cancellationToken
     )
     {
-        foreach (var file in fileSystem.Directory.EnumerateFiles(directory))
+        foreach (var file in fileSystem.Directory.EnumerateFiles(directoryPath))
         {
             yield return file;
         }
 
-        foreach (var subdirectory in fileSystem.Directory.EnumerateDirectories(directory))
+        foreach (var subdirectory in fileSystem.Directory.EnumerateDirectories(directoryPath))
         {
             if (await optionsProvider.IsDirectoryIgnoredAsync(subdirectory, cancellationToken))
             {
@@ -82,10 +82,46 @@ internal class FormattingEngine(
         }
     }
 
-    public async Task FormatPhysicalFile(
+    public Task FormatPhysicalFile(
+        string actualPath,
+        string suppliedPath,
+        bool warnForUnsupported,
+        CancellationToken cancellationToken
+    )
+    {
+        return this.FormatFile(
+            actualPath,
+            suppliedPath,
+            checkIsIgnored: true,
+            warnForUnsupported,
+            ct => FileToFormatInfo.CreateFromFileSystem(actualPath, fileSystem, ct),
+            cancellationToken
+        );
+    }
+
+    public Task FormatStandardInputFile(
+        FileToFormatInfo fileToFormatInfo,
+        string originalPath,
+        bool checkIsIgnored,
+        CancellationToken cancellationToken
+    )
+    {
+        return this.FormatFile(
+            fileToFormatInfo.Path,
+            originalPath,
+            checkIsIgnored,
+            warnForUnsupported: false,
+            _ => Task.FromResult(fileToFormatInfo),
+            cancellationToken
+        );
+    }
+
+    private async Task FormatFile(
         string actualFilePath,
         string originalFilePath,
+        bool checkIsIgnored,
         bool warnForUnsupported,
+        Func<CancellationToken, Task<FileToFormatInfo>> getFileToFormatInfo,
         CancellationToken cancellationToken
     )
     {
@@ -93,7 +129,11 @@ internal class FormattingEngine(
             (
                 !commandLineOptions.IncludeGenerated
                 && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-            ) || await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
+            )
+            || (
+                checkIsIgnored
+                && await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
+            )
         )
         {
             return;
@@ -108,11 +148,7 @@ internal class FormattingEngine(
         {
             printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
 
-            var fileToFormatInfo = await FileToFormatInfo.CreateFromFileSystem(
-                actualFilePath,
-                fileSystem,
-                cancellationToken
-            );
+            var fileToFormatInfo = await getFileToFormatInfo(cancellationToken);
 
             var fileIssueLogger = new FileIssueLogger(
                 originalFilePath,

@@ -16,7 +16,7 @@ The CLI SHALL format code supplied on standard input and write the result to sta
 
 #### Scenario: Content piped with a supplied file path
 - **WHEN** standard-in contents are provided and `--stdin-path` supplies a file path whose directory does not exist on disk
-- **THEN** the system SHALL walk up to the nearest existing ancestor directory to resolve configuration, and SHALL apply ignore-file rules to the supplied path
+- **THEN** the system SHALL resolve configuration as if the file were located at the supplied path — using the configuration and ignore files that apply to the nearest existing ancestor directory — and SHALL apply ignore-file rules to the supplied path
 
 #### Scenario: Stdin file is ignored or generated
 - **WHEN** the stdin file path is a generated code file (and `--include-generated` is not set), or is ignored by configuration when a path was supplied

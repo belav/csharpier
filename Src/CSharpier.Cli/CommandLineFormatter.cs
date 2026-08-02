@@ -142,51 +142,22 @@ internal class CommandLineFormatter(
             cancellationToken
         );
 
-        if (
-            (
-                commandLineOptions.IncludeGenerated
-                || !GeneratedCodeUtilities.IsGeneratedCodeFile(filePath)
-            )
-            // this only considers the ignore files when a path is supplied
-            && (
-                !pathSupplied
-                || !await optionsProvider.IsFileIgnoredAsync(filePath, cancellationToken)
-            )
-        )
-        {
-            var fileIssueLogger = new FileIssueLogger(
-                commandLineOptions.OriginalDirectoryOrFilePaths[0],
-                logger,
-                commandLineOptions.LogFormat
-            );
+        var formattingEngine = new FormattingEngine(
+            new StdOutFormattedFileWriter(console),
+            optionsProvider,
+            FormattingCacheFactory.NullCache,
+            commandLineOptions,
+            fileSystem,
+            logger,
+            this.result
+        );
 
-            var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
-                filePath,
-                cancellationToken
-            );
-
-            if (printerOptions is { Formatter: not Formatter.Unknown })
-            {
-                printerOptions.IncludeGenerated = commandLineOptions.IncludeGenerated;
-
-                var formattingEngine = new FormattingEngine(
-                    new StdOutFormattedFileWriter(console),
-                    optionsProvider,
-                    FormattingCacheFactory.NullCache,
-                    commandLineOptions,
-                    fileSystem,
-                    logger,
-                    this.result
-                );
-
-                await formattingEngine.PerformFormattingSteps(
-                    fileToFormatInfo,
-                    fileIssueLogger,
-                    printerOptions,
-                    cancellationToken
-                );
-            }
-        }
+        await formattingEngine.FormatStandardInputFile(
+            fileToFormatInfo,
+            commandLineOptions.OriginalDirectoryOrFilePaths[0],
+            checkIsIgnored: pathSupplied,
+            cancellationToken
+        );
     }
 
     private async Task<int> FormatPhysicalFiles()
