@@ -98,6 +98,24 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public async Task Format_Rewrites_Only_The_Directory_Prefix_When_Segment_Recurs()
+    {
+        // A subdirectory whose name matches a leading segment of the formatted
+        // directory path would, with a naive string-replace, be rewritten twice.
+        var context = new TestContext();
+        var rootSegment = context.FileSystem.Path.GetFileName(GetRootPath());
+        context.WhenAFileExists($"{rootSegment}/Invalid.cs", "asdfasfasdf");
+
+        var result = await Format(context);
+
+        result
+            .ErrorOutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .Be($"Error ./{rootSegment}/Invalid.cs - Was not formatted due to syntax errors.");
+    }
+
+    [Test]
     public async Task Format_Writes_Unsupported()
     {
         var context = new TestContext();
@@ -812,6 +830,36 @@ public class CommandLineFormatterTests
 
         result.OutputLines.Should().ContainSingle();
         result.OutputLines.First().Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public async Task Should_Resolve_Config_From_Ancestor_When_StdinFilePath_Directory_Does_Not_Exist()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(".csharpierrc", "printWidth: 10");
+
+        var result = await Format(
+            context,
+            standardInFileContents: "var myVariable = someLongValue;",
+            directoryOrFilePaths: "NonExistent/SubDir/File.cs"
+        );
+
+        result.OutputLines.First().Should().Be("var myVariable =\n    someLongValue;\n");
+    }
+
+    [Test]
+    public async Task Should_Resolve_Ignore_From_Ancestor_When_StdinFilePath_Directory_Does_Not_Exist()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(".csharpierignore", "File.cs");
+
+        var result = await Format(
+            context,
+            standardInFileContents: UnformattedClassContent,
+            directoryOrFilePaths: "NonExistent/SubDir/File.cs"
+        );
+
+        result.OutputLines.Should().BeEmpty();
     }
 
     [Test]

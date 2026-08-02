@@ -72,7 +72,6 @@ internal class OptionsProvider
             ? await EditorConfigLocator.FindForDirectoryNameAsync(
                 Path.GetDirectoryName(editorConfigPath)!,
                 fileSystem,
-                ignoreFile,
                 cancellationToken
             )
             : null;
@@ -98,7 +97,6 @@ internal class OptionsProvider
                 await EditorConfigLocator.FindForDirectoryNameAsync(
                     directoryName,
                     fileSystem,
-                    ignoreFile,
                     cancellationToken
                 );
         }
@@ -179,11 +177,10 @@ internal class OptionsProvider
             this.editorConfigByDirectory,
             searchingDirectory =>
                 this.fileSystem.File.Exists(Path.Combine(searchingDirectory, ".editorconfig")),
-            async searchingDirectory =>
-                await EditorConfigLocator.FindForDirectoryNameAsync(
+            searchingDirectory =>
+                EditorConfigLocator.FindForDirectoryNameAsync(
                     searchingDirectory,
                     this.fileSystem,
-                    await this.FindIgnoreFileAsync(searchingDirectory, cancellationToken),
                     cancellationToken
                 )
         );
