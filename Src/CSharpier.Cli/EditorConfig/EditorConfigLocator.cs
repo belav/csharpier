@@ -8,7 +8,6 @@ internal static class EditorConfigLocator
     public static async Task<EditorConfigSections?> FindForDirectoryNameAsync(
         string directoryName,
         IFileSystem fileSystem,
-        IgnoreFile ignoreFile,
         CancellationToken cancellationToken
     )
     {
