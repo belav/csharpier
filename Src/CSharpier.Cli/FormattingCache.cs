@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 using System.IO.Hashing;
 using System.Text;
 using System.Text.Json;
-using CSharpier.Cli.Options;
+using CSharpier.Core;
 using CSharpier.Core.Utilities;
 
 namespace CSharpier.Cli;
@@ -11,8 +11,8 @@ namespace CSharpier.Cli;
 internal interface IFormattingCache
 {
     Task ResolveAsync(CancellationToken cancellationToken);
-    bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo);
-    void CacheResult(string code, FileToFormatInfo fileToFormatInfo);
+    bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo, PrinterOptions printerOptions);
+    void CacheResult(string code, FileToFormatInfo fileToFormatInfo, PrinterOptions printerOptions);
 }
 
 internal static class FormattingCacheFactory
@@ -27,7 +27,6 @@ internal static class FormattingCacheFactory
 
     public static async Task<IFormattingCache> InitializeAsync(
         CommandLineOptions commandLineOptions,
-        OptionsProvider optionsProvider,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
     )
@@ -38,7 +37,7 @@ internal static class FormattingCacheFactory
         }
 
         var cacheDictionary = new ConcurrentDictionary<string, string>();
-        if (File.Exists(CacheFilePath))
+        if (fileSystem.File.Exists(CacheFilePath))
         {
             // in my testing we don't normally have to wait more than a couple MS, but just in case
             const int attempts = 20;
@@ -47,7 +46,10 @@ internal static class FormattingCacheFactory
             {
                 try
                 {
-                    content = await File.ReadAllTextAsync(CacheFilePath, cancellationToken);
+                    content = await fileSystem.File.ReadAllTextAsync(
+                        CacheFilePath,
+                        cancellationToken
+                    );
                     break;
                 }
                 catch (Exception)
@@ -76,7 +78,7 @@ internal static class FormattingCacheFactory
                 // file must be bad json
                 try
                 {
-                    File.Delete(CacheFilePath);
+                    fileSystem.File.Delete(CacheFilePath);
                 }
                 catch (Exception)
                 {
@@ -85,21 +87,21 @@ internal static class FormattingCacheFactory
             }
         }
 
-        return new FormattingCache(optionsProvider, CacheFilePath, cacheDictionary, fileSystem);
+        return new FormattingCache(CacheFilePath, cacheDictionary, fileSystem);
     }
 
     private class FormattingCache(
-        OptionsProvider optionsProvider,
         string cacheFile,
         ConcurrentDictionary<string, string> cacheDictionary,
         IFileSystem fileSystem
     ) : IFormattingCache
     {
-        private readonly string optionsHash = GetOptionsHash(optionsProvider);
-
-        public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
+        public bool CanSkipFormatting(
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
-            var currentHash = Hash(fileToFormatInfo.FileContents) + this.optionsHash;
+            var currentHash = GetCacheHash(fileToFormatInfo.FileContents, printerOptions);
             if (cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
                 if (currentHash == cachedHash)
@@ -113,15 +115,29 @@ internal static class FormattingCacheFactory
             return false;
         }
 
-        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo)
+        public void CacheResult(
+            string code,
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
-            cacheDictionary[fileToFormatInfo.Path] = Hash(code) + this.optionsHash;
+            cacheDictionary[fileToFormatInfo.Path] = GetCacheHash(code, printerOptions);
         }
 
-        private static string GetOptionsHash(OptionsProvider optionsProvider)
+        private static string GetCacheHash(string code, PrinterOptions printerOptions)
+        {
+            return Hash(code) + GetPrinterOptionsHash(printerOptions);
+        }
+
+        private static string GetPrinterOptionsHash(PrinterOptions printerOptions)
         {
             var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
-            return Hash($"{csharpierVersion}_${optionsProvider.Serialize()}");
+            var hash = new XxHash32();
+            hash.Append(
+                Encoding.UTF8.GetBytes(csharpierVersion?.ToString() ?? string.Empty)
+            );
+            hash.Append(JsonSerializer.SerializeToUtf8Bytes(printerOptions));
+            return Convert.ToHexString(hash.GetCurrentHash());
         }
 
         private static string Hash(string input)
@@ -171,11 +187,18 @@ internal static class FormattingCacheFactory
             return Task.CompletedTask;
         }
 
-        public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
+        public bool CanSkipFormatting(
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
             return false;
         }
 
-        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo) { }
+        public void CacheResult(
+            string code,
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        ) { }
     }
 }

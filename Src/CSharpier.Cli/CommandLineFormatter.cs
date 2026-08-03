@@ -162,18 +162,96 @@ internal class CommandLineFormatter(
 
     private async Task<int> FormatPhysicalFiles()
     {
-        var writer = this.SelectWriter();
+        if (commandLineOptions.DirectoryOrFilePaths.Length == 0)
+        {
+            return 0;
+        }
+
+        var paths = new List<PhysicalPath>();
 
         for (var x = 0; x < commandLineOptions.DirectoryOrFilePaths.Length; x++)
         {
-            var exitCode = await this.FormatPhysicalPath(x, writer);
-            if (exitCode != 0)
+            var path = GetPhysicalPath(x);
+            if (path is null)
             {
-                return exitCode;
+                WritePathNotFoundError(x);
+                return 1;
             }
+
+            if (
+                !path.IsFile
+                && !commandLineOptions.NoMSBuildCheck
+                && await HasMismatchedCliAndMsBuildVersions.Check(
+                    path.ActualPath,
+                    fileSystem,
+                    logger,
+                    cancellationToken
+                )
+            )
+            {
+                return 1;
+            }
+
+            paths.Add(path);
         }
 
+        var optionsProvider = await OptionsProvider.Create(
+            paths.Select(path => path.DirectoryName),
+            commandLineOptions.ConfigPath,
+            commandLineOptions.IgnorePath,
+            fileSystem,
+            logger,
+            cancellationToken
+        );
+        var formattingCache = await FormattingCacheFactory.InitializeAsync(
+            commandLineOptions,
+            fileSystem,
+            cancellationToken
+        );
+        var formattingEngine = new FormattingEngine(
+            this.SelectWriter(),
+            optionsProvider,
+            formattingCache,
+            commandLineOptions,
+            fileSystem,
+            logger,
+            this.result
+        );
+
+        await formattingEngine.FormatPhysicalPaths(paths, cancellationToken);
+        await formattingCache.ResolveAsync(cancellationToken);
+
         return 0;
+    }
+
+    private PhysicalPath? GetPhysicalPath(int index)
+    {
+        var actualPath = commandLineOptions.DirectoryOrFilePaths[index];
+        var isFile = fileSystem.File.Exists(actualPath);
+        var isDirectory = fileSystem.Directory.Exists(actualPath);
+        if (!isFile && !isDirectory)
+        {
+            return null;
+        }
+
+        var directoryName = isFile ? fileSystem.Path.GetDirectoryName(actualPath) : actualPath;
+        ArgumentNullException.ThrowIfNull(directoryName);
+
+        var suppliedPath = commandLineOptions.OriginalDirectoryOrFilePaths[index];
+        if (!fileSystem.Path.IsPathRooted(suppliedPath) && !suppliedPath.StartsWith('.'))
+        {
+            suppliedPath = "." + fileSystem.Path.DirectorySeparatorChar + suppliedPath;
+        }
+
+        return new PhysicalPath(actualPath, suppliedPath, directoryName, isFile);
+    }
+
+    private void WritePathNotFoundError(int index)
+    {
+        console.WriteErrorLine(
+            "There was no file or directory found at "
+                + commandLineOptions.OriginalDirectoryOrFilePaths[index]
+        );
     }
 
     private IFormattedFileWriter SelectWriter()
@@ -189,100 +267,6 @@ internal class CommandLineFormatter(
         }
 
         return new FileSystemFormattedFileWriter(fileSystem);
-    }
-
-    private async Task<int> FormatPhysicalPath(int index, IFormattedFileWriter writer)
-    {
-        var directoryOrFilePath = commandLineOptions.DirectoryOrFilePaths[index];
-        var isFile = fileSystem.File.Exists(directoryOrFilePath);
-        var isDirectory = fileSystem.Directory.Exists(directoryOrFilePath);
-
-        if (!isFile && !isDirectory)
-        {
-            console.WriteErrorLine(
-                "There was no file or directory found at "
-                    + commandLineOptions.OriginalDirectoryOrFilePaths[index]
-            );
-            return 1;
-        }
-
-        var directoryName = isFile
-            ? fileSystem.Path.GetDirectoryName(directoryOrFilePath)
-            : directoryOrFilePath;
-
-        ArgumentNullException.ThrowIfNull(directoryName);
-
-        var optionsProvider = await OptionsProvider.Create(
-            directoryName,
-            commandLineOptions.ConfigPath,
-            commandLineOptions.IgnorePath,
-            fileSystem,
-            logger,
-            cancellationToken
-        );
-
-        var originalDirectoryOrFile = commandLineOptions.OriginalDirectoryOrFilePaths[index];
-
-        var formattingCache = await FormattingCacheFactory.InitializeAsync(
-            commandLineOptions,
-            optionsProvider,
-            fileSystem,
-            cancellationToken
-        );
-
-        if (!fileSystem.Path.IsPathRooted(originalDirectoryOrFile))
-        {
-            if (!originalDirectoryOrFile.StartsWith('.'))
-            {
-                originalDirectoryOrFile =
-                    "." + fileSystem.Path.DirectorySeparatorChar + originalDirectoryOrFile;
-            }
-        }
-
-        var formattingEngine = new FormattingEngine(
-            writer,
-            optionsProvider,
-            formattingCache,
-            commandLineOptions,
-            fileSystem,
-            logger,
-            this.result
-        );
-
-        if (isFile)
-        {
-            await formattingEngine.FormatPhysicalFile(
-                directoryOrFilePath,
-                originalDirectoryOrFile,
-                warnForUnsupported: true,
-                cancellationToken
-            );
-        }
-        else if (isDirectory)
-        {
-            if (
-                !commandLineOptions.NoMSBuildCheck
-                && await HasMismatchedCliAndMsBuildVersions.Check(
-                    directoryOrFilePath,
-                    fileSystem,
-                    logger,
-                    cancellationToken
-                )
-            )
-            {
-                return 1;
-            }
-
-            await formattingEngine.FormatDirectory(
-                directoryOrFilePath,
-                originalDirectoryOrFile,
-                cancellationToken
-            );
-        }
-
-        await formattingCache.ResolveAsync(cancellationToken);
-
-        return 0;
     }
 
     private int ReturnExitCode()
