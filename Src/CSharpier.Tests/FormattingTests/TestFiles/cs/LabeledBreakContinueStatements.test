@@ -1,0 +1,22 @@
+class ClassName
+{
+    void MethodName()
+    {
+        outer:
+        for (int row = 0; row < grid.Height; row++)
+        {
+            for (int column = 0; column < grid.Width; column++)
+            {
+                if (grid[row, column].IsBlocked)
+                {
+                    continue outer;
+                }
+
+                if (grid[row, column].IsGoal)
+                {
+                    break outer;
+                }
+            }
+        }
+    }
+}
