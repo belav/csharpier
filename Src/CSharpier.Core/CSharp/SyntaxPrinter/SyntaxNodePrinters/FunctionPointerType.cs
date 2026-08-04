@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class FunctionPointerType
 {
-    public static Doc Print(FunctionPointerTypeSyntax node, PrintingContext context)
+    public static Doc Print(FunctionPointerTypeSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.DelegateKeyword, context),
@@ -36,7 +36,7 @@ internal static class FunctionPointerType
 
     private static Doc PrintCallingConvention(
         FunctionPointerCallingConventionSyntax node,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         return Doc.Concat(

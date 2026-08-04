@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class InterpolatedStringText
 {
-    public static Doc Print(InterpolatedStringTextSyntax node, PrintingContext context)
+    public static Doc Print(InterpolatedStringTextSyntax node, CSharpPrintingContext context)
     {
         return Token.Print(node.TextToken, context);
     }

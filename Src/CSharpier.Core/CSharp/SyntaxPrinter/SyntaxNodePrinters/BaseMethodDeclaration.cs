@@ -20,7 +20,7 @@ internal static partial class BaseMethodDeclaration
     private static readonly Regex RemoveWhiteSpaceLineEndingsRegex = new(@"\s*(\r\n?|\n)");
 #endif
 
-    public static Doc Print(CSharpSyntaxNode node, PrintingContext context)
+    public static Doc Print(CSharpSyntaxNode node, CSharpPrintingContext context)
     {
         SyntaxList<AttributeListSyntax>? attributeLists = null;
         SyntaxTokenList? modifiers = null;
@@ -113,7 +113,7 @@ internal static partial class BaseMethodDeclaration
                 docs.Add(
                     RemoveWhiteSpaceLineEndingsRegex.Replace(
                         methodWithoutAttributes,
-                        context.Options.LineEnding
+                        context.LineEnding
                     )
                 );
             }

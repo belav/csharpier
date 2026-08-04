@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TupleType
 {
-    public static Doc Print(TupleTypeSyntax node, PrintingContext context)
+    public static Doc Print(TupleTypeSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             Token.Print(node.OpenParenToken, context),

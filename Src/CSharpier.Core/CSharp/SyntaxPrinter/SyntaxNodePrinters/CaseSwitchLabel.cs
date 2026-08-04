@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CaseSwitchLabel
 {
-    public static Doc Print(CaseSwitchLabelSyntax node, PrintingContext context)
+    public static Doc Print(CaseSwitchLabelSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

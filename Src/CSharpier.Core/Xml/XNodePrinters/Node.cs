@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
@@ -17,7 +16,7 @@ internal static partial class Node
     private static readonly Regex WhitespaceRegex = new("\\s+");
 #endif
 
-    internal static Doc Print(RawNode node, PrintingContext context)
+    internal static Doc Print(RawNode node, XmlPrintingContext context)
     {
         if (node.NodeType is XmlNodeType.Document)
         {
@@ -87,7 +86,7 @@ internal static partial class Node
         throw new Exception("Need to handle + " + node.NodeType);
     }
 
-    private static Doc GetTextValue(RawNode rawNode, PrintingContext context)
+    private static Doc GetTextValue(RawNode rawNode, XmlPrintingContext context)
     {
         var textValue = rawNode.Value;
 

@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CatchClause
 {
-    public static Doc Print(CatchClauseSyntax node, PrintingContext context)
+    public static Doc Print(CatchClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.CatchKeyword, context),

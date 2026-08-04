@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class VariableDeclaration
 {
-    public static Doc Print(VariableDeclarationSyntax node, PrintingContext context)
+    public static Doc Print(VariableDeclarationSyntax node, CSharpPrintingContext context)
     {
         if (node.Variables.Count > 1)
         {

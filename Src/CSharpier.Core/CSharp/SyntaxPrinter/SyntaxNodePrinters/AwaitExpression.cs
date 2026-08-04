@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AwaitExpression
 {
-    public static Doc Print(AwaitExpressionSyntax node, PrintingContext context)
+    public static Doc Print(AwaitExpressionSyntax node, CSharpPrintingContext context)
     {
         var precedesQueryExpression = node.Expression is QueryExpressionSyntax;
 

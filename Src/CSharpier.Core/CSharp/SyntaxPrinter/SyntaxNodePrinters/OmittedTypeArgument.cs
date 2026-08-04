@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class OmittedTypeArgument
 {
-    public static Doc Print(OmittedTypeArgumentSyntax node, PrintingContext context)
+    public static Doc Print(OmittedTypeArgumentSyntax node, CSharpPrintingContext context)
     {
         return Doc.Null;
     }

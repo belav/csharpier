@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RelationalPattern
 {
-    public static Doc Print(RelationalPatternSyntax node, PrintingContext context)
+    public static Doc Print(RelationalPatternSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.OperatorToken, " ", context),

@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ConditionalAccessExpression
 {
-    public static Doc Print(ConditionalAccessExpressionSyntax node, PrintingContext context)
+    public static Doc Print(ConditionalAccessExpressionSyntax node, CSharpPrintingContext context)
     {
         return InvocationExpression.PrintMemberChain(node, context);
     }

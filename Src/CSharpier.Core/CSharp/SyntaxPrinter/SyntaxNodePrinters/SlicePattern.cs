@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SlicePattern
 {
-    public static Doc Print(SlicePatternSyntax node, PrintingContext context)
+    public static Doc Print(SlicePatternSyntax node, CSharpPrintingContext context)
     {
         if (node.Pattern is null)
         {

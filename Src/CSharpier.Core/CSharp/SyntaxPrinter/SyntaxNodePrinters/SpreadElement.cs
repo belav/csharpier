@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SpreadElement
 {
-    public static Doc Print(SpreadElementSyntax node, PrintingContext context)
+    public static Doc Print(SpreadElementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             Token.Print(node.OperatorToken, context),

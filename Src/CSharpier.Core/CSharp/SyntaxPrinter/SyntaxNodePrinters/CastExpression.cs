@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CastExpression
 {
-    public static Doc Print(CastExpressionSyntax node, PrintingContext context)
+    public static Doc Print(CastExpressionSyntax node, CSharpPrintingContext context)
     {
         return
             node.Expression is ParenthesizedExpressionSyntax

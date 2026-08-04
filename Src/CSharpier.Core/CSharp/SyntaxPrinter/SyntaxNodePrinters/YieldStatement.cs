@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class YieldStatement
 {
-    public static Doc Print(YieldStatementSyntax node, PrintingContext context)
+    public static Doc Print(YieldStatementSyntax node, CSharpPrintingContext context)
     {
         Doc expression =
             node.Expression != null

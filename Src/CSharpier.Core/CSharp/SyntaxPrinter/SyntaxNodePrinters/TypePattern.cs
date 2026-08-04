@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypePattern
 {
-    public static Doc Print(TypePatternSyntax node, PrintingContext context)
+    public static Doc Print(TypePatternSyntax node, CSharpPrintingContext context)
     {
         return Node.Print(node.Type, context);
     }

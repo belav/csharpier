@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ListPattern
 {
-    public static Doc Print(ListPatternSyntax node, PrintingContext context)
+    public static Doc Print(ListPatternSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             Token.Print(node.OpenBracketToken, context),

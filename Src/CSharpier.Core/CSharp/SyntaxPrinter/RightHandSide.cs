@@ -12,7 +12,7 @@ internal static class RightHandSide
         Doc leftDoc,
         Doc operatorDoc,
         ExpressionSyntax rightNode,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         var layout = DetermineLayout(leftNode, rightNode);

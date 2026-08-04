@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BracketedArgumentList
 {
-    public static Doc Print(BracketedArgumentListSyntax node, PrintingContext context)
+    public static Doc Print(BracketedArgumentListSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             Token.Print(node.OpenBracketToken, context),

@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class FromClause
 {
-    public static Doc Print(FromClauseSyntax node, PrintingContext context)
+    public static Doc Print(FromClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.FromKeyword, " ", context),

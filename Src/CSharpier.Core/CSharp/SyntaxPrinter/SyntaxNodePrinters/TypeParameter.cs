@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeParameter
 {
-    public static Doc Print(TypeParameterSyntax node, PrintingContext context)
+    public static Doc Print(TypeParameterSyntax node, CSharpPrintingContext context)
     {
         var hasAttribute = node.AttributeLists.Any();
         var groupId = hasAttribute ? Guid.NewGuid().ToString() : string.Empty;

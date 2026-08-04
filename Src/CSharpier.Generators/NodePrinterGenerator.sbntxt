@@ -12,7 +12,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter
 {
     internal static class Node
     {
-        public static Doc Print(SyntaxNode? syntaxNode, PrintingContext context)
+        public static Doc Print(SyntaxNode? syntaxNode, CSharpPrintingContext context)
         {
             if (syntaxNode == null)
             {

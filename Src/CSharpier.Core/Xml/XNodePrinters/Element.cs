@@ -1,18 +1,17 @@
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Element
 {
-    internal static Doc Print(RawNode rawNode, PrintingContext context)
+    internal static Doc Print(RawNode rawNode, XmlPrintingContext context)
     {
         if (rawNode.PreviousNode?.CSharpierIgnoreType is CSharpierIgnoreType.Ignore)
         {
             return context
                 .NormalizedXml[rawNode.StartPosition..rawNode.EndPosition]
-                .Replace("\n", context.Options.LineEnding);
+                .Replace("\n", context.LineEnding);
         }
 
         var shouldHugContent = false;

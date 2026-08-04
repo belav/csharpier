@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class FinallyClause
 {
-    public static Doc Print(FinallyClauseSyntax node, PrintingContext context)
+    public static Doc Print(FinallyClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.FinallyKeyword, context),

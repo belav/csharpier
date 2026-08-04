@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class PredefinedType
 {
-    public static Doc Print(PredefinedTypeSyntax node, PrintingContext context)
+    public static Doc Print(PredefinedTypeSyntax node, CSharpPrintingContext context)
     {
         return Token.Print(node.Keyword, context);
     }

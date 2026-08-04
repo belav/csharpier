@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AttributeList
 {
-    public static Doc Print(AttributeListSyntax node, PrintingContext context)
+    public static Doc Print(AttributeListSyntax node, CSharpPrintingContext context)
     {
         if (node.Parent is BaseMethodDeclarationSyntax && CSharpierIgnore.HasIgnoreComment(node))
         {

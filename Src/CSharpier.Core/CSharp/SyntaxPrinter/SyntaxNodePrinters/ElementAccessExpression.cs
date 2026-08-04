@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ElementAccessExpression
 {
-    public static Doc Print(ElementAccessExpressionSyntax node, PrintingContext context)
+    public static Doc Print(ElementAccessExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Expression, context),

@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AliasQualifiedName
 {
-    public static Doc Print(AliasQualifiedNameSyntax node, PrintingContext context)
+    public static Doc Print(AliasQualifiedNameSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Alias, context),

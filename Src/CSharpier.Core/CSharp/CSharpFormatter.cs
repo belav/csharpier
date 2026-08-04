@@ -148,17 +148,7 @@ public static class CSharpFormatter
         try
         {
             var lineEnding = PrinterOptions.GetLineEnding(syntaxTree.ToString(), printerOptions);
-            var printingContext = new PrintingContext
-            {
-                NormalizedXml = string.Empty,
-                Options = new PrintingContext.PrintingContextOptions
-                {
-                    LineEnding = lineEnding,
-                    IndentSize = printerOptions.IndentSize,
-                    UseTabs = printerOptions.UseTabs,
-                    XmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict,
-                },
-            };
+            var printingContext = new CSharpPrintingContext { LineEnding = lineEnding };
             var document = Node.Print(rootNode, printingContext);
             var formattedCode = DocPrinter.DocPrinter.Print(document, printerOptions, lineEnding);
             var reorderedModifiers = printingContext.State.ReorderedModifiers;
@@ -176,17 +166,7 @@ public static class CSharpFormatter
                     return result;
                 }
 
-                var formattingContext2 = new PrintingContext
-                {
-                    NormalizedXml = string.Empty,
-                    Options = new PrintingContext.PrintingContextOptions
-                    {
-                        LineEnding = lineEnding,
-                        IndentSize = printerOptions.IndentSize,
-                        UseTabs = printerOptions.UseTabs,
-                        XmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict,
-                    },
-                };
+                var formattingContext2 = new CSharpPrintingContext { LineEnding = lineEnding };
                 document = Node.Print(
                     await syntaxTree.GetRootAsync(cancellationToken),
                     formattingContext2

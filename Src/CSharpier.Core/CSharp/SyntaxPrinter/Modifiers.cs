@@ -44,7 +44,7 @@ internal static class Modifiers
 
     private static readonly DefaultOrder Comparer = new();
 
-    public static Doc Print(SyntaxTokenList modifiers, PrintingContext context)
+    public static Doc Print(SyntaxTokenList modifiers, CSharpPrintingContext context)
     {
         if (modifiers.Count == 0)
         {
@@ -54,7 +54,7 @@ internal static class Modifiers
         return Doc.Group(Doc.Join(" ", modifiers.Select(o => Token.Print(o, context))), " ");
     }
 
-    public static Doc PrintSorted(SyntaxTokenList modifiers, PrintingContext context)
+    public static Doc PrintSorted(SyntaxTokenList modifiers, CSharpPrintingContext context)
     {
         return PrintWithSortedModifiers(
             modifiers,
@@ -66,7 +66,7 @@ internal static class Modifiers
 
     public static Doc PrintSorterWithoutLeadingTrivia(
         SyntaxTokenList modifiers,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         return PrintWithSortedModifiers(
@@ -90,7 +90,7 @@ internal static class Modifiers
 
     private static Doc PrintWithSortedModifiers(
         in SyntaxTokenList modifiers,
-        PrintingContext context,
+        CSharpPrintingContext context,
         Func<IReadOnlyList<SyntaxToken>, Doc> print
     )
     {

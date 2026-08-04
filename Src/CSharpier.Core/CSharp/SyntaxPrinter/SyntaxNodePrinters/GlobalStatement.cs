@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class GlobalStatement
 {
-    public static Doc Print(GlobalStatementSyntax node, PrintingContext context)
+    public static Doc Print(GlobalStatementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             AttributeLists.Print(node, node.AttributeLists, context),

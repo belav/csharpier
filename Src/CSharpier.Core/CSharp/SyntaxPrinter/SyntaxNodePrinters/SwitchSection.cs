@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SwitchSection
 {
-    public static Doc Print(SwitchSectionSyntax node, PrintingContext context)
+    public static Doc Print(SwitchSectionSyntax node, CSharpPrintingContext context)
     {
         var docs = new DocListBuilder(2);
         docs.Add(Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))));

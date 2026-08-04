@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class QueryExpression
 {
-    public static Doc Print(QueryExpressionSyntax node, PrintingContext context)
+    public static Doc Print(QueryExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             FromClause.Print(node.FromClause, context),

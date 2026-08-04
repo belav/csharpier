@@ -6,7 +6,10 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AnonymousObjectMemberDeclarator
 {
-    public static Doc Print(AnonymousObjectMemberDeclaratorSyntax node, PrintingContext context)
+    public static Doc Print(
+        AnonymousObjectMemberDeclaratorSyntax node,
+        CSharpPrintingContext context
+    )
     {
         var docs = new DocListBuilder(4);
         if (
