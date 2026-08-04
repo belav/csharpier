@@ -16,7 +16,11 @@ internal static class RecursivePattern
         return Print(node, true, context);
     }
 
-    private static Doc Print(RecursivePatternSyntax node, bool includeType, CSharpPrintingContext context)
+    private static Doc Print(
+        RecursivePatternSyntax node,
+        bool includeType,
+        CSharpPrintingContext context
+    )
     {
         var result = new DocListBuilder(8);
         if (node.Type != null && includeType)

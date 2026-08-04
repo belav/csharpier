@@ -18,7 +18,11 @@ internal static class NamespaceLikePrinter
         Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }
 
-    public static void Print(CompilationUnitSyntax node, List<Doc> docs, CSharpPrintingContext context)
+    public static void Print(
+        CompilationUnitSyntax node,
+        List<Doc> docs,
+        CSharpPrintingContext context
+    )
     {
         Print(node, node.Externs, node.Usings, node.Members, docs, context);
     }

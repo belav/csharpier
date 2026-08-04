@@ -5,7 +5,10 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ParenthesizedVariableDesignation
 {
-    public static Doc Print(ParenthesizedVariableDesignationSyntax node, CSharpPrintingContext context)
+    public static Doc Print(
+        ParenthesizedVariableDesignationSyntax node,
+        CSharpPrintingContext context
+    )
     {
         return Doc.Group(
             Token.Print(node.OpenParenToken, context),

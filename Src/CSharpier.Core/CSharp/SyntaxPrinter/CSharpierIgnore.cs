@@ -137,7 +137,10 @@ internal static partial class CSharpierIgnore
         return statements;
     }
 
-    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, CSharpPrintingContext context)
+    public static string PrintWithoutFormatting(
+        SyntaxNode syntaxNode,
+        CSharpPrintingContext context
+    )
     {
         return PrintWithoutFormatting(syntaxNode.GetText().ToString(), context);
     }

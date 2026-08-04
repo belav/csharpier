@@ -5,7 +5,10 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class AnonymousObjectCreationExpression
 {
-    public static Doc Print(AnonymousObjectCreationExpressionSyntax node, CSharpPrintingContext context)
+    public static Doc Print(
+        AnonymousObjectCreationExpressionSyntax node,
+        CSharpPrintingContext context
+    )
     {
         var alwaysBreak = node.Initializers.Count >= 3;
 

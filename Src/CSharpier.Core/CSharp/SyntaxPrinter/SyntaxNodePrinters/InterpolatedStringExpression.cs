@@ -45,7 +45,10 @@ internal static class InterpolatedStringExpression
         );
     }
 
-    private static Doc RawString(InterpolatedStringExpressionSyntax node, CSharpPrintingContext context)
+    private static Doc RawString(
+        InterpolatedStringExpressionSyntax node,
+        CSharpPrintingContext context
+    )
     {
         var endDelimiterIsIndented =
             node.StringEndToken.Text.Replace("\r", string.Empty).Replace("\n", string.Empty)[0]

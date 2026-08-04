@@ -9,12 +9,18 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
 internal static class Token
 {
-    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
+    public static Doc PrintWithoutLeadingTrivia(
+        SyntaxToken syntaxToken,
+        CSharpPrintingContext context
+    )
     {
         return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
     }
 
-    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
+    public static Doc PrintWithoutTrailingTrivia(
+        SyntaxToken syntaxToken,
+        CSharpPrintingContext context
+    )
     {
         return PrintSyntaxToken(syntaxToken, context, skipTrailingTrivia: true);
     }
@@ -221,7 +227,10 @@ internal static class Token
             : printedTrivia;
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, CSharpPrintingContext context)
+    public static Doc PrintLeadingTrivia(
+        SyntaxTriviaList leadingTrivia,
+        CSharpPrintingContext context
+    )
     {
         return PrivatePrintLeadingTrivia(leadingTrivia, context);
     }
