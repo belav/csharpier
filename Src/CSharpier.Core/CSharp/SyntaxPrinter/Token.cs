@@ -9,17 +9,17 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
 internal static class Token
 {
-    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
+    public static Doc PrintWithoutLeadingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context, skipLeadingTrivia: true);
     }
 
-    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, PrintingContext context)
+    public static Doc PrintWithoutTrailingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context, skipTrailingTrivia: true);
     }
 
-    public static Doc Print(SyntaxToken syntaxToken, PrintingContext context)
+    public static Doc Print(SyntaxToken syntaxToken, CSharpPrintingContext context)
     {
         return PrintSyntaxToken(syntaxToken, context);
     }
@@ -27,7 +27,7 @@ internal static class Token
     public static Doc PrintWithSuffix(
         SyntaxToken syntaxToken,
         Doc suffixDoc,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool skipLeadingTrivia = false
     )
     {
@@ -38,7 +38,7 @@ internal static class Token
 
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
-        PrintingContext context,
+        CSharpPrintingContext context,
         Doc? suffixDoc = null,
         bool skipLeadingTrivia = false,
         bool skipTrailingTrivia = false
@@ -163,7 +163,7 @@ internal static class Token
         return returnDoc;
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, PrintingContext context)
+    public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
     {
         if (context.State.SkipNextLeadingTrivia)
         {
@@ -221,14 +221,14 @@ internal static class Token
             : printedTrivia;
     }
 
-    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, PrintingContext context)
+    public static Doc PrintLeadingTrivia(SyntaxTriviaList leadingTrivia, CSharpPrintingContext context)
     {
         return PrivatePrintLeadingTrivia(leadingTrivia, context);
     }
 
     public static Doc PrintLeadingTriviaWithNewLines(
         SyntaxTriviaList leadingTrivia,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         return PrivatePrintLeadingTrivia(leadingTrivia, context, includeInitialNewLines: true);
@@ -236,7 +236,7 @@ internal static class Token
 
     private static Doc PrivatePrintLeadingTrivia(
         SyntaxTriviaList leadingTrivia,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool includeInitialNewLines = false,
         bool skipLastHardline = false
     )

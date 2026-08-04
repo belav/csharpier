@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LockStatement
 {
-    public static Doc Print(LockStatementSyntax node, PrintingContext context)
+    public static Doc Print(LockStatementSyntax node, CSharpPrintingContext context)
     {
         var statement = Node.Print(node.Statement, context);
 

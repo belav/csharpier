@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ParameterList
 {
-    public static Doc Print(ParameterListSyntax node, PrintingContext context)
+    public static Doc Print(ParameterListSyntax node, CSharpPrintingContext context)
     {
         return Print(node, node.OpenParenToken, node.CloseParenToken, context);
     }
@@ -15,7 +15,7 @@ internal static class ParameterList
         BaseParameterListSyntax node,
         SyntaxToken openToken,
         SyntaxToken closeToken,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         return Doc.Group(

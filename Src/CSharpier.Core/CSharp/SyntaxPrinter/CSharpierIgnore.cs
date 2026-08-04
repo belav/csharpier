@@ -81,7 +81,7 @@ internal static partial class CSharpierIgnore
     [SkipLocalsInit]
     public static List<Doc> PrintNodesRespectingRangeIgnore<T>(
         SyntaxList<T> list,
-        PrintingContext context
+        CSharpPrintingContext context
     )
         where T : SyntaxNode
     {
@@ -137,14 +137,14 @@ internal static partial class CSharpierIgnore
         return statements;
     }
 
-    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, PrintingContext context)
+    public static string PrintWithoutFormatting(SyntaxNode syntaxNode, CSharpPrintingContext context)
     {
         return PrintWithoutFormatting(syntaxNode.GetText().ToString(), context);
     }
 
-    public static string PrintWithoutFormatting(string code, PrintingContext context)
+    public static string PrintWithoutFormatting(string code, CSharpPrintingContext context)
     {
         // trim trailing whitespace + replace only existing line endings
-        return WhiteSpaceLineEndingsRegex.Replace(code, context.Options.LineEnding);
+        return WhiteSpaceLineEndingsRegex.Replace(code, context.LineEnding);
     }
 }

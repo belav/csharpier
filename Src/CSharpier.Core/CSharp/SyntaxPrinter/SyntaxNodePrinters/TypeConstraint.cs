@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeConstraint
 {
-    public static Doc Print(TypeConstraintSyntax node, PrintingContext context)
+    public static Doc Print(TypeConstraintSyntax node, CSharpPrintingContext context)
     {
         return Node.Print(node.Type, context);
     }

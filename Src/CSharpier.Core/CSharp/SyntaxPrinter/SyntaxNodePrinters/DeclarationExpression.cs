@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class DeclarationExpression
 {
-    public static Doc Print(DeclarationExpressionSyntax node, PrintingContext context)
+    public static Doc Print(DeclarationExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Type, context),

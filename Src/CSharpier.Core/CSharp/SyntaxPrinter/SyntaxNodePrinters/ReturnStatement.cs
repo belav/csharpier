@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ReturnStatement
 {
-    public static Doc Print(ReturnStatementSyntax node, PrintingContext context)
+    public static Doc Print(ReturnStatementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             ExtraNewLines.Print(node),

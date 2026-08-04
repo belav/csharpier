@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class WhileStatement
 {
-    public static Doc Print(WhileStatementSyntax node, PrintingContext context)
+    public static Doc Print(WhileStatementSyntax node, CSharpPrintingContext context)
     {
         var result = Doc.Concat(
             ExtraNewLines.Print(node),

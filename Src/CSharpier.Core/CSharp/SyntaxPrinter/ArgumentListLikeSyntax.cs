@@ -12,7 +12,7 @@ internal static class ArgumentListLike
         SyntaxToken openParenToken,
         SeparatedSyntaxList<ArgumentSyntax> arguments,
         SyntaxToken closeParenToken,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         Doc? args;

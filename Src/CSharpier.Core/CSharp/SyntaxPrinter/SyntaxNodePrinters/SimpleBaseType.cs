@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SimpleBaseType
 {
-    public static Doc Print(SimpleBaseTypeSyntax node, PrintingContext context)
+    public static Doc Print(SimpleBaseTypeSyntax node, CSharpPrintingContext context)
     {
         return Node.Print(node.Type, context);
     }

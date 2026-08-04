@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class PrefixUnaryExpression
 {
-    public static Doc Print(PrefixUnaryExpressionSyntax node, PrintingContext context)
+    public static Doc Print(PrefixUnaryExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.OperatorToken, context),

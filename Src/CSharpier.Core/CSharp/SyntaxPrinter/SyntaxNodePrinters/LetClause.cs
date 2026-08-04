@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LetClause
 {
-    public static Doc Print(LetClauseSyntax node, PrintingContext context)
+    public static Doc Print(LetClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

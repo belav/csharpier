@@ -7,7 +7,7 @@ internal static class ExternAliasDirective
 {
     public static Doc Print(
         ExternAliasDirectiveSyntax node,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool printExtraLines = true
     )
     {

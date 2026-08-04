@@ -8,7 +8,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseTypeDeclaration
 {
-    public static Doc Print(BaseTypeDeclarationSyntax node, PrintingContext context)
+    public static Doc Print(BaseTypeDeclarationSyntax node, CSharpPrintingContext context)
     {
         ParameterListSyntax? parameterList = null;
         TypeParameterListSyntax? typeParameterList = null;

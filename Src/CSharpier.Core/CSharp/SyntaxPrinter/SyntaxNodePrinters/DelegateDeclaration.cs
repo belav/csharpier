@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class DelegateDeclaration
 {
-    public static Doc Print(DelegateDeclarationSyntax node, PrintingContext context)
+    public static Doc Print(DelegateDeclarationSyntax node, CSharpPrintingContext context)
     {
         var docs = new DocListBuilder(10);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));

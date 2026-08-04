@@ -6,17 +6,17 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RecursivePattern
 {
-    public static Doc PrintWithOutType(RecursivePatternSyntax node, PrintingContext context)
+    public static Doc PrintWithOutType(RecursivePatternSyntax node, CSharpPrintingContext context)
     {
         return Print(node, false, context);
     }
 
-    public static Doc Print(RecursivePatternSyntax node, PrintingContext context)
+    public static Doc Print(RecursivePatternSyntax node, CSharpPrintingContext context)
     {
         return Print(node, true, context);
     }
 
-    private static Doc Print(RecursivePatternSyntax node, bool includeType, PrintingContext context)
+    private static Doc Print(RecursivePatternSyntax node, bool includeType, CSharpPrintingContext context)
     {
         var result = new DocListBuilder(8);
         if (node.Type != null && includeType)

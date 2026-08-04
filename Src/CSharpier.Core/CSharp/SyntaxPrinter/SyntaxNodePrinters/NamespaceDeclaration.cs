@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class NamespaceDeclaration
 {
-    public static Doc Print(NamespaceDeclarationSyntax node, PrintingContext context)
+    public static Doc Print(NamespaceDeclarationSyntax node, CSharpPrintingContext context)
     {
         var innerDocs = new List<Doc>();
         var hasMembers = node.Members.Count > 0;

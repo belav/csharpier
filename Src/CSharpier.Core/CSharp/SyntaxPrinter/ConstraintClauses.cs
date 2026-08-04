@@ -9,7 +9,7 @@ internal static class ConstraintClauses
 {
     public static Doc Print(
         SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         if (constraintClauses.Count == 0)

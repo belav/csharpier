@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ParenthesizedPattern
 {
-    public static Doc Print(ParenthesizedPatternSyntax node, PrintingContext context)
+    public static Doc Print(ParenthesizedPatternSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             Token.Print(node.OpenParenToken, context),

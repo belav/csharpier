@@ -7,7 +7,7 @@ internal static class UsingDirective
 {
     public static Doc Print(
         UsingDirectiveSyntax node,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool printExtraLines = true
     )
     {

@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ElseClause
 {
-    public static Doc Print(ElseClauseSyntax node, PrintingContext context)
+    public static Doc Print(ElseClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.ElseKeyword, context),

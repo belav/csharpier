@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ConstantPattern
 {
-    public static Doc Print(ConstantPatternSyntax node, PrintingContext context)
+    public static Doc Print(ConstantPatternSyntax node, CSharpPrintingContext context)
     {
         return Node.Print(node.Expression, context);
     }

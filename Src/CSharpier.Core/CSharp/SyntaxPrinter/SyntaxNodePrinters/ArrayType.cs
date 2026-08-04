@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArrayType
 {
-    public static Doc Print(ArrayTypeSyntax node, PrintingContext context)
+    public static Doc Print(ArrayTypeSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.ElementType, context),

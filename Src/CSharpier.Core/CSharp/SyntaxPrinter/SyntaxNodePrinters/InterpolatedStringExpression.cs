@@ -8,7 +8,7 @@ internal static class InterpolatedStringExpression
 {
     internal static readonly string[] lineSeparators = ["\r\n", "\r", "\n"];
 
-    public static Doc Print(InterpolatedStringExpressionSyntax node, PrintingContext context)
+    public static Doc Print(InterpolatedStringExpressionSyntax node, CSharpPrintingContext context)
     {
         // if any of the expressions in the interpolation contain a newline then don't force this flat
         // ideally we would format the expressions in some way, but determining how much to indent is a hard problem
@@ -45,7 +45,7 @@ internal static class InterpolatedStringExpression
         );
     }
 
-    private static Doc RawString(InterpolatedStringExpressionSyntax node, PrintingContext context)
+    private static Doc RawString(InterpolatedStringExpressionSyntax node, CSharpPrintingContext context)
     {
         var endDelimiterIsIndented =
             node.StringEndToken.Text.Replace("\r", string.Empty).Replace("\n", string.Empty)[0]

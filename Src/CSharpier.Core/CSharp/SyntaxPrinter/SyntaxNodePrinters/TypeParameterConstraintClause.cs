@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeParameterConstraintClause
 {
-    public static Doc Print(TypeParameterConstraintClauseSyntax node, PrintingContext context)
+    public static Doc Print(TypeParameterConstraintClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Group(
             Token.PrintWithSuffix(node.WhereKeyword, " ", context),

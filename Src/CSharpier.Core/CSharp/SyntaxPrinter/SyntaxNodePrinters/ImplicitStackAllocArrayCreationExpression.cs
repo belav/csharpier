@@ -7,7 +7,7 @@ internal static class ImplicitStackAllocArrayCreationExpression
 {
     public static Doc Print(
         ImplicitStackAllocArrayCreationExpressionSyntax node,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         return Doc.Concat(

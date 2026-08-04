@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ImplicitArrayCreationExpression
 {
-    public static Doc Print(ImplicitArrayCreationExpressionSyntax node, PrintingContext context)
+    public static Doc Print(ImplicitArrayCreationExpressionSyntax node, CSharpPrintingContext context)
     {
         var commas = node.Commas.Select(o => Token.Print(o, context)).ToArray();
         return Doc.Group(

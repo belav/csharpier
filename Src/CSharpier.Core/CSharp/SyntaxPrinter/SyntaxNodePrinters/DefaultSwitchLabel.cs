@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class DefaultSwitchLabel
 {
-    public static Doc Print(DefaultSwitchLabelSyntax node, PrintingContext context)
+    public static Doc Print(DefaultSwitchLabelSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

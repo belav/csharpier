@@ -7,7 +7,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Parameter
 {
-    public static Doc Print(ParameterSyntax node, PrintingContext context)
+    public static Doc Print(ParameterSyntax node, CSharpPrintingContext context)
     {
         var hasAttribute = node.AttributeLists.Any();
 

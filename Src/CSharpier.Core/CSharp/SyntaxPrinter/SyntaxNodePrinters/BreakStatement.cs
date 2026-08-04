@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BreakStatement
 {
-    public static Doc Print(BreakStatementSyntax node, PrintingContext context)
+    public static Doc Print(BreakStatementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

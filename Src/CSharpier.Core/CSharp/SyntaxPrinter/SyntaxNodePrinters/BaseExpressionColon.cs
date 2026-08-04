@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseExpressionColon
 {
-    public static Doc Print(BaseExpressionColonSyntax node, PrintingContext context)
+    public static Doc Print(BaseExpressionColonSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Expression, context),
