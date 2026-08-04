@@ -1,0 +1,7 @@
+# basic comment
+Write-Host "SomeValue"
+
+if ($true) {
+    # basic comment
+    Write-Host "SomeValue"
+}

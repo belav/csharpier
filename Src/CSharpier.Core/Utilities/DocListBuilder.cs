@@ -20,7 +20,7 @@ internal ref struct DocListBuilder
 
     public int Length
     {
-        readonly get => this.position;
+        readonly get { return this.position; }
         set
         {
             Debug.Assert(value >= 0);
@@ -39,7 +39,10 @@ internal ref struct DocListBuilder
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Clear() => this.Length = 0;
+    public void Clear()
+    {
+        this.Length = 0;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Add(Doc item)

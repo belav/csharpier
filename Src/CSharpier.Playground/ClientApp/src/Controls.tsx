@@ -60,6 +60,14 @@ export const Controls = observer(() => {
                     <input type="radio" checked={formatter === "XML"} onClick={e => setFormatter("XML")} />
                     XML
                 </label>
+                <label>
+                    <input
+                        type="radio"
+                        checked={formatter === "PowerShell"}
+                        onClick={e => setFormatter("PowerShell")}
+                    />
+                    PowerShell
+                </label>
                 {formatter === "XML" && (
                     <>
                         <label>Whitespace Sensitivity</label>
