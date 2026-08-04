@@ -51,13 +51,19 @@ public static class CSharpFormatter
     internal static Task<CodeFormatterResult> FormatAsync(
         string code,
         PrinterOptions printerOptions
-    ) => FormatAsync(code, printerOptions, CancellationToken.None);
+    )
+    {
+        return FormatAsync(code, printerOptions, CancellationToken.None);
+    }
 
     internal static Task<CodeFormatterResult> FormatAsync(
         string code,
         PrinterOptions printerOptions,
         CancellationToken cancellationToken
-    ) => FormatAsync(code, printerOptions, SourceCodeKind.Regular, cancellationToken);
+    )
+    {
+        return FormatAsync(code, printerOptions, SourceCodeKind.Regular, cancellationToken);
+    }
 
     internal static Task<CodeFormatterResult> FormatAsync(
         string code,

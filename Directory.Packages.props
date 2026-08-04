@@ -32,6 +32,7 @@
     <PackageVersion Include="System.IO.Abstractions" Version="22.1.1" />
     <PackageVersion Include="System.IO.Abstractions.TestingHelpers" Version="22.0.16" />
     <PackageVersion Include="System.IO.Hashing" Version="9.0.10" />
+    <PackageVersion Include="System.Management.Automation" Version="7.4.6" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="10.0.5" />
     <PackageVersion Include="System.Text.Json" Version="10.0.5" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />

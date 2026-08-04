@@ -140,12 +140,25 @@ internal partial class GlobMatcher
         private int myLastAsteriskItem;
         private int myNextPositionForAsterisk;
 
-        private readonly StringComparison ComparisonType =>
-            this.myOptions.IgnoreCase
-                ? StringComparison.OrdinalIgnoreCase
-                : StringComparison.Ordinal;
-        private readonly char[] PathSeparatorChars =>
-            this.myOptions.AllowWindowsPaths ? ourWinPathSeparators : ourUnixPathSeparators;
+        private readonly StringComparison ComparisonType
+        {
+            get
+            {
+                return this.myOptions.IgnoreCase
+                    ? StringComparison.OrdinalIgnoreCase
+                    : StringComparison.Ordinal;
+            }
+        }
+
+        private readonly char[] PathSeparatorChars
+        {
+            get
+            {
+                return this.myOptions.AllowWindowsPaths
+                    ? ourWinPathSeparators
+                    : ourUnixPathSeparators;
+            }
+        }
 
         public MatchContext(GlobMatcherOptions options, string str, PatternCase patternCase)
         {
@@ -634,11 +647,12 @@ internal partial class GlobMatcher
         }
     }
 
-    private static bool IsPathSeparator(GlobMatcherOptions options, char c) =>
+    private static bool IsPathSeparator(GlobMatcherOptions options, char c)
+    {
         // windows: need to use /, not \
         // On other platforms, \ is a valid (albeit bad) filename char.
-        c == '/'
-        || options.AllowWindowsPaths && c == '\\';
+        return c == '/' || options.AllowWindowsPaths && c == '\\';
+    }
 
     private class PatternCase : List<IPatternElement>
     {

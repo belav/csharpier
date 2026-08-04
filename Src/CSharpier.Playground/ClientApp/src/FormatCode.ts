@@ -2,6 +2,17 @@ let gutters: any[] = [];
 let marks: any[] = [];
 let editor: any = undefined;
 
+const parseSyntaxTree = (json: string) => {
+    if (!json) {
+        return undefined;
+    }
+    try {
+        return JSON.parse(json);
+    } catch {
+        return undefined;
+    }
+};
+
 export const formatCode = async (
     code: string,
     printWidth: number,
@@ -27,7 +38,7 @@ export const formatCode = async (
             }, 100);
 
             return {
-                syntaxTree: !data.json ? undefined : JSON.parse(data.json),
+                syntaxTree: parseSyntaxTree(data.json),
                 formattedCode: data.code,
                 doc: data.doc,
                 hasErrors: !!data.errors.length,

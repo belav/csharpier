@@ -47,11 +47,15 @@ internal static partial class CSharpierIgnore
     );
 #endif
 
-    public static bool HasIgnoreComment(SyntaxNode syntaxNode) =>
-        Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
+    public static bool HasIgnoreComment(SyntaxNode syntaxNode)
+    {
+        return Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
+    }
 
-    public static bool HasIgnoreComment(SyntaxToken syntaxToken) =>
-        Token.HasLeadingCommentMatching(syntaxToken, IgnoreRegex);
+    public static bool HasIgnoreComment(SyntaxToken syntaxToken)
+    {
+        return Token.HasLeadingCommentMatching(syntaxToken, IgnoreRegex);
+    }
 
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
