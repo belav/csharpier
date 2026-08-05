@@ -13,6 +13,6 @@ internal abstract class BasePrintingContext
         var number = this.groupNumberByValue.GetValueOrDefault(value, 0) + 1;
         this.groupNumberByValue[value] = number;
 
-        return value + " #" + number;
+        return $"{value} #{number}";
     }
 }
