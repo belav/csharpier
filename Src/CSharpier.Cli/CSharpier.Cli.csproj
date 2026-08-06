@@ -40,6 +40,9 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>CSharpierProcess.Tests, PublicKey=$(PublicKey)</_Parameter1>
     </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>CSharpier.Benchmarks, PublicKey=$(PublicKey)</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
   <ItemGroup>
     <Protobuf Include="protos\*.proto" />

@@ -7,8 +7,10 @@
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="BenchmarkDotNet.Annotations" />
+    <PackageReference Include="System.CommandLine" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSharpier.Cli\CSharpier.Cli.csproj" />
     <ProjectReference Include="..\CSharpier.Core\CSharpier.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
