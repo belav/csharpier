@@ -78,8 +78,11 @@ internal class IgnoreRule
 
         // .gitignore files use Unix paths (with a forward slash separator),
         // so make sure our input also uses forward slashes
-        path = path.NormalisePath().TrimStart('/');
-
+#if NET8_0
+        var normalisedPath = path.NormalisePath().TrimStart('/');
+#else
+        var normalisedPath = path.NormalisePath().AsSpan().TrimStart('/');
+#endif
         // Shortcut return if the pattern is directory-only and the path isn't a directory
         // This has to be determined by the OS (at least that's the only reliable way),
         // so we pass that information in as a boolean so the consuming code can provide it
@@ -91,11 +94,11 @@ internal class IgnoreRule
         // If the pattern is an absolute path pattern, the path must start with the part of the pattern
         // before any wildcards occur. If it doesn't, we can just return a negative match
         var patternBeforeFirstWildcard =
-            this.wildcardIndex != -1 ? this.Pattern[..this.wildcardIndex] : this.Pattern;
+            this.wildcardIndex != -1 ? this.Pattern.AsSpan()[..this.wildcardIndex] : this.Pattern;
 
         if (
             (this.PatternFlags & PatternFlags.ABSOLUTE_PATH) != 0
-            && !path.StartsWith(patternBeforeFirstWildcard, this.stringComparison)
+            && !normalisedPath.StartsWith(patternBeforeFirstWildcard, this.stringComparison)
         )
         {
             return false;
@@ -113,15 +116,33 @@ internal class IgnoreRule
             && path.Contains('/')
         )
         {
-            return path.Split('/').Any(segment => Matcher.TryMatch(this.regex, segment));
+#if NET8_0
+            foreach (var segment in normalisedPath.Split('/'))
+            {
+                if (Matcher.TryMatch(this.regex, segment))
+                {
+                    return true;
+                }
+            }
+#else
+            foreach (var range in normalisedPath.Split('/'))
+            {
+                if (Matcher.TryMatch(this.regex, normalisedPath[range]))
+                {
+                    return true;
+                }
+            }
+#endif
+
+            return false;
         }
 
         // If the *path* doesn't contain any slashes, we should skip over the conditional above
-        return Matcher.TryMatch(this.regex, path);
+        return Matcher.TryMatch(this.regex, normalisedPath);
     }
 
     public override string ToString()
     {
-        return this.Pattern + " " + this.PatternFlags;
+        return $"{this.Pattern} {this.PatternFlags}";
     }
 }

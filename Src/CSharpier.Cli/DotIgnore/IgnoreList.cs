@@ -8,14 +8,14 @@ namespace CSharpier.Cli.DotIgnore;
 
 internal class IgnoreList(string basePath)
 {
-    private static readonly string[] alwaysIgnoredText =
+    private static readonly IgnoreRule[] alwaysIgnoredRules =
     [
-        "**/bin",
-        "**/node_modules",
-        "**/obj",
-        "**/.git",
+        new("**/bin"),
+        new("**/node_modules"),
+        new("**/obj"),
+        new("**/.git"),
     ];
-    private readonly List<IgnoreRule> rules = [];
+    private IgnoreRule[] rules = [];
 
     public static async Task<IgnoreList> CreateAsync(
         IFileSystem fileSystem,
@@ -26,11 +26,9 @@ internal class IgnoreList(string basePath)
     {
         var ignoreList = new IgnoreList(basePath);
         ignoreList.AddRules(
-            alwaysIgnoredText.Concat(
-                ignoreFilePath is null
-                    ? Enumerable.Empty<string>()
-                    : await fileSystem.File.ReadAllLinesAsync(ignoreFilePath, cancellationToken)
-            )
+            ignoreFilePath is null
+                ? Enumerable.Empty<string>()
+                : await fileSystem.File.ReadAllLinesAsync(ignoreFilePath, cancellationToken)
         );
         return ignoreList;
     }
@@ -38,12 +36,11 @@ internal class IgnoreList(string basePath)
     private void AddRules(IEnumerable<string> newRules)
     {
         // TODO it seems like we have two rules that are both "*", they most likely have different pattern flags to account for the ! and the /
-        this.rules.AddRange(
-            newRules
-                .Select(o => o.Trim())
-                .Where(o => o.Length > 0 && !o.StartsWith('#'))
-                .Select(o => new IgnoreRule(o))
-        );
+        this.rules = newRules
+            .Select(o => o.Trim())
+            .Where(o => o.Length > 0 && !o.StartsWith('#'))
+            .Select(o => new IgnoreRule(o))
+            .ToArray();
     }
 
     public (bool hasMatchingRule, bool isIgnored) IsIgnored(string path, bool isDirectory)
@@ -112,7 +109,27 @@ internal class IgnoreList(string basePath)
         var isIgnored = false;
         var hasMatchingRule = false;
 
-        foreach (var rule in this.rules)
+        EvaluateRules(
+            alwaysIgnoredRules,
+            path,
+            pathIsDirectory,
+            ref isIgnored,
+            ref hasMatchingRule
+        );
+        EvaluateRules(this.rules, path, pathIsDirectory, ref isIgnored, ref hasMatchingRule);
+
+        return (hasMatchingRule, isIgnored);
+    }
+
+    private static void EvaluateRules(
+        IgnoreRule[] rules,
+        string path,
+        bool pathIsDirectory,
+        ref bool isIgnored,
+        ref bool hasMatchingRule
+    )
+    {
+        foreach (var rule in rules)
         {
             var isNegativeRule = (rule.PatternFlags & PatternFlags.NEGATION) != 0;
 
@@ -125,7 +142,5 @@ internal class IgnoreList(string basePath)
                 isIgnored = !isNegativeRule;
             }
         }
-
-        return (hasMatchingRule, isIgnored);
     }
 }

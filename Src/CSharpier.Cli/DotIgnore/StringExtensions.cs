@@ -4,8 +4,6 @@ internal static class StringExtensions
 {
     internal static string NormalisePath(this string path)
     {
-        return path.Replace(":", string.Empty)
-            .Replace(char.ToString(Path.DirectorySeparatorChar), "/")
-            .Trim();
+        return path.Replace(":", string.Empty).Replace(Path.DirectorySeparatorChar, '/').Trim();
     }
 }
