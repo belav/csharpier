@@ -42,7 +42,7 @@ internal class SystemConsole : IConsole
 
     public ConsoleColor ForegroundColor
     {
-        set { Console.ForegroundColor = value; }
+        set => Console.ForegroundColor = value;
     }
 
     public void ResetColor()
@@ -50,8 +50,5 @@ internal class SystemConsole : IConsole
         Console.ResetColor();
     }
 
-    public Encoding InputEncoding
-    {
-        get { return Encoding.UTF8; }
-    }
+    public Encoding InputEncoding => Encoding.UTF8;
 }

@@ -20,7 +20,7 @@ internal ref struct DocListBuilder
 
     public int Length
     {
-        readonly get { return this.position; }
+        readonly get => this.position;
         set
         {
             Debug.Assert(value >= 0);

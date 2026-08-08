@@ -1528,10 +1528,7 @@ class ClassName
             this.nextErrorLine += value;
         }
 
-        public Encoding InputEncoding
-        {
-            get { return Encoding.UTF8; }
-        }
+        public Encoding InputEncoding => Encoding.UTF8;
 
         public ConsoleColor ForegroundColor { get; set; }
 
