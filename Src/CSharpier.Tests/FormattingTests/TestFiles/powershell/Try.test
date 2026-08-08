@@ -1,0 +1,12 @@
+try {
+    exit 0 # success!
+} catch {
+    Write-Host "Catch"
+    exit 1
+} finally {
+    Write-Host "Finally"
+}
+
+try {
+    exit 0 # success!
+}

@@ -19,6 +19,16 @@ internal static class ScriptBlock
         }
 
         var parts = new List<Doc>();
+
+        if (node.Extent.Text.StartsWith("<#", StringComparison.InvariantCulture))
+        {
+            var endIndex = node.Extent.Text.IndexOf("#>", StringComparison.InvariantCulture) + 2;
+            // TODO 1894 probably needs proper line endings and spaces vs tabs
+            parts.Add(node.Extent.Text[..endIndex]);
+            parts.Add(Doc.HardLine);
+            parts.Add(Doc.HardLine);
+        }
+
         var startOffset = node.Extent.StartOffset;
         if (node.ParamBlock is not null)
         {

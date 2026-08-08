@@ -14,7 +14,7 @@ internal class PrinterOptions(
     private int indentSize = formatter == Formatter.XML ? 2 : 4;
     public int IndentSize
     {
-        get { return this.indentSize; }
+        get => this.indentSize;
         set
         {
             if (value <= 0)
