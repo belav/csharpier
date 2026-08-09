@@ -14,15 +14,9 @@ internal abstract class Doc
         return StringDoc.Create(value);
     }
 
-    public static NullDoc Null
-    {
-        get { return NullDoc.Instance; }
-    }
+    public static NullDoc Null => NullDoc.Instance;
 
-    public static Doc BreakParent
-    {
-        get { return new BreakParent(); }
-    }
+    public static Doc BreakParent => new BreakParent();
 
     public static readonly HardLine HardLine = new();
 

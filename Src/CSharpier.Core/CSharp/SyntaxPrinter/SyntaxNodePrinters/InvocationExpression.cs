@@ -387,7 +387,7 @@ internal static class InvocationExpression
 
         var result = new DocListBuilder(groups.Count * 2);
 
-        for (int index = 0; index < groups.Count; index++)
+        for (var index = 0; index < groups.Count; index++)
         {
             Doc GetPossibleContents()
             {
