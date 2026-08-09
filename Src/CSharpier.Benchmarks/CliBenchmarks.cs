@@ -1,3 +1,5 @@
+#pragma warning disable CA1822
+
 using System.CommandLine;
 using BenchmarkDotNet.Attributes;
 using CSharpier.Cli;
