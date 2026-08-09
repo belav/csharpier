@@ -54,37 +54,14 @@ public class CSharpBenchmarks
     }
 
     private readonly string largeTestCode = File.ReadAllText(
-        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/PathAxesTests.cs")
+        Path.Combine(Paths.RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/PathAxesTests.cs")
     );
 
     private readonly string largeComplexCode = File.ReadAllText(
-        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Syntax.txt")
+        Path.Combine(Paths.RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Syntax.txt")
     );
 
     private readonly string code = File.ReadAllText(
-        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Code.cs")
+        Path.Combine(Paths.RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Code.cs")
     );
-
-    // benchmarks creates a new build inside of the bin and doesn't seem to respect CopyToOutputDirectory
-    // finding the .git folder seems like the best way of dealing with the path to the code files
-    private static string RepoRoot { get; } = GetRepoRoot();
-
-    private static string GetRepoRoot()
-    {
-        var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (
-            currentDirectory != null
-            && !Directory.Exists(Path.Combine(currentDirectory.FullName, ".git"))
-        )
-        {
-            currentDirectory = currentDirectory.Parent;
-        }
-
-        if (currentDirectory is null)
-        {
-            throw new Exception("Could not find .git directory");
-        }
-
-        return currentDirectory.FullName;
-    }
 }

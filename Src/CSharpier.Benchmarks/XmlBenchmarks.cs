@@ -47,29 +47,6 @@ public class XmlBenchmarks
     }
 
     private readonly string largeXmlCode = File.ReadAllText(
-        Path.Combine(RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Type.xml")
+        Path.Combine(Paths.RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Type.xml")
     );
-
-    // benchmarks creates a new build inside of the bin and doesn't seem to respect CopyToOutputDirectory
-    // finding the .git folder seems like the best way of dealing with the path to the code files
-    private static string RepoRoot { get; } = GetRepoRoot();
-
-    private static string GetRepoRoot()
-    {
-        var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (
-            currentDirectory != null
-            && !Directory.Exists(Path.Combine(currentDirectory.FullName, ".git"))
-        )
-        {
-            currentDirectory = currentDirectory.Parent;
-        }
-
-        if (currentDirectory is null)
-        {
-            throw new Exception("Could not find .git directory");
-        }
-
-        return currentDirectory.FullName;
-    }
 }
