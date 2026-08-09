@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.IO.Hashing;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json;
 using CSharpier.Core;
 using CSharpier.Core.Utilities;
@@ -103,7 +104,7 @@ internal static class FormattingCacheFactory
         {
             if (cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
-                if (this.HashMatches(cachedHash, fileToFormatInfo.FileContents))
+                if (HashMatches(cachedHash, fileToFormatInfo.FileContents, printerOptions))
                 {
                     return true;
                 }
@@ -114,16 +115,26 @@ internal static class FormattingCacheFactory
             return false;
         }
 
-        private bool HashMatches(string cachedHash, string fileContents)
+        private static bool HashMatches(
+            string cachedHash,
+            string fileContents,
+            PrinterOptions printerOptions
+        )
         {
             var contentHash = Hash(fileContents);
 
-            return cachedHash.Length == contentHash.Length + this.optionsHash.Length
+            var optionsHash = GetPrinterOptionsHash(printerOptions);
+
+            return cachedHash.Length == contentHash.Length + optionsHash.Length
                 && cachedHash.AsSpan(0, contentHash.Length).SequenceEqual(contentHash.AsSpan())
-                && cachedHash.AsSpan(contentHash.Length).SequenceEqual(this.optionsHash.AsSpan());
+                && cachedHash.AsSpan(contentHash.Length).SequenceEqual(optionsHash.AsSpan());
         }
 
-        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo)
+        public void CacheResult(
+            string code,
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
             cacheDictionary[fileToFormatInfo.Path] = GetCacheHash(code, printerOptions);
         }
