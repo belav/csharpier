@@ -18,7 +18,10 @@ RUN set -uex \
     && apt-get install nodejs -y;
 
 WORKDIR /build
-COPY ./Directory.Build.props ./Directory.Packages.props ./
+COPY ./Directory.Build.props \
+    ./Directory.Packages.props \
+    ./nuget.config \
+    ./
 COPY ./Src/CSharpier.Playground/CSharpier.Playground.csproj Src/CSharpier.Playground/
 COPY ./Src/CSharpier.Core/CSharpier.Core.csproj Src/CSharpier.Core/
 RUN dotnet restore "Src/CSharpier.Playground/CSharpier.Playground.csproj"

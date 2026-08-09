@@ -7,7 +7,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 internal static class WithElement
 {
     [Experimental("RSEXPERIMENTAL006")]
-    public static Doc Print(WithElementSyntax node, PrintingContext context)
+    public static Doc Print(WithElementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.WithKeyword, context),
