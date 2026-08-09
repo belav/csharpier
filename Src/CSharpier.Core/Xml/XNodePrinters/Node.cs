@@ -90,11 +90,6 @@ internal static partial class Node
     {
         var textValue = rawNode.Value;
 
-        if (string.IsNullOrEmpty(textValue))
-        {
-            return Doc.Null;
-        }
-
         if (rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Ignore)
         {
             if (rawNode.PreviousNode is null)
@@ -118,6 +113,11 @@ internal static partial class Node
             }
         }
 
+        if (string.IsNullOrEmpty(textValue))
+        {
+            return Doc.Null;
+        }
+
         if (rawNode.Parent?.Nodes.First() == rawNode)
         {
             if (textValue[0] is '\r')
@@ -125,7 +125,7 @@ internal static partial class Node
                 textValue = textValue[1..];
             }
 
-            if (textValue[0] is '\n')
+            if (textValue.Length > 0 && textValue[0] is '\n')
             {
                 textValue = textValue[1..];
             }

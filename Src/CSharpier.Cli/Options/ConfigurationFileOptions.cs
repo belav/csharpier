@@ -41,7 +41,8 @@ internal class ConfigurationFileOptions
                     ?? PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
             )
             {
-                IndentSize = matchingOverride.IndentSize,
+                IndentSize =
+                    matchingOverride.IndentSize ?? (parsedFormatter == Formatter.XML ? 2 : 4),
                 UseTabs = matchingOverride.UseTabs,
                 Width = matchingOverride.PrintWidth,
                 EndOfLine = matchingOverride.EndOfLine,
@@ -81,7 +82,7 @@ internal class Override
     private GlobMatcher? matcher;
 
     public int PrintWidth { get; init; } = 100;
-    public int IndentSize { get; init; } = 4;
+    public int? IndentSize { get; init; }
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
