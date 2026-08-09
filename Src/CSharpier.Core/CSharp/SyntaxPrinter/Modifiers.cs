@@ -20,6 +20,7 @@ internal static class Modifiers
             "extern",
             "new",
             "virtual",
+            "closed",
             "abstract",
             "sealed",
             "override",

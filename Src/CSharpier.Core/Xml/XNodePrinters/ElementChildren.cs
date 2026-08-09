@@ -21,7 +21,6 @@ internal static class ElementChildren
             if (childNode.CSharpierIgnoreType is CSharpierIgnoreType.IgnoreEnd)
             {
                 printIgnored = false;
-                x++;
             }
 
             if (printIgnored)

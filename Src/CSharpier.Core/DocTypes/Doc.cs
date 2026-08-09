@@ -14,15 +14,9 @@ internal abstract class Doc
         return StringDoc.Create(value);
     }
 
-    public static NullDoc Null
-    {
-        get { return NullDoc.Instance; }
-    }
+    public static NullDoc Null => NullDoc.Instance;
 
-    public static Doc BreakParent
-    {
-        get { return new BreakParent(); }
-    }
+    public static Doc BreakParent => new BreakParent();
 
     public static readonly HardLine HardLine = new();
 
@@ -104,12 +98,12 @@ internal abstract class Doc
 
     public static ForceFlat ForceFlat(List<Doc> contents)
     {
-        return new ForceFlat { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
+        return new ForceFlat { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
     }
 
     public static ForceFlat ForceFlat(params Doc[] contents)
     {
-        return new ForceFlat { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
+        return new ForceFlat { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
     }
 
     public static Group Group(List<Doc> contents)

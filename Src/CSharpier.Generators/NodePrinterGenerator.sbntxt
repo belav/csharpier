@@ -1,5 +1,6 @@
+#pragma warning disable RSEXPERIMENTAL006
+
 using System;
-using System.Diagnostics;
 using CSharpier.Core;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.CSharp.SyntaxPrinter;
@@ -35,14 +36,13 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter
             context.State.PrintingDepth++;
             try
             {
-                switch ((SyntaxKind)syntaxNode.RawKind)
+                switch (syntaxNode)
                 {
                     {{- for nodeType in NodeTypes }}
-                    case {{ nodeType.SyntaxKinds }}:
-                        return {{ nodeType.PrinterName }}.Print(({{ nodeType.SyntaxNodeName }})syntaxNode, context);
+                    case {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }}:
+                        return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }}, context);
                     {{- end }}
                     default:
-                        Debug.Assert(syntaxNode is not ({{- SyntaxNodeTypes -}}), $"{syntaxNode.GetType().Name} needs a Printer at Src/CSharpier.Core/CSharp/SyntaxPrinter/SyntaxNodePrinters/{syntaxNode.GetType().Name.Replace("Syntax", "")}.cs");
                         return UnhandledNode.Print(syntaxNode, context);
                 }
             }

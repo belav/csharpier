@@ -74,7 +74,7 @@ internal static class SeparatedSyntaxList
                 if (x < list.SeparatorCount)
                 {
                     unFormattedCode.Append(list.GetSeparator(x).ToFullString().Trim());
-                    unFormattedCode.Append(Environment.NewLine);
+                    unFormattedCode.Append(context.LineEnding);
                 }
 
                 continue;

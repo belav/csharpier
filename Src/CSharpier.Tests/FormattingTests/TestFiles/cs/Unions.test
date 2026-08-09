@@ -1,0 +1,3 @@
+public union Pet(Cat, Dog, Bird);
+
+public union Option<T>(None, Some<T>);
