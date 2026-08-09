@@ -9,7 +9,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 // this is loosely based on prettier/src/language-js/print/binaryish.js
 internal static class BinaryExpression
 {
-    public static Doc Print(BinaryExpressionSyntax node, PrintingContext context)
+    public static Doc Print(BinaryExpressionSyntax node, CSharpPrintingContext context)
     {
         var docs = PrintBinaryExpression(node, context);
 
@@ -54,7 +54,7 @@ internal static class BinaryExpression
         && three != four
         && five != six
      */
-    private static List<Doc> PrintBinaryExpression(SyntaxNode node, PrintingContext context)
+    private static List<Doc> PrintBinaryExpression(SyntaxNode node, CSharpPrintingContext context)
     {
         if (node is not BinaryExpressionSyntax binaryExpressionSyntax)
         {

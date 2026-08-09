@@ -1,12 +1,11 @@
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Attributes
 {
-    public static Doc Print(RawNode rawNode, PrintingContext context)
+    public static Doc Print(RawNode rawNode, XmlPrintingContext context)
     {
         if (rawNode.Attributes.Length == 0)
         {

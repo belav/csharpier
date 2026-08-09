@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class PointerType
 {
-    public static Doc Print(PointerTypeSyntax node, PrintingContext context)
+    public static Doc Print(PointerTypeSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.ElementType, context),

@@ -10,9 +10,9 @@ internal static class SeparatedSyntaxList
 {
     public static Doc Print<T>(
         SeparatedSyntaxList<T> list,
-        Func<T, PrintingContext, Doc> printFunc,
+        Func<T, CSharpPrintingContext, Doc> printFunc,
         Doc afterSeparator,
-        PrintingContext context,
+        CSharpPrintingContext context,
         int startingIndex = 0
     )
         where T : SyntaxNode
@@ -22,9 +22,9 @@ internal static class SeparatedSyntaxList
 
     public static Doc PrintWithTrailingComma<T>(
         SeparatedSyntaxList<T> list,
-        Func<T, PrintingContext, Doc> printFunc,
+        Func<T, CSharpPrintingContext, Doc> printFunc,
         Doc afterSeparator,
-        PrintingContext context,
+        CSharpPrintingContext context,
         SyntaxToken? closingToken = null
     )
         where T : SyntaxNode
@@ -38,9 +38,9 @@ internal static class SeparatedSyntaxList
     [SkipLocalsInit]
     private static Doc Print<T>(
         in SeparatedSyntaxList<T> list,
-        Func<T, PrintingContext, Doc> printFunc,
+        Func<T, CSharpPrintingContext, Doc> printFunc,
         Doc afterSeparator,
-        PrintingContext context,
+        CSharpPrintingContext context,
         int startingIndex,
         SyntaxToken? closingToken
     )
@@ -74,7 +74,7 @@ internal static class SeparatedSyntaxList
                 if (x < list.SeparatorCount)
                 {
                     unFormattedCode.Append(list.GetSeparator(x).ToFullString().Trim());
-                    unFormattedCode.Append(Environment.NewLine);
+                    unFormattedCode.Append(context.LineEnding);
                 }
 
                 continue;

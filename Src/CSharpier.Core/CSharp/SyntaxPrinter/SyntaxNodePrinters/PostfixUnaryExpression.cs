@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class PostfixUnaryExpression
 {
-    public static Doc Print(PostfixUnaryExpressionSyntax node, PrintingContext context)
+    public static Doc Print(PostfixUnaryExpressionSyntax node, CSharpPrintingContext context)
     {
         if (
             node.Kind() is SyntaxKind.SuppressNullableWarningExpression

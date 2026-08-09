@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class NameEquals
 {
-    public static Doc Print(NameEqualsSyntax node, PrintingContext context)
+    public static Doc Print(NameEqualsSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Name, context),

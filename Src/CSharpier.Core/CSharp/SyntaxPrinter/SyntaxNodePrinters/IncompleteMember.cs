@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class IncompleteMember
 {
-    public static Doc Print(IncompleteMemberSyntax node, PrintingContext context)
+    public static Doc Print(IncompleteMemberSyntax node, CSharpPrintingContext context)
     {
         return string.Empty;
     }

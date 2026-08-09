@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RangeExpression
 {
-    public static Doc Print(RangeExpressionSyntax node, PrintingContext context)
+    public static Doc Print(RangeExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             node.LeftOperand != null ? Node.Print(node.LeftOperand, context) : Doc.Null,

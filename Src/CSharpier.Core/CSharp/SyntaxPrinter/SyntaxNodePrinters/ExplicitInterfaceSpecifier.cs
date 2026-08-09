@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ExplicitInterfaceSpecifier
 {
-    public static Doc Print(ExplicitInterfaceSpecifierSyntax node, PrintingContext context)
+    public static Doc Print(ExplicitInterfaceSpecifierSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(Node.Print(node.Name, context), Token.Print(node.DotToken, context));
     }

@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class PrimaryConstructorBaseType
 {
-    public static Doc Print(PrimaryConstructorBaseTypeSyntax node, PrintingContext context)
+    public static Doc Print(PrimaryConstructorBaseTypeSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Node.Print(node.Type, context),

@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
 internal static class OptionalBraces
 {
-    public static Doc Print(StatementSyntax node, PrintingContext context)
+    public static Doc Print(StatementSyntax node, CSharpPrintingContext context)
     {
         return node is BlockSyntax blockSyntax
             ? Block.Print(blockSyntax, context)

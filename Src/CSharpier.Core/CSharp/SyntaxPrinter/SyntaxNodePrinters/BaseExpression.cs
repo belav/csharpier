@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseExpression
 {
-    public static Doc Print(BaseExpressionSyntax node, PrintingContext context)
+    public static Doc Print(BaseExpressionSyntax node, CSharpPrintingContext context)
     {
         return Token.Print(node.Token, context);
     }

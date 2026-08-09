@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ArrayRankSpecifier
 {
-    public static Doc Print(ArrayRankSpecifierSyntax node, PrintingContext context)
+    public static Doc Print(ArrayRankSpecifierSyntax node, CSharpPrintingContext context)
     {
         if (node.Sizes.All(o => o is OmittedArraySizeExpressionSyntax))
         {

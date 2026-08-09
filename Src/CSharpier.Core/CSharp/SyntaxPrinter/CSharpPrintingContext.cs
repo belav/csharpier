@@ -1,43 +1,22 @@
 using CSharpier.Core.DocTypes;
-using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
-internal class PrintingContext
+internal class CSharpPrintingContext : BasePrintingContext
 {
-    public required string NormalizedXml { get; init; }
-    public required PrintingContextOptions Options { get; init; }
     public PrintingContextState State { get; } = new();
 
-    private readonly Dictionary<string, int> groupNumberByValue = [];
-
-    public string GroupFor(string value)
-    {
-        var number = this.groupNumberByValue.GetValueOrDefault(value, 0) + 1;
-        this.groupNumberByValue[value] = number;
-
-        return value + " #" + number;
-    }
-
-    public PrintingContext WithSkipNextLeadingTrivia()
+    public CSharpPrintingContext WithSkipNextLeadingTrivia()
     {
         this.State.SkipNextLeadingTrivia = true;
         return this;
     }
 
-    public PrintingContext WithTrailingComma(SyntaxTrivia syntaxTrivia, Doc doc)
+    public CSharpPrintingContext WithTrailingComma(SyntaxTrivia syntaxTrivia, Doc doc)
     {
         this.State.TrailingComma = new TrailingCommaContext(syntaxTrivia, doc);
         return this;
-    }
-
-    public class PrintingContextOptions
-    {
-        public required string LineEnding { get; init; }
-        public required int IndentSize { get; init; }
-        public required bool UseTabs { get; init; }
-        public required XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; init; }
     }
 
     public class PrintingContextState

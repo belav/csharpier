@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class DefaultExpression
 {
-    public static Doc Print(DefaultExpressionSyntax node, PrintingContext context)
+    public static Doc Print(DefaultExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.Keyword, context),

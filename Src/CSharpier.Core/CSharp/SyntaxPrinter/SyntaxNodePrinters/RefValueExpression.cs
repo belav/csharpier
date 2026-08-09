@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class RefValueExpression
 {
-    public static Doc Print(RefValueExpressionSyntax node, PrintingContext context)
+    public static Doc Print(RefValueExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.Print(node.Keyword, context),

@@ -60,7 +60,7 @@ internal class CSharpierServiceImplementation(ILogger logger)
             }
 
             var printerOptions = await optionsProvider.GetPrinterOptionsForAsync(
-                formatFileParameter.fileName,
+                fileName,
                 cancellationToken
             );
             if (printerOptions == null || printerOptions.Formatter is Formatter.Unknown)
@@ -68,7 +68,6 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 return new FormatFileResult(Status.UnsupportedFile);
             }
 
-            // TODO #819 if there are compilation errors we need to do something here
             var result = await CodeFormatter.FormatAsync(
                 formatFileParameter.fileContents,
                 printerOptions,
@@ -81,6 +80,25 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 {
                     errorMessage = "File had compilation errors and could not be formatted",
                 };
+            }
+
+            if (string.IsNullOrEmpty(result.Code))
+            {
+                if (!string.IsNullOrEmpty(result.WarningMessage))
+                {
+                    return new FormatFileResult(Status.Failed)
+                    {
+                        errorMessage = result.WarningMessage,
+                    };
+                }
+
+                if (!string.IsNullOrEmpty(result.FailureMessage))
+                {
+                    return new FormatFileResult(Status.Failed)
+                    {
+                        errorMessage = result.FailureMessage,
+                    };
+                }
             }
 
             return new FormatFileResult(Status.Formatted) { formattedFile = result.Code };

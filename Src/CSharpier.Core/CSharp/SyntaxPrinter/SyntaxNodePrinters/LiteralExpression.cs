@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LiteralExpression
 {
-    public static Doc Print(LiteralExpressionSyntax node, PrintingContext context)
+    public static Doc Print(LiteralExpressionSyntax node, CSharpPrintingContext context)
     {
         return Token.Print(node.Token, context);
     }

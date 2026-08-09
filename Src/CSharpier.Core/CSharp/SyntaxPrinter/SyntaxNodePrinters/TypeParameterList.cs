@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TypeParameterList
 {
-    public static Doc Print(TypeParameterListSyntax node, PrintingContext context)
+    public static Doc Print(TypeParameterListSyntax node, CSharpPrintingContext context)
     {
         if (node.Parameters.Count == 0)
         {

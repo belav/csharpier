@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class OrderByClause
 {
-    public static Doc Print(OrderByClauseSyntax node, PrintingContext context)
+    public static Doc Print(OrderByClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

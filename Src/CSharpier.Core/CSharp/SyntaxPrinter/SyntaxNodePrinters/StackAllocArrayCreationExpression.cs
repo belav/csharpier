@@ -5,7 +5,10 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class StackAllocArrayCreationExpression
 {
-    public static Doc Print(StackAllocArrayCreationExpressionSyntax node, PrintingContext context)
+    public static Doc Print(
+        StackAllocArrayCreationExpressionSyntax node,
+        CSharpPrintingContext context
+    )
     {
         return Doc.Group(
             Token.PrintWithSuffix(node.StackAllocKeyword, " ", context),

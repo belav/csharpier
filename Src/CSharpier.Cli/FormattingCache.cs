@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.IO.Hashing;
-using System.Text;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using CSharpier.Core;
 using CSharpier.Core.Utilities;
@@ -101,10 +101,9 @@ internal static class FormattingCacheFactory
             PrinterOptions printerOptions
         )
         {
-            var currentHash = GetCacheHash(fileToFormatInfo.FileContents, printerOptions);
             if (cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
-                if (currentHash == cachedHash)
+                if (this.HashMatches(cachedHash, fileToFormatInfo.FileContents))
                 {
                     return true;
                 }
@@ -115,11 +114,16 @@ internal static class FormattingCacheFactory
             return false;
         }
 
-        public void CacheResult(
-            string code,
-            FileToFormatInfo fileToFormatInfo,
-            PrinterOptions printerOptions
-        )
+        private bool HashMatches(string cachedHash, string fileContents)
+        {
+            var contentHash = Hash(fileContents);
+
+            return cachedHash.Length == contentHash.Length + this.optionsHash.Length
+                && cachedHash.AsSpan(0, contentHash.Length).SequenceEqual(contentHash.AsSpan())
+                && cachedHash.AsSpan(contentHash.Length).SequenceEqual(this.optionsHash.AsSpan());
+        }
+
+        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo)
         {
             cacheDictionary[fileToFormatInfo.Path] = GetCacheHash(code, printerOptions);
         }
@@ -133,17 +137,18 @@ internal static class FormattingCacheFactory
         {
             var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
             var hash = new XxHash32();
-            hash.Append(
-                Encoding.UTF8.GetBytes(csharpierVersion?.ToString() ?? string.Empty)
-            );
+            hash.Append(Encoding.UTF8.GetBytes(csharpierVersion?.ToString() ?? string.Empty));
             hash.Append(JsonSerializer.SerializeToUtf8Bytes(printerOptions));
             return Convert.ToHexString(hash.GetCurrentHash());
         }
 
+        // hashes the utf-16 payload in place - transcoding to ascii first would both copy the whole
+        // file and collapse every non-ascii character to '?', letting two different files collide
         private static string Hash(string input)
         {
-            var result = XxHash32.Hash(Encoding.ASCII.GetBytes(input));
-            return Convert.ToHexString(result);
+            Span<byte> destination = stackalloc byte[sizeof(uint)];
+            XxHash32.Hash(MemoryMarshal.AsBytes(input.AsSpan()), destination);
+            return Convert.ToHexString(destination);
         }
 
         public async Task ResolveAsync(CancellationToken cancellationToken)

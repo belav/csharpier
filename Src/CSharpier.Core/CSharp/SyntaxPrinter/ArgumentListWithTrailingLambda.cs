@@ -10,7 +10,7 @@ internal static class ArgumentListWithTrailingLambda
     public static Doc Print(
         SeparatedSyntaxList<ArgumentSyntax> arguments,
         LambdaExpressionSyntax lastLambda,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         var chop = Doc.Concat(

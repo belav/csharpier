@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class EmptyStatement
 {
-    public static Doc Print(EmptyStatementSyntax node, PrintingContext context)
+    public static Doc Print(EmptyStatementSyntax node, CSharpPrintingContext context)
     {
         return Token.Print(node.SemicolonToken, context);
     }

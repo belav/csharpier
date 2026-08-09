@@ -7,7 +7,7 @@ internal static class ConditionalExpression
 {
     // TODO a decent amount of edgecases to figure out in
     // https://github.com/belav/csharpier-repos/pull/110/files
-    public static Doc Print(ConditionalExpressionSyntax node, PrintingContext context)
+    public static Doc Print(ConditionalExpressionSyntax node, CSharpPrintingContext context)
     {
         if (
             node.WhenTrue is not ConditionalExpressionSyntax
@@ -24,7 +24,7 @@ internal static class ConditionalExpression
 
     public static Doc PrintWithRegularFormatting(
         ConditionalExpressionSyntax node,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         var whenTrue = node.WhenTrue is ConditionalExpressionSyntax c1
@@ -73,7 +73,7 @@ internal static class ConditionalExpression
     // they are essentially a switch expression
     private static Doc PrintWithChainedFormatting(
         ConditionalExpressionSyntax node,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         var whenTrue = node.WhenTrue is ConditionalExpressionSyntax c1

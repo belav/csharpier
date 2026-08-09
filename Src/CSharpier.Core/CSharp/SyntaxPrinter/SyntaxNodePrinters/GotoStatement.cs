@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class GotoStatement
 {
-    public static Doc Print(GotoStatementSyntax node, PrintingContext context)
+    public static Doc Print(GotoStatementSyntax node, CSharpPrintingContext context)
     {
         var expression =
             node.Expression != null
