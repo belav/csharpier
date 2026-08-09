@@ -310,6 +310,32 @@ overrides:
     }
 
     [Test]
+    [Arguments("xml", 2)]
+    [Arguments("csharp", 4)]
+    public async Task Should_Return_Formatter_Default_IndentSize_For_Override_Without_IndentSize(
+        string formatter,
+        int expectedIndentSize
+    )
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            "c:/test/.csharpierrc",
+            $"""
+overrides:
+    - files: "*.override"
+      formatter: "{formatter}"
+"""
+        );
+
+        var result = await context.CreateProviderAndGetOptionsFor(
+            "c:/test",
+            "c:/test/test.override"
+        );
+
+        result.IndentSize.Should().Be(expectedIndentSize);
+    }
+
+    [Test]
     [Arguments("cs")]
     [Arguments("csx")]
     public async Task Should_Return_Default_CSharp_Options_With_Empty_EditorConfig(string extension)
