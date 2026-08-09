@@ -1076,6 +1076,87 @@ class ClassName
     }
 
     [Test]
+    public async Task Explicit_Files_Should_Resolve_Options_From_Their_Own_Directories()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a/.editorconfig", "[*.cs]\nindent_size = 8");
+        context.WhenAFileExists("a/b/.editorconfig", "[*.cs]\nindent_size = 2");
+        context.WhenAFileExists("a/b/c/.editorconfig", "[*.cs]\nindent_size = 6");
+        context.WhenAFileExists("a/a.cs", UnformattedClassContent);
+        context.WhenAFileExists("a/b/b.cs", UnformattedClassContent);
+        context.WhenAFileExists("a/b/c/c.cs", UnformattedClassContent);
+
+        await Format(context, directoryOrFilePaths: ["a/a.cs", "a/b/b.cs", "a/b/c/c.cs"]);
+
+        context.GetFileContent("a/a.cs").Should().Contain("\n        public int Field;");
+        context.GetFileContent("a/b/b.cs").Should().Contain("\n  public int Field;");
+        context.GetFileContent("a/b/c/c.cs").Should().Contain("\n      public int Field;");
+    }
+
+    [Test]
+    public async Task Ignore_Path_Should_Be_Anchored_To_Each_Explicit_File_Directory()
+    {
+        var context = new TestContext();
+        var ignorePath = context.WhenAFileExists("format.ignore", "/d.cs");
+        context.WhenAFileExists("one/d.cs", UnformattedClassContent);
+        context.WhenAFileExists("two/d.cs", UnformattedClassContent);
+
+        await Format(
+            context,
+            ignorePath: ignorePath,
+            directoryOrFilePaths: ["one/d.cs", "two/d.cs"]
+        );
+
+        context.GetFileContent("one/d.cs").Should().Be(UnformattedClassContent);
+        context.GetFileContent("two/d.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task Built_In_Ignores_Should_Apply_To_Each_Input_Root()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("one/a.cs", UnformattedClassContent);
+        context.WhenAFileExists("two/obj/b.cs", UnformattedClassContent);
+
+        var result = await Format(context, directoryOrFilePaths: ["one", "two"]);
+
+        result.OutputLines.Should().ContainSingle(line => line.StartsWith("Formatted 1 files in"));
+        context.GetFileContent("two/obj/b.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task Ignore_Path_Should_Stay_Anchored_To_The_Originating_Root()
+    {
+        var context = new TestContext();
+        var ignorePath = context.WhenAFileExists("format.ignore", "/sub/ignored.cs");
+        context.WhenAFileExists("root/included.cs", UnformattedClassContent);
+        context.WhenAFileExists("root/sub/ignored.cs", UnformattedClassContent);
+
+        await Format(context, ignorePath: ignorePath, directoryOrFilePaths: ["root", "root/sub"]);
+
+        context.GetFileContent("root/included.cs").Should().Be(FormattedClassContent);
+        context.GetFileContent("root/sub/ignored.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task Formatting_Cache_Should_Use_Each_Files_Resolved_Options()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("one/.editorconfig", "[*.cs]\nindent_size = 4");
+        var secondConfig = context.WhenAFileExists("two/.editorconfig", "[*.cs]\nindent_size = 2");
+        context.WhenAFileExists("one/a.cs", UnformattedClassContent);
+        context.WhenAFileExists("two/b.cs", UnformattedClassContent);
+
+        await Format(context, directoryOrFilePaths: ["one/a.cs", "two/b.cs"]);
+        context.GetFileContent("two/b.cs").Should().Contain("\n  public int Field;");
+
+        context.FileSystem.File.WriteAllText(secondConfig, "[*.cs]\nindent_size = 8");
+        await Format(context, directoryOrFilePaths: ["one/a.cs", "two/b.cs"]);
+
+        context.GetFileContent("two/b.cs").Should().Contain("\n        public int Field;");
+    }
+
+    [Test]
     public async Task Should_Work_With_Extensionless_File()
     {
         var context = new TestContext();
@@ -1125,6 +1206,7 @@ class ClassName
         bool syntaxErrorsAsWarnings = false,
         string? standardInFileContents = null,
         string? configPath = null,
+        string? ignorePath = null,
         params string[] directoryOrFilePaths
     )
     {
@@ -1156,6 +1238,7 @@ class ClassName
                 StandardInFileContents = standardInFileContents,
                 IncludeGenerated = includeGenerated,
                 SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
+                IgnorePath = ignorePath,
             },
             context.FileSystem,
             fakeConsole,

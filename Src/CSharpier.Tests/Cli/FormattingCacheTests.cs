@@ -3,6 +3,7 @@ using System.Text;
 using AwesomeAssertions;
 using CSharpier.Cli;
 using CSharpier.Cli.Options;
+using CSharpier.Core;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CSharpier.Tests.Cli;
@@ -15,11 +16,16 @@ internal sealed class FormattingCacheTests
         var cache = await CreateCacheAsync();
         var path = OperatingSystem.IsWindows() ? "c:/test/Class.cs" : "/test/Class.cs";
 
-        cache.CacheResult("public class Café { }\n", FileAt(path, "public class Café { }\n"));
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Ignore);
+        cache.CacheResult(
+            "public class Café { }\n",
+            FileAt(path, "public class Café { }\n"),
+            printerOptions
+        );
 
         var otherFile = FileAt(path, "public class Cafè { }\n");
 
-        cache.CanSkipFormatting(otherFile).Should().BeFalse();
+        cache.CanSkipFormatting(otherFile, printerOptions).Should().BeFalse();
     }
 
     [Test]
@@ -29,9 +35,10 @@ internal sealed class FormattingCacheTests
         var path = OperatingSystem.IsWindows() ? "c:/test/Class.cs" : "/test/Class.cs";
         var contents = "public class Café { }\n";
 
-        cache.CacheResult(contents, FileAt(path, contents));
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Ignore);
+        cache.CacheResult(contents, FileAt(path, contents), printerOptions);
 
-        cache.CanSkipFormatting(FileAt(path, contents)).Should().BeTrue();
+        cache.CanSkipFormatting(FileAt(path, contents), printerOptions).Should().BeTrue();
     }
 
     private static FileToFormatInfo FileAt(string path, string contents)
@@ -45,18 +52,8 @@ internal sealed class FormattingCacheTests
         var fileSystem = new MockFileSystem();
         fileSystem.AddDirectory(directory);
 
-        var optionsProvider = await OptionsProvider.Create(
-            directory,
-            null,
-            null,
-            fileSystem,
-            NullLogger.Instance,
-            CancellationToken.None
-        );
-
         return await FormattingCacheFactory.InitializeAsync(
             new CommandLineOptions(),
-            optionsProvider,
             fileSystem,
             CancellationToken.None
         );
