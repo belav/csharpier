@@ -5,12 +5,10 @@
  * From https://github.com/SLaks/Minimatch
  */
 
-using System;
-using System.Collections.Generic;
+using System.Buffers;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -90,8 +88,11 @@ internal partial class GlobMatcher
         this.myEmpty = empty;
     }
 
-    private static readonly char[] ourUnixPathSeparators = ['/'];
-    private static readonly char[] ourWinPathSeparators = ['/', '\\'];
+    private static readonly SearchValues<char> ourUnixPathSeparators = SearchValues.Create('/');
+    private static readonly SearchValues<char> ourWinPathSeparators = SearchValues.Create(
+        '/',
+        '\\'
+    );
 
     ///<summary>Checks whether a given string matches this pattern.</summary>
     public bool IsMatch(string input)
@@ -144,7 +145,7 @@ internal partial class GlobMatcher
             this.myOptions.IgnoreCase
                 ? StringComparison.OrdinalIgnoreCase
                 : StringComparison.Ordinal;
-        private readonly char[] PathSeparatorChars =>
+        private readonly SearchValues<char> PathSeparatorChars =>
             this.myOptions.AllowWindowsPaths ? ourWinPathSeparators : ourUnixPathSeparators;
 
         public MatchContext(GlobMatcherOptions options, string str, PatternCase patternCase)
@@ -168,14 +169,13 @@ internal partial class GlobMatcher
                 {
                     this.SkipLastPathSeparators();
 
-                    var lastSeparator = this.myStr.LastIndexOfAny(
-                        this.PathSeparatorChars,
-                        this.myEndOffset - 1,
-                        this.myEndOffset - this.myStartOffset
-                    );
+                    var lastSeparator = this
+                        .myStr.AsSpan()
+                        .Slice(this.myEndOffset - 1, this.myEndOffset - this.myStartOffset)
+                        .LastIndexOfAny(this.PathSeparatorChars);
                     if (lastSeparator != -1)
                     {
-                        this.myStartOffset = lastSeparator + 1;
+                        this.myStartOffset = lastSeparator + this.myEndOffset;
                     }
                 }
             }
@@ -523,15 +523,17 @@ internal partial class GlobMatcher
                         return true;
                     }
 
-                    var pos = this.myStr.IndexOfAny(
-                        this.PathSeparatorChars,
-                        this.myStartOffset + numberOfOneCharItemsBefore,
-                        this.myEndOffset - this.myStartOffset - numberOfOneCharItemsBefore
-                    );
+                    var pos = this
+                        .myStr.AsSpan()
+                        .Slice(
+                            this.myStartOffset + numberOfOneCharItemsBefore,
+                            this.myEndOffset - this.myStartOffset - numberOfOneCharItemsBefore
+                        )
+                        .IndexOfAny(this.PathSeparatorChars);
                     if (pos == -1)
                         return false;
 
-                    this.myStartOffset = pos - numberOfOneCharItemsBefore;
+                    this.myStartOffset = pos + this.myStartOffset;
                     if (this.myEndOffset - this.myStartOffset < fixedItemsLengthAfterAsterisk)
                         return false;
                 }
@@ -572,11 +574,8 @@ internal partial class GlobMatcher
                 if (newStartPos > oldStartPos)
                 {
                     if (
-                        this.myStr.IndexOfAny(
-                            this.PathSeparatorChars,
-                            oldStartPos,
-                            newStartPos - oldStartPos
-                        ) != -1
+                        this.myStr.AsSpan()[oldStartPos..newStartPos]
+                            .IndexOfAny(this.PathSeparatorChars) != -1
                     )
                         return false;
 

@@ -1,9 +1,20 @@
-﻿namespace CSharpier.Cli.DotIgnore;
+﻿using System.Buffers;
+
+namespace CSharpier.Cli.DotIgnore;
 
 internal static class StringExtensions
 {
-    internal static string NormalisePath(this string path)
+    private static readonly SearchValues<char> invalidCharacters = SearchValues.Create(',', '/');
+
+    internal static ReadOnlySpan<char> NormalisePath(this ReadOnlySpan<char> path)
     {
-        return path.Replace(":", string.Empty).Replace(Path.DirectorySeparatorChar, '/').Trim();
+        var index = path.IndexOfAny(invalidCharacters);
+        return index < 0
+            ? path.Trim()
+            : path.ToString()
+                .Replace(":", string.Empty)
+                .Replace(Path.DirectorySeparatorChar, '/')
+                .AsSpan()
+                .Trim();
     }
 }

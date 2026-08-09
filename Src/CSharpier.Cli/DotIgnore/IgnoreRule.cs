@@ -1,10 +1,11 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Buffers;
+using System.Text.RegularExpressions;
 
 namespace CSharpier.Cli.DotIgnore;
 
 internal class IgnoreRule
 {
-    private static readonly char[] _wildcardChars = ['*', '[', '?'];
+    private static readonly SearchValues<char> _wildcardChars = SearchValues.Create('*', '[', '?');
 
     private readonly int wildcardIndex;
     private readonly Regex? regex;
@@ -69,20 +70,17 @@ internal class IgnoreRule
         }
     }
 
-    public bool IsMatch(string path, bool pathIsDirectory)
+    public bool IsMatch(ReadOnlySpan<char> path, bool pathIsDirectory)
     {
-        if (string.IsNullOrWhiteSpace(path))
+        if (path.IsEmpty || path.IsWhiteSpace())
         {
             throw new ArgumentException("Path cannot be null or empty", nameof(path));
         }
 
         // .gitignore files use Unix paths (with a forward slash separator),
         // so make sure our input also uses forward slashes
-#if NET8_0
         var normalisedPath = path.NormalisePath().TrimStart('/');
-#else
-        var normalisedPath = path.NormalisePath().AsSpan().TrimStart('/');
-#endif
+
         // Shortcut return if the pattern is directory-only and the path isn't a directory
         // This has to be determined by the OS (at least that's the only reliable way),
         // so we pass that information in as a boolean so the consuming code can provide it
@@ -116,15 +114,6 @@ internal class IgnoreRule
             && path.Contains('/')
         )
         {
-#if NET8_0
-            foreach (var segment in normalisedPath.Split('/'))
-            {
-                if (Matcher.TryMatch(this.regex, segment))
-                {
-                    return true;
-                }
-            }
-#else
             foreach (var range in normalisedPath.Split('/'))
             {
                 if (Matcher.TryMatch(this.regex, normalisedPath[range]))
@@ -132,7 +121,6 @@ internal class IgnoreRule
                     return true;
                 }
             }
-#endif
 
             return false;
         }

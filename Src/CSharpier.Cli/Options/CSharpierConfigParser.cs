@@ -1,3 +1,4 @@
+using System.Buffers;
 using System.IO.Abstractions;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,10 @@ namespace CSharpier.Cli.Options;
 
 internal static class CSharpierConfigParser
 {
-    private static readonly string[] validExtensions = [".csharpierrc", ".json", ".yml", ".yaml"];
+    private static readonly SearchValues<string> validExtensions = SearchValues.Create(
+        [".csharpierrc", ".json", ".yml", ".yaml"],
+        StringComparison.OrdinalIgnoreCase
+    );
     private static readonly JsonSerializerOptions CaseInsensitiveJson = new()
     {
         PropertyNameCaseInsensitive = true,
@@ -28,9 +32,7 @@ internal static class CSharpierConfigParser
             {
                 var file = directoryInfo
                     .EnumerateFiles(".csharpierrc*", SearchOption.TopDirectoryOnly)
-                    .Where(o =>
-                        validExtensions.Contains(o.Extension, StringComparer.OrdinalIgnoreCase)
-                    )
+                    .Where(o => o.Extension.ContainsAny(validExtensions))
                     .MinBy(o => o.Extension);
 
                 if (file != null)

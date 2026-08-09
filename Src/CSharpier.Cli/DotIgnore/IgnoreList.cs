@@ -51,9 +51,7 @@ internal class IgnoreList(string basePath)
         }
 
         var pathRelativeToIgnoreFile =
-            path.Length > basePath.Length
-                ? path[basePath.Length..].Replace('\\', '/')
-                : string.Empty;
+            path.Length > basePath.Length ? PathRelativeToIgnoreFile(path) : string.Empty;
 
         var ancestorIgnored = this.IsAnyParentDirectoryIgnored(pathRelativeToIgnoreFile);
 
@@ -65,7 +63,14 @@ internal class IgnoreList(string basePath)
         return this.IsPathIgnored(pathRelativeToIgnoreFile, isDirectory);
     }
 
-    private bool IsAnyParentDirectoryIgnored(string path)
+    private ReadOnlySpan<char> PathRelativeToIgnoreFile(string path)
+    {
+        var relativeSpan = path.AsSpan()[basePath.Length..];
+        var index = relativeSpan.IndexOf('\\');
+        return index < 0 ? relativeSpan : path[basePath.Length..].Replace('\\', '/');
+    }
+
+    private bool IsAnyParentDirectoryIgnored(ReadOnlySpan<char> path)
     {
         var nextPathIndex = path.LastIndexOf('/');
         if (nextPathIndex > 0)
@@ -78,9 +83,10 @@ internal class IgnoreList(string basePath)
 
     private readonly ConcurrentDictionary<string, bool> directoryIgnoredByPath = new();
 
-    private bool IsDirectoryIgnored(string path)
+    private bool IsDirectoryIgnored(ReadOnlySpan<char> path)
     {
-        if (this.directoryIgnoredByPath.TryGetValue(path, out var isIgnored))
+        var lookup = this.directoryIgnoredByPath.GetAlternateLookup<ReadOnlySpan<char>>();
+        if (lookup.TryGetValue(path, out var isIgnored))
         {
             return isIgnored;
         }
@@ -99,11 +105,14 @@ internal class IgnoreList(string basePath)
             }
         }
 
-        this.directoryIgnoredByPath.TryAdd(path, isIgnored);
+        lookup.TryAdd(path, isIgnored);
         return isIgnored;
     }
 
-    private (bool hasMatchingRule, bool isIgnored) IsPathIgnored(string path, bool pathIsDirectory)
+    private (bool hasMatchingRule, bool isIgnored) IsPathIgnored(
+        ReadOnlySpan<char> path,
+        bool pathIsDirectory
+    )
     {
         // This pattern modified from https://github.com/henon/GitSharp/blob/master/GitSharp/IgnoreRules.cs
         var isIgnored = false;
@@ -123,7 +132,7 @@ internal class IgnoreList(string basePath)
 
     private static void EvaluateRules(
         IgnoreRule[] rules,
-        string path,
+        ReadOnlySpan<char> path,
         bool pathIsDirectory,
         ref bool isIgnored,
         ref bool hasMatchingRule
