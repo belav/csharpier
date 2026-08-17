@@ -1,7 +1,7 @@
 using System.Management.Automation.Language;
 using CSharpier.Core.DocTypes;
 
-namespace CSharpier.Core.PowerShell.AstPrinters;
+namespace CSharpier.Core.PowerShell;
 
 // TODO 1894 this should probably go away completely
 internal static class Verbatim

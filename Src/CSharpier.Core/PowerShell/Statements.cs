@@ -1,8 +1,9 @@
 using System.Collections.ObjectModel;
 using System.Management.Automation.Language;
 using CSharpier.Core.DocTypes;
+using CSharpier.Core.PowerShell.AstPrinters;
 
-namespace CSharpier.Core.PowerShell.AstPrinters;
+namespace CSharpier.Core.PowerShell;
 
 internal static class Statements
 {

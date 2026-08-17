@@ -3,3 +3,9 @@ line1
   indented
 line2
 "@
+
+$x = @'
+line1
+  indented
+line2
+'@
