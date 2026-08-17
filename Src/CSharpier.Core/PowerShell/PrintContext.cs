@@ -1,6 +1,6 @@
 using System.Management.Automation.Language;
 
-namespace CSharpier.Core.PowerShell.AstPrinters;
+namespace CSharpier.Core.PowerShell;
 
 internal sealed class PrintContext(IReadOnlyList<IScriptExtent> comments)
 {
