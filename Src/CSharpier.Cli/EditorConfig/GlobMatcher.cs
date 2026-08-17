@@ -144,6 +144,7 @@ internal partial class GlobMatcher
             this.myOptions.IgnoreCase
                 ? StringComparison.OrdinalIgnoreCase
                 : StringComparison.Ordinal;
+
         private readonly char[] PathSeparatorChars =>
             this.myOptions.AllowWindowsPaths ? ourWinPathSeparators : ourUnixPathSeparators;
 
@@ -634,11 +635,12 @@ internal partial class GlobMatcher
         }
     }
 
-    private static bool IsPathSeparator(GlobMatcherOptions options, char c) =>
+    private static bool IsPathSeparator(GlobMatcherOptions options, char c)
+    {
         // windows: need to use /, not \
         // On other platforms, \ is a valid (albeit bad) filename char.
-        c == '/'
-        || options.AllowWindowsPaths && c == '\\';
+        return c == '/' || options.AllowWindowsPaths && c == '\\';
+    }
 
     private class PatternCase : List<IPatternElement>
     {

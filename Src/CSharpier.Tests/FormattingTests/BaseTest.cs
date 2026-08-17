@@ -49,6 +49,7 @@ public class BaseTest
                     "cs" => Formatter.CSharp,
                     "csx" => Formatter.CSharpScript,
                     "xml" => Formatter.XML,
+                    "powershell" => Formatter.PowerShell,
                     _ => Formatter.Unknown,
                 };
 
@@ -123,7 +124,6 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
-        // TODO #1359 xml comparer here
         var comparer = new SyntaxNodeComparer(
             expectedCode,
             normalizedCode,

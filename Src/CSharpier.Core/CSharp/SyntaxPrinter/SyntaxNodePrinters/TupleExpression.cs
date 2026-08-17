@@ -5,8 +5,9 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class TupleExpression
 {
-    public static Doc Print(TupleExpressionSyntax node, CSharpPrintingContext context) =>
-        Doc.Group(
+    public static Doc Print(TupleExpressionSyntax node, CSharpPrintingContext context)
+    {
+        return Doc.Group(
             ArgumentListLike.Print(
                 node.OpenParenToken,
                 node.Arguments,
@@ -14,4 +15,5 @@ internal static class TupleExpression
                 context
             )
         );
+    }
 }

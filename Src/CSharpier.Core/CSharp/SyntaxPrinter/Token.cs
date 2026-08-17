@@ -399,16 +399,24 @@ internal static class Token
         return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
     }
 
-    private static bool IsSingleLineComment(SyntaxKind kind) =>
-        kind
+    private static bool IsSingleLineComment(SyntaxKind kind)
+    {
+        return kind
             is SyntaxKind.SingleLineDocumentationCommentTrivia
                 or SyntaxKind.SingleLineCommentTrivia;
+    }
 
-    private static bool IsMultiLineComment(SyntaxKind kind) =>
-        kind is SyntaxKind.MultiLineCommentTrivia or SyntaxKind.MultiLineDocumentationCommentTrivia;
+    private static bool IsMultiLineComment(SyntaxKind kind)
+    {
+        return kind
+            is SyntaxKind.MultiLineCommentTrivia
+                or SyntaxKind.MultiLineDocumentationCommentTrivia;
+    }
 
-    private static bool IsRegion(SyntaxKind kind) =>
-        kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;
+    private static bool IsRegion(SyntaxKind kind)
+    {
+        return kind is SyntaxKind.RegionDirectiveTrivia or SyntaxKind.EndRegionDirectiveTrivia;
+    }
 
     public static Doc PrintTrailingTrivia(SyntaxToken node)
     {

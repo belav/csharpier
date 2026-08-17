@@ -13,8 +13,10 @@ internal sealed class StringDoc(string value, bool isDirective = false) : Doc
     public string Value { get; } = value;
     public bool IsDirective { get; } = isDirective;
 
-    public static StringDoc Create(string value) =>
-        value == " " ? SpaceStringDoc : new StringDoc(value);
+    public static StringDoc Create(string value)
+    {
+        return value == " " ? SpaceStringDoc : new StringDoc(value);
+    }
 
     public static StringDoc Create(SyntaxToken token)
     {

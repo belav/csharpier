@@ -66,15 +66,20 @@ public class FormatController : ControllerBase
             cancellationToken
         );
 
-        var comparer = new SyntaxNodeComparer(
-            model.Code,
-            result.Code,
-            result.ReorderedModifiers,
-            result.ReorderedUsingsWithDisabledText,
-            result.MovedTrailingTrivia,
-            parsedFormatter is Formatter.CSharp ? SourceCodeKind.Regular : SourceCodeKind.Script,
-            cancellationToken
-        );
+        var syntaxValidation = string.Empty;
+        if (parsedFormatter is not Formatter.PowerShell)
+        {
+            var comparer = new SyntaxNodeComparer(
+                model.Code,
+                result.Code,
+                result.ReorderedModifiers,
+                result.ReorderedUsingsWithDisabledText,
+                result.MovedTrailingTrivia,
+                parsedFormatter is Formatter.CSharp ? SourceCodeKind.Regular : SourceCodeKind.Script,
+                cancellationToken
+            );
+            syntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None);
+        }
 
         return new FormatResult
         {
@@ -82,7 +87,7 @@ public class FormatController : ControllerBase
             Json = result.AST,
             Doc = result.DocTree,
             Errors = result.ErrorDiagnostics.Select(this.ConvertError).ToList(),
-            SyntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None),
+            SyntaxValidation = syntaxValidation,
         };
     }
 
