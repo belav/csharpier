@@ -38,7 +38,7 @@ internal static class FormattingCacheFactory
         }
 
         var cacheDictionary = new ConcurrentDictionary<string, string>();
-        if (File.Exists(CacheFilePath))
+        if (fileSystem.File.Exists(CacheFilePath))
         {
             // in my testing we don't normally have to wait more than a couple MS, but just in case
             const int attempts = 20;
@@ -47,7 +47,10 @@ internal static class FormattingCacheFactory
             {
                 try
                 {
-                    content = await File.ReadAllTextAsync(CacheFilePath, cancellationToken);
+                    content = await fileSystem.File.ReadAllTextAsync(
+                        CacheFilePath,
+                        cancellationToken
+                    );
                     break;
                 }
                 catch (Exception)
@@ -76,7 +79,7 @@ internal static class FormattingCacheFactory
                 // file must be bad json
                 try
                 {
-                    File.Delete(CacheFilePath);
+                    fileSystem.File.Delete(CacheFilePath);
                 }
                 catch (Exception)
                 {

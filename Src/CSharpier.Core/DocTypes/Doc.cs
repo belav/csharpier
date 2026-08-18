@@ -64,7 +64,12 @@ internal abstract class Doc
 
     public static Doc Concat(params Doc[] contents)
     {
-        return new Concat(contents);
+        return contents.Length switch
+        {
+            0 => Null,
+            1 => contents[0],
+            _ => new Concat(contents),
+        };
     }
 
     public static Doc Concat(ref DocListBuilder contents)
@@ -98,12 +103,12 @@ internal abstract class Doc
 
     public static ForceFlat ForceFlat(List<Doc> contents)
     {
-        return new ForceFlat { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
+        return new ForceFlat { Contents = Concat(contents) };
     }
 
     public static ForceFlat ForceFlat(params Doc[] contents)
     {
-        return new ForceFlat { Contents = contents.Length == 1 ? contents[0] : Concat(contents) };
+        return new ForceFlat { Contents = Concat(contents) };
     }
 
     public static Group Group(List<Doc> contents)

@@ -5,7 +5,7 @@ using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Tests;
 
-public class DocPrinterTests
+public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDocPrinterTests
 {
     [Test]
     public void Lines_Allowed()
