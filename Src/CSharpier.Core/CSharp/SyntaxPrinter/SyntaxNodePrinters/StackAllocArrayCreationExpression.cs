@@ -13,9 +13,7 @@ internal static class StackAllocArrayCreationExpression
         return Doc.Group(
             Token.PrintWithSuffix(node.StackAllocKeyword, " ", context),
             Node.Print(node.Type, context),
-            node.Initializer != null
-                ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
-                : Doc.Null
+            InitializerExpression.PrintOptionalWithLine(node.Initializer, context)
         );
     }
 }

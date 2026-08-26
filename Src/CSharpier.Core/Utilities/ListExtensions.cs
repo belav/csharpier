@@ -60,6 +60,60 @@ internal static class ListExtensions
         return false;
     }
 
+    // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
+    public static bool Any<TNode>(this in SyntaxList<TNode> list, Func<TNode, bool> predicate)
+        where TNode : SyntaxNode
+    {
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var node in list)
+        {
+            if (predicate(node))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Overload for Any to prevent unnecessary allocations of EnumeratorImpl
+    public static bool Any<TNode>(
+        this in SeparatedSyntaxList<TNode> list,
+        Func<TNode, bool> predicate
+    )
+        where TNode : SyntaxNode
+    {
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var node in list)
+        {
+            if (predicate(node))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Overload for All to prevent unnecessary allocations of EnumeratorImpl
+    public static bool All<TNode>(
+        this in SeparatedSyntaxList<TNode> list,
+        Func<TNode, bool> predicate
+    )
+        where TNode : SyntaxNode
+    {
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+        foreach (var node in list)
+        {
+            if (!predicate(node))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static SyntaxTrivia FirstOrDefault(
         this in SyntaxTriviaList source,
         Func<SyntaxTrivia, bool> predicate

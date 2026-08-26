@@ -40,11 +40,9 @@ internal static class SwitchExpression
         CSharpPrintingContext context
     )
     {
-        var arrowHasComment = switchExpressionArm.EqualsGreaterThanToken.LeadingTrivia.Any(o =>
-            o.IsComment()
-        );
+        var arrowHasComment = switchExpressionArm.EqualsGreaterThanToken.LeadingTrivia.AnyComment();
 
-        var groupId2 = arrowHasComment ? string.Empty : Guid.NewGuid().ToString();
+        var groupId2 = arrowHasComment ? string.Empty : Doc.NextGroupId();
         var innerContents = arrowHasComment
             ? Doc.Indent(
                 Doc.Concat(
@@ -60,7 +58,7 @@ internal static class SwitchExpression
                 Doc.IndentIfBreak(Node.Print(switchExpressionArm.Expression, context), groupId2)
             );
 
-        var groupId1 = Guid.NewGuid().ToString();
+        var groupId1 = Doc.NextGroupId();
 
         return Doc.Concat(
             ExtraNewLines.Print(switchExpressionArm),

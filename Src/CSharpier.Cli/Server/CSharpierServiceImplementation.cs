@@ -1,4 +1,6 @@
+using System.Collections.Concurrent;
 using System.IO.Abstractions;
+using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
 using Microsoft.Extensions.Logging;
@@ -8,6 +10,18 @@ namespace CSharpier.Cli.Server;
 internal class CSharpierServiceImplementation(ILogger logger)
 {
     private readonly FileSystem fileSystem = new();
+
+    private static readonly string[] configFileNames =
+    [
+        ".editorconfig",
+        ".gitignore",
+        ".csharpierignore",
+    ];
+
+    private readonly ConcurrentDictionary<
+        string,
+        (string ConfigStamp, OptionsProvider OptionsProvider)
+    > optionsProvidersByDirectory = new(StringComparer.Ordinal);
 
     public async Task<FormatFileResult> FormatFile(
         FormatFileParameter formatFileParameter,
@@ -42,12 +56,8 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 );
             }
 
-            var optionsProvider = await OptionsProvider.Create(
+            var optionsProvider = await this.GetOptionsProviderAsync(
                 directoryName,
-                configPath: null,
-                ignorePath: null,
-                this.fileSystem,
-                logger,
                 cancellationToken
             );
 
@@ -111,5 +121,89 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 errorMessage = "An exception was thrown\n" + ex,
             };
         }
+    }
+
+    // building an OptionsProvider recompiles every ignore rule into a regex, so it is reused
+    // across requests. the stamp covers the config files it was built from, so one being edited
+    // while the server is running still takes effect on the next request
+    private async Task<OptionsProvider> GetOptionsProviderAsync(
+        string directoryName,
+        CancellationToken cancellationToken
+    )
+    {
+        var configStamp = this.GetConfigStamp(directoryName);
+
+        if (
+            this.optionsProvidersByDirectory.TryGetValue(directoryName, out var cached)
+            && cached.ConfigStamp == configStamp
+        )
+        {
+            return cached.OptionsProvider;
+        }
+
+        var optionsProvider = await OptionsProvider.Create(
+            directoryName,
+            configPath: null,
+            ignorePath: null,
+            this.fileSystem,
+            logger,
+            cancellationToken
+        );
+
+        this.optionsProvidersByDirectory[directoryName] = (configStamp, optionsProvider);
+
+        return optionsProvider;
+    }
+
+    private string GetConfigStamp(string directoryName)
+    {
+        var stamp = new StringBuilder();
+        var directory = this.fileSystem.DirectoryInfo.New(directoryName);
+
+        while (directory is not null)
+        {
+            if (directory.Exists)
+            {
+                foreach (var configFileName in configFileNames)
+                {
+                    this.AppendStamp(
+                        stamp,
+                        this.fileSystem.Path.Combine(directory.FullName, configFileName)
+                    );
+                }
+
+                foreach (
+                    var csharpierConfig in this.fileSystem.Directory.EnumerateFiles(
+                        directory.FullName,
+                        ".csharpierrc*",
+                        SearchOption.TopDirectoryOnly
+                    )
+                )
+                {
+                    this.AppendStamp(stamp, csharpierConfig);
+                }
+            }
+
+            directory = directory.Parent;
+        }
+
+        return stamp.ToString();
+    }
+
+    private void AppendStamp(StringBuilder stamp, string path)
+    {
+        var file = this.fileSystem.FileInfo.New(path);
+        if (!file.Exists)
+        {
+            return;
+        }
+
+        stamp
+            .Append(path)
+            .Append('|')
+            .Append(file.LastWriteTimeUtc.Ticks)
+            .Append('|')
+            .Append(file.Length)
+            .Append(';');
     }
 }

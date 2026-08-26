@@ -1,4 +1,5 @@
 using CSharpier.Core.Utilities;
+using Microsoft.CodeAnalysis;
 
 namespace CSharpier.Core.DocTypes;
 
@@ -16,7 +17,7 @@ internal abstract class Doc
 
     public static NullDoc Null => NullDoc.Instance;
 
-    public static Doc BreakParent => new BreakParent();
+    public static readonly Doc BreakParent = new BreakParent();
 
     public static readonly HardLine HardLine = new();
 
@@ -101,6 +102,109 @@ internal abstract class Doc
         return docs.Count == 1 ? docs[0] : Concat(docs);
     }
 
+    public static Doc Join(Doc separator, ReadOnlySpan<Doc> docs)
+    {
+        if (docs.Length <= 1)
+        {
+            return docs.Length == 0 ? Null : docs[0];
+        }
+
+        var contents = new Doc[docs.Length * 2 - 1];
+        for (var index = 0; index < docs.Length; index++)
+        {
+            if (index != 0)
+            {
+                contents[(index * 2) - 1] = separator;
+            }
+
+            contents[index * 2] = docs[index];
+        }
+
+        return Concat(contents);
+    }
+
+    // the overloads below take the roslyn list plus a print method instead of an
+    // IEnumerable<Doc>, so that the call site avoids the Select(..) iterator. print is expected
+    // to be a static method group, which the compiler caches into a static field
+    public static Doc Join<TNode, TContext>(
+        Doc separator,
+        in SyntaxList<TNode> list,
+        Func<TNode, TContext, Doc> print,
+        TContext context
+    )
+        where TNode : SyntaxNode
+    {
+        if (list.Count <= 1)
+        {
+            return list.Count == 0 ? Null : print(list[0], context);
+        }
+
+        var contents = new Doc[(list.Count * 2) - 1];
+        for (var index = 0; index < list.Count; index++)
+        {
+            if (index != 0)
+            {
+                contents[(index * 2) - 1] = separator;
+            }
+
+            contents[index * 2] = print(list[index], context);
+        }
+
+        return Concat(contents);
+    }
+
+    public static Doc Join<TContext>(
+        Doc separator,
+        in SyntaxTokenList tokens,
+        Func<SyntaxToken, TContext, Doc> print,
+        TContext context
+    )
+    {
+        if (tokens.Count <= 1)
+        {
+            return tokens.Count == 0 ? Null : print(tokens[0], context);
+        }
+
+        var contents = new Doc[(tokens.Count * 2) - 1];
+        for (var index = 0; index < tokens.Count; index++)
+        {
+            if (index != 0)
+            {
+                contents[(index * 2) - 1] = separator;
+            }
+
+            contents[index * 2] = print(tokens[index], context);
+        }
+
+        return Concat(contents);
+    }
+
+    public static Doc Join<TContext>(
+        Doc separator,
+        ReadOnlySpan<SyntaxToken> tokens,
+        Func<SyntaxToken, TContext, Doc> print,
+        TContext context
+    )
+    {
+        if (tokens.Length <= 1)
+        {
+            return tokens.Length == 0 ? Null : print(tokens[0], context);
+        }
+
+        var contents = new Doc[(tokens.Length * 2) - 1];
+        for (var index = 0; index < tokens.Length; index++)
+        {
+            if (index != 0)
+            {
+                contents[(index * 2) - 1] = separator;
+            }
+
+            contents[index * 2] = print(tokens[index], context);
+        }
+
+        return Concat(contents);
+    }
+
     public static ForceFlat ForceFlat(List<Doc> contents)
     {
         return new ForceFlat { Contents = Concat(contents) };
@@ -133,12 +237,11 @@ internal abstract class Doc
 
     private static int groupNumber;
 
-    public static Group GroupWithNewId(out string groupId, Doc contents)
+    // ids only have to be unique within a single print, so an incrementing counter is enough
+    // and is far cheaper than Guid.NewGuid()
+    public static string NextGroupId()
     {
-        groupId = "Group_" + Interlocked.Increment(ref groupNumber);
-        var group = Group(contents);
-        group.GroupId = groupId;
-        return group;
+        return "Group_" + Interlocked.Increment(ref groupNumber);
     }
 
     public static Group GroupWithId(string groupId, params Doc[] contents)

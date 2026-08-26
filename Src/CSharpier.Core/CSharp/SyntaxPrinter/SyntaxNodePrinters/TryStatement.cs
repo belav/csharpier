@@ -14,7 +14,7 @@ internal static class TryStatement
         docs.Add(Token.Print(node.TryKeyword, context));
         docs.Add(Block.Print(node.Block, context));
         docs.Add(node.Catches.Any() ? Doc.HardLine : Doc.Null);
-        docs.Add(Doc.Join(Doc.HardLine, node.Catches.Select(o => CatchClause.Print(o, context))));
+        docs.Add(Doc.Join(Doc.HardLine, node.Catches, CatchClause.Print, context));
 
         if (node.Finally != null)
         {

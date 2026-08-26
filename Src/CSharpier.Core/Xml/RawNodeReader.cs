@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml;
 
@@ -26,7 +27,7 @@ class RawNodeReader
     [GeneratedRegex("^ csharpier-ignore-end ($|- )")]
     private static partial Regex IgnoreEndRegexGenerator();
 
-    [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
+    [GeneratedRegex(@"\r\n|\n|\r")]
     private static partial Regex NewlineRegexGenerator();
 
     private static readonly Regex IgnoreRegex = IgnoreRegexGenerator();
@@ -55,7 +56,7 @@ class RawNodeReader
         XmlWhitespaceSensitivity xmlWhitespaceSensitivity
     )
     {
-        this.normalizedXml = NewlineRegex.Replace(xml, "\n");
+        this.normalizedXml = xml.Contains('\r') ? NewlineRegex.Replace(xml, "\n") : xml;
         this.lineEnding = lineEnding;
         this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
     }
@@ -154,21 +155,21 @@ class RawNodeReader
         {
             if (
                 this.position + 4 < this.normalizedXml.Length
-                && this.normalizedXml.Substring(this.position, 4) == "<!--"
+                && string.CompareOrdinal(this.normalizedXml, this.position, "<!--", 0, 4) == 0
             )
             {
                 this.ParseComment();
             }
             else if (
                 this.position + 9 < this.normalizedXml.Length
-                && this.normalizedXml.Substring(this.position, 9) == "<![CDATA["
+                && string.CompareOrdinal(this.normalizedXml, this.position, "<![CDATA[", 0, 9) == 0
             )
             {
                 this.ParseCData();
             }
             else if (
                 this.position + 9 < this.normalizedXml.Length
-                && this.normalizedXml.Substring(this.position, 9) == "<!DOCTYPE"
+                && string.CompareOrdinal(this.normalizedXml, this.position, "<!DOCTYPE", 0, 9) == 0
             )
             {
                 this.ParseDocType();
@@ -192,38 +193,14 @@ class RawNodeReader
     {
         this.position += 4; // Skip "<!--"
 
-        var content = new StringBuilder();
-        while (this.position + 2 < this.normalizedXml.Length)
-        {
-            if (this.normalizedXml.Substring(this.position, 3) == "-->")
-            {
-                this.position += 3;
-                break;
-            }
-
-            if (this.normalizedXml[this.position] == '\n')
-            {
-                content.Append(this.lineEnding);
-            }
-            else
-            {
-                content.Append(this.normalizedXml[this.position]);
-            }
-            this.position++;
-        }
-
-        var actualContent = content.ToString();
+        var actualContent = this.ReadUntil("-->");
 
         var node = new RawNode
         {
             NodeType = XmlNodeType.Comment,
             Value = $"<!--{actualContent}-->",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
-            CSharpierIgnoreType =
-                IgnoreRegex.IsMatch(actualContent) ? CSharpierIgnoreType.Ignore
-                : IgnoreStartRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreStart
-                : IgnoreEndRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreEnd
-                : CSharpierIgnoreType.None,
+            CSharpierIgnoreType = GetCSharpierIgnoreType(actualContent),
         };
 
         this.AddNode(node);
@@ -233,25 +210,7 @@ class RawNodeReader
     {
         this.position += 9; // Skip "<![CDATA["
 
-        var content = new StringBuilder();
-        while (this.position + 2 < this.normalizedXml.Length)
-        {
-            if (this.normalizedXml.Substring(this.position, 3) == "]]>")
-            {
-                this.position += 3;
-                break;
-            }
-
-            if (this.normalizedXml[this.position] == '\n')
-            {
-                content.Append(this.lineEnding);
-            }
-            else
-            {
-                content.Append(this.normalizedXml[this.position]);
-            }
-            this.position++;
-        }
+        var content = this.ReadUntil("]]>");
 
         var node = new RawNode
         {
@@ -270,25 +229,7 @@ class RawNodeReader
         var name = this.ReadName();
         this.SkipWhitespace();
 
-        var content = new StringBuilder();
-        while (this.position + 1 < this.normalizedXml.Length)
-        {
-            if (this.normalizedXml.Substring(this.position, 2) == "?>")
-            {
-                this.position += 2;
-                break;
-            }
-
-            if (this.normalizedXml[this.position] == '\n')
-            {
-                content.Append(this.lineEnding);
-            }
-            else
-            {
-                content.Append(this.normalizedXml[this.position]);
-            }
-            this.position++;
-        }
+        var content = this.ReadUntil("?>");
 
         var node = new RawNode
         {
@@ -482,22 +423,69 @@ class RawNodeReader
 
     private string ReadName()
     {
-        var name = new StringBuilder();
+        var start = this.position;
         while (
             this.position < this.normalizedXml.Length
             && (
                 char.IsLetterOrDigit(this.normalizedXml[this.position])
-                || this.normalizedXml[this.position] == '_'
-                || this.normalizedXml[this.position] == ':'
-                || this.normalizedXml[this.position] == '-'
-                || this.normalizedXml[this.position] == '.'
+                || this.normalizedXml[this.position] is '_' or ':' or '-' or '.'
             )
         )
         {
-            name.Append(this.normalizedXml[this.position]);
             this.position++;
         }
-        return name.ToString();
+
+        return this.normalizedXml[start..this.position];
+    }
+
+    private string ReadUntil(string terminator)
+    {
+        var terminatorIndex = this.normalizedXml.IndexOf(
+            terminator,
+            this.position,
+            StringComparison.Ordinal
+        );
+
+        // with no terminator present, stop at the last position one could have started at, which
+        // is where the character at a time version this replaced left off
+        var contentEnd =
+            terminatorIndex >= 0
+                ? terminatorIndex
+                : Math.Max(this.position, this.normalizedXml.Length - terminator.Length + 1);
+
+        var content = new StringBuilder(contentEnd - this.position);
+        var start = this.position;
+        while (start < contentEnd)
+        {
+            var newLine = this.normalizedXml.IndexOf('\n', start, contentEnd - start);
+            if (newLine < 0)
+            {
+                content.Append(this.normalizedXml, start, contentEnd - start);
+                break;
+            }
+
+            content.Append(this.normalizedXml, start, newLine - start);
+            content.Append(this.lineEnding);
+            start = newLine + 1;
+        }
+
+        this.position = terminatorIndex >= 0 ? terminatorIndex + terminator.Length : contentEnd;
+
+        return content.ToString();
+    }
+
+    private static CSharpierIgnoreType GetCSharpierIgnoreType(string comment)
+    {
+        // all three patterns require this prefix, and testing it is far cheaper than running them
+        if (!comment.StartsWith(" csharpier-", StringComparison.Ordinal))
+        {
+            return CSharpierIgnoreType.None;
+        }
+
+        return IgnoreRegex.IsMatch(comment) ? CSharpierIgnoreType.Ignore
+            : IgnoreStartRegex.IsMatch(comment) ? CSharpierIgnoreType.IgnoreStart
+            : IgnoreEndRegex.IsMatch(comment) ? CSharpierIgnoreType.IgnoreEnd
+            : CSharpierIgnoreType.None;
     }
 
     private string ReadQuotedValue()

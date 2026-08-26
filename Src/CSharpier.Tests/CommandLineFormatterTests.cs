@@ -130,6 +130,20 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public async Task Format_Does_Not_Write_Unsupported_When_File_Is_Also_Ignored()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
+        context.WhenAFileExists(".csharpierignore", "Unsupported.js");
+
+        var result = await Format(context, directoryOrFilePaths: "Unsupported.js");
+
+        result
+            .OutputLines.Should()
+            .NotContain("Warning ./Unsupported.js - Is an unsupported file type.");
+    }
+
+    [Test]
     public async Task Format_Does_Not_Write_Unsupported_With_EditorConfig()
     {
         var context = new TestContext();

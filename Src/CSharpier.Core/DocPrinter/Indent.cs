@@ -4,12 +4,15 @@ internal class Indent
 {
     public string Value = string.Empty;
     public int Length;
+
+    // caching the next indent here rather than in a dictionary keyed by Value avoids hashing a
+    // whitespace string whose length grows with the nesting depth
+    public Indent? Increased;
 }
 
 internal class Indenter(PrinterOptions printerOptions)
 {
     protected readonly PrinterOptions PrinterOptions = printerOptions;
-    protected readonly Dictionary<string, Indent> IncreaseIndentCache = [];
 
     public static Indent GenerateRoot()
     {
@@ -18,12 +21,7 @@ internal class Indenter(PrinterOptions printerOptions)
 
     public Indent IncreaseIndent(Indent indent)
     {
-        if (IncreaseIndentCache.TryGetValue(indent.Value, out var increasedIndent))
-        {
-            return increasedIndent;
-        }
-
-        var nextIndent = this.PrinterOptions.UseTabs
+        return indent.Increased ??= this.PrinterOptions.UseTabs
             ? new Indent
             {
                 Value = indent.Value + "\t",
@@ -34,8 +32,5 @@ internal class Indenter(PrinterOptions printerOptions)
                 Value = indent.Value.PadRight(indent.Value.Length + this.PrinterOptions.IndentSize),
                 Length = indent.Length + this.PrinterOptions.IndentSize,
             };
-
-        IncreaseIndentCache[indent.Value] = nextIndent;
-        return nextIndent;
     }
 }

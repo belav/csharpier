@@ -47,7 +47,7 @@ internal static class SeparatedSyntaxList
         where T : SyntaxNode
     {
         var docs = list.Count <= 3 ? new DocListBuilder(8) : new DocListBuilder(list.Count * 3);
-        var unFormattedCode = new StringBuilder();
+        StringBuilder? unFormattedCode = null;
         var printUnformatted = false;
         for (var x = startingIndex; x < list.Count; x++)
         {
@@ -55,8 +55,8 @@ internal static class SeparatedSyntaxList
 
             if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
             {
-                docs.Add(unFormattedCode.ToString().Trim());
-                unFormattedCode.Clear();
+                docs.Add(unFormattedCode?.ToString().Trim() ?? string.Empty);
+                unFormattedCode?.Clear();
                 printUnformatted = false;
             }
             else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
@@ -70,6 +70,7 @@ internal static class SeparatedSyntaxList
 
             if (printUnformatted)
             {
+                unFormattedCode ??= new StringBuilder();
                 unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
                 if (x < list.SeparatorCount)
                 {
@@ -80,14 +81,18 @@ internal static class SeparatedSyntaxList
                 continue;
             }
 
-            var firstTrailingComment = list[x]
-                .GetTrailingTrivia()
-                .FirstOrDefault(o => o.IsComment());
+            // GetTrailingTrivia walks the right hand spine of the member, and the result is only
+            // ever read for the last member, so don't compute it for the rest
+            var isLastWithoutSeparator = x >= list.SeparatorCount;
+            var firstTrailingComment =
+                isLastWithoutSeparator && closingToken is not null
+                    ? member.GetTrailingTrivia().FirstOrDefault(o => o.IsComment())
+                    : default;
 
             // we want a trailing comma, but we need to get it printed in place before a trailing comment
             // shove it in the context so the token printing can pick it up and put it in place
             if (
-                x >= list.SeparatorCount
+                isLastWithoutSeparator
                 && closingToken is not null
                 && firstTrailingComment != default
             )
@@ -98,10 +103,10 @@ internal static class SeparatedSyntaxList
                 );
             }
 
-            docs.Add(printFunc(list[x], context));
+            docs.Add(printFunc(member, context));
 
             // if the syntax tree doesn't have a trailing comma but we want want, then add it
-            if (x >= list.SeparatorCount)
+            if (isLastWithoutSeparator)
             {
                 if (closingToken != null && firstTrailingComment == default)
                 {
@@ -119,9 +124,8 @@ internal static class SeparatedSyntaxList
                 // when the trailing separator has trailing comments, we have to print it normally to prevent it from collapsing
                 // when the closing token has a directive, we can't assume the comma should be added/removed so just print it normally
                 if (
-                    trailingSeparatorToken.TrailingTrivia.Any(o => o.IsComment())
-                    || closingToken != null
-                        && closingToken.Value.LeadingTrivia.Any(o => o.IsDirective)
+                    trailingSeparatorToken.TrailingTrivia.AnyComment()
+                    || closingToken != null && closingToken.Value.LeadingTrivia.AnyDirective()
                 )
                 {
                     docs.Add(Token.Print(trailingSeparatorToken, context));
@@ -142,7 +146,7 @@ internal static class SeparatedSyntaxList
             }
         }
 
-        if (unFormattedCode.Length > 0)
+        if (unFormattedCode is { Length: > 0 })
         {
             docs.Add(unFormattedCode.ToString().Trim());
         }

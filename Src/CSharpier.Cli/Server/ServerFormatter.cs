@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using NReco.Logging.File;
@@ -57,42 +56,53 @@ internal class ServerFormatter
         while (true)
         {
             var context = await listener.GetContextAsync();
-            _ = Task.Run(() => ProcessRequestAsync(context, service), cancellationToken);
+            // ProcessRequestAsync yields at its first await, so requests still overlap without the
+            // extra thread pool hop Task.Run added
+            _ = ProcessRequestAsync(context, service, fileLogger, cancellationToken);
         }
     }
 
     private static async Task ProcessRequestAsync(
         HttpListenerContext context,
-        CSharpierServiceImplementation service
+        CSharpierServiceImplementation service,
+        ILogger logger,
+        CancellationToken cancellationToken
     )
     {
-        var request = context.Request;
         var response = context.Response;
 
-        if (request.Url?.AbsolutePath == "/format" && request.HttpMethod == "POST")
+        try
         {
-            using var reader = new StreamReader(
-                context.Request.InputStream,
-                context.Request.ContentEncoding
-            );
-            var body = await reader.ReadToEndAsync();
+            var request = context.Request;
 
-            var formatFileDto =
-                JsonSerializer.Deserialize<FormatFileParameter>(body)
-                ?? throw new Exception("No body!");
-            var result = await service.FormatFile(formatFileDto, CancellationToken.None);
+            if (request.Url?.AbsolutePath == "/format" && request.HttpMethod == "POST")
+            {
+                var formatFileDto =
+                    await JsonSerializer.DeserializeAsync<FormatFileParameter>(
+                        request.InputStream,
+                        cancellationToken: cancellationToken
+                    ) ?? throw new Exception("No body!");
 
-            response.ContentType = "application/json";
+                var result = await service.FormatFile(formatFileDto, cancellationToken);
 
-            var buffer = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(result));
-            response.ContentLength64 = buffer.Length;
-            await response.OutputStream.WriteAsync(buffer);
+                // the length is still sent so that clients keep getting a non chunked response
+                var buffer = JsonSerializer.SerializeToUtf8Bytes(result);
+                response.ContentType = "application/json";
+                response.ContentLength64 = buffer.Length;
+                await response.OutputStream.WriteAsync(buffer, cancellationToken);
+            }
+            else
+            {
+                response.StatusCode = 405;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            response.StatusCode = 405;
+            logger.LogError(ex, "Failed to handle a request");
         }
-
-        response.OutputStream.Close();
+        finally
+        {
+            response.OutputStream.Close();
+        }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
-internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
+internal readonly record struct PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
 // This is based on prettier/src/language-js/print/member-chain.js
 // various discussions/prs about how to potentially improve the formatting
@@ -100,11 +100,11 @@ internal static class InvocationExpression
                     Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
                 )
                 : Doc.Null,
-            PrintIndentedGroup(groups.Skip(shouldMergeFirstTwoGroups ? 2 : 1).ToList())
+            PrintIndentedGroup(GetRemainingGroups(groups, shouldMergeFirstTwoGroups ? 2 : 1))
         );
 
         return
-            oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+            AnyContainsBreakAfterFirst(oneLine)
             || groups[0]
                 .Any(o =>
                     o.Node
@@ -118,7 +118,7 @@ internal static class InvocationExpression
                 }
             || (
                 parent is ExpressionStatementSyntax expressionStatementSyntax
-                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
+                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.AnyComment()
             )
             || groups.Count == 1
             ? expanded
@@ -355,6 +355,27 @@ internal static class InvocationExpression
     }
 
     [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
+    private static List<List<PrintedNode>> GetRemainingGroups(
+        List<List<PrintedNode>> groups,
+        int startIndex
+    )
+    {
+        return groups.GetRange(startIndex, groups.Count - startIndex);
+    }
+
+    private static bool AnyContainsBreakAfterFirst(Doc[] docs)
+    {
+        for (var index = 1; index < docs.Length; index++)
+        {
+            if (DocUtilities.ContainsBreak(docs[index]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private static Doc[] SelectManyDocsToArray(List<List<PrintedNode>> groups)
     {
         var arrayLength = 0;
@@ -478,7 +499,7 @@ internal static class InvocationExpression
                     or ArgumentSyntax
                     or BinaryExpressionSyntax
                     or ExpressionStatementSyntax
-            || groups[1].Skip(1).First().Node
+            || groups[1][1].Node
                 is InvocationExpressionSyntax
                     or ElementAccessExpressionSyntax
                     or PostfixUnaryExpressionSyntax

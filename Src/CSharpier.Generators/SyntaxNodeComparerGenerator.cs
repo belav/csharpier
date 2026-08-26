@@ -238,16 +238,21 @@ namespace CSharpier.Core.CSharp
                         $"            result = this.CompareUsingDirectives(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode, formattedNode);"
                     );
                 }
+                else if (
+                    propertyType.Name == nameof(SyntaxTokenList)
+                    && propertyName == "Modifiers"
+                )
+                {
+                    sourceBuilder.AppendLine(
+                        $"            result = this.CompareModifierLists(originalNode.{propertyName}, formattedNode.{propertyName}, originalNode.Span, formattedNode.Span);"
+                    );
+                }
                 else
                 {
                     var compare =
                         propertyType.Name == nameof(SyntaxTokenList)
-                            ? (propertyName == "Modifiers" ? "CompareModifierToken" : "CompareFunc")
+                            ? "CompareFunc"
                             : "static (_, _) => default";
-                    if (propertyName == "Modifiers")
-                    {
-                        propertyName += ".OrderBy(o => o.Text).ToArray()";
-                    }
 
                     sourceBuilder.AppendLine(
                         $"            result = this.CompareLists(originalNode.{propertyName}, formattedNode.{propertyName}, {compare}, o => o.Span, originalNode.Span, formattedNode.Span);"
@@ -270,7 +275,7 @@ namespace CSharpier.Core.CSharp
 
                 // Omit the last separator when comparing the original node with the formatted node, as it legitimately may be added or removed
                 sourceBuilder.AppendLine(
-                    $"            result = this.CompareLists(AllSeparatorsButLast(originalNode.{propertyName}), AllSeparatorsButLast(formattedNode.{propertyName}), CompareFunc, o => o.Span, originalNode.Span, formattedNode.Span);"
+                    $"            result = this.CompareSeparators(originalNode.{propertyName}, formattedNode.{propertyName});"
                 );
                 sourceBuilder.AppendLine("            if (result.IsInvalid) return result;");
             }
