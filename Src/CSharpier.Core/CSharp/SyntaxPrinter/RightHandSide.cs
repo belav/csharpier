@@ -17,7 +17,7 @@ internal static class RightHandSide
     {
         var layout = DetermineLayout(leftNode, rightNode);
 
-        var groupId = layout == Layout.Fluid ? $"{Layout.Fluid}{Guid.NewGuid()}" : string.Empty;
+        var groupId = layout == Layout.Fluid ? $"{Layout.Fluid}{Doc.NextGroupId()}" : string.Empty;
 
         return layout switch
         {
@@ -60,7 +60,7 @@ internal static class RightHandSide
 
     private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
     {
-        if (rightNode.GetLeadingTrivia().Any(o => o.IsComment()))
+        if (rightNode.GetLeadingTrivia().AnyComment())
         {
             return Layout.BreakAfterOperator;
         }

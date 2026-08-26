@@ -126,14 +126,8 @@ internal class FormattingEngine(
     )
     {
         if (
-            (
-                !commandLineOptions.IncludeGenerated
-                && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
-            )
-            || (
-                checkIsIgnored
-                && await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
-            )
+            !commandLineOptions.IncludeGenerated
+            && GeneratedCodeUtilities.IsGeneratedCodeFile(actualFilePath)
         )
         {
             return;
@@ -143,6 +137,22 @@ internal class FormattingEngine(
             actualFilePath,
             cancellationToken
         );
+
+        // Bail early to avoid parsing things except when warnForUnsupported is set
+        // because a file that is both ignored and unsupported is skipped silently
+        var unsupported = printerOptions is not { Formatter: not Formatter.Unknown };
+        if (unsupported && !warnForUnsupported)
+        {
+            return;
+        }
+
+        if (
+            checkIsIgnored
+            && await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
+        )
+        {
+            return;
+        }
 
         if (printerOptions is { Formatter: not Formatter.Unknown })
         {
@@ -157,9 +167,9 @@ internal class FormattingEngine(
             );
 
             logger.LogDebug(
-                commandLineOptions.Check
-                    ? $"Checking - {originalFilePath}"
-                    : $"Formatting - {originalFilePath}"
+                "{Action} - {FilePath}",
+                commandLineOptions.Check ? "Checking" : "Formatting",
+                originalFilePath
             );
 
             await this.PerformFormattingSteps(
@@ -169,7 +179,7 @@ internal class FormattingEngine(
                 cancellationToken
             );
         }
-        else if (warnForUnsupported)
+        else
         {
             var fileIssueLogger = new FileIssueLogger(
                 originalFilePath,

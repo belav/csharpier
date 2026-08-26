@@ -42,6 +42,14 @@ internal static class Token
 
     internal static readonly string[] lineSeparators = ["\r\n", "\r", "\n"];
 
+    internal static bool ShouldIndentRawString(ArgumentSyntax? argument)
+    {
+        return argument is null
+            || argument.Expression
+                is ParenthesizedLambdaExpressionSyntax
+                    or SimpleLambdaExpressionSyntax;
+    }
+
     private static Doc PrintSyntaxToken(
         SyntaxToken syntaxToken,
         CSharpPrintingContext context,
@@ -113,14 +121,9 @@ internal static class Token
 
             contents.Add(linesIncludingQuotes[^1].TrimStart());
 
-            var argument = syntaxToken.Parent.FindParent<ArgumentSyntax>();
-
             docs.Add(
                 Doc.IndentIf(
-                    argument is null
-                        || argument.Expression
-                            is ParenthesizedLambdaExpressionSyntax
-                                or SimpleLambdaExpressionSyntax,
+                    ShouldIndentRawString(syntaxToken.Parent.FindParent<ArgumentSyntax>()),
                     Doc.Concat(contents)
                 )
             );
@@ -189,7 +192,7 @@ internal static class Token
         );
 
         var leadingTrivia = syntaxToken.LeadingTrivia;
-        var hasDirective = leadingTrivia.Any(o => o.IsDirective);
+        var hasDirective = leadingTrivia.AnyDirective();
 
         if (hasDirective)
         {
@@ -213,7 +216,7 @@ internal static class Token
 
         Doc extraNewLines = Doc.Null;
 
-        if (hasDirective || leadingTrivia.Any(o => o.IsComment()))
+        if (hasDirective || leadingTrivia.AnyComment())
         {
             extraNewLines = ExtraNewLines.Print(syntaxToken.LeadingTrivia);
         }
@@ -451,8 +454,13 @@ internal static class Token
 
     public static bool HasLeadingCommentMatching(SyntaxNode node, Regex regex)
     {
+        return HasLeadingCommentMatching(node.GetLeadingTrivia(), regex);
+    }
+
+    public static bool HasLeadingCommentMatching(in SyntaxTriviaList leadingTrivia, Regex regex)
+    {
         // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
-        foreach (var o in node.GetLeadingTrivia())
+        foreach (var o in leadingTrivia)
         {
             if (
                 o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia
@@ -468,8 +476,6 @@ internal static class Token
 
     public static bool HasLeadingCommentMatching(SyntaxToken token, Regex regex)
     {
-        return token.LeadingTrivia.Any(o =>
-            o.RawSyntaxKind() is SyntaxKind.SingleLineCommentTrivia && regex.IsMatch(o.ToString())
-        );
+        return HasLeadingCommentMatching(token.LeadingTrivia, regex);
     }
 }

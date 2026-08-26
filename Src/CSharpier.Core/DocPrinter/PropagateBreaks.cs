@@ -31,11 +31,23 @@ internal static class PropagateBreaks
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool OnEnter(Doc doc)
         {
-            if (doc is ForceFlat)
+            if (doc is StringDoc { IsDirective: false })
             {
-                forceFlat++;
+                canSkipBreak = false;
             }
-            if (doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine)))
+            else if (doc is Group group)
+            {
+                canSkipBreak = true;
+                groupStack.Push(group);
+                if (!alreadyVisitedSet.Add(group))
+                {
+                    return false;
+                }
+            }
+            else if (
+                doc is IBreakParent
+                && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine))
+            )
             {
                 if (doc is HardLine { SkipBreakIfFirstInGroup: true } && canSkipBreak)
                 {
@@ -51,18 +63,9 @@ internal static class PropagateBreaks
                     BreakParentGroup();
                 }
             }
-            else if (doc is Group group)
+            else if (doc is ForceFlat)
             {
-                canSkipBreak = true;
-                groupStack.Push(group);
-                if (!alreadyVisitedSet.Add(group))
-                {
-                    return false;
-                }
-            }
-            else if (doc is StringDoc { IsDirective: false })
-            {
-                canSkipBreak = false;
+                forceFlat++;
             }
 
             return true;
@@ -104,7 +107,16 @@ internal static class PropagateBreaks
                 continue;
             }
 
-            docsStack.Push(TraverseDocOnExitStackMarker);
+            // OnExit only does something for ForceFlat and Group, so everything else is popped
+            // here instead of being left on the stack behind an exit marker
+            if (doc is ForceFlat or Group)
+            {
+                docsStack.Push(TraverseDocOnExitStackMarker);
+            }
+            else
+            {
+                docsStack.Pop();
+            }
 
             if (doc is Concat concat)
             {

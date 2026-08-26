@@ -156,8 +156,7 @@ internal static partial class BaseMethodDeclaration
         if (explicitInterfaceSpecifier != null)
         {
             declarationGroup.Add(
-                Node.Print(explicitInterfaceSpecifier.Name, context),
-                Token.Print(explicitInterfaceSpecifier.DotToken, context)
+                ExplicitInterfaceSpecifier.Print(explicitInterfaceSpecifier, context)
             );
         }
 

@@ -1,4 +1,3 @@
-using System.Text;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 
@@ -12,32 +11,32 @@ internal static class DocFitter
         int remainingWidth,
         Dictionary<string, PrintMode> groupModeMap,
         Indenter indenter,
-        Stack<PrintCommand> newCommands,
-        StringBuilder output
+        Stack<PrintCommand> scratchCommands
     )
     {
-        // Reset reusable collections before usage
-        newCommands.Clear();
-        output.Clear();
+        scratchCommands.Clear();
+
+        var outputLength = 0;
+        var trailingWhitespace = 0;
 
         var returnFalseIfMoreStringsFound = false;
-        newCommands.Push(nextCommand);
+        scratchCommands.Push(nextCommand);
 
         void Push(Doc doc, PrintMode printMode, Indent indent)
         {
-            newCommands.Push(new PrintCommand(indent, printMode, doc));
+            scratchCommands.Push(new PrintCommand(indent, printMode, doc));
         }
 
-        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0; )
+        for (var x = 0; x < remainingCommands.Count || scratchCommands.Count > 0; )
         {
             if (remainingWidth < 0)
             {
                 return false;
             }
 
-            var (currentIndent, currentMode, currentDoc) = newCommands switch
+            var (currentIndent, currentMode, currentDoc) = scratchCommands switch
             {
-                { Count: > 0 } => newCommands.Pop(),
+                { Count: > 0 } => scratchCommands.Pop(),
                 _ => remainingCommands.ElementAt(x++),
             };
 
@@ -57,18 +56,13 @@ internal static class DocFitter
                         return false;
                     }
 
-                    output.Append(stringDoc.Value);
+                    outputLength += stringDoc.Value.Length;
+                    trailingWhitespace = TrailingWhitespaceLength(
+                        stringDoc.Value,
+                        trailingWhitespace
+                    );
                     remainingWidth -= stringDoc.Value.GetPrintedWidth();
                     break;
-                case LeadingComment or TrailingComment:
-                    if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
-                    {
-                        returnFalseIfMoreStringsFound = true;
-                    }
-
-                    break;
-                case Region:
-                    return false;
                 case Concat concat:
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)
                     {
@@ -76,12 +70,30 @@ internal static class DocFitter
                     }
 
                     break;
-                case IndentDoc indent:
-                    Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
-                    break;
-                case Trim:
-                    remainingWidth += output.TrimTrailingWhitespace();
-                    break;
+                case LineDoc line:
+                    if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
+                    {
+                        if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
+                        {
+                            returnFalseIfMoreStringsFound = false;
+                        }
+                        else if (line.Type == LineDoc.LineType.Hard)
+                        {
+                            return true;
+                        }
+
+                        if (line.Type != LineDoc.LineType.Soft)
+                        {
+                            outputLength += 1;
+                            trailingWhitespace += 1;
+
+                            remainingWidth -= 1;
+                        }
+
+                        break;
+                    }
+
+                    return true;
                 case Group group:
                 {
                     var groupMode = group.Break ? PrintMode.Break : currentMode;
@@ -100,6 +112,9 @@ internal static class DocFitter
 
                     break;
                 }
+                case IndentDoc indent:
+                    Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
+                    break;
                 case IfBreak ifBreak:
                 {
                     var ifBreakMode =
@@ -116,29 +131,20 @@ internal static class DocFitter
                     Push(contents, currentMode, currentIndent);
                     break;
                 }
-                case LineDoc line:
-                    if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
+                case Trim:
+                    outputLength -= trailingWhitespace;
+                    remainingWidth += trailingWhitespace;
+                    trailingWhitespace = 0;
+                    break;
+                case LeadingComment or TrailingComment:
+                    if (outputLength > 0 && currentMode is not PrintMode.ForceFlat)
                     {
-                        if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
-                        {
-                            returnFalseIfMoreStringsFound = false;
-                        }
-                        else if (line.Type == LineDoc.LineType.Hard)
-                        {
-                            return true;
-                        }
-
-                        if (line.Type != LineDoc.LineType.Soft)
-                        {
-                            output.Append(' ');
-
-                            remainingWidth -= 1;
-                        }
-
-                        break;
+                        returnFalseIfMoreStringsFound = true;
                     }
 
-                    return true;
+                    break;
+                case Region:
+                    return false;
                 case ForceFlat flat:
                     Push(flat.Contents, PrintMode.ForceFlat, currentIndent);
                     break;
@@ -152,5 +158,16 @@ internal static class DocFitter
         }
 
         return remainingWidth > 0;
+    }
+
+    private static int TrailingWhitespaceLength(string value, int existingTrailingWhitespace)
+    {
+        var length = 0;
+        while (length < value.Length && value[value.Length - length - 1] is ' ' or '\t')
+        {
+            length++;
+        }
+
+        return length == value.Length ? existingTrailingWhitespace + length : length;
     }
 }

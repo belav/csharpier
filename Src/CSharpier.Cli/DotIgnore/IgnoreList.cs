@@ -55,7 +55,7 @@ internal class IgnoreList(string basePath)
 
         var pathRelativeToIgnoreFile =
             path.Length > basePath.Length
-                ? path[basePath.Length..].Replace('\\', '/')
+                ? path[basePath.Length..].NormalisePath().TrimStart('/')
                 : string.Empty;
 
         var ancestorIgnored = this.IsAnyParentDirectoryIgnored(pathRelativeToIgnoreFile);

@@ -24,6 +24,45 @@ internal static class SyntaxTriviaExtensions
         return (SyntaxKind)trivia.RawKind;
     }
 
+    public static bool AnyComment(this in SyntaxTriviaList triviaList)
+    {
+        foreach (var trivia in triviaList)
+        {
+            if (trivia.IsComment())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool AnyDirective(this in SyntaxTriviaList triviaList)
+    {
+        foreach (var trivia in triviaList)
+        {
+            if (trivia.IsDirective)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool AnyCommentOrDirective(this in SyntaxTriviaList triviaList)
+    {
+        foreach (var trivia in triviaList)
+        {
+            if (trivia.IsComment() || trivia.IsDirective)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static int IndexOfNextEndOfLine(this SyntaxTriviaList leadingTrivia, int startingIndex)
     {
         for (var index = startingIndex + 1; index < leadingTrivia.Count; index++)

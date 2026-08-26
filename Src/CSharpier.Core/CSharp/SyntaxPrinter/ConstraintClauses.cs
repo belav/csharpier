@@ -18,7 +18,9 @@ internal static class ConstraintClauses
         }
         var body = Doc.Join(
             Doc.HardLine,
-            constraintClauses.Select(o => TypeParameterConstraintClause.Print(o, context))
+            constraintClauses,
+            TypeParameterConstraintClause.Print,
+            context
         );
 
         return Doc.Group(Doc.Indent(Doc.HardLine, body));

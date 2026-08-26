@@ -15,9 +15,7 @@ internal static class ImplicitObjectCreationExpression
             Doc.Group(
                 Token.Print(node.NewKeyword, context),
                 ArgumentList.Print(node.ArgumentList, context),
-                node.Initializer != null
-                    ? Doc.Concat(Doc.Line, InitializerExpression.Print(node.Initializer, context))
-                    : Doc.Null
+                InitializerExpression.PrintOptionalWithLine(node.Initializer, context)
             )
         );
     }

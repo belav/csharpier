@@ -39,7 +39,7 @@ internal static partial class Matcher
         { "[:xdigit:]", "A-Fa-f0-9" },
     };
 
-    public static bool TryMatch(Regex? regex, string path)
+    public static bool TryMatch(Regex? regex, ReadOnlySpan<char> path)
     {
         if (regex == null)
         {

@@ -28,7 +28,7 @@ internal static class AttributeLists
             ? Doc.Line
             : Doc.HardLine;
 
-        docs.Add(Doc.Join(separator, attributeLists.Select(o => AttributeList.Print(o, context))));
+        docs.Add(Doc.Join(separator, attributeLists, AttributeList.Print, context));
 
         if (node is not (ParameterSyntax or TypeParameterSyntax))
         {

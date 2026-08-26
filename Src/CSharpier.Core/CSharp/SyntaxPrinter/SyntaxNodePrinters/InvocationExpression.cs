@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
-internal record PrintedNode(CSharpSyntaxNode Node, Doc Doc);
+internal readonly record struct PrintedNode(CSharpSyntaxNode Node, Doc Doc);
 
 // This is based on prettier/src/language-js/print/member-chain.js
 // various discussions/prs about how to potentially improve the formatting
@@ -118,7 +118,7 @@ internal static class InvocationExpression
                 }
             || (
                 parent is ExpressionStatementSyntax expressionStatementSyntax
-                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.Any(o => o.IsComment())
+                && expressionStatementSyntax.SemicolonToken.LeadingTrivia.AnyComment()
             )
             || groups.Count == 1
             ? expanded
@@ -354,7 +354,6 @@ internal static class InvocationExpression
         return groups;
     }
 
-    [SuppressMessage("ReSharper", "ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator")]
     private static Doc[] SelectManyDocsToArray(List<List<PrintedNode>> groups)
     {
         var arrayLength = 0;
@@ -478,7 +477,7 @@ internal static class InvocationExpression
                     or ArgumentSyntax
                     or BinaryExpressionSyntax
                     or ExpressionStatementSyntax
-            || groups[1].Skip(1).First().Node
+            || groups[1][1].Node
                 is InvocationExpressionSyntax
                     or ElementAccessExpressionSyntax
                     or PostfixUnaryExpressionSyntax
