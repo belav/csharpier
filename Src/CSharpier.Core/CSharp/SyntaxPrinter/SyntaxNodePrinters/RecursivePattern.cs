@@ -47,7 +47,7 @@ internal static class RecursivePattern
                         Doc.SoftLine,
                         SeparatedSyntaxList.Print(
                             node.PositionalPatternClause.Subpatterns,
-                            (subpatternNode, _) =>
+                            static (subpatternNode, context) =>
                                 Doc.Concat(
                                     subpatternNode.NameColon != null
                                         ? BaseExpressionColon.Print(
@@ -72,9 +72,7 @@ internal static class RecursivePattern
             result.Add(
                 Doc.Group(
                     node.Type != null
-                    && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.Any(o =>
-                        o.IsDirective || o.IsComment()
-                    )
+                    && !node.PropertyPatternClause.OpenBraceToken.LeadingTrivia.AnyCommentOrDirective()
                         ? Doc.Line
                         : Doc.Null,
                     Token.Print(node.PropertyPatternClause.OpenBraceToken, context),
@@ -82,7 +80,7 @@ internal static class RecursivePattern
                         node.PropertyPatternClause.Subpatterns.Any() ? Doc.Line : Doc.Null,
                         SeparatedSyntaxList.Print(
                             node.PropertyPatternClause.Subpatterns,
-                            (subpatternNode, _) =>
+                            static (subpatternNode, context) =>
                                 Doc.Group(
                                     subpatternNode.ExpressionColon != null
                                         ? Node.Print(subpatternNode.ExpressionColon, context)

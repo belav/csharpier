@@ -100,7 +100,7 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
 
     public bool IsEnabled(LogLevel logLevel)
     {
-        return true;
+        return logLevel >= loggingLevel;
     }
 
     public IDisposable BeginScope<TState>(TState state)

@@ -2,11 +2,6 @@ namespace CSharpier.Core.Utilities;
 
 internal static class StringExtensions
 {
-    public static bool EqualsIgnoreCase(this string value, string otherValue)
-    {
-        return string.Equals(value, otherValue, StringComparison.OrdinalIgnoreCase);
-    }
-
     public static bool StartsWithIgnoreCase(this string value, string otherValue)
     {
         return value.StartsWith(otherValue, StringComparison.OrdinalIgnoreCase);
@@ -28,9 +23,9 @@ internal static class StringExtensions
         return value.EndsWith(otherValue.ToString());
     }
 
-    public static int IndexOf(this string value, char otherValue)
+    public static bool Contains(this string value, char otherValue)
     {
-        return value.IndexOf(otherValue.ToString(), StringComparison.Ordinal);
+        return value.IndexOf(otherValue) >= 0;
     }
 #endif
 

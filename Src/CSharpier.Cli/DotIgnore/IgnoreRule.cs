@@ -7,6 +7,8 @@ internal class IgnoreRule
     private static readonly char[] _wildcardChars = ['*', '[', '?'];
 
     private readonly int wildcardIndex;
+    private readonly string patternBeforeFirstWildcard;
+    private readonly bool patternContainsSlash;
     private readonly Regex? regex;
     private readonly StringComparison stringComparison = StringComparison.Ordinal;
 
@@ -49,6 +51,10 @@ internal class IgnoreRule
 
         this.Pattern = this.Pattern.Replace("\\ ", " ");
 
+        this.patternBeforeFirstWildcard =
+            this.wildcardIndex != -1 ? this.Pattern[..this.wildcardIndex] : this.Pattern;
+        this.patternContainsSlash = this.Pattern.Contains('/');
+
         // If rxPattern is null, an invalid pattern was passed to ToRegex, so it cannot match
         if (!string.IsNullOrEmpty(rxPattern))
         {
@@ -69,17 +75,9 @@ internal class IgnoreRule
         }
     }
 
+    // path must already be normalised; IgnoreList.IsIgnored is where that happens
     public bool IsMatch(string path, bool pathIsDirectory)
     {
-        if (string.IsNullOrWhiteSpace(path))
-        {
-            throw new ArgumentException("Path cannot be null or empty", nameof(path));
-        }
-
-        // .gitignore files use Unix paths (with a forward slash separator),
-        // so make sure our input also uses forward slashes
-        path = path.NormalisePath().TrimStart('/');
-
         // Shortcut return if the pattern is directory-only and the path isn't a directory
         // This has to be determined by the OS (at least that's the only reliable way),
         // so we pass that information in as a boolean so the consuming code can provide it
@@ -88,14 +86,16 @@ internal class IgnoreRule
             return false;
         }
 
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            throw new ArgumentException("Path cannot be null or empty", nameof(path));
+        }
+
         // If the pattern is an absolute path pattern, the path must start with the part of the pattern
         // before any wildcards occur. If it doesn't, we can just return a negative match
-        var patternBeforeFirstWildcard =
-            this.wildcardIndex != -1 ? this.Pattern[..this.wildcardIndex] : this.Pattern;
-
         if (
             (this.PatternFlags & PatternFlags.ABSOLUTE_PATH) != 0
-            && !path.StartsWith(patternBeforeFirstWildcard, this.stringComparison)
+            && !path.StartsWith(this.patternBeforeFirstWildcard, this.stringComparison)
         )
         {
             return false;
@@ -109,11 +109,27 @@ internal class IgnoreRule
         // 'a.jpg', 'a/b.jpg', 'a/b/c.jpg'), so try matching before each slash
         if (
             (this.PatternFlags & PatternFlags.ABSOLUTE_PATH) == 0
-            && !this.Pattern.Contains('/')
+            && !this.patternContainsSlash
             && path.Contains('/')
         )
         {
-            return path.Split('/').Any(segment => Matcher.TryMatch(this.regex, segment));
+            var remaining = path.AsSpan();
+            while (true)
+            {
+                var separator = remaining.IndexOf('/');
+                var segment = separator < 0 ? remaining : remaining[..separator];
+                if (Matcher.TryMatch(this.regex, segment))
+                {
+                    return true;
+                }
+
+                if (separator < 0)
+                {
+                    return false;
+                }
+
+                remaining = remaining[(separator + 1)..];
+            }
         }
 
         // If the *path* doesn't contain any slashes, we should skip over the conditional above

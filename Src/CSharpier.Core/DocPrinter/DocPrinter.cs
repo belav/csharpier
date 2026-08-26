@@ -20,7 +20,6 @@ internal class DocPrinter
 
     // Reusable collection types for use in DocFitter
     protected readonly Stack<PrintCommand> DocFitterNewCommands = new();
-    protected readonly StringBuilder DocFitterOutput = new();
 
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
@@ -59,16 +58,7 @@ internal class DocPrinter
 
     private void EnsureOutputEndsWithSingleNewLine()
     {
-        var trimmed = 0;
-        for (; trimmed < this.Output.Length; trimmed++)
-        {
-            if (this.Output[^(trimmed + 1)] is not '\r' and not '\n')
-            {
-                break;
-            }
-        }
-
-        this.Output.Length -= trimmed;
+        this.Output.TrimEnd('\r', '\n');
 
         this.Output.Append(this.EndOfLine);
     }
@@ -92,6 +82,14 @@ internal class DocPrinter
                 this.Push(concat.Contents[x], mode, indent);
             }
         }
+        else if (doc is LineDoc line)
+        {
+            this.ProcessLine(line, mode, indent);
+        }
+        else if (doc is Group group)
+        {
+            this.ProcessGroup(group, mode, indent);
+        }
         else if (doc is IndentDoc indentDoc)
         {
             this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
@@ -100,10 +98,6 @@ internal class DocPrinter
         {
             this.CurrentWidth -= this.Output.TrimTrailingWhitespace();
             this.NewLineNextStringValue = false;
-        }
-        else if (doc is Group group)
-        {
-            this.ProcessGroup(group, mode, indent);
         }
         else if (doc is IfBreak ifBreak)
         {
@@ -119,10 +113,6 @@ internal class DocPrinter
             var contents =
                 groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
             this.Push(contents, mode, indent);
-        }
-        else if (doc is LineDoc line)
-        {
-            this.ProcessLine(line, mode, indent);
         }
         else if (doc is BreakParent) { }
         else if (doc is LeadingComment leadingComment)
@@ -394,8 +384,7 @@ internal class DocPrinter
             this.PrinterOptions.Width - this.CurrentWidth,
             this.GroupModeMap,
             this.Indenter,
-            this.DocFitterNewCommands,
-            this.DocFitterOutput
+            this.DocFitterNewCommands
         );
     }
 

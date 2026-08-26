@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Text;
 using CSharpier.Core.DocTypes;
@@ -26,22 +25,26 @@ internal static class MembersWithForcedLines
             result.Add(Doc.HardLine);
         }
 
-        var unFormattedCode = new StringBuilder();
+        StringBuilder? unFormattedCode = null;
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
         for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
         {
             var skipAddingLineBecauseIgnoreEnded = false;
             var member = members[memberIndex];
+            // GetLeadingTrivia walks the left hand spine of the member, so get it once
+            var leadingTrivia = member.GetLeadingTrivia();
 
-            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
+            if (Token.HasLeadingCommentMatching(leadingTrivia, CSharpierIgnore.IgnoreEndRegex))
             {
                 skipAddingLineBecauseIgnoreEnded = true;
-                result.Add(unFormattedCode.ToString().Trim());
-                unFormattedCode.Clear();
+                result.Add(unFormattedCode?.ToString().Trim() ?? string.Empty);
+                unFormattedCode?.Clear();
                 printUnformatted = false;
             }
-            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
+            else if (
+                Token.HasLeadingCommentMatching(leadingTrivia, CSharpierIgnore.IgnoreStartRegex)
+            )
             {
                 if (!printUnformatted && memberIndex > 0)
                 {
@@ -53,6 +56,7 @@ internal static class MembersWithForcedLines
 
             if (printUnformatted)
             {
+                unFormattedCode ??= new StringBuilder();
                 unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
                 continue;
             }
@@ -141,14 +145,16 @@ internal static class MembersWithForcedLines
             var triviaContainsCommentOrNewLine = false;
             var printExtraNewLines = false;
             var triviaContainsEndIfOrRegion = false;
+            var triviaContainsIfDirective = false;
+            var triviaContainsElifDirective = false;
+            var triviaContainsElseDirective = false;
+            var triviaContainsEndOfLine = false;
+            var triviaContainsSingleLineComment = false;
 
-            var leadingTrivia = member
-                .GetLeadingTrivia()
-                .Select(o => o.RawSyntaxKind())
-                .ToImmutableHashSet();
-
-            foreach (var syntaxTrivia in leadingTrivia)
+            foreach (var trivia in leadingTrivia)
             {
+                var syntaxTrivia = trivia.RawSyntaxKind();
+
                 if (syntaxTrivia is SyntaxKind.EndOfLineTrivia || syntaxTrivia.IsComment())
                 {
                     triviaContainsCommentOrNewLine = true;
@@ -163,6 +169,9 @@ internal static class MembersWithForcedLines
                 {
                     printExtraNewLines = true;
                 }
+                // EndRegionDirectiveTrivia is matched by the arm above as well, so only
+                // EndIfDirectiveTrivia ever reaches here. that is long standing behavior, so the
+                // label stays rather than quietly changing what gets printed
                 else if (
                     syntaxTrivia
                     is SyntaxKind.EndIfDirectiveTrivia
@@ -170,6 +179,27 @@ internal static class MembersWithForcedLines
                 )
                 {
                     triviaContainsEndIfOrRegion = true;
+                }
+
+                if (syntaxTrivia is SyntaxKind.IfDirectiveTrivia)
+                {
+                    triviaContainsIfDirective = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.ElifDirectiveTrivia)
+                {
+                    triviaContainsElifDirective = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.ElseDirectiveTrivia)
+                {
+                    triviaContainsElseDirective = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.EndOfLineTrivia)
+                {
+                    triviaContainsEndOfLine = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.SingleLineCommentTrivia)
+                {
+                    triviaContainsSingleLineComment = true;
                 }
             }
 
@@ -199,20 +229,17 @@ internal static class MembersWithForcedLines
                 && (
                     (
                         !triviaContainsEndIfOrRegion
-                        && leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
-                        && !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
+                        && triviaContainsIfDirective
+                        && !triviaContainsEndOfLine
                     )
                     || (
                         triviaContainsEndIfOrRegion
-                        && !leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
-                        && !leadingTrivia.Contains(SyntaxKind.ElifDirectiveTrivia)
-                        && !leadingTrivia.Contains(SyntaxKind.ElseDirectiveTrivia)
+                        && !triviaContainsIfDirective
+                        && !triviaContainsElifDirective
+                        && !triviaContainsElseDirective
                         // single comments have an EndOfLine separate
                         // ideally we would just exclude if leadingTrivia contains EndOfLineTrivia
-                        && (
-                            !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
-                            || leadingTrivia.Contains(SyntaxKind.SingleLineCommentTrivia)
-                        )
+                        && (!triviaContainsEndOfLine || triviaContainsSingleLineComment)
                         && !printExtraNewLines
                     )
                 )
@@ -229,7 +256,7 @@ internal static class MembersWithForcedLines
             lastMemberForcedBlankLine = blankLineIsForced;
         }
 
-        if (unFormattedCode.Length > 0)
+        if (unFormattedCode is { Length: > 0 })
         {
             result.Add(unFormattedCode.ToString().Trim());
         }

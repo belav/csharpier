@@ -44,7 +44,7 @@ internal static class BinaryExpression
 
         return shouldNotIndent
             ? Doc.Group(docs)
-            : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
+            : Doc.Group(docs[0], Doc.Indent(docs.GetRange(1, docs.Count - 1)));
     }
 
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
@@ -122,7 +122,7 @@ internal static class BinaryExpression
 
             if (binaryOnTheRight)
             {
-                return shouldGroup ? [docs[0], Doc.Group(docs.Skip(1).ToList())] : docs;
+                return shouldGroup ? [docs[0], Doc.Group(docs.GetRange(1, docs.Count - 1))] : docs;
             }
 
             var right = Doc.Concat(
@@ -205,16 +205,20 @@ internal static class BinaryExpression
 
         static bool HasInvocationExcludingLeftmostParenthesized(ExpressionSyntax expression)
         {
-            var leftmost = GetLeftmostExpression(expression);
-            return expression
-                .DescendantNodesAndSelf()
-                .Where(node =>
-                    leftmost is not ParenthesizedExpressionSyntax excludedNode
-                    || !IsDescendantOrSelf(node, excludedNode)
+            var excludedNode = GetLeftmostExpression(expression) as ParenthesizedExpressionSyntax;
+
+            foreach (var node in expression.DescendantNodesAndSelf(o => o != excludedNode))
+            {
+                if (
+                    node != excludedNode
+                    && node is InvocationExpressionSyntax or ConditionalAccessExpressionSyntax
                 )
-                .Any(node =>
-                    node is InvocationExpressionSyntax or ConditionalAccessExpressionSyntax
-                );
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         static ExpressionSyntax GetLeftmostExpression(ExpressionSyntax expression)
@@ -233,11 +237,6 @@ internal static class BinaryExpression
                 AwaitExpressionSyntax awaitExpr => GetLeftmostExpression(awaitExpr.Expression),
                 _ => expression,
             };
-        }
-
-        static bool IsDescendantOrSelf(SyntaxNode node, SyntaxNode ancestor)
-        {
-            return node == ancestor || node.Ancestors().Contains(ancestor);
         }
     }
 

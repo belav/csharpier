@@ -23,4 +23,45 @@ internal static class SyntaxTriviaExtensions
     {
         return (SyntaxKind)trivia.RawKind;
     }
+
+    // these iterate the struct enumerator instead of going through System.Linq, which would
+    // box the list and allocate an enumerator for every call
+    public static bool AnyComment(this in SyntaxTriviaList triviaList)
+    {
+        foreach (var trivia in triviaList)
+        {
+            if (trivia.IsComment())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool AnyDirective(this in SyntaxTriviaList triviaList)
+    {
+        foreach (var trivia in triviaList)
+        {
+            if (trivia.IsDirective)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool AnyCommentOrDirective(this in SyntaxTriviaList triviaList)
+    {
+        foreach (var trivia in triviaList)
+        {
+            if (trivia.IsComment() || trivia.IsDirective)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

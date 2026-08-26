@@ -43,11 +43,7 @@ internal static class ForStatement
                 ),
                 Token.Print(node.CloseParenToken, context)
             ),
-            node.Statement switch
-            {
-                ForStatementSyntax => Doc.Group(Doc.HardLine, Node.Print(node.Statement, context)),
-                _ => OptionalBraces.Print(node.Statement, context),
-            }
+            OptionalBraces.PrintWithSelfNesting<ForStatementSyntax>(node.Statement, context)
         );
     }
 }

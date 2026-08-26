@@ -14,31 +14,17 @@ internal static class Element
                 .Replace("\n", context.LineEnding);
         }
 
-        var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
 
         Doc PrintChildrenDoc()
         {
             var childContent = ElementChildren.Print(rawNode, context);
 
-            if (shouldHugContent)
-            {
-                return Doc.IndentIfBreak(
-                    Doc.Concat(PrintLineBeforeChildren(), childContent),
-                    attrGroupId
-                );
-            }
-
             return Doc.Indent(PrintLineBeforeChildren(), childContent);
         }
 
         Doc PrintLineBeforeChildren()
         {
-            if (shouldHugContent)
-            {
-                return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
-            }
-
             if (
                 rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
                 && rawNode.Nodes.FirstOrDefault()
@@ -71,11 +57,6 @@ internal static class Element
 
         Doc PrintLineAfterChildren()
         {
-            if (shouldHugContent)
-            {
-                return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
-            }
-
             if (
                 rawNode.Nodes.LastOrDefault() is { } node
                 && Tag.PrintParentClosingTagStartWithContent(node, context)
