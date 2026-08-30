@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class QueryContinuation
 {
-    public static Doc Print(QueryContinuationSyntax node, PrintingContext context)
+    public static Doc Print(QueryContinuationSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.IntoKeyword, " ", context),

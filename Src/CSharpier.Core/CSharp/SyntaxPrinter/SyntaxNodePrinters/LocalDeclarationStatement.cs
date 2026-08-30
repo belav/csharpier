@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LocalDeclarationStatement
 {
-    public static Doc Print(LocalDeclarationStatementSyntax node, PrintingContext context)
+    public static Doc Print(LocalDeclarationStatementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

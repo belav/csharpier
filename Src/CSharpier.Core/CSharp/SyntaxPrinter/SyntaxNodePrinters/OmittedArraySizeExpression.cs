@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class OmittedArraySizeExpression
 {
-    public static Doc Print(OmittedArraySizeExpressionSyntax node, PrintingContext context)
+    public static Doc Print(OmittedArraySizeExpressionSyntax node, CSharpPrintingContext context)
     {
         return Doc.Null;
     }

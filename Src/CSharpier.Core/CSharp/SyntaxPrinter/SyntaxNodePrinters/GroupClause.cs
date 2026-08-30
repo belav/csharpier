@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class GroupClause
 {
-    public static Doc Print(GroupClauseSyntax node, PrintingContext context)
+    public static Doc Print(GroupClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

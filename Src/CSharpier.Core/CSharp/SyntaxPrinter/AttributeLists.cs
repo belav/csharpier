@@ -11,7 +11,7 @@ internal static class AttributeLists
     public static Doc Print(
         SyntaxNode node,
         SyntaxList<AttributeListSyntax> attributeLists,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         if (attributeLists.Count == 0)

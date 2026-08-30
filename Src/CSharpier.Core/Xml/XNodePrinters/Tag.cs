@@ -1,12 +1,11 @@
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class Tag
 {
-    public static Doc PrintOpeningTag(RawNode rawNode, PrintingContext context)
+    public static Doc PrintOpeningTag(RawNode rawNode, XmlPrintingContext context)
     {
         return Doc.Concat(
             PrintOpeningTagStart(rawNode, context),
@@ -15,7 +14,7 @@ internal static class Tag
         );
     }
 
-    private static Doc PrintOpeningTagStart(RawNode rawNode, PrintingContext context)
+    private static Doc PrintOpeningTagStart(RawNode rawNode, XmlPrintingContext context)
     {
         return
             rawNode.PreviousNode is not null
@@ -27,7 +26,7 @@ internal static class Tag
             );
     }
 
-    private static Doc PrintOpeningTagEnd(RawNode rawNode, PrintingContext context)
+    private static Doc PrintOpeningTagEnd(RawNode rawNode, XmlPrintingContext context)
     {
         return
             rawNode.Nodes.FirstOrDefault() is { } firstNode
@@ -36,12 +35,12 @@ internal static class Tag
             : ">";
     }
 
-    public static Doc PrintOpeningTagPrefix(RawNode rawNode, PrintingContext context)
+    public static Doc PrintOpeningTagPrefix(RawNode rawNode, XmlPrintingContext context)
     {
         return NeedsToBorrowParentOpeningTagEndMarker(rawNode, context) ? ">" : "";
     }
 
-    public static Doc PrintClosingTag(RawNode rawNode, PrintingContext context)
+    public static Doc PrintClosingTag(RawNode rawNode, XmlPrintingContext context)
     {
         return Doc.Concat(
             rawNode.IsEmpty ? Doc.Null : PrintClosingTagStart(rawNode, context),
@@ -55,7 +54,7 @@ internal static class Tag
         );
     }
 
-    public static Doc PrintClosingTagStart(RawNode rawNode, PrintingContext context)
+    public static Doc PrintClosingTagStart(RawNode rawNode, XmlPrintingContext context)
     {
         var lastChild = rawNode.Nodes.LastOrDefault();
 
@@ -64,7 +63,7 @@ internal static class Tag
             : PrintClosingTagStartMarker(rawNode, context);
     }
 
-    public static Doc PrintClosingTagStartMarker(RawNode rawNode, PrintingContext context)
+    public static Doc PrintClosingTagStartMarker(RawNode rawNode, XmlPrintingContext context)
     {
         return $"</{rawNode.Name}";
     }
@@ -74,7 +73,7 @@ internal static class Tag
         return rawNode.IsEmpty ? "/>" : ">";
     }
 
-    public static Doc PrintClosingTagSuffix(RawNode rawNode, PrintingContext context)
+    public static Doc PrintClosingTagSuffix(RawNode rawNode, XmlPrintingContext context)
     {
         return PrintParentClosingTagStartWithContent(rawNode, context)
                 ? Doc.Concat(
@@ -86,7 +85,7 @@ internal static class Tag
             : Doc.Null;
     }
 
-    private static Doc PrintOpeningTagStartMarker(RawNode rawNode, PrintingContext context)
+    private static Doc PrintOpeningTagStartMarker(RawNode rawNode, XmlPrintingContext context)
     {
         return $"<{rawNode.Name}";
     }
@@ -104,7 +103,7 @@ internal static class Tag
 
     public static bool PrintParentClosingTagStartWithContent(
         RawNode rawNode,
-        PrintingContext context
+        XmlPrintingContext context
     )
     {
         /* <p>
@@ -144,7 +143,7 @@ there is also this case
 
     public static bool NeedsToBorrowParentOpeningTagEndMarker(
         RawNode rawNode,
-        PrintingContext context
+        XmlPrintingContext context
     )
     {
         /* <p

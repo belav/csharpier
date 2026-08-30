@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class SelectClause
 {
-    public static Doc Print(SelectClauseSyntax node, PrintingContext context)
+    public static Doc Print(SelectClauseSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

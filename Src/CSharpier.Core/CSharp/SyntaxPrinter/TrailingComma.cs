@@ -9,7 +9,7 @@ internal static class TrailingComma
 {
     public static Doc Print(
         SyntaxToken closingToken,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool skipIfBreak = false
     )
     {

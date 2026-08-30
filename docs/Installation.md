@@ -2,6 +2,8 @@
 hide_table_of_contents: true
 ---
 
+## Installing CSharpier
+
 CSharpier is implemented as a dotnet tool and can be installed with the following commands.
 
 ```bash
@@ -19,6 +21,8 @@ Dotnet tools can also be installed globally with the following command.
 dotnet tool install -g csharpier
 ```
 
+## Updating CSharpier
+
 To update an existing installation of CSharpier, run the dotnet update command.
 
 For local installations run the following command from the install directory.
@@ -30,5 +34,5 @@ dotnet tool update csharpier
 For global installations run the following command from any location.
 
 ```bash
-dotnet tool update csharpier -g
+dotnet tool update -g csharpier
 ```

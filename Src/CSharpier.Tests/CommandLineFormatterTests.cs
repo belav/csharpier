@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Tests;
 
-[NotInParallel]
 public class CommandLineFormatterTests
 {
     private const string UnformattedClassContent = "public class ClassName { public int Field; }";
@@ -70,7 +69,7 @@ public class CommandLineFormatterTests
 
         var result = await Format(
             context,
-            directoryOrFilePaths: Path.Combine(GetRootPath(), "Subdirectory")
+            directoryOrFilePaths: Path.Combine(context.RootPath, "Subdirectory")
         );
 
         result
@@ -78,7 +77,7 @@ public class CommandLineFormatterTests
             .Replace('\\', '/')
             .Should()
             .Be(
-                $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Was not formatted due to syntax errors."
+                $"Error {context.RootPath.Replace('\\', '/')}/Subdirectory/Invalid.cs - Was not formatted due to syntax errors."
             );
     }
 
@@ -103,7 +102,7 @@ public class CommandLineFormatterTests
         // A subdirectory whose name matches a leading segment of the formatted
         // directory path would, with a naive string-replace, be rewritten twice.
         var context = new TestContext();
-        var rootSegment = context.FileSystem.Path.GetFileName(GetRootPath());
+        var rootSegment = context.FileSystem.Path.GetFileName(context.RootPath);
         context.WhenAFileExists($"{rootSegment}/Invalid.cs", "asdfasfasdf");
 
         var result = await Format(context);
@@ -558,7 +557,7 @@ public class CommandLineFormatterTests
 
         var result = await Format(
             context,
-            directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory)
+            directoryOrFilePaths: Path.Combine(context.RootPath, baseDirectory)
         );
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
@@ -1213,13 +1212,13 @@ class ClassName
         var originalDirectoryOrFilePaths = directoryOrFilePaths;
         if (directoryOrFilePaths.Length == 0)
         {
-            directoryOrFilePaths = [GetRootPath()];
+            directoryOrFilePaths = [context.RootPath];
             originalDirectoryOrFilePaths = ["."];
         }
         else
         {
             directoryOrFilePaths = directoryOrFilePaths
-                .Select(o => context.FileSystem.Path.Combine(GetRootPath(), o))
+                .Select(o => context.FileSystem.Path.Combine(context.RootPath, o))
                 .ToArray();
         }
 
@@ -1249,24 +1248,24 @@ class ClassName
         return new FormatResult(exitCode, fakeConsole.GetLines(), fakeConsole.GetErrorLines());
     }
 
-    private static string GetRootPath()
-    {
-        return OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
-    }
-
     private sealed class TestContext
     {
         public readonly MockFileSystem FileSystem = new();
 
+        public readonly string RootPath = Path.Combine(
+            Path.GetTempPath(),
+            Guid.NewGuid().ToString()
+        );
+
         public TestContext()
         {
-            this.FileSystem.AddDirectory(GetRootPath());
+            this.FileSystem.AddDirectory(this.RootPath);
         }
 
         public string WhenAFileExists(string path, string contents)
         {
             path = this
-                .FileSystem.Path.Combine(GetRootPath(), path)
+                .FileSystem.Path.Combine(this.RootPath, path)
                 .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             this.FileSystem.AddFile(path, new MockFileData(contents));
             return path;
@@ -1274,7 +1273,7 @@ class ClassName
 
         public string GetFileContent(string path)
         {
-            path = this.FileSystem.Path.Combine(GetRootPath(), path);
+            path = this.FileSystem.Path.Combine(this.RootPath, path);
             return this.FileSystem.File.ReadAllText(path);
         }
     }

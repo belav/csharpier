@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class IsPatternExpression
 {
-    public static Doc Print(IsPatternExpressionSyntax node, PrintingContext context)
+    public static Doc Print(IsPatternExpressionSyntax node, CSharpPrintingContext context)
     {
         if (
             node.Parent

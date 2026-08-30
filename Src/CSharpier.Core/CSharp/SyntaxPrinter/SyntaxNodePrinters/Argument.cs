@@ -7,7 +7,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Argument
 {
-    public static Doc Print(ArgumentSyntax node, PrintingContext context)
+    public static Doc Print(ArgumentSyntax node, CSharpPrintingContext context)
     {
         var modifiers = PrintModifiers(node, context);
 
@@ -16,7 +16,7 @@ internal static class Argument
             : Doc.Concat(modifiers, Node.Print(node.Expression, context));
     }
 
-    public static Doc PrintModifiers(ArgumentSyntax node, PrintingContext context)
+    public static Doc PrintModifiers(ArgumentSyntax node, CSharpPrintingContext context)
     {
         var docs = new DocListBuilder(2);
         if (node.NameColon != null)

@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.IO.Hashing;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using CSharpier.Core;
@@ -109,10 +110,9 @@ internal static class FormattingCacheFactory
             PrinterOptions printerOptions
         )
         {
-            var currentHash = GetCacheHash(fileToFormatInfo.FileContents, printerOptions);
             if (cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
-                if (currentHash == cachedHash)
+                if (HashMatches(cachedHash, fileToFormatInfo.FileContents, printerOptions))
                 {
                     return true;
                 }
@@ -121,6 +121,21 @@ internal static class FormattingCacheFactory
             }
 
             return false;
+        }
+
+        private static bool HashMatches(
+            string cachedHash,
+            string fileContents,
+            PrinterOptions printerOptions
+        )
+        {
+            var contentHash = Hash(fileContents);
+
+            var optionsHash = GetPrinterOptionsHash(printerOptions);
+
+            return cachedHash.Length == contentHash.Length + optionsHash.Length
+                && cachedHash.AsSpan(0, contentHash.Length).SequenceEqual(contentHash.AsSpan())
+                && cachedHash.AsSpan(contentHash.Length).SequenceEqual(optionsHash.AsSpan());
         }
 
         public void CacheResult(
@@ -148,10 +163,13 @@ internal static class FormattingCacheFactory
             });
         }
 
+        // hashes the utf-16 payload in place - transcoding to ascii first would both copy the whole
+        // file and collapse every non-ascii character to '?', letting two different files collide
         private static string Hash(string input)
         {
-            var result = XxHash32.Hash(Encoding.ASCII.GetBytes(input));
-            return Convert.ToHexString(result);
+            Span<byte> destination = stackalloc byte[sizeof(uint)];
+            XxHash32.Hash(MemoryMarshal.AsBytes(input.AsSpan()), destination);
+            return Convert.ToHexString(destination);
         }
 
         public async Task ResolveAsync(CancellationToken cancellationToken)

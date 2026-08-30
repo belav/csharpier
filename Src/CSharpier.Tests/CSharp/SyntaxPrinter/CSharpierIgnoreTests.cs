@@ -65,17 +65,7 @@ public string Example
         return CSharpierIgnore
             .PrintWithoutFormatting(
                 code,
-                new PrintingContext
-                {
-                    NormalizedXml = code,
-                    Options = new PrintingContext.PrintingContextOptions
-                    {
-                        LineEnding = Environment.NewLine,
-                        IndentSize = 4,
-                        UseTabs = false,
-                        XmlWhitespaceSensitivity = XmlWhitespaceSensitivity.Strict,
-                    },
-                }
+                new CSharpPrintingContext { LineEnding = Environment.NewLine }
             )
             .ReplaceLineEndings("\n");
     }

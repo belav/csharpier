@@ -15,7 +15,7 @@ internal static class MembersWithForcedLines
     public static List<Doc> Print<T>(
         CSharpSyntaxNode node,
         IReadOnlyList<T> members,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool skipFirstHardLine = false
     )
         where T : MemberDeclarationSyntax

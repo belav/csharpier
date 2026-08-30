@@ -7,7 +7,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BasePropertyDeclaration
 {
-    public static Doc Print(BasePropertyDeclarationSyntax node, PrintingContext context)
+    public static Doc Print(BasePropertyDeclarationSyntax node, CSharpPrintingContext context)
     {
         EqualsValueClauseSyntax? initializer = null;
         ExplicitInterfaceSpecifierSyntax? explicitInterfaceSpecifierSyntax = null;
@@ -67,7 +67,7 @@ internal static class BasePropertyDeclaration
     private static Doc Contents(
         BasePropertyDeclarationSyntax node,
         ArrowExpressionClauseSyntax? expressionBody,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         Doc contents = string.Empty;
@@ -112,7 +112,7 @@ internal static class BasePropertyDeclaration
     private static Doc PrintAccessorDeclarationSyntax(
         AccessorDeclarationSyntax node,
         Doc separator,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         var docs = new DocListBuilder(6);

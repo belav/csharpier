@@ -1,3 +1,10 @@
+# No External Contributions Accepted
+
+CSharpier is my passion project.
+I don't enjoy reviewing code and trying to get it to conform to what I'd prefer to see.
+I much prefer to spend my free time working on CSharpier myself.
+As such I will no longer be accepting external contributions. Feel free to open an issue for any problems you encounter.
+
 ## Development
 The two main ways to work with CSharpier locally are the playground or with formatting tests.
 
@@ -29,9 +36,7 @@ Most areas of CSharpier are covered by tests. Some to take note of
 ### Helpful Information
 - https://github.com/prettier/prettier/blob/main/commands.md is useful for understanding how formatting with the Doc classes works. CSharpier hasn't implemented all of the prettier Doc types, and it has added a couple new ones.
 - https://dev.to/fvictorio/how-to-write-a-plugin-for-prettier-6gi is also useful for understanding how formatting works.
-- https://sharplab.io/ is useful for understanding the AST that is produced from some C# code
+- https://lab.razor.fyi is useful for understanding the AST that is produced from some C# code
 - https://www.linqpad.net/ can also show the AST, but is less forgiving with errors in your code.
 - https://www.sapehin.com/blog/csharp-via-roslynapi-the-big-picture/ gives an overview of all the different syntax nodes in c#
 
-### Issues
-If you plan to contribute by working on an issue, you can assign it to yourself by adding a comment `.assign`

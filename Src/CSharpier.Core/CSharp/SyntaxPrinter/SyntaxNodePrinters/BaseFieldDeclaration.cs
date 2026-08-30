@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BaseFieldDeclaration
 {
-    public static Doc Print(BaseFieldDeclarationSyntax node, PrintingContext context)
+    public static Doc Print(BaseFieldDeclarationSyntax node, CSharpPrintingContext context)
     {
         var docs = new DocListBuilder(5);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));

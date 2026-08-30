@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class UnaryPattern
 {
-    public static Doc Print(UnaryPatternSyntax node, PrintingContext context)
+    public static Doc Print(UnaryPatternSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             Token.PrintWithSuffix(node.OperatorToken, " ", context),

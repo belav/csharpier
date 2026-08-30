@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class MemberAccessExpression
 {
-    public static Doc Print(MemberAccessExpressionSyntax node, PrintingContext context)
+    public static Doc Print(MemberAccessExpressionSyntax node, CSharpPrintingContext context)
     {
         return InvocationExpression.PrintMemberChain(node, context);
     }

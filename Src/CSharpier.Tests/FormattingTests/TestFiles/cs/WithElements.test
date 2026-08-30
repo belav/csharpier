@@ -1,0 +1,20 @@
+HashSet<string> set = [with(StringComparer.OrdinalIgnoreCase), "Hello", "HELLO", "hello"];
+
+HashSet<string> set =
+[
+    with(StringComparer.OrdinalIgnoreCase_______________________________),
+    "Hello",
+    "HELLO",
+    "hello",
+];
+
+HashSet<string> set =
+[
+    with(
+        StringComparer.OrdinalIgnoreCase_______________________________,
+        StringComparer.OrdinalIgnoreCase_______________________________
+    ),
+    "Hello",
+    "HELLO",
+    "hello",
+];

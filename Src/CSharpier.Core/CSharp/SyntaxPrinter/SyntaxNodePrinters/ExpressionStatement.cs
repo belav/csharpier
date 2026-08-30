@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class ExpressionStatement
 {
-    public static Doc Print(ExpressionStatementSyntax node, PrintingContext context)
+    public static Doc Print(ExpressionStatementSyntax node, CSharpPrintingContext context)
     {
         var semicolonLeadingTrivia = Token.PrintLeadingTrivia(node.SemicolonToken, context);
         if (

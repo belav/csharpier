@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class LocalFunctionStatement
 {
-    public static Doc Print(LocalFunctionStatementSyntax node, PrintingContext context)
+    public static Doc Print(LocalFunctionStatementSyntax node, CSharpPrintingContext context)
     {
         return BaseMethodDeclaration.Print(node, context);
     }

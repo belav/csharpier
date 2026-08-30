@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CommonForEachStatement
 {
-    public static Doc Print(CommonForEachStatementSyntax node, PrintingContext context)
+    public static Doc Print(CommonForEachStatementSyntax node, CSharpPrintingContext context)
     {
         var variable = node switch
         {

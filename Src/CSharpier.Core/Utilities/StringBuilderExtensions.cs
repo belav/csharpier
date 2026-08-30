@@ -24,7 +24,7 @@ internal static class StringBuilderExtensions
 
     public static void TrimStart(this StringBuilder value, params ReadOnlySpan<char> trimChars)
     {
-        int startIndex = 0;
+        var startIndex = 0;
         while (startIndex < value.Length && trimChars.IndexOf(value[startIndex]) >= 0)
         {
             startIndex++;

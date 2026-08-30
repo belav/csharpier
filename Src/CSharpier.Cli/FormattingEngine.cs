@@ -284,13 +284,6 @@ internal class FormattingEngine(
             return;
         }
 
-        if (fileToFormatInfo.UnableToDetectEncoding)
-        {
-            fileIssueLogger.WriteWarning(
-                $"Unable to detect file encoding. Defaulting to {fileToFormatInfo.Encoding}."
-            );
-        }
-
         cancellationToken.ThrowIfCancellationRequested();
 
         CodeFormatterResult codeFormattingResult;

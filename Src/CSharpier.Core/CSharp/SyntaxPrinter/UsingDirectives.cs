@@ -12,7 +12,7 @@ internal static class UsingDirectives
 
     public static Doc PrintWithSorting(
         SyntaxList<UsingDirectiveSyntax> usings,
-        PrintingContext context,
+        CSharpPrintingContext context,
         bool printExtraLines
     )
     {
@@ -159,7 +159,7 @@ internal static class UsingDirectives
     private static IEnumerable<List<UsingData>> GroupUsings(
         List<UsingDirectiveSyntax> usings,
         SyntaxTriviaList triviaOnFirstUsing,
-        PrintingContext context
+        CSharpPrintingContext context
     )
     {
         var globalSystemUsings = new List<UsingData>();

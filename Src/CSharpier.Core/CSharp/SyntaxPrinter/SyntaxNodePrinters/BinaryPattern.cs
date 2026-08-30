@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class BinaryPattern
 {
-    public static Doc Print(BinaryPatternSyntax node, PrintingContext context)
+    public static Doc Print(BinaryPatternSyntax node, CSharpPrintingContext context)
     {
         return Doc.IndentIf(
             node.Parent is SubpatternSyntax or IsPatternExpressionSyntax,

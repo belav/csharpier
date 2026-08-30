@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class FixedStatement
 {
-    public static Doc Print(FixedStatementSyntax node, PrintingContext context)
+    public static Doc Print(FixedStatementSyntax node, CSharpPrintingContext context)
     {
         return Doc.Concat(
             ExtraNewLines.Print(node),

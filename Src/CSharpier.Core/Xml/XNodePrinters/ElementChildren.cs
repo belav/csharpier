@@ -1,12 +1,11 @@
 using System.Xml;
-using CSharpier.Core.CSharp.SyntaxPrinter;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.Xml.XNodePrinters;
 
 internal static class ElementChildren
 {
-    public static Doc Print(RawNode node, PrintingContext context)
+    public static Doc Print(RawNode node, XmlPrintingContext context)
     {
         var groupIds = new List<string>();
         foreach (var _ in node.Nodes)
@@ -22,7 +21,6 @@ internal static class ElementChildren
             if (childNode.CSharpierIgnoreType is CSharpierIgnoreType.IgnoreEnd)
             {
                 printIgnored = false;
-                x++;
             }
 
             if (printIgnored)
@@ -30,7 +28,7 @@ internal static class ElementChildren
                 result.Add(
                     context
                         .NormalizedXml[childNode.StartPosition..childNode.EndPosition]
-                        .Replace("\n", context.Options.LineEnding)
+                        .Replace("\n", context.LineEnding)
                 );
                 continue;
             }

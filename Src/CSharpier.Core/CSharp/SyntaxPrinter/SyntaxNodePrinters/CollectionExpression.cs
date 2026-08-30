@@ -5,7 +5,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class CollectionExpression
 {
-    public static Doc Print(CollectionExpressionSyntax node, PrintingContext context)
+    public static Doc Print(CollectionExpressionSyntax node, CSharpPrintingContext context)
     {
         Doc separator = node.Parent
             is ArgumentSyntax { NameColon: null }

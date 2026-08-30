@@ -6,7 +6,7 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class Interpolation
 {
-    public static Doc Print(InterpolationSyntax node, PrintingContext context)
+    public static Doc Print(InterpolationSyntax node, CSharpPrintingContext context)
     {
         var docs = new DocListBuilder(8);
         docs.Add(Token.Print(node.OpenBraceToken, context));

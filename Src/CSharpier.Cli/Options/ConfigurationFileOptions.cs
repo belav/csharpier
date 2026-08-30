@@ -6,7 +6,7 @@ namespace CSharpier.Cli.Options;
 
 internal class ConfigurationFileOptions
 {
-    public int PrintWidth { get; init; } = 100;
+    public int? PrintWidth { get; init; }
     public int? IndentSize { get; init; }
     public bool UseTabs { get; init; }
 
@@ -35,36 +35,64 @@ internal class ConfigurationFileOptions
                 return null;
             }
 
-            return new PrinterOptions(
+            return CreatePrinterOptions(
                 parsedFormatter,
-                matchingOverride.XmlWhitespaceSensitivity
-                    ?? PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
-            )
-            {
-                IndentSize = matchingOverride.IndentSize,
-                UseTabs = matchingOverride.UseTabs,
-                Width = matchingOverride.PrintWidth,
-                EndOfLine = matchingOverride.EndOfLine,
-            };
+                filePath,
+                matchingOverride.XmlWhitespaceSensitivity,
+                matchingOverride.IndentSize,
+                matchingOverride.PrintWidth,
+                matchingOverride.UseTabs,
+                matchingOverride.EndOfLine
+            );
         }
 
         var formatter = PrinterOptions.GetFormatter(filePath);
         if (formatter != Formatter.Unknown)
         {
-            return new PrinterOptions(
+            return CreatePrinterOptions(
                 formatter,
-                this.XmlWhitespaceSensitivity
-                    ?? PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
-            )
-            {
-                IndentSize = this.IndentSize ?? (formatter == Formatter.XML ? 2 : 4),
-                UseTabs = this.UseTabs,
-                Width = this.PrintWidth,
-                EndOfLine = this.EndOfLine,
-            };
+                filePath,
+                this.XmlWhitespaceSensitivity,
+                this.IndentSize,
+                this.PrintWidth,
+                this.UseTabs,
+                this.EndOfLine
+            );
         }
 
         return null;
+    }
+
+    private static PrinterOptions CreatePrinterOptions(
+        Formatter formatter,
+        string filePath,
+        XmlWhitespaceSensitivity? xmlWhitespaceSensitivity,
+        int? indentSize,
+        int? printWidth,
+        bool useTabs,
+        EndOfLine endOfLine
+    )
+    {
+        var printerOptions = new PrinterOptions(
+            formatter,
+            xmlWhitespaceSensitivity ?? PrinterOptions.GetXmlWhitespaceSensitivity(filePath)
+        )
+        {
+            UseTabs = useTabs,
+            EndOfLine = endOfLine,
+        };
+
+        if (indentSize is not null)
+        {
+            printerOptions.IndentSize = indentSize.Value;
+        }
+
+        if (printWidth is not null)
+        {
+            printerOptions.Width = printWidth.Value;
+        }
+
+        return printerOptions;
     }
 
     public void Init(string directory)
@@ -80,8 +108,8 @@ internal class Override
 {
     private GlobMatcher? matcher;
 
-    public int PrintWidth { get; init; } = 100;
-    public int IndentSize { get; init; } = 4;
+    public int? PrintWidth { get; init; }
+    public int? IndentSize { get; init; }
     public bool UseTabs { get; init; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]

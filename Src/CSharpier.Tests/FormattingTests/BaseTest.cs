@@ -56,7 +56,6 @@ public class BaseTest
                 {
                     UseTabs = useTabs,
                     Width = PrinterOptions.WidthUsedByTests,
-                    IndentSize = formatter == Formatter.XML ? 2 : 4,
                 };
 
                 context.AddTest(

@@ -83,6 +83,31 @@ four"";
     }
 
     [Test]
+    [Arguments(EndOfLine.LF)]
+    [Arguments(EndOfLine.CRLF)]
+    public async Task Ignored_Range_In_Separated_List_Should_Respect_LineEnding(EndOfLine endOfLine)
+    {
+        var code = """
+            var value = new()
+            {
+                // csharpier-ignore-start
+                First =     1,
+                Second =     2
+                // csharpier-ignore-end
+            };
+
+            """;
+
+        var printerOptions = new PrinterOptions(Formatter.CSharp, XmlWhitespaceSensitivity.Strict)
+        {
+            EndOfLine = endOfLine,
+        };
+        var result = await CSharpFormatter.FormatAsync(code, printerOptions);
+
+        result.Code.Should().Be(code.ReplaceLineEndings(endOfLine == EndOfLine.LF ? "\n" : "\r\n"));
+    }
+
+    [Test]
     [Arguments("\\r\\n", EndOfLine.LF)]
     [Arguments("\\n", EndOfLine.CRLF)]
     public async Task Escaped_LineEndings_In_Verbatim_String_Should_Remain(

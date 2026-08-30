@@ -18,8 +18,6 @@ internal static class FileReader
         CancellationToken cancellationToken
     )
     {
-        var unableToDetectEncoding = false;
-
         await Semaphore.WaitAsync(cancellationToken);
         try
         {
@@ -35,11 +33,7 @@ internal static class FileReader
 
             var fileContents = await streamReader.ReadToEndAsync(cancellationToken);
 
-            return new FileReaderResult(
-                streamReader.CurrentEncoding,
-                fileContents,
-                unableToDetectEncoding
-            );
+            return new FileReaderResult(streamReader.CurrentEncoding, fileContents);
         }
         finally
         {
@@ -48,8 +42,4 @@ internal static class FileReader
     }
 }
 
-internal record FileReaderResult(
-    Encoding Encoding,
-    string FileContents,
-    bool UnableToDetectEncoding
-);
+internal record FileReaderResult(Encoding Encoding, string FileContents);
