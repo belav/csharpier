@@ -102,7 +102,7 @@ internal class OptionsProvider
                 directoryName,
                 fileSystem,
                 ignorePath,
-                null,
+                optionsProvider.ignoreWithPathCache,
                 cancellationToken
             );
             optionsProvider.ignoreFilesByDirectory[directoryName] =

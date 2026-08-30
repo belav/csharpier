@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.IO.Hashing;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using CSharpier.Core;
@@ -96,6 +97,13 @@ internal static class FormattingCacheFactory
         IFileSystem fileSystem
     ) : IFormattingCache
     {
+        private static readonly byte[] CSharpierVersionBytes = Encoding.UTF8.GetBytes(
+            typeof(FormattingCache).Assembly.GetName().Version?.ToString() ?? string.Empty
+        );
+
+        private static readonly ConditionalWeakTable<PrinterOptions, string> printerOptionsHashes =
+        [];
+
         public bool CanSkipFormatting(
             FileToFormatInfo fileToFormatInfo,
             PrinterOptions printerOptions
@@ -131,13 +139,13 @@ internal static class FormattingCacheFactory
 
         private static string GetPrinterOptionsHash(PrinterOptions printerOptions)
         {
-            var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
-            var hash = new XxHash32();
-            hash.Append(
-                Encoding.UTF8.GetBytes(csharpierVersion?.ToString() ?? string.Empty)
-            );
-            hash.Append(JsonSerializer.SerializeToUtf8Bytes(printerOptions));
-            return Convert.ToHexString(hash.GetCurrentHash());
+            return printerOptionsHashes.GetValue(printerOptions, static options =>
+            {
+                var hash = new XxHash32();
+                hash.Append(CSharpierVersionBytes);
+                hash.Append(JsonSerializer.SerializeToUtf8Bytes(options));
+                return Convert.ToHexString(hash.GetCurrentHash());
+            });
         }
 
         private static string Hash(string input)

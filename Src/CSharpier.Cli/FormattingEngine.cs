@@ -83,10 +83,12 @@ internal class FormattingEngine(
     )
     {
         var seenPaths = new HashSet<string>(PathComparer);
-        var explicitPaths = paths
-            .Where(path => path.IsFile)
-            .DistinctBy(path => path.ActualPath, PathComparer)
-            .ToDictionary(path => path.ActualPath, PathComparer);
+        var explicitPaths = new Lazy<Dictionary<string, PhysicalPath>>(() =>
+            paths
+                .Where(path => path.IsFile)
+                .DistinctBy(path => path.ActualPath, PathComparer)
+                .ToDictionary(path => path.ActualPath, PathComparer)
+        );
 
         foreach (var path in paths)
         {
@@ -118,7 +120,7 @@ internal class FormattingEngine(
 
                 if (seenPaths.Add(file))
                 {
-                    yield return explicitPaths.TryGetValue(file, out var explicitPath)
+                    yield return explicitPaths.Value.TryGetValue(file, out var explicitPath)
                         ? new PhysicalFile(
                             file,
                             explicitPath.SuppliedPath,
