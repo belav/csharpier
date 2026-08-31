@@ -23,4 +23,25 @@ internal static class SyntaxTriviaExtensions
     {
         return (SyntaxKind)trivia.RawKind;
     }
+
+    public static int IndexOfNextEndOfLine(this SyntaxTriviaList leadingTrivia, int startingIndex)
+    {
+        for (var index = startingIndex + 1; index < leadingTrivia.Count; index++)
+        {
+            var rawSyntaxKind = leadingTrivia[index].RawSyntaxKind();
+            if (rawSyntaxKind is SyntaxKind.WhitespaceTrivia)
+            {
+                continue;
+            }
+
+            if (rawSyntaxKind is SyntaxKind.EndOfLineTrivia)
+            {
+                return index;
+            }
+
+            return -1;
+        }
+
+        return -1;
+    }
 }
