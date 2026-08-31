@@ -349,12 +349,10 @@ internal static class Token
                 // keep one line after an #endif if there is at least one
                 if (kind is SyntaxKind.EndIfDirectiveTrivia)
                 {
-                    if (
-                        x + 1 < leadingTrivia.Count
-                        && leadingTrivia[x + 1].RawSyntaxKind() is SyntaxKind.EndOfLineTrivia
-                    )
+                    var lineIndex = leadingTrivia.IndexOfNextEndOfLine(x);
+                    if (lineIndex >= 0)
                     {
-                        x++;
+                        x = lineIndex;
                         docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
                     }
                     printNewLines = false;
