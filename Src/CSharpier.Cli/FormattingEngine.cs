@@ -11,6 +11,13 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli;
 
+internal sealed record PhysicalPath(
+    string ActualPath,
+    string SuppliedPath,
+    string DirectoryName,
+    bool IsFile
+);
+
 internal class FormattingEngine(
     IFormattedFileWriter writer,
     OptionsProvider optionsProvider,
@@ -22,81 +29,152 @@ internal class FormattingEngine(
 )
 {
     private static readonly int DefaultMaxDegreeOfParallelism = Environment.ProcessorCount * 2;
+    private static readonly StringComparer PathComparer = OperatingSystem.IsWindows()
+        ? StringComparer.OrdinalIgnoreCase
+        : StringComparer.Ordinal;
 
-    public async Task FormatDirectory(
-        string actualPath,
-        string suppliedPath,
+    public async Task FormatPhysicalPaths(
+        IReadOnlyList<PhysicalPath> paths,
         CancellationToken cancellationToken
     )
     {
+        if (!writer.SupportsParallelWrites)
+        {
+            await foreach (var file in this.EnumerateFiles(paths, cancellationToken))
+            {
+                await this.FormatFile(
+                    file.ActualPath,
+                    file.SuppliedPath,
+                    checkIsIgnored: true,
+                    file.WarnForUnsupported,
+                    file.IgnoreRootDirectory,
+                    ct => FileToFormatInfo.CreateFromFileSystem(file.ActualPath, fileSystem, ct),
+                    cancellationToken
+                );
+            }
+            return;
+        }
+
         var parallelOptions = new ParallelOptions
         {
             MaxDegreeOfParallelism = DefaultMaxDegreeOfParallelism,
             CancellationToken = cancellationToken,
         };
 
-        try
+        await Parallel.ForEachAsync(
+            this.EnumerateFiles(paths, cancellationToken),
+            parallelOptions,
+            async (file, formattingToken) =>
+                await this.FormatFile(
+                    file.ActualPath,
+                    file.SuppliedPath,
+                    checkIsIgnored: true,
+                    file.WarnForUnsupported,
+                    file.IgnoreRootDirectory,
+                    ct => FileToFormatInfo.CreateFromFileSystem(file.ActualPath, fileSystem, ct),
+                    formattingToken
+                )
+        );
+    }
+
+    private async IAsyncEnumerable<PhysicalFile> EnumerateFiles(
+        IReadOnlyList<PhysicalPath> paths,
+        [EnumeratorCancellation] CancellationToken cancellationToken
+    )
+    {
+        var seenPaths = new HashSet<string>(PathComparer);
+        var explicitPaths = new Lazy<Dictionary<string, PhysicalPath>>(() =>
+            paths
+                .Where(path => path.IsFile)
+                .DistinctBy(path => path.ActualPath, PathComparer)
+                .ToDictionary(path => path.ActualPath, PathComparer)
+        );
+
+        foreach (var path in paths)
         {
-            await Parallel.ForEachAsync(
-                this.EnumerateNonignoredFiles(actualPath, cancellationToken),
-                parallelOptions,
-                async (file, formattingToken) =>
-                {
-                    var relativePath = suppliedPath + file[actualPath.Length..];
-                    await this.FormatPhysicalFile(file, relativePath, false, formattingToken);
-                }
-            );
-        }
-        catch (OperationCanceledException ex)
-        {
-            if (ex.CancellationToken != cancellationToken)
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (path.IsFile)
             {
-                throw;
+                if (seenPaths.Add(path.ActualPath))
+                {
+                    yield return new PhysicalFile(
+                        path.ActualPath,
+                        path.SuppliedPath,
+                        WarnForUnsupported: true,
+                        path.DirectoryName
+                    );
+                }
+                continue;
+            }
+
+            await foreach (
+                var file in this.EnumerateNonignoredFiles(
+                    path.ActualPath,
+                    path.DirectoryName,
+                    cancellationToken
+                )
+            )
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (seenPaths.Add(file))
+                {
+                    yield return explicitPaths.Value.TryGetValue(file, out var explicitPath)
+                        ? new PhysicalFile(
+                            file,
+                            explicitPath.SuppliedPath,
+                            WarnForUnsupported: true,
+                            explicitPath.DirectoryName
+                        )
+                        : new PhysicalFile(
+                            file,
+                            path.SuppliedPath + file[path.ActualPath.Length..],
+                            WarnForUnsupported: false,
+                            path.DirectoryName
+                        );
+                }
             }
         }
     }
 
     private async IAsyncEnumerable<string> EnumerateNonignoredFiles(
         string directoryPath,
+        string ignoreRootDirectory,
         [EnumeratorCancellation] CancellationToken cancellationToken
     )
     {
         foreach (var file in fileSystem.Directory.EnumerateFiles(directoryPath))
         {
+            cancellationToken.ThrowIfCancellationRequested();
             yield return file;
         }
 
         foreach (var subdirectory in fileSystem.Directory.EnumerateDirectories(directoryPath))
         {
-            if (await optionsProvider.IsDirectoryIgnoredAsync(subdirectory, cancellationToken))
+            cancellationToken.ThrowIfCancellationRequested();
+            if (
+                await optionsProvider.IsDirectoryIgnoredAsync(
+                    subdirectory,
+                    ignoreRootDirectory,
+                    cancellationToken
+                )
+            )
             {
                 continue;
             }
 
             await foreach (
-                var file in this.EnumerateNonignoredFiles(subdirectory, cancellationToken)
+                var file in this.EnumerateNonignoredFiles(
+                    subdirectory,
+                    ignoreRootDirectory,
+                    cancellationToken
+                )
             )
             {
                 yield return file;
             }
         }
-    }
-
-    public Task FormatPhysicalFile(
-        string actualPath,
-        string suppliedPath,
-        bool warnForUnsupported,
-        CancellationToken cancellationToken
-    )
-    {
-        return this.FormatFile(
-            actualPath,
-            suppliedPath,
-            checkIsIgnored: true,
-            warnForUnsupported,
-            ct => FileToFormatInfo.CreateFromFileSystem(actualPath, fileSystem, ct),
-            cancellationToken
-        );
     }
 
     public Task FormatStandardInputFile(
@@ -111,6 +189,7 @@ internal class FormattingEngine(
             originalPath,
             checkIsIgnored,
             warnForUnsupported: false,
+            ignoreRootDirectory: null,
             _ => Task.FromResult(fileToFormatInfo),
             cancellationToken
         );
@@ -121,6 +200,7 @@ internal class FormattingEngine(
         string originalFilePath,
         bool checkIsIgnored,
         bool warnForUnsupported,
+        string? ignoreRootDirectory,
         Func<CancellationToken, Task<FileToFormatInfo>> getFileToFormatInfo,
         CancellationToken cancellationToken
     )
@@ -132,7 +212,11 @@ internal class FormattingEngine(
             )
             || (
                 checkIsIgnored
-                && await optionsProvider.IsFileIgnoredAsync(actualFilePath, cancellationToken)
+                && await optionsProvider.IsFileIgnoredAsync(
+                    actualFilePath,
+                    ignoreRootDirectory,
+                    cancellationToken
+                )
             )
         )
         {
@@ -194,7 +278,7 @@ internal class FormattingEngine(
 
         Interlocked.Increment(ref result.Files);
 
-        if (formattingCache.CanSkipFormatting(fileToFormatInfo))
+        if (formattingCache.CanSkipFormatting(fileToFormatInfo, printerOptions))
         {
             Interlocked.Increment(ref result.CachedFiles);
             return;
@@ -291,7 +375,7 @@ internal class FormattingEngine(
         }
 
         writer.WriteResult(codeFormattingResult, fileToFormatInfo);
-        formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo);
+        formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo, printerOptions);
     }
 
     private async Task ValidateFormatting(
@@ -362,4 +446,11 @@ internal class FormattingEngine(
             }
         }
     }
+
+    private sealed record PhysicalFile(
+        string ActualPath,
+        string SuppliedPath,
+        bool WarnForUnsupported,
+        string IgnoreRootDirectory
+    );
 }

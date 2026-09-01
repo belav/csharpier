@@ -1,9 +1,11 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.IO.Hashing;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Json;
-using CSharpier.Cli.Options;
+using CSharpier.Core;
 using CSharpier.Core.Utilities;
 
 namespace CSharpier.Cli;
@@ -11,8 +13,8 @@ namespace CSharpier.Cli;
 internal interface IFormattingCache
 {
     Task ResolveAsync(CancellationToken cancellationToken);
-    bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo);
-    void CacheResult(string code, FileToFormatInfo fileToFormatInfo);
+    bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo, PrinterOptions printerOptions);
+    void CacheResult(string code, FileToFormatInfo fileToFormatInfo, PrinterOptions printerOptions);
 }
 
 internal static class FormattingCacheFactory
@@ -27,7 +29,6 @@ internal static class FormattingCacheFactory
 
     public static async Task<IFormattingCache> InitializeAsync(
         CommandLineOptions commandLineOptions,
-        OptionsProvider optionsProvider,
         IFileSystem fileSystem,
         CancellationToken cancellationToken
     )
@@ -88,23 +89,30 @@ internal static class FormattingCacheFactory
             }
         }
 
-        return new FormattingCache(optionsProvider, CacheFilePath, cacheDictionary, fileSystem);
+        return new FormattingCache(CacheFilePath, cacheDictionary, fileSystem);
     }
 
     private class FormattingCache(
-        OptionsProvider optionsProvider,
         string cacheFile,
         ConcurrentDictionary<string, string> cacheDictionary,
         IFileSystem fileSystem
     ) : IFormattingCache
     {
-        private readonly string optionsHash = GetOptionsHash(optionsProvider);
+        private static readonly byte[] CSharpierVersionBytes = Encoding.UTF8.GetBytes(
+            typeof(FormattingCache).Assembly.GetName().Version?.ToString() ?? string.Empty
+        );
 
-        public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
+        private static readonly ConditionalWeakTable<PrinterOptions, string> printerOptionsHashes =
+        [];
+
+        public bool CanSkipFormatting(
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
             if (cacheDictionary.TryGetValue(fileToFormatInfo.Path, out var cachedHash))
             {
-                if (this.HashMatches(cachedHash, fileToFormatInfo.FileContents))
+                if (HashMatches(cachedHash, fileToFormatInfo.FileContents, printerOptions))
                 {
                     return true;
                 }
@@ -115,24 +123,44 @@ internal static class FormattingCacheFactory
             return false;
         }
 
-        private bool HashMatches(string cachedHash, string fileContents)
+        private static bool HashMatches(
+            string cachedHash,
+            string fileContents,
+            PrinterOptions printerOptions
+        )
         {
             var contentHash = Hash(fileContents);
 
-            return cachedHash.Length == contentHash.Length + this.optionsHash.Length
+            var optionsHash = GetPrinterOptionsHash(printerOptions);
+
+            return cachedHash.Length == contentHash.Length + optionsHash.Length
                 && cachedHash.AsSpan(0, contentHash.Length).SequenceEqual(contentHash.AsSpan())
-                && cachedHash.AsSpan(contentHash.Length).SequenceEqual(this.optionsHash.AsSpan());
+                && cachedHash.AsSpan(contentHash.Length).SequenceEqual(optionsHash.AsSpan());
         }
 
-        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo)
+        public void CacheResult(
+            string code,
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
-            cacheDictionary[fileToFormatInfo.Path] = Hash(code) + this.optionsHash;
+            cacheDictionary[fileToFormatInfo.Path] = GetCacheHash(code, printerOptions);
         }
 
-        private static string GetOptionsHash(OptionsProvider optionsProvider)
+        private static string GetCacheHash(string code, PrinterOptions printerOptions)
         {
-            var csharpierVersion = typeof(FormattingCache).Assembly.GetName().Version;
-            return Hash($"{csharpierVersion}_${optionsProvider.Serialize()}");
+            return Hash(code) + GetPrinterOptionsHash(printerOptions);
+        }
+
+        private static string GetPrinterOptionsHash(PrinterOptions printerOptions)
+        {
+            return printerOptionsHashes.GetValue(printerOptions, static options =>
+            {
+                var hash = new XxHash32();
+                hash.Append(CSharpierVersionBytes);
+                hash.Append(JsonSerializer.SerializeToUtf8Bytes(options));
+                return Convert.ToHexString(hash.GetCurrentHash());
+            });
         }
 
         // hashes the utf-16 payload in place - transcoding to ascii first would both copy the whole
@@ -185,11 +213,18 @@ internal static class FormattingCacheFactory
             return Task.CompletedTask;
         }
 
-        public bool CanSkipFormatting(FileToFormatInfo fileToFormatInfo)
+        public bool CanSkipFormatting(
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        )
         {
             return false;
         }
 
-        public void CacheResult(string code, FileToFormatInfo fileToFormatInfo) { }
+        public void CacheResult(
+            string code,
+            FileToFormatInfo fileToFormatInfo,
+            PrinterOptions printerOptions
+        ) { }
     }
 }

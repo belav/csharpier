@@ -4,13 +4,17 @@ using System.Text;
 using System.Text.Json;
 using AwesomeAssertions;
 using CSharpier.Cli;
-using CSharpier.Cli.Options;
-using Microsoft.Extensions.Logging.Abstractions;
+using CSharpier.Core;
 
 namespace CSharpier.Tests.Cli;
 
 internal sealed class FormattingCacheTests
 {
+    private static readonly PrinterOptions printerOptions = new(
+        Formatter.CSharp,
+        XmlWhitespaceSensitivity.Strict
+    );
+
     private readonly string testFileDirectory = Directory
         .CreateTempSubdirectory("CsharpierTestFies")
         .FullName;
@@ -44,10 +48,10 @@ internal sealed class FormattingCacheTests
         var path = Path.Combine(this.testFileDirectory, "Class.cs");
         var file = FileAt("public class Café { }\n", path);
 
-        cache.CacheResult(file.FileContents, file);
+        cache.CacheResult(file.FileContents, file, printerOptions);
 
         var otherFile = FileAt("public class Cafè { }\n", path);
-        cache.CanSkipFormatting(otherFile).Should().BeFalse();
+        cache.CanSkipFormatting(otherFile, printerOptions).Should().BeFalse();
     }
 
     [Test]
@@ -57,9 +61,9 @@ internal sealed class FormattingCacheTests
         var path = Path.Combine(this.testFileDirectory, "Class.cs");
         var file = FileAt("public class Café { }\n", path);
 
-        cache.CacheResult(file.FileContents, file);
+        cache.CacheResult(file.FileContents, file, printerOptions);
 
-        cache.CanSkipFormatting(file).Should().BeTrue();
+        cache.CanSkipFormatting(file, printerOptions).Should().BeTrue();
     }
 
     [Test]
@@ -87,12 +91,12 @@ internal sealed class FormattingCacheTests
         await SetupOldCacheFileAsync();
 
         var cacheWith130Hash = await this.CreateCacheAsync(fileSystem);
-        cacheWith130Hash.CanSkipFormatting(file).Should().BeFalse();
+        cacheWith130Hash.CanSkipFormatting(file, printerOptions).Should().BeFalse();
         await CacheFileAsync(cacheWith130Hash, file);
-        cacheWith130Hash.CanSkipFormatting(file).Should().BeTrue();
+        cacheWith130Hash.CanSkipFormatting(file, printerOptions).Should().BeTrue();
 
         var refreshedCache = await this.CreateCacheAsync(fileSystem);
-        refreshedCache.CanSkipFormatting(file).Should().BeTrue();
+        refreshedCache.CanSkipFormatting(file, printerOptions).Should().BeTrue();
     }
 
     private static FileToFormatInfo FileAt(string contents, string path)
@@ -102,7 +106,7 @@ internal sealed class FormattingCacheTests
 
     private static async Task CacheFileAsync(IFormattingCache cache, FileToFormatInfo file)
     {
-        cache.CacheResult(file.FileContents, file);
+        cache.CacheResult(file.FileContents, file, printerOptions);
         await cache.ResolveAsync(CancellationToken.None);
     }
 
@@ -134,18 +138,8 @@ internal sealed class FormattingCacheTests
     {
         fileSystem ??= this.CreateFileSystem();
 
-        var optionsProvider = await OptionsProvider.Create(
-            this.testFileDirectory,
-            null,
-            null,
-            fileSystem,
-            NullLogger.Instance,
-            CancellationToken.None
-        );
-
         return await FormattingCacheFactory.InitializeAsync(
             new CommandLineOptions(),
-            optionsProvider,
             fileSystem,
             CancellationToken.None
         );
