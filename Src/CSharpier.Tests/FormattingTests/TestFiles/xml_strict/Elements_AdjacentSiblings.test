@@ -1,0 +1,14 @@
+<Root>
+  <TextBlock><Run>Sub</Run><Run>total</Run></TextBlock>
+  <TextBlock>
+    <Run>Sub</Run><Run>total</Run>
+  </TextBlock>
+  <TextBlock>
+    <Run>Sub</Run>
+    <Run>total</Run>
+  </TextBlock>
+  <TextBlock>Sub<Run>total</Run></TextBlock>
+  <TextBlock>
+    <Run>This is a longer run of text</Run><Run>that will not fit on a single line with the rest</Run>
+  </TextBlock>
+</Root>

@@ -120,7 +120,10 @@ internal static class ElementChildren
     public static Doc PrintBetweenLine(RawNode prevNode, RawNode nextNode)
     {
         return
-            (prevNode.NodeType is XmlNodeType.Whitespace && nextNode.NodeType is XmlNodeType.Text)
+            !nextNode.HasLeadingWhitespace
+            || (
+                prevNode.NodeType is XmlNodeType.Whitespace && nextNode.NodeType is XmlNodeType.Text
+            )
             || (
                 prevNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
                 && nextNode.NodeType is XmlNodeType.Text or XmlNodeType.CDATA
