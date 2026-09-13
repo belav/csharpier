@@ -48,6 +48,11 @@ internal static class Element
                 return Doc.LiteralLine;
             }
 
+            if (rawNode.IsWhitespacePreserved)
+            {
+                return Doc.Null;
+            }
+
             if (
                 rawNode.Attributes.Length == 0
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
@@ -80,6 +85,11 @@ internal static class Element
                 rawNode.Nodes.LastOrDefault() is { } node
                 && Tag.PrintParentClosingTagStartWithContent(node, context)
             )
+            {
+                return Doc.Null;
+            }
+
+            if (rawNode.IsWhitespacePreserved)
             {
                 return Doc.Null;
             }

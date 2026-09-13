@@ -131,6 +131,33 @@ internal static partial class Node
             }
         }
 
+        if (rawNode.IsWhitespacePreserved && textValue.Contains('\n'))
+        {
+            return PrintWithLiteralLines(textValue, context.LineEnding);
+        }
+
         return textValue;
+    }
+
+    private static Doc PrintWithLiteralLines(string textValue, string lineEnding)
+    {
+        // the doc printer tracks the current column by string length, so newlines have to be
+        // real line docs or everything after them is measured as if it were on the same line
+        var lines = textValue.Split([lineEnding], StringSplitOptions.None);
+        var result = new List<Doc>();
+        for (var x = 0; x < lines.Length; x++)
+        {
+            if (x > 0)
+            {
+                result.Add(Doc.LiteralLine);
+            }
+
+            if (lines[x].Length > 0)
+            {
+                result.Add(lines[x]);
+            }
+        }
+
+        return Doc.Concat(result);
     }
 }

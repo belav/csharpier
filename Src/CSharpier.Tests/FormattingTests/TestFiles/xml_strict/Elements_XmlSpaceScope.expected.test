@@ -1,0 +1,7 @@
+<Root>
+  <Preserve xml:space="preserve"><A />   <B /></Preserve>
+  <AfterPreserve>
+    <A />
+    <B />
+  </AfterPreserve>
+</Root>
