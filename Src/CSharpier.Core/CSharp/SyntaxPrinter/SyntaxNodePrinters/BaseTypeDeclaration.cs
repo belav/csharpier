@@ -48,9 +48,7 @@ internal static class BaseTypeDeclaration
             {
                 keyword = interfaceDeclarationSyntax.Keyword;
             }
-#pragma warning disable RSEXPERIMENTAL006
             else if (node is UnionDeclarationSyntax unionDeclarationSyntax)
-#pragma warning restore RSEXPERIMENTAL006
             {
                 keyword = unionDeclarationSyntax.Keyword;
                 parameterList = unionDeclarationSyntax.ParameterList;

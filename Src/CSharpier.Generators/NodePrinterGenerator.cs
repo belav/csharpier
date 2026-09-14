@@ -1,5 +1,3 @@
-﻿#pragma warning disable RSEXPERIMENTAL006
-
 using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
