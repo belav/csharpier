@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using System.IO.Abstractions;
-using System.Text.Json;
 using CSharpier.Cli.DotIgnore;
 using CSharpier.Cli.EditorConfig;
 using CSharpier.Core;
@@ -20,24 +19,46 @@ internal class OptionsProvider
     private readonly ConcurrentDictionary<string, IgnoreFile?> ignoreFilesByDirectory = new();
     private readonly ConfigurationFileOptions? specifiedConfigFile;
     private readonly EditorConfigSections? specifiedEditorConfig;
+    private readonly bool hasSpecifiedIgnorePath;
     private readonly IFileSystem fileSystem;
     private readonly ILogger logger;
 
     private OptionsProvider(
         ConfigurationFileOptions? specifiedPrinterOptions,
         EditorConfigSections? specifiedEditorConfig,
+        bool hasSpecifiedIgnorePath,
         IFileSystem fileSystem,
         ILogger logger
     )
     {
         this.specifiedConfigFile = specifiedPrinterOptions;
         this.specifiedEditorConfig = specifiedEditorConfig;
+        this.hasSpecifiedIgnorePath = hasSpecifiedIgnorePath;
         this.fileSystem = fileSystem;
         this.logger = logger;
     }
 
     public static async Task<OptionsProvider> Create(
         string directoryName,
+        string? configPath,
+        string? ignorePath,
+        IFileSystem fileSystem,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        return await Create(
+            [directoryName],
+            configPath,
+            ignorePath,
+            fileSystem,
+            logger,
+            cancellationToken
+        );
+    }
+
+    public static async Task<OptionsProvider> Create(
+        IEnumerable<string> directoryNames,
         string? configPath,
         string? ignorePath,
         IFileSystem fileSystem,
@@ -58,16 +79,6 @@ internal class OptionsProvider
             ? CSharpierConfigParser.Create(csharpierConfigPath, fileSystem, logger)
             : null;
 
-        var ignoreFile = await IgnoreFile.CreateAsync(
-            directoryName,
-            fileSystem,
-            ignorePath,
-            null,
-            cancellationToken
-        );
-
-        ignoreFile ??= IgnoreFile.NullIgnore;
-
         var specifiedEditorConfig = editorConfigPath is not null
             ? await EditorConfigLocator.FindForDirectoryNameAsync(
                 Path.GetDirectoryName(editorConfigPath)!,
@@ -79,26 +90,47 @@ internal class OptionsProvider
         var optionsProvider = new OptionsProvider(
             specifiedConfigFile,
             specifiedEditorConfig,
+            ignorePath is not null,
             fileSystem,
             logger
         );
 
-        optionsProvider.ignoreFilesByDirectory[directoryName] = ignoreFile;
-
-        if (csharpierConfigPath is null)
+        var distinctDirectoryNames = directoryNames.Distinct(StringComparer.Ordinal).ToArray();
+        foreach (var directoryName in distinctDirectoryNames)
         {
-            optionsProvider.csharpierConfigsByDirectory[directoryName] =
-                CSharpierConfigParser.FindForDirectoryName(directoryName, fileSystem, logger);
+            var ignoreFile = await IgnoreFile.CreateAsync(
+                directoryName,
+                fileSystem,
+                ignorePath,
+                optionsProvider.ignoreWithPathCache,
+                cancellationToken
+            );
+            optionsProvider.ignoreFilesByDirectory[directoryName] =
+                ignoreFile ?? IgnoreFile.NullIgnore;
         }
 
-        if (editorConfigPath is null)
+        if (distinctDirectoryNames.Length == 1)
         {
-            optionsProvider.editorConfigByDirectory[directoryName] =
-                await EditorConfigLocator.FindForDirectoryNameAsync(
-                    directoryName,
-                    fileSystem,
-                    cancellationToken
-                );
+            var firstDirectoryName = distinctDirectoryNames[0];
+            if (csharpierConfigPath is null)
+            {
+                optionsProvider.csharpierConfigsByDirectory[firstDirectoryName] =
+                    CSharpierConfigParser.FindForDirectoryName(
+                        firstDirectoryName,
+                        fileSystem,
+                        logger
+                    );
+            }
+
+            if (editorConfigPath is null)
+            {
+                optionsProvider.editorConfigByDirectory[firstDirectoryName] =
+                    await EditorConfigLocator.FindForDirectoryNameAsync(
+                        firstDirectoryName,
+                        fileSystem,
+                        cancellationToken
+                    );
+            }
         }
 
         return optionsProvider;
@@ -259,36 +291,51 @@ internal class OptionsProvider
         return result;
     }
 
-    public Task<bool> IsFileIgnoredAsync(string filePath, CancellationToken cancellationToken)
+    public Task<bool> IsFileIgnoredAsync(
+        string filePath,
+        string? ignoreRootDirectory,
+        CancellationToken cancellationToken
+    )
     {
-        return this.IsIgnoredAsync(filePath, false, cancellationToken);
+        return this.IsIgnoredAsync(filePath, ignoreRootDirectory, false, cancellationToken);
     }
 
-    public Task<bool> IsDirectoryIgnoredAsync(string filePath, CancellationToken cancellationToken)
+    public Task<bool> IsFileIgnoredAsync(string filePath, CancellationToken cancellationToken)
     {
-        return this.IsIgnoredAsync(filePath, true, cancellationToken);
+        return this.IsFileIgnoredAsync(filePath, null, cancellationToken);
+    }
+
+    public Task<bool> IsDirectoryIgnoredAsync(
+        string filePath,
+        string ignoreRootDirectory,
+        CancellationToken cancellationToken
+    )
+    {
+        return this.IsIgnoredAsync(filePath, ignoreRootDirectory, true, cancellationToken);
     }
 
     private async Task<bool> IsIgnoredAsync(
         string path,
+        string? ignoreRootDirectory,
         bool isDirectory,
         CancellationToken cancellationToken
     )
     {
+        if (
+            this.hasSpecifiedIgnorePath
+            && ignoreRootDirectory is not null
+            && this.ignoreFilesByDirectory.TryGetValue(
+                ignoreRootDirectory,
+                out var specifiedIgnoreFile
+            )
+            && specifiedIgnoreFile is not null
+        )
+        {
+            return specifiedIgnoreFile.IsIgnored(path, isDirectory);
+        }
+
         return (
             await this.FindIgnoreFileAsync(Path.GetDirectoryName(path)!, cancellationToken)
         ).IsIgnored(path, isDirectory);
-    }
-
-    public string Serialize()
-    {
-        return JsonSerializer.Serialize(
-            new
-            {
-                specified = this.specifiedConfigFile,
-                this.csharpierConfigsByDirectory,
-                this.editorConfigByDirectory,
-            }
-        );
     }
 }
