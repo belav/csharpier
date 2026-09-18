@@ -8,7 +8,7 @@ internal static class IfStatement
 {
     public static Doc Print(IfStatementSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
         if (node.Parent is not ElseClauseSyntax)
         {
             docs.Add(ExtraNewLines.Print(node));
@@ -34,6 +34,6 @@ internal static class IfStatement
             docs.Add(Doc.HardLine, Node.Print(node.Else, context));
         }
 
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

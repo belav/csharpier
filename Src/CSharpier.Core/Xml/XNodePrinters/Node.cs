@@ -20,7 +20,7 @@ internal static partial class Node
     {
         if (node.NodeType is XmlNodeType.Document)
         {
-            var result = new DocListBuilder(node.Nodes.Count * 2 + 1);
+            using var result = new DocListBuilder(node.Nodes.Count * 2 + 1);
 
             foreach (var childNode in node.Nodes)
             {
@@ -32,7 +32,7 @@ internal static partial class Node
 
             result.Add(Doc.HardLine);
 
-            return Doc.Concat(ref result);
+            return Doc.Concat(result);
         }
 
         if (node.NodeType == XmlNodeType.DocumentType)

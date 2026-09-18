@@ -46,7 +46,8 @@ internal static class SeparatedSyntaxList
     )
         where T : SyntaxNode
     {
-        var docs = list.Count <= 3 ? new DocListBuilder(8) : new DocListBuilder(list.Count * 3);
+        using var docs =
+            list.Count <= 3 ? new DocListBuilder(8) : new DocListBuilder(list.Count * 3);
         StringBuilder? unFormattedCode = null;
         var printUnformatted = false;
         for (var x = startingIndex; x < list.Count; x++)
@@ -149,9 +150,6 @@ internal static class SeparatedSyntaxList
             docs.Add(unFormattedCode.ToString().Trim());
         }
 
-        var output = Doc.Concat(ref docs);
-        docs.Dispose();
-
-        return output;
+        return Doc.Concat(docs);
     }
 }

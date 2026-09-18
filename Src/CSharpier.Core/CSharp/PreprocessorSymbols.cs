@@ -23,12 +23,14 @@ internal class PreprocessorSymbols : CSharpSyntaxWalker
 
     public static List<string[]> GetSets(SyntaxTree syntaxTree)
     {
-        return new PreprocessorSymbols().GetSymbolSets(syntaxTree);
+        var root = syntaxTree.GetRoot();
+
+        return root.ContainsDirectives ? new PreprocessorSymbols().GetSymbolSets(root) : [];
     }
 
-    private List<string[]> GetSymbolSets(SyntaxTree syntaxTree)
+    private List<string[]> GetSymbolSets(SyntaxNode root)
     {
-        this.Visit(syntaxTree.GetRoot());
+        this.Visit(root);
 
         return this.symbolSets;
     }

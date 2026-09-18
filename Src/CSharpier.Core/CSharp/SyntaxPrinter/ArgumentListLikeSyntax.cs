@@ -22,20 +22,18 @@ internal static class ArgumentListLike
         )
         {
             var groupId = context.GroupFor("LambdaArguments");
+            var head = Doc.GroupWithId(
+                groupId,
+                Doc.Indent(
+                    Doc.SoftLine,
+                    Argument.PrintModifiers(arguments[0], context),
+                    SimpleLambdaExpression.PrintHead(simpleLambda, context)
+                )
+            );
+            var body = SimpleLambdaExpression.PrintBody(simpleLambda, context);
             args = Doc.Concat(
-                Doc.GroupWithId(
-                    groupId,
-                    Doc.Indent(
-                        Doc.SoftLine,
-                        Argument.PrintModifiers(arguments[0], context),
-                        SimpleLambdaExpression.PrintHead(simpleLambda, context)
-                    )
-                ),
-                Doc.IfBreak(
-                    Doc.Indent(Doc.Group(SimpleLambdaExpression.PrintBody(simpleLambda, context))),
-                    SimpleLambdaExpression.PrintBody(simpleLambda, context),
-                    groupId
-                ),
+                head,
+                Doc.IfBreak(Doc.Indent(Doc.Group(body)), body, groupId),
                 simpleLambda.Body
                     is BlockSyntax
                         or ObjectCreationExpressionSyntax

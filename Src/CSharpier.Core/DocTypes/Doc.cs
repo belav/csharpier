@@ -73,12 +73,12 @@ internal abstract class Doc
         };
     }
 
-    public static Doc Concat(ref DocListBuilder contents)
+    public static Doc Concat(scoped in DocListBuilder contents)
     {
         return contents.Length switch
         {
             0 => Null,
-            1 => contents[0],
+            1 => contents.AsSpan()[0],
             _ => new Concat(contents.ToArray()),
         };
     }
