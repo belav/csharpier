@@ -142,10 +142,21 @@ internal static class MembersWithForcedLines
             var printExtraNewLines = false;
             var triviaContainsEndIfOrRegion = false;
 
-            var leadingTrivia = member
-                .GetLeadingTrivia()
+            var memberLeadingTrivia = member.GetLeadingTrivia();
+            var leadingTrivia = memberLeadingTrivia
                 .Select(o => o.RawSyntaxKind())
                 .ToImmutableHashSet();
+
+            // duplicate logic from `Token` so we don't skip a line it never prints
+            var lineFollowsEndIf = false;
+            for (var index = memberLeadingTrivia.Count - 1; index >= 0; index--)
+            {
+                if (memberLeadingTrivia[index].RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia)
+                {
+                    lineFollowsEndIf = memberLeadingTrivia.IndexOfNextEndOfLine(index) >= 0;
+                    break;
+                }
+            }
 
             foreach (var syntaxTrivia in leadingTrivia)
             {
@@ -207,12 +218,7 @@ internal static class MembersWithForcedLines
                         && !leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
                         && !leadingTrivia.Contains(SyntaxKind.ElifDirectiveTrivia)
                         && !leadingTrivia.Contains(SyntaxKind.ElseDirectiveTrivia)
-                        // single comments have an EndOfLine separate
-                        // ideally we would just exclude if leadingTrivia contains EndOfLineTrivia
-                        && (
-                            !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
-                            || leadingTrivia.Contains(SyntaxKind.SingleLineCommentTrivia)
-                        )
+                        && !lineFollowsEndIf
                         && !printExtraNewLines
                     )
                 )

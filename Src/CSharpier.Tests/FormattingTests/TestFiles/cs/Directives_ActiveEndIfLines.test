@@ -1,0 +1,38 @@
+class ClassName1
+{
+#if SYMBOL
+#else
+    void MethodName1() { }
+#endif
+    
+    void MethodName2() { }
+}
+
+class ClassName2
+{
+#if SYMBOL
+#else
+    void MethodName1() { }
+
+#endif
+    void MethodName2() { }
+}
+
+class ClassName3
+{
+#if SYMBOL
+#else
+    int field1;
+#endif
+    
+    int field2;
+}
+
+class ClassName4
+{
+#if SYMBOL
+#else
+    int field1;
+#endif
+    int field2;
+}

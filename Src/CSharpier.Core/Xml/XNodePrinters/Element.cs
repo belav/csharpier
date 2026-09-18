@@ -48,6 +48,11 @@ internal static class Element
                 return Doc.LiteralLine;
             }
 
+            if (rawNode.IsWhitespacePreserved)
+            {
+                return Doc.Null;
+            }
+
             if (
                 rawNode.Attributes.Length == 0
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
@@ -84,6 +89,11 @@ internal static class Element
                 return Doc.Null;
             }
 
+            if (rawNode.IsWhitespacePreserved)
+            {
+                return Doc.Null;
+            }
+
             if (
                 rawNode.Attributes.Length == 0
                 && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
@@ -95,8 +105,8 @@ internal static class Element
 
             if (
                 rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
-                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is '\r' or '\n'
+                && rawNode.Nodes is [.., { NodeType: XmlNodeType.Text } lastTextNode]
+                && lastTextNode.Value.TrimEnd(' ')[^1] is '\r' or '\n'
             )
             {
                 return Doc.Null;

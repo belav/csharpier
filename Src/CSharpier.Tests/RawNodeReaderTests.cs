@@ -3,6 +3,7 @@
 using AwesomeAssertions;
 using CSharpier.Core;
 using CSharpier.Core.Xml;
+using XmlNodeType = System.Xml.XmlNodeType;
 
 namespace CSharpier.Tests;
 
@@ -154,7 +155,7 @@ public class RawNodeReaderTests
         );
         nodes
             .First()
-            .Nodes.First()
+            .Nodes.First(o => o.Name == "child")
             .XmlWhitespaceSensitivity.Should()
             .Be(XmlWhitespaceSensitivity.Strict);
     }
@@ -174,10 +175,74 @@ public class RawNodeReaderTests
         );
         nodes
             .First()
-            .Nodes.First()
-            .Nodes.First()
+            .Nodes.First(o => o.Name == "child")
+            .Nodes.First(o => o.Name == "grandChild")
             .XmlWhitespaceSensitivity.Should()
             .Be(XmlWhitespaceSensitivity.Ignore);
+    }
+
+    [Test]
+    public void Should_Restore_Whitespace_After_Element_With_XmlSpace()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root>
+                <child xml:space="preserve" />
+                <sibling />
+            </root>
+            """,
+            XmlWhitespaceSensitivity.Ignore
+        );
+        nodes
+            .First()
+            .Nodes[1]
+            .XmlWhitespaceSensitivity.Should()
+            .Be(XmlWhitespaceSensitivity.Ignore);
+    }
+
+    [Test]
+    public void Should_Set_HasLeadingWhitespace()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root><first /> <second /><third />
+            <fourth /></root>
+            """
+        );
+
+        var children = nodes.First().Nodes;
+        children[0].HasLeadingWhitespace.Should().BeFalse();
+        children[1].HasLeadingWhitespace.Should().BeTrue();
+        children[2].HasLeadingWhitespace.Should().BeFalse();
+        children[3].HasLeadingWhitespace.Should().BeTrue();
+    }
+
+    [Test]
+    public void Should_Restore_Default_Whitespace_With_XmlSpace_Default()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root xml:space="default"></root>
+            """,
+            XmlWhitespaceSensitivity.Strict
+        );
+        nodes.First().XmlWhitespaceSensitivity.Should().Be(XmlWhitespaceSensitivity.Strict);
+    }
+
+    [Test]
+    public void Should_Keep_Whitespace_Between_Elements_When_Preserving()
+    {
+        var nodes = ReadAllNodes(
+            """
+            <root xml:space="preserve"><first />   <second /></root>
+            """,
+            XmlWhitespaceSensitivity.Ignore
+        );
+
+        var children = nodes.First().Nodes;
+        children.Count.Should().Be(3);
+        children[1].NodeType.Should().Be(XmlNodeType.Text);
+        children[1].Value.Should().Be("   ");
     }
 
     private static List<RawNode> ReadAllNodes(

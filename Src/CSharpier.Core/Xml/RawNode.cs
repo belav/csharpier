@@ -22,6 +22,8 @@ internal class RawNode
     public List<RawNode> Nodes { get; set; } = [];
     public string Value { get; set; } = string.Empty;
     public required XmlWhitespaceSensitivity XmlWhitespaceSensitivity { get; set; }
+    public bool IsWhitespacePreserved { get; set; }
+    public bool HasLeadingWhitespace { get; set; }
     public int StartPosition { get; set; }
     public int EndPosition { get; set; }
     public CSharpierIgnoreType CSharpierIgnoreType { get; set; }

@@ -12,7 +12,10 @@ class RawNodeReader
 {
     private readonly string normalizedXml;
     private readonly string lineEnding;
+    private readonly XmlWhitespaceSensitivity defaultXmlWhitespaceSensitivity;
     private XmlWhitespaceSensitivity currentXmlWhitespaceSensitivity;
+    private bool isWhitespacePreserved;
+    private bool hasLeadingWhitespace;
     private int position;
     private readonly Stack<RawNode> elementStack = new();
 
@@ -57,6 +60,7 @@ class RawNodeReader
     {
         this.normalizedXml = NewlineRegex.Replace(xml, "\n");
         this.lineEnding = lineEnding;
+        this.defaultXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
         this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
     }
 
@@ -81,6 +85,7 @@ class RawNodeReader
         while (this.position < this.normalizedXml.Length)
         {
             var newLines = 0;
+            var positionBeforeWhitespace = this.position;
             while (
                 this.position < this.normalizedXml.Length
                 && char.IsWhiteSpace(this.normalizedXml[this.position])
@@ -93,7 +98,30 @@ class RawNodeReader
                 this.position++;
             }
 
-            if (newLines > 1)
+            this.hasLeadingWhitespace = this.position != positionBeforeWhitespace;
+
+            if (
+                this.isWhitespacePreserved
+                && this.hasLeadingWhitespace
+                && this.elementStack.Peek().NodeType is XmlNodeType.Element
+                && this.position < this.normalizedXml.Length
+                && this.normalizedXml[this.position] == '<'
+            )
+            {
+                // ParseText picks up whitespace that runs into text, this covers the rest of it
+                this.AddNode(
+                    new RawNode
+                    {
+                        NodeType = XmlNodeType.Text,
+                        Value = this.normalizedXml[positionBeforeWhitespace..this.position]
+                            .Replace("\n", this.lineEnding),
+                        XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+                        HasLeadingWhitespace = this.hasLeadingWhitespace,
+                        IsWhitespacePreserved = true,
+                    }
+                );
+            }
+            else if (newLines > 1)
             {
                 // this is a bit of a hack and doesn't actually represent the whitespace from the original xml
                 // we turn all whitespace into a single new line if it has more than a single newline in it
@@ -105,6 +133,7 @@ class RawNodeReader
                         NodeType = XmlNodeType.Whitespace,
                         Value = "\n",
                         XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+                        HasLeadingWhitespace = this.hasLeadingWhitespace,
                     }
                 );
             }
@@ -219,6 +248,7 @@ class RawNodeReader
             NodeType = XmlNodeType.Comment,
             Value = $"<!--{actualContent}-->",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
             CSharpierIgnoreType =
                 IgnoreRegex.IsMatch(actualContent) ? CSharpierIgnoreType.Ignore
                 : IgnoreStartRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreStart
@@ -258,6 +288,7 @@ class RawNodeReader
             NodeType = XmlNodeType.CDATA,
             Value = $"<![CDATA[{content}]]>",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
         };
 
         this.AddNode(node);
@@ -296,6 +327,7 @@ class RawNodeReader
             NodeType = XmlNodeType.ProcessingInstruction,
             Value = $"<?{name} {content}?>",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
         };
 
         this.AddNode(node);
@@ -315,7 +347,12 @@ class RawNodeReader
 
         var element = this.elementStack.Pop();
         element.EndPosition = this.position;
-        this.currentXmlWhitespaceSensitivity = element.XmlWhitespaceSensitivity;
+        if (this.elementStack.Count > 0)
+        {
+            var parent = this.elementStack.Peek();
+            this.currentXmlWhitespaceSensitivity = parent.XmlWhitespaceSensitivity;
+            this.isWhitespacePreserved = parent.IsWhitespacePreserved;
+        }
         // we don't want to keep around any leading or trailing newlines in an elements children
         // it is easier to remove them here instead of dealing with it in the printer
         for (var x = element.Nodes.Count - 1; x >= 0; x--)
@@ -370,14 +407,15 @@ class RawNodeReader
         this.SkipToChar('>');
 
         var xmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity;
+        var whitespaceIsPreserved = this.isWhitespacePreserved;
 
         var spaceAttribute = attributes.FirstOrDefault(o => o.Name == "xml:space");
         if (spaceAttribute != null)
         {
-            xmlWhitespaceSensitivity =
-                spaceAttribute.Value == "preserve"
-                    ? XmlWhitespaceSensitivity.Strict
-                    : XmlWhitespaceSensitivity.Ignore;
+            whitespaceIsPreserved = spaceAttribute.Value == "preserve";
+            xmlWhitespaceSensitivity = whitespaceIsPreserved
+                ? XmlWhitespaceSensitivity.Strict
+                : this.defaultXmlWhitespaceSensitivity;
         }
 
         var node = new RawNode
@@ -387,6 +425,8 @@ class RawNodeReader
             IsEmpty = isEmpty,
             Attributes = attributes.ToArray(),
             XmlWhitespaceSensitivity = xmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
+            IsWhitespacePreserved = whitespaceIsPreserved,
             StartPosition = originalPosition,
             EndPosition = this.position, // set to the end of the start tag which is correct for empty elements and will be adjusted later for non-empty
         };
@@ -397,6 +437,7 @@ class RawNodeReader
         {
             this.elementStack.Push(node);
             this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
+            this.isWhitespacePreserved = whitespaceIsPreserved;
         }
     }
 
@@ -434,6 +475,8 @@ class RawNodeReader
             NodeType = XmlNodeType.Text,
             Value = text,
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
+            IsWhitespacePreserved = this.isWhitespacePreserved,
         };
 
         this.AddNode(node);
