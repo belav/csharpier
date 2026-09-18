@@ -485,7 +485,7 @@ internal partial class SyntaxNodeComparer
             : NotEqual(originalTrivia.Span, formattedTrivia.Span);
     }
 
-    private bool CompareFullSpan(SyntaxNode originalStart, SyntaxNode formattedStart)
+    internal bool CompareFullSpan(SyntaxNode originalStart, SyntaxNode formattedStart)
     {
         var originalSpan = OriginalSourceCode
             .AsSpan()
@@ -493,7 +493,7 @@ internal partial class SyntaxNodeComparer
         var formattedSpan = NewSourceCode
             .AsSpan()
             .Slice(formattedStart.FullSpan.Start, formattedStart.FullSpan.Length);
-        return originalSpan == formattedSpan;
+        return originalSpan.SequenceEqual(formattedSpan);
     }
 
     private static CompareResult CompareComment(

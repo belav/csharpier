@@ -9,7 +9,7 @@ internal static class UsingStatement
 {
     public static Doc Print(UsingStatementSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(4);
+        using var docs = new DocListBuilder(4);
         docs.Add(ExtraNewLines.Print(node));
         docs.Add(
             Doc.Group(
@@ -46,6 +46,6 @@ internal static class UsingStatement
             docs.Add(Doc.Indent(Doc.HardLine, Node.Print(node.Statement, context)));
         }
 
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }
