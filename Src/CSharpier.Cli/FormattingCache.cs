@@ -154,13 +154,15 @@ internal static class FormattingCacheFactory
 
         private static string GetPrinterOptionsHash(PrinterOptions printerOptions)
         {
-            return printerOptionsHashes.GetValue(printerOptions, static options =>
-            {
-                var hash = new XxHash32();
-                hash.Append(CSharpierVersionBytes);
-                hash.Append(JsonSerializer.SerializeToUtf8Bytes(options));
-                return Convert.ToHexString(hash.GetCurrentHash());
-            });
+            return printerOptionsHashes.GetValue(
+                printerOptions,
+                static options =>
+                {
+                    var hash = new XxHash32();
+                    hash.Append(CSharpierVersionBytes);
+                    hash.Append(JsonSerializer.SerializeToUtf8Bytes(options));
+                    return Convert.ToHexString(hash.GetCurrentHash());
+                });
         }
 
         // hashes the utf-16 payload in place - transcoding to ascii first would both copy the whole
