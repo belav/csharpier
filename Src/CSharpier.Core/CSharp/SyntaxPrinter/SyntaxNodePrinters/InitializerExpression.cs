@@ -6,6 +6,14 @@ namespace CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 
 internal static class InitializerExpression
 {
+    public static Doc PrintOptionalWithLine(
+        InitializerExpressionSyntax? node,
+        CSharpPrintingContext context
+    )
+    {
+        return node != null ? Doc.Concat(Doc.Line, Print(node, context)) : Doc.Null;
+    }
+
     public static Doc Print(InitializerExpressionSyntax node, CSharpPrintingContext context)
     {
         Doc separator = node.Parent

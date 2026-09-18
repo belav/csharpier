@@ -9,7 +9,7 @@ internal static class TypeParameter
     public static Doc Print(TypeParameterSyntax node, CSharpPrintingContext context)
     {
         var hasAttribute = node.AttributeLists.Any();
-        var groupId = hasAttribute ? Guid.NewGuid().ToString() : string.Empty;
+        var groupId = hasAttribute ? Doc.NextGroupId() : string.Empty;
 
         var result = Doc.Concat(
             AttributeLists.Print(node, node.AttributeLists, context),

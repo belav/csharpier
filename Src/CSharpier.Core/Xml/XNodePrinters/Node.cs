@@ -47,20 +47,20 @@ internal static partial class Node
 
         if (node.NodeType is XmlNodeType.Text)
         {
-            List<Doc> doc =
-            [
-                Tag.PrintOpeningTagPrefix(node, context),
-                GetTextValue(node, context),
-                Tag.PrintClosingTagSuffix(node, context),
-            ];
+            var prefix = Tag.PrintOpeningTagPrefix(node, context);
+            var textValue = GetTextValue(node, context);
+            var suffix = Tag.PrintClosingTagSuffix(node, context);
 
-            if (doc.All(o => o is StringDoc))
+            if (
+                prefix is StringDoc prefixString
+                && textValue is StringDoc textValueString
+                && suffix is StringDoc suffixString
+            )
             {
-                var result = string.Join(string.Empty, doc.Select(o => ((StringDoc)o).Value));
-                return result;
+                return string.Concat(prefixString.Value, textValueString.Value, suffixString.Value);
             }
 
-            return Doc.Concat(doc);
+            return Doc.Concat(prefix, textValue, suffix);
         }
 
         if (

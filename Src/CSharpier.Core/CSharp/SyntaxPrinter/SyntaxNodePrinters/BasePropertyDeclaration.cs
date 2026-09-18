@@ -51,10 +51,7 @@ internal static class BasePropertyDeclaration
                 Node.Print(node.Type, context),
                 " ",
                 explicitInterfaceSpecifierSyntax != null
-                    ? Doc.Concat(
-                        Node.Print(explicitInterfaceSpecifierSyntax.Name, context),
-                        Token.Print(explicitInterfaceSpecifierSyntax.DotToken, context)
-                    )
+                    ? ExplicitInterfaceSpecifier.Print(explicitInterfaceSpecifierSyntax, context)
                     : Doc.Null,
                 identifier != null ? identifier() : Doc.Null,
                 Contents(node, expressionBody, context),

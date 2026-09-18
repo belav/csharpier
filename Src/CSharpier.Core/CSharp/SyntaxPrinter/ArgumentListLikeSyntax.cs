@@ -18,7 +18,7 @@ internal static class ArgumentListLike
         Doc? args;
         if (
             arguments is [{ Expression: SimpleLambdaExpressionSyntax simpleLambda }]
-            && !simpleLambda.GetLeadingTrivia().Any(o => o.IsComment())
+            && !simpleLambda.GetLeadingTrivia().AnyComment()
         )
         {
             var groupId = context.GroupFor("LambdaArguments");

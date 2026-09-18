@@ -9,7 +9,7 @@ internal static class QueryBody
     public static Doc Print(QueryBodySyntax node, CSharpPrintingContext context)
     {
         var docs = new DocListBuilder(5);
-        docs.Add(Doc.Join(Doc.Line, node.Clauses.Select(o => Node.Print(o, context))));
+        docs.Add(Doc.Join(Doc.Line, node.Clauses, Node.Print, context));
 
         if (node.Clauses.Count > 0)
         {

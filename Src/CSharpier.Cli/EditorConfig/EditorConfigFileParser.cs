@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 using CSharpier.Core;
@@ -24,7 +25,23 @@ internal static partial class EditorConfigFileParser
         ThrowExceptionsOnError = false,
     };
 
+    private static readonly ConcurrentDictionary<
+        (string Path, DateTime LastWriteTimeUtc, long Length),
+        EditorConfigFile
+    > ParsedFilesByPath = new();
+
     public static EditorConfigFile Parse(string filePath, IFileSystem fileSystem)
+    {
+        var fileInfo = fileSystem.FileInfo.New(filePath);
+
+        return ParsedFilesByPath.GetOrAdd(
+            (filePath, fileInfo.LastWriteTimeUtc, fileInfo.Length),
+            static (key, fs) => ParseFile(key.Path, fs),
+            fileSystem
+        );
+    }
+
+    private static EditorConfigFile ParseFile(string filePath, IFileSystem fileSystem)
     {
         var directory = fileSystem.Path.GetDirectoryName(filePath);
 

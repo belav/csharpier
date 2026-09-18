@@ -205,15 +205,13 @@ internal static class BinaryExpression
 
         static bool HasInvocationExcludingLeftmostParenthesized(ExpressionSyntax expression)
         {
-            var leftmost = GetLeftmostExpression(expression);
+            var excludedNode = GetLeftmostExpression(expression) as ParenthesizedExpressionSyntax;
+
             return expression
-                .DescendantNodesAndSelf()
-                .Where(node =>
-                    leftmost is not ParenthesizedExpressionSyntax excludedNode
-                    || !IsDescendantOrSelf(node, excludedNode)
-                )
+                .DescendantNodesAndSelf(o => o != excludedNode)
                 .Any(node =>
-                    node is InvocationExpressionSyntax or ConditionalAccessExpressionSyntax
+                    node != excludedNode
+                    && node is InvocationExpressionSyntax or ConditionalAccessExpressionSyntax
                 );
         }
 
@@ -233,11 +231,6 @@ internal static class BinaryExpression
                 AwaitExpressionSyntax awaitExpr => GetLeftmostExpression(awaitExpr.Expression),
                 _ => expression,
             };
-        }
-
-        static bool IsDescendantOrSelf(SyntaxNode node, SyntaxNode ancestor)
-        {
-            return node == ancestor || node.Ancestors().Contains(ancestor);
         }
     }
 

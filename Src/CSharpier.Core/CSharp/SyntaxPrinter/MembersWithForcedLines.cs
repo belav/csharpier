@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
 using System.Text;
 using CSharpier.Core.DocTypes;
@@ -26,22 +25,25 @@ internal static class MembersWithForcedLines
             result.Add(Doc.HardLine);
         }
 
-        var unFormattedCode = new StringBuilder();
+        StringBuilder? unFormattedCode = null;
         var printUnformatted = false;
         var lastMemberForcedBlankLine = false;
         for (var memberIndex = 0; memberIndex < members.Count; memberIndex++)
         {
             var skipAddingLineBecauseIgnoreEnded = false;
             var member = members[memberIndex];
+            var leadingTrivia = member.GetLeadingTrivia();
 
-            if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreEndRegex))
+            if (Token.HasLeadingCommentMatching(leadingTrivia, CSharpierIgnore.IgnoreEndRegex))
             {
                 skipAddingLineBecauseIgnoreEnded = true;
-                result.Add(unFormattedCode.ToString().Trim());
-                unFormattedCode.Clear();
+                result.Add(unFormattedCode?.ToString().Trim() ?? string.Empty);
+                unFormattedCode?.Clear();
                 printUnformatted = false;
             }
-            else if (Token.HasLeadingCommentMatching(member, CSharpierIgnore.IgnoreStartRegex))
+            else if (
+                Token.HasLeadingCommentMatching(leadingTrivia, CSharpierIgnore.IgnoreStartRegex)
+            )
             {
                 if (!printUnformatted && memberIndex > 0)
                 {
@@ -53,6 +55,7 @@ internal static class MembersWithForcedLines
 
             if (printUnformatted)
             {
+                unFormattedCode ??= new StringBuilder();
                 unFormattedCode.Append(CSharpierIgnore.PrintWithoutFormatting(member, context));
                 continue;
             }
@@ -141,25 +144,16 @@ internal static class MembersWithForcedLines
             var triviaContainsCommentOrNewLine = false;
             var printExtraNewLines = false;
             var triviaContainsEndIfOrRegion = false;
-
-            var memberLeadingTrivia = member.GetLeadingTrivia();
-            var leadingTrivia = memberLeadingTrivia
-                .Select(o => o.RawSyntaxKind())
-                .ToImmutableHashSet();
-
-            // duplicate logic from `Token` so we don't skip a line it never prints
+            var triviaContainsIfDirective = false;
+            var triviaContainsElifDirective = false;
+            var triviaContainsElseDirective = false;
+            var triviaContainsEndOfLine = false;
             var lineFollowsEndIf = false;
-            for (var index = memberLeadingTrivia.Count - 1; index >= 0; index--)
-            {
-                if (memberLeadingTrivia[index].RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia)
-                {
-                    lineFollowsEndIf = memberLeadingTrivia.IndexOfNextEndOfLine(index) >= 0;
-                    break;
-                }
-            }
 
-            foreach (var syntaxTrivia in leadingTrivia)
+            for (var triviaIndex = 0; triviaIndex < leadingTrivia.Count; triviaIndex++)
             {
+                var syntaxTrivia = leadingTrivia[triviaIndex].RawSyntaxKind();
+
                 if (syntaxTrivia is SyntaxKind.EndOfLineTrivia || syntaxTrivia.IsComment())
                 {
                     triviaContainsCommentOrNewLine = true;
@@ -181,6 +175,28 @@ internal static class MembersWithForcedLines
                 )
                 {
                     triviaContainsEndIfOrRegion = true;
+                }
+
+                if (syntaxTrivia is SyntaxKind.EndIfDirectiveTrivia)
+                {
+                    lineFollowsEndIf = leadingTrivia.IndexOfNextEndOfLine(triviaIndex) >= 0;
+                }
+
+                if (syntaxTrivia is SyntaxKind.IfDirectiveTrivia)
+                {
+                    triviaContainsIfDirective = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.ElifDirectiveTrivia)
+                {
+                    triviaContainsElifDirective = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.ElseDirectiveTrivia)
+                {
+                    triviaContainsElseDirective = true;
+                }
+                else if (syntaxTrivia is SyntaxKind.EndOfLineTrivia)
+                {
+                    triviaContainsEndOfLine = true;
                 }
             }
 
@@ -210,14 +226,14 @@ internal static class MembersWithForcedLines
                 && (
                     (
                         !triviaContainsEndIfOrRegion
-                        && leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
-                        && !leadingTrivia.Contains(SyntaxKind.EndOfLineTrivia)
+                        && triviaContainsIfDirective
+                        && !triviaContainsEndOfLine
                     )
                     || (
                         triviaContainsEndIfOrRegion
-                        && !leadingTrivia.Contains(SyntaxKind.IfDirectiveTrivia)
-                        && !leadingTrivia.Contains(SyntaxKind.ElifDirectiveTrivia)
-                        && !leadingTrivia.Contains(SyntaxKind.ElseDirectiveTrivia)
+                        && !triviaContainsIfDirective
+                        && !triviaContainsElifDirective
+                        && !triviaContainsElseDirective
                         && !lineFollowsEndIf
                         && !printExtraNewLines
                     )
@@ -235,7 +251,7 @@ internal static class MembersWithForcedLines
             lastMemberForcedBlankLine = blankLineIsForced;
         }
 
-        if (unFormattedCode.Length > 0)
+        if (unFormattedCode is { Length: > 0 })
         {
             result.Add(unFormattedCode.ToString().Trim());
         }

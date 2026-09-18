@@ -213,29 +213,142 @@ internal partial class SyntaxNodeComparer
         return Equal;
     }
 
-    private static SyntaxToken[] AllSeparatorsButLast(in SeparatedSyntaxList<SyntaxNode> list)
+    // Omit the last separator when comparing the original node with the formatted node, as it
+    // legitimately may be added or removed. The generator emits the node comparison for the same
+    // list immediately before this, and that already returns NotEqual on a count mismatch, so the
+    // two lists are known to have the same count here.
+    private CompareResult CompareSeparators<T>(
+        in SeparatedSyntaxList<T> original,
+        in SeparatedSyntaxList<T> formatted
+    )
+        where T : SyntaxNode
     {
-        if (list.Count <= 1)
+        for (var x = 0; x < original.Count - 1; x++)
         {
-            return [];
-        }
-
-        var tokens = new SyntaxToken[list.Count - 1];
-        var tokenIndex = 0;
-
-        foreach (var element in list.GetWithSeparators())
-        {
-            if (element.IsToken)
+            var result = this.Compare(original.GetSeparator(x), formatted.GetSeparator(x));
+            if (result.IsInvalid)
             {
-                tokens[tokenIndex++] = element.AsToken();
-                if (tokenIndex == tokens.Length)
-                {
-                    break;
-                }
+                return result;
             }
         }
 
-        return tokens;
+        return Equal;
+    }
+
+    private const int MaxStackAllocatedModifiers = 16;
+
+    // The two lists are lined up by modifier text before comparing, so that a list the printer
+    // reordered still matches. This cannot be skipped when ReorderedModifiers is false: the
+    // comparer deliberately tolerates a reordered modifier list either way, which
+    // Unsorted_Modifiers_Pass_Validation covers.
+    private CompareResult CompareModifierLists(
+        in SyntaxTokenList original,
+        in SyntaxTokenList formatted,
+        TextSpan originalParentSpan,
+        TextSpan formattedParentSpan
+    )
+    {
+        var count = Math.Max(original.Count, formatted.Count);
+
+        if (count <= 1)
+        {
+            for (var x = 0; x < count; x++)
+            {
+                var result = this.CompareModifierAt(
+                    original,
+                    formatted,
+                    x,
+                    x,
+                    originalParentSpan,
+                    formattedParentSpan
+                );
+                if (result.IsInvalid)
+                {
+                    return result;
+                }
+            }
+
+            return Equal;
+        }
+
+        var originalOrder =
+            original.Count <= MaxStackAllocatedModifiers
+                ? stackalloc int[MaxStackAllocatedModifiers]
+                : new int[original.Count];
+        originalOrder = originalOrder[..original.Count];
+        SortIndexesByText(original, originalOrder);
+
+        var formattedOrder =
+            formatted.Count <= MaxStackAllocatedModifiers
+                ? stackalloc int[MaxStackAllocatedModifiers]
+                : new int[formatted.Count];
+        formattedOrder = formattedOrder[..formatted.Count];
+        SortIndexesByText(formatted, formattedOrder);
+
+        for (var x = 0; x < count; x++)
+        {
+            var result = this.CompareModifierAt(
+                original,
+                formatted,
+                x < originalOrder.Length ? originalOrder[x] : x,
+                x < formattedOrder.Length ? formattedOrder[x] : x,
+                originalParentSpan,
+                formattedParentSpan
+            );
+            if (result.IsInvalid)
+            {
+                return result;
+            }
+        }
+
+        return Equal;
+    }
+
+    private CompareResult CompareModifierAt(
+        in SyntaxTokenList original,
+        in SyntaxTokenList formatted,
+        int originalIndex,
+        int formattedIndex,
+        TextSpan originalParentSpan,
+        TextSpan formattedParentSpan
+    )
+    {
+        if (originalIndex >= original.Count)
+        {
+            return NotEqual(originalParentSpan, formatted[formattedIndex].Span);
+        }
+
+        if (formattedIndex >= formatted.Count)
+        {
+            return NotEqual(original[originalIndex].Span, formattedParentSpan);
+        }
+
+        return this.CompareModifierToken(original[originalIndex], formatted[formattedIndex]);
+    }
+
+    // modifier lists are short, so an insertion sort of the indexes over a stack buffer costs less
+    // than OrderBy(..).ToArray() on both sides. modifier text is always lower case ascii, so
+    // ordinal ordering matches the culture aware ordering OrderBy used to do
+    private static void SortIndexesByText(in SyntaxTokenList tokens, Span<int> order)
+    {
+        for (var x = 0; x < order.Length; x++)
+        {
+            order[x] = x;
+        }
+
+        for (var x = 1; x < order.Length; x++)
+        {
+            var current = order[x];
+            var currentText = tokens[current].Text;
+            var y = x - 1;
+            while (y >= 0 && string.CompareOrdinal(tokens[order[y]].Text, currentText) > 0)
+            {
+                order[y + 1] = order[y];
+                y--;
+            }
+
+            order[y + 1] = current;
+        }
     }
 
     private static CompareResult NotEqual(SyntaxNode? originalNode, SyntaxNode? formattedNode)
@@ -525,8 +638,24 @@ internal partial class SyntaxNodeComparer
             return NotEqual(originalParent, formattedParent);
         }
 
-        var sortedOriginal = original.OrderBy(o => o.ToFullString().Trim()).ToList();
-        var sortedFormatted = formatted.OrderBy(o => o.ToFullString().Trim()).ToList();
+        // sorted with Array.Sort rather than OrderBy to avoid boxing the SyntaxList and
+        // allocating the OrderedEnumerable. ordinal is used because both sides sort with the same
+        // comparer, and ordinal only reports two keys as equal when they are the same string
+        var originalKeys = new string[original.Count];
+        var sortedOriginal = new UsingDirectiveSyntax[original.Count];
+        var formattedKeys = new string[formatted.Count];
+        var sortedFormatted = new UsingDirectiveSyntax[formatted.Count];
+
+        for (var x = 0; x < original.Count; x++)
+        {
+            sortedOriginal[x] = original[x];
+            originalKeys[x] = original[x].ToFullString().Trim();
+            sortedFormatted[x] = formatted[x];
+            formattedKeys[x] = formatted[x].ToFullString().Trim();
+        }
+
+        Array.Sort(originalKeys, sortedOriginal, StringComparer.Ordinal);
+        Array.Sort(formattedKeys, sortedFormatted, StringComparer.Ordinal);
 
         for (var x = 0; x < original.Count; x++)
         {
