@@ -1,5 +1,6 @@
 #pragma warning disable CA1822
 
+using System.Globalization;
 using System.IO.Abstractions;
 using System.Text;
 using BenchmarkDotNet.Attributes;
@@ -239,8 +240,9 @@ public class OptionsBenchmarks
         for (var i = 0; i < ruleCount; i++)
         {
             var pattern = IgnorePatterns[i % IgnorePatterns.Length];
-            var suffix = i < IgnorePatterns.Length ? string.Empty : i.ToString();
-            builder.AppendLine(string.Format(pattern, suffix));
+            var suffix =
+                i < IgnorePatterns.Length ? string.Empty : i.ToString(CultureInfo.InvariantCulture);
+            builder.AppendLine(string.Format(CultureInfo.InvariantCulture, pattern, suffix));
             if (i % 10 == 0)
             {
                 builder.AppendLine();
