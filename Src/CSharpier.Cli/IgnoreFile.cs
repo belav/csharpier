@@ -44,19 +44,24 @@ internal class IgnoreFile
     {
         async Task<IgnoreList> CreateIgnore(string ignoreFilePath, string? overrideBasePath)
         {
-            if (ignoreCache is not null && ignoreCache.TryGetValue(ignoreFilePath, out var ignore))
+            // the same ignore file results in different ignore lists depending on the base path
+            // it is anchored to, so the base path has to be part of the cache key
+            var basePath = overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!;
+            var cacheKey = ignoreFilePath + "|" + basePath;
+
+            if (ignoreCache is not null && ignoreCache.TryGetValue(cacheKey, out var ignore))
             {
                 return ignore;
             }
 
             ignore = await IgnoreList.CreateAsync(
                 fileSystem,
-                overrideBasePath ?? Path.GetDirectoryName(ignoreFilePath)!,
+                basePath,
                 ignoreFilePath,
                 cancellationToken
             );
 
-            ignoreCache?[ignoreFilePath] = ignore;
+            ignoreCache?[cacheKey] = ignore;
 
             return ignore;
         }
