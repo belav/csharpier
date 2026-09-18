@@ -112,7 +112,7 @@ internal static class BasePropertyDeclaration
         CSharpPrintingContext context
     )
     {
-        var docs = new DocListBuilder(6);
+        using var docs = new DocListBuilder(6);
         if (
             node.AttributeLists.Count > 1
             || node.Body != null
@@ -145,6 +145,6 @@ internal static class BasePropertyDeclaration
 
         docs.Add(Token.Print(node.SemicolonToken, context));
 
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

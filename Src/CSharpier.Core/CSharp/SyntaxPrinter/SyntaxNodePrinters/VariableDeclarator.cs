@@ -8,7 +8,7 @@ internal static class VariableDeclarator
 {
     public static Doc Print(VariableDeclaratorSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(3);
+        using var docs = new DocListBuilder(3);
         docs.Add(Token.Print(node.Identifier, context));
 
         if (node.ArgumentList != null)
@@ -19,6 +19,6 @@ internal static class VariableDeclarator
         {
             docs.Add(EqualsValueClause.Print(node.Initializer, context));
         }
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

@@ -22,7 +22,7 @@ internal static class RecursivePattern
         CSharpPrintingContext context
     )
     {
-        var result = new DocListBuilder(8);
+        using var result = new DocListBuilder(8);
         if (node.Type != null && includeType)
         {
             result.Add(Node.Print(node.Type, context));
@@ -102,6 +102,6 @@ internal static class RecursivePattern
             result.Add(" ", Node.Print(node.Designation, context));
         }
 
-        return Doc.Concat(ref result);
+        return Doc.Concat(result);
     }
 }
