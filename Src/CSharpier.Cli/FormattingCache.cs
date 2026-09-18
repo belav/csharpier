@@ -162,7 +162,8 @@ internal static class FormattingCacheFactory
                     hash.Append(CSharpierVersionBytes);
                     hash.Append(JsonSerializer.SerializeToUtf8Bytes(options));
                     return Convert.ToHexString(hash.GetCurrentHash());
-                });
+                }
+            );
         }
 
         // hashes the utf-16 payload in place - transcoding to ascii first would both copy the whole
