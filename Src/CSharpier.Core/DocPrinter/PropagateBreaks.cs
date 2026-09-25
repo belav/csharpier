@@ -56,10 +56,7 @@ internal static class PropagateBreaks
             )
             {
                 var isAtStartOfLine = stringCount == stringCountAtLastHardLine;
-                if (
-                    doc is HardLine { IsForTrivia: true }
-                    && (isAtStartOfLine || canSkipBreak)
-                )
+                if (doc is HardLine { IsForTrivia: true } && (isAtStartOfLine || canSkipBreak))
                 {
                     if (!isAtStartOfLine && groupStack.Count > 1)
                     {

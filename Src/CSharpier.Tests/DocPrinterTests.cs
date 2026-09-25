@@ -475,11 +475,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
         var doc = Doc.Concat(
             Doc.TrailingComment("// trailing", CommentType.SingleLine),
             Doc.HardLine,
-            Doc.Indent(
-                Doc.HardLineIfNoPreviousLineForTrivia,
-                Doc.Trim,
-                "    #endregion"
-            )
+            Doc.Indent(Doc.HardLineIfNoPreviousLineForTrivia, Doc.Trim, "    #endregion")
         );
         PrintedDocShouldBe(
             doc,
@@ -533,14 +529,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     [Test]
     public void HardLineForTrivia_With_HardLine_Should_Break()
     {
-        var doc = Doc.Group(
-            Doc.HardLineForTrivia,
-            "1",
-            Doc.HardLine,
-            "2",
-            Doc.Line,
-            "3"
-        );
+        var doc = Doc.Group(Doc.HardLineForTrivia, "1", Doc.HardLine, "2", Doc.Line, "3");
 
         PrintedDocShouldBe(doc, "\n1\n2\n3");
     }
@@ -548,12 +537,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     [Test]
     public void HardLineForTrivia_Should_Break_Outer_Group()
     {
-        var doc = Doc.Group(
-            "1",
-            Doc.Line,
-            "2",
-            Doc.Group(Doc.HardLineForTrivia, "3")
-        );
+        var doc = Doc.Group("1", Doc.Line, "2", Doc.Group(Doc.HardLineForTrivia, "3"));
 
         PrintedDocShouldBe(doc, "1\n2\n3");
     }
@@ -561,13 +545,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     [Test]
     public void HardLineForTrivia_Twice_Should_Not_Break()
     {
-        var doc = Doc.Group(
-            Doc.HardLineForTrivia,
-            Doc.HardLineForTrivia,
-            "1",
-            Doc.Line,
-            "2"
-        );
+        var doc = Doc.Group(Doc.HardLineForTrivia, Doc.HardLineForTrivia, "1", Doc.Line, "2");
 
         PrintedDocShouldBe(doc, "\n\n1 2");
     }
@@ -575,12 +553,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     [Test]
     public void HardLineIfNoPreviousLineForTrivia_Should_Not_Break()
     {
-        var doc = Doc.Group(
-            Doc.HardLineIfNoPreviousLineForTrivia,
-            "1",
-            Doc.Line,
-            "2"
-        );
+        var doc = Doc.Group(Doc.HardLineIfNoPreviousLineForTrivia, "1", Doc.Line, "2");
 
         PrintedDocShouldBe(doc, "\n1 2");
     }
@@ -588,12 +561,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     [Test]
     public void HardLineIfNoPreviousLineForTrivia_Should_Break_When_Does_Not_Fit()
     {
-        var doc = Doc.Group(
-            Doc.HardLineForTrivia,
-            "someValue",
-            Doc.Line,
-            "someValue"
-        );
+        var doc = Doc.Group(Doc.HardLineForTrivia, "someValue", Doc.Line, "someValue");
         PrintedDocShouldBe(
             doc,
             """
@@ -630,13 +598,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     [Test]
     public void Directive_Does_Not_Affect_FirstInGroup()
     {
-        var doc = Doc.Group(
-            Doc.Directive("#pragma"),
-            Doc.HardLineForTrivia,
-            "1",
-            Doc.Line,
-            "2"
-        );
+        var doc = Doc.Group(Doc.Directive("#pragma"), Doc.HardLineForTrivia, "1", Doc.Line, "2");
 
         PrintedDocShouldBe(doc, "#pragma\n1 2");
     }
