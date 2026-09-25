@@ -1,6 +1,5 @@
 using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
-using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -19,7 +18,6 @@ internal static class AttributeLists
             return Doc.Null;
         }
 
-        var docs = new DocListBuilder(2);
         Doc separator = node
             is TypeParameterSyntax
                 or ParameterSyntax
@@ -28,13 +26,10 @@ internal static class AttributeLists
             ? Doc.Line
             : Doc.HardLine;
 
-        docs.Add(Doc.Join(separator, attributeLists, AttributeList.Print, context));
+        var printedLists = Doc.Join(separator, attributeLists, AttributeList.Print, context);
 
-        if (node is not (ParameterSyntax or TypeParameterSyntax))
-        {
-            docs.Add(separator);
-        }
-
-        return Doc.Concat(ref docs);
+        return node is ParameterSyntax or TypeParameterSyntax
+            ? printedLists
+            : Doc.Concat(printedLists, separator);
     }
 }

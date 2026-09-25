@@ -49,7 +49,9 @@ public static class XmlFormatter
                 DocTree = printerOptions.IncludeDocTree
                     ? DocSerializer.Serialize(doc)
                     : string.Empty,
-                AST = RawNodeSyntaxWriter.Write(rootNode),
+                AST = printerOptions.IncludeAST
+                    ? RawNodeSyntaxWriter.Write(rootNode)
+                    : string.Empty,
             };
         }
         catch (XmlException ex)
