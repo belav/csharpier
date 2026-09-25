@@ -73,7 +73,7 @@ internal static class DocFitter
                 case LineDoc line:
                     if (currentMode is PrintMode.Flat or PrintMode.ForceFlat)
                     {
-                        if (currentDoc is HardLine { SkipBreakIfFirstInGroup: true })
+                        if (currentDoc is HardLine { IsForTrivia: true })
                         {
                             returnFalseIfMoreStringsFound = false;
                         }

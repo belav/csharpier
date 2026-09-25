@@ -271,7 +271,7 @@ internal static class Token
 
             if (printNewLines && kind == SyntaxKind.EndOfLineTrivia)
             {
-                if (docs.Count > 0 && docs[^1] == Doc.HardLineSkipBreakIfFirstInGroup)
+                if (docs.Count > 0 && docs[^1] == Doc.HardLineForTrivia)
                 {
                     printNewLines = false;
                 }
@@ -279,12 +279,12 @@ internal static class Token
                 if (
                     !(
                         docs.Count > 1
-                        && docs[^1] == Doc.HardLineSkipBreakIfFirstInGroup
+                        && docs[^1] == Doc.HardLineForTrivia
                         && docs[^2] is LeadingComment { Type: CommentType.SingleLine }
                     )
                 )
                 {
-                    docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
+                    docs.Add(Doc.HardLineForTrivia);
                 }
             }
             if (kind is not (SyntaxKind.EndOfLineTrivia or SyntaxKind.WhitespaceTrivia))
@@ -312,7 +312,7 @@ internal static class Token
                 AddLeadingComment(CommentType.SingleLine);
                 docs.Add(
                     kind == SyntaxKind.SingleLineDocumentationCommentTrivia
-                        ? Doc.HardLineSkipBreakIfFirstInGroup
+                        ? Doc.HardLineForTrivia
                         : Doc.Null
                 );
             }
@@ -342,11 +342,11 @@ internal static class Token
 
                 docs.Add(
                     // adding two of these to ensure we get a new line when a directive follows a trailing comment
-                    Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
-                    Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
+                    Doc.HardLineIfNoPreviousLineForTrivia,
+                    Doc.HardLineIfNoPreviousLineForTrivia,
                     Doc.Trim,
                     Doc.Directive(triviaText),
-                    Doc.HardLineSkipBreakIfFirstInGroup
+                    Doc.HardLineForTrivia
                 );
 
                 // keep one line after an #endif if there is at least one
@@ -356,7 +356,7 @@ internal static class Token
                     if (lineIndex >= 0)
                     {
                         x = lineIndex;
-                        docs.Add(Doc.HardLineSkipBreakIfFirstInGroup);
+                        docs.Add(Doc.HardLineForTrivia);
                     }
                     printNewLines = false;
                 }
@@ -372,7 +372,7 @@ internal static class Token
         {
             if (leadingTrivia.Any(o => o.RawSyntaxKind() is SyntaxKind.IfDirectiveTrivia))
             {
-                docs.Insert(0, Doc.HardLineSkipBreakIfFirstInGroup);
+                docs.Insert(0, Doc.HardLineForTrivia);
             }
             else
             {
@@ -391,7 +391,7 @@ internal static class Token
                     || !(docs[index + 1] is HardLine && docs[index + 2] is HardLine)
                 )
                 {
-                    docs.Insert(index + 1, Doc.HardLineSkipBreakIfFirstInGroup);
+                    docs.Insert(index + 1, Doc.HardLineForTrivia);
                 }
             }
             context.State.NextTriviaNeedsLine = false;

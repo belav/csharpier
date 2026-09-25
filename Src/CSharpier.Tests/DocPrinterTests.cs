@@ -476,7 +476,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
             Doc.TrailingComment("// trailing", CommentType.SingleLine),
             Doc.HardLine,
             Doc.Indent(
-                Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
+                Doc.HardLineIfNoPreviousLineForTrivia,
                 Doc.Trim,
                 "    #endregion"
             )
@@ -523,18 +523,18 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     }
 
     [Test]
-    public void HardLineSkipBreakIfFirstInGroup_Should_Not_Break()
+    public void HardLineForTrivia_Should_Not_Break()
     {
-        var doc = Doc.Group(Doc.HardLineSkipBreakIfFirstInGroup, "1", Doc.Line, "2");
+        var doc = Doc.Group(Doc.HardLineForTrivia, "1", Doc.Line, "2");
 
         PrintedDocShouldBe(doc, "\n1 2");
     }
 
     [Test]
-    public void HardLineSkipBreakIfFirstInGroup_With_HardLine_Should_Break()
+    public void HardLineForTrivia_With_HardLine_Should_Break()
     {
         var doc = Doc.Group(
-            Doc.HardLineSkipBreakIfFirstInGroup,
+            Doc.HardLineForTrivia,
             "1",
             Doc.HardLine,
             "2",
@@ -546,24 +546,24 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     }
 
     [Test]
-    public void HardLineSkipBreakIfFirstInGroup_Should_Break_Outer_Group()
+    public void HardLineForTrivia_Should_Break_Outer_Group()
     {
         var doc = Doc.Group(
             "1",
             Doc.Line,
             "2",
-            Doc.Group(Doc.HardLineSkipBreakIfFirstInGroup, "3")
+            Doc.Group(Doc.HardLineForTrivia, "3")
         );
 
         PrintedDocShouldBe(doc, "1\n2\n3");
     }
 
     [Test]
-    public void HardLineSkipBreakIfFirstInGroup_Twice_Should_Not_Break()
+    public void HardLineForTrivia_Twice_Should_Not_Break()
     {
         var doc = Doc.Group(
-            Doc.HardLineSkipBreakIfFirstInGroup,
-            Doc.HardLineSkipBreakIfFirstInGroup,
+            Doc.HardLineForTrivia,
+            Doc.HardLineForTrivia,
             "1",
             Doc.Line,
             "2"
@@ -573,10 +573,10 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     }
 
     [Test]
-    public void HardLineIfNoPreviousLineSkipBreakIfFirstInGroup_Should_Not_Break()
+    public void HardLineIfNoPreviousLineForTrivia_Should_Not_Break()
     {
         var doc = Doc.Group(
-            Doc.HardLineIfNoPreviousLineSkipBreakIfFirstInGroup,
+            Doc.HardLineIfNoPreviousLineForTrivia,
             "1",
             Doc.Line,
             "2"
@@ -586,10 +586,10 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     }
 
     [Test]
-    public void HardLineIfNoPreviousLineSkipBreakIfFirstInGroup_Should_Break_When_Does_Not_Fit()
+    public void HardLineIfNoPreviousLineForTrivia_Should_Break_When_Does_Not_Fit()
     {
         var doc = Doc.Group(
-            Doc.HardLineSkipBreakIfFirstInGroup,
+            Doc.HardLineForTrivia,
             "someValue",
             Doc.Line,
             "someValue"
@@ -606,13 +606,13 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     }
 
     [Test]
-    public void HardLineIfNoPreviousLineSkipBreakIfFirstInGroup_Should_Not_Break_With_Multiple_Comments()
+    public void HardLineIfNoPreviousLineForTrivia_Should_Not_Break_With_Multiple_Comments()
     {
         var doc = Doc.Group(
             Doc.LeadingComment("// shouldn't break next line", CommentType.SingleLine),
-            Doc.HardLineSkipBreakIfFirstInGroup,
+            Doc.HardLineForTrivia,
             Doc.LeadingComment("// shouldn't break next line", CommentType.SingleLine),
-            Doc.HardLineSkipBreakIfFirstInGroup,
+            Doc.HardLineForTrivia,
             "true",
             Doc.Line,
             "|| false"
@@ -632,7 +632,7 @@ public class Should_Replace_Cache_Entry_Written_Under_The_Previous_Key_SchemeDoc
     {
         var doc = Doc.Group(
             Doc.Directive("#pragma"),
-            Doc.HardLineSkipBreakIfFirstInGroup,
+            Doc.HardLineForTrivia,
             "1",
             Doc.Line,
             "2"
