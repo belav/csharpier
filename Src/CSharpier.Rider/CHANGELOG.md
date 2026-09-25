@@ -1,14 +1,8 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # csharpier-rider Changelog
-## [10.0.1]
-- Re-add a global format on save option
-
-## 10.0.0
-- Make version a number that won't conflict with CSharpier itself.
-
-## [2.3.0]
-- Add a global format on save option
+## [10.0.7]
+- Change path for where global settings are. New versions of Rider complain about it.
 
 ## [10.0.6]
 - Supporting 2026.2 EAP
