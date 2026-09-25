@@ -11,7 +11,7 @@ internal static class Parameter
     {
         var hasAttribute = node.AttributeLists.Any();
 
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
 
         if (hasAttribute)
         {
@@ -53,6 +53,6 @@ internal static class Parameter
             docs.Add(EqualsValueClause.Print(node.Default, context));
         }
 
-        return hasAttribute ? Doc.Group(docs.ToArray()) : Doc.Concat(ref docs);
+        return hasAttribute ? Doc.Group(docs.ToArray()) : Doc.Concat(docs);
     }
 }

@@ -58,29 +58,36 @@ internal static class Token
         bool skipTrailingTrivia = false
     )
     {
-        if (syntaxToken.RawSyntaxKind() == SyntaxKind.None)
+        var kind = syntaxToken.RawSyntaxKind();
+        if (kind == SyntaxKind.None)
         {
             return Doc.Null;
         }
 
-        var docs = new DocListBuilder(8);
+        var leadingTrivia = skipLeadingTrivia ? Doc.Null : PrintLeadingTrivia(syntaxToken, context);
+        var trailingTrivia = skipTrailingTrivia ? Doc.Null : PrintTrailingTrivia(syntaxToken);
 
-        if (!skipLeadingTrivia)
+        if (
+            suffixDoc is null
+            && leadingTrivia == Doc.Null
+            && trailingTrivia == Doc.Null
+            && !HasMultiLineText(syntaxToken, kind)
+        )
         {
-            var leadingTrivia = PrintLeadingTrivia(syntaxToken, context);
-            if (leadingTrivia != Doc.Null)
-            {
-                docs.Add(leadingTrivia);
-            }
+            return StringDoc.Create(syntaxToken);
+        }
+
+        using var docs = new DocListBuilder(8);
+
+        if (leadingTrivia != Doc.Null)
+        {
+            docs.Add(leadingTrivia);
         }
 
         if (
-            (
-                syntaxToken.RawSyntaxKind() == SyntaxKind.StringLiteralToken
-                && syntaxToken.Text.StartsWith('@')
-            )
+            (kind == SyntaxKind.StringLiteralToken && syntaxToken.Text.StartsWith('@'))
             || (
-                syntaxToken.RawSyntaxKind() == SyntaxKind.InterpolatedStringTextToken
+                kind == SyntaxKind.InterpolatedStringTextToken
                 && syntaxToken.Parent!.Parent
                     is InterpolatedStringExpressionSyntax
                     {
@@ -93,7 +100,7 @@ internal static class Token
             var lines = syntaxToken.Text.Replace("\r", string.Empty).Split('\n');
             docs.Add(Doc.Join(Doc.LiteralLine, lines.Select(o => new StringDoc(o))));
         }
-        else if (syntaxToken.RawSyntaxKind() is SyntaxKind.MultiLineRawStringLiteralToken)
+        else if (kind is SyntaxKind.MultiLineRawStringLiteralToken)
         {
             var linesIncludingQuotes = syntaxToken.Text.Split(
                 lineSeparators,
@@ -129,7 +136,7 @@ internal static class Token
             );
         }
         else if (
-            syntaxToken.RawSyntaxKind()
+            kind
             is SyntaxKind.InterpolatedMultiLineRawStringStartToken
                 or SyntaxKind.InterpolatedRawStringEndToken
         )
@@ -141,24 +148,20 @@ internal static class Token
             docs.Add(StringDoc.Create(syntaxToken));
         }
 
-        if (!skipTrailingTrivia)
+        if (trailingTrivia != Doc.Null)
         {
-            var trailingTrivia = PrintTrailingTrivia(syntaxToken);
-            if (trailingTrivia != Doc.Null)
+            if (
+                context.State.TrailingComma is not null
+                && syntaxToken.TrailingTrivia.FirstOrDefault(o => o.IsComment())
+                    == context.State.TrailingComma.TrailingComment
+            )
             {
-                if (
-                    context.State.TrailingComma is not null
-                    && syntaxToken.TrailingTrivia.FirstOrDefault(o => o.IsComment())
-                        == context.State.TrailingComma.TrailingComment
-                )
-                {
-                    docs.Add(context.State.TrailingComma.PrintedTrailingComma);
-                    context.State.MovedTrailingTrivia = true;
-                    context.State.TrailingComma = null;
-                }
-
-                docs.Add(trailingTrivia);
+                docs.Add(context.State.TrailingComma.PrintedTrailingComma);
+                context.State.MovedTrailingTrivia = true;
+                context.State.TrailingComma = null;
             }
+
+            docs.Add(trailingTrivia);
         }
 
         if (suffixDoc != null)
@@ -166,10 +169,25 @@ internal static class Token
             docs.Add(suffixDoc);
         }
 
-        var returnDoc = Doc.Concat(ref docs);
-        docs.Dispose();
+        return Doc.Concat(docs);
+    }
 
-        return returnDoc;
+    private static bool HasMultiLineText(SyntaxToken syntaxToken, SyntaxKind kind)
+    {
+        return (kind == SyntaxKind.StringLiteralToken && syntaxToken.Text.StartsWith('@'))
+            || (
+                kind == SyntaxKind.InterpolatedStringTextToken
+                && syntaxToken.Parent!.Parent
+                    is InterpolatedStringExpressionSyntax
+                    {
+                        StringStartToken.RawKind: (int)
+                            SyntaxKind.InterpolatedVerbatimStringStartToken
+                    }
+            )
+            || kind
+                is SyntaxKind.MultiLineRawStringLiteralToken
+                    or SyntaxKind.InterpolatedMultiLineRawStringStartToken
+                    or SyntaxKind.InterpolatedRawStringEndToken;
     }
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
@@ -254,6 +272,15 @@ internal static class Token
     )
     {
         if (leadingTrivia.Count == 0)
+        {
+            return Doc.Null;
+        }
+
+        if (
+            !includeInitialNewLines
+            && !context.State.NextTriviaNeedsLine
+            && IsOnlyWhitespace(leadingTrivia)
+        )
         {
             return Doc.Null;
         }
@@ -400,6 +427,22 @@ internal static class Token
         return docs.Count > 0 ? Doc.Concat(docs) : Doc.Null;
     }
 
+    private static bool IsOnlyWhitespace(in SyntaxTriviaList leadingTrivia)
+    {
+        foreach (var trivia in leadingTrivia)
+        {
+            if (
+                trivia.RawSyntaxKind()
+                is not (SyntaxKind.WhitespaceTrivia or SyntaxKind.EndOfLineTrivia)
+            )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static bool IsSingleLineComment(SyntaxKind kind) =>
         kind
             is SyntaxKind.SingleLineDocumentationCommentTrivia
@@ -418,28 +461,43 @@ internal static class Token
 
     private static Doc PrintTrailingTrivia(in SyntaxTriviaList trailingTrivia)
     {
-        if (trailingTrivia.Count == 0)
+        if (!HasTrailingComment(trailingTrivia))
         {
             return Doc.Null;
         }
 
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
         foreach (var trivia in trailingTrivia)
         {
-            if (trivia.RawSyntaxKind() == SyntaxKind.SingleLineCommentTrivia)
+            var kind = trivia.RawSyntaxKind();
+            if (kind == SyntaxKind.SingleLineCommentTrivia)
             {
                 docs.Add(Doc.TrailingComment(trivia.ToString(), CommentType.SingleLine));
             }
-            else if (trivia.RawSyntaxKind() == SyntaxKind.MultiLineCommentTrivia)
+            else if (kind == SyntaxKind.MultiLineCommentTrivia)
             {
                 docs.Add(" ", Doc.TrailingComment(trivia.ToString(), CommentType.MultiLine));
             }
         }
 
-        var returnDoc = Doc.Concat(ref docs);
-        docs.Dispose();
+        return Doc.Concat(docs);
+    }
 
-        return returnDoc;
+    private static bool HasTrailingComment(in SyntaxTriviaList trailingTrivia)
+    {
+        foreach (var trivia in trailingTrivia)
+        {
+            if (
+                trivia.RawSyntaxKind()
+                is SyntaxKind.SingleLineCommentTrivia
+                    or SyntaxKind.MultiLineCommentTrivia
+            )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static bool HasComments(SyntaxToken syntaxToken)

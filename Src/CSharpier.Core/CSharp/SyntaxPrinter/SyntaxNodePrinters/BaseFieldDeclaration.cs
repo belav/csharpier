@@ -8,7 +8,7 @@ internal static class BaseFieldDeclaration
 {
     public static Doc Print(BaseFieldDeclarationSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(5);
+        using var docs = new DocListBuilder(5);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         if (node is EventFieldDeclarationSyntax eventFieldDeclarationSyntax)
@@ -20,6 +20,6 @@ internal static class BaseFieldDeclaration
             VariableDeclaration.Print(node.Declaration, context),
             Token.Print(node.SemicolonToken, context)
         );
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

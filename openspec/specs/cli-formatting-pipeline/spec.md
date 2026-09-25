@@ -24,7 +24,7 @@ The CLI SHALL format code supplied on standard input and write the result to sta
 
 ### Requirement: Physical file and directory formatting
 
-The CLI SHALL format files and directories passed as arguments, selecting the output destination based on options.
+The CLI SHALL format files and directories passed as arguments, selecting the output destination based on options. When formatting a directory, the CLI SHALL format the discovered files with a bounded degree of concurrency rather than starting all of them at once.
 
 #### Scenario: Output writer selection
 - **WHEN** formatting physical files
@@ -45,6 +45,18 @@ The CLI SHALL format files and directories passed as arguments, selecting the ou
 #### Scenario: MSBuild version mismatch check
 - **WHEN** a directory is formatted and `--no-msbuild-check` is not set
 - **THEN** the system SHALL check for mismatched CLI and MSBuild versions and return exit code 1 when a mismatch is detected
+
+#### Scenario: Bounded concurrency for directory formatting
+- **WHEN** a directory containing many files is formatted
+- **THEN** the system SHALL format the files concurrently up to a bounded maximum degree of parallelism, and SHALL NOT start all file-formatting operations simultaneously
+
+#### Scenario: Results unchanged under bounded concurrency
+- **WHEN** a directory is formatted with bounded concurrency
+- **THEN** every per-file outcome — formatted output, result counters (files, cached, unformatted, failures, exceptions), and the final exit code — SHALL be identical to formatting the same directory without a concurrency bound
+
+#### Scenario: Cancellation during directory formatting
+- **WHEN** the run's cancellation token is cancelled while a directory is being formatted with bounded concurrency
+- **THEN** the system SHALL stop starting new files and SHALL swallow the cancellation for that token exactly as it does today, while any other cancellation propagates
 
 ### Requirement: Per-file formatting sequence
 

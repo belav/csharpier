@@ -13,7 +13,7 @@ internal static class AttributeList
             return CSharpierIgnore.PrintWithoutFormatting(node, context).Trim();
         }
 
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
         if (
             node.Parent is CompilationUnitSyntax compilationUnitSyntax
             && compilationUnitSyntax.AttributeLists.First() != node
