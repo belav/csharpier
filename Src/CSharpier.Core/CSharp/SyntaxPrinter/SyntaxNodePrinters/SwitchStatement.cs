@@ -26,9 +26,8 @@ internal static class SwitchStatement
 
         return Doc.Concat(
             ExtraNewLines.Print(node),
-            Token.PrintLeadingTrivia(node.SwitchKeyword, context),
             Doc.Group(
-                Token.PrintWithoutLeadingTrivia(node.SwitchKeyword, context),
+                Token.Print(node.SwitchKeyword, context),
                 " ",
                 Token.Print(node.OpenParenToken, context),
                 Doc.GroupWithId(

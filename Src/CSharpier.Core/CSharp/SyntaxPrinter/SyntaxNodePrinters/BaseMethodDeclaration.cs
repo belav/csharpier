@@ -135,22 +135,12 @@ internal static partial class BaseMethodDeclaration
 
         if (modifiers is { Count: > 0 })
         {
-            docs.Add(Token.PrintLeadingTrivia(modifiers.Value[0], context));
-            declarationGroup.Add(
-                Modifiers.PrintSorterWithoutLeadingTrivia(modifiers.Value, context)
-            );
+            declarationGroup.Add(Modifiers.PrintSorted(modifiers.Value, context));
         }
 
         if (returnType != null)
         {
-            if (modifiers is not { Count: > 0 })
-            {
-                docs.Add(Token.PrintLeadingTrivia(returnType.GetLeadingTrivia(), context));
-                context.State.SkipNextLeadingTrivia = true;
-            }
-
             declarationGroup.Add(Node.Print(returnType, context), " ");
-            context.State.SkipNextLeadingTrivia = false;
         }
 
         if (explicitInterfaceSpecifier != null)

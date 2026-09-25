@@ -174,12 +174,6 @@ internal static class Token
 
     public static Doc PrintLeadingTrivia(SyntaxToken syntaxToken, CSharpPrintingContext context)
     {
-        if (context.State.SkipNextLeadingTrivia)
-        {
-            context.State.SkipNextLeadingTrivia = false;
-            return Doc.Null;
-        }
-
         var isClosingBrace =
             syntaxToken.RawSyntaxKind() == SyntaxKind.CloseBraceToken
             || syntaxToken.Parent is CollectionExpressionSyntax
