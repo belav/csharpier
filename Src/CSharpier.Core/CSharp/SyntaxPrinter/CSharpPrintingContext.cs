@@ -7,12 +7,6 @@ internal class CSharpPrintingContext : BasePrintingContext
 {
     public PrintingContextState State { get; } = new();
 
-    public CSharpPrintingContext WithSkipNextLeadingTrivia()
-    {
-        this.State.SkipNextLeadingTrivia = true;
-        return this;
-    }
-
     public CSharpPrintingContext WithTrailingComma(SyntaxTrivia syntaxTrivia, Doc doc)
     {
         this.State.TrailingComma = new TrailingCommaContext(syntaxTrivia, doc);
@@ -23,7 +17,6 @@ internal class CSharpPrintingContext : BasePrintingContext
     {
         public int PrintingDepth { get; set; }
         public bool NextTriviaNeedsLine { get; set; }
-        public bool SkipNextLeadingTrivia { get; set; }
 
         // we need to keep track if we reordered modifiers because when modifiers are moved inside
         // of an #if, then we can't compare the before and after disabled text in the source file

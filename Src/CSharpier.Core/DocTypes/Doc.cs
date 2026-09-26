@@ -23,14 +23,11 @@ internal abstract class Doc
 
     public static readonly HardLineNoTrim HardLineNoTrim = new();
 
-    public static readonly HardLine HardLineSkipBreakIfFirstInGroup = new(false, true);
+    public static readonly HardLine HardLineForTrivia = new(false, true);
 
     public static readonly HardLine HardLineIfNoPreviousLine = new(true);
 
-    public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup = new(
-        true,
-        true
-    );
+    public static readonly HardLine HardLineIfNoPreviousLineForTrivia = new(true, true);
 
     public static readonly LiteralLine LiteralLine = new();
 

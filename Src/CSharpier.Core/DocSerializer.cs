@@ -67,7 +67,7 @@ internal static class DocSerializer
             result.Append(
                 "Doc.HardLine"
                     + (hardLine.Squash ? "IfNoPreviousLine" : string.Empty)
-                    + (hardLine.SkipBreakIfFirstInGroup ? "SkipBreakIfFirstInGroup" : string.Empty)
+                    + (hardLine.IsForTrivia ? "ForTrivia" : string.Empty)
             );
         }
         else if (doc is LiteralLine)

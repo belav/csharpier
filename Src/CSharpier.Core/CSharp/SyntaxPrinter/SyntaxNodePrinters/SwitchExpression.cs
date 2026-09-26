@@ -62,10 +62,6 @@ internal static class SwitchExpression
 
         return Doc.Concat(
             ExtraNewLines.Print(switchExpressionArm),
-            Token.PrintLeadingTrivia(
-                switchExpressionArm.Pattern.GetLeadingTrivia(),
-                context.WithSkipNextLeadingTrivia()
-            ),
             Doc.Group(
                 Doc.GroupWithId(
                     groupId1,
