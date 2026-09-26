@@ -68,64 +68,6 @@ internal static class Modifiers
             : Doc.Group(Doc.Join(" ", modifiers, Token.Print, context), " ");
     }
 
-    public static Doc PrintSorterWithoutLeadingTrivia(
-        SyntaxTokenList modifiers,
-        CSharpPrintingContext context
-    )
-    {
-        if (modifiers.Count == 0)
-        {
-            return Doc.Null;
-        }
-
-        return TryGetSortedModifiers(modifiers, context, out var sortedModifiers)
-            ? PrintWithoutLeadingTrivia(sortedModifiers, context)
-            : PrintWithoutLeadingTrivia(modifiers, context);
-    }
-
-    // the two overloads below exist because there is no way to view a SyntaxTokenList as a span
-    // without copying it, and the whole point of TryGetSortedModifiers returning false is to avoid
-    // that copy for the common case where the modifiers are already in order
-    private static Group PrintWithoutLeadingTrivia(
-        in SyntaxTokenList modifiers,
-        CSharpPrintingContext context
-    )
-    {
-        var first = Token.PrintWithoutLeadingTrivia(modifiers[0], context);
-        if (modifiers.Count == 1)
-        {
-            return Doc.Group(first, " ", Doc.Null);
-        }
-
-        var rest = new Doc[modifiers.Count - 1];
-        for (var index = 1; index < modifiers.Count; index++)
-        {
-            rest[index - 1] = Token.PrintWithSuffix(modifiers[index], " ", context);
-        }
-
-        return Doc.Group(first, " ", Doc.Concat(rest));
-    }
-
-    private static Group PrintWithoutLeadingTrivia(
-        ReadOnlySpan<SyntaxToken> modifiers,
-        CSharpPrintingContext context
-    )
-    {
-        var first = Token.PrintWithoutLeadingTrivia(modifiers[0], context);
-        if (modifiers.Length == 1)
-        {
-            return Doc.Group(first, " ", Doc.Null);
-        }
-
-        var rest = new Doc[modifiers.Length - 1];
-        for (var index = 1; index < modifiers.Length; index++)
-        {
-            rest[index - 1] = Token.PrintWithSuffix(modifiers[index], " ", context);
-        }
-
-        return Doc.Group(first, " ", Doc.Concat(rest));
-    }
-
     // returns false when the modifiers should be printed as they are, so that the common case of
     // an already sorted list costs neither an array nor a sort
     private static bool TryGetSortedModifiers(
