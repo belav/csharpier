@@ -61,7 +61,7 @@ internal static class DocFitter
                         stringDoc.Value,
                         trailingWhitespace
                     );
-                    remainingWidth -= stringDoc.Value.GetPrintedWidth();
+                    remainingWidth -= stringDoc.PrintedWidth;
                     break;
                 case Concat concat:
                     for (var i = concat.Contents.Count - 1; i >= 0; i--)

@@ -493,7 +493,7 @@ internal partial class SyntaxNodeComparer
         var formattedSpan = NewSourceCode
             .AsSpan()
             .Slice(formattedStart.FullSpan.Start, formattedStart.FullSpan.Length);
-        return originalSpan == formattedSpan;
+        return originalSpan.SequenceEqual(formattedSpan);
     }
 
     private static CompareResult CompareComment(

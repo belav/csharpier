@@ -254,6 +254,31 @@ public class PreprocessorSymbolsTests
         );
     }
 
+    [Test]
+    public void GetSets_Should_Return_Nothing_For_A_File_Without_Directives()
+    {
+        RunTest(
+            @"class ClassName
+{
+    // a comment
+    void MethodName() { }
+}
+"
+        );
+    }
+
+    [Test]
+    public void GetSets_Should_Return_Nothing_For_Directives_That_Are_Not_If()
+    {
+        RunTest(
+            @"#nullable enable
+#region TheRegion
+class ClassName { }
+#endregion
+"
+        );
+    }
+
     private static void RunTest(string code, params string[] symbolSets)
     {
         var result = PreprocessorSymbols.GetSets(code);

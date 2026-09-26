@@ -260,7 +260,7 @@ internal sealed class DocPrinter
         }
 
         this.Output.Append(stringDoc.Value);
-        this.CurrentWidth += stringDoc.Value.GetPrintedWidth();
+        this.CurrentWidth += stringDoc.PrintedWidth;
     }
 
     private void ProcessLine(LineDoc line, PrintMode mode, Indent indent)

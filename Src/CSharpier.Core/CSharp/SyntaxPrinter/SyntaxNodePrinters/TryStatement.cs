@@ -8,7 +8,7 @@ internal static class TryStatement
 {
     public static Doc Print(TryStatementSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
         docs.Add(ExtraNewLines.Print(node));
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Token.Print(node.TryKeyword, context));
@@ -20,6 +20,6 @@ internal static class TryStatement
         {
             docs.Add(Doc.HardLine, FinallyClause.Print(node.Finally, context));
         }
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }
