@@ -11,7 +11,7 @@ internal static partial class BaseMethodDeclaration
 {
 #if NET8_0_OR_GREATER
 
-    [GeneratedRegex(@"\s*(\r\n?|\n)")]
+    [GeneratedRegex(@"[\t\v\f ]*(\r\n?|\n)")]
     private static partial Regex RemoveWhiteSpaceLineEndingsGenerator();
 
     private static readonly Regex RemoveWhiteSpaceLineEndingsRegex =

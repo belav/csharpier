@@ -279,3 +279,23 @@ public class TrailingComma
         // csharpier-ignore-end
     };
 }
+
+public class MethodsWithLines
+{
+    // csharpier-ignore
+    public void SomeMethodWithLines()
+    {
+        var someVariable = someLongValue____________________________________________ + someLongValue____________________________________________;
+
+        return;
+    }
+
+    [SomeAttribute]
+    // csharpier-ignore
+    public void SomeMethodWithLines()
+    {
+        var someVariable = someLongValue____________________________________________ + someLongValue____________________________________________;
+
+        return;
+    }
+}
