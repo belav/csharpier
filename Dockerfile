@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/aspnet:11.0-preview AS base
+FROM mcr.microsoft.com/dotnet/aspnet:11.0.0-rc.1 AS base
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:11.0-preview AS build
+FROM mcr.microsoft.com/dotnet/sdk:11.0.100-rc.1 AS build
 
 RUN set -uex \
     && apt-get update \
