@@ -1,3 +1,7 @@
+## 11.0.1
+Adding support to format "msbuild" language. The "MSBuild project tools" extension changes the language on some files from "xml" to "msbuild" which csharpier wasn't registered as a formatter for.
+
+
 ## 11.0.0
 This release drops support for two features added by outside contributors which I have no interest in continuing to support. 
 - Drop support for diagnostics
