@@ -24,13 +24,11 @@ class TestClass
             - three_____________________________
             + four______________________________;
 
-        var coalesceIsSpecial =
-            someValue_________________________
+        var coalesceIsSpecial = someValue_________________________
             ?? someOtherValue_______________________
             ?? someOtherValue_______________________;
 
-        coalesceIsSpecial ??=
-            someValue_________________________
+        coalesceIsSpecial ??= someValue_________________________
             ?? someOtherValue_______________________
             ?? someOtherValue_______________________;
 
@@ -109,8 +107,8 @@ class TestClass
             )
             && CallMethod() == someValue;
 
-        var someValue =
-            someLongThing___________________________.someLongThing_____________ ?? someOtherThing;
+        var someValue = someLongThing___________________________.someLongThing_____________
+            ?? someOtherThing;
 
         if (
             one - two == three
@@ -194,181 +192,158 @@ class TestClass
                 someLongValue__________________________________________
             ) == someOtherValue;
 
-        var coalesceIsSpecial =
-            CallSomething(
+        var coalesceIsSpecial = CallSomething(
+            someLongValue__________________________________________,
+            someLongValue__________________________________________
+        ) ?? someOtherValue;
+
+        var x = someValue
+            .Property.CallLongMethod_____________________________________()
+            .CallMethod(
                 someLongValue__________________________________________,
                 someLongValue__________________________________________
-            ) ?? someOtherValue;
-
-        var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
-                .CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            ?? someOtherValue;
-
-        var x =
-            someValue.CallMethod(
-                someLongValue__________________________________________,
-                someLongValue__________________________________________
-            ) ?? someOtherValue;
-
-        var x =
-            someValue?.CallMethod(
-                someLongValue__________________________________________,
-                someLongValue__________________________________________
-            ) ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            ) ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            ).CallMethod() ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            )?.CallMethod() ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            )?.CallMethod(
-                someLongValue__________________________________________,
-                someLongValue__________________________________________
-            ) ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
             )
-                .CallMethod()
-                .CallMethod()
             ?? someOtherValue;
 
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            ).SomeProperty.CallMethod() ?? someOtherValue;
+        var x = someValue.CallMethod(
+            someLongValue__________________________________________,
+            someLongValue__________________________________________
+        ) ?? someOtherValue;
 
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            )?.SomeProperty.CallMethod() ?? someOtherValue;
+        var x = someValue?.CallMethod(
+            someLongValue__________________________________________,
+            someLongValue__________________________________________
+        ) ?? someOtherValue;
 
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            )?.SomeProperty?.CallMethod() ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            )
-                .SomeProperty.CallMethod()
-                .CallMethod()
-            ?? someOtherValue;
-
-        var x =
-            (
-                CallMethod(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
-            )
-                ?.SomeProperty.CallMethod()
-                .CallMethod()
-            ?? someOtherValue;
-
-        var x =
-            await CallMethodAsync(
+        var x = (
+            CallMethod(
                 someLongValue__________________________________________,
                 someLongValue__________________________________________
-            ) ?? someOtherValue;
+            )
+        ) ?? someOtherValue;
 
-        var x =
-            await SomeObject.CallMethodAsync(
+        var x = (
+            CallMethod(
                 someLongValue__________________________________________,
                 someLongValue__________________________________________
-            ) ?? someOtherValue;
+            )
+        ).CallMethod() ?? someOtherValue;
 
-        var x =
-            await SomeObject
-                .CallMethod()
-                .CallMethodAsync(
-                    someLongValue__________________________________________,
-                    someLongValue__________________________________________
-                )
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )?.CallMethod() ?? someOtherValue;
+
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )?.CallMethod(
+            someLongValue__________________________________________,
+            someLongValue__________________________________________
+        ) ?? someOtherValue;
+
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )
+            .CallMethod()
+            .CallMethod()
             ?? someOtherValue;
 
-        var x =
-            (IEnumerable<SomeClass>?)
-                someValue.CallLongMethod____________________________________________________()
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        ).SomeProperty.CallMethod() ?? someOtherValue;
+
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )?.SomeProperty.CallMethod() ?? someOtherValue;
+
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )?.SomeProperty?.CallMethod() ?? someOtherValue;
+
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )
+            .SomeProperty.CallMethod()
+            .CallMethod()
             ?? someOtherValue;
 
-        var x =
-            (IEnumerable<SomeClass>?)(
-                someLongValue____________________________________________
-                ?? someLongValue____________________________________________
-            ) ?? someOtherValue;
+        var x = (
+            CallMethod(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+        )
+            ?.SomeProperty.CallMethod()
+            .CallMethod()
+            ?? someOtherValue;
 
-        var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
-                .CallMethod__________()
+        var x = await CallMethodAsync(
+            someLongValue__________________________________________,
+            someLongValue__________________________________________
+        ) ?? someOtherValue;
+
+        var x = await SomeObject.CallMethodAsync(
+            someLongValue__________________________________________,
+            someLongValue__________________________________________
+        ) ?? someOtherValue;
+
+        var x = await SomeObject
+            .CallMethod()
+            .CallMethodAsync(
+                someLongValue__________________________________________,
+                someLongValue__________________________________________
+            )
+            ?? someOtherValue;
+
+        var x = (IEnumerable<SomeClass>?)
+            someValue.CallLongMethod____________________________________________________()
+            ?? someOtherValue;
+
+        var x = (IEnumerable<SomeClass>?)(
+            someLongValue____________________________________________
+            ?? someLongValue____________________________________________
+        ) ?? someOtherValue;
+
+        var x = someValue
+            .Property.CallLongMethod_____________________________________()
+            .CallMethod__________()
             ?? throw new Exception();
 
-        var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
-                .CallMethod__________(someParameter)
+        var x = someValue
+            .Property.CallLongMethod_____________________________________()
+            .CallMethod__________(someParameter)
             ?? throw new Exception();
 
-        var x =
-            someValue
-                .Property.CallLongMethod_____________________________________()
-                .CallLongMethod___________________________________________________()
+        var x = someValue
+            .Property.CallLongMethod_____________________________________()
+            .CallLongMethod___________________________________________________()
             ?? throw new Exception();
 
         return SomeObject.CallSomeMethod___________()
             ?? SomeObject.CallSomeMethod___________()
             ?? new SomeObject();
 
-        var storeObject =
-            entityType.GetSchemaQualifiedTableName()
+        var storeObject = entityType.GetSchemaQualifiedTableName()
             ?? entityType.GetInsertStoredProcedure()?.GetSchemaQualifiedName()
             ?? entityType.GetDeleteStoredProcedure()?.GetSchemaQualifiedName()
             ?? entityType.GetUpdateStoredProcedure()?.GetSchemaQualifiedName();
@@ -376,41 +351,33 @@ class TestClass
         return parameterDescriptor.BindingInfo.Binder
             ?? Binders.GetBinder(parameterDescriptor.ParameterType);
 
-        var x =
-            someValue.SomeCall()?.SomeCall().SomeProperty
+        var x = someValue.SomeCall()?.SomeCall().SomeProperty
             ?? someValue.SomeCall()?.SomeCall().SomeProperty;
 
-        var x =
-            someValue.SomeCall().SomeProperty.SomeProperty
+        var x = someValue.SomeCall().SomeProperty.SomeProperty
             ?? someValue.SomeCall().SomeProperty.SomeProperty;
 
-        var x =
-            someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty
+        var x = someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty
             ?? someValue.SomeCall().SomeProperty?.SomeCall().SomeProperty;
 
-        var x =
-            someValue.SomeCall()?.SomeProperty_______________________
+        var x = someValue.SomeCall()?.SomeProperty_______________________
             ?? someValue.SomeCall()?.SomeProperty_______________________;
 
-        var x =
-            someValue.SomeCall().SomeProperty_______________________
+        var x = someValue.SomeCall().SomeProperty_______________________
             ?? someValue.SomeCall().SomeProperty_______________________;
 
-        var x =
-            someValue.SomeCall()?.A______().B______().C______()
+        var x = someValue.SomeCall()?.A______().B______().C______()
             ?? someValue.SomeCall()?.A______().B______().C______();
 
-        var x =
-            someValue.SomeCall().A_______.B_______.C_______
+        var x = someValue.SomeCall().A_______.B_______.C_______
             ?? someValue.SomeCall().A_______.B_______.C_______;
 
-        var x =
-            someValue switch
-            {
-                "" => someLongValue_________________________________,
-                null => someLongValue_________________________________,
-                _ => someLongValue_________________________________,
-            } ?? someOtherValue;
+        var x = someValue switch
+        {
+            "" => someLongValue_________________________________,
+            null => someLongValue_________________________________,
+            _ => someLongValue_________________________________,
+        } ?? someOtherValue;
 
         var notIdealSee355 =
             variable
