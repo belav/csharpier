@@ -65,7 +65,7 @@ internal static class RightHandSide
         };
     }
 
-    private static Doc PrintBreakBeforeCoalesce(
+    private static Group PrintBreakBeforeCoalesce(
         Doc leftDoc,
         Doc operatorDoc,
         BinaryExpressionSyntax rightNode,

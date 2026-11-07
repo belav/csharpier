@@ -1,40 +1,32 @@
-public class ClassName
-{
-    public string Value = SomeValue ?? "";
+string baz = "qux"
+    ?? throw new InvalidOperationException(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies eros turpis. Cras diam libero, interdum id elementum ut, interdum sed justo."
+    );
 
-    void Method()
-    {
-        string baz = "qux"
-            ?? throw new InvalidOperationException(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies eros turpis. Cras diam libero, interdum id elementum ut, interdum sed justo."
-            );
+baz = "qux"
+    ?? throw new InvalidOperationException(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies eros turpis. Cras diam libero, interdum id elementum ut, interdum sed justo."
+    );
 
-        baz = "qux"
-            ?? throw new InvalidOperationException(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies eros turpis. Cras diam libero, interdum id elementum ut, interdum sed justo."
-            );
+var method = target.DeclaringType!.GetMethod(
+    ReplaceMethod,
+    BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public
+) ?? throw new($"Could not find method {ReplaceMethod} on {target.DeclaringType}");
 
-        var method = target.DeclaringType!.GetMethod(
-            ReplaceMethod,
-            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public
-        ) ?? throw new($"Could not find method {ReplaceMethod} on {target.DeclaringType}");
+var discontinuedProductIds = result
+    .GetWishListResult.GetProductCollectionResult?.ProductDtos?.Where(o =>
+        o.IsDiscontinued && !o.CanBackOrder
+    )
+    .Select(o => o.Id)
+    .ToHashSet()
+    ?? new HashSet<Guid>();
 
-        var discontinuedProductIds = result
-            .GetWishListResult.GetProductCollectionResult?.ProductDtos?.Where(o =>
-                o.IsDiscontinued && !o.CanBackOrder
-            )
-            .Select(o => o.Id)
-            .ToHashSet()
-            ?? new HashSet<Guid>();
+var result3 =
+    x.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        - x.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+        - x.ccccccccccccccccccccccccccccccccccc
+    ?? 0;
 
-        var result3 =
-            x.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                - x.bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
-                - x.ccccccccccccccccccccccccccccccccccc
-            ?? 0;
-
-        var someVeryLongVariableName =
-            someLongValue_____________________________________________________________
-            ?? someOtherValue;
-    }
-}
+var someVeryLongVariableNameThatIsLongEnoughToOverflow =
+    someLongValue_____________________________________________________________
+    ?? someOtherValue_______________;
