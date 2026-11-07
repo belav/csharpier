@@ -93,3 +93,78 @@ var supportedProtocols = hubSupportedProtocols______
 return hubSupportedProtocols__________________________
     ?? globalSupportedProtocols
     ?? Array.Empty<string>();
+
+var result =
+    // 1. Check for simple property put
+    TryPropertyPut(binder, value)
+    ??
+    // 2. Check for event handler hookup where the put is dropped
+    TryEventHandlerNoop(binder, value);
+return
+    // 1. Check for simple property put
+    TryPropertyPut(binder, value)
+    ??
+    // 2. Check for event handler hookup where the put is dropped
+    TryEventHandlerNoop(binder, value);
+
+var symbol = semanticModel.GetDeclaredSymbol(
+    variableDeclarator_____________________,
+    cancellationToken
+)
+    ?? semanticModel.GetDeclaredSymbol(
+        GetIdentifierOfVariableDeclarator(variableDeclarator).GetRequiredParent()
+    );
+return semanticModel.GetDeclaredSymbol(
+    variableDeclarator_____________________________________,
+    cancellationToken
+)
+    ?? semanticModel.GetDeclaredSymbol(
+        GetIdentifierOfVariableDeclarator(variableDeclarator).GetRequiredParent()
+    );
+
+var document = project.Documents.FirstOrDefault(d =>
+    d.Name == _documentName && d.Folders.SequenceEqual(_documentFolders)
+)
+    ?? throw new InvalidOperationException(
+        WorkspaceExtensionsResources.The_solution_does_not_contain_the_specified_document
+    );
+return project.Documents.FirstOrDefault(d =>
+    d.Name == _documentName && d.Folders.SequenceEqual(_documentFolders)
+)
+    ?? throw new InvalidOperationException(
+        WorkspaceExtensionsResources.The_solution_does_not_contain_the_specified_document
+    );
+
+var targetTransaction = this.UndoManagers[
+    subjectBuffer
+].ConflictResolutionUndoTransaction____________
+    ?? this.UndoManagers[subjectBuffer].StartRenameSessionUndoTransaction;
+return this.UndoManagers[
+    subjectBuffer
+].ConflictResolutionUndoTransaction____________________________
+    ?? this.UndoManagers[subjectBuffer].StartRenameSessionUndoTransaction;
+
+var location = await GetExternalNavigationLocationForSpecificSymbolAsync(
+        definitionItem,
+        rqName1,
+        cancellationToken
+    )
+    .ConfigureAwait(false)
+    ?? await GetExternalNavigationLocationForSpecificSymbolAsync(
+            definitionItem,
+            rqName2,
+            cancellationToken
+        )
+        .ConfigureAwait(false);
+return await GetExternalNavigationLocationForSpecificSymbolAsync(
+        definitionItem,
+        rqName1,
+        cancellationToken
+    )
+    .ConfigureAwait(false)
+    ?? await GetExternalNavigationLocationForSpecificSymbolAsync(
+            definitionItem,
+            rqName2,
+            cancellationToken
+        )
+        .ConfigureAwait(false);

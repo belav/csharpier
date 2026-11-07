@@ -50,11 +50,12 @@ internal static class BinaryExpression
     public static bool IsCoalesceWithNonBinaryLeft(ExpressionSyntax node)
     {
         return node
-            is BinaryExpressionSyntax
-            {
-                RawKind: (int)SyntaxKind.CoalesceExpression,
-                Left: not BinaryExpressionSyntax
-            };
+                is BinaryExpressionSyntax
+                {
+                    RawKind: (int)SyntaxKind.CoalesceExpression,
+                    Left: not BinaryExpressionSyntax
+                }
+            && !node.GetLeadingTrivia().AnyComment();
     }
 
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
