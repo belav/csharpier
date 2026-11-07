@@ -13,8 +13,8 @@ class ClassName
 
         x = 25; // trailing!!!!
 
-        assignmentInstructionalText =
-            editAssignmentViewModel.InstructionalTextxxxxxxxxxx ?? string.Empty;
+        assignmentInstructionalText = editAssignmentViewModel.InstructionalTextxxxxxxxxxx
+            ?? string.Empty;
 
         value =
             someLongValue__________________________________

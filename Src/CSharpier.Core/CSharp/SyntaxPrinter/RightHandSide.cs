@@ -1,3 +1,4 @@
+using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
@@ -37,6 +38,12 @@ internal static class RightHandSide
                 operatorDoc,
                 Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode, context)))
             ),
+            Layout.BreakBeforeCoalesce => PrintBreakBeforeCoalesce(
+                leftDoc,
+                operatorDoc,
+                (BinaryExpressionSyntax)rightNode,
+                context
+            ),
             Layout.Chain => Doc.Concat(
                 Doc.Group(leftDoc),
                 operatorDoc,
@@ -56,6 +63,28 @@ internal static class RightHandSide
             ),
             _ => throw new Exception("The layout type of " + layout + " was not handled."),
         };
+    }
+
+    private static Group PrintBreakBeforeCoalesce(
+        Doc leftDoc,
+        Doc operatorDoc,
+        BinaryExpressionSyntax rightNode,
+        CSharpPrintingContext context
+    )
+    {
+        var groupId = $"{Layout.BreakBeforeCoalesce}{Doc.NextGroupId()}";
+        var docs = BinaryExpression.PrintParts(rightNode, context);
+        var rest = docs.Skip(1).ToList();
+
+        return Doc.Group(
+            Doc.Group(leftDoc),
+            operatorDoc,
+            Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
+            Doc.IndentIfBreak(
+                Doc.Group(docs[0], Doc.IfBreak(Doc.Concat(rest), Doc.Indent(rest), groupId)),
+                groupId
+            )
+        );
     }
 
     private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
@@ -113,6 +142,9 @@ internal static class RightHandSide
                 StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
             } => Layout.BasicConcatWithSpace,
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
+            BinaryExpressionSyntax binary
+                when BinaryExpression.IsCoalesceWithNonBinaryLeft(binary) =>
+                Layout.BreakBeforeCoalesce,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
             or ConditionalExpressionSyntax
@@ -138,6 +170,7 @@ internal static class RightHandSide
         BasicConcatWithoutLine,
         BasicConcatWithSpace,
         BreakAfterOperator,
+        BreakBeforeCoalesce,
         Chain,
         ChainTail,
         Fluid,

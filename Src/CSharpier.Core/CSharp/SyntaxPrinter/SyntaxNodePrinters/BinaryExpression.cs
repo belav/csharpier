@@ -11,7 +11,7 @@ internal static class BinaryExpression
 {
     public static Doc Print(BinaryExpressionSyntax node, CSharpPrintingContext context)
     {
-        var docs = PrintBinaryExpression(node, context);
+        var docs = PrintParts(node, context);
 
         if (node.Parent is IfStatementSyntax)
         {
@@ -31,11 +31,11 @@ internal static class BinaryExpression
                     or ParenthesizedExpressionSyntax
                     or ParenthesizedLambdaExpressionSyntax
                     or SimpleLambdaExpressionSyntax
-                    or ReturnStatementSyntax
                     or SwitchExpressionSyntax
                     or SwitchStatementSyntax
                     or WhereClauseSyntax
                     or WhileStatementSyntax
+            || (node.Parent is ReturnStatementSyntax && !IsCoalesceWithNonBinaryLeft(node))
             || (
                 node.Parent is ConditionalExpressionSyntax conditionalExpressionSyntax
                 && conditionalExpressionSyntax.WhenTrue != node
@@ -47,6 +47,17 @@ internal static class BinaryExpression
             : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
     }
 
+    public static bool IsCoalesceWithNonBinaryLeft(ExpressionSyntax node)
+    {
+        return node
+                is BinaryExpressionSyntax
+                {
+                    RawKind: (int)SyntaxKind.CoalesceExpression,
+                    Left: not BinaryExpressionSyntax
+                }
+            && !node.GetLeadingTrivia().AnyComment();
+    }
+
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
     // for example the following should break on the && before it breaks on the !=
     /* (
@@ -54,7 +65,7 @@ internal static class BinaryExpression
         && three != four
         && five != six
      */
-    private static List<Doc> PrintBinaryExpression(SyntaxNode node, CSharpPrintingContext context)
+    public static List<Doc> PrintParts(SyntaxNode node, CSharpPrintingContext context)
     {
         if (node is not BinaryExpressionSyntax binaryExpressionSyntax)
         {
@@ -113,7 +124,7 @@ internal static class BinaryExpression
                 && ShouldFlatten(binaryExpressionSyntax.OperatorToken, childBinary.OperatorToken)
             )
             {
-                docs.AddRange(PrintBinaryExpression(childBinary, context));
+                docs.AddRange(PrintParts(childBinary, context));
             }
             else
             {

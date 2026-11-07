@@ -110,8 +110,7 @@ class ClassName
     public override Type SourceType
     {
         get =>
-            _sourceType ??=
-                CustomMapExpression?.ReturnType
+            _sourceType ??= CustomMapExpression?.ReturnType
                 ?? CustomMapFunction?.ReturnType
                 ?? (
                     _sourceMembers.Length > 0
