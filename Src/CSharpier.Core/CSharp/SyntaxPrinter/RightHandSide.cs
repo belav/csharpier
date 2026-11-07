@@ -142,11 +142,9 @@ internal static class RightHandSide
                 StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
             } => Layout.BasicConcatWithSpace,
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
-            BinaryExpressionSyntax
-            {
-                RawKind: (int)SyntaxKind.CoalesceExpression,
-                Left: not BinaryExpressionSyntax
-            } => Layout.BreakBeforeCoalesce,
+            BinaryExpressionSyntax binary
+                when BinaryExpression.IsCoalesceWithNonBinaryLeft(binary) =>
+                Layout.BreakBeforeCoalesce,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
             or ConditionalExpressionSyntax

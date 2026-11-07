@@ -30,3 +30,66 @@ var result3 =
 var someVeryLongVariableNameThatIsLongEnoughToOverflow =
     someLongValue_____________________________________________________________
     ?? someOtherValue_______________;
+
+var confirmEmailUrl = linkGenerator.GetUriByName(
+    context,
+    confirmEmailEndpointName,
+    routeValues____________________
+) ?? fallback;
+return linkGenerator.GetUriByName(
+    context,
+    confirmEmailEndpointName,
+    routeValues____________________
+) ?? fallback;
+
+var isEndpointSuppressed = endpoint
+    .Metadata.GetMetadata<ISuppressMatchingMetadata>()
+    ?.SuppressMatching__________________
+    ?? fallback;
+return endpoint
+    .Metadata.GetMetadata<ISuppressMatchingMetadata>()
+    ?.SuppressMatching__________________
+    ?? fallback;
+
+var dataDirectory = (string)
+    AppDomain.CurrentDomain.GetData("DataDirectory______________________________________")
+    ?? fallback;
+return (string)
+    AppDomain.CurrentDomain.GetData("DataDirectory______________________________________")
+    ?? fallback;
+
+var serializerOptions = s.GetService<
+    IOptions<JsonOptions>
+>()?.Value?.JsonSerializerOptions___________________________
+    ?? fallback;
+return s.GetService<
+    IOptions<JsonOptions>
+>()?.Value?.JsonSerializerOptions___________________________
+    ?? fallback;
+
+var executingLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location____________)
+    ?.Replace('/', '/')
+    ?? fallback;
+return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location____________)
+    ?.Replace('/', '/')
+    ?? fallback;
+
+var ns = wsdlOperationMessage
+    .Operation
+    .PortType
+    .ServiceDescription
+    .TargetNamespace____________________
+    ?? fallback;
+return wsdlOperationMessage
+    .Operation
+    .PortType
+    .ServiceDescription
+    .TargetNamespace____________________
+    ?? fallback;
+
+var supportedProtocols = hubSupportedProtocols______
+    ?? globalSupportedProtocols
+    ?? Array.Empty<string>();
+return hubSupportedProtocols__________________________
+    ?? globalSupportedProtocols
+    ?? Array.Empty<string>();

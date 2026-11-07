@@ -31,11 +31,11 @@ internal static class BinaryExpression
                     or ParenthesizedExpressionSyntax
                     or ParenthesizedLambdaExpressionSyntax
                     or SimpleLambdaExpressionSyntax
-                    or ReturnStatementSyntax
                     or SwitchExpressionSyntax
                     or SwitchStatementSyntax
                     or WhereClauseSyntax
                     or WhileStatementSyntax
+            || (node.Parent is ReturnStatementSyntax && !IsCoalesceWithNonBinaryLeft(node))
             || (
                 node.Parent is ConditionalExpressionSyntax conditionalExpressionSyntax
                 && conditionalExpressionSyntax.WhenTrue != node
@@ -45,6 +45,16 @@ internal static class BinaryExpression
         return shouldNotIndent
             ? Doc.Group(docs)
             : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
+    }
+
+    public static bool IsCoalesceWithNonBinaryLeft(ExpressionSyntax node)
+    {
+        return node
+            is BinaryExpressionSyntax
+            {
+                RawKind: (int)SyntaxKind.CoalesceExpression,
+                Left: not BinaryExpressionSyntax
+            };
     }
 
     // The goal of this is to group operators of the same precedence such that they all break or none of them break
