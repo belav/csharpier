@@ -1,6 +1,9 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # csharpier-rider Changelog
+## [10.0.8]
+- Supporting 2026.3 and future versions by removing the until-build limit
+
 ## [10.0.7]
 - Change path for where global settings are. New versions of Rider complain about it.
 
