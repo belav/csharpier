@@ -30,7 +30,7 @@ intellijPlatform {
         name = "csharpier"
         group = "com.intellij.csharpier"
         ideaVersion.sinceBuild.set(properties("pluginSinceBuild"))
-        ideaVersion.untilBuild.set(properties("pluginUntilBuild"))
+        ideaVersion.untilBuild = provider { null }
         description = getProjectDescription()
         version = properties("pluginVersion")
 
