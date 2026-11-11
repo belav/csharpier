@@ -16,25 +16,35 @@ jobs:
     runs-on: ubuntu-latest
     name: publish nuget
     needs: test
+    permissions:
+      contents: write
+      id-token: write
     env:
       VERSION_FILE_PATH: Nuget/Build.props
-      NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: belav
       - name: Publish CSharpier.Core library on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: Src/CSharpier.Core/CSharpier.Core.csproj
           TAG_FORMAT: "*"
+          NUGET_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
       - name: Publish CSharpier dotnet tool on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:
           PACKAGE_NAME: CSharpier
           PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
           TAG_FORMAT: "*"
+          NUGET_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
       - name: Publish CSharpier.MsBuild library on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:
           PROJECT_FILE_PATH: Src/CSharpier.MsBuild/CSharpier.MsBuild.csproj
           TAG_FORMAT: "*"
+          NUGET_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
