@@ -161,7 +161,7 @@ Rules added while writing the statement and declaration printers:
   - Measured 2026-11-11, Release pack of this branch against the published 1.4.0 packages:
     - `csharpier` tool nupkg: 13.5 MB -> 28.1 MB. Unpacked `tools/net10.0/any`: 19.9 MB -> 42.5 MB; `tools/net11.0/any`: 19.6 MB -> 42.2 MB. 53 new files per target framework, 22.5 MB.
     - Largest additions: `runtimes/win/lib/net8.0/System.Management.Automation.dll` (7.6 MB), `runtimes/unix/lib/net8.0/System.Management.Automation.dll` (7.1 MB), `System.Diagnostics.EventLog.Messages.dll`, `Newtonsoft.Json.dll`, `System.Configuration.ConfigurationManager.dll`, `System.DirectoryServices.dll`, `Microsoft.ApplicationInsights.dll`, `System.Security.Cryptography.Pkcs.dll`, `System.Management.dll`, `Microsoft.Management.Infrastructure` (per runtime), native `libpsl-native` and `pwrshplugin` binaries, `Microsoft.PowerShell.CoreCLR.Eventing.dll`, `System.CodeDom.dll`.
-    - `CSharpier.Core` nupkg: 526 KB -> 558 KB. The `net10.0` and `net11.0` dependency groups gain `System.Management.Automation` 7.4.6, so consumers restore that package and its dependencies. The `netstandard2.0` group is unchanged.
+    - `CSharpier.Core` nupkg: 526 KB -> 558 KB. The `net10.0` and `net11.0` dependency groups gain `System.Management.Automation` 7.6.10 (measured with 7.4.6), so consumers restore that package and its dependencies. The `netstandard2.0` group is unchanged.
     - `CSharpier.MsBuild` copies the CLI build output into `tools/csharpier`, so it grows by the same files.
     - The packed tool installed into a temporary tool path formatted a `.ps1` file on Windows. Linux and macOS were not tried.
 - Block comments: a multi-line `<# #>` comment that starts its line moves as a whole. Lines after the first that begin with the first line's source indentation are printed at the new indentation; other lines are kept as written. Trailing whitespace on re-indented lines is removed.
@@ -178,6 +178,8 @@ A set of public repositories (PowerShell/PowerShell, Pester, PSScriptAnalyzer, d
 ### Decision 12: Resolution errors do not block formatting
 
 The parser reports errors that depend on what is installed on the machine, not on syntax: `ResourceNotDefined`, `ModuleNotFoundDuringParse`, `TypeNotFound`, `RequiresModuleInvalid`, `WorkflowNotSupportedInPowerShellCore`, `DscResourceMissingSetMethod`. The AST is still complete for these. `CustomAttributeTypeNotFound` was added to the list while testing classes whose attributes come from another module. A file whose errors all have one of these `ErrorId` values is formatted; the validator ignores the same ids. Any other error leaves the file unchanged and is reported.
+
+DSC `configuration` blocks are different. On a machine without DSC (Linux and macOS by default) the parser throws while loading the DSC keywords, reports the exception as a parse error, and drops the configuration statement from the AST. That tree cannot be printed safely, so the file is returned unchanged with a warning. The same file is formatted (configuration body verbatim) on Windows.
 
 ## Open Questions (resolved in Decision 10)
 

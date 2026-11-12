@@ -35,6 +35,11 @@ public class PowerShellResolutionErrorTests
         var result = await PowerShellFormatter.FormatAsync(CodeWithMissingModule, options);
 
         result.ErrorDiagnostics.Should().BeEmpty();
+        result.Code.Should().Be(CodeWithMissingModule);
+        if (!OperatingSystem.IsWindows())
+        {
+            result.WarningMessage.Should().Contain("DSC is not installed");
+        }
     }
 
     [Test]
