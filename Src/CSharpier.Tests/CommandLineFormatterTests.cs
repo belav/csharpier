@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Tests;
 
-[NotInParallel]
 public class CommandLineFormatterTests
 {
     private const string UnformattedClassContent = "public class ClassName { public int Field; }";
@@ -70,7 +69,7 @@ public class CommandLineFormatterTests
 
         var result = await Format(
             context,
-            directoryOrFilePaths: Path.Combine(GetRootPath(), "Subdirectory")
+            directoryOrFilePaths: Path.Combine(context.RootPath, "Subdirectory")
         );
 
         result
@@ -78,7 +77,7 @@ public class CommandLineFormatterTests
             .Replace('\\', '/')
             .Should()
             .Be(
-                $"Error {GetRootPath().Replace('\\', '/')}/Subdirectory/Invalid.cs - Was not formatted due to syntax errors."
+                $"Error {context.RootPath.Replace('\\', '/')}/Subdirectory/Invalid.cs - Was not formatted due to syntax errors."
             );
     }
 
@@ -103,7 +102,7 @@ public class CommandLineFormatterTests
         // A subdirectory whose name matches a leading segment of the formatted
         // directory path would, with a naive string-replace, be rewritten twice.
         var context = new TestContext();
-        var rootSegment = context.FileSystem.Path.GetFileName(GetRootPath());
+        var rootSegment = context.FileSystem.Path.GetFileName(context.RootPath);
         context.WhenAFileExists($"{rootSegment}/Invalid.cs", "asdfasfasdf");
 
         var result = await Format(context);
@@ -128,6 +127,20 @@ public class CommandLineFormatterTests
             .Replace('\\', '/')
             .Should()
             .Be("Warning ./Unsupported.js - Is an unsupported file type.");
+    }
+
+    [Test]
+    public async Task Format_Does_Not_Write_Unsupported_When_File_Is_Also_Ignored()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Unsupported.js", "asdfasfasdf");
+        context.WhenAFileExists(".csharpierignore", "Unsupported.js");
+
+        var result = await Format(context, directoryOrFilePaths: "Unsupported.js");
+
+        result
+            .OutputLines.Should()
+            .NotContain("Warning ./Unsupported.js - Is an unsupported file type.");
     }
 
     [Test]
@@ -558,7 +571,7 @@ public class CommandLineFormatterTests
 
         var result = await Format(
             context,
-            directoryOrFilePaths: Path.Combine(GetRootPath(), baseDirectory)
+            directoryOrFilePaths: Path.Combine(context.RootPath, baseDirectory)
         );
 
         result.OutputLines.FirstOrDefault().Should().StartWith("Formatted 0 files in ");
@@ -1076,6 +1089,87 @@ class ClassName
     }
 
     [Test]
+    public async Task Explicit_Files_Should_Resolve_Options_From_Their_Own_Directories()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a/.editorconfig", "[*.cs]\nindent_size = 8");
+        context.WhenAFileExists("a/b/.editorconfig", "[*.cs]\nindent_size = 2");
+        context.WhenAFileExists("a/b/c/.editorconfig", "[*.cs]\nindent_size = 6");
+        context.WhenAFileExists("a/a.cs", UnformattedClassContent);
+        context.WhenAFileExists("a/b/b.cs", UnformattedClassContent);
+        context.WhenAFileExists("a/b/c/c.cs", UnformattedClassContent);
+
+        await Format(context, directoryOrFilePaths: ["a/a.cs", "a/b/b.cs", "a/b/c/c.cs"]);
+
+        context.GetFileContent("a/a.cs").Should().Contain("\n        public int Field;");
+        context.GetFileContent("a/b/b.cs").Should().Contain("\n  public int Field;");
+        context.GetFileContent("a/b/c/c.cs").Should().Contain("\n      public int Field;");
+    }
+
+    [Test]
+    public async Task Ignore_Path_Should_Be_Anchored_To_Each_Explicit_File_Directory()
+    {
+        var context = new TestContext();
+        var ignorePath = context.WhenAFileExists("format.ignore", "/d.cs");
+        context.WhenAFileExists("one/d.cs", UnformattedClassContent);
+        context.WhenAFileExists("two/d.cs", UnformattedClassContent);
+
+        await Format(
+            context,
+            ignorePath: ignorePath,
+            directoryOrFilePaths: ["one/d.cs", "two/d.cs"]
+        );
+
+        context.GetFileContent("one/d.cs").Should().Be(UnformattedClassContent);
+        context.GetFileContent("two/d.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task Built_In_Ignores_Should_Apply_To_Each_Input_Root()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("one/a.cs", UnformattedClassContent);
+        context.WhenAFileExists("two/obj/b.cs", UnformattedClassContent);
+
+        var result = await Format(context, directoryOrFilePaths: ["one", "two"]);
+
+        result.OutputLines.Should().ContainSingle(line => line.StartsWith("Formatted 1 files in"));
+        context.GetFileContent("two/obj/b.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task Ignore_Path_Should_Stay_Anchored_To_The_Originating_Root()
+    {
+        var context = new TestContext();
+        var ignorePath = context.WhenAFileExists("format.ignore", "/sub/ignored.cs");
+        context.WhenAFileExists("root/included.cs", UnformattedClassContent);
+        context.WhenAFileExists("root/sub/ignored.cs", UnformattedClassContent);
+
+        await Format(context, ignorePath: ignorePath, directoryOrFilePaths: ["root", "root/sub"]);
+
+        context.GetFileContent("root/included.cs").Should().Be(FormattedClassContent);
+        context.GetFileContent("root/sub/ignored.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task Formatting_Cache_Should_Use_Each_Files_Resolved_Options()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("one/.editorconfig", "[*.cs]\nindent_size = 4");
+        var secondConfig = context.WhenAFileExists("two/.editorconfig", "[*.cs]\nindent_size = 2");
+        context.WhenAFileExists("one/a.cs", UnformattedClassContent);
+        context.WhenAFileExists("two/b.cs", UnformattedClassContent);
+
+        await Format(context, directoryOrFilePaths: ["one/a.cs", "two/b.cs"]);
+        context.GetFileContent("two/b.cs").Should().Contain("\n  public int Field;");
+
+        context.FileSystem.File.WriteAllText(secondConfig, "[*.cs]\nindent_size = 8");
+        await Format(context, directoryOrFilePaths: ["one/a.cs", "two/b.cs"]);
+
+        context.GetFileContent("two/b.cs").Should().Contain("\n        public int Field;");
+    }
+
+    [Test]
     public async Task Should_Work_With_Extensionless_File()
     {
         var context = new TestContext();
@@ -1125,19 +1219,20 @@ class ClassName
         bool syntaxErrorsAsWarnings = false,
         string? standardInFileContents = null,
         string? configPath = null,
+        string? ignorePath = null,
         params string[] directoryOrFilePaths
     )
     {
         var originalDirectoryOrFilePaths = directoryOrFilePaths;
         if (directoryOrFilePaths.Length == 0)
         {
-            directoryOrFilePaths = [GetRootPath()];
+            directoryOrFilePaths = [context.RootPath];
             originalDirectoryOrFilePaths = ["."];
         }
         else
         {
             directoryOrFilePaths = directoryOrFilePaths
-                .Select(o => context.FileSystem.Path.Combine(GetRootPath(), o))
+                .Select(o => context.FileSystem.Path.Combine(context.RootPath, o))
                 .ToArray();
         }
 
@@ -1156,6 +1251,7 @@ class ClassName
                 StandardInFileContents = standardInFileContents,
                 IncludeGenerated = includeGenerated,
                 SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
+                IgnorePath = ignorePath,
             },
             context.FileSystem,
             fakeConsole,
@@ -1166,24 +1262,24 @@ class ClassName
         return new FormatResult(exitCode, fakeConsole.GetLines(), fakeConsole.GetErrorLines());
     }
 
-    private static string GetRootPath()
-    {
-        return OperatingSystem.IsWindows() ? @"c:\test" : "/Test";
-    }
-
     private sealed class TestContext
     {
         public readonly MockFileSystem FileSystem = new();
 
+        public readonly string RootPath = Path.Combine(
+            Path.GetTempPath(),
+            Guid.NewGuid().ToString()
+        );
+
         public TestContext()
         {
-            this.FileSystem.AddDirectory(GetRootPath());
+            this.FileSystem.AddDirectory(this.RootPath);
         }
 
         public string WhenAFileExists(string path, string contents)
         {
             path = this
-                .FileSystem.Path.Combine(GetRootPath(), path)
+                .FileSystem.Path.Combine(this.RootPath, path)
                 .Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
             this.FileSystem.AddFile(path, new MockFileData(contents));
             return path;
@@ -1191,7 +1287,7 @@ class ClassName
 
         public string GetFileContent(string path)
         {
-            path = this.FileSystem.Path.Combine(GetRootPath(), path);
+            path = this.FileSystem.Path.Combine(this.RootPath, path);
             return this.FileSystem.File.ReadAllText(path);
         }
     }

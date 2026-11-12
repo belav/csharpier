@@ -132,6 +132,7 @@ internal ref struct DocListBuilder
         if (toReturn != null)
         {
             this.arrayFromPool = null;
+            this.span = default;
             ArrayPool<Doc>.Shared.Return(toReturn);
         }
     }

@@ -8,8 +8,8 @@ internal static class SwitchSection
 {
     public static Doc Print(SwitchSectionSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(2);
-        docs.Add(Doc.Join(Doc.HardLine, node.Labels.Select(o => Node.Print(o, context))));
+        using var docs = new DocListBuilder(2);
+        docs.Add(Doc.Join(Doc.HardLine, node.Labels, Node.Print, context));
         if (node.Statements is [BlockSyntax blockSyntax])
         {
             docs.Add(Block.Print(blockSyntax, context));
@@ -27,6 +27,6 @@ internal static class SwitchSection
                 )
             );
         }
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

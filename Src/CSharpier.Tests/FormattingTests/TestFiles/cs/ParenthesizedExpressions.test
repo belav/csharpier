@@ -1,22 +1,19 @@
-class ClassName
-{
-    void MethodName()
-    {
-        var x =
-            query
-            && (
-                currentChar == '='
-                || currentChar == '<'
-                || currentChar == '!'
-                || currentChar == '>'
-                || currentChar == '|'
-                || currentChar == '&'
-            );
-        var b2 = (
-            System.Environment.SpecialFolder.AdminTools
-            is System.Environment.SpecialFolder.AdminTools
-                or System.Environment.SpecialFolder.AdminTools
-                or System.Environment.SpecialFolder.AdminTools
-        );
-    }
-}
+var x =
+    query
+    && (
+        currentChar == '='
+        || currentChar == '<'
+        || currentChar == '!'
+        || currentChar == '>'
+        || currentChar == '|'
+        || currentChar == '&'
+    );
+var b2 = (
+    System.Environment.SpecialFolder.AdminTools
+    is System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+        or System.Environment.SpecialFolder.AdminTools
+);
+
+// leading comment on paren should not break invocation chain
+((int)Value.One).Should().Be(1);

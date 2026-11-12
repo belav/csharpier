@@ -1,0 +1,13 @@
+<Root>
+  <Preserve xml:space="preserve">
+    TextValue
+  </Preserve>
+  <AfterPreserve>
+    TextValue
+  </AfterPreserve>
+  <Parent>
+    <NestedAfterPreserve>
+      TextValue
+    </NestedAfterPreserve>
+  </Parent>
+</Root>

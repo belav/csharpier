@@ -14,31 +14,17 @@ internal static class Element
                 .Replace("\n", context.LineEnding);
         }
 
-        var shouldHugContent = false;
         var attrGroupId = context.GroupFor("element-attr-group-id");
 
         Doc PrintChildrenDoc()
         {
             var childContent = ElementChildren.Print(rawNode, context);
 
-            if (shouldHugContent)
-            {
-                return Doc.IndentIfBreak(
-                    Doc.Concat(PrintLineBeforeChildren(), childContent),
-                    attrGroupId
-                );
-            }
-
             return Doc.Indent(PrintLineBeforeChildren(), childContent);
         }
 
         Doc PrintLineBeforeChildren()
         {
-            if (shouldHugContent)
-            {
-                return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
-            }
-
             if (
                 rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
                 && rawNode.Nodes.FirstOrDefault()
@@ -46,6 +32,11 @@ internal static class Element
             )
             {
                 return Doc.LiteralLine;
+            }
+
+            if (rawNode.IsWhitespacePreserved)
+            {
+                return Doc.Null;
             }
 
             if (
@@ -71,15 +62,15 @@ internal static class Element
 
         Doc PrintLineAfterChildren()
         {
-            if (shouldHugContent)
-            {
-                return Doc.IfBreak(Doc.SoftLine, "", attrGroupId);
-            }
-
             if (
                 rawNode.Nodes.LastOrDefault() is { } node
                 && Tag.PrintParentClosingTagStartWithContent(node, context)
             )
+            {
+                return Doc.Null;
+            }
+
+            if (rawNode.IsWhitespacePreserved)
             {
                 return Doc.Null;
             }
@@ -95,8 +86,8 @@ internal static class Element
 
             if (
                 rawNode.XmlWhitespaceSensitivity is XmlWhitespaceSensitivity.Strict
-                && rawNode.Nodes is [{ NodeType: XmlNodeType.Text }]
-                && rawNode.Nodes[0].Value.TrimEnd(' ')[^1] is '\r' or '\n'
+                && rawNode.Nodes is [.., { NodeType: XmlNodeType.Text } lastTextNode]
+                && lastTextNode.Value.TrimEnd(' ')[^1] is '\r' or '\n'
             )
             {
                 return Doc.Null;

@@ -95,6 +95,40 @@ Changing to `ignore` for `csproj` can cause issues because `msbuild` does treat 
   </Target>
 ```
 
+CSharpier also honors the `xml:space` attribute. With `ignore` set the whitespace within a given element can still be preserved by setting `xml:space="preserve"`
+
+```xml
+<Root>
+  <Preserve xml:space="preserve">
+    TextValue
+  </Preserve>
+</Root>
+```
+
+CSharpier will never insert a new line between adjacent elements unless there is already whitespace between them. This supports xaml `WhitespaceSignificantCollectionAttribute` which considers whitespace significant.
+```xml
+<Root>
+    <TextBlock><Run>Sub</Run><Run>total</Run></TextBlock>
+    <TextBlock>
+        <Run>Sub</Run><Run>total</Run>
+    </TextBlock>
+    <TextBlock>
+        <Run>Sub</Run> <Run>total</Run>
+    </TextBlock>
+</Root>
+<!-- will be reformatted to -->
+<Root>
+<TextBlock><Run>Sub</Run><Run>total</Run></TextBlock>
+<TextBlock>
+    <Run>Sub</Run><Run>total</Run>
+</TextBlock>
+<TextBlock>
+    <Run>Sub</Run>
+    <Run>total</Run>
+</TextBlock>
+</Root>
+```
+
 ### Configuration Overrides ###
 Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
 

@@ -3,6 +3,8 @@ hide_table_of_contents: true
 ---
 Use the `dotnet csharpier` command to run CSharpier from the command line.
 
+If CSharpier is installed globally, the command is `csharpier` instead of `dotnet csharpier`. See [Installation](Installation.md) for more information.
+
 In practice, it will look something like:
 ```shell
 dotnet csharpier format .

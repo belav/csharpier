@@ -8,7 +8,7 @@ internal static class Interpolation
 {
     public static Doc Print(InterpolationSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
         docs.Add(Token.Print(node.OpenBraceToken, context));
         docs.Add(Node.Print(node.Expression, context));
 
@@ -28,6 +28,6 @@ internal static class Interpolation
         }
 
         docs.Add(Token.Print(node.CloseBraceToken, context));
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

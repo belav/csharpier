@@ -1,13 +1,9 @@
-﻿using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Running;
 using CSharpier.Benchmarks;
 
-if (args is { Length: > 0 })
-{
-    _ = BenchmarkSwitcher.FromAssembly(typeof(CSharpBenchmarks).Assembly).Run(args);
-}
-else
-{
-    _ = BenchmarkRunner.Run<CSharpBenchmarks>();
-    // _ = BenchmarkRunner.Run<CliBenchmarks>();
-    // _ = BenchmarkRunner.Run<XmlBenchmarks>();
-}
+var config = DefaultConfig.Instance.WithArtifactsPath(
+    Path.Combine(Paths.RepoRoot, "Src/CSharpier.Benchmarks/BenchmarkDotNet.Artifacts")
+);
+
+BenchmarkSwitcher.FromAssembly(typeof(CliBenchmarks).Assembly).Run(args, config);

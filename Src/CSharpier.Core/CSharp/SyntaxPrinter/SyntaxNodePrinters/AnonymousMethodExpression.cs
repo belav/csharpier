@@ -8,7 +8,7 @@ internal static class AnonymousMethodExpression
 {
     public static Doc Print(AnonymousMethodExpressionSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(4);
+        using var docs = new DocListBuilder(4);
         docs.Add(Modifiers.Print(node.Modifiers, context));
         docs.Add(Token.Print(node.DelegateKeyword, context));
 
@@ -19,6 +19,6 @@ internal static class AnonymousMethodExpression
 
         docs.Add(Block.Print(node.Block, context));
 
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

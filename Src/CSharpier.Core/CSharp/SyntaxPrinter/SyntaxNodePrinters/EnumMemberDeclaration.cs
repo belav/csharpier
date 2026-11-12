@@ -8,7 +8,7 @@ internal static class EnumMemberDeclaration
 {
     public static Doc Print(EnumMemberDeclarationSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(4);
+        using var docs = new DocListBuilder(4);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Modifiers.Print(node.Modifiers, context));
         docs.Add(Token.Print(node.Identifier, context));
@@ -17,6 +17,6 @@ internal static class EnumMemberDeclaration
         {
             docs.Add(EqualsValueClause.Print(node.EqualsValue, context));
         }
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

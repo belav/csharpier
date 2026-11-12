@@ -8,7 +8,7 @@ internal static class DelegateDeclaration
 {
     public static Doc Print(DelegateDeclarationSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(10);
+        using var docs = new DocListBuilder(10);
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Modifiers.PrintSorted(node.Modifiers, context));
         docs.Add(Token.PrintWithSuffix(node.DelegateKeyword, " ", context));
@@ -25,6 +25,6 @@ internal static class DelegateDeclaration
             ConstraintClauses.Print(node.ConstraintClauses, context),
             Token.Print(node.SemicolonToken, context)
         );
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

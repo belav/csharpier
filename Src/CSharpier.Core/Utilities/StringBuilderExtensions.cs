@@ -33,6 +33,17 @@ internal static class StringBuilderExtensions
         value.Remove(0, startIndex);
     }
 
+    public static void TrimEnd(this StringBuilder value, params ReadOnlySpan<char> trimChars)
+    {
+        var length = value.Length;
+        while (length > 0 && trimChars.IndexOf(value[length - 1]) >= 0)
+        {
+            length--;
+        }
+
+        value.Length = length;
+    }
+
     public static bool EndsWithNewLineAndWhitespace(this StringBuilder stringBuilder)
     {
         for (var index = 1; index <= stringBuilder.Length; index++)

@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using CSharpier.Core.Utilities;
 
 namespace CSharpier.Core.Xml;
 
@@ -12,7 +13,10 @@ class RawNodeReader
 {
     private readonly string normalizedXml;
     private readonly string lineEnding;
+    private readonly XmlWhitespaceSensitivity defaultXmlWhitespaceSensitivity;
     private XmlWhitespaceSensitivity currentXmlWhitespaceSensitivity;
+    private bool isWhitespacePreserved;
+    private bool hasLeadingWhitespace;
     private int position;
     private readonly Stack<RawNode> elementStack = new();
 
@@ -26,7 +30,7 @@ class RawNodeReader
     [GeneratedRegex("^ csharpier-ignore-end ($|- )")]
     private static partial Regex IgnoreEndRegexGenerator();
 
-    [GeneratedRegex(@"\r\n|\n|\r", RegexOptions.Compiled)]
+    [GeneratedRegex(@"\r\n|\n|\r")]
     private static partial Regex NewlineRegexGenerator();
 
     private static readonly Regex IgnoreRegex = IgnoreRegexGenerator();
@@ -55,8 +59,9 @@ class RawNodeReader
         XmlWhitespaceSensitivity xmlWhitespaceSensitivity
     )
     {
-        this.normalizedXml = NewlineRegex.Replace(xml, "\n");
+        this.normalizedXml = xml.Contains('\r') ? NewlineRegex.Replace(xml, "\n") : xml;
         this.lineEnding = lineEnding;
+        this.defaultXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
         this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
     }
 
@@ -81,6 +86,7 @@ class RawNodeReader
         while (this.position < this.normalizedXml.Length)
         {
             var newLines = 0;
+            var positionBeforeWhitespace = this.position;
             while (
                 this.position < this.normalizedXml.Length
                 && char.IsWhiteSpace(this.normalizedXml[this.position])
@@ -93,7 +99,30 @@ class RawNodeReader
                 this.position++;
             }
 
-            if (newLines > 1)
+            this.hasLeadingWhitespace = this.position != positionBeforeWhitespace;
+
+            if (
+                this.isWhitespacePreserved
+                && this.hasLeadingWhitespace
+                && this.elementStack.Peek().NodeType is XmlNodeType.Element
+                && this.position < this.normalizedXml.Length
+                && this.normalizedXml[this.position] == '<'
+            )
+            {
+                // ParseText picks up whitespace that runs into text, this covers the rest of it
+                this.AddNode(
+                    new RawNode
+                    {
+                        NodeType = XmlNodeType.Text,
+                        Value = this.normalizedXml[positionBeforeWhitespace..this.position]
+                            .Replace("\n", this.lineEnding),
+                        XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+                        HasLeadingWhitespace = this.hasLeadingWhitespace,
+                        IsWhitespacePreserved = true,
+                    }
+                );
+            }
+            else if (newLines > 1)
             {
                 // this is a bit of a hack and doesn't actually represent the whitespace from the original xml
                 // we turn all whitespace into a single new line if it has more than a single newline in it
@@ -105,6 +134,7 @@ class RawNodeReader
                         NodeType = XmlNodeType.Whitespace,
                         Value = "\n",
                         XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+                        HasLeadingWhitespace = this.hasLeadingWhitespace,
                     }
                 );
             }
@@ -154,21 +184,21 @@ class RawNodeReader
         {
             if (
                 this.position + 4 < this.normalizedXml.Length
-                && this.normalizedXml.Substring(this.position, 4) == "<!--"
+                && string.CompareOrdinal(this.normalizedXml, this.position, "<!--", 0, 4) == 0
             )
             {
                 this.ParseComment();
             }
             else if (
                 this.position + 9 < this.normalizedXml.Length
-                && this.normalizedXml.Substring(this.position, 9) == "<![CDATA["
+                && string.CompareOrdinal(this.normalizedXml, this.position, "<![CDATA[", 0, 9) == 0
             )
             {
                 this.ParseCData();
             }
             else if (
                 this.position + 9 < this.normalizedXml.Length
-                && this.normalizedXml.Substring(this.position, 9) == "<!DOCTYPE"
+                && string.CompareOrdinal(this.normalizedXml, this.position, "<!DOCTYPE", 0, 9) == 0
             )
             {
                 this.ParseDocType();
@@ -192,38 +222,15 @@ class RawNodeReader
     {
         this.position += 4; // Skip "<!--"
 
-        var content = new StringBuilder();
-        while (this.position + 2 < this.normalizedXml.Length)
-        {
-            if (this.normalizedXml.Substring(this.position, 3) == "-->")
-            {
-                this.position += 3;
-                break;
-            }
-
-            if (this.normalizedXml[this.position] == '\n')
-            {
-                content.Append(this.lineEnding);
-            }
-            else
-            {
-                content.Append(this.normalizedXml[this.position]);
-            }
-            this.position++;
-        }
-
-        var actualContent = content.ToString();
+        var actualContent = this.ReadUntil("-->");
 
         var node = new RawNode
         {
             NodeType = XmlNodeType.Comment,
             Value = $"<!--{actualContent}-->",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
-            CSharpierIgnoreType =
-                IgnoreRegex.IsMatch(actualContent) ? CSharpierIgnoreType.Ignore
-                : IgnoreStartRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreStart
-                : IgnoreEndRegex.IsMatch(actualContent) ? CSharpierIgnoreType.IgnoreEnd
-                : CSharpierIgnoreType.None,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
+            CSharpierIgnoreType = GetCSharpierIgnoreType(actualContent),
         };
 
         this.AddNode(node);
@@ -233,31 +240,14 @@ class RawNodeReader
     {
         this.position += 9; // Skip "<![CDATA["
 
-        var content = new StringBuilder();
-        while (this.position + 2 < this.normalizedXml.Length)
-        {
-            if (this.normalizedXml.Substring(this.position, 3) == "]]>")
-            {
-                this.position += 3;
-                break;
-            }
-
-            if (this.normalizedXml[this.position] == '\n')
-            {
-                content.Append(this.lineEnding);
-            }
-            else
-            {
-                content.Append(this.normalizedXml[this.position]);
-            }
-            this.position++;
-        }
+        var content = this.ReadUntil("]]>");
 
         var node = new RawNode
         {
             NodeType = XmlNodeType.CDATA,
             Value = $"<![CDATA[{content}]]>",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
         };
 
         this.AddNode(node);
@@ -270,25 +260,7 @@ class RawNodeReader
         var name = this.ReadName();
         this.SkipWhitespace();
 
-        var content = new StringBuilder();
-        while (this.position + 1 < this.normalizedXml.Length)
-        {
-            if (this.normalizedXml.Substring(this.position, 2) == "?>")
-            {
-                this.position += 2;
-                break;
-            }
-
-            if (this.normalizedXml[this.position] == '\n')
-            {
-                content.Append(this.lineEnding);
-            }
-            else
-            {
-                content.Append(this.normalizedXml[this.position]);
-            }
-            this.position++;
-        }
+        var content = this.ReadUntil("?>");
 
         var node = new RawNode
         {
@@ -296,6 +268,7 @@ class RawNodeReader
             NodeType = XmlNodeType.ProcessingInstruction,
             Value = $"<?{name} {content}?>",
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
         };
 
         this.AddNode(node);
@@ -315,7 +288,12 @@ class RawNodeReader
 
         var element = this.elementStack.Pop();
         element.EndPosition = this.position;
-        this.currentXmlWhitespaceSensitivity = element.XmlWhitespaceSensitivity;
+        if (this.elementStack.Count > 0)
+        {
+            var parent = this.elementStack.Peek();
+            this.currentXmlWhitespaceSensitivity = parent.XmlWhitespaceSensitivity;
+            this.isWhitespacePreserved = parent.IsWhitespacePreserved;
+        }
         // we don't want to keep around any leading or trailing newlines in an elements children
         // it is easier to remove them here instead of dealing with it in the printer
         for (var x = element.Nodes.Count - 1; x >= 0; x--)
@@ -370,14 +348,15 @@ class RawNodeReader
         this.SkipToChar('>');
 
         var xmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity;
+        var whitespaceIsPreserved = this.isWhitespacePreserved;
 
         var spaceAttribute = attributes.FirstOrDefault(o => o.Name == "xml:space");
         if (spaceAttribute != null)
         {
-            xmlWhitespaceSensitivity =
-                spaceAttribute.Value == "preserve"
-                    ? XmlWhitespaceSensitivity.Strict
-                    : XmlWhitespaceSensitivity.Ignore;
+            whitespaceIsPreserved = spaceAttribute.Value == "preserve";
+            xmlWhitespaceSensitivity = whitespaceIsPreserved
+                ? XmlWhitespaceSensitivity.Strict
+                : this.defaultXmlWhitespaceSensitivity;
         }
 
         var node = new RawNode
@@ -387,6 +366,8 @@ class RawNodeReader
             IsEmpty = isEmpty,
             Attributes = attributes.ToArray(),
             XmlWhitespaceSensitivity = xmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
+            IsWhitespacePreserved = whitespaceIsPreserved,
             StartPosition = originalPosition,
             EndPosition = this.position, // set to the end of the start tag which is correct for empty elements and will be adjusted later for non-empty
         };
@@ -397,6 +378,7 @@ class RawNodeReader
         {
             this.elementStack.Push(node);
             this.currentXmlWhitespaceSensitivity = xmlWhitespaceSensitivity;
+            this.isWhitespacePreserved = whitespaceIsPreserved;
         }
     }
 
@@ -434,6 +416,8 @@ class RawNodeReader
             NodeType = XmlNodeType.Text,
             Value = text,
             XmlWhitespaceSensitivity = this.currentXmlWhitespaceSensitivity,
+            HasLeadingWhitespace = this.hasLeadingWhitespace,
+            IsWhitespacePreserved = this.isWhitespacePreserved,
         };
 
         this.AddNode(node);
@@ -482,22 +466,69 @@ class RawNodeReader
 
     private string ReadName()
     {
-        var name = new StringBuilder();
+        var start = this.position;
         while (
             this.position < this.normalizedXml.Length
             && (
                 char.IsLetterOrDigit(this.normalizedXml[this.position])
-                || this.normalizedXml[this.position] == '_'
-                || this.normalizedXml[this.position] == ':'
-                || this.normalizedXml[this.position] == '-'
-                || this.normalizedXml[this.position] == '.'
+                || this.normalizedXml[this.position] is '_' or ':' or '-' or '.'
             )
         )
         {
-            name.Append(this.normalizedXml[this.position]);
             this.position++;
         }
-        return name.ToString();
+
+        return this.normalizedXml[start..this.position];
+    }
+
+    private string ReadUntil(string terminator)
+    {
+        var terminatorIndex = this.normalizedXml.IndexOf(
+            terminator,
+            this.position,
+            StringComparison.Ordinal
+        );
+
+        // with no terminator present, stop at the last position one could have started at, which
+        // is where the character at a time version this replaced left off
+        var contentEnd =
+            terminatorIndex >= 0
+                ? terminatorIndex
+                : Math.Max(this.position, this.normalizedXml.Length - terminator.Length + 1);
+
+        var content = new StringBuilder(contentEnd - this.position);
+        var start = this.position;
+        while (start < contentEnd)
+        {
+            var newLine = this.normalizedXml.IndexOf('\n', start, contentEnd - start);
+            if (newLine < 0)
+            {
+                content.Append(this.normalizedXml, start, contentEnd - start);
+                break;
+            }
+
+            content.Append(this.normalizedXml, start, newLine - start);
+            content.Append(this.lineEnding);
+            start = newLine + 1;
+        }
+
+        this.position = terminatorIndex >= 0 ? terminatorIndex + terminator.Length : contentEnd;
+
+        return content.ToString();
+    }
+
+    private static CSharpierIgnoreType GetCSharpierIgnoreType(string comment)
+    {
+        // all three patterns require this prefix, and testing it is far cheaper than running them
+        if (!comment.StartsWith(" csharpier-", StringComparison.Ordinal))
+        {
+            return CSharpierIgnoreType.None;
+        }
+
+        return IgnoreRegex.IsMatch(comment) ? CSharpierIgnoreType.Ignore
+            : IgnoreStartRegex.IsMatch(comment) ? CSharpierIgnoreType.IgnoreStart
+            : IgnoreEndRegex.IsMatch(comment) ? CSharpierIgnoreType.IgnoreEnd
+            : CSharpierIgnoreType.None;
     }
 
     private string ReadQuotedValue()

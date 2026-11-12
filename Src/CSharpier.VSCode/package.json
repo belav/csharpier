@@ -2,7 +2,7 @@
     "name": "csharpier-vscode",
     "displayName": "CSharpier - Code formatter",
     "description": "Code formatter using csharpier",
-    "version": "11.0.0",
+    "version": "11.0.1",
     "publisher": "csharpier",
     "qna": "https://github.com/belav/csharpier/issues",
     "author": "CSharpier",
@@ -30,7 +30,8 @@
     ],
     "activationEvents": [
         "onLanguage:csharp",
-        "onLanguage:xml"
+        "onLanguage:xml",
+        "onLanguage:msbuild"
     ],
     "icon": "logo.png",
     "main": "./build/Extension.js",

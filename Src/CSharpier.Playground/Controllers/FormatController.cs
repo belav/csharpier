@@ -75,7 +75,9 @@ public class FormatController : ControllerBase
                 result.ReorderedModifiers,
                 result.ReorderedUsingsWithDisabledText,
                 result.MovedTrailingTrivia,
-                parsedFormatter is Formatter.CSharp ? SourceCodeKind.Regular : SourceCodeKind.Script,
+                parsedFormatter is Formatter.CSharp
+                    ? SourceCodeKind.Regular
+                    : SourceCodeKind.Script,
                 cancellationToken
             );
             syntaxValidation = await comparer.CompareSourceAsync(CancellationToken.None);

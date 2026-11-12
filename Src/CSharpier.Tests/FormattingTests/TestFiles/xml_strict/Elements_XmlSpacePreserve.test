@@ -1,0 +1,7 @@
+<Root>
+  <Glued xml:space="preserve"><A/>   <B/></Glued>
+  <WhitespaceOnly xml:space="preserve"> </WhitespaceOnly>
+  <Indented xml:space="preserve">
+<A/>
+</Indented>
+</Root>
