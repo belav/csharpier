@@ -13,6 +13,19 @@ internal static class PowerShellFormatter
     {
         var ast = Parser.ParseInput(code, out var tokens, out var errors);
 
+        if (errors.Any(PowerShellParseErrors.IsDscUnavailable))
+        {
+            return Task.FromResult(
+                new CodeFormatterResult
+                {
+                    Code = code,
+                    WarningMessage =
+                        "Contains a DSC configuration, which cannot be parsed on this machine because DSC is not installed, so was not formatted.",
+                    AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
+                }
+            );
+        }
+
         errors = errors.Where(PowerShellParseErrors.IsBlocking).ToArray();
         if (errors.Length != 0)
         {

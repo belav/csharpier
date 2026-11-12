@@ -17,6 +17,14 @@ internal static class PowerShellParseErrors
         "DscResourceMissingSetMethod",
     };
 
+    // On machines without DSC (Linux and macOS by default) the parser fails to load the DSC
+    // keywords, reports the exception as a parse error, and drops the configuration statement
+    // from the tree.
+    internal static bool IsDscUnavailable(ParseError error)
+    {
+        return error.Message.Contains("DscClassCache", StringComparison.Ordinal);
+    }
+
     internal static bool IsBlocking(ParseError error)
     {
         return !ResolutionErrorIds.Contains(error.ErrorId);

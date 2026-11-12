@@ -205,6 +205,6 @@ CSharpier formats `.ps1`, `.psm1` and `.psd1` files. The same options apply as f
 - Quote style, aliases, and the casing of commands, parameters, types, members and variables are never changed.
 - Keywords and operators are lowercased.
 - The contents of here-strings and of DSC `configuration` blocks are left as written.
-- A file with syntax errors is not formatted. Errors that only mean a module, DSC resource or type is not installed on the machine do not stop a file from being formatted.
+- A file with syntax errors is not formatted. Errors that only mean a module, DSC resource or type is not installed on the machine do not stop a file from being formatted. The exception is a file with a DSC `configuration` block on a machine without DSC (Linux and macOS by default): it is left unchanged with a warning.
 - `csharpier-ignore` comments are not supported in PowerShell files. Use a `.csharpierignore` file to exclude a file.
 - When using [CSharpier.Core](API.md), PowerShell formatting is not part of the `netstandard2.0` build.
