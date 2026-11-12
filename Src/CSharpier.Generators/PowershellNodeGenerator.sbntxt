@@ -7,12 +7,23 @@ internal static class Node
 {
     internal static Doc Print(Ast node, PrintContext context)
     {
+        var doc = PrintNode(node, context);
+        if (context.HasUnprintedCommentIn(node.Extent))
+        {
+            doc = Verbatim.Print(node.Extent, context);
+        }
+
+        return context.WrapWithComments(node, doc);
+    }
+
+    private static Doc PrintNode(Ast node, PrintContext context)
+    {
         return node switch
         {
             {{- for nodeType in NodeTypes }}
             {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }} => {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }}, context),
             {{- end }}
-            _ => node.GetType().ToString(),
+            _ => Verbatim.Print(node.Extent, context),
         };
     }
 }

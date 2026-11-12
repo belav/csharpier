@@ -1,0 +1,16 @@
+$a = $()
+$a = $( 1 )
+$a = $(Get-Item a)
+$a = $( Get-Item a; Get-Item b )
+$a = $(
+    Get-Item a
+    Get-Item b
+)
+$a = "text $(Get-Item a) more $( $b.c ) $($d   +   1)"
+$a = $(if ($b) { 1 } else { 2 })
+$a = $($b.c).d
+Write-Host $(Get-Date) -ForegroundColor Red
+$a = $(
+    # comment
+    Get-Item a
+)

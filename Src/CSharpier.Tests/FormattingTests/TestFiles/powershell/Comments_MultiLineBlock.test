@@ -1,0 +1,19 @@
+function Get-Value {
+    <#
+    .SYNOPSIS
+        Gets a value
+    .DESCRIPTION
+        Gets a value from somewhere
+    #>
+    param($a)
+
+    Write-Host $a
+}
+
+<#
+.SYNOPSIS
+    Sets a value
+#>
+function Set-Value {
+    Write-Host "set"
+}

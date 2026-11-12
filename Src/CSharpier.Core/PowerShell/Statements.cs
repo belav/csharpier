@@ -5,87 +5,129 @@ using CSharpier.Core.PowerShell.AstPrinters;
 
 namespace CSharpier.Core.PowerShell;
 
-internal static class Statements
+// Collects docs that each go on their own line. At most one blank line from the source is kept
+// between two of them.
+internal sealed class LineList
 {
-    internal static Doc Print(
-        ReadOnlyCollection<StatementAst> statements,
-        PrintContext context,
-        int startOffset,
-        int endOffset
-    )
-    {
-        var items = new List<(int Offset, int StartLine, int EndLine, Doc Doc)>();
+    private readonly List<Doc> docs = [];
+    private int? previousEndLine;
 
-        foreach (var statement in statements)
+    internal bool IsEmpty => this.docs.Count == 0;
+
+    internal void Add(Doc doc, int startLine, int endLine, bool forceBlankLine = false)
+    {
+        if (this.previousEndLine is not null)
         {
-            items.Add(
-                (
-                    statement.Extent.StartOffset,
-                    statement.Extent.StartLineNumber,
-                    statement.Extent.EndLineNumber,
-                    Node.Print(statement, context)
-                )
-            );
+            this.docs.Add(Doc.HardLine);
+            if (forceBlankLine || startLine - this.previousEndLine > 1)
+            {
+                this.docs.Add(Doc.HardLine);
+            }
         }
 
-        // Comments are trivia, not attached to any Ast node. Emit the ones that live directly in
-        // this block - between or around its statements - alongside the statements. A comment inside
-        // a statement travels with that statement, which is emitted verbatim, so skip those here.
-        foreach (var comment in context.CommentsBetween(startOffset, endOffset))
+        this.docs.Add(doc);
+        this.previousEndLine = endLine;
+    }
+
+    internal void AddComments(IEnumerable<IScriptExtent> comments, PrintContext context)
+    {
+        foreach (var comment in comments)
         {
-            if (IsInsideAny(comment, statements))
+            this.Add(context.PrintComment(comment), comment.StartLineNumber, comment.EndLineNumber);
+        }
+    }
+
+    // For comments that moved here from another place, where the blank lines of the source say
+    // nothing about the lines around them.
+    internal void AddCommentsWithoutBlankLines(
+        IEnumerable<IScriptExtent> comments,
+        PrintContext context
+    )
+    {
+        foreach (var comment in comments)
+        {
+            this.Add(context.PrintComment(comment), 0, int.MaxValue);
+        }
+    }
+
+    // Adds a node that Node.Print does not wrap with its comments.
+    internal void AddWithComments(
+        Ast node,
+        Doc doc,
+        PrintContext context,
+        bool forceBlankLine = false
+    )
+    {
+        this.Add(
+            Doc.Concat(
+                context.PrintLeadingComments(node),
+                doc,
+                context.PrintTrailingComments(node)
+            ),
+            context.GetStartLine(node),
+            context.GetEndLine(node),
+            forceBlankLine
+        );
+    }
+
+    internal Doc ToDoc()
+    {
+        return this.docs.Count == 0 ? Doc.Null : Doc.Concat(this.docs);
+    }
+}
+
+internal static class Statements
+{
+    // Prints the statements and traps of a block one per line, followed by the dangling comments of
+    // the node that owns the block. The comments in firstComments go before the first statement.
+    internal static Doc Print(
+        ReadOnlyCollection<StatementAst> statements,
+        ReadOnlyCollection<TrapStatementAst>? traps,
+        PrintContext context,
+        Ast owner,
+        IEnumerable<IScriptExtent>? firstComments = null
+    )
+    {
+        var lines = new LineList();
+        if (firstComments is not null)
+        {
+            lines.AddCommentsWithoutBlankLines(firstComments, context);
+        }
+
+        IEnumerable<StatementAst> items = statements;
+        if (traps is { Count: > 0 })
+        {
+            items = statements.Concat(traps).OrderBy(o => o.Extent.StartOffset);
+        }
+
+        foreach (var statement in items)
+        {
+            if (IsBaseConstructorCall(statement))
             {
                 continue;
             }
 
-            items.Add(
-                (
-                    comment.StartOffset,
-                    comment.StartLineNumber,
-                    comment.EndLineNumber,
-                    Verbatim.Print(comment)
-                )
+            lines.Add(
+                Node.Print(statement, context),
+                context.GetStartLine(statement),
+                context.GetEndLine(statement)
             );
         }
 
-        items.Sort((first, second) => first.Offset.CompareTo(second.Offset));
+        lines.AddComments(context.GetDanglingComments(owner), context);
 
-        var docs = new List<Doc>();
-        int? previousEndLine = null;
-        foreach (var item in items)
-        {
-            if (previousEndLine is not null)
-            {
-                docs.Add(Doc.HardLine);
-                if (item.StartLine - previousEndLine > 1)
-                {
-                    docs.Add(Doc.HardLine);
-                }
-            }
-
-            docs.Add(item.Doc);
-            previousEndLine = item.EndLine;
-        }
-
-        return Doc.Concat(docs);
+        return lines.ToDoc();
     }
 
-    private static bool IsInsideAny(
-        IScriptExtent comment,
-        ReadOnlyCollection<StatementAst> statements
-    )
+    internal static Doc PrintLabel(LabeledStatementAst node)
     {
-        foreach (var statement in statements)
-        {
-            if (
-                comment.StartOffset >= statement.Extent.StartOffset
-                && comment.StartOffset < statement.Extent.EndOffset
-            )
-            {
-                return true;
-            }
-        }
+        return node.Label is null ? Doc.Null : ":" + node.Label + " ";
+    }
 
-        return false;
+    // A constructor's call to its base constructor is the first statement of the body in the
+    // tree, but it is written in front of the body.
+    internal static bool IsBaseConstructorCall(StatementAst statement)
+    {
+        return statement is CommandExpressionAst { Expression: BaseCtorInvokeMemberExpressionAst };
     }
 }

@@ -1,0 +1,35 @@
+$a = 1, 2, 3
+$a = 1, 2, 3
+$a = 1, 2, 3
+$a = "a", "b"
+$a = 1, 2, 3
+$a = (1, 2), (3, 4)
+$a = 1, (2, 3), 4
+$a = $firstVeryLongVariableName,
+    $secondVeryLongVariableName,
+    $thirdVeryLongVariableName,
+    $fourthVeryLongVariableName
+$a = 'a', # first
+    'b', # second
+    'c'
+$a = ,1
+$a = ,(1, 2)
+Write-Host a, b, c
+Write-Host -Items 1, 2, 3 -Other "a", "b"
+Test-SuitableDotnet -availableVersions "2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.7", "2.1.8" -requiredVersion 2.1.2 |
+    Should -Be $true
+Get-Thing -Names 'a',
+    'b',
+    'c' -Force
+foreach ($x in 1, 2, 3) {
+    $x
+}
+$a, $b = $c
+return 1, 2
+$a = ('a', 'b')
+$a = (
+    $firstVeryLongVariableName,
+    $secondVeryLongVariableName,
+    $thirdVeryLongVariableName,
+    $fourthVeryLongVariableName
+)

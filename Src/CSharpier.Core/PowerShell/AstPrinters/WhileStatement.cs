@@ -8,10 +8,11 @@ internal static class WhileStatement
     internal static Doc Print(WhileStatementAst node, PrintContext context)
     {
         return Doc.Concat(
-            "while (",
-            Verbatim.Print(node.Condition.Extent),
-            ") ",
-            StatementBlock.Print(node.Body, context)
+            Statements.PrintLabel(node),
+            "while ",
+            Condition.Print(node.Condition, context),
+            " ",
+            StatementBlock.Print(node.Body, context, node.Condition)
         );
     }
 }

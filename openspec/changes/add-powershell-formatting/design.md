@@ -70,7 +70,116 @@ Everything that parses gets formatted; anything with parse errors is returned un
 - **Comment/here-string fidelity** → Reattach comments by token extent and emit here-strings/string literals verbatim from spans; cover with targeted sample pairs.
 - **Formatting-quality maturity at first release** → Consider gating behind an experimental/opt-in signal initially (as CSharpier has done for maturing features) so early adopters opt in while the node-printer coverage broadens.
 
-## Open Questions
+## Status after the POC (2026-11-11)
+
+Done: `Formatter.PowerShell` enum + extension map, `CodeFormatter` dispatch, `System.Management.Automation` 7.4.6 referenced for non-netstandard2.0 targets with `PowerShell/**` compiled out of netstandard2.0, `PowerShellFormatter.FormatAsync` (parse errors returned as diagnostics, source unchanged), a source generator that builds `Node.Print` from the file names in `PowerShell/AstPrinters/`, printers for 17 AST types, a `powershell` folder in the formatting test harness, Playground support.
+
+Not done or wrong in the POC:
+- Unknown AST types print their .NET type name instead of source text (corrupts output).
+- Comments are only kept between statements; comments inside expressions, param blocks, hashtables, and between `}` and `else` are dropped.
+- Leaf printers rebuild text from parsed values (`Value.ToString()`, `"$" + VariablePath`, quotes re-added), which changes number literals, escaped quotes, `${}` variables, splatting, and scoped variables.
+- `Pipeline` joins elements with nothing; `InvokeMemberExpression` always prints `::` and `()`; `catch` drops type filters; named blocks, param blocks, and conditions are verbatim.
+- No validator, no CLI validation branch, harness uses the C# comparer for PowerShell, no idempotency check.
+- `Random.test` fails.
+- Docs, editor extensions, public API decision, package size measurement.
+
+### Decision 6: Comment handling
+
+Comments are attached to AST nodes before printing, the way Prettier does it for ASTs without trivia. For each comment token: find the deepest node whose extent contains it (enclosing), and among that node's children the one ending before it (preceding) and the one starting after it (following). A comment on the same line as the end of the preceding node is a trailing comment of that node. Otherwise it is a leading comment of the following node. With neither, it is a dangling comment of the enclosing node. `Node.Print` prints leading and trailing comments around every node; printers of block-like nodes print their own dangling comments.
+
+As implemented: `Node.Print` only prints leading and trailing comments by itself for statements that sit directly in a block and for param blocks, because a `#` comment printed in the middle of a line swallows the code after it. For any other node the comments stay unprinted unless the parent printer calls `context.PrintLeadingComments(child)` / `context.PrintTrailingComments(child)` at a place where a line break is safe.
+
+Safety net: `PrintContext` tracks which comments have been printed. After a node is printed, if any comment inside its extent was not printed, the node is printed verbatim from source instead. The validator also compares the comment list of input and output.
+
+### Decision 7: Leaves and unknown nodes print from source text
+
+Constants, strings, variables, type names, command parameters, and bare words print `Extent.Text`. Any AST type without a printer prints its extent verbatim. `--%` commands and anything containing a here-string keep the here-string lines literal.
+
+### Decision 8: Style rules
+
+These follow the common community style (OTBS, what `Invoke-Formatter` and the VS Code extension produce by default).
+
+- Indent 4 spaces by default; tabs when configured. Print width from options.
+- Opening brace on the same line. `} else {`, `} elseif (...) {`, `} catch [Type] {`, `} finally {`, `} while (...)`, `} until (...)` on the closing-brace line.
+- Empty block is `{ }`. Empty hashtable `@{}`, empty array `@()`.
+- One statement per line; `;` between statements is removed. Blank lines between statements: at most one kept, none at the start or end of a block.
+- Keywords and operators are lowercased (`If` -> `if`, `-EQ` -> `-eq`). Command names, parameter names, type names, member names, and variable names keep their source casing. No alias expansion. Quote style is never changed.
+- One space around binary and assignment operators, after `,`, and after keywords before `(`. No space after unary `!`/`-`/`+`/`++`/`--`/casts; one space after `-not`, `-bnot`, `-join`, `-split` in unary form.
+- Range `..` and member access `.`/`::`/`?.` have no surrounding spaces. Index `[...]` has no inner spaces.
+- Pipelines: on one line when they fit; otherwise break after each `|` with the continuation indented one level. A pipeline that was multi-line in the source at `|` stays broken. Same rule for `&&`/`||` chains.
+- Backtick continuations are removed when the construct can break without them (after `|`, operators, `,`, inside parentheses/braces). A command whose arguments used backtick continuation keeps backticks, one argument per line, indented one level.
+- Binary expressions break after the operator, continuation indented.
+- Hashtables: `@{ a = 1; b = 2 }` on one line when the source had it on one line and it fits; otherwise one entry per line without `;`. A hashtable that had a newline after `@{` in the source stays expanded.
+- Arrays and argument lists break after `,` one element per line when they do not fit.
+- Script block expressions: `{ $_.Name }` on one line when the source was on one line, it has a single statement, and it fits; otherwise expanded like a statement block.
+- `param(...)`: empty is `param()`. On one line when the source was on one line, no parameter has attributes on separate lines, and it fits. Otherwise one parameter per line, each attribute on its own line above the parameter, a blank line between parameters when any parameter has attributes. A blank line follows the param block.
+- Attributes: `[Parameter(Mandatory = $true, Position = 0)]`; type constraints directly followed by the variable (`[string]$Name`).
+- Functions: `function Name {`; `function Name($a, $b) {` keeps the parenthesized parameter form. Named blocks (`begin`/`process`/`end`/`clean`/`dynamicparam`) each start on their own line with a blank line between them.
+- `switch`: `switch -Regex ($x) {`, each clause `pattern { ... }` on its own line; clause bodies follow script-block rules.
+- Classes/enums: members one per line, blank line between methods, attributes above members.
+- File ends with exactly one newline. Leading `#requires`, comment-based help, and `using` lines keep their order.
+- Here-string contents and closing markers are never indented or changed.
+
+Rules added while writing the expression and command printers:
+
+- `@( )` and `$( )` stay expanded when the source had a line break after the opening delimiter or they hold more than one statement; otherwise they are on one line when they fit.
+- A command line cannot wrap without a backtick, so commands are never broken between arguments. An array literal that is a command argument stays on one line unless the source had it on several lines. Hashtables, script blocks, `@( )`, `$( )`, and parenthesized expressions used as arguments can still break inside their delimiters.
+- A command that used backtick continuation keeps the source grouping of arguments per line; only the continuation lines are indented.
+- Arguments of a command that touch in the source (`Write-Host("hi")`) stay touching.
+- File redirection has one space after the operator (`2> $null`); merging redirection is unchanged (`2>&1`). Redirections stay where they were among the arguments.
+- `-Name: value` becomes `-Name:value`.
+- Method call arguments break one per line inside the parentheses. When the last argument is a script block, hashtable, `@( )`, or `$( )`, or any argument is a multi-line string, the arguments stay on the line of the parentheses and that argument breaks by itself.
+- After a first operand that is a hashtable, script block, `@( )`, or `$( )`, a binary operator and its right operand stay on the line of the closing delimiter. The same applies to `( )` when a single short operand follows. The format operator `-f` never breaks after the operator.
+- A parenthesized binary expression, ternary, or array literal breaks after `(` and before `)`. Other parenthesized content (commands, pipelines) stays next to the parentheses.
+- A ternary breaks after `?` and after `:`, because a line that starts with `?` is a new command.
+- Unary `-` and `+` keep a source space between operator and operand so `- -$x` does not turn into `--$x`.
+- A pipeline whose elements span lines but whose `|` were all on the same line as the neighbouring elements keeps that layout (`$x | ForEach-Object {` ... `} | Sort-Object`).
+- All of these decisions use the node types or the source layout that the output keeps, never whether something happened to fit, so a second format gives the same result.
+
+Rules added while writing the statement and declaration printers:
+
+- A statement block always has its statements on their own lines. The exceptions are a `switch` clause body and a script block expression, which stay on one line when the source had them on one line with a single statement. A script block expression with a `param()` and one statement also stays on one line.
+- A comment between `}` and `else`/`elseif`/`catch`/`finally`/`while`/`until` stays where it is: a comment on the line of `}` stays after the brace, a comment on its own line stays on its own line, and the keyword starts the next line.
+- A comment between the header of a statement and its `{` (`if ($a) # why`) moves to the first line inside the block.
+- The lines of a `<# #>` comment after the first are written exactly as in the source. Only the first line follows the indentation of the code.
+- `param(...)` breaks when the source had it on more than one line, when it holds a comment, or when it does not fit. When it breaks, attributes go on their own lines, the type constraints directly in front of the name stay with the name, and parameters are separated by a blank line when any parameter has an attribute. A type constraint that is followed by an attribute keeps its place in the order and gets its own line.
+- Class members: attributes on their own lines, then `hidden`, then `static`, then the type. A blank line goes before and after every method. Enum members go one per line.
+- `function f()` keeps its empty parentheses because the tree differs from `function f`.
+- `switch` flags, the name and `-SupportedCommand` of a `data` statement, and labels keep the casing of the source.
+- `for` prints `for (init; condition; step)` and `for (;;)`.
+- `using` statements come first, followed by a blank line. A `using` with an alias is printed as written.
+- A blank line separates the param block from the code after it and each named block from the next.
+- Arguments of attributes, method calls, and `base(...)` go one per line when one of them has a comment next to it.
+
+### Decision 9: Validator compares ASTs and comments
+
+`PowerShellFormattingValidator` lives in `Src/CSharpier.Core/PowerShell/`, parses both texts, walks both trees in parallel, and fails on the first difference in node type, child count, or leaf data (constant values, string values and quote type, variable paths, operator token kinds, command element text, parameter names, type names, member names, static flag, redirection data). Comments are compared as an ordered list with per-line leading whitespace trimmed. The formatting test harness uses it for the `powershell` folder and also formats the output a second time and asserts it is unchanged.
+
+### Decision 10: Resolved open questions
+
+- Dependency: keep `System.Management.Automation`; record the measured package size delta here. If it is large, that is reported to the maintainer, not solved in this change.
+  - Measured 2026-11-11, Release pack of this branch against the published 1.4.0 packages:
+    - `csharpier` tool nupkg: 13.5 MB -> 28.1 MB. Unpacked `tools/net10.0/any`: 19.9 MB -> 42.5 MB; `tools/net11.0/any`: 19.6 MB -> 42.2 MB. 53 new files per target framework, 22.5 MB.
+    - Largest additions: `runtimes/win/lib/net8.0/System.Management.Automation.dll` (7.6 MB), `runtimes/unix/lib/net8.0/System.Management.Automation.dll` (7.1 MB), `System.Diagnostics.EventLog.Messages.dll`, `Newtonsoft.Json.dll`, `System.Configuration.ConfigurationManager.dll`, `System.DirectoryServices.dll`, `Microsoft.ApplicationInsights.dll`, `System.Security.Cryptography.Pkcs.dll`, `System.Management.dll`, `Microsoft.Management.Infrastructure` (per runtime), native `libpsl-native` and `pwrshplugin` binaries, `Microsoft.PowerShell.CoreCLR.Eventing.dll`, `System.CodeDom.dll`.
+    - `CSharpier.Core` nupkg: 526 KB -> 558 KB. The `net10.0` and `net11.0` dependency groups gain `System.Management.Automation` 7.4.6, so consumers restore that package and its dependencies. The `netstandard2.0` group is unchanged.
+    - `CSharpier.MsBuild` copies the CLI build output into `tools/csharpier`, so it grows by the same files.
+    - The packed tool installed into a temporary tool path formatted a `.ps1` file on Windows. Linux and macOS were not tried.
+- Block comments: a multi-line `<# #>` comment that starts its line moves as a whole. Lines after the first that begin with the first line's source indentation are printed at the new indentation; other lines are kept as written. Trailing whitespace on re-indented lines is removed.
+- `csharpier-ignore` comments are not supported in PowerShell files.
+- Coverage: every `Ast` subclass gets a printer or an explicit verbatim printer. DSC `configuration`, dynamic keywords, and `workflow` blocks are verbatim.
+- No experimental gate: PowerShell files are formatted by default like XML was in 1.0.
+- Public API: no new public type. The public `CSharpFormatter`/`XmlFormatter` equivalents are deferred until the output is stable.
+- Playground is done. Docs and editor-extension lists are part of this change.
+
+### Decision 11: Testing against real code
+
+A set of public repositories (PowerShell/PowerShell, Pester, PSScriptAnalyzer, dbatools, PSReadLine, SqlServerDsc, fleschutz/PowerShell, vscode-powershell) is downloaded outside the repo. The dev build formats a copy of it; the run must report zero exceptions, zero validation failures, and a second run must report every file as already formatted.
+
+### Decision 12: Resolution errors do not block formatting
+
+The parser reports errors that depend on what is installed on the machine, not on syntax: `ResourceNotDefined`, `ModuleNotFoundDuringParse`, `TypeNotFound`, `RequiresModuleInvalid`, `WorkflowNotSupportedInPowerShellCore`, `DscResourceMissingSetMethod`. The AST is still complete for these. `CustomAttributeTypeNotFound` was added to the list while testing classes whose attributes come from another module. A file whose errors all have one of these `ErrorId` values is formatted; the validator ignores the same ids. Any other error leaves the file unchanged and is reported.
+
+## Open Questions (resolved in Decision 10)
 
 - **Exact dependency and its size:** full `System.Management.Automation` (or `Microsoft.PowerShell.SDK`) vs a trimmed parser-only reference — and the measured packaged-size impact on the global tool. This gates Decision 2.
 - **Coverage boundary for v1:** which constructs are explicitly in-scope vs deferred (e.g., DSC configurations, dynamic keywords, class syntax, workflow).

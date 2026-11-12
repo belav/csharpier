@@ -1,0 +1,38 @@
+Get-ChildItem | Sort-Object
+Get-ChildItem | Where-Object { $_.Length -gt 5 } | Sort-Object Name
+Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" |
+    Where-Object { $_.Length -gt 5 -and $_.Name -like "*test*" } |
+    Sort-Object Name |
+    Select-Object -First 10
+Get-Process |
+    Where-Object CPU |
+    Sort-Object CPU
+Get-Process |
+    Where-Object CPU |
+    Sort-Object CPU
+$items = Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" |
+    Where-Object { $_.Length -gt 5 } |
+    Sort-Object Name
+$items | ForEach-Object {
+    $_.Name
+    $_.Length
+} | Sort-Object
+$items |
+    ForEach-Object {
+        $_.Name
+        $_.Length
+    } |
+    Sort-Object
+Get-ChildItem | # get the items
+    Sort-Object |
+    # leading comment
+    Select-Object -First 1
+Start-Job { Get-Item } &
+Get-Item a | Out-Null &
+if ($true) {
+    Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" |
+        Where-Object { $_.Length -gt 5 } |
+        Sort-Object Name
+}
+1, 2, 3 | ForEach-Object { $_ * 2 }
+$x | Out-Null

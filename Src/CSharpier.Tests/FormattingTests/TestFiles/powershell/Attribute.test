@@ -1,0 +1,16 @@
+function a {
+    [CmdletBinding()]
+    [CmdletBinding( )]
+    [OutputType([string],[int])]
+    [OutputType('System.String', ParameterSetName='ByName')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Not needed here')]
+    [Alias('b','c')]
+    param(
+        [Parameter(Mandatory,Position=0)]
+        [Parameter(Mandatory=$false,ParameterSetName="Other")]
+        [ValidateRange(1,10)]
+        [ValidateScript({ $_ -gt 0 })]
+        [ValidateSet('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven')]
+        [int]$Value
+    )
+}

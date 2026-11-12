@@ -1,0 +1,54 @@
+$a.Method()
+$a.Method()
+$a.Method(1)
+$a.Method(1, 2, 3)
+[System.Diagnostics.Stopwatch]::StartNew()
+[System.IO.Path]::Combine($a, $b)
+[string]::new('a', 5)
+[System.Collections.Generic.List[string]]::new()
+$a?.Method()
+$a.b.c.Method().d[0].e()
+$list.ForEach{ $_ * 2 }
+$list.Where{ $_ -gt 1 }
+$list.Where({ $_ -gt 1 })
+$list.ForEach({
+    $_.Name
+    $_.Length
+})
+$list.Where({
+    $_.Name
+    $_.Length
+})
+$a.Method($b.Other($c), $d[0], "text")
+$veryLongAssignment = [System.String]::Format(
+    "{0} {1} {2} {3}",
+    $firstArgumentValue,
+    $secondArgumentValue,
+    $thirdArgumentValue,
+    $fourth
+)
+$a.Method(1, 2)
+$a.Method(@{
+    a = 1
+})
+$a.Method(@{ a = 1 })
+$a.Method("name", @{
+    a = 1
+    b = "a long value to make this break"
+    c = "another long value to push it over"
+})
+$a.Method("name", {
+    $_.Name
+})
+$a.Method(@"
+text
+"@)
+$a.Method(@"
+text
+"@, 'b')
+$a.Method((Get-Item a), (Get-Item b))
+$a.Method(1, 2).Other(3).Third()
+$a.$methodName(1)
+$a::$methodName(1)
+[array]::Empty[string]()
+$a.Method # not a call

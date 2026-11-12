@@ -1,0 +1,27 @@
+function Get-Value{Get-Item}
+Function  Get-Other
+{
+    Get-Item
+}
+function Empty { }
+function Parens() { }
+function WithParameters($a,[int]$b=2) { $a + $b }
+function LongParameters([string]$aVeryLongParameterName, [string]$anotherVeryLongParameterName, [string]$third) { }
+Filter Get-Filtered { $_ }
+function global:Get-Global { 1 }
+function script:Get-Script($a) { 1 }
+function Outer {
+    function Inner { 1 }
+    Inner
+}
+# help for the function
+function WithHelp {
+    <#
+    .SYNOPSIS
+        Help inside
+    #>
+    param($a)
+
+    $a
+}
+function WithAttributeOnly { [CmdletBinding()] param() }

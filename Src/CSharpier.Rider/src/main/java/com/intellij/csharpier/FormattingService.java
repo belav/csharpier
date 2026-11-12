@@ -29,7 +29,8 @@ public class FormattingService {
             languageId.equals("C#") ||
             languageId.equals("MSBuild") ||
             languageId.equals("XML") ||
-            languageId.equals("Xaml")
+            languageId.equals("Xaml") ||
+            languageId.equals("PowerShell")
         );
     }
 

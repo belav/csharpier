@@ -7,6 +7,6 @@ internal static class TypeExpression
 {
     internal static Doc Print(TypeExpressionAst node, PrintContext context)
     {
-        return Doc.Concat("[", node.TypeName.FullName, "]");
+        return Verbatim.Print(node.Extent, context);
     }
 }

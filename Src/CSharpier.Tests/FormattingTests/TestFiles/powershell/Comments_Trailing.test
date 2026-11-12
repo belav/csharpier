@@ -1,0 +1,8 @@
+Write-Host "one" # trailing comment
+$x = 5 # another trailing comment
+
+Write-Host "two" <# trailing block comment #>
+if ($true) {
+    Write-Host "three" # inside a block
+}
+exit 0 # last one

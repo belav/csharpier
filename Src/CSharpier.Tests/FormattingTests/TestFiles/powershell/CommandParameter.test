@@ -1,0 +1,8 @@
+Get-Item -Path $path
+Get-Item -Path:$path
+Get-Item -Path: $path
+Get-Item -Force:$false -Path:"a b" -Filter:(Get-Filter)
+Get-Item -LiteralPath $path -ErrorAction SilentlyContinue
+Get-Item -
+Get-Item --
+Get-Item -- -NotAParameter

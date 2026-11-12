@@ -1,0 +1,18 @@
+$a = 0x10
+$b = 1kb
+$c = 1.50
+$d = 1e3
+$e = "a `"quoted`" value"
+$f = 'it''s'
+$g = ${a variable}
+$h = $env:PATH
+$i = $script:value
+$j = [System.Collections.Generic.List[string]]
+Write-Host @splat -Name:$value -Force
+$k += 1
+$l ??= "default"
+& "$PSScriptRoot/other.ps1" "value"
+. ./other.ps1
+Get-ChildItem | Sort-Object | Select-Object -First 1
+Get-ChildItem > out.txt 2>&1
+exit

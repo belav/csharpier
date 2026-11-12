@@ -1,0 +1,18 @@
+$a = [int]$b
+$a = [int] $b
+$a = [int][string]$b
+$a = [string[]]('a', 'b')
+$a = [ordered]@{ a = 1 }
+$a = [ordered] @{
+    a = 1
+}
+$a = [pscustomobject]@{
+    Name = "a"
+    Value = 1
+}
+$a = [System.Collections.Generic.List[string]]@('a', 'b')
+$a = [int]"5" + [int]"6"
+$a = [datetime]::Now
+$a = [xml](Get-Content $path)
+$a = [scriptblock]{ $_ }
+[void][System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")

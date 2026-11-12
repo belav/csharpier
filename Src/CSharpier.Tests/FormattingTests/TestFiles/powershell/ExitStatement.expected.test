@@ -1,0 +1,3 @@
+exit
+exit 1
+exit $LASTEXITCODE

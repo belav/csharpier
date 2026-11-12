@@ -1,0 +1,21 @@
+$a = (1)
+$a = (1)
+$a = ($b + $c) * $d
+$a = (Get-Item a).Name
+$a = (Get-ChildItem | Sort-Object)
+$a = ((1))
+$a = ($b)
+$a = ($b)
+$a = (
+    $someVeryLongVariableName -eq $anotherVeryLongVariableName -and
+    $yetAnotherLongVariableName -ne $theLastVeryLongVariableName
+)
+$a = (Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" |
+    Where-Object { $_.Length -gt 5 } |
+    Sort-Object Name)
+Write-Host (Get-Date) ("a" + "b") ($c)
+($a = 5)
+(Get-Item a) | Out-Null
+$a = (Get-Thing -Name a -Property @{
+    b = 1
+})

@@ -1,0 +1,34 @@
+if($a){Write-Host "a"}
+If ($a -eq 1)
+{
+    Write-Host "a"
+}
+ElseIf ($a -eq 2)
+{
+    Write-Host "b"
+}
+Else
+{
+    Write-Host "c"
+}
+if ($a) { } elseif ($b) { } else { }
+if ($someVeryLongVariableName -eq $anotherVeryLongVariableName -and $yetAnotherLongVariableName -ne $theLastOne) { Write-Host "long" }
+if (Test-Path $path) { if (-not $force) { return } }
+if ($a) # after condition
+{
+    Write-Host "a"
+}
+if ($a) {
+    Write-Host "a"
+} # after brace
+elseif ($b) {
+    Write-Host "b"
+}
+# before else
+else {
+    Write-Host "c"
+}
+if ($a) {
+    # only a comment
+}
+$x = if ($a) { 1 } else { 2 }

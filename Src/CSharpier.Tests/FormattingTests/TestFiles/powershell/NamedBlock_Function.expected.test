@@ -1,0 +1,34 @@
+function Get-Value {
+    [CmdletBinding()]
+    param($a)
+
+    dynamicparam {
+        $null
+    }
+
+    begin {
+        $x = 1
+    }
+
+    # before process
+    process {
+        $_
+    }
+
+    end {
+        # only comment
+    } # after end
+
+    clean {
+        $x = $null
+    }
+    # dangling
+}
+function Get-Other {
+    process {
+        $_
+    }
+}
+function Get-Third {
+    end { }
+}

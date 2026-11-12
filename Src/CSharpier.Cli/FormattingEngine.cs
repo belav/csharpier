@@ -4,6 +4,7 @@ using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
+using CSharpier.Core.PowerShell;
 using CSharpier.Core.Utilities;
 using CSharpier.Core.Xml;
 using Microsoft.CodeAnalysis;
@@ -429,6 +430,16 @@ internal class FormattingEngine(
         else if (printerOptions.Formatter is Formatter.XML)
         {
             formattingValidator = new XmlFormattingValidator(
+                fileToFormatInfo.FileContents,
+                codeFormattingResult.Code
+            );
+        }
+        else if (
+            printerOptions.Formatter is Formatter.PowerShell
+            && fileToFormatInfo.FileContents != codeFormattingResult.Code
+        )
+        {
+            formattingValidator = new PowerShellFormattingValidator(
                 fileToFormatInfo.FileContents,
                 codeFormattingResult.Code
             );

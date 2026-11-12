@@ -1,0 +1,19 @@
+$a.b
+$a.b.c.d
+$a::b
+[Type]::Static
+[System.IO.Path]::DirectorySeparatorChar
+$a?.b
+${a}?.b
+$a.$b
+$a."quoted name"
+$a.'single quoted'
+$a.("computed" + "name")
+$a.b.
+    c
+(Get-Item a).Name
+(Get-Item a).Name.Length
+$env:PATH.Split(';')
+"text".Length
+@{ a = 1 }.a
+$a.b::c

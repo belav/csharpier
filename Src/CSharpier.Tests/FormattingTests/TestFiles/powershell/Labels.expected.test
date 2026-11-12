@@ -1,0 +1,8 @@
+:outer foreach ($a in $b) { }
+:a for (;;) { }
+:b while ($true) { }
+:c do { } while ($true)
+:d do { } until ($true)
+:e switch ($x) {
+    1 { }
+}

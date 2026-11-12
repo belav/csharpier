@@ -7,6 +7,6 @@ internal static class VariableExpression
 {
     internal static Doc Print(VariableExpressionAst node, PrintContext context)
     {
-        return "$" + node.VariablePath;
+        return Verbatim.Print(node.Extent, context);
     }
 }

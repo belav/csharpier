@@ -1,0 +1,7 @@
+#requires -Version 5.1
+
+# just a comment
+
+<#
+    and a block comment
+#>

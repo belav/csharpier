@@ -1,0 +1,11 @@
+param($a)
+
+begin {
+    $x = 1
+}
+
+process {
+    $_
+}
+
+end { }

@@ -379,9 +379,10 @@ public class CliTests
     [Test]
     [Arguments("cs")]
     [Arguments("xml")]
+    [Arguments("ps1")]
     public async Task Format_Should_Exit_1_When_Invalid_File(string extension)
     {
-        var unformattedContent1 = "var invalidCode\n";
+        var unformattedContent1 = "var invalidCode = (\n";
 
         var result = await this.CSharpierProcess()
             .WithArguments($"format --stdin-path ./Stdin/Test.{extension}")
@@ -529,6 +530,34 @@ public class CliTests
             .Should()
             .StartWith("Warning ./CheckUnformatted.cs - Was not formatted.");
         result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Format_Should_Format_Piped_PowerShell_File_With_Path()
+    {
+        var result = await this.CSharpierProcess()
+            .WithArguments("format --stdin-path ./Stdin/Test.ps1")
+            .WithPipedInput("if($a){Write-Host 1}\n")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.Output.Should().Be("if ($a) {\n    Write-Host 1\n}\n");
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task PipeFiles_Should_Format_Piped_PowerShell_File()
+    {
+        var input = $"Test1.ps1{'\u0003'}if($a){{Write-Host 1}}\n{'\u0003'}";
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("pipe-files")
+            .WithPipedInput(input)
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Split('\u0003')[0].Should().Be("if ($a) {\n    Write-Host 1\n}\n");
     }
 
     [Test]
