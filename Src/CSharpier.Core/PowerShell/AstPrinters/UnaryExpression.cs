@@ -1,0 +1,33 @@
+using System.Management.Automation.Language;
+using CSharpier.Core.DocTypes;
+
+namespace CSharpier.Core.PowerShell.AstPrinters;
+
+internal static class UnaryExpression
+{
+    public static Doc Print(UnaryExpressionAst node, PrintContext context)
+    {
+        var child = Node.Print(node.Child, context);
+
+        if (node.TokenKind is TokenKind.PostfixPlusPlus or TokenKind.PostfixMinusMinus)
+        {
+            return Doc.Concat(
+                child,
+                context.GetText(node.Child.Extent.EndOffset, node.Extent.EndOffset).Trim()
+            );
+        }
+
+        var source = context.GetText(node.Extent.StartOffset, node.Child.Extent.StartOffset);
+        var unaryOperator = source.TrimEnd();
+        if (unaryOperator.Length > 1 && char.IsLetter(unaryOperator[1]))
+        {
+            return Doc.Concat(unaryOperator.ToLowerInvariant(), " ", child);
+        }
+
+        var keepSpace =
+            node.TokenKind is TokenKind.Minus or TokenKind.Plus
+            && source.Length != unaryOperator.Length;
+
+        return Doc.Concat(unaryOperator, keepSpace ? " " : Doc.Null, child);
+    }
+}

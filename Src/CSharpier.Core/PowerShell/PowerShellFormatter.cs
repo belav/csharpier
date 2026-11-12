@@ -13,6 +13,7 @@ internal static class PowerShellFormatter
     {
         var ast = Parser.ParseInput(code, out var tokens, out var errors);
 
+        errors = errors.Where(PowerShellParseErrors.IsBlocking).ToArray();
         if (errors.Length != 0)
         {
             var sourceText = SourceText.From(code);
@@ -39,7 +40,7 @@ internal static class PowerShellFormatter
             }
         }
 
-        var doc = PowerShellPrinter.Print(ast, comments);
+        var doc = PowerShellPrinter.Print(ast, comments, code);
         var formatted = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
 
         return Task.FromResult(

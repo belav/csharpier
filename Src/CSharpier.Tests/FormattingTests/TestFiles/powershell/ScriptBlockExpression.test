@@ -1,0 +1,36 @@
+$a = {}
+$a = { }
+$a = {$_.Name}
+$a = { $_.Name }
+$a = {   $_.Name   }
+$a = { $a; $b }
+$a = {
+$a
+$b }
+$a = {
+    $_.Name
+}
+$a = { param($x) $x + 1 }
+$a = {
+    param($x)
+    $x + 1
+}
+$a = { Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" | Where-Object { $_.Length -gt 5 } }
+$a = { # comment
+    $_.Name
+}
+$a = {
+    # only a comment
+}
+$a = { <# inline #> $_.Name }
+$a = {
+    begin { $x = 1 }
+    process { $_ }
+}
+Get-ChildItem | ForEach-Object { $_.Name } | Where-Object { $_ }
+Get-ChildItem | ForEach-Object {
+    $_.Name
+}
+Get-ChildItem | Where-Object { $_.Name -like "*a*" -and $_.Length -gt $someVeryLongVariableName -and $_.Extension -eq ".ps1" }
+$a = { { nested } }
+& { 1 }

@@ -1,47 +1,58 @@
-## 1. Parser dependency spike (gating)
+## 1. Parser dependency (gating)
 
-- [ ] 1.1 Add the `System.Management.Automation` reference to a throwaway/test target and confirm `Parser.ParseInput` returns a `ScriptBlockAst`, token stream, and `ParseError[]` for representative `.ps1`/`.psm1`/`.psd1` samples
-- [ ] 1.2 Measure the packaged-size and cold-start delta the dependency adds to the CLI/global tool; record the number in design.md's Open Questions and decide full SDK vs parser-only vs separate reference
-- [ ] 1.3 Confirm the dependency's supported target frameworks and settle the `netstandard2.0` strategy (compile PowerShell support out of that TFM vs target-conditional unit); write the decision into `CSharpier.Core.csproj` conditions
+- [x] 1.1 Reference `System.Management.Automation` and confirm `Parser.ParseInput` returns AST, tokens, and errors
+- [x] 1.2 Measure the packaged-size delta the dependency adds to the CLI tool and CSharpier.Core nupkg; record it in design.md
+- [x] 1.3 Compile PowerShell support out of `netstandard2.0`
 
-## 2. Formatter wiring (plug into the shared engine)
+## 2. Formatter wiring
 
-- [ ] 2.1 Add `PowerShell` to the `Formatter` enum in `Src/CSharpier.Core/PrinterOptions.cs`
-- [ ] 2.2 Map `ps1`, `psm1`, `psd1` (case-insensitive) to `Formatter.PowerShell` in `PrinterOptions.GetFormatter`
-- [ ] 2.3 Default the PowerShell indent size to 4 in `PrinterOptions` (parallel to the XML special-case)
-- [ ] 2.4 Add a `Formatter.PowerShell` arm to `CodeFormatter.FormatAsync` in `Src/CSharpier.Core/CodeFormatter.cs`
+- [x] 2.1 Add `PowerShell` to the `Formatter` enum
+- [x] 2.2 Map `ps1`, `psm1`, `psd1` in `PrinterOptions.GetFormatter`
+- [x] 2.3 Default indent size 4
+- [x] 2.4 `Formatter.PowerShell` arm in `CodeFormatter.FormatAsync`
 
-## 3. PowerShell front-end
+## 3. Foundation (one agent, first)
 
-- [ ] 3.1 Create `Src/CSharpier.Core/PowerShell/PowerShellFormatter.cs` with public `Format` and `FormatAsync` entry points mirroring `XmlFormatter` (parse → build Doc → `DocPrinter.Print`), returning original source + warning on parse errors
-- [ ] 3.2 Add the new public entry point(s) to `Src/CSharpier.Core/PublicAPI.Unshipped.txt`
-- [ ] 3.3 Implement AST-walking node printers under `Src/CSharpier.Core/PowerShell/` for the core constructs (script blocks, pipelines, commands + parameters/arguments, assignments, if/switch/loops, function definitions, hashtables/arrays, param blocks)
-- [ ] 3.4 Emit string literals, here-strings, and unhandled/unknown nodes verbatim from their source `Extent` so contents round-trip exactly
-- [ ] 3.5 Reattach comments and comment-based help from the token stream by source offset (parallel to the C# trivia handling)
-- [ ] 3.6 Apply end-of-line normalization and indent style/size via the existing `PrinterOptions`/`DocPrinter` path
+- [x] 3.1 Unknown AST types print verbatim source instead of the .NET type name
+- [x] 3.2 Comment attachment (leading/trailing/dangling) with the unprinted-comment verbatim fallback (design Decision 6)
+- [x] 3.3 Leaf printers print `Extent.Text` (constants, strings, variables, types, command parameters)
+- [x] 3.4 Generator orders derived AST types before base types in the `Node.Print` switch
+- [x] 3.5 `PowerShellFormattingValidator` (design Decision 9) with unit tests
+- [x] 3.6 `FormattingEngine.ValidateFormatting` branch for PowerShell
+- [x] 3.7 Test harness: use the PowerShell validator for the `powershell` folder and assert a second format is unchanged
+- [x] 3.8 Fix `Random.test`; remove `TODO 1894` items that this phase resolves
+- [x] 3.9 Line-ending and tab handling for multi-line comments and verbatim text
 
-## 4. Validation
+## 4. Printers (sequential agents, each adds test files per construct)
 
-- [ ] 4.1 Create `PowerShellFormattingValidator` implementing `IFormattingValidator`: re-parse the formatted output, assert no new `ParseError`s, and compare a trivia-independent normalization of input vs output `ScriptBlockAst` for structural equivalence
-- [ ] 4.2 Add a `Formatter.PowerShell` branch to `FormattingEngine.ValidateFormatting` in `Src/CSharpier.Cli/FormattingEngine.cs`
+- [x] 4.1 Statements: named blocks, `if`, `switch`, `for`, `foreach` (incl. `-parallel`), `while`, `do/while`, `do/until`, `try/catch [types]/finally`, `trap`, `break`/`continue` with labels, `return`, `throw`, `exit`, loop labels, `data`, `using`, blank-line and `;` handling
+- [x] 4.2 Pipelines and commands: `|` breaking, `&&`/`||` chains, background `&`, invocation operators `&`/`.`, command parameters (`-Name:value`), redirections, splatting, `--%`, backtick-continued arguments
+- [x] 4.3 Expressions: binary, unary, ternary, casts, attributed expressions, member access and method calls (static, instance, null-conditional, generic), index, array literal, `@()`, `$()`, parens, hashtable, script block expression, `$using:`, expandable strings, assignments with all operators
+- [x] 4.4 Declarations: `param` blocks, parameters with attributes and defaults, attributes with named arguments, functions/filters (both parameter forms), classes, enums, properties, methods, constructors with `: base()`
+- [x] 4.5 Explicit verbatim printers for `configuration`, dynamic keywords, workflow block statements, error nodes
 
-## 5. Tests
+## 5. Real-code testing
 
-- [ ] 5.1 Add a PowerShell subclass of the `FormattingTests` sample-pair harness under `Src/CSharpier.Tests/` and seed input/expected sample files for the core constructs
-- [ ] 5.2 Add an idempotency corpus asserting that formatting already-formatted output is byte-identical
-- [ ] 5.3 Add a test asserting unparseable PowerShell is returned unchanged with a warning and no mangled output
-- [ ] 5.4 Add `PowerShellFormattingValidator` unit tests (equivalent output passes; a meaning-changing edit fails)
-- [ ] 5.5 Add CLI integration coverage: `.ps1`/`.psm1`/`.psd1` files are discovered, formatted, `--check`-reported, and warned-on when unsupported (netstandard2.0 host)
-- [ ] 5.6 Add comment / comment-based-help / here-string fidelity tests
+- [x] 5.1 Download the public repositories listed in design Decision 11 outside the repo and report AST node frequency
+- [x] 5.2 Format the set with the dev build: zero exceptions, zero validation failures, second run reports no changes
+- [x] 5.3 Read a sample of formatted output for ugly results and fix the printers; add a test file for each fix
 
-## 6. Secondary surfaces (may split into a follow-up change)
+## 6. CLI, docs, editors
 
-- [ ] 6.1 Surface PowerShell in the Playground language handling
-- [ ] 6.2 Update documentation to list the new supported file types
-- [ ] 6.3 Update editor-extension file-type lists as needed
-- [ ] 6.4 Decide and, if chosen, implement an experimental/opt-in gate for the first release
+- [x] 6.1 CLI tests: `.ps1`/`.psm1`/`.psd1` discovered, formatted, `check` reports, parse errors reported, validation failure reported
+- [x] 6.2 Docs: supported file types, configuration notes
+- [x] 6.3 Editor extensions (VS Code, Rider, Visual Studio): add PowerShell file types where each extension lists them
+- [x] 6.4 Playground
 
 ## 7. Verification
 
-- [ ] 7.1 Run the full test suite and confirm C#/XML behavior is unchanged
-- [ ] 7.2 Run `openspec validate add-powershell-formatting` and confirm the change is consistent
+- [x] 7.1 Full test suite passes; C#/XML output unchanged
+- [x] 7.2 `dotnet csharpier format .` leaves the repo formatted
+- [x] 7.3 `openspec validate add-powershell-formatting`
+
+## 8. Findings from the downloaded repositories
+
+- [x] 8.1 (5.1) 4,535 files from 8 repositories downloaded; all 59 reachable AST types occur except `BaseCtorInvokeMemberExpressionAst`, `BlockStatementAst`, and the two error node types
+- [x] 8.2 Format files whose only parse errors are resolution errors (`ResourceNotDefined`, `ModuleNotFoundDuringParse`, `TypeNotFound`, `RequiresModuleInvalid`, `WorkflowNotSupportedInPowerShellCore`, `DscResourceMissingSetMethod`); 170 of the downloaded files hit these because a module or type is not installed on the machine
+- [x] 8.3 Hand-written tests for constructs the downloaded files lack: `--%`, `: base(...)` constructors, mixed line endings, `&&`/`||`, `data`, `trap`, attributed expressions
+- [x] 8.4 Confirm UTF-16 and BOM files round-trip through the CLI (15 UTF-16 files, 1,064 UTF-8 BOM files in the downloaded set)

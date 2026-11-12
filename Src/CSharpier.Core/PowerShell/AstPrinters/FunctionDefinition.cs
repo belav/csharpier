@@ -7,56 +7,64 @@ internal static class FunctionDefinition
 {
     internal static Doc Print(FunctionDefinitionAst node, PrintContext context)
     {
-        var keyword = node.IsFilter ? "filter " : "function ";
-        var body = node.Body;
+        if (node.Parent is FunctionMemberAst)
+        {
+            return Verbatim.Print(node.Extent, context);
+        }
 
-        if (
-            body.BeginBlock is not null
-            || body.ProcessBlock is not null
-            || body.DynamicParamBlock is not null
-            || body.EndBlock is null
-            || !body.EndBlock.Unnamed
+        var keyword =
+            node.IsFilter ? "filter "
+            : node.IsWorkflow ? "workflow "
+            : "function ";
+
+        return Doc.Concat(keyword, node.Name, PrintParametersAndBody(node, null, context));
+    }
+
+    // Prints everything after the name. The parentheses are only there when the source has them,
+    // because "function f()" and "function f" are different trees.
+    internal static Doc PrintParametersAndBody(
+        FunctionDefinitionAst node,
+        Doc? baseConstructorCall,
+        PrintContext context
+    )
+    {
+        var docs = new List<Doc>();
+
+        var header = context
+            .GetText(node.Extent.StartOffset, node.Body.Extent.StartOffset)
+            .TrimEnd();
+        if (node.Parameters is { Count: > 0 })
+        {
+            docs.Add(ArgumentList.Print("(", node.Parameters, ")", context));
+        }
+        else if (
+            node.Parameters is not null
+            || node.Parent is FunctionMemberAst
+            || header.EndsWith(')')
         )
         {
-            return Doc.Concat(keyword, node.Name, " ", Verbatim.Print(body.Extent));
+            docs.Add("()");
         }
 
-        var inner = new List<Doc>();
-        if (body.ParamBlock is not null)
+        if (baseConstructorCall is not null)
         {
-            inner.Add(Verbatim.Print(body.ParamBlock.Extent));
-            inner.Add(Doc.HardLine);
+            docs.Add(" : ");
+            docs.Add(baseConstructorCall);
         }
 
-        if (body.EndBlock.Statements.Count > 0)
+        var contentsOfBody = ScriptBlock.PrintContents(node.Body, context);
+        if (contentsOfBody == Doc.Null)
         {
-            if (inner.Count > 0)
-            {
-                inner.Add(Doc.HardLine);
-            }
-
-            inner.Add(
-                Statements.Print(
-                    body.EndBlock.Statements,
-                    context,
-                    body.Extent.StartOffset,
-                    body.Extent.EndOffset
-                )
-            );
+            docs.Add(" { }");
         }
-
-        if (inner.Count == 0)
+        else
         {
-            return Doc.Concat(keyword, node.Name, " { }");
+            docs.Add(" {");
+            docs.Add(Doc.Indent(Doc.HardLine, contentsOfBody));
+            docs.Add(Doc.HardLine);
+            docs.Add("}");
         }
 
-        return Doc.Concat(
-            keyword,
-            node.Name,
-            " {",
-            Doc.Indent(Doc.HardLine, Doc.Concat(inner)),
-            Doc.HardLine,
-            "}"
-        );
+        return Doc.Concat(docs);
     }
 }

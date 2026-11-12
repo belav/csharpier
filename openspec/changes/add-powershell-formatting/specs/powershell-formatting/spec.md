@@ -45,8 +45,12 @@ The system SHALL re-print PowerShell by building a Doc tree with the shared Doc 
 The system SHALL NOT alter PowerShell source that cannot be parsed, and SHALL report the condition rather than emit corrupted output.
 
 #### Scenario: Syntactically invalid PowerShell
-- **WHEN** PowerShell source contains parse errors
+- **WHEN** PowerShell source contains syntax errors
 - **THEN** the system SHALL return the original source unchanged together with a warning (or error diagnostics) indicating the input could not be formatted, and SHALL NOT write mangled output
+
+#### Scenario: Resolution errors do not block formatting
+- **WHEN** the only errors the parser reports are that a module, DSC resource, or type could not be found on the machine
+- **THEN** the system SHALL format the source
 
 ### Requirement: Formatting preserves program meaning
 
@@ -54,7 +58,7 @@ The system SHALL validate that formatting a PowerShell file does not change the 
 
 #### Scenario: Post-format validation on change
 - **WHEN** the CLI formats a PowerShell file whose formatted output differs from its input and validation is not skipped
-- **THEN** the system SHALL re-parse the output and compare it against the input, and SHALL report a validation failure (rather than write the file) if the two are not equivalent
+- **THEN** the system SHALL re-parse the output and compare it against the input, and SHALL report a validation failure and exit with a non-zero code if the two are not equivalent, consistent with how validation failures are handled for other languages
 
 #### Scenario: Comments and here-strings are preserved
 - **WHEN** PowerShell source containing comments, comment-based help, or here-strings is formatted

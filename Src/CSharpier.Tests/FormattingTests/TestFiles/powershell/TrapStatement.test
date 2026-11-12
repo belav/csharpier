@@ -1,0 +1,14 @@
+trap{continue}
+Trap [System.Exception]
+{
+    Write-Host "trapped"
+    continue
+}
+function Get-Value {
+    trap { break }
+    Get-Item
+}
+if ($a) {
+    Get-Item
+    trap [System.IO.IOException] { continue }
+}

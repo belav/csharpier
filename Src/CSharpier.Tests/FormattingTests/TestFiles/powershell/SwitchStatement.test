@@ -1,0 +1,24 @@
+switch($x){1{"one"}2{"two"}default{"other"}}
+Switch -Regex -CaseSensitive ($value) {
+    '^a' { 'starts with a' }
+
+    # comment on b
+    '^b' {
+        'b'
+        break
+    }
+    { $_ -gt 5 } { 'big' } # trailing
+    Default { 'none' }
+    # dangling
+}
+switch -file $path { 'a' { 1 } }
+switch -Wildcard -File (Get-Path) { 'a*' { 1 } }
+:outer switch ($x) { 1 { break outer } }
+switch ($someVeryLongVariableName -eq $anotherVeryLongVariableName -and $yetAnotherLongVariableName -ne $theLastOne) { $true { 1 } }
+switch ($x) {
+    1 { Write-Host "this is a rather long statement that will not fit on a single line of the output" }
+    "two" { 1; 2 }
+    default {
+    }
+}
+$result = switch ($x) { 1 { 'one' } default { 'other' } }

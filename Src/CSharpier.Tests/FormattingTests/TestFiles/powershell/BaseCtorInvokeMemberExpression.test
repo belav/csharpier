@@ -1,0 +1,12 @@
+class Base { Base([int]$a) { } }
+class A : Base {
+    A():base(1){}
+    A([int]$a) : base($a) { $this.x = 1 }
+    A([int]$a, [int]$b)
+        : base($a + $b)
+    {
+        # comment
+        $this.x = 1
+    }
+    A([string]$s) : base([int]::Parse($s, [System.Globalization.NumberStyles]::Integer, [cultureinfo]::InvariantCulture)) { }
+}

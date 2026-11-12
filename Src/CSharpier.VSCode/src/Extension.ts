@@ -16,7 +16,7 @@ export async function activate(context: ExtensionContext) {
     await initPlugin(context);
 }
 
-export let supportedLanguageIds = ["csharp", "xml", "msbuild"];
+export let supportedLanguageIds = ["csharp", "xml", "msbuild", "powershell"];
 
 let initPlugin = async (context: ExtensionContext) => {
     let enableDebugLogs =

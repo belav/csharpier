@@ -73,6 +73,75 @@ public class PowershellNodeGenerator : IIncrementalGenerator
         return reader.ReadToEnd();
     }
 
+    // The switch in Node.Print matches the first arm that fits, so a printer for a derived Ast type
+    // has to come before the printer for its base type. The generator only sees file names, so the
+    // base types that matter are listed here.
+    private static readonly Dictionary<string, string> BaseTypes = new()
+    {
+        ["StringConstantExpression"] = "ConstantExpression",
+        ["InvokeMemberExpression"] = "MemberExpression",
+        ["BaseCtorInvokeMemberExpression"] = "InvokeMemberExpression",
+        ["ConvertExpression"] = "AttributedExpression",
+        ["ConstantExpression"] = "Expression",
+        ["MemberExpression"] = "Expression",
+        ["AttributedExpression"] = "Expression",
+        ["Attribute"] = "AttributeBase",
+        ["TypeConstraint"] = "AttributeBase",
+        ["PropertyMember"] = "Member",
+        ["FunctionMember"] = "Member",
+        ["FileRedirection"] = "Redirection",
+        ["MergingRedirection"] = "Redirection",
+        ["Pipeline"] = "PipelineBase",
+        ["PipelineChain"] = "PipelineBase",
+        ["AssignmentStatement"] = "PipelineBase",
+        ["ErrorStatement"] = "PipelineBase",
+        ["PipelineBase"] = "Statement",
+        ["Command"] = "CommandBase",
+        ["CommandExpression"] = "CommandBase",
+        ["CommandBase"] = "Statement",
+        ["ForStatement"] = "LoopStatement",
+        ["ForEachStatement"] = "LoopStatement",
+        ["WhileStatement"] = "LoopStatement",
+        ["DoWhileStatement"] = "LoopStatement",
+        ["DoUntilStatement"] = "LoopStatement",
+        ["LoopStatement"] = "LabeledStatement",
+        ["SwitchStatement"] = "LabeledStatement",
+        ["LabeledStatement"] = "Statement",
+        ["Expression"] = "CommandElement",
+        ["CommandParameter"] = "CommandElement",
+    };
+
+    private static int GetInheritanceDepth(string printerName)
+    {
+        var depth = 0;
+        while (true)
+        {
+            if (!BaseTypes.TryGetValue(printerName, out var baseType))
+            {
+                if (printerName.Length > "Expression".Length && printerName.EndsWith("Expression"))
+                {
+                    baseType = "Expression";
+                }
+                else if (
+                    printerName.Length > "Statement".Length
+                    && printerName.EndsWith("Statement")
+                )
+                {
+                    baseType = "Statement";
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            depth++;
+            printerName = baseType;
+        }
+
+        return depth;
+    }
+
     private object GetModel(ImmutableArray<SyntaxTree> syntaxTrees)
     {
         var nodeTypes = syntaxTrees
@@ -83,7 +152,8 @@ public class PowershellNodeGenerator : IIncrementalGenerator
                 SyntaxNodeName = $"{fileName}Ast",
                 VariableName = char.ToLower(fileName[0]) + fileName[1..],
             })
-            .OrderBy(o => o.SyntaxNodeName)
+            .OrderByDescending(o => GetInheritanceDepth(o.PrinterName))
+            .ThenBy(o => o.SyntaxNodeName)
             .ToArray();
 
         return new { NodeTypes = nodeTypes };

@@ -1,0 +1,21 @@
+class Empty{}
+Class Animal
+{
+    [string]$Name
+}
+class Dog:Animal,System.IDisposable {
+    [void] Dispose() { }
+}
+[SuppressMessage('a', 'b')]
+class WithAttribute { }
+class Commented {
+    # leading
+    [string]$Name # trailing
+
+    # before method
+    [void] M() { }
+    # dangling
+}
+class OnlyComment {
+    # nothing
+}

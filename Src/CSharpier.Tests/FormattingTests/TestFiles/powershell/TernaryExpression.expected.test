@@ -1,0 +1,7 @@
+$a = $b ? 1 : 2
+$a = ($b -eq 1) ? "one" : "other"
+$a = $b ? $c ? 1 : 2 : 3
+$a = $someVeryLongConditionVariableName -eq $anotherVeryLongVariableName ?
+    $theValueWhenTheConditionIsTrue :
+    $theValueWhenTheConditionIsFalse
+$a = $b ? 1 : 2

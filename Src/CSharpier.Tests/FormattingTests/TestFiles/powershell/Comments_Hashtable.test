@@ -1,0 +1,6 @@
+$x = @{
+    # leading comment
+    One = 1 # trailing comment
+    Two = 2
+    # last comment
+}

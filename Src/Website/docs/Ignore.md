@@ -150,6 +150,10 @@ public class Unformatted2     { }
 // csharpier-ignore-end
 ```
 
+### PowerShell
+
+Ignore comments are not supported in PowerShell files. Use the ignore file to exclude PowerShell files.
+
 ### XML
 
 Ignoring code in xml is similar to c#.

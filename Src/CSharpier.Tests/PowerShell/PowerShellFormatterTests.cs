@@ -72,4 +72,85 @@ public class PowerShellFormatterTests
 
         result.AST.Should().BeEmpty();
     }
+
+    [Test]
+    [Arguments("\n")]
+    [Arguments("\r\n")]
+    public void Should_Use_One_Line_Ending_For_Multiline_Comments_And_Verbatim_Text(
+        string endOfLine
+    )
+    {
+        var code = """
+            <#
+              block comment
+            #>
+            $a = @"
+            here string
+            "@
+            $b = @{
+                One = 1
+            }
+            function Get-Value {
+                    <#
+                    .SYNOPSIS
+                    #>
+                Get-Item
+            }
+
+            """.ReplaceLineEndings("\r\n");
+
+        var options = new PrinterOptions(Formatter.PowerShell, XmlWhitespaceSensitivity.Strict)
+        {
+            EndOfLine = endOfLine == "\n" ? EndOfLine.LF : EndOfLine.CRLF,
+        };
+        var result = PowerShellFormatter.FormatAsync(code, options).Result;
+
+        result
+            .Code.Should()
+            .Be(
+                """
+                <#
+                  block comment
+                #>
+                $a = @"
+                here string
+                "@
+                $b = @{
+                    One = 1
+                }
+                function Get-Value {
+                    <#
+                    .SYNOPSIS
+                    #>
+                    Get-Item
+                }
+
+                """.ReplaceLineEndings(endOfLine)
+            );
+    }
+
+    [Test]
+    public void Should_Reindent_Lines_Of_Multiline_Comments()
+    {
+        var code = "function Get-Value {\n    <#\n        text  \n    #>\n    Get-Item\n}\n";
+
+        var options = new PrinterOptions(Formatter.PowerShell, XmlWhitespaceSensitivity.Strict)
+        {
+            UseTabs = true,
+        };
+        var result = PowerShellFormatter.FormatAsync(code, options).Result;
+
+        result.Code.Should().Be("function Get-Value {\n\t<#\n\t    text\n\t#>\n\tGet-Item\n}\n");
+    }
+
+    [Test]
+    public void Should_Not_Print_Type_Names_For_Nodes_Without_Printers()
+    {
+        var code = "switch ($a) {\n    1 { 'one' }\n}\n";
+
+        var options = new PrinterOptions(Formatter.PowerShell, XmlWhitespaceSensitivity.Strict);
+        var result = PowerShellFormatter.FormatAsync(code, options).Result;
+
+        result.Code.Should().Be(code);
+    }
 }

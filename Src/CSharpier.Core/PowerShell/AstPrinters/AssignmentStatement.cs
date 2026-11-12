@@ -7,6 +7,12 @@ internal static class AssignmentStatement
 {
     public static Doc Print(AssignmentStatementAst node, PrintContext context)
     {
-        return Doc.Concat(Node.Print(node.Left, context), " = ", Node.Print(node.Right, context));
+        return Doc.Concat(
+            Node.Print(node.Left, context),
+            " ",
+            node.ErrorPosition.Text,
+            " ",
+            Node.Print(node.Right, context)
+        );
     }
 }

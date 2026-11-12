@@ -1,0 +1,39 @@
+$a = @()
+$a = @( )
+$a = @(1)
+$a = @( 1,2,3 )
+$a = @(Get-ChildItem | Sort-Object)
+$a = @(
+  'a'
+  'b'
+)
+$a = @(
+  'a',
+  'b'
+)
+$a = @('a'
+  'b')
+$a = @(
+    'a', # first
+    'b' # second
+    # dangling
+)
+$a = @(
+    # only a comment
+)
+$a = @(1; 2; 3)
+$a = @($firstVeryLongVariableName, $secondVeryLongVariableName, $thirdVeryLongVariableName, $fourthVeryLongVariableName)
+$a = @(
+    @{ a = 1 }
+    @{ a = 2 }
+)
+$a = @(@{ a = 1 }, @{ a = 2 })
+$a = @(
+
+    'a'
+
+    'b'
+
+)
+Write-Host @(1, 2).Count
+$a = @(if ($b) { 1 })

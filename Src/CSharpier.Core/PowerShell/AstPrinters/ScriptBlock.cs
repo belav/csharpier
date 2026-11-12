@@ -7,52 +7,74 @@ internal static class ScriptBlock
 {
     internal static Doc Print(ScriptBlockAst node, PrintContext context)
     {
-        if (
-            node.BeginBlock is not null
-            || node.ProcessBlock is not null
-            || node.DynamicParamBlock is not null
-            || node.EndBlock is null
-            || !node.EndBlock.Unnamed
-        )
+        return PrintContents(node, context);
+    }
+
+    // Prints the using statements, param block, statements or named blocks, and dangling comments
+    // of a script block without any surrounding braces.
+    internal static Doc PrintContents(ScriptBlockAst node, PrintContext context)
+    {
+        var lines = new LineList();
+
+        foreach (var usingStatement in node.UsingStatements)
         {
-            return Verbatim.Print(node.Extent);
+            lines.AddWithComments(usingStatement, Node.Print(usingStatement, context), context);
         }
 
-        var parts = new List<Doc>();
-
-        if (node.Extent.Text.StartsWith("<#", StringComparison.InvariantCulture))
-        {
-            var endIndex = node.Extent.Text.IndexOf("#>", StringComparison.InvariantCulture) + 2;
-            // TODO 1894 probably needs proper line endings and spaces vs tabs
-            parts.Add(node.Extent.Text[..endIndex]);
-            parts.Add(Doc.HardLine);
-            parts.Add(Doc.HardLine);
-        }
-
-        var startOffset = node.Extent.StartOffset;
         if (node.ParamBlock is not null)
         {
-            parts.Add(Verbatim.Print(node.ParamBlock.Extent));
-            startOffset = node.ParamBlock.Extent.EndOffset;
-        }
-
-        if (node.EndBlock.Statements.Count > 0)
-        {
-            if (parts.Count > 0)
-            {
-                parts.Add(Doc.HardLine);
-            }
-
-            parts.Add(
-                Statements.Print(
-                    node.EndBlock.Statements,
-                    context,
-                    startOffset,
-                    node.Extent.EndOffset
-                )
+            lines.Add(
+                Node.Print(node.ParamBlock, context),
+                context.GetStartLine(node.ParamBlock),
+                context.GetEndLine(node.ParamBlock),
+                forceBlankLine: true
             );
         }
 
-        return parts.Count == 0 ? Doc.Null : Doc.Concat(parts);
+        var namedBlocks = new List<NamedBlockAst>();
+        foreach (
+            var block in new[]
+            {
+                node.DynamicParamBlock,
+                node.BeginBlock,
+                node.ProcessBlock,
+                node.EndBlock,
+                node.CleanBlock,
+            }
+        )
+        {
+            if (block is not null)
+            {
+                namedBlocks.Add(block);
+            }
+        }
+
+        if (namedBlocks is [{ Unnamed: true } unnamedBlock])
+        {
+            var statements = Statements.Print(
+                unnamedBlock.Statements,
+                unnamedBlock.Traps,
+                context,
+                node
+            );
+            if (statements != Doc.Null)
+            {
+                lines.Add(statements, 0, 0, forceBlankLine: true);
+            }
+
+            return lines.ToDoc();
+        }
+
+        namedBlocks.Sort(
+            (first, second) => first.Extent.StartOffset.CompareTo(second.Extent.StartOffset)
+        );
+        foreach (var block in namedBlocks)
+        {
+            lines.AddWithComments(block, Node.Print(block, context), context, forceBlankLine: true);
+        }
+
+        lines.AddComments(context.GetDanglingComments(node), context);
+
+        return lines.ToDoc();
     }
 }

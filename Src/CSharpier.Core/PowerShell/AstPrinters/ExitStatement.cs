@@ -5,8 +5,10 @@ namespace CSharpier.Core.PowerShell.AstPrinters;
 
 internal static class ExitStatement
 {
-    public static Doc Print(ExitStatementAst node, PrintContext context)
+    internal static Doc Print(ExitStatementAst node, PrintContext context)
     {
-        return Doc.Concat("exit ", Node.Print(node.Pipeline, context));
+        return node.Pipeline is null
+            ? "exit"
+            : Doc.Concat("exit ", Node.Print(node.Pipeline, context));
     }
 }

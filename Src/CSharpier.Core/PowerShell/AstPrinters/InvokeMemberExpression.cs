@@ -7,11 +7,71 @@ internal static class InvokeMemberExpression
 {
     internal static Doc Print(InvokeMemberExpressionAst node, PrintContext context)
     {
-        return Doc.Concat(
-            Node.Print(node.Expression, context),
-            "::",
-            Node.Print(node.Member, context),
-            "()"
+        var arguments = node.Arguments;
+        var hasArguments = arguments is { Count: > 0 };
+        var afterMember = context.GetText(
+            node.Member.Extent.EndOffset,
+            hasArguments ? arguments![0].Extent.StartOffset : node.Extent.EndOffset
         );
+        var openParenIndex = afterMember.IndexOf('(');
+        var genericArguments =
+            openParenIndex < 0 ? afterMember.Trim() : afterMember[..openParenIndex].Trim();
+
+        var target = Doc.Concat(
+            Node.Print(node.Expression, context),
+            MemberExpression.GetOperator(node),
+            Node.Print(node.Member, context),
+            genericArguments
+        );
+
+        if (!hasArguments)
+        {
+            return Doc.Concat(target, "()");
+        }
+
+        if (openParenIndex < 0)
+        {
+            return Doc.Concat(target, Node.Print(arguments![0], context));
+        }
+
+        if (ArgumentList.HasComments(arguments!, context))
+        {
+            return Doc.Concat(target, ArgumentList.Print("(", arguments!, ")", context));
+        }
+
+        var last = arguments![^1];
+        if (
+            (Layout.IsDelimitedBlock(last) && last is not ParenExpressionAst)
+            || arguments.Any(Layout.IsMultiLineString)
+        )
+        {
+            var docs = new List<Doc> { target, "(" };
+            for (var index = 0; index < arguments.Count; index++)
+            {
+                if (index > 0)
+                {
+                    docs.Add(", ");
+                }
+
+                docs.Add(Node.Print(arguments[index], context));
+            }
+
+            docs.Add(")");
+            return Doc.Concat(docs);
+        }
+
+        var contents = new List<Doc> { Doc.SoftLine };
+        for (var index = 0; index < arguments.Count; index++)
+        {
+            if (index > 0)
+            {
+                contents.Add(",");
+                contents.Add(Doc.Line);
+            }
+
+            contents.Add(Node.Print(arguments[index], context));
+        }
+
+        return Doc.Concat(target, Doc.Group("(", Doc.Indent(contents), Doc.SoftLine, ")"));
     }
 }
