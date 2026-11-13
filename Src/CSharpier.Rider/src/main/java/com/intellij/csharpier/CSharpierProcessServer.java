@@ -22,6 +22,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
     private int port;
     private Process process = null;
     private boolean processFailedToStart;
+    private volatile boolean disposed;
 
     public CSharpierProcessServer(String csharpierPath, String version, Project project) {
         this.csharpierPath = csharpierPath;
@@ -96,6 +97,9 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
             csharpierProcess
                 .onExit()
                 .thenAccept(p -> {
+                    if (this.disposed) {
+                        return;
+                    }
                     if (errorOutput.length() > 0) {
                         this.logger.error("Process failed to start with " + errorOutput);
                     } else {
@@ -197,6 +201,7 @@ public class CSharpierProcessServer implements ICSharpierProcess2, Disposable {
 
     @Override
     public void dispose() {
+        this.disposed = true;
         if (this.process != null) {
             this.process.destroy();
         }

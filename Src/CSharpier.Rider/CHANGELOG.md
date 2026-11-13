@@ -1,6 +1,15 @@
 <!-- Keep a Changelog guide -> https://keepachangelog.com -->
 
 # csharpier-rider Changelog
+## [10.1.0]
+- Fix UI freeze while typing caused by running `dotnet tool list` on the UI thread. The lookup for the installed version of CSharpier now runs in the background.
+- Run `dotnet tool list` once per `dotnet-tools.json` instead of once per directory.
+- Detect changes to `dotnet-tools.json` and switch to the new version of CSharpier without restarting Rider.
+- Warm up CSharpier when a file is opened instead of waiting for the first edit.
+- Warm up CSharpier for all supported file types instead of only `.cs` files.
+- Avoid starting duplicate CSharpier processes for the same version.
+- Fix "Process exited unexpectedly" error being logged when Rider is closed.
+
 ## [10.0.8]
 - Supporting 2026.3 and future versions by removing the until-build limit
 
