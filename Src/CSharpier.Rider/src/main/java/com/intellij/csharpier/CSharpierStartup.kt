@@ -35,8 +35,9 @@ class CSharpierStartup : StartupActivity, DumbAware {
                     return@adviseUntil false
                 }
 
-                CSharpierProcessProvider.getInstance(project)
+                val processProvider = CSharpierProcessProvider.getInstance(project)
                 DotNetProvider.getInstance(project).initialize();
+                processProvider.warmOpenFiles()
 
                 return@adviseUntil true
             }

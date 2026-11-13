@@ -56,15 +56,15 @@ public class FormattingService {
 
         var filePath = virtualFile.getPath();
 
-        if (!this.getCanFormat(filePath, project)) {
+        var csharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(
+            filePath
+        );
+        if (NullCSharpierProcess.Instance.equals(csharpierProcess)) {
             return;
         }
 
         var currentDocumentText = document.getText();
 
-        var csharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(
-            filePath
-        );
         this.logger.info(
                 "Formatting started for " +
                 filePath +
@@ -151,9 +151,6 @@ public class FormattingService {
     }
 
     public boolean getCanFormat(String filePath, Project project) {
-        var cSharpierProcess = CSharpierProcessProvider.getInstance(project).getProcessFor(
-            filePath
-        );
-        return !NullCSharpierProcess.Instance.equals(cSharpierProcess);
+        return CSharpierProcessProvider.getInstance(project).canFormatWithoutBlocking(filePath);
     }
 }
