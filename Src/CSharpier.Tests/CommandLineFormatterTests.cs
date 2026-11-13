@@ -1209,6 +1209,229 @@ class ClassName
         context.GetFileContent("Xml.xml").Should().Be(content.ToString());
     }
 
+    private const string UnformattedPowerShell = "if($a){Write-Host 1}";
+    private const string FormattedPowerShell = "if ($a) {\n    Write-Host 1\n}\n";
+
+    [Test]
+    public async Task Format_Formats_PowerShell_Files_In_Directory()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Script.ps1", UnformattedPowerShell);
+        context.WhenAFileExists("Sub/Module.psm1", UnformattedPowerShell);
+        context.WhenAFileExists("Sub/Manifest.psd1", "@{ModuleVersion='1.0'}");
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        result.OutputLines.First().Should().StartWith("Formatted 3 files in ");
+        context.GetFileContent("Script.ps1").Should().Be(FormattedPowerShell);
+        context.GetFileContent("Sub/Module.psm1").Should().Be(FormattedPowerShell);
+        context.GetFileContent("Sub/Manifest.psd1").Should().Be("@{ ModuleVersion = '1.0' }\n");
+    }
+
+    [Test]
+    public async Task Check_Reports_Unformatted_PowerShell_File()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Unformatted.ps1", UnformattedPowerShell);
+        context.WhenAFileExists("Formatted.ps1", FormattedPowerShell);
+
+        var result = await Format(context, check: true);
+
+        result.ExitCode.Should().Be(1);
+        result
+            .ErrorOutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .StartWith("Error ./Unformatted.ps1 - Was not formatted.");
+        result.ErrorOutputLines.Should().NotContain(o => o.Contains("Formatted.ps1 "));
+        context.GetFileContent("Unformatted.ps1").Should().Be(UnformattedPowerShell);
+    }
+
+    [Test]
+    public async Task Format_Writes_Failed_To_Compile_For_PowerShell()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Invalid.ps1", "function { broken (");
+
+        var result = await Format(context);
+
+        result
+            .ErrorOutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .Be("Error ./Invalid.ps1 - Was not formatted due to syntax errors.");
+        result.ExitCode.Should().Be(1);
+        context.GetFileContent("Invalid.ps1").Should().Be("function { broken (");
+    }
+
+    [Test]
+    public async Task Format_Formats_PowerShell_File_With_Unresolved_Module()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Script.ps1", "using module ModuleThatIsNotInstalled\n$x=1\n");
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        context
+            .GetFileContent("Script.ps1")
+            .Should()
+            .Be("using module ModuleThatIsNotInstalled\n\n$x = 1\n");
+    }
+
+    [Test]
+    public async Task Should_Format_StandardInput_As_PowerShell_When_Path_Is_PowerShell()
+    {
+        var context = new TestContext();
+        var result = await Format(
+            context,
+            standardInFileContents: UnformattedPowerShell,
+            directoryOrFilePaths: "Script.ps1"
+        );
+
+        result.OutputLines.Should().ContainSingle();
+        result.OutputLines.First().Should().Be(FormattedPowerShell);
+    }
+
+    [Test]
+    public async Task Format_Uses_CSharpierrc_Override_For_PowerShell()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            ".csharpierrc",
+            """
+            overrides:
+              - files: "*.ps1"
+                formatter: "powershell"
+                indentSize: 2
+            """
+        );
+        context.WhenAFileExists("Script.ps1", UnformattedPowerShell);
+
+        await Format(context);
+
+        context.GetFileContent("Script.ps1").Should().Be("if ($a) {\n  Write-Host 1\n}\n");
+    }
+
+    [Test]
+    public async Task Format_Uses_EditorConfig_Section_For_PowerShell()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists(
+            ".editorconfig",
+            """
+            [*.ps1]
+            indent_style = tab
+            """
+        );
+        context.WhenAFileExists("Script.ps1", UnformattedPowerShell);
+
+        await Format(context);
+
+        context.GetFileContent("Script.ps1").Should().Be("if ($a) {\n\tWrite-Host 1\n}\n");
+    }
+
+    [Test]
+    [Arguments("utf-8", true)]
+    [Arguments("utf-16", true)]
+    [Arguments("utf-16BE", true)]
+    [Arguments("utf-8", false)]
+    public async Task Format_Keeps_Encoding_And_Bom_Of_PowerShell_File(
+        string encodingName,
+        bool withBom
+    )
+    {
+        Encoding encoding = encodingName switch
+        {
+            "utf-16" => new UnicodeEncoding(bigEndian: false, byteOrderMark: withBom),
+            "utf-16BE" => new UnicodeEncoding(bigEndian: true, byteOrderMark: withBom),
+            _ => new UTF8Encoding(encoderShouldEmitUTF8Identifier: withBom),
+        };
+
+        var context = new TestContext();
+        var path = context.FileSystem.Path.Combine(context.RootPath, "Script.ps1");
+        context.FileSystem.AddFile(
+            path,
+            new MockFileData(
+                encoding.GetPreamble().Concat(encoding.GetBytes("if($a){Write-Host 'é'}")).ToArray()
+            )
+        );
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        context
+            .FileSystem.File.ReadAllBytes(path)
+            .Should()
+            .Equal(
+                encoding
+                    .GetPreamble()
+                    .Concat(encoding.GetBytes("if ($a) {\n    Write-Host 'é'\n}\n"))
+                    .ToArray()
+            );
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task Format_Does_Not_Touch_PowerShell_File_That_Is_Not_Valid_Utf8(bool check)
+    {
+        var bytes = Encoding
+            .Latin1.GetBytes("if($a){Write-Host '")
+            .Concat(new byte[] { 0xA9 })
+            .Concat(Encoding.Latin1.GetBytes(" Company'}"))
+            .ToArray();
+
+        var context = new TestContext();
+        var path = context.FileSystem.Path.Combine(context.RootPath, "Script.ps1");
+        context.FileSystem.AddFile(path, new MockFileData(bytes));
+
+        var result = await Format(context, check: check);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result
+            .OutputLines.First()
+            .Should()
+            .EndWith(
+                "Script.ps1 - Is not valid UTF-8 and has no byte order mark, so was not formatted."
+            );
+        context.FileSystem.File.ReadAllBytes(path).Should().Equal(bytes);
+    }
+
+    [Test]
+    public async Task Format_Keeps_Replacement_Character_In_Valid_Utf8_PowerShell_File()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Script.ps1", "if($a){Write-Host '\uFFFD'}");
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        context.GetFileContent("Script.ps1").Should().Be("if ($a) {\n    Write-Host '\uFFFD'\n}\n");
+    }
+
+    [Test]
+    public async Task Format_Still_Formats_CSharp_File_That_Is_Not_Valid_Utf8()
+    {
+        var bytes = Encoding
+            .Latin1.GetBytes("class ClassName { string x = \"")
+            .Concat(new byte[] { 0xA9 })
+            .Concat(Encoding.Latin1.GetBytes("\"; }"))
+            .ToArray();
+
+        var context = new TestContext();
+        var path = context.FileSystem.Path.Combine(context.RootPath, "File.cs");
+        context.FileSystem.AddFile(path, new MockFileData(bytes));
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        context.FileSystem.File.ReadAllBytes(path).Should().NotEqual(bytes);
+    }
+
     private static async Task<FormatResult> Format(
         TestContext context,
         bool skipWrite = false,
@@ -1359,6 +1582,7 @@ class ClassName
         }
 
         public Encoding InputEncoding => Encoding.UTF8;
+
         public ConsoleColor ForegroundColor { get; set; }
 
         public void ResetColor() { }

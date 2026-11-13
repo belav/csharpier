@@ -1,0 +1,5 @@
+class testAssembly {
+    [string]${config-file}
+    [string]${test-framework} = 'Pester' # trailing
+    hidden ${plain-name}
+}

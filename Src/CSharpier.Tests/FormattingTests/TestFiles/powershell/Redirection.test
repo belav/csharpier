@@ -1,0 +1,13 @@
+Get-Item a > out.txt
+Get-Item a >out.txt
+Get-Item a >> out.txt
+Get-Item a 2>&1
+Get-Item a 2>$null
+Get-Item a 2> $null
+Get-Item a *> all.txt
+Get-Item a 3>&1 2>&1 > out.txt
+Get-Item a > out.txt -Force
+$result = Get-Item a 2>&1
+$x > out.txt
+"text" >> $logFile
+& $exe $arguments 2>&1 | Out-String

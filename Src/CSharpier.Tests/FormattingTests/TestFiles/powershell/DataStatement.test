@@ -1,0 +1,3 @@
+data{'a'}
+Data Messages { ConvertFrom-StringData 'a = b' }
+data  Messages  -SupportedCommand  ConvertFrom-Json,Get-Item { 'a' }

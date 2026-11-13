@@ -1,0 +1,3 @@
+Invoke-Command -ScriptBlock { Get-Item $using:path }
+Invoke-Command -ScriptBlock { $using:a.b + $Using:c[0] }
+Start-Job { Write-Host $using:value } | Out-Null

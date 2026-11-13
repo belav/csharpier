@@ -1,0 +1,14 @@
+function Get-Foo {
+  <#
+  .SYNOPSIS
+    Gets foo
+  #>
+  param($a)
+
+  if ($a) {
+    <#
+      note
+    #>
+    Write-Host $a
+  }
+}

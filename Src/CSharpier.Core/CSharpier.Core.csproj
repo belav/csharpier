@@ -24,6 +24,12 @@
     </PackageReference>
     <PackageReference Include="System.IO.Abstractions" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <PackageReference Include="System.Management.Automation" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Compile Remove="PowerShell\**\*.cs" />
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
     <PackageReference Include="System.Text.Json" />
   </ItemGroup>

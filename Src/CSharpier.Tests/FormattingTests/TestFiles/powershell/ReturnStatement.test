@@ -1,0 +1,5 @@
+function a { Return }
+function b { return   $x }
+function c { return Get-Item | Select-Object -First 1 }
+function d { return @{ a = 1 } }
+function e { return ,$x }

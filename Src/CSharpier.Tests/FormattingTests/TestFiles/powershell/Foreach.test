@@ -1,0 +1,9 @@
+foreach ($x in $items) {
+    if ($x -gt 5) {
+        Write-Output "big"
+    } elseif ($x -gt 0) {
+        Write-Output "small"
+    } else {
+        Write-Output "neg"
+    }
+}

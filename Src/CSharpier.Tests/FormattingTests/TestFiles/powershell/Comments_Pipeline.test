@@ -1,0 +1,5 @@
+Get-ChildItem | # get the items
+    Where-Object { $_.Length -gt 5 } | # only the big ones
+    Sort-Object
+
+Get-ChildItem | Sort-Object

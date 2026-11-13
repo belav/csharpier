@@ -1,0 +1,35 @@
+function Get-Value {
+    param($a)
+
+    begin { }
+
+    process {
+        if ($a) {
+            return
+        } elseif ($b) {
+            throw "x"
+        } else {
+            exit 1
+        }
+    }
+
+    end { }
+}
+foreach ($a in $b) {
+    continue
+}
+while ($true) {
+    break
+}
+do { } while ($true)
+do { } until ($true)
+try { } catch { } finally { }
+switch ($x) {
+    default { }
+}
+class Foo {
+    hidden static [int]$x
+}
+enum Bar {
+    A
+}

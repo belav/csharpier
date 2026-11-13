@@ -1,0 +1,9 @@
+function Get-Foo {
+    param($a,$b)
+
+    if ($a) {
+        Write-Host $a
+    } else {
+        Write-Host $b
+    }
+}

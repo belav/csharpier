@@ -1,0 +1,20 @@
+function Get-Foo {
+    <#
+    .SYNOPSIS
+      Gets foo
+
+    .NOTES
+        deeper
+ not aligned
+    #>
+    param($a)
+
+    if ($a) {
+        <# two
+           lines #>
+        Write-Host $a
+    }
+
+    Write-Host 1 <# trailing
+  block #>
+}

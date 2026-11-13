@@ -9,47 +9,46 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CSharpier.Core.CSharp.SyntaxPrinter
+namespace CSharpier.Core.CSharp.SyntaxPrinter;
+
+internal static class Node
 {
-    internal static class Node
+    public static Doc Print(SyntaxNode? syntaxNode, CSharpPrintingContext context)
     {
-        public static Doc Print(SyntaxNode? syntaxNode, CSharpPrintingContext context)
+        if (syntaxNode == null)
         {
-            if (syntaxNode == null)
-            {
-                return Doc.Null;
-            }
+            return Doc.Null;
+        }
 
-            if (context.State.PrintingDepth > 200)
-            {
-                throw new InTooDeepException();
-            }
+        if (context.State.PrintingDepth > 200)
+        {
+            throw new InTooDeepException();
+        }
 
-            if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
-            {
-                var unformattedCode = CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
-                return syntaxNode is StatementSyntax statementSyntax
-                    ? Doc.Concat(ExtraNewLines.Print(statementSyntax), unformattedCode)
-                    : unformattedCode;
-            }
+        if (CSharpierIgnore.IsNodeIgnored(syntaxNode))
+        {
+            var unformattedCode = CSharpierIgnore.PrintWithoutFormatting(syntaxNode, context).Trim();
+            return syntaxNode is StatementSyntax statementSyntax
+                ? Doc.Concat(ExtraNewLines.Print(statementSyntax), unformattedCode)
+                : unformattedCode;
+        }
 
-            context.State.PrintingDepth++;
-            try
+        context.State.PrintingDepth++;
+        try
+        {
+            switch (syntaxNode)
             {
-                switch (syntaxNode)
-                {
-                    {{- for nodeType in NodeTypes }}
-                    case {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }}:
-                        return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }}, context);
-                    {{- end }}
-                    default:
-                        return UnhandledNode.Print(syntaxNode, context);
-                }
+                {{- for nodeType in NodeTypes }}
+                case {{ nodeType.SyntaxNodeName }} {{ nodeType.VariableName }}:
+                    return {{ nodeType.PrinterName }}.Print({{ nodeType.VariableName }}, context);
+                {{- end }}
+                default:
+                    return UnhandledNode.Print(syntaxNode, context);
             }
-            finally
-            {
-                context.State.PrintingDepth--;
-            }
+        }
+        finally
+        {
+            context.State.PrintingDepth--;
         }
     }
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/clike/clike";
+import "codemirror/mode/xml/xml";
+import "codemirror/mode/powershell/powershell";
 import { SyntaxTree } from "./SyntaxTree";
 import { DocTree } from "./DocTree";
 import { Header } from "./Header";

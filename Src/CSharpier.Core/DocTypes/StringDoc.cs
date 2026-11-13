@@ -15,8 +15,10 @@ internal sealed class StringDoc(string value, bool isDirective = false) : Doc
     public bool IsDirective { get; } = isDirective;
     public int PrintedWidth { get; } = value.GetPrintedWidth();
 
-    public static StringDoc Create(string value) =>
-        value == " " ? SpaceStringDoc : new StringDoc(value);
+    public static StringDoc Create(string value)
+    {
+        return value == " " ? SpaceStringDoc : new StringDoc(value);
+    }
 
     public static StringDoc Create(SyntaxToken token)
     {

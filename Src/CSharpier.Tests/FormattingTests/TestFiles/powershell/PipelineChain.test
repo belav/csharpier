@@ -1,0 +1,7 @@
+Get-Item a && Get-Item b
+Get-Item a&&Get-Item b||Write-Error "failed"
+Get-Item a | Out-Null && Get-Item b | Out-Null
+Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" && Get-ChildItem -Path $otherPath -Recurse -Filter "*.psm1" || Write-Error "failed"
+Get-Item a &&
+  Get-Item b
+Get-Item a && Get-Item b &

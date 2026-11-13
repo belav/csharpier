@@ -1,0 +1,33 @@
+$a = 1
+$a = 1
+$a = 1
+$a += 1
+$a -= 1
+$a *= 2
+$a /= 2
+$a %= 2
+$a ??= "default"
+$a, $b = 1, 2
+$a, $b = $b, $a
+$script:value = 5
+$env:PATH = "$env:PATH;C:\tools"
+$a.b = 1
+$a[0] = 1
+$a.b[0].c = 1
+[int]$a = 1
+[int]$a = 1
+[string[]]$names = 'a', 'b'
+$a = $b = $c = 0
+$a = Get-ChildItem | Sort-Object
+$a = if ($b) {
+    1
+} else {
+    2
+}
+$a = foreach ($x in $y) {
+    $x
+}
+$a = @{
+    b = 1
+}
+$a = 5

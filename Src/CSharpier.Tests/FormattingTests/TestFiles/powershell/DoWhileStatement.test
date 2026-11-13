@@ -1,0 +1,17 @@
+do{$x++}while($x -lt 10)
+Do
+{
+    $x++
+}
+While ($x -lt 10)
+do { } while ($true)
+:again do { $x++ } while ($x -lt 10)
+do {
+    $x++
+} # after brace
+while ($x -lt 10)
+do {
+    $x++
+}
+# before while
+while ($x -lt 10)

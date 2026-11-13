@@ -1,0 +1,17 @@
+if ($true) {
+    # nothing to do
+}
+
+function Get-Nothing {
+    # not implemented
+}
+
+while ($false) {
+    <# never #>
+}
+
+foreach ($x in $y) {
+    # one
+
+    # two
+}

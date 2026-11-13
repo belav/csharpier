@@ -1,0 +1,22 @@
+if (
+    # explains the condition
+    $a -and $b
+) {
+    1
+}
+# explains the else if
+elseif ($someVeryLongVariableName -eq $anotherVeryLongVariableName -and $yetAnotherLongVariableName -ne $theLastOne) {
+    2
+}
+switch ($version) {
+    14 # SQL Server 2017
+    {
+        'a'
+    }
+    15 <# SQL Server 2019 #> { 'b' }
+    # explains the default
+    default { 'c' }
+}
+while ($true) {
+    break # leave
+}

@@ -1,0 +1,9 @@
+try {
+    1
+} catch [System.IO.IOException], <# c #> [System.Exception] { 2 }
+try {
+    1
+} catch [System.IO.IOException], # c
+  [System.Exception] { 2 } finally {
+    3
+}

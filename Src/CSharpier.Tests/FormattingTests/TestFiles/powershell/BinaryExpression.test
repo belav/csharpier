@@ -1,0 +1,55 @@
+$x=1+2*3
+$x = 1 + 2 - 3 + 4
+$x = $a -AND $b -Or $c
+$x = $a -eq 1 -and $b -ne 2
+$x = $someVeryLongVariableName -eq $anotherVeryLongVariableName -and $yetAnotherLongVariableName -ne $theLastVeryLongVariableName -or $short
+$x = $someVeryLongVariableName + $anotherVeryLongVariableName + $yetAnotherLongVariableName + $theLastVeryLongVariableName
+if ($someVeryLongVariableName -eq $anotherVeryLongVariableName -and $yetAnotherLongVariableName -ne $theLastVeryLongVariableName) {
+    $x
+}
+$x = ($someVeryLongVariableName -eq $anotherVeryLongVariableName) -and ($yetAnotherLongVariableName -ne $theLastVeryLongVariableName)
+$x = $a -and
+    $b
+$x = $a `
+    -and $b
+$x = $a -and # first
+    $b -and
+    # second
+    $c
+$r = 1 .. 10
+$r = 1..10
+$r = -1..-5
+$r = $a..$b
+$r = $a.Count..0
+$r = 0..($a.Count - 1)
+$s = $parts -join ','
+$s = $text -split "`n"
+$s = "{0} {1}" -f $a, $b
+$s = "a very long format string that goes on and on {0} {1} {2}" -f $someVeryLongVariableName, $anotherVeryLongVariableName, $third
+$s = $text -replace 'a','b' -replace 'c', 'd'
+$normalized = $sb.ToString() `
+    -replace 'Pester v\S+', 'Pester v<version>' `
+    -replace ([regex]::Escape($folder + [IO.Path]::DirectorySeparatorChar)), '' `
+    -replace '\d+(.\d+)?m?s', '<time>'
+$m = $x -match '^a' -and ($y -notlike 'b*' -or $z -in 1,2,3)
+$a -is [string]
+$b -isnot [int]
+$a -as [int]
+$a -band 0x0F -bor 0xF0
+$a -shl 2
+$a ?? $b
+$a ?? $b ?? "default"
+$a -ceq $b
+$a -iLike $b
+$text = @"
+here $a
+"@ -replace 'a','b'
+$message = ("a very long format string that goes on and on {0} {1} {2}" -f (Get-ChangeLogMessage $commit.Subject), $commit.AuthorGitHubLogin)
+$all = @($first) + @($second)
+$all = @(
+    $first
+    $second
+) + $third
+$joined = (Get-Thing -Name "a" | ForEach-Object { $_.Name }) -join ', '
+$count = (Get-ChildItem -Path $somePath -Recurse -Filter "*.ps1" | Where-Object { $_.Length -gt 5 }).Count + $offset
+$isMatch = ($someVeryLongVariableName -replace '^([^.]+)(.+)?.Tests.ps1', '$1') -notin $TestsRunGroups['disabled']

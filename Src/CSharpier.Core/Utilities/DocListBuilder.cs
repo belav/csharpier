@@ -39,7 +39,10 @@ internal ref struct DocListBuilder
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Clear() => this.Length = 0;
+    public void Clear()
+    {
+        this.Length = 0;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Add(Doc item)

@@ -31,7 +31,8 @@
     "activationEvents": [
         "onLanguage:csharp",
         "onLanguage:xml",
-        "onLanguage:msbuild"
+        "onLanguage:msbuild",
+        "onLanguage:powershell"
     ],
     "icon": "logo.png",
     "main": "./build/Extension.js",

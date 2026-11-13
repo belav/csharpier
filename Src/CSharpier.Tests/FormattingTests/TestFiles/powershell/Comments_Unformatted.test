@@ -1,0 +1,20 @@
+#requires -Version 5.1
+  # indented comment
+Write-Host "one"   # trailing comment
+if ($true) { # comment after brace
+        # deeply indented comment
+    Write-Host "two"
+
+
+    # comment after blank lines
+}
+function Get-Value {
+            <#
+            .SYNOPSIS
+                Gets a value
+            #>
+    Write-Host "three"
+      <# dangling
+           block #>
+}
+Write-Host "four"; # after semicolon
