@@ -6,13 +6,9 @@ namespace CSharpier.Core.PowerShell;
 
 internal static class PowerShellPrinter
 {
-    internal static Doc Print(
-        ScriptBlockAst scriptBlock,
-        IReadOnlyList<IScriptExtent> comments,
-        string source
-    )
+    internal static Doc Print(ScriptBlockAst scriptBlock, Token[] tokens, string source)
     {
-        var context = new PrintContext(scriptBlock, comments, source);
+        var context = new PrintContext(scriptBlock, tokens, source);
         return Node.Print(scriptBlock, context);
     }
 }

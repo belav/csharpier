@@ -1,0 +1,20 @@
+<#
+.SYNOPSIS
+Script level help.
+#>
+
+
+function Get-Foo { 1 }
+
+# plain
+
+
+
+function Get-Bar { 2 }
+
+# .SYNOPSIS
+# line help
+
+
+
+function Get-Baz { 3 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Management.Automation.Language;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -12,7 +13,12 @@ internal static class AstSyntaxWriter
 {
     private const int MaxDepth = 200;
 
-    private static readonly JsonSerializerOptions IndentedJson = new() { WriteIndented = true };
+    // Each level of the tree can add an object, an array, and a tuple array to the JSON.
+    private static readonly JsonSerializerOptions IndentedJson = new()
+    {
+        WriteIndented = true,
+        MaxDepth = MaxDepth * 4,
+    };
 
     internal static string Write(Ast ast)
     {
@@ -72,6 +78,14 @@ internal static class AstSyntaxWriter
                 return boolean;
             case Enum enumValue:
                 return enumValue.ToString();
+            case ITuple tuple:
+                var tupleItems = new JsonArray();
+                for (var index = 0; index < tuple.Length; index++)
+                {
+                    tupleItems.Add(ToValue(tuple[index], depth));
+                }
+
+                return tupleItems;
             // A single string is IEnumerable<char>, so it is handled above before we get here.
             case IEnumerable enumerable:
                 var array = new JsonArray();

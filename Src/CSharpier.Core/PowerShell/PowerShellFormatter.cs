@@ -1,4 +1,5 @@
 using System.Management.Automation.Language;
+using CSharpier.Core.DocTypes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 
@@ -11,58 +12,61 @@ internal static class PowerShellFormatter
         PrinterOptions printerOptions
     )
     {
+        return LargeStack.Run(code.Length, () => Format(code, printerOptions));
+    }
+
+    private static CodeFormatterResult Format(string code, PrinterOptions printerOptions)
+    {
         var ast = Parser.ParseInput(code, out var tokens, out var errors);
 
         if (errors.Any(PowerShellParseErrors.IsDscUnavailable))
         {
-            return Task.FromResult(
-                new CodeFormatterResult
-                {
-                    Code = code,
-                    WarningMessage =
-                        "Contains a DSC configuration, which cannot be parsed on this machine because DSC is not installed, so was not formatted.",
-                    AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
-                }
-            );
+            return new CodeFormatterResult
+            {
+                Code = code,
+                WarningMessage =
+                    "Contains a DSC configuration, which cannot be parsed on this machine because DSC is not installed, so was not formatted.",
+                AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
+            };
         }
 
         errors = errors.Where(PowerShellParseErrors.IsBlocking).ToArray();
         if (errors.Length != 0)
         {
             var sourceText = SourceText.From(code);
-            return Task.FromResult(
-                new CodeFormatterResult
-                {
-                    Code = code,
-                    ErrorDiagnostics = errors
-                        .Select(error => CreateDiagnosticFromParseError(sourceText, error))
-                        .ToList(),
-                    AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
-                }
-            );
+            return new CodeFormatterResult
+            {
+                Code = code,
+                ErrorDiagnostics = errors
+                    .Select(error => CreateDiagnosticFromParseError(sourceText, error))
+                    .ToList(),
+                AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
+            };
         }
 
         var lineEnding = PrinterOptions.GetLineEnding(code, printerOptions);
 
-        var comments = new List<IScriptExtent>();
-        foreach (var token in tokens)
+        Doc doc;
+        try
         {
-            if (token.Kind == TokenKind.Comment)
+            doc = PowerShellPrinter.Print(ast, tokens, code);
+        }
+        catch (InTooDeepException)
+        {
+            return new CodeFormatterResult
             {
-                comments.Add(token.Extent);
-            }
+                Code = code,
+                FailureMessage = "We can't handle this deep of recursion yet.",
+            };
         }
 
-        var doc = PowerShellPrinter.Print(ast, comments, code);
         var formatted = DocPrinter.DocPrinter.Print(doc, printerOptions, lineEnding);
 
-        return Task.FromResult(
-            new CodeFormatterResult
-            {
-                Code = formatted,
-                AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
-            }
-        );
+        return new CodeFormatterResult
+        {
+            Code = formatted,
+            AST = printerOptions.IncludeAST ? AstSyntaxWriter.Write(ast) : string.Empty,
+        };
     }
 
     private static Diagnostic CreateDiagnosticFromParseError(

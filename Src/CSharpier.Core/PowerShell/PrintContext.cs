@@ -1,4 +1,5 @@
 using System.Management.Automation.Language;
+using System.Text.RegularExpressions;
 using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.PowerShell;
@@ -9,10 +10,28 @@ internal sealed class PrintContext
     private readonly bool[] printed;
     private readonly AttachedComments attachedComments;
     private readonly string source;
+    private readonly Token[] tokens;
 
-    internal PrintContext(ScriptBlockAst root, IReadOnlyList<IScriptExtent> comments, string source)
+    private static readonly Regex HelpKeyword = new(
+        @"^[\s#<]*\.(SYNOPSIS|DESCRIPTION|PARAMETER|EXAMPLE|INPUTS|OUTPUTS|NOTES|LINK|COMPONENT|ROLE|FUNCTIONALITY|FORWARDHELPTARGETNAME|FORWARDHELPCATEGORY|REMOTEHELPRUNSPACE|EXTERNALHELP)\b",
+        RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.CultureInvariant
+    );
+
+    internal int PrintingDepth { get; set; }
+
+    internal PrintContext(ScriptBlockAst root, Token[] tokens, string source)
     {
+        var comments = new List<IScriptExtent>();
+        foreach (var token in tokens)
+        {
+            if (token.Kind == TokenKind.Comment)
+            {
+                comments.Add(token.Extent);
+            }
+        }
+
         this.source = source;
+        this.tokens = tokens;
         this.comments = comments;
         this.printed = new bool[comments.Count];
         this.attachedComments = CommentAttacher.Attach(root, comments);
@@ -21,6 +40,56 @@ internal sealed class PrintContext
     internal string GetText(int startOffset, int endOffset)
     {
         return this.source[startOffset..endOffset];
+    }
+
+    // The tokens that start in the range, without comments, new lines, and line continuations.
+    // Printers that need a keyword, flag, name, or operator the tree does not have read it from
+    // here, because the text between two nodes can also hold comments.
+    internal List<Token> GetTokens(int startOffset, int endOffset)
+    {
+        var low = 0;
+        var high = this.tokens.Length;
+        while (low < high)
+        {
+            var middle = (low + high) / 2;
+            if (this.tokens[middle].Extent.StartOffset < startOffset)
+            {
+                low = middle + 1;
+            }
+            else
+            {
+                high = middle;
+            }
+        }
+
+        var result = new List<Token>();
+        for (
+            var index = low;
+            index < this.tokens.Length && this.tokens[index].Extent.StartOffset < endOffset;
+            index++
+        )
+        {
+            var token = this.tokens[index];
+            if (
+                token.Kind
+                is not (
+                    TokenKind.Comment
+                    or TokenKind.NewLine
+                    or TokenKind.LineContinuation
+                    or TokenKind.EndOfInput
+                )
+            )
+            {
+                result.Add(token);
+            }
+        }
+
+        return result;
+    }
+
+    internal string GetTokenText(int startOffset, int endOffset)
+    {
+        return string.Concat(this.GetTokens(startOffset, endOffset).Select(o => o.Text));
     }
 
     internal bool HasCommentIn(IScriptExtent extent)
@@ -195,10 +264,28 @@ internal sealed class PrintContext
                 {
                     docs.Add(Doc.HardLine);
                 }
+
+                if (
+                    index == leading.Count - 1
+                    && nextStartLine - comment.EndLineNumber > 2
+                    && node is FunctionDefinitionAst
+                    && leading.Any(IsHelpComment)
+                )
+                {
+                    docs.Add(Doc.HardLine);
+                }
             }
         }
 
         return docs.Count == 0 ? Doc.Null : Doc.Concat(docs);
+    }
+
+    // PowerShell reads a help comment as the help of the function that follows it unless more than
+    // one blank line separates them. With two or more blank lines it is the help of the script, so
+    // two of them are kept.
+    private static bool IsHelpComment(IScriptExtent comment)
+    {
+        return HelpKeyword.IsMatch(comment.Text);
     }
 
     // Prints the trailing comments of a node. A line comment forces a line break after it.

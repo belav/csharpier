@@ -1374,6 +1374,64 @@ class ClassName
             );
     }
 
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task Format_Does_Not_Touch_PowerShell_File_That_Is_Not_Valid_Utf8(bool check)
+    {
+        var bytes = Encoding
+            .Latin1.GetBytes("if($a){Write-Host '")
+            .Concat(new byte[] { 0xA9 })
+            .Concat(Encoding.Latin1.GetBytes(" Company'}"))
+            .ToArray();
+
+        var context = new TestContext();
+        var path = context.FileSystem.Path.Combine(context.RootPath, "Script.ps1");
+        context.FileSystem.AddFile(path, new MockFileData(bytes));
+
+        var result = await Format(context, check: check);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        result
+            .OutputLines.First()
+            .Should()
+            .EndWith(
+                "Script.ps1 - Is not valid UTF-8 and has no byte order mark, so was not formatted."
+            );
+        context.FileSystem.File.ReadAllBytes(path).Should().Equal(bytes);
+    }
+
+    [Test]
+    public async Task Format_Keeps_Replacement_Character_In_Valid_Utf8_PowerShell_File()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Script.ps1", "if($a){Write-Host '\uFFFD'}");
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        context.GetFileContent("Script.ps1").Should().Be("if ($a) {\n    Write-Host '\uFFFD'\n}\n");
+    }
+
+    [Test]
+    public async Task Format_Still_Formats_CSharp_File_That_Is_Not_Valid_Utf8()
+    {
+        var bytes = Encoding
+            .Latin1.GetBytes("class ClassName { string x = \"")
+            .Concat(new byte[] { 0xA9 })
+            .Concat(Encoding.Latin1.GetBytes("\"; }"))
+            .ToArray();
+
+        var context = new TestContext();
+        var path = context.FileSystem.Path.Combine(context.RootPath, "File.cs");
+        context.FileSystem.AddFile(path, new MockFileData(bytes));
+
+        var result = await Format(context);
+
+        result.ErrorOutputLines.Should().BeEmpty();
+        context.FileSystem.File.ReadAllBytes(path).Should().NotEqual(bytes);
+    }
+
     private static async Task<FormatResult> Format(
         TestContext context,
         bool skipWrite = false,

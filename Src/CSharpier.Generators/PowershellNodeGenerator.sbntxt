@@ -7,13 +7,26 @@ internal static class Node
 {
     internal static Doc Print(Ast node, PrintContext context)
     {
-        var doc = PrintNode(node, context);
-        if (context.HasUnprintedCommentIn(node.Extent))
+        if (context.PrintingDepth > 300)
         {
-            doc = Verbatim.Print(node.Extent, context);
+            throw new InTooDeepException();
         }
 
-        return context.WrapWithComments(node, doc);
+        context.PrintingDepth++;
+        try
+        {
+            var doc = PrintNode(node, context);
+            if (context.HasUnprintedCommentIn(node.Extent))
+            {
+                doc = Verbatim.PrintNode(node, context);
+            }
+
+            return context.WrapWithComments(node, doc);
+        }
+        finally
+        {
+            context.PrintingDepth--;
+        }
     }
 
     private static Doc PrintNode(Ast node, PrintContext context)

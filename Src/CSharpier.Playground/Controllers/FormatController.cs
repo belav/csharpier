@@ -95,7 +95,10 @@ public class FormatController : ControllerBase
 
     private FormatError ConvertError(Diagnostic diagnostic)
     {
-        var lineSpan = diagnostic.Location.SourceTree!.GetLineSpan(diagnostic.Location.SourceSpan);
-        return new FormatError { LineSpan = lineSpan, Description = diagnostic.ToString() };
+        return new FormatError
+        {
+            LineSpan = diagnostic.Location.GetLineSpan(),
+            Description = diagnostic.ToString(),
+        };
     }
 }

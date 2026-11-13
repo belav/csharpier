@@ -13,12 +13,15 @@ internal static class UnaryExpression
         {
             return Doc.Concat(
                 child,
-                context.GetText(node.Child.Extent.EndOffset, node.Extent.EndOffset).Trim()
+                context.GetTokenText(node.Child.Extent.EndOffset, node.Extent.EndOffset)
             );
         }
 
-        var source = context.GetText(node.Extent.StartOffset, node.Child.Extent.StartOffset);
-        var unaryOperator = source.TrimEnd();
+        var operatorTokens = context.GetTokens(
+            node.Extent.StartOffset,
+            node.Child.Extent.StartOffset
+        );
+        var unaryOperator = string.Concat(operatorTokens.Select(o => o.Text));
         if (unaryOperator.Length > 1 && char.IsLetter(unaryOperator[1]))
         {
             return Doc.Concat(unaryOperator.ToLowerInvariant(), " ", child);
@@ -26,7 +29,8 @@ internal static class UnaryExpression
 
         var keepSpace =
             node.TokenKind is TokenKind.Minus or TokenKind.Plus
-            && source.Length != unaryOperator.Length;
+            && operatorTokens.Count > 0
+            && operatorTokens[^1].Extent.EndOffset != node.Child.Extent.StartOffset;
 
         return Doc.Concat(unaryOperator, keepSpace ? " " : Doc.Null, child);
     }

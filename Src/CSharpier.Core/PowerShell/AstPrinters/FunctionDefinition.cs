@@ -17,7 +17,18 @@ internal static class FunctionDefinition
             : node.IsWorkflow ? "workflow "
             : "function ";
 
-        return Doc.Concat(keyword, node.Name, PrintParametersAndBody(node, null, context));
+        return Doc.Concat(
+            keyword,
+            GetName(node, context),
+            PrintParametersAndBody(node, null, context)
+        );
+    }
+
+    // The tree has the name with its escapes resolved, which is not always valid source text.
+    private static string GetName(FunctionDefinitionAst node, PrintContext context)
+    {
+        var tokens = context.GetTokens(node.Extent.StartOffset, node.Body.Extent.StartOffset);
+        return tokens.Count > 1 ? tokens[1].Text : node.Name;
     }
 
     // Prints everything after the name. The parentheses are only there when the source has them,
@@ -30,9 +41,7 @@ internal static class FunctionDefinition
     {
         var docs = new List<Doc>();
 
-        var header = context
-            .GetText(node.Extent.StartOffset, node.Body.Extent.StartOffset)
-            .TrimEnd();
+        var header = context.GetTokens(node.Extent.StartOffset, node.Body.Extent.StartOffset);
         if (node.Parameters is { Count: > 0 })
         {
             docs.Add(ArgumentList.Print("(", node.Parameters, ")", context));
@@ -40,7 +49,7 @@ internal static class FunctionDefinition
         else if (
             node.Parameters is not null
             || node.Parent is FunctionMemberAst
-            || header.EndsWith(')')
+            || header is [.., { Kind: TokenKind.RParen }]
         )
         {
             docs.Add("()");

@@ -7,12 +7,9 @@ internal static class Command
 {
     public static Doc Print(CommandAst node, PrintContext context)
     {
-        foreach (var element in node.CommandElements)
+        if (IsStopParsing(node))
         {
-            if (element is StringConstantExpressionAst && element.Extent.Text == "--%")
-            {
-                return Verbatim.Print(node.Extent, context);
-            }
+            return Verbatim.Print(node.Extent, context);
         }
 
         var items = new List<Ast>(node.CommandElements.Count + node.Redirections.Count);
@@ -63,6 +60,26 @@ internal static class Command
         }
 
         return Doc.Concat(docs);
+    }
+
+    // Everything after --% up to a pipe or the end of the line is one argument, including the
+    // spaces in front of the pipe.
+    internal static bool IsStopParsing(Ast node)
+    {
+        if (node is not CommandAst command)
+        {
+            return false;
+        }
+
+        foreach (var element in command.CommandElements)
+        {
+            if (element is StringConstantExpressionAst && element.Extent.Text == "--%")
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // A block comment after an element on the same line stays there. A line comment cannot be

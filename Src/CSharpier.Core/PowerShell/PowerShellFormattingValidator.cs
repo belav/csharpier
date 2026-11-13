@@ -19,31 +19,33 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
 
     public Task<FormattingValidatorResult> ValidateAsync(CancellationToken cancellationToken)
     {
-        try
-        {
-            var failureMessage = this.Validate(cancellationToken);
-            return Task.FromResult(
-                new FormattingValidatorResult
+        return LargeStack.Run(
+            Math.Max(originalCode.Length, formattedCode.Length),
+            () =>
+            {
+                try
                 {
-                    Failed = failureMessage is not null,
-                    FailureMessage = failureMessage,
+                    var failureMessage = this.Validate(cancellationToken);
+                    return new FormattingValidatorResult
+                    {
+                        Failed = failureMessage is not null,
+                        FailureMessage = failureMessage,
+                    };
                 }
-            );
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            return Task.FromResult(
-                new FormattingValidatorResult
+                catch (OperationCanceledException)
                 {
-                    Failed = true,
-                    FailureMessage = "Failed with ex " + ex,
+                    throw;
                 }
-            );
-        }
+                catch (Exception ex)
+                {
+                    return new FormattingValidatorResult
+                    {
+                        Failed = true,
+                        FailureMessage = "Failed with ex " + ex,
+                    };
+                }
+            }
+        );
     }
 
     private string? Validate(CancellationToken cancellationToken)
@@ -192,7 +194,14 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
             case string originalString:
                 return
                     formattedValue is string formattedString
-                    && NormalizeLineEndings(originalString) == NormalizeLineEndings(formattedString)
+                    && (
+                        NormalizeLineEndings(originalString)
+                            == NormalizeLineEndings(formattedString)
+                        || (
+                            IsStopParsingArgument(originalOwner)
+                            && originalString.TrimEnd() == formattedString
+                        )
+                    )
                     ? null
                     : Describe(
                         originalOwner,
@@ -281,6 +290,15 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
                         $"{propertyName} changed from \"{originalValue}\" to \"{formattedValue}\""
                     );
         }
+    }
+
+    // The argument after --% runs to the end of the line, and trailing whitespace is not kept.
+    private static bool IsStopParsingArgument(Ast node)
+    {
+        return node.Parent is CommandAst command
+            && command.CommandElements.Count > 1
+            && command.CommandElements[^1] == node
+            && command.CommandElements[^2].Extent.Text == "--%";
     }
 
     private static PropertyInfo[] GetProperties(Type type)

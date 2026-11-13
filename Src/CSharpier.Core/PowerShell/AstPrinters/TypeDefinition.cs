@@ -5,6 +5,19 @@ namespace CSharpier.Core.PowerShell.AstPrinters;
 
 internal static class TypeDefinition
 {
+    // The name is the token after the class, enum, or interface keyword.
+    private static string GetName(TypeDefinitionAst node, PrintContext context)
+    {
+        var startOffset = node.Extent.StartOffset;
+        foreach (var attribute in node.Attributes)
+        {
+            startOffset = Math.Max(startOffset, attribute.Extent.EndOffset);
+        }
+
+        var tokens = context.GetTokens(startOffset, node.Extent.EndOffset);
+        return tokens.Count > 1 ? tokens[1].Text : node.Name;
+    }
+
     internal static Doc Print(TypeDefinitionAst node, PrintContext context)
     {
         var docs = new List<Doc>();
@@ -21,7 +34,7 @@ internal static class TypeDefinition
             : node.IsInterface ? "interface "
             : "class "
         );
-        docs.Add(node.Name);
+        docs.Add(GetName(node, context));
 
         if (node.BaseTypes.Count > 0)
         {

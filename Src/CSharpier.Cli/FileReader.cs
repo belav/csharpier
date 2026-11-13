@@ -33,13 +33,40 @@ internal static class FileReader
 
             var fileContents = await streamReader.ReadToEndAsync(cancellationToken);
 
-            return new FileReaderResult(streamReader.CurrentEncoding, fileContents);
+            var hasInvalidBytes = false;
+            if (streamReader.CurrentEncoding is UTF8Encoding && fileContents.Contains('�'))
+            {
+                hasInvalidBytes = !IsValidUtf8(
+                    await fileSystem.File.ReadAllBytesAsync(filePath, cancellationToken)
+                );
+            }
+
+            return new FileReaderResult(streamReader.CurrentEncoding, fileContents)
+            {
+                HasInvalidBytes = hasInvalidBytes,
+            };
         }
         finally
         {
             Semaphore.Release();
         }
     }
+
+    private static bool IsValidUtf8(byte[] bytes)
+    {
+        try
+        {
+            new UTF8Encoding(false, throwOnInvalidBytes: true).GetCharCount(bytes);
+            return true;
+        }
+        catch (DecoderFallbackException)
+        {
+            return false;
+        }
+    }
 }
 
-internal record FileReaderResult(Encoding Encoding, string FileContents);
+internal record FileReaderResult(Encoding Encoding, string FileContents)
+{
+    public bool HasInvalidBytes { get; init; }
+}
