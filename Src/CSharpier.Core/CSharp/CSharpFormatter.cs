@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using CSharpier.Core.CSharp.SyntaxPrinter;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -209,16 +210,13 @@ public static class CSharpFormatter
             var stringBuilder = new StringBuilder();
             SyntaxNodeJsonWriter.WriteCompilationUnitSyntax(stringBuilder, rootNode);
             // SyntaxNodeJsonWriter doesn't write things indented, so this cleans it up for us
-            return JsonSerializer.Serialize(
-                JsonSerializer.Deserialize<object>(stringBuilder.ToString()),
-                IndentedJson
-            );
+            return JsonNode.Parse(stringBuilder.ToString())?.ToJsonString(IndentedJson) ?? "null";
         }
         // in some cases with new unsupported c# language features
         // SyntaxNodeJsonWriter will not produce valid json
         catch (JsonException ex)
         {
-            return JsonSerializer.Serialize(new { exception = ex.ToString() }, IndentedJson);
+            return new JsonObject { ["exception"] = ex.ToString() }.ToJsonString(IndentedJson);
         }
     }
 }

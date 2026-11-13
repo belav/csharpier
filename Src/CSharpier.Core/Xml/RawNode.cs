@@ -15,7 +15,7 @@ internal class RawNode
     public RawNode? NextNode { get; set; }
     public string Name { get; set; } = string.Empty;
 
-    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter<XmlNodeType>))]
     public required XmlNodeType NodeType { get; set; }
     public bool IsEmpty { get; set; }
     public RawAttribute[] Attributes { get; set; } = [];

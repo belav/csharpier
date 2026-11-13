@@ -6,17 +6,17 @@ namespace CSharpier.Cli.Options;
 
 internal class ConfigurationFileOptions
 {
-    public int? PrintWidth { get; init; }
-    public int? IndentSize { get; init; }
-    public bool UseTabs { get; init; }
+    public int? PrintWidth { get; set; }
+    public int? IndentSize { get; set; }
+    public bool UseTabs { get; set; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
-    public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; init; }
+    public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; set; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
-    public EndOfLine EndOfLine { get; init; }
+    public EndOfLine EndOfLine { get; set; }
 
-    public Override[] Overrides { get; init; } = [];
+    public Override[] Overrides { get; set; } = [];
 
     public PrinterOptions? ConvertToPrinterOptions(string filePath)
     {
@@ -108,19 +108,19 @@ internal class Override
 {
     private GlobMatcher? matcher;
 
-    public int? PrintWidth { get; init; }
-    public int? IndentSize { get; init; }
-    public bool UseTabs { get; init; }
+    public int? PrintWidth { get; set; }
+    public int? IndentSize { get; set; }
+    public bool UseTabs { get; set; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<XmlWhitespaceSensitivity>))]
-    public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; init; }
+    public XmlWhitespaceSensitivity? XmlWhitespaceSensitivity { get; set; }
 
     [JsonConverter(typeof(CaseInsensitiveEnumConverter<EndOfLine>))]
-    public EndOfLine EndOfLine { get; init; }
+    public EndOfLine EndOfLine { get; set; }
 
-    public string Files { get; init; } = string.Empty;
+    public string Files { get; set; } = string.Empty;
 
-    public string Formatter { get; init; } = string.Empty;
+    public string Formatter { get; set; } = string.Empty;
 
     public void Init(string directory)
     {
