@@ -11,6 +11,17 @@ jobs:
       - uses: actions/setup-dotnet@v3
       - run: >
           dotnet test --solution CSharpier.slnx
+  test_native:
+    runs-on: ubuntu-latest
+    name: Test NativeAOT
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v3
+      - run: |
+          dotnet publish Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -f net10.0 -r linux-x64 -p:TreatWarningsAsErrors=true -o ./native
+          dotnet build Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -f net10.0
+          pwsh ./Scripts/CompareManagedAndNative.ps1 -ManagedDll ./Src/CSharpier.Cli/bin/Release/net10.0/CSharpier.dll -NativeExecutable ./native/CSharpier
+          CSHARPIER_TEST_EXECUTABLE="$PWD/native/CSharpier" dotnet test --project Src/CSharpierProcess.Tests/CSharpierProcess.Tests.csproj
   no_warnings:
     runs-on: ubuntu-latest
     name: No Warnings

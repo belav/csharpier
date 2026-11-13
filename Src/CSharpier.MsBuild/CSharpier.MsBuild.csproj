@@ -23,6 +23,11 @@
     <Content Include="build/*" PackagePath="build/" />
     <Content Include="build/*" PackagePath="buildMultitargeting/" />
     <Content Include="build/*" PackagePath="buildTransitive/" />
-    <Content Include="$(CSharpierOutputDir)/**" PackagePath="tools/csharpier" />
+    <!-- the excludes keep out the runtime specific folders that exist after packing the native versions of the CSharpier tool -->
+    <Content
+      Include="$(CSharpierOutputDir)/**"
+      Exclude="$(CSharpierOutputDir)/*/any/**;$(CSharpierOutputDir)/*/win-*/**;$(CSharpierOutputDir)/*/linux-*/**;$(CSharpierOutputDir)/*/osx-*/**"
+      PackagePath="tools/csharpier"
+    />
   </ItemGroup>
 </Project>

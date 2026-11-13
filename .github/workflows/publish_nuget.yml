@@ -12,18 +12,107 @@ jobs:
       - run: >
           dotnet build CSharpier.slnx -c release -p:TreatWarningsAsErrors=true
 
+  check-version:
+    runs-on: ubuntu-latest
+    name: check version
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      publish: ${{ steps.version.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: version
+        run: |
+          VERSION=$(grep -oP '(?<=<Version>)[^<]+' Nuget/Build.props)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if curl -sf https://api.nuget.org/v3-flatcontainer/csharpier/index.json | grep -qi "\"$VERSION\""; then
+            echo "publish=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # NativeAOT can't compile for a different operating system, so each runtime identifier is packed on a matching runner
+  pack-native:
+    needs: check-version
+    if: needs.check-version.outputs.publish == 'true'
+    strategy:
+      matrix:
+        include:
+          - rid: win-x64
+            os: windows-latest
+          - rid: win-arm64
+            os: windows-latest
+          - rid: linux-x64
+            os: ubuntu-latest
+          - rid: linux-arm64
+            os: ubuntu-24.04-arm
+          - rid: linux-musl-x64
+            os: ubuntu-latest
+            container: mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot
+          - rid: osx-arm64
+            os: macos-latest
+          - rid: osx-x64
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    name: pack ${{ matrix.rid }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v3
+        if: matrix.container == ''
+      - run: >
+          dotnet pack Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -r ${{ matrix.rid }}
+          -p:TargetFrameworks=net10.0 -p:TreatWarningsAsErrors=true -o ./packages
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ matrix.rid }}
+          path: ./packages/*.nupkg
+          if-no-files-found: error
+
+  pack-pointer:
+    needs: check-version
+    if: needs.check-version.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    name: pack pointer and any
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v3
+      # the framework dependent package that is used on any platform without a native package
+      - run: >
+          dotnet pack Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -r any
+          -p:PublishAot=false -o ./packages
+      # the package that points to the runtime specific packages
+      - run: >
+          dotnet pack Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release
+          -p:CreateRidSpecificToolPackages=false -o ./packages
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-pointer
+          path: ./packages/*.nupkg
+          if-no-files-found: error
+
   publish-nuget:
     runs-on: ubuntu-latest
     name: publish nuget
-    needs: test
+    needs: [ test, check-version, pack-native, pack-pointer ]
     permissions:
       contents: write
       id-token: write
     env:
       VERSION_FILE_PATH: Nuget/Build.props
+      VERSION: ${{ needs.check-version.outputs.version }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          path: ./packages
+          merge-multiple: true
+      - name: Verify all CSharpier tool packages exist
+        run: |
+          for name in "" ".win-x64" ".win-arm64" ".linux-x64" ".linux-arm64" ".linux-musl-x64" ".osx-x64" ".osx-arm64" ".any"; do
+            test -f "./packages/CSharpier$name.$VERSION.nupkg" || { echo "missing CSharpier$name.$VERSION.nupkg"; exit 1; }
+          done
       - name: NuGet login
         uses: NuGet/login@v1
         id: login
@@ -35,13 +124,17 @@ jobs:
           PROJECT_FILE_PATH: Src/CSharpier.Core/CSharpier.Core.csproj
           TAG_FORMAT: "*"
           NUGET_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
-      - name: Publish CSharpier dotnet tool on version change
-        uses: alirezanet/publish-nuget@v3.1.0
-        with:
-          PACKAGE_NAME: CSharpier
-          PROJECT_FILE_PATH: Src/CSharpier.Cli/CSharpier.Cli.csproj
-          TAG_FORMAT: "*"
-          NUGET_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
+      # the runtime specific packages have to exist before the package that points to them
+      - name: Publish CSharpier dotnet tool runtime specific packages
+        run: >
+          dotnet nuget push "./packages/CSharpier.*.$VERSION.nupkg"
+          --source https://api.nuget.org/v3/index.json
+          --api-key "${{steps.login.outputs.NUGET_API_KEY}}" --skip-duplicate
+      - name: Publish CSharpier dotnet tool
+        run: >
+          dotnet nuget push "./packages/CSharpier.$VERSION.nupkg"
+          --source https://api.nuget.org/v3/index.json
+          --api-key "${{steps.login.outputs.NUGET_API_KEY}}" --skip-duplicate
       - name: Publish CSharpier.MsBuild library on version change
         uses: alirezanet/publish-nuget@v3.1.0
         with:

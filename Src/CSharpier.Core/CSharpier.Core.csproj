@@ -11,6 +11,9 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Tester>One</Tester>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <IsAotCompatible>true</IsAotCompatible>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="LovettSoftware.XmlDiff" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
