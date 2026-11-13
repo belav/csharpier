@@ -10,17 +10,15 @@ internal static class DataStatement
         // The variable name and the -SupportedCommand parameter are written the way the source
         // has them.
         var docs = new List<Doc> { "data " };
-        var header = context.GetText(
+        var header = context.GetTokens(
             node.Extent.StartOffset,
             node.CommandsAllowed is { Count: > 0 }
                 ? node.CommandsAllowed[0].Extent.StartOffset
                 : node.Body.Extent.StartOffset
         );
-        foreach (
-            var word in header.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).Skip(1)
-        )
+        foreach (var token in header.Skip(1))
         {
-            docs.Add(word);
+            docs.Add(token.Text);
             docs.Add(" ");
         }
 

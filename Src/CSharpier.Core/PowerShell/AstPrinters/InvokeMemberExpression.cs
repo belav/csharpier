@@ -9,13 +9,16 @@ internal static class InvokeMemberExpression
     {
         var arguments = node.Arguments;
         var hasArguments = arguments is { Count: > 0 };
-        var afterMember = context.GetText(
+        var afterMember = context.GetTokens(
             node.Member.Extent.EndOffset,
             hasArguments ? arguments![0].Extent.StartOffset : node.Extent.EndOffset
         );
-        var openParenIndex = afterMember.IndexOf('(');
-        var genericArguments =
-            openParenIndex < 0 ? afterMember.Trim() : afterMember[..openParenIndex].Trim();
+        var openParenIndex = afterMember.FindIndex(o => o.Kind == TokenKind.LParen);
+        var genericArguments = string.Concat(
+            afterMember
+                .Take(openParenIndex < 0 ? afterMember.Count : openParenIndex)
+                .Select(o => o.Kind == TokenKind.Comma ? ", " : o.Text)
+        );
 
         var target = Doc.Concat(
             Node.Print(node.Expression, context),

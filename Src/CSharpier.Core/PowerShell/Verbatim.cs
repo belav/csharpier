@@ -14,6 +14,32 @@ internal static class Verbatim
         return Print(extent.StartOffset, extent.EndOffset, context);
     }
 
+    // Prints a node from its source text. The & of a background pipeline lies outside the extent
+    // of the pipeline and of an assignment that ends with it, so it is added back.
+    internal static Doc PrintNode(Ast node, PrintContext context)
+    {
+        var doc = Print(node.Extent, context);
+        return EndsWithBackgroundOperator(node) ? Doc.Concat(doc, " &") : doc;
+    }
+
+    private static bool EndsWithBackgroundOperator(Ast node)
+    {
+        while (true)
+        {
+            switch (node)
+            {
+                case PipelineAst { Background: true }:
+                case PipelineChainAst { Background: true }:
+                    return true;
+                case AssignmentStatementAst assignment:
+                    node = assignment.Right;
+                    break;
+                default:
+                    return false;
+            }
+        }
+    }
+
     internal static Doc Print(int startOffset, int endOffset, PrintContext context)
     {
         context.MarkCommentsPrintedIn(startOffset, endOffset);

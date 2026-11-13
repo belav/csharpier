@@ -12,8 +12,7 @@ internal static class TryStatement
         var previous = node.Body;
         foreach (var catchClause in node.CatchClauses)
         {
-            docs.Add(StatementBlock.PrintKeywordAfter(previous, catchClause, "catch", context));
-            docs.Add(" ");
+            docs.Add(StatementBlock.PrintSeparatorAfter(previous, catchClause, context));
             docs.Add(Node.Print(catchClause, context));
             previous = catchClause.Body;
         }

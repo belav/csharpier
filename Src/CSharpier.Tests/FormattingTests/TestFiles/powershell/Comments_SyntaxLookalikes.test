@@ -1,0 +1,12 @@
+class C { [ValidateNotNull()] <# ${other} #> $Name
+  [int] ${a-b} = 1
+  hidden static [string] <# $x #> $Y
+  [void] M() { }
+  C() { } }
+enum E { A = 1; B }
+switch <# -Regex #> ($x) { 1 { 2 } }
+switch -Regex -CaseSensitive <# -Exact #> ($x) { a { 2 } }
+switch -File $p { a { 1 } }
+:l switch ($y) { default { 1 } }
+data <# c #> { 'a' }
+data foo -supportedCommand <# d #> ConvertTo-Json { 'b' }

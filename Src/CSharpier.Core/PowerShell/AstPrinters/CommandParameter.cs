@@ -12,9 +12,7 @@ internal static class CommandParameter
             return Verbatim.Print(node.Extent, context);
         }
 
-        var name = context
-            .GetText(node.Extent.StartOffset, node.Argument.Extent.StartOffset)
-            .TrimEnd();
+        var name = context.GetTokenText(node.Extent.StartOffset, node.Argument.Extent.StartOffset);
 
         return Doc.Concat(name, Node.Print(node.Argument, context));
     }

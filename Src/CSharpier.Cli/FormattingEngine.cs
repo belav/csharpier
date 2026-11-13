@@ -297,6 +297,16 @@ internal class FormattingEngine(
 
         Interlocked.Increment(ref result.Files);
 
+        // Windows PowerShell reads a file without a byte order mark as ANSI, so such files are
+        // common. Decoding one as UTF-8 loses characters, and the loss cannot be seen afterwards.
+        if (printerOptions.Formatter is Formatter.PowerShell && fileToFormatInfo.HasInvalidBytes)
+        {
+            fileIssueLogger.WriteWarning(
+                "Is not valid UTF-8 and has no byte order mark, so was not formatted."
+            );
+            return;
+        }
+
         if (formattingCache.CanSkipFormatting(fileToFormatInfo, printerOptions))
         {
             Interlocked.Increment(ref result.CachedFiles);
@@ -362,13 +372,18 @@ internal class FormattingEngine(
 
         if (!commandLineOptions.SkipValidation)
         {
-            await this.ValidateFormatting(
+            var failedValidation = await this.ValidateFormatting(
                 fileToFormatInfo,
                 codeFormattingResult,
                 printerOptions,
                 fileIssueLogger,
                 cancellationToken
             );
+
+            if (failedValidation && printerOptions.Formatter is Formatter.PowerShell)
+            {
+                return;
+            }
         }
 
         if (
@@ -406,7 +421,7 @@ internal class FormattingEngine(
         formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo, printerOptions);
     }
 
-    private async Task ValidateFormatting(
+    private async Task<bool> ValidateFormatting(
         FileToFormatInfo fileToFormatInfo,
         CodeFormatterResult codeFormattingResult,
         PrinterOptions printerOptions,
@@ -471,6 +486,7 @@ internal class FormattingEngine(
                     fileIssueLogger.WriteError(
                         $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "\n" + validatorResult.FailureMessage)}"
                     );
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -481,8 +497,11 @@ internal class FormattingEngine(
                     "Failed with exception during syntax tree validation.",
                     ex
                 );
+                return true;
             }
         }
+
+        return false;
     }
 
     private sealed record PhysicalFile(

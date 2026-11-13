@@ -36,7 +36,7 @@ internal static class PropertyMember
             }
         }
 
-        docs.Add(isEnumMember ? node.Name : GetVariable(node, context));
+        docs.Add(isEnumMember ? GetEnumMemberName(node, context) : GetVariable(node, context));
         if (node.InitialValue is not null)
         {
             docs.Add(" = ");
@@ -44,6 +44,18 @@ internal static class PropertyMember
         }
 
         return Doc.Concat(docs);
+    }
+
+    private static string GetEnumMemberName(PropertyMemberAst node, PrintContext context)
+    {
+        var startOffset = node.Extent.StartOffset;
+        foreach (var attribute in node.Attributes)
+        {
+            startOffset = Math.Max(startOffset, attribute.Extent.EndOffset);
+        }
+
+        var tokens = context.GetTokens(startOffset, node.Extent.EndOffset);
+        return tokens.Count > 0 ? tokens[0].Text : node.Name;
     }
 
     // A name such as ${config-file} needs its braces, and the tree only has the name.
@@ -60,9 +72,14 @@ internal static class PropertyMember
             startOffset = Math.Max(startOffset, node.PropertyType.Extent.EndOffset);
         }
 
-        var text = context.GetText(startOffset, node.Extent.EndOffset);
-        var start = text.IndexOf("${", StringComparison.Ordinal);
-        var end = start < 0 ? -1 : text.IndexOf('}', start);
-        return end < 0 || text[..start].Contains('$') ? "$" + node.Name : text[start..(end + 1)];
+        foreach (var token in context.GetTokens(startOffset, node.Extent.EndOffset))
+        {
+            if (token.Kind == TokenKind.Variable)
+            {
+                return token.Text;
+            }
+        }
+
+        return "$" + node.Name;
     }
 }

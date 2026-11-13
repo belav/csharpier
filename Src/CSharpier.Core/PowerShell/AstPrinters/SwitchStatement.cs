@@ -10,15 +10,13 @@ internal static class SwitchStatement
         var docs = new List<Doc> { Statements.PrintLabel(node), "switch " };
 
         // The flags are written the way the source has them, in the same order.
-        var header = context
-            .GetText(node.Extent.StartOffset, node.Condition.Extent.StartOffset)
-            .TrimEnd();
-        var isParenthesized = header.EndsWith('(');
-        foreach (var word in header.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+        var header = context.GetTokens(node.Extent.StartOffset, node.Condition.Extent.StartOffset);
+        var isParenthesized = header is [.., { Kind: TokenKind.LParen }];
+        foreach (var token in header)
         {
-            if (word.StartsWith('-'))
+            if (token.Kind == TokenKind.Parameter)
             {
-                docs.Add(word.TrimEnd('('));
+                docs.Add(token.Text);
                 docs.Add(" ");
             }
         }

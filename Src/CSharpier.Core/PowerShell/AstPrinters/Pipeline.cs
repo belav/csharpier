@@ -30,7 +30,7 @@ internal static class Pipeline
                     hasMultiLineElement = true;
                 }
 
-                rest.Add(" |");
+                rest.Add(Command.IsStopParsing(previous) ? "|" : " |");
                 rest.Add(context.PrintTrailingComments(previous));
                 rest.Add(Doc.Line);
                 rest.Add(context.PrintLeadingComments(current));
@@ -42,7 +42,7 @@ internal static class Pipeline
                 var docs = new List<Doc> { first };
                 for (var index = 1; index < elements.Count; index++)
                 {
-                    docs.Add(" | ");
+                    docs.Add(Command.IsStopParsing(elements[index - 1]) ? "| " : " | ");
                     docs.Add(rest[(index * 5) - 1]);
                 }
 

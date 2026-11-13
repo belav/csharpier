@@ -70,6 +70,11 @@ internal static class StatementBlock
         PrintContext context
     )
     {
+        return Doc.Concat(PrintSeparatorAfter(previousBlock, next, context), keyword);
+    }
+
+    internal static Doc PrintSeparatorAfter(Ast previousBlock, Ast next, PrintContext context)
+    {
         var docs = new List<Doc> { context.PrintTrailingComments(previousBlock) };
         foreach (var comment in context.GetUnprintedComments(context.GetLeadingComments(next)))
         {
@@ -79,11 +84,10 @@ internal static class StatementBlock
 
         if (docs.Count == 1 && docs[0] == Doc.Null)
         {
-            return " " + keyword;
+            return " ";
         }
 
         docs.Add(Doc.HardLine);
-        docs.Add(keyword);
         return Doc.Concat(docs);
     }
 
