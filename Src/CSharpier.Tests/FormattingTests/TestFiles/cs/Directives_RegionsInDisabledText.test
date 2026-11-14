@@ -1,0 +1,34 @@
+namespace N;
+
+#if D1
+public class A
+{
+    #region R
+    class B { }
+    #endregion
+}
+#endif
+
+public class C
+{
+#if D2
+    public int V;
+#endif
+}
+
+public class D
+{
+#if D3
+    public class E
+    {
+        #region R
+        public class F
+        {
+            #region R2
+            public int V;
+            #endregion
+        }
+        #endregion
+    }
+#endif
+}
