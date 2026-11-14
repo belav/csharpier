@@ -350,11 +350,22 @@ internal static class Token
                 var triviaText = trivia.ToString();
                 docs.Add(Doc.HardLineIfNoPreviousLine);
                 docs.Add(Doc.Trim);
-                docs.Add(
-                    kind == SyntaxKind.RegionDirectiveTrivia
-                        ? Doc.BeginRegion(triviaText)
-                        : Doc.EndRegion(triviaText)
-                );
+                if (trivia.GetStructure() is DirectiveTriviaSyntax { IsActive: false })
+                {
+                    var whitespace =
+                        x > 0 && leadingTrivia[x - 1].RawSyntaxKind() is SyntaxKind.WhitespaceTrivia
+                            ? leadingTrivia[x - 1].ToString()
+                            : string.Empty;
+                    docs.Add(Doc.Directive(whitespace + triviaText));
+                }
+                else
+                {
+                    docs.Add(
+                        kind == SyntaxKind.RegionDirectiveTrivia
+                            ? Doc.BeginRegion(triviaText)
+                            : Doc.EndRegion(triviaText)
+                    );
+                }
                 docs.Add(Doc.HardLine);
             }
             else if (trivia.IsDirective)
