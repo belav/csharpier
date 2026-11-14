@@ -16,6 +16,7 @@ internal static class ReturnStatement
             ),
             node.Expression != null
                 ? node.Expression is BinaryExpressionSyntax or QueryExpressionSyntax
+                && !BinaryExpression.IsCoalesceWithNonBinaryLeft(node.Expression)
                     ? Doc.Indent(Node.Print(node.Expression, context))
                     : Node.Print(node.Expression, context)
                 : Doc.Null,

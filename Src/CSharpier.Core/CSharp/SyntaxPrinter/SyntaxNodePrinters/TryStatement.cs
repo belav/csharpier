@@ -8,18 +8,18 @@ internal static class TryStatement
 {
     public static Doc Print(TryStatementSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(8);
+        using var docs = new DocListBuilder(8);
         docs.Add(ExtraNewLines.Print(node));
         docs.Add(AttributeLists.Print(node, node.AttributeLists, context));
         docs.Add(Token.Print(node.TryKeyword, context));
         docs.Add(Block.Print(node.Block, context));
         docs.Add(node.Catches.Any() ? Doc.HardLine : Doc.Null);
-        docs.Add(Doc.Join(Doc.HardLine, node.Catches.Select(o => CatchClause.Print(o, context))));
+        docs.Add(Doc.Join(Doc.HardLine, node.Catches, CatchClause.Print, context));
 
         if (node.Finally != null)
         {
             docs.Add(Doc.HardLine, FinallyClause.Print(node.Finally, context));
         }
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }

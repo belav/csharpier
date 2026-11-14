@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using CSharpier.Core.CSharp;
+using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -12,6 +13,7 @@ internal sealed class StringDoc(string value, bool isDirective = false) : Doc
 #pragma warning restore IDE0028
     public string Value { get; } = value;
     public bool IsDirective { get; } = isDirective;
+    public int PrintedWidth { get; } = value.GetPrintedWidth();
 
     public static StringDoc Create(string value) =>
         value == " " ? SpaceStringDoc : new StringDoc(value);

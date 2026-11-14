@@ -1,5 +1,4 @@
 using CSharpier.Core.DocTypes;
-using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -18,17 +17,17 @@ internal static class Argument
 
     public static Doc PrintModifiers(ArgumentSyntax node, CSharpPrintingContext context)
     {
-        var docs = new DocListBuilder(2);
-        if (node.NameColon != null)
+        var hasRefKind = node.RefKindKeyword.RawSyntaxKind() != SyntaxKind.None;
+
+        if (node.NameColon == null)
         {
-            docs.Add(BaseExpressionColon.Print(node.NameColon, context));
+            return hasRefKind ? Token.PrintWithSuffix(node.RefKindKeyword, " ", context) : Doc.Null;
         }
 
-        if (node.RefKindKeyword.RawSyntaxKind() != SyntaxKind.None)
-        {
-            docs.Add(Token.PrintWithSuffix(node.RefKindKeyword, " ", context));
-        }
+        var nameColon = BaseExpressionColon.Print(node.NameColon, context);
 
-        return Doc.Concat(ref docs);
+        return hasRefKind
+            ? Doc.Concat(nameColon, Token.PrintWithSuffix(node.RefKindKeyword, " ", context))
+            : nameColon;
     }
 }

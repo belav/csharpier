@@ -53,7 +53,7 @@ internal static class CollectionExpression
                     ? Doc.HardLine
                     : Doc.IfBreak(Doc.Line, Doc.Null)
                 : Doc.Null,
-            node.CloseBracketToken.LeadingTrivia.Any(o => o.IsComment() || o.IsDirective)
+            node.CloseBracketToken.LeadingTrivia.AnyCommentOrDirective()
                 ? Doc.Concat(
                     Doc.Indent(Token.PrintLeadingTrivia(node.CloseBracketToken, context)),
                     Doc.HardLine

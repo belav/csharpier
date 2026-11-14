@@ -113,6 +113,20 @@ namespace SomeNamespace
             return;
         }
 
+        [Attribute]
+        // leading comments after attributes don't affect modifiers
+        public void Exactly100(IApplicationBuilder app, IWebHostEnvironment env____________________)
+        {
+            return;
+        }
+
+        [Attribute]
+        // leading comments after attributes don't affect void
+        void Exactly100(IApplicationBuilder app, IWebHostEnvironment env___________________________)
+        {
+            return;
+        }
+
         public void JustOver100(
             IApplicationBuilder app,
             IWebHostEnvironment env____________________

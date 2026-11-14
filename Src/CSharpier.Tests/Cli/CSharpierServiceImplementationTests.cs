@@ -105,6 +105,54 @@ internal sealed class CSharpierServiceImplementationTests
         result.formattedFile.Should().Contain("\n public string Property");
     }
 
+    [Test]
+    public async Task Should_Pick_Up_A_Config_Edited_Between_Requests()
+    {
+        var configPath = Path.Combine(this.testFileDirectory, ".csharpierrc.json");
+
+        async Task WriteConfigAsync(int indentSize)
+        {
+            await File.WriteAllTextAsync(
+                configPath,
+                $$"""
+                {
+                    "overrides": [
+                        {
+                            "files": "*.cs",
+                            "formatter": "csharp",
+                            "indentSize": {{indentSize}}
+                        }
+                    ]
+                }
+                """
+            );
+        }
+
+        var service = new CSharpierServiceImplementation(NullLogger.Instance);
+
+        Task<FormatFileResult> FormatAsync()
+        {
+            return service.FormatFile(
+                new FormatFileParameter
+                {
+                    fileName = Path.Combine(this.testFileDirectory, "Class.cs"),
+                    fileContents =
+                        "public class ClassName\n{\npublic string Property { get; set; }\n}\n",
+                },
+                CancellationToken.None
+            );
+        }
+
+        await WriteConfigAsync(1);
+        var firstResult = await FormatAsync();
+
+        await WriteConfigAsync(10);
+        var secondResult = await FormatAsync();
+
+        firstResult.formattedFile.Should().Contain("\n public string Property");
+        secondResult.formattedFile.Should().Contain("\n          public string Property");
+    }
+
     private static readonly string DeeplyConcatenatedString =
         "public class ClassName\n{\n    private string field = "
         + string.Join(" + ", Enumerable.Repeat("\"1\"", 200))

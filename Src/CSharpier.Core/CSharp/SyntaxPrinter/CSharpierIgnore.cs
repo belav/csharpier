@@ -47,11 +47,15 @@ internal static partial class CSharpierIgnore
     );
 #endif
 
-    public static bool HasIgnoreComment(SyntaxNode syntaxNode) =>
-        Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
+    public static bool HasIgnoreComment(SyntaxNode syntaxNode)
+    {
+        return Token.HasLeadingCommentMatching(syntaxNode, IgnoreRegex);
+    }
 
-    public static bool HasIgnoreComment(SyntaxToken syntaxToken) =>
-        Token.HasLeadingCommentMatching(syntaxToken, IgnoreRegex);
+    public static bool HasIgnoreComment(SyntaxToken syntaxToken)
+    {
+        return Token.HasLeadingCommentMatching(syntaxToken, IgnoreRegex);
+    }
 
     public static bool IsNodeIgnored(SyntaxNode syntaxNode)
     {
@@ -86,7 +90,7 @@ internal static partial class CSharpierIgnore
         where T : SyntaxNode
     {
         var statements = new List<Doc>();
-        var unFormattedCode = new StringBuilder();
+        StringBuilder? unFormattedCode = null;
         var printUnformatted = false;
         SyntaxNode? firstUnformattedNode = null;
 
@@ -94,15 +98,13 @@ internal static partial class CSharpierIgnore
         {
             if (Token.HasLeadingCommentMatching(node, IgnoreEndRegex))
             {
+                var ignoredCode = unFormattedCode?.ToString().Trim() ?? string.Empty;
                 statements.Add(
                     firstUnformattedNode is StatementSyntax statementSyntax
-                        ? Doc.Concat(
-                            ExtraNewLines.Print(statementSyntax),
-                            unFormattedCode.ToString().Trim()
-                        )
-                        : unFormattedCode.ToString().Trim()
+                        ? Doc.Concat(ExtraNewLines.Print(statementSyntax), ignoredCode)
+                        : ignoredCode
                 );
-                unFormattedCode.Clear();
+                unFormattedCode?.Clear();
                 firstUnformattedNode = null;
                 printUnformatted = false;
             }
@@ -114,6 +116,7 @@ internal static partial class CSharpierIgnore
 
             if (printUnformatted)
             {
+                unFormattedCode ??= new StringBuilder();
                 unFormattedCode.Append(PrintWithoutFormatting(node, context));
             }
             else
@@ -122,7 +125,7 @@ internal static partial class CSharpierIgnore
             }
         }
 
-        if (unFormattedCode.Length > 0)
+        if (unFormattedCode is { Length: > 0 })
         {
             statements.Add(
                 firstUnformattedNode is StatementSyntax statementSyntax

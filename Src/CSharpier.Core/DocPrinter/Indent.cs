@@ -4,12 +4,12 @@ internal class Indent
 {
     public string Value = string.Empty;
     public int Length;
+    public Indent? Increased;
 }
 
 internal class Indenter(PrinterOptions printerOptions)
 {
     protected readonly PrinterOptions PrinterOptions = printerOptions;
-    protected readonly Dictionary<string, Indent> IncreaseIndentCache = [];
 
     public static Indent GenerateRoot()
     {
@@ -18,24 +18,14 @@ internal class Indenter(PrinterOptions printerOptions)
 
     public Indent IncreaseIndent(Indent indent)
     {
-        if (IncreaseIndentCache.TryGetValue(indent.Value, out var increasedIndent))
+        indent.Increased ??= new Indent
         {
-            return increasedIndent;
-        }
+            Value = this.PrinterOptions.UseTabs
+                ? indent.Value + "\t"
+                : indent.Value.PadRight(indent.Value.Length + this.PrinterOptions.IndentSize),
+            Length = indent.Length + this.PrinterOptions.IndentSize,
+        };
 
-        var nextIndent = this.PrinterOptions.UseTabs
-            ? new Indent
-            {
-                Value = indent.Value + "\t",
-                Length = indent.Length + this.PrinterOptions.IndentSize,
-            }
-            : new Indent
-            {
-                Value = indent.Value.PadRight(indent.Value.Length + this.PrinterOptions.IndentSize),
-                Length = indent.Length + this.PrinterOptions.IndentSize,
-            };
-
-        IncreaseIndentCache[indent.Value] = nextIndent;
-        return nextIndent;
+        return indent.Increased;
     }
 }

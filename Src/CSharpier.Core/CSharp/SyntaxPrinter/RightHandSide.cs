@@ -1,3 +1,4 @@
+using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis.CSharp;
@@ -17,7 +18,7 @@ internal static class RightHandSide
     {
         var layout = DetermineLayout(leftNode, rightNode);
 
-        var groupId = layout == Layout.Fluid ? $"{Layout.Fluid}{Guid.NewGuid()}" : string.Empty;
+        var groupId = layout == Layout.Fluid ? $"{Layout.Fluid}{Doc.NextGroupId()}" : string.Empty;
 
         return layout switch
         {
@@ -36,6 +37,12 @@ internal static class RightHandSide
                 Doc.Group(leftDoc),
                 operatorDoc,
                 Doc.Group(Doc.Indent(Doc.Line, Node.Print(rightNode, context)))
+            ),
+            Layout.BreakBeforeCoalesce => PrintBreakBeforeCoalesce(
+                leftDoc,
+                operatorDoc,
+                (BinaryExpressionSyntax)rightNode,
+                context
             ),
             Layout.Chain => Doc.Concat(
                 Doc.Group(leftDoc),
@@ -58,9 +65,31 @@ internal static class RightHandSide
         };
     }
 
+    private static Group PrintBreakBeforeCoalesce(
+        Doc leftDoc,
+        Doc operatorDoc,
+        BinaryExpressionSyntax rightNode,
+        CSharpPrintingContext context
+    )
+    {
+        var groupId = $"{Layout.BreakBeforeCoalesce}{Doc.NextGroupId()}";
+        var docs = BinaryExpression.PrintParts(rightNode, context);
+        var rest = docs.Skip(1).ToList();
+
+        return Doc.Group(
+            Doc.Group(leftDoc),
+            operatorDoc,
+            Doc.GroupWithId(groupId, Doc.Indent(Doc.Line)),
+            Doc.IndentIfBreak(
+                Doc.Group(docs[0], Doc.IfBreak(Doc.Concat(rest), Doc.Indent(rest), groupId)),
+                groupId
+            )
+        );
+    }
+
     private static Layout DetermineLayout(CSharpSyntaxNode leftNode, ExpressionSyntax rightNode)
     {
-        if (rightNode.GetLeadingTrivia().Any(o => o.IsComment()))
+        if (rightNode.GetLeadingTrivia().AnyComment())
         {
             return Layout.BreakAfterOperator;
         }
@@ -113,6 +142,9 @@ internal static class RightHandSide
                 StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
             } => Layout.BasicConcatWithSpace,
             InitializerExpressionSyntax => Layout.BasicConcatWithoutLine,
+            BinaryExpressionSyntax binary
+                when BinaryExpression.IsCoalesceWithNonBinaryLeft(binary) =>
+                Layout.BreakBeforeCoalesce,
             BinaryExpressionSyntax
             or CastExpressionSyntax { Type: GenericNameSyntax }
             or ConditionalExpressionSyntax
@@ -138,6 +170,7 @@ internal static class RightHandSide
         BasicConcatWithoutLine,
         BasicConcatWithSpace,
         BreakAfterOperator,
+        BreakBeforeCoalesce,
         Chain,
         ChainTail,
         Fluid,

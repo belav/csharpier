@@ -15,6 +15,8 @@ internal static class PropagateBreaks
         var groupStack = new Stack<Group>();
         var forceFlat = 0;
         var canSkipBreak = false;
+        var stringCount = 0;
+        var stringCountAtLastHardLine = 0;
 
         void BreakParentGroup()
         {
@@ -31,24 +33,12 @@ internal static class PropagateBreaks
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool OnEnter(Doc doc)
         {
-            if (doc is ForceFlat)
+            if (doc is StringDoc { IsDirective: false } stringDoc)
             {
-                forceFlat++;
-            }
-            if (doc is IBreakParent && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine)))
-            {
-                if (doc is HardLine { SkipBreakIfFirstInGroup: true } && canSkipBreak)
+                canSkipBreak = false;
+                if (!string.IsNullOrEmpty(stringDoc.Value))
                 {
-                    if (groupStack.Count > 1)
-                    {
-                        var nextGroup = groupStack.Pop();
-                        groupStack.Peek().Break = true;
-                        groupStack.Push(nextGroup);
-                    }
-                }
-                else
-                {
-                    BreakParentGroup();
+                    stringCount++;
                 }
             }
             else if (doc is Group group)
@@ -60,9 +50,34 @@ internal static class PropagateBreaks
                     return false;
                 }
             }
-            else if (doc is StringDoc { IsDirective: false })
+            else if (
+                doc is IBreakParent
+                && (forceFlat == 0 || (forceFlat > 0 && doc is LiteralLine))
+            )
             {
-                canSkipBreak = false;
+                var isAtStartOfLine = stringCount == stringCountAtLastHardLine;
+                if (doc is HardLine { IsForTrivia: true } && (isAtStartOfLine || canSkipBreak))
+                {
+                    if (!isAtStartOfLine && groupStack.Count > 1)
+                    {
+                        var nextGroup = groupStack.Pop();
+                        groupStack.Peek().Break = true;
+                        groupStack.Push(nextGroup);
+                    }
+                }
+                else
+                {
+                    BreakParentGroup();
+                }
+
+                if (doc is HardLine)
+                {
+                    stringCountAtLastHardLine = stringCount;
+                }
+            }
+            else if (doc is ForceFlat)
+            {
+                forceFlat++;
             }
 
             return true;
@@ -104,7 +119,16 @@ internal static class PropagateBreaks
                 continue;
             }
 
-            docsStack.Push(TraverseDocOnExitStackMarker);
+            // OnExit only does something for ForceFlat and Group, so everything else is popped
+            // here instead of being left on the stack behind an exit marker
+            if (doc is ForceFlat or Group)
+            {
+                docsStack.Push(TraverseDocOnExitStackMarker);
+            }
+            else
+            {
+                docsStack.Pop();
+            }
 
             if (doc is Concat concat)
             {

@@ -37,7 +37,7 @@ public class CSharpBenchmarks
     {
         var syntaxNodeComparer = new SyntaxNodeComparer(
             this.code,
-            this.code,
+            this.codeCopy,
             false,
             false,
             false,
@@ -62,6 +62,11 @@ public class CSharpBenchmarks
     );
 
     private readonly string code = File.ReadAllText(
+        Path.Combine(Paths.RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Code.cs")
+    );
+
+    // read a second time so the comparison is given two distinct instances, the way the CLI does
+    private readonly string codeCopy = File.ReadAllText(
         Path.Combine(Paths.RepoRoot, "Src/CSharpier.BenchMarks/CodeSamples/Code.cs")
     );
 }

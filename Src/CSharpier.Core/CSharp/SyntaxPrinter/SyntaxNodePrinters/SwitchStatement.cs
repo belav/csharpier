@@ -14,10 +14,7 @@ internal static class SwitchStatement
                     Doc.Indent(
                         Doc.Concat(
                             Doc.HardLine,
-                            Doc.Join(
-                                Doc.HardLine,
-                                node.Sections.Select(o => SwitchSection.Print(o, context))
-                            )
+                            Doc.Join(Doc.HardLine, node.Sections, SwitchSection.Print, context)
                         )
                     ),
                     Doc.HardLine
@@ -25,13 +22,12 @@ internal static class SwitchStatement
 
         DocUtilities.RemoveInitialDoubleHardLine(sections);
 
-        var groupId = Guid.NewGuid().ToString();
+        var groupId = Doc.NextGroupId();
 
         return Doc.Concat(
             ExtraNewLines.Print(node),
-            Token.PrintLeadingTrivia(node.SwitchKeyword, context),
             Doc.Group(
-                Token.PrintWithoutLeadingTrivia(node.SwitchKeyword, context),
+                Token.Print(node.SwitchKeyword, context),
                 " ",
                 Token.Print(node.OpenParenToken, context),
                 Doc.GroupWithId(

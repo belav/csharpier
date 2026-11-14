@@ -1,3 +1,302 @@
+# 1.4.0
+## Breaking Changes
+### Drop support for net8.0 and net9.0 [#1888](https://github.com/belav/csharpier/issues/1888)
+CSharpier and CSharpier.MsBuild now target `net10.0` and `net11.0`. CSharpier.Core targets `net10.0`, `net11.0` and `netstandard2.0`.
+
+## What's Changed
+### Feature: Support for .NET 11 and C# 15 [#1888](https://github.com/belav/csharpier/issues/1888)
+CSharpier now supports the new syntax in C# 15.
+```c#
+public union Pet(Cat, Dog, Bird);
+
+public closed record GateState;
+
+HashSet<string> set = [with(StringComparer.OrdinalIgnoreCase), "Hello", "HELLO", "hello"];
+
+outer:
+for (int row = 0; row < grid.Height; row++)
+{
+    for (int column = 0; column < grid.Width; column++)
+    {
+        if (grid[row, column].IsBlocked)
+        {
+            continue outer;
+        }
+
+        if (grid[row, column].IsGoal)
+        {
+            break outer;
+        }
+    }
+}
+```
+
+### Feature: Avoid chopping single trailing lambda [#1865](https://github.com/belav/csharpier/issues/1865)
+When the last argument is a lambda with a block body, and the arguments up to and including the `=>` fit on one line, CSharpier now keeps them on the same line as the method name.
+```c#
+// input & expected output
+logging.AddFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"), o =>
+{
+    o.MaxRollingFiles = 1;
+});
+
+// 1.3.0
+logging.AddFile(
+    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"),
+    o =>
+    {
+        o.MaxRollingFiles = 1;
+    }
+);
+```
+
+### Feature: Keep the left side of a null-coalescing operator on the same line as the variable [#1913](https://github.com/belav/csharpier/issues/1913)
+When an assignment or return containing `??` is too long, CSharpier now keeps the left value on the same line as the variable instead of breaking after the `=`.
+```c#
+// input & expected output
+string baz = "qux"
+    ?? throw new InvalidOperationException(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies eros turpis. Cras diam libero, interdum id elementum ut, interdum sed justo."
+    );
+
+var confirmEmailUrl = linkGenerator.GetUriByName(
+    context,
+    confirmEmailEndpointName,
+    routeValues____________________
+) ?? fallback;
+
+// 1.3.0
+string baz =
+    "qux"
+    ?? throw new InvalidOperationException(
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ultricies eros turpis. Cras diam libero, interdum id elementum ut, interdum sed justo."
+    );
+
+var confirmEmailUrl =
+    linkGenerator.GetUriByName(context, confirmEmailEndpointName, routeValues____________________)
+    ?? fallback;
+```
+
+### Feature: Support csharpier-ignore ranges in using directives [#1856](https://github.com/belav/csharpier/issues/1856)
+Using directives within a `csharpier-ignore-start` and `csharpier-ignore-end` range are no longer sorted or formatted.
+```c#
+// input
+using D;
+using C;
+
+// csharpier-ignore-start
+
+using B;
+
+using A;
+
+// csharpier-ignore-end
+
+// expected output
+using C;
+using D;
+
+// csharpier-ignore-start
+
+using B;
+
+using A;
+
+// csharpier-ignore-end
+
+// 1.3.0
+using A;
+// csharpier-ignore-start
+
+using B;
+using C;
+using D;
+
+// csharpier-ignore-end
+```
+
+### Feature: Improve performance of CLI when passing in files/folders [#1893](https://github.com/belav/csharpier/pull/1893)
+CSharpier now resolves ignore files and configuration files once per run instead of once for each path passed to it. This speeds up tools such as pre-commit hooks that pass a list of staged files.
+```bash
+# check every .cs file in the CSharpier repo passed as a list of files
+dotnet csharpier check "@filelist.txt"
+
+# 1.3.0 - about 60s
+# 1.4.0 - about 1.7s
+```
+
+### Fix: False formatting validation failure with inconsistent whitespace in using directives [#1929](https://github.com/belav/csharpier/issues/1929)
+CSharpier reported `Failed formatting validation` when a using directive contained extra whitespace.
+```c#
+// input
+using System;
+using  System.Diagnostics;
+class C {}
+
+// expected output
+using System;
+using System.Diagnostics;
+
+class C { }
+```
+
+### Fix: Blank lines removed from csharpier-ignore methods that have attributes [#1925](https://github.com/belav/csharpier/issues/1925)
+CSharpier was removing blank lines within a method that had an attribute and a `csharpier-ignore` comment.
+```c#
+// input & expected output
+public class ClassName
+{
+    [SomeAttribute]
+    // csharpier-ignore
+    public void SomeMethodWithLines()
+    {
+        var someVariable = someLongValue____________________________________________ + someLongValue____________________________________________;
+
+        return;
+    }
+}
+
+// 1.3.0
+public class ClassName
+{
+    [SomeAttribute]
+    // csharpier-ignore
+    public void SomeMethodWithLines()
+    {
+        var someVariable = someLongValue____________________________________________ + someLongValue____________________________________________;
+        return;
+    }
+}
+```
+
+### Fix: Leading comment causes short invocation chain to break [#1921](https://github.com/belav/csharpier/issues/1921)
+```c#
+// input & expected output
+// some comment
+((int)Value.One).Should().Be(1);
+
+// 1.3.0
+// some comment
+((int)Value.One)
+    .Should()
+    .Be(1);
+```
+
+### Fix: Leading comment causes `with` expression to break [#1882](https://github.com/belav/csharpier/issues/1882)
+```c#
+// input & expected output
+// some comment
+someRecord = someRecord with { Property = "Value" };
+
+// 1.3.0
+// some comment
+someRecord = someRecord with
+{
+    Property = "Value",
+};
+```
+
+### Fix: XmlFormatter fails under Native AOT [#1920](https://github.com/belav/csharpier/issues/1920)
+`XmlFormatter` always serialized the AST, which uses reflection based JSON serialization. This threw an `InvalidOperationException` when CSharpier.Core was used in a Native AOT application. The AST is now only serialized when `IncludeAST` is set, the same as `CSharpFormatter`.
+```c#
+// threw an InvalidOperationException in 1.3.0 when published with <PublishAot>true</PublishAot>
+Console.WriteLine(XmlFormatter.Format("<a><b/></a>").Code);
+```
+
+### Fix: XAML formatting inserts a line break between adjacent inline elements [#1912](https://github.com/belav/csharpier/issues/1912)
+CSharpier no longer inserts a new line between adjacent elements unless there is already whitespace between them. Inserting whitespace changes the rendered text for elements such as a xaml `TextBlock`.
+```xml
+<!-- input -->
+<TextBlock><Run>Sub</Run><Run>total</Run></TextBlock>
+<TextBlock>
+  <Run>Sub</Run><Run>total</Run>
+</TextBlock>
+
+<!-- expected output -->
+<TextBlock><Run>Sub</Run><Run>total</Run></TextBlock>
+<TextBlock><Run>Sub</Run><Run>total</Run></TextBlock>
+
+<!-- 1.3.0 -->
+<TextBlock>
+  <Run>Sub</Run>
+  <Run>total</Run>
+</TextBlock>
+<TextBlock>
+  <Run>Sub</Run>
+  <Run>total</Run>
+</TextBlock>
+```
+CSharpier also respects `xml:space="preserve"` when using `ignore` whitespace handling. See [details](https://csharpier.com/docs/Configuration#xml-whitespace-sensitivity)
+
+### Fix: Blank line after #endif is removed and then added back on the next run [#1908](https://github.com/belav/csharpier/issues/1908)
+CSharpier was removing the blank line after an `#endif` that ended with an active member, and adding it back on the next format.
+```c#
+// input
+class ClassName
+{
+#if SYMBOL
+#else
+    void MethodName1() { }
+
+#endif
+    void MethodName2() { }
+}
+
+// expected output
+class ClassName
+{
+#if SYMBOL
+#else
+    void MethodName1() { }
+#endif
+
+    void MethodName2() { }
+}
+
+// 1.3.0
+class ClassName
+{
+#if SYMBOL
+#else
+    void MethodName1() { }
+#endif
+    void MethodName2() { }
+}
+```
+
+### Fix: Xml formatter inserts a blank line before a closing tag when the last children are a comment and text [#1905](https://github.com/belav/csharpier/issues/1905)
+```xml
+<!-- input & expected output -->
+<NoWarn>
+  <!-- comment -->
+  CS1234;
+</NoWarn>
+
+<!-- 1.3.0 -->
+<NoWarn>
+  <!-- comment -->
+  CS1234;
+
+</NoWarn>
+```
+
+### Fix: Error when .gitignore contains the macOS `Icon[\r]` pattern [#1887](https://github.com/belav/csharpier/pull/1887)
+The pattern used to ignore the `Icon\r` files that macOS creates in folders could not be parsed and caused CSharpier to fail. CSharpier now skips that line when reading a `.gitignore`.
+```
+# .gitignore where [\r] is a literal carriage return
+Bin
+Icon[\r]
+Obj
+```
+
+### Fix: `dotnet csharpier` fails when CSharpier is installed globally [#1883](https://github.com/belav/csharpier/issues/1883)
+The documentation has been updated to explain that a global install is run with `csharpier` instead of `dotnet csharpier`. This is a limitation of how dotnet runs global tools, see [dotnet/sdk#14626](https://github.com/dotnet/sdk/issues/14626).
+```bash
+dotnet tool install -g csharpier
+csharpier --version
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.3.0...1.4.0
 # 1.3.0
 ## Breaking Changes
 ### Change xml formatting to return error when it runs into syntax error so it is consistent with c# [#1854](https://github.com/belav/csharpier/pull/1854)
@@ -3968,6 +4267,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 

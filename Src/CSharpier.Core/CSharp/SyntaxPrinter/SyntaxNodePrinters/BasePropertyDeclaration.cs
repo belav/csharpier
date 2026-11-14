@@ -51,10 +51,7 @@ internal static class BasePropertyDeclaration
                 Node.Print(node.Type, context),
                 " ",
                 explicitInterfaceSpecifierSyntax != null
-                    ? Doc.Concat(
-                        Node.Print(explicitInterfaceSpecifierSyntax.Name, context),
-                        Token.Print(explicitInterfaceSpecifierSyntax.DotToken, context)
-                    )
+                    ? ExplicitInterfaceSpecifier.Print(explicitInterfaceSpecifierSyntax, context)
                     : Doc.Null,
                 identifier != null ? identifier() : Doc.Null,
                 Contents(node, expressionBody, context),
@@ -115,7 +112,7 @@ internal static class BasePropertyDeclaration
         CSharpPrintingContext context
     )
     {
-        var docs = new DocListBuilder(6);
+        using var docs = new DocListBuilder(6);
         if (
             node.AttributeLists.Count > 1
             || node.Body != null
@@ -148,6 +145,6 @@ internal static class BasePropertyDeclaration
 
         docs.Add(Token.Print(node.SemicolonToken, context));
 
-        return Doc.Concat(ref docs);
+        return Doc.Concat(docs);
     }
 }
