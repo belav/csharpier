@@ -28,9 +28,7 @@ internal static class Modifiers
                 SyntaxKind.ExternKeyword => 6,
                 SyntaxKind.NewKeyword => 7,
                 SyntaxKind.VirtualKeyword => 8,
-#pragma warning disable RSEXPERIMENTAL006
                 SyntaxKind.ClosedKeyword => 9,
-#pragma warning restore RSEXPERIMENTAL006
                 SyntaxKind.AbstractKeyword => 10,
                 SyntaxKind.SealedKeyword => 11,
                 SyntaxKind.OverrideKeyword => 12,
