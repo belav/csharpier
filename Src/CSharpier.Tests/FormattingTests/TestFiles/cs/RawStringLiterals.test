@@ -266,6 +266,27 @@ class ClassName
         SomeRawString {value}
         """;
 
+    string Method() =>
+        $$"""
+        SomeRawString {{(
+            someValue_____________________________________________________________________________
+        )}}
+        """;
+
+    string Property { get; } =
+        $$"""
+        SomeRawString {{(
+            someValue_____________________________________________________________________________
+        )}}
+        """;
+
+    Func<int, string> field = _ =>
+        $$"""
+        SomeRawString {{(
+            someValue_____________________________________________________________________________
+        )}}
+        """;
+
     [Attribute(
         """
         SomeRawString

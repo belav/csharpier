@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
@@ -44,16 +45,20 @@ internal static class Token
 
     internal static bool IsMultiLineRawString(SyntaxNode? node)
     {
-        return node
-            is LiteralExpressionSyntax
-                {
-                    Token.RawKind: (int)SyntaxKind.MultiLineRawStringLiteralToken
-                }
-                or InterpolatedStringExpressionSyntax
-                {
-                    StringStartToken.RawKind: (int)
-                        SyntaxKind.InterpolatedMultiLineRawStringStartToken
-                };
+        return node switch
+        {
+            LiteralExpressionSyntax
+            {
+                Token.RawKind: (int)SyntaxKind.MultiLineRawStringLiteralToken
+            } => true,
+            InterpolatedStringExpressionSyntax
+            {
+                StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
+            } interpolatedString => !InterpolatedStringExpression.HasMultiLineInterpolation(
+                interpolatedString
+            ),
+            _ => false,
+        };
     }
 
     internal static bool ShouldIndentRawString(SyntaxNode? rawString)
