@@ -187,5 +187,42 @@ public class ClassName
                 return Method(x => x.Prop);
             }
         );
+
+        CallMethod(one, x =>
+            x == 1 ? "one"
+            : x == 2 ? "two"
+            : "three"
+        );
+
+        if (
+            !CallMethod(one, x =>
+                x == 1 ? "one"
+                : x == 2 ? "two"
+                : "three"
+            )
+        )
+        {
+            return;
+        }
+
+        CallMethod(one, x =>
+            new[] { 1 }
+                .Select(o =>
+                {
+                    return o;
+                })
+                .ToList()
+                .Count == x
+                ? "one"
+                : "two"
+        );
+
+        CallMethod(
+            someLongArgument_____________________________________________________________________,
+            x =>
+                x == 1 ? "one"
+                : x == 2 ? "two"
+                : "three"
+        );
     }
 }
