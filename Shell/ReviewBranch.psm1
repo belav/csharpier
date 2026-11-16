@@ -118,10 +118,7 @@ function CSH-ReviewBranch {
     & git push --set-upstream origin $postBranch
 
     if ($firstRun) {
-        # uses https://github.com/github/hub/releases
-        # if this hangs run a command against this repo outside of here, it will store
-        # a token. Or I can just have a way to pass a GITHUB_TOKEN or store it in a .env
-        $newPr = & hub pull-request -b belav:$preBranch -m "Testing $branch $folder"
+        $newPr = & gh pr create --base $preBranch --head $postBranch --title "Testing $branch $folder" --body ""
         Write-Output $newPr
     }
 

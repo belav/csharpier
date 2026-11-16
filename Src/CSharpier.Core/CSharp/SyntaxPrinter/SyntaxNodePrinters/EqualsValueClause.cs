@@ -8,7 +8,11 @@ internal static class EqualsValueClause
     public static Doc Print(EqualsValueClauseSyntax node, CSharpPrintingContext context)
     {
         Doc separator = Doc.Line;
-        if (
+        if (Token.IsMultiLineRawString(node.Value))
+        {
+            separator = " ";
+        }
+        else if (
             node is
             {
                 Parent: PropertyDeclarationSyntax,

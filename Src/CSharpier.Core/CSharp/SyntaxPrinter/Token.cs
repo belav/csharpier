@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using CSharpier.Core.CSharp.SyntaxPrinter.SyntaxNodePrinters;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
@@ -42,8 +43,50 @@ internal static class Token
 
     internal static readonly string[] lineSeparators = ["\r\n", "\r", "\n"];
 
-    internal static bool ShouldIndentRawString(ArgumentSyntax? argument)
+    internal static bool IsMultiLineRawString(SyntaxNode? node)
     {
+        return node switch
+        {
+            LiteralExpressionSyntax
+            {
+                Token.RawKind: (int)SyntaxKind.MultiLineRawStringLiteralToken
+            } => true,
+            InterpolatedStringExpressionSyntax
+            {
+                StringStartToken.RawKind: (int)SyntaxKind.InterpolatedMultiLineRawStringStartToken
+            } interpolatedString => !InterpolatedStringExpression.HasMultiLineInterpolation(
+                interpolatedString
+            ),
+            _ => false,
+        };
+    }
+
+    internal static bool ShouldIndentRawString(SyntaxNode? rawString)
+    {
+        var parent = rawString?.Parent;
+        while (
+            parent
+                is MemberAccessExpressionSyntax
+                    or InvocationExpressionSyntax
+                    or PostfixUnaryExpressionSyntax
+        )
+        {
+            parent = parent.Parent;
+        }
+
+        if (
+            parent
+            is ExpressionElementSyntax
+                or InitializerExpressionSyntax
+                or ParenthesizedExpressionSyntax
+                or AttributeArgumentSyntax { NameEquals: null }
+        )
+        {
+            return false;
+        }
+
+        var argument = rawString.FindParent<ArgumentSyntax>();
+
         return argument is null
             || argument.Expression
                 is ParenthesizedLambdaExpressionSyntax
@@ -128,12 +171,7 @@ internal static class Token
 
             contents.Add(linesIncludingQuotes[^1].TrimStart());
 
-            docs.Add(
-                Doc.IndentIf(
-                    ShouldIndentRawString(syntaxToken.Parent.FindParent<ArgumentSyntax>()),
-                    Doc.Concat(contents)
-                )
-            );
+            docs.Add(Doc.IndentIf(ShouldIndentRawString(syntaxToken.Parent), Doc.Concat(contents)));
         }
         else if (
             kind

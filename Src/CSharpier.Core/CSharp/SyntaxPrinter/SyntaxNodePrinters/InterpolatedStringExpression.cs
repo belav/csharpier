@@ -12,7 +12,7 @@ internal static class InterpolatedStringExpression
         // if any of the expressions in the interpolation contain a newline then don't force this flat
         // ideally we would format the expressions in some way, but determining how much to indent is a hard problem
         // and new lines in expressions in them are rare.
-        if (node.Contents.Any(o => o is InterpolationSyntax && o.ToString().Contains('\n')))
+        if (HasMultiLineInterpolation(node))
         {
             return Doc.Concat(
                 Token.PrintLeadingTrivia(node.GetLeadingTrivia(), context),
@@ -42,6 +42,11 @@ internal static class InterpolatedStringExpression
             Doc.ForceFlat(docs),
             Token.PrintTrailingTrivia(node.StringEndToken)
         );
+    }
+
+    internal static bool HasMultiLineInterpolation(InterpolatedStringExpressionSyntax node)
+    {
+        return node.Contents.Any(o => o is InterpolationSyntax && o.ToString().Contains('\n'));
     }
 
     private static Doc RawString(
@@ -104,9 +109,6 @@ internal static class InterpolatedStringExpression
         );
         contents.Add(Token.Print(node.StringEndToken, context));
 
-        return Doc.IndentIf(
-            Token.ShouldIndentRawString(node.FindParent<ArgumentSyntax>()),
-            Doc.Concat(contents)
-        );
+        return Doc.IndentIf(Token.ShouldIndentRawString(node), Doc.Concat(contents));
     }
 }
