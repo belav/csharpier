@@ -104,9 +104,6 @@ internal static class InterpolatedStringExpression
         );
         contents.Add(Token.Print(node.StringEndToken, context));
 
-        return Doc.IndentIf(
-            Token.ShouldIndentRawString(node.FindParent<ArgumentSyntax>()),
-            Doc.Concat(contents)
-        );
+        return Doc.IndentIf(Token.ShouldIndentRawString(node), Doc.Concat(contents));
     }
 }

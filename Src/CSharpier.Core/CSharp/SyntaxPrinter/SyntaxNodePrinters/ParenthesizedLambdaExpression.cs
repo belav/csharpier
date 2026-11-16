@@ -43,6 +43,11 @@ internal static class ParenthesizedLambdaExpression
 
         var body = Node.Print(node.Body, context);
 
+        if (Token.IsMultiLineRawString(node.Body))
+        {
+            return Doc.Concat(" ", body);
+        }
+
         if (
             node.ParameterList.Parameters.Count == 0
             && node.Parent?.Parent is ArgumentListSyntax { Arguments.Count: 1 }

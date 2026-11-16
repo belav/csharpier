@@ -125,3 +125,160 @@ CallMethod(_ =>
         SomeRawString
         """;
 });
+
+Func<int, string> lambda = _ => """
+    SomeRawString
+    """;
+
+Func<string> lambda = () => """
+    SomeRawString
+    """;
+
+Func<int, int, string> lambda = (a, b) => """
+    SomeRawString
+    """;
+
+Func<int, Task<string>> lambda = async a => """
+    SomeRawString
+    """;
+
+Func<int, string> lambda = _ => $"""
+    SomeRawString {value}
+    """;
+
+Func<string> lambda = () => $"""
+    SomeRawString {value}
+    """;
+
+CallMethod(_ => """
+    SomeRawString
+    """
+);
+
+CallMethod(() => """
+    SomeRawString
+    """
+);
+
+CallMethod(_ => $"""
+    SomeRawString {value}
+    """
+);
+
+CallMethod(() => $"""
+    SomeRawString {value}
+    """
+);
+
+var cast = (object)"""
+    SomeRawString
+    """;
+
+var cast = (object)$"""
+    SomeRawString {value}
+    """;
+
+string one = """
+        SomeRawString
+        """,
+    two = $"""
+        SomeRawString {value}
+        """;
+
+var array = new[]
+{
+    """
+    SomeRawString
+    """,
+    $"""
+    SomeRawString {value}
+    """,
+};
+
+string[] collection =
+[
+    """
+    SomeRawString
+    """,
+    $"""
+    SomeRawString {value}
+    """,
+];
+
+var parenthesized = (
+    """
+    SomeRawString
+    """
+);
+
+var parenthesized = (
+    $"""
+    SomeRawString {value}
+    """
+);
+
+string LocalFunction() => """
+    SomeRawString
+    """;
+
+string LocalFunction() => $"""
+    SomeRawString {value}
+    """;
+
+class ClassName
+{
+    string Property { get; } = """
+        SomeRawString
+        """;
+
+    string Property { get; set; } = $"""
+        SomeRawString {value}
+        """;
+
+    string Property => """
+        SomeRawString
+        """;
+
+    string Property => $"""
+        SomeRawString {value}
+        """;
+
+    string Property
+    {
+        get => """
+            SomeRawString
+            """;
+    }
+
+    string this[int index] => """
+        SomeRawString
+        """;
+
+    public static implicit operator string(ClassName value) => """
+        SomeRawString
+        """;
+
+    string Method() => """
+        SomeRawString
+        """;
+
+    string Method() => $"""
+        SomeRawString {value}
+        """;
+
+    [Attribute(
+        """
+        SomeRawString
+        """
+    )]
+    [Attribute(
+        $"""
+        SomeRawString {value}
+        """
+    )]
+    void Method(
+        string parameter = """
+            SomeRawString
+            """
+    ) { }
+}

@@ -9,6 +9,7 @@ internal static class CastExpression
     {
         return
             node.Expression is ParenthesizedExpressionSyntax
+            || Token.IsMultiLineRawString(node.Expression)
             || (
                 node.Expression
                     is IdentifierNameSyntax
