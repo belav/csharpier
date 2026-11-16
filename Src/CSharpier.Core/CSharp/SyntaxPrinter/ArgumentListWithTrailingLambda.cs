@@ -72,7 +72,7 @@ internal static class ArgumentListWithTrailingLambda
         {
             var forcedWrap = Doc.Concat(
                 Doc.ForceFlat(flatParts),
-                Doc.Indent(Doc.HardLine, Node.Print(lastLambda.Body, context)),
+                Doc.Indent(Doc.HardLine, Doc.Group(Node.Print(lastLambda.Body, context))),
                 Doc.HardLine
             );
 
