@@ -187,5 +187,74 @@ public class ClassName
                 return Method(x => x.Prop);
             }
         );
+
+        CallMethod(one, x =>
+            x == 1 ? "one"
+            : x == 2 ? "two"
+            : "three"
+        );
+
+        if (
+            !CallMethod(one, x =>
+                x == 1 ? "one"
+                : x == 2 ? "two"
+                : "three"
+            )
+        )
+        {
+            return;
+        }
+
+        CallMethod(one, x =>
+            new[] { 1 }
+                .Select(o =>
+                {
+                    return o;
+                })
+                .ToList()
+                .Count == x
+                ? "one"
+                : "two"
+        );
+
+        CallMethod(
+            someLongArgument_____________________________________________________________________,
+            x =>
+                x == 1 ? "one"
+                : x == 2 ? "two"
+                : "three"
+        );
+
+        CallMethod(one, x =>
+            from y in x
+            where y.Id < 3
+            select (from z in y.Items select z)
+                .Distinct()
+                .OrderBy(o => o.Id)
+                .FirstOrDefault()
+                .Name
+        );
+
+        CallMethod(one, x =>
+            from y in x
+            group y by y.Key into g
+            select new
+            {
+                g.Key.Id,
+                g.Key.Alias,
+                Count = g.Count(),
+            }
+        );
+
+        CallMethod(one, (x, y) =>
+            from z in x
+            where
+                z.SomeLongProperty_________________ != null
+                && (
+                    z.SomeText_________________ == "someLongValue_______________"
+                    || z.SomeText_________________ == "someOtherLongValue_______________"
+                )
+            select z
+        );
     }
 }
