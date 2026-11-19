@@ -93,8 +93,8 @@ internal static class HasMismatchedCliAndMsBuildVersions
             }
             catch (Exception ex)
             {
-                logger.LogWarning(
-                    $"The csproj at {pathToCsProj} failed to load with the following exception {ex.Message}"
+                logger.LogDebug(
+                    $"The csproj at {pathToCsProj} failed to load while checking for a version of CSharpier.MsBuild that does not match the version of the CSharpier CLI. It failed with the following exception {ex.Message}"
                 );
 
                 continue;

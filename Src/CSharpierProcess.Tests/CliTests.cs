@@ -657,7 +657,7 @@ public class CliTests
 
         result.ErrorOutput.Should().BeEmpty();
         result.ExitCode.Should().Be(0);
-        result.Output.Should().StartWith("Warning The csproj at ");
+        result.Output.Should().StartWith("Formatted 0 files in ");
     }
 
     private const string CsprojContentWithCSharpierMsBuild99 = """
