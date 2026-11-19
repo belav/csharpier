@@ -292,3 +292,29 @@ websiteQueryable = websiteQueryable
         .ThenInclude(c => c.RuleManager)
             .ThenInclude(rm => rm.RuleClauses)
                 .ThenInclude(rc => rc.RuleTypeOption);
+
+var someVariable = (
+    new SomeObject
+    {
+        Property1 = "",
+        Property2 = "",
+        Property3 = "",
+    }
+)
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod();
+
+var someVariable = (
+    new SomeObject
+    {
+        Property1 = "",
+        Property2 = "",
+        Property3 = "",
+    }
+).CallMethod();
