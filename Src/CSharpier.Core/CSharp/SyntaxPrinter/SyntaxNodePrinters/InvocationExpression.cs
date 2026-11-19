@@ -126,7 +126,6 @@ internal static class InvocationExpression
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
     }
 
-    // a comment before the open paren also results in a break, but that one should not expand the chain
     private static bool ParenthesizedExpressionContainsBreak(PrintedNode printedNode)
     {
         return printedNode
