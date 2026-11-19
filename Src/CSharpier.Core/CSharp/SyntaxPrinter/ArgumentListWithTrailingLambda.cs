@@ -64,6 +64,21 @@ internal static class ArgumentListWithTrailingLambda
             return chop;
         }
 
+        if (
+            !bodyIsBraced
+            && !Token.IsMultiLineRawString(lastLambda.Body)
+            && DocUtilities.ContainsBreak(lambdaBody)
+        )
+        {
+            var forcedWrap = Doc.Concat(
+                Doc.ForceFlat(flatParts),
+                Doc.Indent(Doc.HardLine, Doc.Group(Node.Print(lastLambda.Body, context))),
+                Doc.HardLine
+            );
+
+            return Doc.Concat(Doc.ConditionalGroup(forcedWrap, forcedWrap, chop), Doc.BreakParent);
+        }
+
         var wrap = Doc.Concat(
             Doc.ForceFlat(flatParts),
             lambdaBody,
