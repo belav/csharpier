@@ -298,6 +298,39 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public async Task MSBuild_Version_Checking_Does_Not_Warn_When_Csproj_Fails_To_Load()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Broken.csproj", "<Project><PropertyGroup></Project>");
+        context.WhenAFileExists(".csharpierignore", "Broken.csproj");
+
+        var result = await Format(context);
+
+        result.ExitCode.Should().Be(0);
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.Should().ContainSingle().Which.Should().StartWith("Formatted 0 files");
+    }
+
+    [Test]
+    public async Task MSBuild_Version_Checking_Logs_Debug_When_Csproj_Fails_To_Load()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Broken.csproj", "<Project><PropertyGroup></Project>");
+        context.WhenAFileExists(".csharpierignore", "Broken.csproj");
+
+        var result = await Format(context, logLevel: LogLevel.Debug);
+
+        result.ExitCode.Should().Be(0);
+        result
+            .OutputLines.Should()
+            .Contain(o =>
+                o.Contains(
+                    "Broken.csproj failed to load while checking for a version of CSharpier.MsBuild"
+                )
+            );
+    }
+
+    [Test]
     [Arguments("0.9.0", false)]
     [Arguments("9999.0.0", false)]
     [Arguments("current", true)]
@@ -1220,6 +1253,7 @@ class ClassName
         string? standardInFileContents = null,
         string? configPath = null,
         string? ignorePath = null,
+        LogLevel logLevel = LogLevel.Information,
         params string[] directoryOrFilePaths
     )
     {
@@ -1237,7 +1271,7 @@ class ClassName
         }
 
         var fakeConsole = new TestConsole();
-        var testLogger = new ConsoleLogger(fakeConsole, LogLevel.Information, logFormat);
+        var testLogger = new ConsoleLogger(fakeConsole, logLevel, logFormat);
         var exitCode = await CommandLineFormatter.Format(
             new CommandLineOptions
             {
