@@ -116,6 +116,7 @@ internal static class InvocationExpression
                 {
                     Expression: SwitchExpressionSyntax or QueryExpressionSyntax
                 }
+            || ParenthesizedExpressionContainsBreak(groups[0][0])
             || (
                 parent is ExpressionStatementSyntax expressionStatementSyntax
                 && expressionStatementSyntax.SemicolonToken.LeadingTrivia.AnyComment()
@@ -123,6 +124,13 @@ internal static class InvocationExpression
             || groups.Count == 1
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+    }
+
+    private static bool ParenthesizedExpressionContainsBreak(PrintedNode printedNode)
+    {
+        return printedNode
+                is { Node: ParenthesizedExpressionSyntax, Doc: Group { Contents: Concat concat } }
+            && concat.Contents.Any(o => o is IndentDoc && DocUtilities.ContainsBreak(o));
     }
 
     private static void FlattenAndPrintNodes(
@@ -206,7 +214,9 @@ internal static class InvocationExpression
         else if (
             expression is PostfixUnaryExpressionSyntax
             {
-                Operand: InvocationExpressionSyntax or MemberAccessExpressionSyntax
+                Operand: InvocationExpressionSyntax
+                    or MemberAccessExpressionSyntax
+                    or ParenthesizedExpressionSyntax
             } postfixUnaryExpression
         )
         {
