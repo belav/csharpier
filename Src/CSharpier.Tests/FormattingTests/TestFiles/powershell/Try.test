@@ -1,0 +1,13 @@
+try {
+    Write-Host "Try"
+} catch {
+    Write-Host "Catch"
+} finally {
+    Write-Host "Finally"
+}
+
+try {
+    Write-Host "Try"
+} catch {
+    Write-Host "Catch"
+}

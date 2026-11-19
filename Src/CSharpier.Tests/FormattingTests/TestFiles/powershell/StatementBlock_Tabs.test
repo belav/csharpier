@@ -1,0 +1,17 @@
+function Get-Value {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name
+    )
+
+    process {
+        if ($Name) {
+            switch ($Name) {
+                'a' { 1 }
+                default {
+                    2
+                }
+            }
+        }
+    }
+}

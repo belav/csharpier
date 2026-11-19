@@ -1,0 +1,63 @@
+$a = @{}
+$a = @{ }
+$a = @{a=1}
+$a = @{a=1;b=2}
+$a = @{ a = 1; b = 2 }
+$a = @{ a = 1; b = 2; }
+$a = @{
+a = 1;
+  b = 2
+
+  c = @{ nested = $true }
+
+
+  d = 3
+}
+$a = @{ a = 1
+  b = 2 }
+$a = @{ someVeryLongKeyName = $someVeryLongVariableName; anotherVeryLongKeyName = $anotherVeryLongVariableName; third = 3 }
+$a = @{
+    "quoted key" = 1
+    'single' = 2
+    3 = "number key"
+    $variable = 4
+    (Get-Key) = 5
+    [int] = 6
+}
+$a = @{
+    # leading comment
+    One = 1 # trailing comment
+    Two = 2; # after semicolon
+
+    # before three
+    Three = 3
+    # last comment
+}
+$a = @{
+    # only a comment
+}
+$a = @{
+    Script = { $_.Name }
+    Block = {
+        $_.Name
+        $_.Length
+    }
+    Array = @(1, 2, 3)
+    List = 'a', 'b'
+    Pipeline = Get-ChildItem | Sort-Object
+    Condition = if ($b) { 1 } else { 2 }
+    Nested = @{
+        Deep = @{
+            Deeper = 1
+        }
+    }
+}
+Invoke-Thing @{ a = 1 } -Other @{
+    b = 2
+}
+$a = @{ a = 1 }.a
+$a = @{
+    Name       = "aligned"
+    Value      = 1
+    LongerName = 2
+}

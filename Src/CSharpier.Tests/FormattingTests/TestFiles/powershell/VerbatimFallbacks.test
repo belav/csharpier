@@ -1,0 +1,28 @@
+using namespace System.Text
+
+function Get-Value($a, $b) {
+    return $a
+}
+
+function Get-Other {
+    begin {
+        $x = 1
+    }
+    process {
+        $_
+    }
+}
+
+try {
+    Get-Item
+} catch [System.IO.IOException], [System.ArgumentException] {
+    Write-Host "io"
+} catch {
+    Write-Host "other"
+}
+
+:outer foreach ($x in $y) {
+    break outer
+}
+
+Start-Job { Get-Item } &

@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/clike/clike";
+import "codemirror/mode/xml/xml";
+import "codemirror/mode/powershell/powershell";
 import { useOptions } from "./Hooks";
 import { useAppContext } from "./AppContext";
 import { observer } from "mobx-react-lite";

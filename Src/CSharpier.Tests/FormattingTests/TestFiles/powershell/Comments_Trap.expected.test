@@ -1,0 +1,9 @@
+# Copyright
+# Licensed
+
+trap {
+    throw $_
+} # after trap
+
+Get-Item
+# end

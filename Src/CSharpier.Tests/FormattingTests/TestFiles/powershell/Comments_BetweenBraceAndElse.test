@@ -1,0 +1,22 @@
+if ($a) {
+    Write-Host "a"
+}
+# comment before else
+else {
+    Write-Host "b"
+}
+
+if ($a) {
+    Write-Host "a"
+} # comment after brace
+else {
+    Write-Host "b"
+}
+
+try {
+    Write-Host "a"
+}
+# comment before catch
+catch {
+    Write-Host "b"
+}

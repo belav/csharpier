@@ -1,0 +1,9 @@
+FUNCTION Get-Value { PARAM($a) BEGIN { } PROCESS { IF ($a) { RETURN } ELSEIF ($b) { THROW "x" } ELSE { EXIT 1 } } END { } }
+FOREACH ($a IN $b) { CONTINUE }
+WHILE ($true) { BREAK }
+DO { } WHILE ($true)
+DO { } UNTIL ($true)
+TRY { } CATCH { } FINALLY { }
+SWITCH ($x) { DEFAULT { } }
+CLASS Foo { HIDDEN STATIC [int]$x }
+ENUM Bar { A }

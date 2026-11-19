@@ -71,6 +71,7 @@ internal class PrinterOptions(
             "csx" => Formatter.CSharpScript,
             "config" or "csproj" or "props" or "slnx" or "targets" or "axaml" or "xaml" or "xml" =>
                 Formatter.XML,
+            "ps1" or "psm1" or "psd1" => Formatter.PowerShell,
             _ => Formatter.Unknown,
         };
     }
@@ -99,4 +100,5 @@ internal enum Formatter
     CSharp,
     CSharpScript,
     XML,
+    PowerShell,
 }

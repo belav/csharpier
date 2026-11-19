@@ -1,0 +1,6 @@
+$x = 1 + <# why #> 2
+Write-Host <# first #> "value" <# second #>
+$y = <# before #> 5
+if (<# condition #> $true) {
+    Write-Host "a"
+}

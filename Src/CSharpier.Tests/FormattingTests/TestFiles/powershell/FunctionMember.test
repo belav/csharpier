@@ -1,0 +1,15 @@
+class A {
+    A(){}
+    A([string]$name){$this.Name = $name}
+    [void]M(){}
+    [string] N([int]$a,[string]$b) { return "$a$b" }
+    static [A] Create() { return [A]::new() }
+    hidden [void] Secret() { }
+    static hidden [void] Both() { }
+    hidden static [void] BothAgain() { }
+    Untyped() { }
+    [void] LongParameters([string]$aVeryLongParameterName, [string]$anotherVeryLongParameterName, [string]$third) { }
+    [void] WithComment() {
+        # only a comment
+    }
+}

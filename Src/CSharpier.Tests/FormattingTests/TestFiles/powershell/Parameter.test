@@ -1,0 +1,12 @@
+function a([string]$Name,[int]$Count=5,$Plain,[switch]$Force) { }
+function b {
+    param(
+        [ValidateSet('a','b')] [string] $One,
+        [string] [ValidateNotNull()] $Two,
+        [Parameter()] $Three = (Get-Default),
+        [hashtable]$Four = @{ a = 1 },
+        [scriptblock]$Five = { $_ },
+        [string[]]$Six = @('a', 'b'),
+        [System.Collections.Generic.List[string]]$Seven
+    )
+}

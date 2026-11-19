@@ -1,0 +1,4 @@
+Throw
+throw   "message"
+throw [System.InvalidOperationException]::new("message")
+throw "a very long message that goes on and on " + $withSomeVariable + " and even more text to make it break"

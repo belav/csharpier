@@ -1,0 +1,15 @@
+if ($a) {
+
+
+    Write-Host "a"
+
+
+    Write-Host "b"; Write-Host "c"
+
+}
+if ($a) { Write-Host "a"; Write-Host "b" }
+if ($a) { # after brace
+    Write-Host "a"
+    # at end
+}
+if ($a) {}

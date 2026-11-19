@@ -1,0 +1,32 @@
+try {
+    Get-Item
+} catch {
+    Write-Host "failed"
+}
+try {
+    Get-Item
+} catch [System.IO.IOException], [System.ArgumentException] {
+    Write-Host "io"
+} catch {
+    Write-Host "other"
+} finally {
+    Write-Host "done"
+}
+try { } finally { }
+try { } catch { }
+try {
+    Get-Item
+} # after try
+catch {
+    throw
+}
+# before finally
+finally {
+    Write-Host "done"
+}
+try {
+    Get-Item
+} catch [System.Exception] {
+    # after type
+    throw
+}

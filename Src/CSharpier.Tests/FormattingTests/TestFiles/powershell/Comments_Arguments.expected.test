@@ -1,0 +1,34 @@
+[System.Management.Automation.CommandCompletion]::CompleteInput(
+    <#inputScript#> $InputScript,
+    <#cursorColumn#> $CursorColumn,
+    <#options#> $Options
+)
+$instance.Modify(
+    # the properties not in desired state
+    @{
+        MaximumFileSize = 20
+    }
+)
+$a.Foo(
+    $b, # first
+    $c
+).Bar()
+function a {
+    param(
+        [ValidateSet(
+            'SQL',
+            'SQLEngine', # part of SQL
+            'Replication' # also part of SQL
+        )]
+        [string]
+        # the feature
+        $Feature
+    )
+}
+$x = (
+    # explains the value
+    $a -and $b
+)
+It 'Verifies logging' -Skip <#-Skip:(!$IsSupported)#> {
+    $a
+}

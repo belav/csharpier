@@ -4,6 +4,7 @@ using AwesomeAssertions;
 using CSharpier.Cli;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
+using CSharpier.Core.PowerShell;
 using DiffEngine;
 using Microsoft.CodeAnalysis;
 
@@ -49,6 +50,7 @@ public class BaseTest
                     "cs" => Formatter.CSharp,
                     "csx" => Formatter.CSharpScript,
                     "xml" => Formatter.XML,
+                    "powershell" => Formatter.PowerShell,
                     _ => Formatter.Unknown,
                 };
 
@@ -122,17 +124,6 @@ public class BaseTest
             normalizedCode = normalizedCode.Replace("\r\n", "\n");
         }
 
-        // TODO #1359 xml comparer here
-        var comparer = new SyntaxNodeComparer(
-            expectedCode,
-            normalizedCode,
-            false,
-            false,
-            false,
-            SourceCodeKind.Regular,
-            CancellationToken.None
-        );
-
         result.ErrorDiagnostics.Should().BeEmpty();
         result.FailureMessage.Should().BeEmpty();
         result.WarningMessage.Should().BeEmpty();
@@ -143,7 +134,35 @@ public class BaseTest
         }
         normalizedCode.Should().Be(expectedCode);
 
-        var compareResult = comparer.CompareSource();
-        compareResult.Should().BeNullOrEmpty();
+        if (printerOptions.Formatter is Formatter.PowerShell)
+        {
+            var validatorResult = await new PowerShellFormattingValidator(
+                fileReaderResult.FileContents,
+                result.Code
+            ).ValidateAsync(CancellationToken.None);
+            validatorResult.FailureMessage.Should().BeNullOrEmpty();
+            validatorResult.Failed.Should().BeFalse();
+
+            var secondResult = await CodeFormatter.FormatAsync(
+                result.Code,
+                printerOptions,
+                CancellationToken.None
+            );
+            secondResult.Code.Should().Be(result.Code, "formatting should be idempotent");
+        }
+        else
+        {
+            var comparer = new SyntaxNodeComparer(
+                expectedCode,
+                normalizedCode,
+                false,
+                false,
+                false,
+                SourceCodeKind.Regular,
+                CancellationToken.None
+            );
+            var compareResult = comparer.CompareSource();
+            compareResult.Should().BeNullOrEmpty();
+        }
     }
 }

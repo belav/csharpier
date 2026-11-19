@@ -1,0 +1,12 @@
+enum Empty{}
+Enum Color{Red;Green;Blue}
+enum Level
+{
+    Low = 1
+    Medium = 2 # middle
+
+    # the top
+    High = 3
+}
+[Flags()] enum Access { Read = 1; Write = 2; All = 3 }
+enum Small : byte { A; B }

@@ -1,0 +1,12 @@
+#requires -Version 5.1
+<#
+.SYNOPSIS
+    Does things
+#>
+using namespace System.IO
+[CmdletBinding()]
+param([string]$Path)
+$ErrorActionPreference = 'Stop'; Set-StrictMode -Version Latest
+
+
+Write-Host $Path;

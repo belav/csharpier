@@ -1,0 +1,15 @@
+foreach($item in $items){Write-Host $item}
+ForEach ($item In $items)
+{
+    Write-Host $item
+}
+foreach ($item in Get-ChildItem -Path $path | Where-Object { $_.Length -gt 0 }) { $item }
+foreach ($item in $items) { }
+:outer foreach ($a in $b) {
+    foreach ($c in $d) { continue outer }
+}
+foreach ($item in $items) # after
+{
+    $item
+}
+foreach ($item in @(1, 2, 3)) { $item }

@@ -42,7 +42,8 @@ Default `false`
 Specify the number of spaces used per indentation level.
 
 Default for C# `4`\
-Default for XML `2`
+Default for XML `2`\
+Default for PowerShell `4`
 
 #### End of Line
 
@@ -132,6 +133,8 @@ CSharpier will never insert a new line between adjacent elements unless there is
 ### Configuration Overrides ###
 Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
 
+Valid values for `formatter` are `csharp`, `csharpscript`, `xml` and `powershell`.
+
 ```json
 {
   "overrides": [
@@ -179,6 +182,11 @@ max_line_length = 100
 indent_style = space
 indent_size = 2
 max_line_length = 100
+
+[*.{ps1,psm1,psd1}]
+indent_style = space
+indent_size = 4
+max_line_length = 100
 ```
 
 Formatting non-standard file extensions using csharpier can be accomplished with the `csharpier_formatter` option
@@ -190,3 +198,13 @@ indent_size = 2
 max_line_length = 80
 ```
 
+
+### PowerShell
+CSharpier formats `.ps1`, `.psm1` and `.psd1` files. The same options apply as for other languages, there are no PowerShell specific options.
+
+- Quote style, aliases, and the casing of commands, parameters, types, members and variables are never changed.
+- Keywords and operators are lowercased.
+- The contents of here-strings and of DSC `configuration` blocks are left as written.
+- A file with syntax errors is not formatted. Errors that only mean a module, DSC resource or type is not installed on the machine do not stop a file from being formatted. The exception is a file with a DSC `configuration` block on a machine without DSC (Linux and macOS by default): it is left unchanged with a warning.
+- `csharpier-ignore` comments are not supported in PowerShell files. Use a `.csharpierignore` file to exclude a file.
+- When using [CSharpier.Core](API.md), PowerShell formatting is not part of the `netstandard2.0` build.

@@ -1,0 +1,8 @@
+do{$x++}until($x -gt 10)
+Do
+{
+    $x++
+}
+Until ($x -gt 10)
+do { } until ($true)
+:again do { $x++ } until ($x -gt 10)

@@ -74,7 +74,10 @@ Modify the file at `.husky/task-runner.json`. Include any file extensions that y
             "**/*.props",
             "**/*.targets",
             "**/*.xml",
-            "**/*.config"
+            "**/*.config",
+            "**/*.ps1",
+            "**/*.psm1",
+            "**/*.psd1"
         ]
     }]
 }
