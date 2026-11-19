@@ -67,9 +67,10 @@ internal static class FormattingCacheFactory
 
             try
             {
-                var newDictionary = JsonSerializer.Deserialize<
-                    ConcurrentDictionary<string, string>
-                >(content);
+                var newDictionary = JsonSerializer.Deserialize(
+                    content,
+                    CliJsonContext.Default.ConcurrentDictionaryStringString
+                );
                 if (newDictionary != null)
                 {
                     cacheDictionary = newDictionary;
@@ -160,7 +161,12 @@ internal static class FormattingCacheFactory
                 {
                     var hash = new XxHash32();
                     hash.Append(CSharpierVersionBytes);
-                    hash.Append(JsonSerializer.SerializeToUtf8Bytes(options));
+                    hash.Append(
+                        JsonSerializer.SerializeToUtf8Bytes(
+                            options,
+                            CliJsonContext.Default.PrinterOptions
+                        )
+                    );
                     return Convert.ToHexString(hash.GetCurrentHash());
                 }
             );
@@ -188,7 +194,12 @@ internal static class FormattingCacheFactory
                     FileShare.None
                 );
                 await using var streamWriter = new StreamWriter(fileStream);
-                await streamWriter.WriteAsync(JsonSerializer.Serialize(cacheDictionary));
+                await streamWriter.WriteAsync(
+                    JsonSerializer.Serialize(
+                        cacheDictionary,
+                        CliJsonContext.Default.ConcurrentDictionaryStringString
+                    )
+                );
 
                 await fileStream.FlushAsync(cancellationToken);
             }

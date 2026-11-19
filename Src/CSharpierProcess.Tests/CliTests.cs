@@ -287,13 +287,11 @@ public class CliTests
         // executed via CliWrap. This is because CliWrap initializes ProcessStartInfo with
         // the parameter `RedirectStandardInput = true`, which interferes
         // with this test.
-        var startInfo = new ProcessStartInfo("dotnet")
+        var startInfo = new ProcessStartInfo(
+            CSharpierExecutable.FileName,
+            [.. CSharpierExecutable.Arguments, "format"]
+        )
         {
-            ArgumentList =
-            {
-                Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll"),
-                "format",
-            },
             RedirectStandardInput = false,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
@@ -858,6 +856,145 @@ public class CliTests
         Task.WaitAll(formatTasks);
     }
 
+    [Test]
+    public async Task Version_Should_Print_Version()
+    {
+        var result = await this.CSharpierProcess().WithArguments("--version").ExecuteAsync();
+
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Trim().Should().MatchRegex(@"^\d+\.\d+\.\d+");
+    }
+
+    [Test]
+    [Arguments("")]
+    [Arguments("format")]
+    [Arguments("check")]
+    [Arguments("pipe-files")]
+    [Arguments("server")]
+    public async Task Help_Should_Print_Usage(string command)
+    {
+        var result = await this.CSharpierProcess()
+            .WithArguments($"{command} --help")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.ExitCode.Should().Be(0);
+        result.Output.Should().Contain("Usage:");
+    }
+
+    [Test]
+    public async Task Unknown_Command_Should_Return_Error()
+    {
+        var result = await this.CSharpierProcess().WithArguments("not-a-command").ExecuteAsync();
+
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().NotBeNullOrEmpty();
+    }
+
+    [Test]
+    public async Task Format_Should_Return_Error_For_Invalid_Option_Value()
+    {
+        await this.WriteFileAsync("BasicFile.cs", "public class ClassName { }\n");
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("format BasicFile.cs --log-level NotALevel")
+            .ExecuteAsync();
+
+        result.ExitCode.Should().Be(1);
+        result.ErrorOutput.Should().NotBeNullOrEmpty();
+    }
+
+    [Test]
+    public async Task Format_Should_Use_Json_Config_With_Any_Property_Casing()
+    {
+        await this.WriteFileAsync(
+            "BasicFile.cs",
+            "public class ClassName\n{\n    void Method() { }\n}\n"
+        );
+        await this.WriteFileAsync(".csharpierrc", """{ "USETABS": true, "endOfLine": "lf" }""");
+
+        var result = await this.CSharpierProcess().WithArguments("format .").ExecuteAsync();
+
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.ExitCode.Should().Be(0);
+        (await this.ReadAllTextAsync("BasicFile.cs"))
+            .Should()
+            .Be("public class ClassName\n{\n\tvoid Method() { }\n}\n");
+    }
+
+    [Test]
+    public async Task Format_Should_Use_Yaml_Config_With_Overrides()
+    {
+        var unformattedContent = "public class ClassName\n{\n    void Method() { }\n}\n";
+        await this.WriteFileAsync("BasicFile.cs", unformattedContent);
+        await this.WriteFileAsync("Other.cst", unformattedContent);
+        await this.WriteFileAsync(
+            ".csharpierrc.yaml",
+            """
+            indentSize: 2
+            endOfLine: lf
+            overrides:
+              - files: "*.cst"
+                formatter: csharp
+                useTabs: true
+                endOfLine: lf
+            """
+        );
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("format BasicFile.cs Other.cst")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.ExitCode.Should().Be(0);
+        (await this.ReadAllTextAsync("BasicFile.cs"))
+            .Should()
+            .Be("public class ClassName\n{\n  void Method() { }\n}\n");
+        (await this.ReadAllTextAsync("Other.cst"))
+            .Should()
+            .Be("public class ClassName\n{\n\tvoid Method() { }\n}\n");
+    }
+
+    [Test]
+    public async Task Format_Should_Format_Code_In_Preprocessor_Branches()
+    {
+        await this.WriteFileAsync(
+            "BasicFile.cs",
+            "public class ClassName\n{\n#if DEBUG && !RELEASE\n    void   One() { }\n#elif RELEASE || OTHER\n    void   Two() { }\n#else\n    void   Three() { }\n#endif\n}\n"
+        );
+
+        var result = await this.CSharpierProcess().WithArguments("format .").ExecuteAsync();
+
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.ExitCode.Should().Be(0);
+        (await this.ReadAllTextAsync("BasicFile.cs"))
+            .Should()
+            .Be(
+                "public class ClassName\n{\n#if DEBUG && !RELEASE\n    void One() { }\n#elif RELEASE || OTHER\n    void Two() { }\n#else\n    void Three() { }\n#endif\n}\n"
+            );
+    }
+
+    [Test]
+    public async Task Format_Should_Reuse_Cache_On_Second_Run()
+    {
+        await this.WriteFileAsync("BasicFile.cs", "public class ClassName {     }\n");
+
+        var first = await this.CSharpierProcess().WithArguments("format .").ExecuteAsync();
+        var second = await this.CSharpierProcess().WithArguments("format .").ExecuteAsync();
+        var check = await this.CSharpierProcess()
+            .WithArguments("check . --use-cache")
+            .ExecuteAsync();
+
+        first.ErrorOutput.Should().BeNullOrEmpty();
+        first.ExitCode.Should().Be(0);
+        second.ErrorOutput.Should().BeNullOrEmpty();
+        second.ExitCode.Should().Be(0);
+        check.ErrorOutput.Should().BeNullOrEmpty();
+        check.ExitCode.Should().Be(0);
+        (await this.ReadAllTextAsync("BasicFile.cs")).Should().Be("public class ClassName { }\n");
+    }
+
     private DateTime GetLastWriteTime(string path)
     {
         return File.GetLastWriteTime(Path.Combine(this.testFileDirectory, path));
@@ -904,16 +1041,9 @@ public class CliTests
 
         public CsharpierProcess(string workingDirectory)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
-
-            if (!File.Exists(path))
-            {
-                throw new Exception("No file found at " + path);
-            }
-
             this.command = CliWrap
-                .Cli.Wrap("dotnet")
-                .WithArguments(path)
+                .Cli.Wrap(CSharpierExecutable.FileName)
+                .WithArguments(CSharpierExecutable.ArgumentsPrefix)
                 .WithWorkingDirectory(workingDirectory)
                 .WithValidation(CommandResultValidation.None)
                 .WithStandardOutputPipe(PipeTarget.ToStringBuilder(this.output, this.encoding))

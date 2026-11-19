@@ -1,17 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../../Nuget/Build.props" />
   <PropertyGroup>
-    <NoWarn>$(NoWarn);NU1510</NoWarn>
+    <!-- IL3000 is reported for Microsoft.CodeAnalysis.CommonCompiler.GetAssemblyLocation, which is only used by the command line compilers and never called by csharpier. Warnings can't be suppressed for a single referenced assembly -->
+    <NoWarn>$(NoWarn);NU1510;IL3000</NoWarn>
     <OutputType>Exe</OutputType>
+    <PublishAot>true</PublishAot>
     <PackageId>CSharpier</PackageId>
     <AssemblyName>CSharpier</AssemblyName>
     <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>csharpier</ToolCommandName>
+    <ToolPackageRuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm64;linux-musl-x64;osx-x64;osx-arm64;any</ToolPackageRuntimeIdentifiers>
     <AssemblyOriginatorKeyFile>../../Nuget/csharpier.snk</AssemblyOriginatorKeyFile>
     <RollForward>Major</RollForward>
     <SignAssembly>True</SignAssembly>
     <PublicKey>002400000480000094000000060200000024000052534131000400000100010049d266ea1aeae09c0abfce28b8728314d4e4807126ee8bc56155a7ddc765997ed3522908b469ae133fc49ef0bfa957df36082c1c2e0ec8cdc05a4ca4dbd4e1bea6c17fc1008555e15af13a8fc871a04ffc38f5e60e6203bfaf01d16a2a283b90572ade79135801c1675bf38b7a5a60ec8353069796eb53a26ffdddc9ee1273be</PublicKey>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != '' and '$(RuntimeIdentifier)' != 'any'">
+    <!-- the pdb for the native executable is around 70mb, keep it out of the runtime specific tool packages -->
+    <CopyOutputSymbolsToPublishDirectory>false</CopyOutputSymbolsToPublishDirectory>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="ini-parser-netstandard" />

@@ -53,9 +53,10 @@ public class ServerTests
         string? arguments = null
     )
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
-
-        var processStartInfo = new ProcessStartInfo("dotnet", $"{path} server {arguments}")
+        var processStartInfo = new ProcessStartInfo(
+            CSharpierExecutable.FileName,
+            $"{CSharpierExecutable.ArgumentsPrefix} server {arguments}"
+        )
         {
             UseShellExecute = false,
             ErrorDialog = false,
@@ -100,12 +101,10 @@ public class ServerTests
     [Skip("this doesn't kill the processes after it starts them")]
     public void RunTwo()
     {
-        var path = Path.Combine(Directory.GetCurrentDirectory(), "CSharpier.dll");
-
-        async Task NewFunction()
+        static async Task NewFunction()
         {
-            var command = Cli.Wrap("dotnet")
-                .WithArguments(path + " server")
+            var command = Cli.Wrap(CSharpierExecutable.FileName)
+                .WithArguments(CSharpierExecutable.ArgumentsPrefix + " server")
                 .WithValidation(CommandResultValidation.None);
 
             using var cts = new CancellationTokenSource();

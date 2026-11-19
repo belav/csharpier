@@ -76,14 +76,18 @@ internal class ServerFormatter
             if (request.Url?.AbsolutePath == "/format" && request.HttpMethod == "POST")
             {
                 var formatFileDto =
-                    await JsonSerializer.DeserializeAsync<FormatFileParameter>(
+                    await JsonSerializer.DeserializeAsync(
                         request.InputStream,
-                        cancellationToken: cancellationToken
+                        CliJsonContext.Default.FormatFileParameter,
+                        cancellationToken
                     ) ?? throw new Exception("No body!");
 
                 var result = await service.FormatFile(formatFileDto, cancellationToken);
 
-                var buffer = JsonSerializer.SerializeToUtf8Bytes(result);
+                var buffer = JsonSerializer.SerializeToUtf8Bytes(
+                    result,
+                    CliJsonContext.Default.FormatFileResult
+                );
                 response.ContentType = "application/json";
                 response.ContentLength64 = buffer.Length;
                 await response.OutputStream.WriteAsync(buffer, cancellationToken);

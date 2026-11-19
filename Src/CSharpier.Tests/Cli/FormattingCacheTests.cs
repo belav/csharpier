@@ -42,6 +42,40 @@ internal sealed class FormattingCacheTests
     }
 
     [Test]
+    [Arguments(Formatter.CSharp, XmlWhitespaceSensitivity.Strict, false, 4, 100, EndOfLine.Auto)]
+    [Arguments(Formatter.XML, XmlWhitespaceSensitivity.Ignore, true, 2, 80, EndOfLine.CRLF)]
+    [Arguments(
+        Formatter.CSharpScript,
+        XmlWhitespaceSensitivity.Strict,
+        false,
+        3,
+        120,
+        EndOfLine.LF
+    )]
+    public void PrinterOptions_Json_Used_For_Cache_Key_Should_Match_Reflection_Based_Json(
+        Formatter formatter,
+        XmlWhitespaceSensitivity xmlWhitespaceSensitivity,
+        bool useTabs,
+        int indentSize,
+        int width,
+        EndOfLine endOfLine
+    )
+    {
+        var options = new PrinterOptions(formatter, xmlWhitespaceSensitivity)
+        {
+            UseTabs = useTabs,
+            IndentSize = indentSize,
+            Width = width,
+            EndOfLine = endOfLine,
+        };
+
+        JsonSerializer
+            .Serialize(options, CliJsonContext.Default.PrinterOptions)
+            .Should()
+            .Be(JsonSerializer.Serialize(options));
+    }
+
+    [Test]
     public async Task Should_Not_Skip_File_That_Differs_Only_By_Non_Ascii_Character()
     {
         var cache = await this.CreateCacheAsync();
