@@ -214,7 +214,9 @@ internal static class InvocationExpression
         else if (
             expression is PostfixUnaryExpressionSyntax
             {
-                Operand: InvocationExpressionSyntax or MemberAccessExpressionSyntax
+                Operand: InvocationExpressionSyntax
+                    or MemberAccessExpressionSyntax
+                    or ParenthesizedExpressionSyntax
             } postfixUnaryExpression
         )
         {

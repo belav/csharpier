@@ -318,3 +318,20 @@ var someVariable = (
         Property3 = "",
     }
 ).CallMethod();
+
+var someVariable = (
+    new SomeObject
+    {
+        Property1 = "",
+        Property2 = "",
+        Property3 = "",
+    }
+)!
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod();
