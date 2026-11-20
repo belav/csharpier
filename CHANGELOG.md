@@ -1,3 +1,170 @@
+# 1.4.1
+## What's Changed
+### Fix: Trailing lambda with an expression body that breaks is formatted badly [#1941](https://github.com/belav/csharpier/issues/1941)
+1.4.0 started keeping the arguments before a trailing lambda on the same line as the method name. When the lambda had an expression body that did not fit on one line, the body started on the same line as the `=>` and the closing parenthesis was not moved to its own line.
+```c#
+// input & expected output
+CallMethod(one, x =>
+    x == 1 ? "one"
+    : x == 2 ? "two"
+    : "three"
+);
+
+CallMethod(one, x =>
+    from y in x
+    group y by y.Key into g
+    select new
+    {
+        g.Key.Id,
+        g.Key.Alias,
+        Count = g.Count(),
+    }
+);
+
+// 1.4.0
+CallMethod(one, x => x == 1 ? "one"
+    : x == 2 ? "two"
+    : "three");
+
+CallMethod(one, x => from y in x group y by y.Key into g select new
+    {
+        g.Key.Id,
+        g.Key.Alias,
+        Count = g.Count(),
+    });
+```
+
+### Fix: Raw string literals are formatted inconsistently [#1940](https://github.com/belav/csharpier/issues/1940)
+A raw string literal assigned to a variable kept its opening quotes on the same line as the `=`. In other places, such as a lambda body, an expression bodied member, a property initializer or a cast, the opening quotes moved to the next line and the contents were indented one level further than the quotes. These cases are now formatted the same way as a variable.
+```c#
+// input & expected output
+Func<int, string> lambda = _ => """
+    SomeRawString
+    """;
+
+CallMethod(_ => """
+    SomeRawString
+    """
+);
+
+var cast = (object)"""
+    SomeRawString
+    """;
+
+class ClassName
+{
+    string Property { get; } = """
+        SomeRawString
+        """;
+
+    string Method() => """
+        SomeRawString
+        """;
+}
+
+// 1.4.0
+Func<int, string> lambda = _ =>
+    """
+        SomeRawString
+        """;
+
+CallMethod(_ =>
+    """
+        SomeRawString
+        """
+);
+
+var cast = (object)
+    """
+        SomeRawString
+        """;
+
+class ClassName
+{
+    string Property { get; } =
+        """
+            SomeRawString
+            """;
+
+    string Method() =>
+        """
+            SomeRawString
+            """;
+}
+```
+
+### Fix: Warning about an unparseable csproj that is excluded by .csharpierignore [#1930](https://github.com/belav/csharpier/issues/1930)
+CSharpier reads every `.csproj` under the directory it is formatting to check for a version of `CSharpier.MsBuild` that does not match the version of the CLI. This includes files excluded by `.csharpierignore`. When one of those files could not be parsed, CSharpier logged a warning that did not explain why the file was being read.  
+The message is now logged at debug level and states that the file was read as part of the version check.
+
+### Fix: Member chain does not break when it follows a parenthesized expression that breaks [#1914](https://github.com/belav/csharpier/issues/1914)
+```c#
+// input & expected output
+var someVariable = (
+    new SomeObject
+    {
+        Property1 = "",
+        Property2 = "",
+        Property3 = "",
+    }
+)
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod()
+    .CallMethod();
+
+// 1.4.0
+var someVariable = (
+    new SomeObject
+    {
+        Property1 = "",
+        Property2 = "",
+        Property3 = "",
+    }
+).CallMethod().CallMethod().CallMethod().CallMethod().CallMethod().CallMethod().CallMethod();
+```
+
+### Fix: #region inside a disabled #if loses its indentation when another #if is in the file [#1840](https://github.com/belav/csharpier/issues/1840)
+```c#
+// input & expected output
+#if D1
+public class A
+{
+    #region R
+    class B { }
+    #endregion
+}
+#endif
+
+public class C
+{
+#if D2
+    public int V;
+#endif
+}
+
+// 1.4.0
+#if D1
+public class A
+{
+#region R
+    class B { }
+#endregion
+}
+#endif
+
+public class C
+{
+#if D2
+    public int V;
+#endif
+}
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.4.0...1.4.1
 # 1.4.0
 ## Breaking Changes
 ### Drop support for net8.0 and net9.0 [#1888](https://github.com/belav/csharpier/issues/1888)
@@ -4267,6 +4434,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
