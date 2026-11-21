@@ -35,9 +35,8 @@ public class NodePrinterGenerator : IIncrementalGenerator
 
         var generator = new NodePrinterGenerator();
         var template = Template.Parse(generator.GetContent(generator.GetType().Name + ".sbntxt"));
-        var renderedSource = template.Render(
-            generator.GetModel(syntaxTrees),
-            member => member.Name
+        var renderedSource = template.Render(generator.GetModel(syntaxTrees), member =>
+            member.Name
         );
 
         var sourceText = SourceText.From(renderedSource, Encoding.UTF8);

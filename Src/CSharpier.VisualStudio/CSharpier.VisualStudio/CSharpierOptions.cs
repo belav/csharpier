@@ -118,25 +118,19 @@
                 }
             }
 
-            await LoadOptionsFromFile(
-                GetSolutionOptionsFileNameAsync,
-                o =>
-                {
-                    newInstance.SolutionRunOnSave = o.RunOnSave;
-                }
-            );
+            await LoadOptionsFromFile(GetSolutionOptionsFileNameAsync, o =>
+            {
+                newInstance.SolutionRunOnSave = o.RunOnSave;
+            });
 
-            await LoadOptionsFromFile(
-                this.GetGlobalOptionsFileNameAsync,
-                o =>
-                {
-                    newInstance.GlobalRunOnSave = o.RunOnSave;
-                    newInstance.GlobalLogDebugMessages = o.LogDebugMessages;
-                    newInstance.CustomPath = o.CustomPath;
-                    newInstance.UseCustomPath = o.UseCustomPath;
-                    newInstance.DisableCSharpierServer = o.DisableCSharpierServer;
-                }
-            );
+            await LoadOptionsFromFile(this.GetGlobalOptionsFileNameAsync, o =>
+            {
+                newInstance.GlobalRunOnSave = o.RunOnSave;
+                newInstance.GlobalLogDebugMessages = o.LogDebugMessages;
+                newInstance.CustomPath = o.CustomPath;
+                newInstance.UseCustomPath = o.UseCustomPath;
+                newInstance.DisableCSharpierServer = o.DisableCSharpierServer;
+            });
 
             this.LoadFrom(newInstance);
         }

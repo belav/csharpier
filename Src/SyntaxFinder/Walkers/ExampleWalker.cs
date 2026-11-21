@@ -24,19 +24,15 @@ public class ExampleWalker(string file) : SyntaxFinderWalker(file)
     {
         foreach (var member in members)
         {
-            MembersInType.AddOrUpdate(
-                node.GetType().Name,
-                [],
-                (key, list) =>
+            MembersInType.AddOrUpdate(node.GetType().Name, [], (key, list) =>
+            {
+                if (!list.Contains(member.GetType().Name))
                 {
-                    if (!list.Contains(member.GetType().Name))
-                    {
-                        list.Add(member.GetType().Name);
-                    }
-
-                    return list;
+                    list.Add(member.GetType().Name);
                 }
-            );
+
+                return list;
+            });
         }
     }
 

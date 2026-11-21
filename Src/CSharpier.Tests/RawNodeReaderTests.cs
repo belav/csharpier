@@ -97,17 +97,17 @@ public class RawNodeReaderTests
     [Arguments("<Element Attribute=\"@('', '&#xA;')\" />", "@('', '&#xA;')")]
     [Arguments(
         """
-            <Element
-              Attribute=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
-                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
-                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
-            />
-            """,
+        <Element
+          Attribute=" '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+            AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+            AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' "
+        />
+        """,
         """
-             '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
-                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
-                AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' 
-            """
+         '$(MSBuildProjectName)' != 'Microsoft.TestCommon'
+            AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetCore.Test'
+            AND '$(MSBuildProjectName)' != 'System.Net.Http.Formatting.NetStandard.Test' 
+        """
     )]
     public void Should_Read_Various_Attributes(string xml, string attributeValue)
     {

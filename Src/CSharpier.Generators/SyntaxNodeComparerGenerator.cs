@@ -15,9 +15,8 @@ public class SyntaxNodeComparerGenerator : IIncrementalGenerator
             (compilation, _) => ValidNodeTypes.Get(compilation)
         );
 
-        context.RegisterSourceOutput(
-            compilationProvider,
-            static (context, entityClasses) => Execute(context, entityClasses)
+        context.RegisterSourceOutput(compilationProvider, static (context, entityClasses) =>
+            Execute(context, entityClasses)
         );
     }
 

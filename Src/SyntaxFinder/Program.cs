@@ -32,21 +32,18 @@ if (!typesByName.TryGetValue(nameOfTypeToRun, out var typeToRun))
 
 var constructor = typeToRun.GetConstructors().Single();
 
-Parallel.ForEach(
-    files,
-    file =>
+Parallel.ForEach(files, file =>
+{
+    if (Ignored.Is(file))
     {
-        if (Ignored.Is(file))
-        {
-            return;
-        }
-
-        var contents = File.ReadAllText(file);
-        var tree = CSharpSyntaxTree.ParseText(contents);
-
-        var syntaxWalker = constructor.Invoke([file]) as CSharpSyntaxWalker;
-        syntaxWalker!.Visit(tree.GetRoot());
+        return;
     }
-);
+
+    var contents = File.ReadAllText(file);
+    var tree = CSharpSyntaxTree.ParseText(contents);
+
+    var syntaxWalker = constructor.Invoke([file]) as CSharpSyntaxWalker;
+    syntaxWalker!.Visit(tree.GetRoot());
+});
 
 typeToRun.GetMethod("WriteResult")?.Invoke(null, null);

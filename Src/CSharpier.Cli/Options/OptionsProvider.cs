@@ -105,8 +105,8 @@ internal class OptionsProvider
                 optionsProvider.ignoreWithPathCache,
                 cancellationToken
             );
-            optionsProvider.ignoreFilesByDirectory[directoryName] =
-                ignoreFile ?? IgnoreFile.NullIgnore;
+            optionsProvider.ignoreFilesByDirectory[directoryName] = ignoreFile
+                ?? IgnoreFile.NullIgnore;
         }
 
         if (distinctDirectoryNames.Length == 1)

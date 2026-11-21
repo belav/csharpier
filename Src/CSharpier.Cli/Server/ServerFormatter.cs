@@ -32,17 +32,14 @@ internal class ServerFormatter
         {
             builder
                 .SetMinimumLevel(LogLevel.Information)
-                .AddFile(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"),
-                    o =>
-                    {
-                        o.MaxRollingFiles = 1;
-                        o.FileSizeLimitBytes = 10000;
-                        o.HandleFileError = _ => { };
-                        o.FormatLogFileName = name =>
-                            string.Format(CultureInfo.InvariantCulture, name, port);
-                    }
-                );
+                .AddFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "server{0}.log"), o =>
+                {
+                    o.MaxRollingFiles = 1;
+                    o.FileSizeLimitBytes = 10000;
+                    o.HandleFileError = _ => { };
+                    o.FormatLogFileName = name =>
+                        string.Format(CultureInfo.InvariantCulture, name, port);
+                });
         });
 
         logger.LogInformation("Started on " + port);
@@ -75,11 +72,10 @@ internal class ServerFormatter
 
             if (request.Url?.AbsolutePath == "/format" && request.HttpMethod == "POST")
             {
-                var formatFileDto =
-                    await JsonSerializer.DeserializeAsync<FormatFileParameter>(
-                        request.InputStream,
-                        cancellationToken: cancellationToken
-                    ) ?? throw new Exception("No body!");
+                var formatFileDto = await JsonSerializer.DeserializeAsync<FormatFileParameter>(
+                    request.InputStream,
+                    cancellationToken: cancellationToken
+                ) ?? throw new Exception("No body!");
 
                 var result = await service.FormatFile(formatFileDto, cancellationToken);
 

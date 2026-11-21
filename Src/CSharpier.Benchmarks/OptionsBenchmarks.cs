@@ -106,14 +106,13 @@ public class OptionsBenchmarks
         }
 
         this.filePathsToCheck = BuildFilePathsToCheck(this.targetDirectory);
-        this.warmIgnoreFile =
-            await IgnoreFile.CreateAsync(
-                this.targetDirectory,
-                this.fileSystem,
-                null,
-                null,
-                CancellationToken.None
-            ) ?? throw new Exception("no ignore file");
+        this.warmIgnoreFile = await IgnoreFile.CreateAsync(
+            this.targetDirectory,
+            this.fileSystem,
+            null,
+            null,
+            CancellationToken.None
+        ) ?? throw new Exception("no ignore file");
 
         this.CheckFilesIgnored();
     }

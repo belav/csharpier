@@ -905,9 +905,10 @@ overrides:
                 CancellationToken.None
             );
 
-            var printerOptions =
-                await provider.GetPrinterOptionsForAsync(filePath, CancellationToken.None)
-                ?? throw new Exception("PrinterOptions was null");
+            var printerOptions = await provider.GetPrinterOptionsForAsync(
+                filePath,
+                CancellationToken.None
+            ) ?? throw new Exception("PrinterOptions was null");
 
             return printerOptions;
         }

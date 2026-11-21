@@ -18,8 +18,8 @@ internal class EditorConfigSections
             .ToList();
         var resolvedConfiguration = new ResolvedConfiguration(sections);
 
-        var formatter =
-            resolvedConfiguration.Formatter ?? PrinterOptions.GetFormatter(filePath).ToString();
+        var formatter = resolvedConfiguration.Formatter
+            ?? PrinterOptions.GetFormatter(filePath).ToString();
 
         if (!Enum.TryParse<Formatter>(formatter, ignoreCase: true, out var parsedFormatter))
         {
@@ -47,8 +47,8 @@ internal class EditorConfigSections
         }
         else
         {
-            printerOptions.IndentSize =
-                resolvedConfiguration.IndentSize ?? printerOptions.IndentSize;
+            printerOptions.IndentSize = resolvedConfiguration.IndentSize
+                ?? printerOptions.IndentSize;
         }
 
         if (resolvedConfiguration.EndOfLine is { } endOfLine)
