@@ -47,21 +47,31 @@ jobs:
             os: ubuntu-24.04-arm
           - rid: linux-musl-x64
             os: ubuntu-latest
-            container: mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot
+            image: mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot
+          - rid: linux-musl-arm64
+            os: ubuntu-24.04-arm
+            image: mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot
           - rid: osx-arm64
             os: macos-latest
           - rid: osx-x64
             os: macos-latest
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.container }}
     name: pack ${{ matrix.rid }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
-        if: matrix.container == ''
-      - run: >
+        if: matrix.image == ''
+      - if: matrix.image == ''
+        run: >
           dotnet pack Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -r ${{ matrix.rid }}
-          -p:TargetFrameworks=net10.0 -p:TreatWarningsAsErrors=true -o ./packages
+          -p:TreatWarningsAsErrors=true -o ./packages
+      # the runner refuses to run javascript actions such as checkout in an alpine job container on arm64,
+      # so the musl packages are packed with docker run instead of a job container
+      - if: matrix.image != ''
+        run: >
+          docker run --rm -v "$PWD:/src" -w /src ${{ matrix.image }}
+          dotnet pack Src/CSharpier.Cli/CSharpier.Cli.csproj -c Release -r ${{ matrix.rid }}
+          -p:TreatWarningsAsErrors=true -o ./packages
       - uses: actions/upload-artifact@v4
         with:
           name: package-${{ matrix.rid }}
@@ -94,23 +104,34 @@ jobs:
     runs-on: ubuntu-latest
     name: publish nuget
     needs: [ test, check-version, pack-native, pack-pointer ]
+    # the pack jobs are skipped when the CSharpier tool version is already published. This job still has to run then
+    # so that a failed publish of CSharpier.Core or CSharpier.MsBuild is retried when the workflow is run again
+    if: >-
+      ${{ !cancelled()
+      && needs.test.result == 'success'
+      && needs.check-version.result == 'success'
+      && (needs.pack-native.result == 'success' || needs.pack-native.result == 'skipped')
+      && (needs.pack-pointer.result == 'success' || needs.pack-pointer.result == 'skipped') }}
     permissions:
       contents: write
       id-token: write
     env:
       VERSION_FILE_PATH: Nuget/Build.props
       VERSION: ${{ needs.check-version.outputs.version }}
+      PUBLISH_TOOL: ${{ needs.check-version.outputs.publish }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v3
       - uses: actions/download-artifact@v4
+        if: env.PUBLISH_TOOL == 'true'
         with:
           pattern: package-*
           path: ./packages
           merge-multiple: true
       - name: Verify all CSharpier tool packages exist
+        if: env.PUBLISH_TOOL == 'true'
         run: |
-          for name in "" ".win-x64" ".win-arm64" ".linux-x64" ".linux-arm64" ".linux-musl-x64" ".osx-x64" ".osx-arm64" ".any"; do
+          for name in "" ".win-x64" ".win-arm64" ".linux-x64" ".linux-arm64" ".linux-musl-x64" ".linux-musl-arm64" ".osx-x64" ".osx-arm64" ".any"; do
             test -f "./packages/CSharpier$name.$VERSION.nupkg" || { echo "missing CSharpier$name.$VERSION.nupkg"; exit 1; }
           done
       - name: NuGet login
@@ -126,11 +147,13 @@ jobs:
           NUGET_KEY: ${{steps.login.outputs.NUGET_API_KEY}}
       # the runtime specific packages have to exist before the package that points to them
       - name: Publish CSharpier dotnet tool runtime specific packages
+        if: env.PUBLISH_TOOL == 'true'
         run: >
           dotnet nuget push "./packages/CSharpier.*.$VERSION.nupkg"
           --source https://api.nuget.org/v3/index.json
           --api-key "${{steps.login.outputs.NUGET_API_KEY}}" --skip-duplicate
       - name: Publish CSharpier dotnet tool
+        if: env.PUBLISH_TOOL == 'true'
         run: >
           dotnet nuget push "./packages/CSharpier.$VERSION.nupkg"
           --source https://api.nuget.org/v3/index.json

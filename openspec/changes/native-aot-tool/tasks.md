@@ -60,49 +60,39 @@
 - [x] 8.5 Install from a local feed that lacks the win-x64 package to confirm the `any` fallback is selected and runs
 - [ ] 8.6 (package contents confirmed after adding excludes for runtime specific folders; `Tests/MsBuild/Run.ps1` not run, it needs docker) Confirm `dotnet pack Src/CSharpier.MsBuild` still bundles the managed `CSharpier.dll` for both target frameworks and `Tests/MsBuild/Run.ps1` passes
 - [x] 8.7 Confirm `dotnet build` and `dotnet test` output paths are unchanged for the solution
-- [ ] 8.8 Remove `win-x64` and `win-arm64` from `ToolPackageRuntimeIdentifiers` in `CSharpier.Cli.csproj` so Windows keeps using the `any` package until the plugins are updated (design decision 12)
-- [ ] 8.9 Build the linux-x64 native package in a Linux container, install it with `--tool-path`, and confirm `<tool-path>/csharpier` is a file that starts without a shell
-- [ ] 8.10 Install with `dotnet tool install -g` on Windows and Linux and record what shim each creates
+- [x] 8.8 Build the linux-x64 native package in a Linux container, install it with `--tool-path`, and confirm `<tool-path>/csharpier` is a file that starts without a shell (it is a relative symlink to the native executable in `.store`; see design decision 11)
+- [x] 8.9 Install with `dotnet tool install -g` on Windows and Linux and record what shim each creates (Windows: `csharpier.cmd`, Linux: symlink; see design decision 11)
 
 ## 9. Release workflow
 
 - [ ] 9.1 (written in `publish_nuget.yml`, not yet run on GitHub) Add a job to `publish_nuget.yml` that outputs whether the version in `Nuget/Build.props` is already on nuget.org
-- [ ] 9.2 (written in `publish_nuget.yml`, not yet run on GitHub) Add a matrix job that packs native packages on ubuntu (linux-x64, linux-arm64, linux-musl-x64 in an Alpine container) and macOS (osx-arm64, osx-x64) and uploads them as artifacts
+- [ ] 9.2 (written in `publish_nuget.yml`, not yet run on GitHub) Add a matrix job that packs native packages on windows (win-x64, win-arm64), ubuntu (linux-x64, linux-arm64, linux-musl-x64 and linux-musl-arm64 with `docker run` of the Alpine AOT image), and macOS (osx-arm64, osx-x64) and uploads them as artifacts
 - [ ] 9.3 (written in `publish_nuget.yml`, not yet run on GitHub) Add a job that packs the pointer and `any` packages
 - [ ] 9.4 (written in `publish_nuget.yml`, not yet run on GitHub) Add a final job that requires all pack jobs, pushes runtime packages then the pointer package with the trusted-publishing login
 - [ ] 9.5 (written in `publish_nuget.yml`, not yet run on GitHub) Remove the `alirezanet/publish-nuget` step for the CLI; keep the steps for `CSharpier.Core` and `CSharpier.MsBuild`
-- [ ] 9.6 Remove the `win-x64` and `win-arm64` matrix entries and their entries in the package verification step of `publish_nuget.yml`, to match 8.8
-- [ ] 9.7 Confirm the Alpine AOT SDK image tag used for linux-musl-x64 exists and has an SDK that satisfies `global.json`
-- [ ] 9.8 Dry-run the workflow on a branch with the push step disabled and inspect all seven packages (pointer, five native, `any`)
+- [x] 9.6 Confirm the Alpine AOT SDK image tag used for linux-musl-x64 and linux-musl-arm64 exists for both architectures and has an SDK that satisfies `global.json`
+- [ ] 9.7 Dry-run the workflow on a branch with the push step disabled and inspect all ten packages
 
-## 10. First release: Linux and macOS native packages
+## 10. Plugins: find the native executable on Windows
 
-- [ ] 10.1 Publish a prerelease version and install it on Linux glibc, Alpine, macOS arm64, and Windows
-- [ ] 10.2 Confirm Windows installs the `any` package and gets `csharpier.exe` with `--tool-path`
-- [ ] 10.3 Verify the released VSCode and Rider plugins install and run the prerelease on Linux and macOS, including the `server` command, and all three plugins on Windows
-- [ ] 10.4 Update the installation docs: native packages, supported RIDs, the managed fallback on Windows and other platforms, minimum glibc, and the .NET 10 SDK requirement
-- [ ] 10.5 Add a changelog entry
-- [ ] 10.6 Run `dotnet csharpier format .` and the full test suite
-- [ ] 10.7 Publish the stable version
+These are done in this change and released before the CSharpier version with native packages (design decision 12).
 
-## 11. Plugins: find the native executable on Windows
+- [ ] 10.1 VSCode: in `CustomPathInstaller.getPathForVersion`, return `csharpier.exe` when it exists; otherwise return the native executable under `.store/csharpier/<version>/csharpier.<rid>/<version>/tools/any/<rid>/CSharpier.exe`; keep the current path on Linux and macOS
+- [ ] 10.2 Rider: the same lookup in `CustomPathInstaller.java`
+- [ ] 10.3 Visual Studio: the same lookup in `CustomPathInstaller.cs`
+- [ ] 10.4 Base the lookup on which file exists, not on the CSharpier version, because the same version installs `csharpier.exe` on platforms that use the `any` package
+- [ ] 10.5 Start the resolved executable directly, not `csharpier.cmd`, so stopping the process stops the CSharpier server and no shell is needed
+- [ ] 10.6 Check the paths the plugins use for an existing global or local tool install and apply the same lookup where they start an executable directly
+- [ ] 10.7 Test each plugin on Windows against a `--tool-path` install of a locally packed win-x64 native package and against an `any` install: format a file, restart the server, close the IDE and confirm no CSharpier process is left running
+- [ ] 10.8 Test the VSCode and Rider plugins on Linux or macOS against a locally packed native package
+- [ ] 10.9 Release the three plugins and record the first plugin versions that support native packages on Windows
 
-Where the plugin work is done is not decided: the Rider change overlaps with uncommitted work on the `better-rider` branch (`CSharpierProcessProvider.java`).
+## 11. Release
 
-- [ ] 11.1 VSCode: in `CustomPathInstaller.getPathForVersion`, return `csharpier.exe` when it exists; otherwise return the native executable under `.store/csharpier/<version>/csharpier.<rid>/<version>/tools/any/<rid>/CSharpier.exe`; keep the current path on Linux and macOS
-- [ ] 11.2 Rider: the same lookup in `CustomPathInstaller.java`
-- [ ] 11.3 Visual Studio: the same lookup in `CustomPathInstaller.cs`
-- [ ] 11.4 Base the lookup on which file exists, not on the CSharpier version, because the same version installs `csharpier.exe` on platforms that use the `any` package
-- [ ] 11.5 Start the resolved executable directly, not `csharpier.cmd`, so stopping the process stops the CSharpier server and no shell is needed
-- [ ] 11.6 Check the paths the plugins use for an existing global or local tool install and apply the same lookup where they start an executable directly
-- [ ] 11.7 Test each plugin on Windows against a `--tool-path` install of a locally packed win-x64 native package and against an `any` install: format a file, restart the server, close the IDE and confirm no CSharpier process is left running
-- [ ] 11.8 Release the three plugins and record the first plugin versions that support native packages on Windows
-
-## 12. Later release: Windows native packages
-
-- [ ] 12.1 Wait until the plugin versions from 11.8 have been available for at least one CSharpier release
-- [ ] 12.2 Add `win-x64` and `win-arm64` back to `ToolPackageRuntimeIdentifiers`, the `publish_nuget.yml` matrix, and the package verification step
-- [ ] 12.3 Publish a prerelease and verify the three updated plugins on Windows x64, and on Windows arm64 if a machine is available
-- [ ] 12.4 Install the prerelease with a plugin version older than 11.8 on Windows and record the error the user sees
-- [ ] 12.5 Document the minimum plugin versions for Windows in the installation docs and the changelog, including the error from 12.4 and how to fix it
-- [ ] 12.6 Publish the stable version
+- [ ] 11.1 Publish a prerelease version and install it on Windows x64, Linux glibc, Alpine x64, Alpine arm64 if a machine or emulation is available, and macOS arm64
+- [ ] 11.2 Verify the plugin versions from 10.9 install and run the prerelease on each platform, including the `server` command
+- [ ] 11.3 Install the prerelease with a plugin version older than 10.9 on Windows and record the error the user sees
+- [ ] 11.4 Update the installation docs: native packages, supported RIDs, the managed fallback, minimum glibc, the .NET 10 SDK requirement, and the minimum plugin versions on Windows with the error from 11.3 and how to fix it
+- [ ] 11.5 Add a changelog entry that calls out the minimum plugin versions on Windows
+- [ ] 11.6 Run `dotnet csharpier format .` and the full test suite
+- [ ] 11.7 Publish the stable version

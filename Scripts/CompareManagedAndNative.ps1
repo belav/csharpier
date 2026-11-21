@@ -58,10 +58,14 @@ if ($managedExitCode -ne $nativeExitCode) {
     $failures += "Exit codes differ: managed $managedExitCode, native $nativeExitCode"
 }
 
-# the last line of the output includes the elapsed time
-$normalizedManagedOutput = ($managedOutput -replace "in \d+ms", "in Xms").Replace($managedDirectory, "")
-$normalizedNativeOutput = ($nativeOutput -replace "in \d+ms", "in Xms").Replace($nativeDirectory, "")
-if ($normalizedManagedOutput -ne $normalizedNativeOutput) {
+# files are formatted concurrently so messages for different files come out in a different order on each run,
+# and the last line of the output includes the elapsed time
+function NormalizeOutput([string]$output, [string]$directory) {
+    $lines = ($output -replace "in \d+ms", "in Xms").Replace($directory, "") -split "\r?\n"
+    return ($lines | ForEach-Object { $_.TrimEnd() } | Sort-Object -CaseSensitive) -join "`n"
+}
+
+if ((NormalizeOutput $managedOutput $managedDirectory) -cne (NormalizeOutput $nativeOutput $nativeDirectory)) {
     $failures += "Console output differs.`n--- managed`n$managedOutput`n--- native`n$nativeOutput"
 }
 

@@ -85,7 +85,7 @@ Set in `CSharpier.Cli.csproj`:
 
 ```xml
 <PublishAot>true</PublishAot>
-<ToolPackageRuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm64;linux-musl-x64;osx-x64;osx-arm64;any</ToolPackageRuntimeIdentifiers>
+<ToolPackageRuntimeIdentifiers>win-x64;win-arm64;linux-x64;linux-arm64;linux-musl-x64;linux-musl-arm64;osx-x64;osx-arm64;any</ToolPackageRuntimeIdentifiers>
 ```
 
 `dotnet pack` produces the pointer package. `dotnet pack -r <rid>` produces each native package. The `any` package is packed with `PublishAot=false`. `ToolPackageRuntimeIdentifiers` is used instead of `RuntimeIdentifiers` so that plain `dotnet build` output paths stay as they are, which `CSharpier.MsBuild` and the test projects depend on.
@@ -157,14 +157,14 @@ A parity check formats the repository's own test files with both builds and comp
 
 ### 9. Target framework of the native packages
 
-Native packages are built from a single target framework, `net10.0`, so the .NET 10 SDK can install them. The `any` package keeps both `net10.0` and `net11.0` as today. How multi-targeting interacts with `ToolPackageRuntimeIdentifiers` is not verified; see Open Questions.
+Native packages are built from a single target framework, `net10.0`, so the .NET 10 SDK can install them. The `any` package keeps both `net10.0` and `net11.0` as today. `CSharpier.Cli.csproj` sets `TargetFrameworks` to `net10.0` when a runtime identifier other than `any` is set; see the pack commands under decision 11.
 
 ### 10. Release workflow
 
 Replace the `alirezanet/publish-nuget` step for the CLI with:
 
 1. A job that compares the version in `Nuget/Build.props` with nuget.org and outputs whether to publish.
-2. A matrix job that packs native packages: `windows-latest` (win-x64, win-arm64), `ubuntu-latest` (linux-x64, linux-arm64, linux-musl-x64; the musl build runs in an Alpine container, arm64 uses the cross toolchain or `ubuntu-24.04-arm`), `macos-latest` (osx-arm64, osx-x64). Each uploads its `.nupkg` files as artifacts.
+2. A matrix job that packs native packages: `windows-latest` (win-x64, win-arm64), `ubuntu-latest` (linux-x64, and linux-musl-x64 in `mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot`), `ubuntu-24.04-arm` (linux-arm64, and linux-musl-arm64 in the same image), `macos-latest` (osx-arm64, osx-x64). Each uploads its `.nupkg` files as artifacts. The musl packs run the image with `docker run` on the runner, not as a job `container:`, because the GitHub runner refuses JavaScript actions such as `actions/checkout` in an Alpine job container on arm64 ("JavaScript Actions in Alpine containers are only supported on x64 Linux runners", `CheckPlatformForAlpineContainer` in `actions/runner` `StepHost.cs`). Both musl jobs use `docker run` so they are set up the same way.
 3. A job that packs the pointer package and the `any` package on ubuntu.
 4. A final job that depends on all of the above, downloads every artifact, pushes them with `dotnet nuget push` using the existing trusted-publishing login, and creates the git tag.
 
@@ -190,9 +190,10 @@ Native is faster on every input, so task 7.2 does not stop the work.
 
 **Pack commands (resolves open questions 1 to 3).** Verified with SDK 11.0.100:
 
-- Native package: `dotnet pack Src/CSharpier.Cli -c Release -r <rid> -p:TargetFrameworks=net10.0`. Produces `CSharpier.<rid>.<version>.nupkg` with `tools/any/<rid>/CSharpier.exe`, 9.3 MB for win-x64.
+- Native package: `dotnet pack Src/CSharpier.Cli -c Release -r <rid>`. Produces `CSharpier.<rid>.<version>.nupkg` with `tools/any/<rid>/CSharpier.exe`, 9.3 MB for win-x64, 10.1 MB for linux-x64 and linux-musl-x64. The single `net10.0` target framework comes from `CSharpier.Cli.csproj`. It was first passed as `-p:TargetFrameworks=net10.0`, but a global property also reaches `CSharpier.Core` and `CSharpier.Generators`, which retargeted the source generator from `netstandard2.0` to `net10.0` and failed the pack with NU1510 under `-p:TreatWarningsAsErrors=true`.
+- The pointer package pack reports NU5118 because `net10.0` and `net11.0` both add `tools/any/any/DotnetToolSettings.xml`. The files are the same, so the warning is harmless, but the pointer pack cannot use `-p:TreatWarningsAsErrors=true`.
 - `any` package: `dotnet pack Src/CSharpier.Cli -c Release -r any -p:PublishAot=false`. Contains `tools/net10.0/any` and `tools/net11.0/any`, 13 MB.
-- Pointer package: `dotnet pack Src/CSharpier.Cli -c Release -p:CreateRidSpecificToolPackages=false`. Contains only `tools/any/any/DotnetToolSettings.xml` listing all eight runtime identifiers, so it is not tied to a target framework.
+- Pointer package: `dotnet pack Src/CSharpier.Cli -c Release -p:CreateRidSpecificToolPackages=false`. Contains only `tools/any/any/DotnetToolSettings.xml` listing every runtime identifier (eight when this was run, nine with linux-musl-arm64), so it is not tied to a target framework.
 - A plain `dotnet pack` does not work with SDK 11: besides the pointer package it starts inner packs for the runtime identifiers the host can build (win-x64 and win-arm64 on Windows) and they fail with NETSDK1047 because restore did not include those runtime identifiers. This differs from the .NET 10 documentation, which says a plain pack only produces the pointer package.
 - Passing the runtime identifier list on the command line does not work: an escaped `;` produces a single runtime identifier named `linux-x64;any`.
 - `CopyOutputSymbolsToPublishDirectory=false` for runtime-specific packs keeps the 73 MB native pdb out of the package.
@@ -201,25 +202,29 @@ Native is faster on every input, so task 7.2 does not stop the work.
 
 **Install results (Windows, local feed).** With SDK 10.0.204 and SDK 11.0.100: the win-x64 native package installs and runs as a local tool (`dotnet csharpier`) and with `--tool-path`; a pointer package that lists only `linux-x64;any` installs the `any` package and runs. The native executable runs with `DOTNET_ROOT` pointing at a missing directory.
 
-**Windows `--tool-path` shim is a `.cmd` file (blocks Windows native packages for IDE plugins).** For a framework-dependent tool the SDK writes `tools/csharpier.exe`. For the native package it writes `tools/csharpier.cmd` containing a call to the executable in `.store`. Starting `<tool-path>\csharpier` directly, without a shell, fails with "The system cannot find the file specified". The VSCode (`spawn`), Rider (`ProcessBuilder`), and Visual Studio (`ProcessStartInfo` with `UseShellExecute = false`) plugins all start it that way, so every released plugin version would stop working on Windows after a user moves to a CSharpier version with Windows native packages. The spec scenario "Install with tool-path" expects `csharpier.exe` on Windows and cannot be met with the current SDK behavior. Not checked on Linux or macOS, where the shim is expected to be a file named `csharpier`.
+**Windows `--tool-path` shim is a `.cmd` file (blocks Windows native packages for IDE plugins).** For a framework-dependent tool the SDK writes `tools/csharpier.exe`. For the native package it writes `tools/csharpier.cmd` containing a call to the executable in `.store`. Starting `<tool-path>\csharpier` directly, without a shell, fails with "The system cannot find the file specified". The VSCode (`spawn`), Rider (`ProcessBuilder`), and Visual Studio (`ProcessStartInfo` with `UseShellExecute = false`) plugins all start it that way, so every released plugin version would stop working on Windows after a user moves to a CSharpier version with Windows native packages. The spec scenario "Install with tool-path" expects `csharpier.exe` on Windows and cannot be met with the current SDK behavior. `dotnet tool install -g` creates the same `.cmd` file in `%USERPROFILE%\.dotnet\tools` (checked with `DOTNET_CLI_HOME` pointing at an empty directory): `@echo off` followed by `"%~dp0.store\csharpier\<version>\csharpier.win-x64\<version>\tools\any\win-x64\CSharpier.exe" %*`. `csharpier` typed in `cmd` or PowerShell works because both run `.cmd` files from `PATH`.
+
+**Install results (Linux, containers).** SDK 11.0.100 on Ubuntu 26.04 and Alpine 3.24, x64, from a local feed with the pointer, linux-x64, linux-musl-x64, and `any` packages. `--tool-path` and `-g` both create `csharpier` as a relative symlink to the native ELF executable, for example `csharpier -> .store/csharpier/<version>/csharpier.linux-x64/<version>/tools/any/linux-x64/CSharpier`. Started directly as the container entrypoint (no shell) in `runtime-deps:10.0` and `runtime-deps:10.0-alpine`, which have no dotnet installed, it prints the version and formats stdin. Alpine selects `linux-musl-x64`, Ubuntu selects `linux-x64`. A local tool (`dotnet new tool-manifest`, `dotnet tool install csharpier`, `dotnet csharpier format A.cs`) works on both. The plugins can start `<tool-path>/csharpier` on Linux as they do today. macOS was not checked.
+
+**Alpine AOT image.** `mcr.microsoft.com/dotnet/sdk:11.0-alpine-aot` has linux/amd64 and linux/arm64 manifests, both with SDK 11.0.100, which satisfies `global.json` (`11.0.100`, `latestFeature`). linux-musl-x64 packs in it with warnings as errors.
 
 Decided: see decision 12.
 
-### 12. Windows native packages are released after a plugin update
+### 12. Windows native packages ship in the first release, with a plugin update
 
-Decided by the maintainer after the shim finding above. The work is released in three steps:
+Decided by the maintainer after the shim finding above. Windows is the reason for this change, so `win-x64` and `win-arm64` stay in `ToolPackageRuntimeIdentifiers` and ship in the first release that has native packages. The plugins are changed to cope with the `.cmd` shim and are released first:
 
-1. A CSharpier release with native packages for Linux and macOS plus `any`. `win-x64` and `win-arm64` are left out of `ToolPackageRuntimeIdentifiers`, so Windows installs the `any` package, gets `csharpier.exe`, and existing plugin versions keep working.
-2. Plugin releases (VSCode, Rider, Visual Studio) that locate the executable on Windows: use `<tool-path>\csharpier.exe` when it exists, otherwise the native executable under `.store\csharpier\<version>\csharpier.<rid>\<version>\tools\any\<rid>\CSharpier.exe`.
-3. A later CSharpier release that adds `win-x64` and `win-arm64`.
+1. Plugin releases (VSCode, Rider, Visual Studio) that locate the executable on Windows: use `<tool-path>\csharpier.exe` when it exists, otherwise the native executable under `.store\csharpier\<version>\csharpier.<rid>\<version>\tools\any\<rid>\CSharpier.exe`.
+2. The CSharpier release with native packages for all eight runtime identifiers plus `any`.
 
 Details of the plugin change:
 
 - The lookup checks which file exists and does not compare versions. One CSharpier version installs `csharpier.exe` on a Windows platform that uses the `any` package and `csharpier.cmd` on one with a native package.
 - The plugins start the native executable, not `csharpier.cmd`. Running the `.cmd` puts `cmd.exe` between the plugin and the `server` or `pipe-files` process, so stopping the process can leave the CSharpier server running, and Node's `spawn` rejects `.cmd` files without `shell: true`. Neither effect was tested here.
-- Plugin versions released before step 2 fail on Windows once a user installs a CSharpier version from step 3. Releasing step 2 at least one CSharpier release ahead reduces how many users hit that; the docs and changelog for step 3 state the minimum plugin versions.
 
-Alternatives considered: shipping Windows native packages immediately with a plugin update (breaks installed plugins on Windows on day one), and reporting the shim to dotnet/sdk and waiting for a fix (no date, and already released SDKs would keep the `.cmd` shim). Reporting it is still worthwhile but nothing here depends on it.
+Accepted cost: a plugin version older than step 1 fails on Windows as soon as the user's project moves to the CSharpier version from step 2. The docs and changelog state the minimum plugin versions and show the error.
+
+Alternatives considered: leaving the Windows runtime identifiers out until a later release (rejected, it removes the main benefit), and reporting the shim to dotnet/sdk and waiting for a fix (no date, and already released SDKs would keep the `.cmd` shim). Reporting it is still worthwhile but nothing here depends on it.
 
 ## Risks / Trade-offs
 
@@ -230,7 +235,7 @@ Alternatives considered: shipping Windows native packages immediately with a plu
 - [Release needs macOS and Windows runners; longer and more expensive releases] → Native matrix runs only when the version changed; pull requests build one RID on ubuntu.
 - [A user on SDK 10 installs to a platform where the native binary fails, for example an old glibc] → Document how to force the managed fallback and state the minimum glibc of the build image in the docs.
 - [Throughput: NativeAOT has no tiered JIT, so formatting a very large repository may be slower than the managed build] → Benchmark both single-file and whole-repository runs before release; results decide whether to proceed and are recorded in the change.
-- [Nine packages per release on nuget.org; a partial push leaves a broken version] → All-or-nothing push job, runtime packages first, pointer last.
+- [Ten packages per release on nuget.org; a partial push leaves a broken version] → All-or-nothing push job, runtime packages first, pointer last.
 
 ## Migration Plan
 
@@ -243,9 +248,10 @@ Rollback after stage 3: remove `ToolPackageRuntimeIdentifiers` and `PublishAot` 
 
 ## Open Questions
 
-- Does `ToolPackageRuntimeIdentifiers` work with `TargetFrameworks=net10.0;net11.0`, and which target framework folder do the pointer and native packages use? If it does not, the CLI packs native packages from `net10.0` only through a pack-time property.
-- Exact command to pack the `any` package when `PublishAot=true` is set in the project.
-- Can the .NET 10 SDK install a pointer package produced by the .NET 11 SDK that `global.json` pins?
-- Is there a supported way for a user to force the `any` package on a listed platform?
-- Does `dotnet tool install` for a local tool manifest (`dotnet tool restore`) behave the same as global install for RID-specific packages on all three operating systems?
-- Is linux-musl-arm64 wanted in the first release?
+Answered and recorded under decision 11: multi-targeting with `ToolPackageRuntimeIdentifiers`, the pack command for `any`, and SDK 10 installing packages built by SDK 11. linux-musl-arm64 was added to the runtime identifiers. The plugin work is done in this change.
+
+Still open:
+
+- What do `--tool-path`, `-g`, and local tool installs create on macOS? Linux and Windows are recorded under decision 11.
+- Is there a supported way for a user to force the `any` package on a platform that has a native package?
+- Should the `.cmd` shim be reported to dotnet/sdk?

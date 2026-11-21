@@ -2,7 +2,7 @@
 
 ### Requirement: Native packages per runtime identifier
 
-The `CSharpier` tool SHALL be published as a pointer package named `CSharpier` together with one NativeAOT package for each of these runtime identifiers: win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64. The win-x64 and win-arm64 packages SHALL NOT be published until plugin versions that can locate the native executable on Windows have been released.
+The `CSharpier` tool SHALL be published as a pointer package named `CSharpier` together with one NativeAOT package for each of these runtime identifiers: win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, linux-musl-arm64, osx-x64, osx-arm64. Plugin versions that can locate the native executable on Windows SHALL be released before the first CSharpier version that has these packages.
 
 #### Scenario: Install on a listed platform
 - **WHEN** a user runs `dotnet tool install csharpier` with the .NET 10 SDK or later on a platform matching a listed runtime identifier
@@ -16,10 +16,6 @@ The `CSharpier` tool SHALL be published as a pointer package named `CSharpier` t
 - **WHEN** a user or IDE plugin runs `dotnet tool install csharpier --version <version> --tool-path <dir>` on a listed platform
 - **THEN** on Linux and macOS `<dir>/csharpier` SHALL exist and SHALL start the native executable without a shell
 - **AND** on Windows the native executable SHALL exist at `<dir>/.store/csharpier/<version>/csharpier.<rid>/<version>/tools/any/<rid>/CSharpier.exe`
-
-#### Scenario: Windows before native packages are published
-- **WHEN** a user or IDE plugin runs `dotnet tool install csharpier --version <version> --tool-path <dir>` on Windows for a version that does not list win-x64 or win-arm64
-- **THEN** the `any` package SHALL be installed and `<dir>/csharpier.exe` SHALL exist
 
 ### Requirement: Plugins locate the executable on Windows
 

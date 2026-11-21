@@ -4,7 +4,7 @@ The `csharpier` dotnet tool starts on the .NET runtime and pays JIT cost on ever
 
 ## What Changes
 
-- Publish the `CSharpier` tool as a pointer package plus one NativeAOT package per supported runtime identifier: win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, osx-x64, osx-arm64.
+- Publish the `CSharpier` tool as a pointer package plus one NativeAOT package per supported runtime identifier: win-x64, win-arm64, linux-x64, linux-arm64, linux-musl-x64, linux-musl-arm64, osx-x64, osx-arm64.
 - Keep an `any` framework-dependent package as the fallback for every other platform. It is the same managed build that ships today.
 - Make `CSharpier.Cli` and the `net10.0`/`net11.0` builds of `CSharpier.Core` free of trim and AOT warnings:
   - Replace reflection-based `System.Text.Json` calls with source-generated contexts.
@@ -29,7 +29,7 @@ None. The requirements in `cli-formatting-pipeline` and `formatter-performance-i
 - **Code**: `Src/CSharpier.Cli` (`Program.cs`, `FormattingCommands.cs`, `PipeCommand.cs`, `ServerCommand.cs`, `FormattingCache.cs`, `Options/CSharpierConfigParser.cs`, `Options/ConfigurationFileOptions.cs`, `Server/ServerFormatter.cs`), `Src/CSharpier.Core` (`CSharp/CSharpFormatter.cs`, `DebugLogger.cs`, `Xml/RawNodeSyntaxWriter.cs`, `CSharp/BooleanExpressionParser.cs`), both `.csproj` files.
 - **Dependencies**: System.CommandLine (major upgrade), YamlDotNet (static deserializer or removal), possibly NReco.Logging.File, ini-parser-netstandard and StrongNamer depending on analysis results.
 - **CI**: `.github/workflows/ValidatePullRequest.yml`, `.github/workflows/publish_nuget.yml`. Adds Windows and macOS runners to the release build.
-- **Packages on nuget.org**: one `CSharpier` package becomes nine (`CSharpier`, seven `CSharpier.<rid>`, `CSharpier.any`).
-- **Users**: installing with the .NET 10 SDK or later on a listed platform gets the native binary with no command changes. On Windows the SDK creates a `csharpier.cmd` shim for native packages, which the IDE plugins cannot start, so Windows native packages are released after a plugin update that locates the native executable; until then Windows uses the `any` package.
+- **Packages on nuget.org**: one `CSharpier` package becomes ten (`CSharpier`, eight `CSharpier.<rid>`, `CSharpier.any`).
+- **Users**: installing with the .NET 10 SDK or later on a listed platform gets the native binary with no command changes. On Windows the SDK creates a `csharpier.cmd` shim for native packages, which the IDE plugins cannot start, so the plugins are updated to locate the native executable and released first. Plugin versions older than that stop working on Windows with a CSharpier version that has native packages.
 - **Plugins**: `CustomPathInstaller` in `Src/CSharpier.VSCode`, `Src/CSharpier.Rider`, and `Src/CSharpier.VisualStudio`.
 - **Docs**: installation page and changelog.
