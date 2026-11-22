@@ -264,6 +264,7 @@ internal class FormattingEngine(
 
             await this.PerformFormattingSteps(
                 fileToFormatInfo,
+                originalFilePath,
                 fileIssueLogger,
                 printerOptions,
                 cancellationToken
@@ -282,6 +283,7 @@ internal class FormattingEngine(
 
     public async Task PerformFormattingSteps(
         FileToFormatInfo fileToFormatInfo,
+        string originalFilePath,
         FileIssueLogger fileIssueLogger,
         PrinterOptions printerOptions,
         CancellationToken cancellationToken
@@ -388,6 +390,15 @@ internal class FormattingEngine(
             }
 
             Interlocked.Increment(ref result.UnformattedFiles);
+        }
+
+        if (codeFormattingResult.Code != fileToFormatInfo.FileContents)
+        {
+            Interlocked.Increment(ref result.ChangedFiles);
+            if (commandLineOptions.ListFormatted)
+            {
+                result.FormattedFilePaths.Enqueue(originalFilePath);
+            }
         }
 
         writer.WriteResult(codeFormattingResult, fileToFormatInfo);

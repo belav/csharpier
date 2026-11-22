@@ -142,6 +142,17 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
     }
     ```
 
+- `--list-formatted`
+
+    Print the paths of files that were changed by formatting, one per line, instead of the summary. Only errors are logged, and they go to stderr, so stdout contains nothing but the paths. Cannot be used with `--write-stdout` or when piping input to CSharpier.
+    <br/><br/>
+    *shell*
+    ```bash
+    $ dotnet csharpier format . --list-formatted
+    ./src/Bar.cs
+    ./src/Foo.cs
+    ```
+
 
 - `--no-msbuild-check`
 

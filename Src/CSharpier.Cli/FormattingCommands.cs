@@ -33,6 +33,11 @@ internal static class FormattingCommands
             "Write the results of formatting any files to stdout."
         );
         formatCommand.AddOption(writeStdoutOption);
+        var listFormattedOption = new Option<bool>(
+            ["--list-formatted"],
+            "Print the paths of files that were changed by formatting, one per line, instead of the summary."
+        );
+        formatCommand.AddOption(listFormattedOption);
         formatCommand.AddOption(SyntaxErrorsAsWarningsOption);
         formatCommand.AddOption(ConfigPathOption);
         formatCommand.AddOption(IgnorePathOption);
@@ -46,6 +51,7 @@ internal static class FormattingCommands
             var skipValidation = context.ParseResult.GetValueForOption(skipValidationOption);
             var skipWrite = context.ParseResult.GetValueForOption(skipWriteOption);
             var writeStdout = context.ParseResult.GetValueForOption(writeStdoutOption);
+            var listFormatted = context.ParseResult.GetValueForOption(listFormattedOption);
             var noCache = context.ParseResult.GetValueForOption(noCacheOption);
             var noMSBuildCheck = context.ParseResult.GetValueForOption(NoMsBuildCheckOption);
             var includeGenerated = context.ParseResult.GetValueForOption(IncludeGeneratedOption);
@@ -65,6 +71,7 @@ internal static class FormattingCommands
                 skipValidation,
                 skipWrite,
                 writeStdout,
+                listFormatted,
                 noCache,
                 noMSBuildCheck,
                 includeGenerated,
@@ -128,6 +135,7 @@ internal static class FormattingCommands
                 skipValidation: false,
                 skipWrite: false,
                 writeStdout: false,
+                listFormatted: false,
                 noCache: !useCache,
                 noMSBuildCheck,
                 includeGenerated,
@@ -151,6 +159,7 @@ internal static class FormattingCommands
         bool skipValidation,
         bool skipWrite,
         bool writeStdout,
+        bool listFormatted,
         bool noCache,
         bool noMSBuildCheck,
         bool includeGenerated,
@@ -165,7 +174,11 @@ internal static class FormattingCommands
     )
     {
         var console = new SystemConsole();
-        var logger = new ConsoleLogger(console, logLevel, logFormat);
+        var logger = new ConsoleLogger(
+            console,
+            listFormatted && logLevel < LogLevel.Error ? LogLevel.Error : logLevel,
+            logFormat
+        );
 
         var directoryOrFileNotProvided = directoryOrFile is null or { Length: 0 };
         var originalDirectoryOrFile = directoryOrFile;
@@ -202,6 +215,7 @@ internal static class FormattingCommands
             SkipValidation = skipValidation,
             SkipWrite = skipWrite,
             WriteStdout = writeStdout || standardInFileContents != null,
+            ListFormatted = listFormatted,
             IncludeGenerated = includeGenerated,
             ConfigPath = configPath,
             IgnorePath = ignorePath,

@@ -466,6 +466,79 @@ public class CliTests
     }
 
     [Test]
+    public async Task Format_With_List_Formatted_Prints_Changed_Paths()
+    {
+        await this.WriteFileAsync("Unformatted.cs", "public class ClassName {\n\n}");
+        await this.WriteFileAsync("Formatted.cs", "public class ClassName { }\n");
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("format . --list-formatted")
+            .ExecuteAsync();
+
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.Output.Replace('\\', '/').Should().Be("./Unformatted.cs" + Environment.NewLine);
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Format_With_List_Formatted_Does_Not_Write_Warnings_To_Stdout()
+    {
+        await this.WriteFileAsync("Unformatted.cs", "public class ClassName {\n\n}");
+        await this.WriteFileAsync("Invalid.cs", "asdfasfasdf");
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("format . --list-formatted --syntax-errors-as-warnings")
+            .ExecuteAsync();
+
+        result.Output.Replace('\\', '/').Should().Be("./Unformatted.cs" + Environment.NewLine);
+        result.ErrorOutput.Should().BeNullOrEmpty();
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task Format_With_List_Formatted_Ignores_Lower_Log_Level()
+    {
+        await this.WriteFileAsync("Unformatted.cs", "public class ClassName {\n\n}");
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("format . --list-formatted --log-level Debug")
+            .ExecuteAsync();
+
+        result.Output.Replace('\\', '/').Should().Be("./Unformatted.cs" + Environment.NewLine);
+    }
+
+    [Test]
+    public async Task Format_With_List_Formatted_Writes_Errors_To_Stderr()
+    {
+        await this.WriteFileAsync("Unformatted.cs", "public class ClassName {\n\n}");
+        await this.WriteFileAsync("Invalid.cs", "asdfasfasdf");
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("format . --list-formatted")
+            .ExecuteAsync();
+
+        result.Output.Replace('\\', '/').Should().Be("./Unformatted.cs" + Environment.NewLine);
+        result
+            .ErrorOutput.Replace('\\', '/')
+            .Should()
+            .StartWith("Error ./Invalid.cs - Was not formatted due to syntax errors.");
+        result.ExitCode.Should().Be(1);
+    }
+
+    [Test]
+    public async Task Check_Should_Reject_List_Formatted()
+    {
+        await this.WriteFileAsync("Unformatted.cs", "public class ClassName {\n\n}");
+
+        var result = await this.CSharpierProcess()
+            .WithArguments("check . --list-formatted")
+            .ExecuteAsync();
+
+        result.ExitCode.Should().NotBe(0);
+        result.ErrorOutput.Should().Contain("--list-formatted");
+    }
+
+    [Test]
     public async Task Format_Should_Write_To_StdError_For_Piped_Invalid_File()
     {
         const string invalidFile = "public class ClassName { ";

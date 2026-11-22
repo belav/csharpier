@@ -33,6 +33,14 @@ internal class CommandLineFormatter(
 
     private async Task<int> FormatAsync()
     {
+        if (commandLineOptions is { ListFormatted: true, WriteStdout: true })
+        {
+            console.WriteErrorLine(
+                "--list-formatted cannot be used with --write-stdout or when piping input via stdin."
+            );
+            return 1;
+        }
+
         try
         {
             var timestamp = Stopwatch.GetTimestamp();
@@ -52,10 +60,19 @@ internal class CommandLineFormatter(
 
             this.result.ElapsedMilliseconds = (long)
                 Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds;
-            if (!commandLineOptions.WriteStdout)
+            if (commandLineOptions.ListFormatted)
+            {
+                foreach (var path in this.result.FormattedFilePaths.Order(StringComparer.Ordinal))
+                {
+                    console.WriteLine(path);
+                }
+            }
+            else if (!commandLineOptions.WriteStdout)
             {
                 logger.LogInformation(
-                    $"{(commandLineOptions.Check ? "Checked" : "Formatted")} {this.result.Files} files in {this.result.ElapsedMilliseconds}ms."
+                    commandLineOptions.Check
+                        ? $"Checked {this.result.Files} files in {this.result.ElapsedMilliseconds}ms."
+                        : $"Formatted {this.result.Files} files in {this.result.ElapsedMilliseconds}ms ({this.result.ChangedFiles} changed)."
                 );
             }
 
