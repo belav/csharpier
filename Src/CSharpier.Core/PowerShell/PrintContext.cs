@@ -4,18 +4,19 @@ using CSharpier.Core.DocTypes;
 
 namespace CSharpier.Core.PowerShell;
 
-internal sealed class PrintContext
+internal sealed partial class PrintContext
 {
-    private readonly IReadOnlyList<IScriptExtent> comments;
+    private readonly List<IScriptExtent> comments;
     private readonly bool[] printed;
     private readonly AttachedComments attachedComments;
     private readonly string source;
     private readonly Token[] tokens;
 
-    private static readonly Regex HelpKeyword = new(
+    [GeneratedRegex(
         @"^[\s#<]*\.(SYNOPSIS|DESCRIPTION|PARAMETER|EXAMPLE|INPUTS|OUTPUTS|NOTES|LINK|COMPONENT|ROLE|FUNCTIONALITY|FORWARDHELPTARGETNAME|FORWARDHELPCATEGORY|REMOTEHELPRUNSPACE|EXTERNALHELP)\b",
         RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.CultureInvariant
-    );
+    )]
+    private static partial Regex HelpKeyword();
 
     internal int PrintingDepth { get; set; }
 
@@ -113,6 +114,25 @@ internal sealed class PrintContext
         }
 
         return false;
+    }
+
+    // The comments that start in the range and have not been printed, in source order.
+    internal List<IScriptExtent> GetUnprintedCommentsIn(int startOffset, int endOffset)
+    {
+        var result = new List<IScriptExtent>();
+        for (
+            var index = this.FindFirstCommentAtOrAfter(startOffset);
+            index < this.comments.Count && this.comments[index].StartOffset < endOffset;
+            index++
+        )
+        {
+            if (!this.printed[index])
+            {
+                result.Add(this.comments[index]);
+            }
+        }
+
+        return result;
     }
 
     internal void MarkCommentsPrintedIn(IScriptExtent extent)
@@ -285,7 +305,7 @@ internal sealed class PrintContext
     // two of them are kept.
     private static bool IsHelpComment(IScriptExtent comment)
     {
-        return HelpKeyword.IsMatch(comment.Text);
+        return HelpKeyword().IsMatch(comment.Text);
     }
 
     // Prints the trailing comments of a node. A line comment forces a line break after it.
@@ -319,6 +339,35 @@ internal sealed class PrintContext
         }
 
         return docs.Count == 0 ? Doc.Null : Doc.Concat(docs);
+    }
+
+    // Prints comments that stay between two parts of a header, from right after the part in front
+    // of them to right before the part after them. A comment stays on the line of the text in front
+    // of it when the source had it there. The part after the last comment goes on a new line after
+    // a line comment or when the source had it on a later line.
+    internal Doc PrintCommentsInPlace(
+        IReadOnlyList<IScriptExtent> comments,
+        int previousEndLine,
+        int nextStartLine
+    )
+    {
+        if (comments.Count == 0)
+        {
+            return Doc.Null;
+        }
+
+        var docs = new List<Doc>();
+        foreach (var comment in comments)
+        {
+            docs.Add(comment.StartLineNumber == previousEndLine ? " " : Doc.HardLine);
+            docs.Add(this.PrintComment(comment));
+            previousEndLine = comment.EndLineNumber;
+        }
+
+        docs.Add(
+            IsLineComment(comments[^1]) || nextStartLine != previousEndLine ? Doc.HardLine : " "
+        );
+        return Doc.Concat(docs);
     }
 
     // Prints one comment and records that it was printed. A block comment that starts its line

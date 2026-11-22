@@ -360,7 +360,11 @@ internal class FormattingEngine(
 
         if (!string.IsNullOrEmpty(codeFormattingResult.WarningMessage))
         {
-            fileIssueLogger.WriteWarning(codeFormattingResult.WarningMessage);
+            fileIssueLogger.WriteWarning(
+                codeFormattingResult.WarningMessage,
+                toStandardError: commandLineOptions.WriteStdout
+            );
+            this.WriteUnchangedToStandardOutput(fileToFormatInfo);
             return;
         }
 
@@ -370,7 +374,13 @@ internal class FormattingEngine(
             return;
         }
 
-        if (!commandLineOptions.SkipValidation)
+        if (
+            !commandLineOptions.SkipValidation
+            || (
+                commandLineOptions.AlwaysValidatePowerShell
+                && printerOptions.Formatter is Formatter.PowerShell
+            )
+        )
         {
             var failedValidation = await this.ValidateFormatting(
                 fileToFormatInfo,
@@ -382,6 +392,7 @@ internal class FormattingEngine(
 
             if (failedValidation && printerOptions.Formatter is Formatter.PowerShell)
             {
+                this.WriteUnchangedToStandardOutput(fileToFormatInfo);
                 return;
             }
         }
@@ -419,6 +430,20 @@ internal class FormattingEngine(
 
         writer.WriteResult(codeFormattingResult, fileToFormatInfo);
         formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo, printerOptions);
+    }
+
+    // When the result goes to standard output, the caller (a redirect or an editor using
+    // pipe-files) takes that output as the new text of the file, so a file that is not formatted
+    // is written out unchanged. Warnings for it go to standard error.
+    private void WriteUnchangedToStandardOutput(FileToFormatInfo fileToFormatInfo)
+    {
+        if (commandLineOptions.WriteStdout)
+        {
+            writer.WriteResult(
+                new CodeFormatterResult { Code = fileToFormatInfo.FileContents },
+                fileToFormatInfo
+            );
+        }
     }
 
     private async Task<bool> ValidateFormatting(

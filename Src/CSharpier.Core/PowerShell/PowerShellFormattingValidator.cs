@@ -13,8 +13,6 @@ namespace CSharpier.Core.PowerShell;
 internal class PowerShellFormattingValidator(string originalCode, string formattedCode)
     : IFormattingValidator
 {
-    private const int MaxDepth = 500;
-
     private static readonly ConcurrentDictionary<Type, PropertyInfo[]> PropertiesByType = new();
 
     public Task<FormattingValidatorResult> ValidateAsync(CancellationToken cancellationToken)
@@ -44,17 +42,21 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
                         FailureMessage = "Failed with ex " + ex,
                     };
                 }
-            }
+            },
+            cancellationToken
         );
     }
 
     private string? Validate(CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var originalAst = Parser.ParseInput(
             originalCode,
             out var originalTokens,
             out var originalErrors
         );
+
+        cancellationToken.ThrowIfCancellationRequested();
         var formattedAst = Parser.ParseInput(
             formattedCode,
             out var formattedTokens,
@@ -98,7 +100,7 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
             }
         }
 
-        return this.CompareNodes(originalAst, formattedAst, 0, cancellationToken);
+        return CompareTrees(originalAst, formattedAst, cancellationToken);
     }
 
     private static List<Token> GetComments(Token[] tokens)
@@ -111,54 +113,28 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
         return string.Join("\n", comment.Replace("\r\n", "\n").Split('\n').Select(o => o.Trim()));
     }
 
-    private string? CompareNodes(
-        Ast original,
-        Ast formatted,
-        int depth,
+    private readonly record struct Pair(
+        object? Original,
+        object? Formatted,
+        Ast OriginalOwner,
+        Ast FormattedOwner,
+        string PropertyName
+    );
+
+    // Walks both trees with an explicit stack, so a deeply nested tree such as a long operator
+    // chain cannot overflow the stack. Children are pushed in reverse so they are compared in order.
+    private static string? CompareTrees(
+        Ast originalRoot,
+        Ast formattedRoot,
         CancellationToken cancellationToken
     )
     {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        if (original.GetType() != formatted.GetType())
+        var pending = new Stack<Pair>();
+        pending.Push(new Pair(originalRoot, formattedRoot, originalRoot, formattedRoot, "Root"));
+        while (pending.Count > 0)
         {
-            return Describe(
-                original,
-                formatted,
-                $"the node type changed from {original.GetType().Name} to {formatted.GetType().Name}"
-            );
-        }
-
-        if (depth >= MaxDepth)
-        {
-            return NormalizeText(original.Extent.Text) == NormalizeText(formatted.Extent.Text)
-                ? null
-                : Describe(original, formatted, "the text of a deeply nested node changed");
-        }
-
-        foreach (var property in GetProperties(original.GetType()))
-        {
-            object? originalValue;
-            object? formattedValue;
-            try
-            {
-                originalValue = property.GetValue(original);
-                formattedValue = property.GetValue(formatted);
-            }
-            catch
-            {
-                continue;
-            }
-
-            var result = this.CompareValues(
-                originalValue,
-                formattedValue,
-                original,
-                formatted,
-                property.Name,
-                depth,
-                cancellationToken
-            );
+            cancellationToken.ThrowIfCancellationRequested();
+            var result = CompareValues(pending.Pop(), pending);
             if (result is not null)
             {
                 return result;
@@ -168,16 +144,9 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
         return null;
     }
 
-    private string? CompareValues(
-        object? originalValue,
-        object? formattedValue,
-        Ast originalOwner,
-        Ast formattedOwner,
-        string propertyName,
-        int depth,
-        CancellationToken cancellationToken
-    )
+    private static string? CompareValues(Pair pair, Stack<Pair> pending)
     {
+        var (originalValue, formattedValue, originalOwner, formattedOwner, propertyName) = pair;
         if (originalValue is null || formattedValue is null)
         {
             return originalValue is null && formattedValue is null
@@ -188,9 +157,36 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
         switch (originalValue)
         {
             case Ast originalAst:
-                return formattedValue is Ast formattedAst
-                    ? this.CompareNodes(originalAst, formattedAst, depth + 1, cancellationToken)
-                    : Describe(originalOwner, formattedOwner, $"{propertyName} changed");
+                if (formattedValue is not Ast formattedAst)
+                {
+                    return Describe(originalOwner, formattedOwner, $"{propertyName} changed");
+                }
+
+                if (originalAst.GetType() != formattedAst.GetType())
+                {
+                    return Describe(
+                        originalAst,
+                        formattedAst,
+                        $"the node type changed from {originalAst.GetType().Name} to {formattedAst.GetType().Name}"
+                    );
+                }
+
+                var properties = GetProperties(originalAst.GetType());
+                for (var index = properties.Length - 1; index >= 0; index--)
+                {
+                    var property = properties[index];
+                    pending.Push(
+                        new Pair(
+                            property.GetValue(originalAst),
+                            property.GetValue(formattedAst),
+                            originalAst,
+                            formattedAst,
+                            property.Name
+                        )
+                    );
+                }
+
+                return null;
             case string originalString:
                 return
                     formattedValue is string formattedString
@@ -223,21 +219,9 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
                     return Describe(originalOwner, formattedOwner, $"{propertyName} changed");
                 }
 
-                for (var index = 0; index < originalTuple.Length; index++)
+                for (var index = originalTuple.Length - 1; index >= 0; index--)
                 {
-                    var result = this.CompareValues(
-                        originalTuple[index],
-                        formattedTuple[index],
-                        originalOwner,
-                        formattedOwner,
-                        propertyName,
-                        depth,
-                        cancellationToken
-                    );
-                    if (result is not null)
-                    {
-                        return result;
-                    }
+                    pending.Push(pair with { Original = originalTuple[index], Formatted = formattedTuple[index] });
                 }
 
                 return null;
@@ -258,21 +242,9 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
                     );
                 }
 
-                for (var index = 0; index < originalItems.Count; index++)
+                for (var index = originalItems.Count - 1; index >= 0; index--)
                 {
-                    var result = this.CompareValues(
-                        originalItems[index],
-                        formattedItems[index],
-                        originalOwner,
-                        formattedOwner,
-                        propertyName,
-                        depth,
-                        cancellationToken
-                    );
-                    if (result is not null)
-                    {
-                        return result;
-                    }
+                    pending.Push(pair with { Original = originalItems[index], Formatted = formattedItems[index] });
                 }
 
                 return null;
@@ -303,29 +275,22 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
 
     private static PropertyInfo[] GetProperties(Type type)
     {
-        return PropertiesByType.GetOrAdd(
-            type,
-            static type =>
-                type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(o =>
-                        o.GetIndexParameters().Length == 0
-                        && o.Name != nameof(Ast.Parent)
-                        && !typeof(IScriptExtent).IsAssignableFrom(o.PropertyType)
-                        && !typeof(Type).IsAssignableFrom(o.PropertyType)
-                        && o.PropertyType != typeof(ScriptRequirements)
-                    )
-                    .ToArray()
+        return PropertiesByType.GetOrAdd(type, static type =>
+            type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(o =>
+                    o.GetIndexParameters().Length == 0
+                    && o.Name != nameof(Ast.Parent)
+                    && !typeof(IScriptExtent).IsAssignableFrom(o.PropertyType)
+                    && !typeof(Type).IsAssignableFrom(o.PropertyType)
+                    && o.PropertyType != typeof(ScriptRequirements)
+                )
+                .ToArray()
         );
     }
 
     private static string NormalizeLineEndings(string value)
     {
         return value.Replace("\r\n", "\n");
-    }
-
-    private static string NormalizeText(string value)
-    {
-        return string.Join(" ", value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
     }
 
     private static string Describe(Ast original, Ast formatted, string difference)

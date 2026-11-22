@@ -1,5 +1,6 @@
 using AwesomeAssertions;
 using CSharpier.Cli.Server;
+using CSharpier.Core.PowerShell;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace CSharpier.Tests.Cli;
@@ -151,6 +152,84 @@ internal sealed class CSharpierServiceImplementationTests
 
         firstResult.formattedFile.Should().Contain("\n public string Property");
         secondResult.formattedFile.Should().Contain("\n          public string Property");
+    }
+
+    [Test]
+    public async Task Should_Report_Warning_When_PowerShell_Is_Returned_Unchanged_With_A_Warning()
+    {
+        PowerShellFormatter.SimulateDscUnavailable.Value = true;
+        var service = new CSharpierServiceImplementation(NullLogger.Instance);
+
+        var result = await service.FormatFile(
+            new FormatFileParameter
+            {
+                fileName = Path.Combine(this.testFileDirectory, "Configuration.ps1"),
+                fileContents = "configuration Sample {\n}\n",
+            },
+            CancellationToken.None
+        );
+
+        result.status.Should().Be(Status.Failed);
+        result.errorMessage.Should().Contain("DSC is not installed");
+        result.formattedFile.Should().BeNull();
+    }
+
+    [Test]
+    public async Task Should_Report_Failure_When_PowerShell_Is_Returned_Unchanged_With_A_FailureMessage()
+    {
+        var service = new CSharpierServiceImplementation(NullLogger.Instance);
+
+        var result = await service.FormatFile(
+            new FormatFileParameter
+            {
+                fileName = Path.Combine(this.testFileDirectory, "Deep.ps1"),
+                fileContents = "$a = " + new string('(', 500) + "1" + new string(')', 500) + "\n",
+            },
+            CancellationToken.None
+        );
+
+        result.status.Should().Be(Status.Failed);
+        result.errorMessage.Should().Contain("deep of recursion");
+        result.formattedFile.Should().BeNull();
+    }
+
+    [Test]
+    public async Task Should_Report_Failure_When_PowerShell_Fails_Validation()
+    {
+        PowerShellFormatter.SimulatedPrinterOutput.Value = "if ($a) {\n    Write-Output 1\n}\n";
+        var service = new CSharpierServiceImplementation(NullLogger.Instance);
+
+        var result = await service.FormatFile(
+            new FormatFileParameter
+            {
+                fileName = Path.Combine(this.testFileDirectory, "Script.ps1"),
+                fileContents = "if($a){Write-Host 1}",
+            },
+            CancellationToken.None
+        );
+
+        result.status.Should().Be(Status.Failed);
+        result.errorMessage.Should().StartWith("Failed formatting validation.");
+        result.errorMessage.Should().Contain("Write-Host");
+        result.formattedFile.Should().BeNull();
+    }
+
+    [Test]
+    public async Task Should_Format_PowerShell_That_Passes_Validation()
+    {
+        var service = new CSharpierServiceImplementation(NullLogger.Instance);
+
+        var result = await service.FormatFile(
+            new FormatFileParameter
+            {
+                fileName = Path.Combine(this.testFileDirectory, "Script.ps1"),
+                fileContents = "if($a){Write-Host 1}",
+            },
+            CancellationToken.None
+        );
+
+        result.status.Should().Be(Status.Formatted);
+        result.formattedFile.Should().Be("if ($a) {\n    Write-Host 1\n}\n");
     }
 
     private static readonly string DeeplyConcatenatedString =

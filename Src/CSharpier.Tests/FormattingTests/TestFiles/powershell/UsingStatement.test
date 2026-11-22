@@ -3,6 +3,7 @@ using module  MyModule
 
 using module ./Local.psm1
 using module @{ ModuleName = 'Foo'; ModuleVersion = '1.0' }
+using  Assembly System.Windows.Forms
 # comment
 using namespace System.Text # trailing
 param($a)

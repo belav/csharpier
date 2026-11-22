@@ -1,0 +1,12 @@
+for ($i = 0; $i -lt 1; $i++) {
+    # after the header
+    $x = 1
+}
+for (;;) {
+    <# after the header #>
+    break
+}
+for ($i = 0; $i -lt 1; $i++) {
+    # after the brace
+    $x = 1
+}

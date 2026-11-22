@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Management.Automation.Language;
 using System.Text.Json;
 using AwesomeAssertions;
@@ -205,6 +206,108 @@ public class PowerShellRobustnessTests
             CancellationToken.None
         );
         validation.Failed.Should().BeFalse();
+    }
+
+    // The checks the parser runs over the finished tree recurse once per operator and do not check
+    // the stack. Code under 20,000 characters used to be parsed on the calling thread, and these
+    // overflowed a 256 KB stack. If that comes back, this test ends the test process with a stack
+    // overflow instead of failing.
+    [Test]
+    [Arguments("plus", true)]
+    [Arguments("pipeline chain", true)]
+    [Arguments("member", false)]
+    [Arguments("cast", false)]
+    public void Should_Not_Overflow_A_Small_Stack_Of_The_Calling_Thread(string kind, bool formats)
+    {
+        var code = kind switch
+        {
+            "plus" => "$a=" + string.Concat(Enumerable.Repeat("1+", 9000)) + "1\n",
+            "pipeline chain" => "a" + string.Concat(Enumerable.Repeat("&&a", 6000)) + "\n",
+            "member" => "$a" + string.Concat(Enumerable.Repeat(".b", 9000)) + "\n",
+            _ => string.Concat(Enumerable.Repeat("[a]", 6000)) + "1\n",
+        };
+
+        CodeFormatterResult? result = null;
+        FormattingValidatorResult? validation = null;
+        var thread = new Thread(
+            () =>
+            {
+                result = PowerShellFormatter.FormatAsync(code, Options).Result;
+                validation = new PowerShellFormattingValidator(code, code)
+                    .ValidateAsync(CancellationToken.None)
+                    .Result;
+            },
+            256 * 1024
+        );
+        thread.Start();
+        thread.Join();
+
+        result!.ErrorDiagnostics.Should().BeEmpty();
+        if (formats)
+        {
+            result.FailureMessage.Should().BeEmpty();
+            result.Code.Should().NotBe(code);
+        }
+        else
+        {
+            result.FailureMessage.Should().Be("We can't handle this deep of recursion yet.");
+            result.Code.Should().Be(code);
+        }
+        validation!.Failed.Should().BeFalse();
+    }
+
+    // When each comment was checked against every statement of its block, formatting these took
+    // 30 to 50 seconds in a debug build. It now takes under a second, so the bound leaves room for
+    // a slow machine and still fails if the work becomes quadratic again.
+    [Test]
+    [Arguments(true)]
+    [Arguments(false)]
+    public async Task Should_Attach_Many_Comments_In_Linear_Time(bool betweenStatements)
+    {
+        const int count = 50000;
+        var code = betweenStatements
+            ? string.Concat(Enumerable.Repeat("# c\n$x = 1\n", count))
+            : string.Concat(Enumerable.Repeat("# c\n", count))
+                + string.Concat(Enumerable.Repeat("$x = 1\n", count));
+
+        var stopwatch = Stopwatch.StartNew();
+        var result = await PowerShellFormatter.FormatAsync(code, Options);
+        stopwatch.Stop();
+
+        result.FailureMessage.Should().BeEmpty();
+        result.Code.Should().Be(code);
+        stopwatch.Elapsed.Should().BeLessThan(TimeSpan.FromSeconds(10));
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task Should_Stop_Formatting_When_Cancelled(bool largeInput)
+    {
+        var code = largeInput ? string.Concat(Enumerable.Repeat("$a = 1\n", 5000)) : "$a = 1\n";
+        using var cancellationTokenSource = new CancellationTokenSource();
+        await cancellationTokenSource.CancelAsync();
+
+        var act = () => CodeFormatter.FormatAsync(code, Options, cancellationTokenSource.Token);
+
+        await act.Should().ThrowAsync<OperationCanceledException>();
+    }
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task Should_Stop_Validating_When_Cancelled(bool largeInput)
+    {
+        var code = largeInput ? string.Concat(Enumerable.Repeat("$a = 1\n", 5000)) : "$a = 1\n";
+        using var cancellationTokenSource = new CancellationTokenSource();
+        await cancellationTokenSource.CancelAsync();
+
+        var act = () =>
+            new PowerShellFormattingValidator(code, code + "$b = 2\n").ValidateAsync(
+                cancellationTokenSource.Token
+            );
+
+        await act.Should().ThrowAsync<OperationCanceledException>();
     }
 
     [Test]

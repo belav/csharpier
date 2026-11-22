@@ -2,6 +2,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Text;
 using AwesomeAssertions;
 using CSharpier.Cli;
+using CSharpier.Core.PowerShell;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Tests;
@@ -1599,6 +1600,220 @@ class ClassName
         context.FileSystem.File.ReadAllBytes(path).Should().NotEqual(bytes);
     }
 
+    private const string ConfigurationPowerShell =
+        "configuration Sample {\n    node localhost {\n        $x=1\n    }\n}\n";
+    private const string DscUnavailableWarning =
+        "Contains a DSC configuration, which cannot be parsed on this machine because DSC is not installed, so was not formatted.";
+    private const string PowerShellThatFailsValidation = "if ($a) {\n    Write-Output 1\n}\n";
+
+    [Test]
+    public async Task Format_Warns_And_Leaves_PowerShell_File_Unchanged_When_Dsc_Is_Unavailable()
+    {
+        PowerShellFormatter.SimulateDscUnavailable.Value = true;
+        var context = new TestContext();
+        context.WhenAFileExists("Configuration.ps1", ConfigurationPowerShell);
+
+        var result = await Format(context);
+
+        result.ExitCode.Should().Be(0);
+        result.ErrorOutputLines.Should().BeEmpty();
+        result
+            .OutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .Be($"Warning ./Configuration.ps1 - {DscUnavailableWarning}");
+        context.GetFileContent("Configuration.ps1").Should().Be(ConfigurationPowerShell);
+    }
+
+    [Test]
+    public async Task Should_Write_Unchanged_StandardInput_When_Dsc_Is_Unavailable()
+    {
+        PowerShellFormatter.SimulateDscUnavailable.Value = true;
+        var context = new TestContext();
+
+        var result = await Format(
+            context,
+            standardInFileContents: ConfigurationPowerShell,
+            directoryOrFilePaths: "Script.ps1"
+        );
+
+        result.ExitCode.Should().Be(0);
+        result.OutputLines.Should().ContainSingle().Which.Should().Be(ConfigurationPowerShell);
+        result
+            .ErrorOutputLines.Should()
+            .ContainSingle()
+            .Which.Should()
+            .Be($"Warning Script.ps1 - {DscUnavailableWarning}");
+    }
+
+    [Test]
+    public async Task PipeFiles_Should_Write_Unchanged_File_When_Dsc_Is_Unavailable()
+    {
+        PowerShellFormatter.SimulateDscUnavailable.Value = true;
+        var context = new TestContext();
+
+        var result = await FormatPipedFile(context, "Script.ps1", ConfigurationPowerShell);
+
+        result.ExitCode.Should().Be(0);
+        result.OutputLines.Should().ContainSingle().Which.Should().Be(ConfigurationPowerShell);
+        result
+            .ErrorOutputLines.Should()
+            .ContainSingle()
+            .Which.Should()
+            .StartWith("Warning ")
+            .And.EndWith($"Script.ps1 - {DscUnavailableWarning}");
+    }
+
+    private const string SignedPowerShell =
+        "if($a){Write-Host 1}\n\n"
+        + "# SIG # Begin signature block\n"
+        + "# MIIFuQYJKoZIhvcNAQcCoIIFqjCCBaYCAQExCzAJBgUrDgMCGgUAMGkGCisGAQQB\n"
+        + "# SIG # End signature block\n";
+    private const string SignedScriptWarning =
+        "Contains a signature block, which formatting would invalidate, so was not formatted.";
+
+    [Test]
+    [Arguments(false)]
+    [Arguments(true)]
+    public async Task Format_Warns_And_Leaves_Signed_PowerShell_File_Unchanged(bool check)
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Signed.ps1", SignedPowerShell);
+
+        var result = await Format(context, check: check);
+
+        result.ExitCode.Should().Be(0);
+        result.ErrorOutputLines.Should().BeEmpty();
+        result
+            .OutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .Be($"Warning ./Signed.ps1 - {SignedScriptWarning}");
+        context.GetFileContent("Signed.ps1").Should().Be(SignedPowerShell);
+    }
+
+    [Test]
+    public async Task Should_Write_Unchanged_StandardInput_When_PowerShell_Is_Signed()
+    {
+        var context = new TestContext();
+
+        var result = await Format(
+            context,
+            standardInFileContents: SignedPowerShell,
+            directoryOrFilePaths: "Signed.ps1"
+        );
+
+        result.ExitCode.Should().Be(0);
+        result.OutputLines.Should().ContainSingle().Which.Should().Be(SignedPowerShell);
+        result
+            .ErrorOutputLines.Should()
+            .ContainSingle()
+            .Which.Should()
+            .Be($"Warning Signed.ps1 - {SignedScriptWarning}");
+    }
+
+    [Test]
+    public async Task Format_Does_Not_Write_PowerShell_File_That_Fails_Validation()
+    {
+        PowerShellFormatter.SimulatedPrinterOutput.Value = PowerShellThatFailsValidation;
+        var context = new TestContext();
+        context.WhenAFileExists("Script.ps1", UnformattedPowerShell);
+
+        var result = await Format(context);
+
+        result.ExitCode.Should().Be(1);
+        result
+            .ErrorOutputLines.First()
+            .Replace('\\', '/')
+            .Should()
+            .Be("Error ./Script.ps1 - Failed formatting validation.");
+        context.GetFileContent("Script.ps1").Should().Be(UnformattedPowerShell);
+    }
+
+    [Test]
+    public async Task Format_Skips_PowerShell_Validation_When_Asked()
+    {
+        PowerShellFormatter.SimulatedPrinterOutput.Value = PowerShellThatFailsValidation;
+        var context = new TestContext();
+        context.WhenAFileExists("Script.ps1", UnformattedPowerShell);
+
+        var result = await Format(context, skipValidation: true);
+
+        result.ExitCode.Should().Be(0);
+        result.ErrorOutputLines.Should().BeEmpty();
+        context.GetFileContent("Script.ps1").Should().Be(PowerShellThatFailsValidation);
+    }
+
+    [Test]
+    public async Task Should_Write_Original_StandardInput_When_PowerShell_Fails_Validation()
+    {
+        PowerShellFormatter.SimulatedPrinterOutput.Value = PowerShellThatFailsValidation;
+        var context = new TestContext();
+
+        var result = await Format(
+            context,
+            standardInFileContents: UnformattedPowerShell,
+            directoryOrFilePaths: "Script.ps1"
+        );
+
+        result.ExitCode.Should().Be(1);
+        result.OutputLines.Should().ContainSingle().Which.Should().Be(UnformattedPowerShell);
+        result
+            .ErrorOutputLines.First()
+            .Should()
+            .Be("Error Script.ps1 - Failed formatting validation.");
+    }
+
+    [Test]
+    public async Task PipeFiles_Should_Write_Original_File_When_PowerShell_Fails_Validation()
+    {
+        PowerShellFormatter.SimulatedPrinterOutput.Value = PowerShellThatFailsValidation;
+        var context = new TestContext();
+
+        var result = await FormatPipedFile(context, "Script.ps1", UnformattedPowerShell);
+
+        result.ExitCode.Should().Be(1);
+        result.OutputLines.Should().ContainSingle().Which.Should().Be(UnformattedPowerShell);
+        result
+            .ErrorOutputLines.First()
+            .Should()
+            .StartWith("Error ")
+            .And.EndWith("Script.ps1 - Failed formatting validation.");
+    }
+
+    [Test]
+    public async Task PipeFiles_Should_Format_PowerShell_That_Passes_Validation()
+    {
+        var context = new TestContext();
+
+        var result = await FormatPipedFile(context, "Script.ps1", UnformattedPowerShell);
+
+        result.ExitCode.Should().Be(0);
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.OutputLines.Should().ContainSingle().Which.Should().Be(FormattedPowerShell);
+    }
+
+    private static async Task<FormatResult> FormatPipedFile(
+        TestContext context,
+        string fileName,
+        string fileContents
+    )
+    {
+        var fakeConsole = new TestConsole();
+        var exitCode = await CommandLineFormatter.Format(
+            PipeMultipleFilesFormatter.CreateCommandLineOptions(
+                context.FileSystem.Path.Combine(context.RootPath, fileName),
+                fileContents
+            ),
+            context.FileSystem,
+            fakeConsole,
+            new ConsoleLogger(fakeConsole, LogLevel.Information, LogFormat.Console),
+            CancellationToken.None
+        );
+
+        return new FormatResult(exitCode, fakeConsole.GetLines(), fakeConsole.GetErrorLines());
+    }
+
     private static async Task<FormatResult> Format(
         TestContext context,
         bool skipWrite = false,
@@ -1612,6 +1827,7 @@ class ClassName
         string? ignorePath = null,
         LogLevel logLevel = LogLevel.Information,
         bool listFormatted = false,
+        bool skipValidation = false,
         params string[] directoryOrFilePaths
     )
     {
@@ -1645,6 +1861,7 @@ class ClassName
                 SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
                 IgnorePath = ignorePath,
                 ListFormatted = listFormatted,
+                SkipValidation = skipValidation,
             },
             context.FileSystem,
             fakeConsole,

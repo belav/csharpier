@@ -27,19 +27,22 @@ internal static class InvokeMemberExpression
             genericArguments
         );
 
-        if (!hasArguments)
-        {
-            return Doc.Concat(target, "()");
-        }
-
-        if (openParenIndex < 0)
+        if (hasArguments && openParenIndex < 0)
         {
             return Doc.Concat(target, Node.Print(arguments![0], context));
         }
 
-        if (ArgumentList.HasComments(arguments!, context))
+        // A comment after the opening parenthesis on its line is a trailing comment of the member,
+        // so the comments are looked for from the end of the member.
+        IReadOnlyList<Ast> items = hasArguments ? arguments! : [];
+        var innerStart = node.Member.Extent.EndOffset;
+        var innerEnd = node.Extent.EndOffset - 1;
+        if (!hasArguments || ArgumentList.HasComments(items, innerStart, innerEnd, context))
         {
-            return Doc.Concat(target, ArgumentList.Print("(", arguments!, ")", context));
+            return Doc.Concat(
+                target,
+                ArgumentList.Print("(", items, ")", innerStart, innerEnd, context)
+            );
         }
 
         var last = arguments![^1];

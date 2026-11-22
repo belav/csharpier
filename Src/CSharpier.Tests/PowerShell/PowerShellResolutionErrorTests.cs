@@ -29,6 +29,32 @@ public class PowerShellResolutionErrorTests
     }
 
     [Test]
+    public async Task Should_Format_When_An_Assembly_Cannot_Be_Loaded()
+    {
+        var options = new PrinterOptions(Formatter.PowerShell, XmlWhitespaceSensitivity.Strict);
+        var result = await PowerShellFormatter.FormatAsync(
+            "using assembly System.Windows.Forms\n$x=1\n",
+            options
+        );
+
+        result.ErrorDiagnostics.Should().BeEmpty();
+        result.Code.Should().Be("using assembly System.Windows.Forms\n\n$x = 1\n");
+    }
+
+    [Test]
+    public async Task Should_Format_When_An_Assembly_Path_Does_Not_Exist()
+    {
+        var options = new PrinterOptions(Formatter.PowerShell, XmlWhitespaceSensitivity.Strict);
+        var result = await PowerShellFormatter.FormatAsync(
+            "using assembly ./Missing.dll\n$x=1\n",
+            options
+        );
+
+        result.ErrorDiagnostics.Should().BeEmpty();
+        result.Code.Should().Be("using assembly ./Missing.dll\n\n$x = 1\n");
+    }
+
+    [Test]
     public async Task Should_Format_When_A_Dsc_Resource_Cannot_Be_Resolved()
     {
         var options = new PrinterOptions(Formatter.PowerShell, XmlWhitespaceSensitivity.Strict);

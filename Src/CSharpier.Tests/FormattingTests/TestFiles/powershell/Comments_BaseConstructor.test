@@ -1,0 +1,37 @@
+class Base { Base() { } Base([int]$a) { } Base([int]$a, [int]$b) { } }
+class A : Base {
+    A() : base( # after the parenthesis
+        1) {
+        $x=1
+    }
+    A([int]$a) : base($a <# after the argument #>) {
+        $x=1
+    }
+    A([int]$a, [int]$b) : base($a,
+        # before the second argument
+        $b) {
+        $x=1
+    }
+    A([string]$s) : base(<# no arguments #>) {
+        $x=1
+    }
+    A([string]$s, [int]$a) : base($a
+        # after the last argument
+    ) {
+        $x=1
+    }
+    A([bool]$b) : base() # before the brace
+    {
+        $x=1
+    }
+    A([char]$c)
+    :   # after the colon
+    base
+    (
+    )
+    {
+    }
+    A([long]$l) <# before the colon #> : base() {
+        $x=1
+    }
+}

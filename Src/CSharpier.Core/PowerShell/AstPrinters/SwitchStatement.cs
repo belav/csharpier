@@ -44,7 +44,13 @@ internal static class SwitchStatement
                 first.Body.Extent.StartOffset.CompareTo(second.Body.Extent.StartOffset)
         );
 
+        // Comments after the condition on its line, in front of the opening brace or after it, go
+        // on the first lines of the body.
         var lines = new LineList();
+        lines.AddCommentsWithoutBlankLines(
+            context.GetUnprintedComments(context.GetTrailingComments(node.Condition)),
+            context
+        );
         foreach (var (first, body, pattern) in clauses)
         {
             lines.Add(

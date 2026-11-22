@@ -65,4 +65,75 @@ internal static class Layout
         return node is StringConstantExpressionAst or ExpandableStringExpressionAst
             && IsMultiLine(node);
     }
+
+    // -and/-or/-xor and +/- break across lines. Other operators only break in a chain of two or
+    // more, such as $a -replace 'b', 'c' -replace 'd', 'e', so a single $a -gt 0 stays together.
+    // Nothing breaks between the brackets of an index.
+    internal static bool CanBreakAfterOperator(BinaryExpressionAst node)
+    {
+        if (IsInsideIndex(node))
+        {
+            return false;
+        }
+
+        var precedence = GetPrecedence(node.Operator);
+        if (precedence is TokenFlags.BinaryPrecedenceLogical or TokenFlags.BinaryPrecedenceAdd)
+        {
+            return true;
+        }
+
+        return precedence
+                is not (TokenFlags.BinaryPrecedenceFormat or TokenFlags.BinaryPrecedenceRange)
+            && (
+                node.Left is BinaryExpressionAst left && GetPrecedence(left.Operator) == precedence
+                || node.Parent is BinaryExpressionAst parent
+                    && parent.Left == node
+                    && GetPrecedence(parent.Operator) == precedence
+            );
+    }
+
+    internal static TokenFlags GetPrecedence(TokenKind kind)
+    {
+        return kind.GetTraits() & TokenFlags.BinaryPrecedenceMask;
+    }
+
+    internal static bool IsInsideIndex(Ast node)
+    {
+        var child = node;
+        var parent = node.Parent;
+        while (
+            parent
+                is BinaryExpressionAst
+                    or UnaryExpressionAst
+                    or ConvertExpressionAst
+                    or ArrayLiteralAst
+        )
+        {
+            child = parent;
+            parent = parent.Parent;
+        }
+
+        return parent is IndexExpressionAst index && index.Index == child;
+    }
+
+    // True for an expression that has no place of its own to break across lines.
+    internal static bool HasNoBreakPoint(ExpressionAst node)
+    {
+        return node switch
+        {
+            VariableExpressionAst or TypeExpressionAst => true,
+            StringConstantExpressionAst or ExpandableStringExpressionAst => !IsMultiLine(node),
+            ConstantExpressionAst => true,
+            InvokeMemberExpressionAst invokeMember => (invokeMember.Arguments?.Count ?? 0) == 0
+                && HasNoBreakPoint(invokeMember.Expression),
+            MemberExpressionAst member => HasNoBreakPoint(member.Expression),
+            IndexExpressionAst index => HasNoBreakPoint(index.Target),
+            ConvertExpressionAst convert => HasNoBreakPoint(convert.Child),
+            UnaryExpressionAst unary => HasNoBreakPoint(unary.Child),
+            BinaryExpressionAst binary => !CanBreakAfterOperator(binary)
+                && HasNoBreakPoint(binary.Left)
+                && HasNoBreakPoint(binary.Right),
+            _ => false,
+        };
+    }
 }

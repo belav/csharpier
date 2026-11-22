@@ -16,6 +16,7 @@ internal static class Pipeline
             var forceBreak = false;
             var hasMultiLineElement = false;
             var rest = new List<Doc>();
+            var printedElements = new List<Doc> { first };
             for (var index = 1; index < elements.Count; index++)
             {
                 var previous = elements[index - 1];
@@ -34,7 +35,9 @@ internal static class Pipeline
                 rest.Add(context.PrintTrailingComments(previous));
                 rest.Add(Doc.Line);
                 rest.Add(context.PrintLeadingComments(current));
-                rest.Add(Node.Print(current, context));
+                var printed = Node.Print(current, context);
+                printedElements.Add(printed);
+                rest.Add(printed);
             }
 
             if (!forceBreak && hasMultiLineElement && !context.HasCommentIn(node.Extent))
@@ -43,7 +46,7 @@ internal static class Pipeline
                 for (var index = 1; index < elements.Count; index++)
                 {
                     docs.Add(Command.IsStopParsing(elements[index - 1]) ? "| " : " | ");
-                    docs.Add(rest[(index * 5) - 1]);
+                    docs.Add(printedElements[index]);
                 }
 
                 return node.Background ? Doc.Concat(Doc.Concat(docs), " &") : Doc.Concat(docs);

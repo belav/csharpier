@@ -27,6 +27,7 @@ internal static class CommentAttacher
         }
 
         var children = GetChildren(root);
+        var statementsByBlock = new Dictionary<NamedBlockAst, List<StatementAst>>();
 
         foreach (var comment in comments)
         {
@@ -34,45 +35,13 @@ internal static class CommentAttacher
             Ast? preceding = null;
             Ast? following = null;
 
-            while (true)
+            while (children.TryGetValue(enclosing, out var enclosingChildren))
             {
-                preceding = null;
-                following = null;
-                Ast? container = null;
-
-                if (children.TryGetValue(enclosing, out var enclosingChildren))
-                {
-                    foreach (var child in enclosingChildren)
-                    {
-                        var childStartOffset = PrintContext.GetOwnStartOffset(child);
-                        if (
-                            childStartOffset <= comment.StartOffset
-                            && comment.EndOffset <= child.Extent.EndOffset
-                        )
-                        {
-                            container = child;
-                            break;
-                        }
-
-                        if (child.Extent.EndOffset <= comment.StartOffset)
-                        {
-                            if (
-                                preceding is null
-                                || child.Extent.EndOffset >= preceding.Extent.EndOffset
-                            )
-                            {
-                                preceding = child;
-                            }
-                        }
-                        else if (childStartOffset >= comment.EndOffset)
-                        {
-                            following ??= child;
-                        }
-                    }
-                }
-
+                var container = enclosingChildren.FindContainer(comment);
                 if (container is null)
                 {
+                    preceding = enclosingChildren.FindPreceding(comment);
+                    following = enclosingChildren.FindFollowing(comment);
                     break;
                 }
 
@@ -82,7 +51,11 @@ internal static class CommentAttacher
             if (
                 preceding is not null
                 && preceding.Extent.EndLineNumber == comment.StartLineNumber
-                && TryAdd(result.Trailing, GetLastStatementIfUnnamedBlock(preceding), comment)
+                && TryAdd(
+                    result.Trailing,
+                    GetLastStatementIfUnnamedBlock(preceding, statementsByBlock),
+                    comment
+                )
             )
             {
                 continue;
@@ -90,7 +63,11 @@ internal static class CommentAttacher
 
             if (
                 following is not null
-                && TryAdd(result.Leading, GetFirstStatementIfUnnamedBlock(following), comment)
+                && TryAdd(
+                    result.Leading,
+                    GetFirstStatementIfUnnamedBlock(following, statementsByBlock),
+                    comment
+                )
             )
             {
                 continue;
@@ -118,11 +95,15 @@ internal static class CommentAttacher
 
     // The unnamed end block of a script is never printed as a node of its own, so comments around
     // it belong to its first or last statement.
-    private static Ast? GetFirstStatementIfUnnamedBlock(Ast node)
+    private static Ast? GetFirstStatementIfUnnamedBlock(
+        Ast node,
+        Dictionary<NamedBlockAst, List<StatementAst>> statementsByBlock
+    )
     {
         if (node is NamedBlockAst { Unnamed: true } block)
         {
-            return GetStatementsAndTraps(block.Statements, block.Traps).FirstOrDefault();
+            var statements = GetStatementsAndTraps(block, statementsByBlock);
+            return statements.Count > 0 ? statements[0] : null;
         }
 
         if (node is StatementBlockAst { Parent: ArrayExpressionAst or SubExpressionAst } inner)
@@ -133,11 +114,15 @@ internal static class CommentAttacher
         return node;
     }
 
-    private static Ast? GetLastStatementIfUnnamedBlock(Ast node)
+    private static Ast? GetLastStatementIfUnnamedBlock(
+        Ast node,
+        Dictionary<NamedBlockAst, List<StatementAst>> statementsByBlock
+    )
     {
         if (node is NamedBlockAst { Unnamed: true } block)
         {
-            return GetStatementsAndTraps(block.Statements, block.Traps).LastOrDefault();
+            var statements = GetStatementsAndTraps(block, statementsByBlock);
+            return statements.Count > 0 ? statements[^1] : null;
         }
 
         if (node is StatementBlockAst { Parent: ArrayExpressionAst or SubExpressionAst } inner)
@@ -148,15 +133,24 @@ internal static class CommentAttacher
         return node;
     }
 
-    private static IEnumerable<StatementAst> GetStatementsAndTraps(
-        IEnumerable<StatementAst> statements,
-        IEnumerable<TrapStatementAst>? traps
+    // Many comments can sit before the first statement of a block, so the sorted statements are
+    // kept for each block.
+    private static List<StatementAst> GetStatementsAndTraps(
+        NamedBlockAst block,
+        Dictionary<NamedBlockAst, List<StatementAst>> statementsByBlock
     )
     {
-        return statements
-            .Concat(traps ?? [])
-            .Where(o => !Statements.IsBaseConstructorCall(o))
-            .OrderBy(o => o.Extent.StartOffset);
+        if (!statementsByBlock.TryGetValue(block, out var statements))
+        {
+            statements = block
+                .Statements.Concat(block.Traps ?? [])
+                .Where(o => !Statements.IsBaseConstructorCall(o))
+                .OrderBy(o => o.Extent.StartOffset)
+                .ToList();
+            statementsByBlock[block] = statements;
+        }
+
+        return statements;
     }
 
     private static bool TryAdd(
@@ -180,9 +174,9 @@ internal static class CommentAttacher
         return true;
     }
 
-    private static Dictionary<Ast, List<Ast>> GetChildren(ScriptBlockAst root)
+    private static Dictionary<Ast, SortedChildren> GetChildren(ScriptBlockAst root)
     {
-        var children = new Dictionary<Ast, List<Ast>>();
+        var lists = new Dictionary<Ast, List<Ast>>();
         foreach (var node in root.FindAll(_ => true, searchNestedScriptBlocks: true))
         {
             if (node.Parent is null || node.Extent.StartOffset == node.Extent.EndOffset)
@@ -190,16 +184,24 @@ internal static class CommentAttacher
                 continue;
             }
 
-            if (!children.TryGetValue(node.Parent, out var list))
+            // FindAll skips the call to a base constructor, and the tree has it in the body of the
+            // constructor although it is written in front of the body, so it becomes a child of
+            // the function definition.
+            if (
+                node is CommandExpressionAst { Expression: BaseCtorInvokeMemberExpressionAst call }
+                && node.Parent.Parent?.Parent is FunctionDefinitionAst function
+                && call.Extent.EndOffset <= function.Body.Extent.StartOffset
+            )
             {
-                list = [];
-                children[node.Parent] = list;
+                AddChild(lists, function, call);
+                continue;
             }
 
-            list.Add(node);
+            AddChild(lists, node.Parent, node);
         }
 
-        foreach (var list in children.Values)
+        var children = new Dictionary<Ast, SortedChildren>(lists.Count);
+        foreach (var (parent, list) in lists)
         {
             list.Sort(
                 (first, second) =>
@@ -207,8 +209,114 @@ internal static class CommentAttacher
                         .GetOwnStartOffset(first)
                         .CompareTo(PrintContext.GetOwnStartOffset(second))
             );
+            children[parent] = new SortedChildren(list);
         }
 
         return children;
+    }
+
+    private static void AddChild(Dictionary<Ast, List<Ast>> lists, Ast parent, Ast child)
+    {
+        if (!lists.TryGetValue(parent, out var list))
+        {
+            list = [];
+            lists[parent] = list;
+        }
+
+        list.Add(child);
+    }
+
+    // The children of one node, sorted by where they start, with binary searches that give the
+    // same answers as checking every child in that order. Siblings can overlap (the unnamed end
+    // block of a script starts where its param block starts), so the end offsets are not assumed
+    // to be in the same order, and the searches by end offset use their own arrays.
+    private sealed class SortedChildren
+    {
+        private readonly List<Ast> byStart;
+        private readonly int[] starts;
+
+        // The greatest end offset among byStart[0..index].
+        private readonly int[] greatestEnds;
+
+        // Sorted by end offset, and by position in byStart when two children end at the same
+        // offset.
+        private readonly Ast[] byEnd;
+        private readonly int[] ends;
+
+        internal SortedChildren(List<Ast> byStart)
+        {
+            this.byStart = byStart;
+            this.starts = new int[byStart.Count];
+            this.greatestEnds = new int[byStart.Count];
+            var order = new int[byStart.Count];
+            for (var index = 0; index < byStart.Count; index++)
+            {
+                this.starts[index] = PrintContext.GetOwnStartOffset(byStart[index]);
+                this.greatestEnds[index] = Math.Max(
+                    index > 0 ? this.greatestEnds[index - 1] : int.MinValue,
+                    byStart[index].Extent.EndOffset
+                );
+                order[index] = index;
+            }
+
+            Array.Sort(order, (first, second) =>
+            {
+                var result = byStart[first]
+                    .Extent.EndOffset.CompareTo(byStart[second].Extent.EndOffset);
+                return result != 0 ? result : first.CompareTo(second);
+            });
+
+            this.byEnd = new Ast[byStart.Count];
+            this.ends = new int[byStart.Count];
+            for (var index = 0; index < order.Length; index++)
+            {
+                this.byEnd[index] = byStart[order[index]];
+                this.ends[index] = this.byEnd[index].Extent.EndOffset;
+            }
+        }
+
+        // The first child that covers the comment.
+        internal Ast? FindContainer(IScriptExtent comment)
+        {
+            var index = FindFirstAtLeast(this.greatestEnds, comment.EndOffset);
+            return index < this.starts.Length && this.starts[index] <= comment.StartOffset
+                ? this.byStart[index]
+                : null;
+        }
+
+        // The child that ends last at or before the start of the comment, and of those that end
+        // there, the last one in byStart.
+        internal Ast? FindPreceding(IScriptExtent comment)
+        {
+            var index = FindFirstAtLeast(this.ends, comment.StartOffset + 1) - 1;
+            return index >= 0 ? this.byEnd[index] : null;
+        }
+
+        // The first child that starts at or after the end of the comment.
+        internal Ast? FindFollowing(IScriptExtent comment)
+        {
+            var index = FindFirstAtLeast(this.starts, comment.EndOffset);
+            return index < this.starts.Length ? this.byStart[index] : null;
+        }
+
+        private static int FindFirstAtLeast(int[] sortedValues, int value)
+        {
+            var low = 0;
+            var high = sortedValues.Length;
+            while (low < high)
+            {
+                var middle = (low + high) / 2;
+                if (sortedValues[middle] < value)
+                {
+                    low = middle + 1;
+                }
+                else
+                {
+                    high = middle;
+                }
+            }
+
+            return low;
+        }
     }
 }

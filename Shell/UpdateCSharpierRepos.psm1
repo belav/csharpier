@@ -16,6 +16,11 @@ function CSH-UpdateCSharpierRepos()
     $repositories += "https://github.com/mono/mono.git"
     $repositories += "https://github.com/increase-POS/Res-Server.git"
     $repositories += "https://github.com/stride3d/stride.git"
+    $repositories += "https://github.com/dataplat/dbatools.git"
+    $repositories += "https://github.com/dsccommunity/SqlServerDsc.git"
+    $repositories += "https://github.com/PowerShell/PowerShell.git"
+    $repositories += "https://github.com/pester/Pester.git"
+    $repositories += "https://github.com/PowerShell/PSScriptAnalyzer.git"
 
     $tempLocation = "c:\temp\UpdateRepos"
 
@@ -30,7 +35,7 @@ function CSH-UpdateCSharpierRepos()
 
     foreach ($repository in $repositories)
     {
-        $repoFolder = $tempLocation + "/" + (Split-Path $repositories -Leaf).Replace(".git", "")
+        $repoFolder = $tempLocation + "/" + (Split-Path $repository -Leaf).Replace(".git", "")
         if (Test-Path $repoFolder)
         {
             Set-Location $repoFolder
@@ -47,7 +52,7 @@ function CSH-UpdateCSharpierRepos()
     Set-Location $destination
     & git checkout main
 
-    $extensions = (".csproj", ".props", ".targets", ".xml", ".config", ".cs", ".xaml", ".axaml")
+    $extensions = (".csproj", ".props", ".targets", ".xml", ".config", ".cs", ".xaml", ".axaml", ".ps1", ".psm1", ".psd1")
     
     foreach ($extension in $extensions)
     {

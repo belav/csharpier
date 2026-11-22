@@ -5,13 +5,16 @@ namespace CSharpier.Core.PowerShell.AstPrinters;
 
 internal static class BaseCtorInvokeMemberExpression
 {
+    // Comments between base and the parentheses go inside the parentheses.
     internal static Doc Print(BaseCtorInvokeMemberExpressionAst node, PrintContext context)
     {
-        if (node.Arguments is not { Count: > 0 })
-        {
-            return "base()";
-        }
-
-        return ArgumentList.Print("base(", node.Arguments, ")", context);
+        return ArgumentList.Print(
+            "base(",
+            (IReadOnlyList<Ast>?)node.Arguments ?? [],
+            ")",
+            node.Expression.Extent.EndOffset,
+            node.Extent.EndOffset - 1,
+            context
+        );
     }
 }

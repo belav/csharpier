@@ -28,7 +28,13 @@ internal static class ForStatement
         }
 
         docs.Add(") ");
-        docs.Add(StatementBlock.Print(node.Body, context));
+        docs.Add(
+            StatementBlock.Print(
+                node.Body,
+                context,
+                node.Iterator ?? node.Condition ?? node.Initializer
+            )
+        );
         return Doc.Concat(docs);
     }
 }

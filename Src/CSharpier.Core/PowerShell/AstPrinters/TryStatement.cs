@@ -9,12 +9,13 @@ internal static class TryStatement
     {
         var docs = new List<Doc> { "try ", StatementBlock.Print(node.Body, context) };
 
-        var previous = node.Body;
+        // A comment after a catch block on its line is a trailing comment of the catch clause.
+        Ast previous = node.Body;
         foreach (var catchClause in node.CatchClauses)
         {
             docs.Add(StatementBlock.PrintSeparatorAfter(previous, catchClause, context));
             docs.Add(Node.Print(catchClause, context));
-            previous = catchClause.Body;
+            previous = catchClause;
         }
 
         if (node.Finally is not null)

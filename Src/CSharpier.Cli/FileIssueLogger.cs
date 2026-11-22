@@ -9,9 +9,14 @@ internal class FileIssueLogger(string filePath, ILogger logger, LogFormat logFor
         logger.LogError(exception, this.GetMessageTemplate(), this.GetPath(), value);
     }
 
-    public void WriteWarning(string value)
+    public void WriteWarning(string value, bool toStandardError = false)
     {
-        logger.LogWarning(this.GetMessageTemplate(), this.GetPath(), value);
+        logger.LogWarning(
+            toStandardError ? ConsoleLogger.StandardErrorEvent : default,
+            this.GetMessageTemplate(),
+            this.GetPath(),
+            value
+        );
     }
 
     private string GetMessageTemplate()

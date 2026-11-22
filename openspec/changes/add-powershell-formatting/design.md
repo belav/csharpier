@@ -37,7 +37,7 @@ PowerShell ships an authoritative, MIT-licensed parser: `System.Management.Autom
 
 - **Why over a hand-rolled reader (the XML approach):** XML's grammar is small enough that `RawNodeReader` is tractable. PowerShell's grammar (pipelines, script blocks, splatting, subexpressions, format/redirection operators, backtick continuation, here-strings, expandable-string subexpressions, statement-terminating newlines) is not — re-implementing it would be a parser project of its own and a permanent correctness liability. Reuse the real one.
 - **Comment/trivia handling:** PowerShell's AST does not contain comments; they arrive as `Token`s of kind `Comment` with source `Extent`s. This mirrors Roslyn trivia reattachment that the C# front-end already does — walk the AST for structure, and splice comments back in by offset from the token stream.
-- **Verbatim spans:** string literals, here-strings, and command-argument text are emitted from their source `Extent` (offset range into the original text), not reconstructed, so their contents round-trip exactly.
+- **Verbatim spans:** string literals, here-strings, and command-argument text are emitted from their source `Extent` (offset range into the original text), not reconstructed, so their contents round-trip exactly. The exception is line endings, which follow the configured end of line (Decision 8).
 
 **Alternatives considered:** (a) hand-rolled tokenizer/reader — rejected, see above; (b) a third-party managed PowerShell grammar — none is authoritative or maintained enough to trust for round-tripping; (c) shelling out to `pwsh` — introduces a runtime dependency and process cost, unacceptable for a bundled formatter.
 
@@ -89,6 +89,8 @@ Comments are attached to AST nodes before printing, the way Prettier does it for
 
 As implemented: `Node.Print` only prints leading and trailing comments by itself for statements that sit directly in a block and for param blocks, because a `#` comment printed in the middle of a line swallows the code after it. For any other node the comments stay unprinted unless the parent printer calls `context.PrintLeadingComments(child)` / `context.PrintTrailingComments(child)` at a place where a line break is safe.
 
+Where the attachment depends on the line layout (comments in a function header, a comment after the opening parenthesis of a call, which is a trailing comment of the member), printers ask `PrintContext` for the comments in a range of the source that are not printed yet. `FindAll` does not return `BaseCtorInvokeMemberExpressionAst`, and the tree puts the base constructor call in the body of the constructor although it is written in front of the body, so the attacher makes the call a child of the function definition.
+
 Safety net: `PrintContext` tracks which comments have been printed. After a node is printed, if any comment inside its extent was not printed, the node is printed verbatim from source instead. The validator also compares the comment list of input and output.
 
 ### Decision 7: Leaves and unknown nodes print from source text
@@ -108,7 +110,8 @@ These follow the common community style (OTBS, what `Invoke-Formatter` and the V
 - Range `..` and member access `.`/`::`/`?.` have no surrounding spaces. Index `[...]` has no inner spaces.
 - Pipelines: on one line when they fit; otherwise break after each `|` with the continuation indented one level. A pipeline that was multi-line in the source at `|` stays broken. Same rule for `&&`/`||` chains.
 - Backtick continuations are removed when the construct can break without them (after `|`, operators, `,`, inside parentheses/braces). A command whose arguments used backtick continuation keeps backticks, one argument per line, indented one level.
-- Binary expressions break after the operator, continuation indented.
+- Binary expressions break after the operator, continuation indented. Only `-and`/`-or`/`-xor` and `+`/`-` are break points, plus any other operator repeated in a chain (`$a -replace 'b', 'c' -replace 'd', 'e'`); a single comparison such as `$a.Count -gt 0` stays together. Nothing breaks between the brackets of an index. PowerShell does not allow a line to start with an operator, so the operator stays at the end of the line.
+- An assignment whose right side has no break point of its own (a variable, member access, index, cast, single-line string, or one of the non-breaking operators above, with no comments) moves the right side to the next line, indented, when it does not fit after the `=`.
 - Hashtables: `@{ a = 1; b = 2 }` on one line when the source had it on one line and it fits; otherwise one entry per line without `;`. A hashtable that had a newline after `@{` in the source stays expanded.
 - Arrays and argument lists break after `,` one element per line when they do not fit.
 - Script block expressions: `{ $_.Name }` on one line when the source was on one line, it has a single statement, and it fits; otherwise expanded like a statement block.
@@ -118,7 +121,7 @@ These follow the common community style (OTBS, what `Invoke-Formatter` and the V
 - `switch`: `switch -Regex ($x) {`, each clause `pattern { ... }` on its own line; clause bodies follow script-block rules.
 - Classes/enums: members one per line, blank line between methods, attributes above members.
 - File ends with exactly one newline. Leading `#requires`, comment-based help, and `using` lines keep their order.
-- Here-string contents and closing markers are never indented or changed.
+- Here-string contents and closing markers are never indented or changed, except that their line endings are changed to the configured end of line. The same applies to multi-line string literals, `<# #>` comment lines that are not re-indented, and verbatim text. The parser keeps the line endings of the file in a string's value, so the value changes; CSharpier does the same for C# verbatim and raw strings, and the validator compares string values with `\r\n` read as `\n`. A lone `\r` inside such text is kept as written.
 
 Rules added while writing the expression and command printers:
 
@@ -140,7 +143,8 @@ Rules added while writing the statement and declaration printers:
 
 - A statement block always has its statements on their own lines. The exceptions are a `switch` clause body and a script block expression, which stay on one line when the source had them on one line with a single statement. A script block expression with a `param()` and one statement also stays on one line.
 - A comment between `}` and `else`/`elseif`/`catch`/`finally`/`while`/`until` stays where it is: a comment on the line of `}` stays after the brace, a comment on its own line stays on its own line, and the keyword starts the next line.
-- A comment between the header of a statement and its `{` (`if ($a) # why`) moves to the first line inside the block.
+- A comment between the header of a statement and its `{` (`if ($a) # why`, also `switch` and `for`) moves to the first line inside the block. So does a comment after the `{` of a `switch` on its line.
+- A comment between a function's name, parameter list, or base constructor call and its `{` stays there, and the `{` goes on the next line after a line comment or when the source had it there. PowerShell reads a comment at the start of the body as the help of the function and ignores one in front of the `{` (checked with `Get-Help`), so moving it into the body would change the help. Comments between `function` and the name, and around the `:` of a constructor, also stay where they are.
 - The lines of a `<# #>` comment after the first are written exactly as in the source. Only the first line follows the indentation of the code.
 - `param(...)` breaks when the source had it on more than one line, when it holds a comment, or when it does not fit. When it breaks, attributes go on their own lines, the type constraints directly in front of the name stay with the name, and parameters are separated by a blank line when any parameter has an attribute. A type constraint that is followed by an attribute keeps its place in the order and gets its own line.
 - Class members: attributes on their own lines, then `hidden`, then `static`, then the type. A blank line goes before and after every method. Enum members go one per line.
@@ -149,11 +153,13 @@ Rules added while writing the statement and declaration printers:
 - `for` prints `for (init; condition; step)` and `for (;;)`.
 - `using` statements come first, followed by a blank line. A `using` with an alias is printed as written.
 - A blank line separates the param block from the code after it and each named block from the next.
-- Arguments of attributes, method calls, and `base(...)` go one per line when one of them has a comment next to it.
+- Arguments of attributes, method calls, and `base(...)` go one per line when one of them has a comment next to it, or when a comment sits between the parentheses before the first argument or after the last one. A comment after the opening parenthesis on its line goes on the first line inside, as after the `(` of a parameter list or `@(`. The `[ ]` of an index expression follow the same rule.
 
 ### Decision 9: Validator compares ASTs and comments
 
 `PowerShellFormattingValidator` lives in `Src/CSharpier.Core/PowerShell/`, parses both texts, walks both trees in parallel, and fails on the first difference in node type, child count, or leaf data (constant values, string values and quote type, variable paths, operator token kinds, command element text, parameter names, type names, member names, static flag, redirection data). Comments are compared as an ordered list with per-line leading whitespace trimmed. The formatting test harness uses it for the `powershell` folder and also formats the output a second time and asserts it is unchanged.
+
+The validator runs for PowerShell in every mode, not only for files on disk. `pipe-files` skips validation for C# and XML for speed but sets `AlwaysValidatePowerShell`; an explicit `--skip-validation` still skips it. `csharpier server` validates PowerShell output before it returns it. On a failure a file on disk is not written, standard output (stdin, `pipe-files`, `--write-stdout`) gets the original code with the error on standard error, and the server returns `Failed` with the validation message.
 
 ### Decision 10: Resolved open questions
 
@@ -177,9 +183,23 @@ A set of public repositories (PowerShell/PowerShell, Pester, PSScriptAnalyzer, d
 
 ### Decision 12: Resolution errors do not block formatting
 
-The parser reports errors that depend on what is installed on the machine, not on syntax: `ResourceNotDefined`, `ModuleNotFoundDuringParse`, `TypeNotFound`, `RequiresModuleInvalid`, `WorkflowNotSupportedInPowerShellCore`, `DscResourceMissingSetMethod`. The AST is still complete for these. `CustomAttributeTypeNotFound` was added to the list while testing classes whose attributes come from another module. A file whose errors all have one of these `ErrorId` values is formatted; the validator ignores the same ids. Any other error leaves the file unchanged and is reported.
+The parser reports errors that depend on what is installed on the machine, not on syntax: `ResourceNotDefined`, `ModuleNotFoundDuringParse`, `TypeNotFound`, `RequiresModuleInvalid`, `WorkflowNotSupportedInPowerShellCore`, `DscResourceMissingSetMethod`. The AST is still complete for these. `CustomAttributeTypeNotFound` was added to the list while testing classes whose attributes come from another module. `ErrorLoadingAssembly` was added for `using assembly` statements whose assembly cannot be loaded on the machine, such as `using assembly System.Windows.Forms` or a relative path to a missing DLL. A file whose errors all have one of these `ErrorId` values is formatted; the validator ignores the same ids. Any other error leaves the file unchanged and is reported.
 
-DSC `configuration` blocks are different. On a machine without DSC (Linux and macOS by default) the parser throws while loading the DSC keywords, reports the exception as a parse error, and drops the configuration statement from the AST. That tree cannot be printed safely, so the file is returned unchanged with a warning. The same file is formatted (configuration body verbatim) on Windows.
+DSC `configuration` blocks are different. On a machine without DSC (Linux and macOS by default) the parser throws while loading the DSC keywords, reports the exception as a parse error, and drops the configuration statement from the AST. That tree cannot be printed safely, so the file is returned unchanged with a warning. The same file is formatted (configuration body verbatim) on Windows. This difference between machines is accepted and documented in `Configuration.md`, along with the extra parse time for these files; skipping them on every machine was considered and rejected.
+
+The error is recognised by its `ErrorId`, `ParserError`, and its position, the name after the `configuration` keyword (seen in a Linux container with `System.Management.Automation` 7.6.10). Its message is the exception text with a stack trace (`System.IO.DirectoryNotFoundException: Unable to find DSC schema store at /etc/opt/omi/conf/dsc/configuration...` followed by `DscClassCache` frames) and is not matched. `ParseError` does not expose the exception object. A file on disk is left unchanged and the warning is logged as before. Standard output (stdin, `pipe-files`, `--write-stdout`) gets the unchanged code and the warning goes to standard error, because the caller takes standard output as the new text of the file. The server returns `Failed` with the warning, because the editors replace the document on `Formatted` and only log the message on `Failed`.
+
+### Decision 13: Signed scripts are not formatted
+
+An Authenticode signature covers the exact text of a script and is stored in comments at the end of the file, from `# SIG # Begin signature block` to `# SIG # End signature block`. Formatting would invalidate it, so a file with a comment token whose text is the begin marker (trailing whitespace allowed) is returned unchanged with a warning, the same way as the DSC case in Decision 12. The marker is looked for in comment tokens, not in the raw text, so the marker inside a string or here-string does not count.
+
+### Decision 14: Stack depth
+
+The parser stops with "Processing was stopped because the script is too complex." when its recursive descent runs low on stack. The checks it runs over the finished tree (`SemanticChecks`, the `FindAll` in `SymbolTable.AddTypesInScope`) do not check the stack, and a chain of binary operators, `&&`/`||`, member accesses, or attributes is parsed in a loop but nests once per operator in the tree. On a 1 MB thread a chain of 20,000 `1+` overflowed inside `Parser.ParseInput`; a chain of 200,000 overflowed 8 MB and passed in 16 MB.
+
+`LargeStack` used to run code under 20,000 characters on the calling thread. On the 1.5 MB threads of the CLI and the server no probe overflowed, but on a 512 KB thread a chain of 9,940 `1+` (19,883 characters) overflowed, and on a 256 KB thread so did a chain of 4,970 `1 + `. All code now runs on its own thread with a stack of 2,048 bytes per character of code, at least 16 MB and at most 1 GB. Creating the thread costs about 0.08 ms per call; formatting the downloaded repositories took the same time before and after (18.0 to 18.5 s for 4,536 files). Deeply nested code under 20,000 characters that used to stop with the parser's "too complex" error now reaches the depth check of the printer and fails with its message, or is formatted.
+
+The limit that remains is the 1 GB cap, reached at 524,288 characters. At up to 84 bytes per level, the checks after parsing need more than 1 GB only for a chain of about 12 million operators, a file of more than 24 million characters. That size was not tried.
 
 ## Open Questions (resolved in Decision 10)
 

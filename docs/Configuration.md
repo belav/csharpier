@@ -204,7 +204,9 @@ CSharpier formats `.ps1`, `.psm1` and `.psd1` files. The same options apply as f
 
 - Quote style, aliases, and the casing of commands, parameters, types, members and variables are never changed.
 - Keywords and operators are lowercased.
-- The contents of here-strings and of DSC `configuration` blocks are left as written.
-- A file with syntax errors is not formatted. Errors that only mean a module, DSC resource or type is not installed on the machine do not stop a file from being formatted. The exception is a file with a DSC `configuration` block on a machine without DSC (Linux and macOS by default): it is left unchanged with a warning.
+- The text of here-strings, multi-line strings and DSC `configuration` blocks is left as written, except that line endings are changed to the configured `endOfLine`. PowerShell takes the line endings of a here-string or multi-line string from the file, so this can change its value.
+- A file with syntax errors is not formatted. Errors that only mean a module, DSC resource or type is not installed on the machine do not stop a file from being formatted.
+- Files with a DSC `configuration` block depend on the machine. Where DSC is installed (Windows by default), the `configuration` block is left as written and the rest of the file is formatted. Where it is not (Linux and macOS by default), PowerShell cannot parse the block, so the whole file is left unchanged with a warning. `csharpier check` can report such a file as unformatted on Windows and only warn about it on Linux or macOS. Format these files on a machine with DSC, or add them to `.csharpierignore` to get the same result everywhere. They also take longer to format, because PowerShell loads the DSC resources to parse them.
+- A signed script (one with a `# SIG # Begin signature block` comment) is left unchanged with a warning, because formatting would invalidate the signature.
 - `csharpier-ignore` comments are not supported in PowerShell files. Use a `.csharpierignore` file to exclude a file.
 - When using [CSharpier.Core](API.md), PowerShell formatting is not part of the `netstandard2.0` build.

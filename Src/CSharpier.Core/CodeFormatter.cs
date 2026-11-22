@@ -30,7 +30,8 @@ internal static class CodeFormatter
 #if !NETSTANDARD2_0
             Formatter.PowerShell => await PowerShell.PowerShellFormatter.FormatAsync(
                 fileContents,
-                options
+                options,
+                cancellationToken
             ),
 #endif
             _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." },

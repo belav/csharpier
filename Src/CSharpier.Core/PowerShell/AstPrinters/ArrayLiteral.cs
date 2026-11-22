@@ -14,8 +14,11 @@ internal static class ArrayLiteral
         }
 
         // A command line cannot wrap, so an array that is a command argument only breaks where
-        // the source already had it on several lines.
-        Doc separator = Doc.Line;
+        // the source already had it on several lines. That includes the place after a trailing
+        // block comment: a break there would put the elements on several lines, and the next
+        // format would then break after every comma. A trailing line comment only comes before
+        // an element on a later line, where the separator is already a hard line.
+        Doc separator = Layout.IsInsideIndex(node) ? " " : Doc.Line;
         if (node.Parent is CommandAst or CommandParameterAst)
         {
             separator = " ";
@@ -39,9 +42,8 @@ internal static class ArrayLiteral
         for (var index = 1; index < elements.Count; index++)
         {
             rest.Add(",");
-            var trailingComments = context.PrintTrailingComments(elements[index - 1]);
-            rest.Add(trailingComments);
-            rest.Add(trailingComments == Doc.Null ? separator : Doc.Line);
+            rest.Add(context.PrintTrailingComments(elements[index - 1]));
+            rest.Add(separator);
             rest.Add(context.PrintLeadingComments(elements[index]));
             rest.Add(Node.Print(elements[index], context));
         }
@@ -57,6 +59,7 @@ internal static class ArrayLiteral
         return
             node.Parent is BinaryExpressionAst binaryExpression
             && binaryExpression.Right == node
+            && Layout.CanBreakAfterOperator(binaryExpression)
             && !Layout.IsSoleContentOfParens(binaryExpression)
             ? Doc.Group(first, Doc.Concat(rest))
             : Doc.Group(first, Doc.Indent(rest));

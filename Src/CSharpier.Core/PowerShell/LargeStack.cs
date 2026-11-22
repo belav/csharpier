@@ -1,25 +1,22 @@
 namespace CSharpier.Core.PowerShell;
 
 // The parser and the walks over its tree recurse once per level of nesting, and a long chain of
-// operators nests once per operator. Code large enough to hold such a chain is handled on a thread
-// with a stack sized for it, so the depth checks can reject it instead of the process dying from a
-// stack overflow.
+// operators nests once per operator. The parser reports an error when its own recursion runs low
+// on stack, but the checks it then runs over the tree do not, so a deep tree can overflow the
+// stack inside the parser. All code is handled on a thread with a stack sized for its length, so
+// the result does not depend on the stack of the calling thread, and the depth checks can reject
+// the code instead of the process dying from a stack overflow.
 internal static class LargeStack
 {
-    private const int Threshold = 20_000;
-
-    internal static Task<T> Run<T>(int codeLength, Func<T> function)
+    internal static Task<T> Run<T>(
+        int codeLength,
+        Func<T> function,
+        CancellationToken cancellationToken
+    )
     {
-        if (codeLength < Threshold)
+        if (cancellationToken.IsCancellationRequested)
         {
-            try
-            {
-                return Task.FromResult(function());
-            }
-            catch (Exception exception)
-            {
-                return Task.FromException<T>(exception);
-            }
+            return Task.FromCanceled<T>(cancellationToken);
         }
 
         var completion = new TaskCompletionSource<T>(
@@ -32,6 +29,10 @@ internal static class LargeStack
                 try
                 {
                     completion.SetResult(function());
+                }
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+                {
+                    completion.SetCanceled(cancellationToken);
                 }
                 catch (Exception exception)
                 {

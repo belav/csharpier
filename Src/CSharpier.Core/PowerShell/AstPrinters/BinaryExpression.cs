@@ -24,7 +24,7 @@ internal static class BinaryExpression
             if (
                 current.Left is BinaryExpressionAst left
                 && left.Operator != TokenKind.DotDot
-                && GetPrecedence(left.Operator) == GetPrecedence(node.Operator)
+                && Layout.GetPrecedence(left.Operator) == Layout.GetPrecedence(node.Operator)
             )
             {
                 current = left;
@@ -45,6 +45,8 @@ internal static class BinaryExpression
                 ? chain.Count == 1 && IsShort(node.Right)
                 : Layout.IsDelimitedBlock(firstOperand);
 
+        var canBreak = Layout.CanBreakAfterOperator(node);
+        var hasTrailingComments = false;
         var rest = new List<Doc>();
         foreach (var link in chain)
         {
@@ -54,9 +56,10 @@ internal static class BinaryExpression
             rest.Add(trailingComments);
             if (trailingComments != Doc.Null)
             {
+                hasTrailingComments = true;
                 rest.Add(Doc.Line);
             }
-            else if (link.Operator == TokenKind.Format || Layout.IsMultiLineString(link.Left))
+            else if (!canBreak || Layout.IsMultiLineString(link.Left))
             {
                 rest.Add(" ");
             }
@@ -71,6 +74,11 @@ internal static class BinaryExpression
 
             rest.Add(context.PrintLeadingComments(link.Right));
             rest.Add(Node.Print(link.Right, context));
+        }
+
+        if (!canBreak && !hasTrailingComments)
+        {
+            return Doc.Concat(first, Doc.Concat(rest));
         }
 
         if (hugFirstOperand)
@@ -92,10 +100,5 @@ internal static class BinaryExpression
                     or MemberExpressionAst { Expression: VariableExpressionAst }
                     or IndexExpressionAst { Target: VariableExpressionAst }
             || (node is ExpandableStringExpressionAst && !Layout.IsMultiLine(node));
-    }
-
-    private static TokenFlags GetPrecedence(TokenKind kind)
-    {
-        return kind.GetTraits() & TokenFlags.BinaryPrecedenceMask;
     }
 }

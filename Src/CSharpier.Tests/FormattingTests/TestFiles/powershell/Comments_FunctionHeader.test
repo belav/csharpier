@@ -1,0 +1,68 @@
+function Get-A # after the name
+{
+    $x=1
+}
+
+function Get-B
+# on its own line
+{
+    $x=1
+}
+
+function Get-C
+<#
+.SYNOPSIS
+    Help between the name and the brace is not read as help, so it stays there.
+#>
+{
+    $x=1
+}
+
+function Get-D <# inline #> {
+    $x=1
+}
+
+function Get-E($a) # after the parameters
+{
+    $x=1
+}
+
+function Get-F() <# after empty parentheses #> {
+    $x=1
+}
+
+function Get-G($a, $b) # after the parameters
+{ }
+
+filter Get-H # after the name
+{
+    $x=1
+}
+
+function <# before the name #> Get-I {
+    $x=1
+}
+
+function Get-J($a
+    # after the last parameter
+) {
+    $x=1
+}
+
+function Get-K {
+    function Get-L # nested
+    {
+        $x=1
+    }
+}
+
+class A {
+    [void] M() # after the parameters
+    {
+        $x=1
+    }
+
+    [void] N($a) <# inline #> {
+        $x=1
+    }
+}

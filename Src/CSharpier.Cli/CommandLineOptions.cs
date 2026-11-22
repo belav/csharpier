@@ -9,6 +9,9 @@ internal class CommandLineOptions
     public string[] OriginalDirectoryOrFilePaths { get; init; } = [];
     public bool Check { get; init; }
     public bool SkipValidation { get; init; }
+
+    // Validates PowerShell even when SkipValidation is set.
+    public bool AlwaysValidatePowerShell { get; init; }
     public LogFormat LogFormat { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }

@@ -10,19 +10,25 @@ internal static class Attribute
         var arguments = new List<Ast>(node.PositionalArguments.Count + node.NamedArguments.Count);
         arguments.AddRange(node.PositionalArguments);
         arguments.AddRange(node.NamedArguments);
-        if (arguments.Count == 0)
-        {
-            return Doc.Concat("[", node.TypeName.Extent.Text, "()]");
-        }
-
         arguments.Sort(
             (first, second) => first.Extent.StartOffset.CompareTo(second.Extent.StartOffset)
         );
 
+        var tokens = context.GetTokens(node.Extent.StartOffset, node.Extent.EndOffset);
+        var openParenthesis = tokens.Find(o => o.Kind == TokenKind.LParen);
+        var closeParenthesis = tokens.FindLast(o => o.Kind == TokenKind.RParen);
+
         return Doc.Concat(
             "[",
             node.TypeName.Extent.Text,
-            ArgumentList.Print("(", arguments, ")", context),
+            ArgumentList.Print(
+                "(",
+                arguments,
+                ")",
+                openParenthesis?.Extent.EndOffset ?? node.Extent.StartOffset,
+                closeParenthesis?.Extent.StartOffset ?? node.Extent.EndOffset,
+                context
+            ),
             "]"
         );
     }

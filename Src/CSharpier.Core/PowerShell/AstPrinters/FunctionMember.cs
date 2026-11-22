@@ -6,7 +6,7 @@ namespace CSharpier.Core.PowerShell.AstPrinters;
 internal static class FunctionMember
 {
     // The name is the token in front of the parameter list.
-    private static string GetName(
+    private static Token? GetName(
         FunctionMemberAst node,
         FunctionDefinitionAst definition,
         PrintContext context
@@ -25,24 +25,12 @@ internal static class FunctionMember
 
         var tokens = context.GetTokens(startOffset, definition.Body.Extent.StartOffset);
         var openParenIndex = tokens.FindIndex(o => o.Kind == TokenKind.LParen);
-        return openParenIndex > 0 ? tokens[openParenIndex - 1].Text : node.Name;
+        return openParenIndex > 0 ? tokens[openParenIndex - 1] : null;
     }
 
     internal static Doc Print(FunctionMemberAst node, PrintContext context)
     {
-        FunctionDefinitionAst? definition = null;
-        foreach (var child in node.FindAll(o => o.Parent == node, searchNestedScriptBlocks: false))
-        {
-            if (child is FunctionDefinitionAst functionDefinition)
-            {
-                definition = functionDefinition;
-            }
-        }
-
-        if (definition is null)
-        {
-            return Verbatim.Print(node.Extent, context);
-        }
+        var definition = (FunctionDefinitionAst)node.Body.Parent;
 
         var docs = new List<Doc>();
         foreach (var attribute in node.Attributes)
@@ -69,9 +57,10 @@ internal static class FunctionMember
             docs.Add(" ");
         }
 
-        docs.Add(GetName(node, definition, context));
+        var name = GetName(node, definition, context);
+        docs.Add(name?.Text ?? node.Name);
 
-        Doc? baseConstructorCall = null;
+        BaseCtorInvokeMemberExpressionAst? baseConstructorCall = null;
         if (
             node.Body.EndBlock?.Statements
                 is [CommandExpressionAst { Expression: BaseCtorInvokeMemberExpressionAst call }, ..]
@@ -79,11 +68,16 @@ internal static class FunctionMember
             && call.Extent.EndOffset > call.Extent.StartOffset
         )
         {
-            baseConstructorCall = Node.Print(call, context);
+            baseConstructorCall = call;
         }
 
         docs.Add(
-            FunctionDefinition.PrintParametersAndBody(definition, baseConstructorCall, context)
+            FunctionDefinition.PrintParametersAndBody(
+                definition,
+                baseConstructorCall,
+                name,
+                context
+            )
         );
         return Doc.Concat(docs);
     }
