@@ -169,6 +169,140 @@ public class CommandLineFormatterTests
     }
 
     [Test]
+    public async Task Format_Summary_Includes_Changed_Count()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Formatted.cs", FormattedClassContent);
+        context.WhenAFileExists("Unformatted.cs", UnformattedClassContent);
+
+        var first = await Format(context);
+        first
+            .OutputLines.Should()
+            .ContainSingle()
+            .Which.Should()
+            .MatchRegex(@"^Formatted 2 files in \d+ms \(1 changed\)\.$");
+
+        var second = await Format(context);
+        second
+            .OutputLines.Should()
+            .ContainSingle()
+            .Which.Should()
+            .MatchRegex(@"^Formatted 2 files in \d+ms \(0 changed\)\.$");
+    }
+
+    [Test]
+    public async Task Check_Summary_Does_Not_Include_Changed_Count()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("Unformatted.cs", UnformattedClassContent);
+
+        var result = await Format(context, check: true);
+
+        result
+            .OutputLines.Should()
+            .ContainSingle()
+            .Which.Should()
+            .MatchRegex(@"^Checked 1 files in \d+ms\.$");
+    }
+
+    [Test]
+    public async Task ListFormatted_Prints_Only_Changed_Paths_Sorted()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("b.cs", UnformattedClassContent);
+        context.WhenAFileExists("a.cs", UnformattedClassContent);
+        context.WhenAFileExists("c.cs", FormattedClassContent);
+
+        var result = await Format(context, listFormatted: true);
+
+        result.OutputLines.Select(o => o.Replace('\\', '/')).Should().Equal("./a.cs", "./b.cs");
+        result.ErrorOutputLines.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+        context.GetFileContent("a.cs").Should().Be(FormattedClassContent);
+        context.GetFileContent("b.cs").Should().Be(FormattedClassContent);
+    }
+
+    [Test]
+    public async Task ListFormatted_Prints_Nothing_When_No_Files_Change()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a.cs", UnformattedClassContent);
+
+        await Format(context, listFormatted: true);
+        var result = await Format(context, listFormatted: true);
+
+        result.OutputLines.Should().BeEmpty();
+        result.ExitCode.Should().Be(0);
+    }
+
+    [Test]
+    public async Task ListFormatted_With_SkipWrite_Lists_Without_Writing()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a.cs", UnformattedClassContent);
+
+        var result = await Format(context, skipWrite: true, listFormatted: true);
+
+        result.OutputLines.Select(o => o.Replace('\\', '/')).Should().Equal("./a.cs");
+        context.GetFileContent("a.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task ListFormatted_With_WriteStdout_Returns_Error()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a.cs", UnformattedClassContent);
+
+        var result = await Format(context, writeStdout: true, listFormatted: true);
+
+        result.ExitCode.Should().Be(1);
+        result
+            .ErrorOutputLines.Should()
+            .Equal(
+                "--list-formatted cannot be used with --write-stdout or when piping input via stdin."
+            );
+        result.OutputLines.Should().BeEmpty();
+        context.GetFileContent("a.cs").Should().Be(UnformattedClassContent);
+    }
+
+    [Test]
+    public async Task ListFormatted_Uses_Supplied_Path_For_Explicit_Files()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("sub/a.cs", UnformattedClassContent);
+
+        var result = await Format(context, listFormatted: true, directoryOrFilePaths: "sub/a.cs");
+
+        result.OutputLines.Select(o => o.Replace('\\', '/')).Should().Equal("./sub/a.cs");
+    }
+
+    [Test]
+    public async Task ListFormatted_Lists_File_Passed_Twice_Once()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a.cs", UnformattedClassContent);
+
+        var result = await Format(
+            context,
+            listFormatted: true,
+            directoryOrFilePaths: ["a.cs", "a.cs"]
+        );
+
+        result.OutputLines.Select(o => o.Replace('\\', '/')).Should().Equal("./a.cs");
+    }
+
+    [Test]
+    public async Task ListFormatted_Prints_Paths_With_Log_Level_None()
+    {
+        var context = new TestContext();
+        context.WhenAFileExists("a.cs", UnformattedClassContent);
+
+        var result = await Format(context, logLevel: LogLevel.None, listFormatted: true);
+
+        result.OutputLines.Select(o => o.Replace('\\', '/')).Should().Equal("./a.cs");
+    }
+
+    [Test]
     public async Task Format_Writes_File_With_Directory_Path()
     {
         var context = new TestContext();
@@ -1254,6 +1388,7 @@ class ClassName
         string? configPath = null,
         string? ignorePath = null,
         LogLevel logLevel = LogLevel.Information,
+        bool listFormatted = false,
         params string[] directoryOrFilePaths
     )
     {
@@ -1286,6 +1421,7 @@ class ClassName
                 IncludeGenerated = includeGenerated,
                 SyntaxErrorsAsWarnings = syntaxErrorsAsWarnings,
                 IgnorePath = ignorePath,
+                ListFormatted = listFormatted,
             },
             context.FileSystem,
             fakeConsole,

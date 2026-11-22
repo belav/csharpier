@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace CSharpier.Cli;
 
 internal class CommandLineFormatterResult
@@ -9,6 +11,8 @@ internal class CommandLineFormatterResult
     public int ExceptionsValidatingSource;
     public int Files;
     public int UnformattedFiles;
+    public int ChangedFiles;
     public int CachedFiles;
     public long ElapsedMilliseconds;
+    public readonly ConcurrentQueue<string> FormattedFilePaths = new();
 }

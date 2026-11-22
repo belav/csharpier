@@ -12,6 +12,7 @@ internal class CommandLineOptions
     public LogFormat LogFormat { get; init; }
     public bool SkipWrite { get; init; }
     public bool WriteStdout { get; init; }
+    public bool ListFormatted { get; init; }
     public bool NoCache { get; init; }
     public bool NoMSBuildCheck { get; init; }
 
