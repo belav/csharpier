@@ -1,3 +1,13 @@
-while ($true) { Break }
-:outer while ($true) { while ($true) { break outer } }
-:outer while ($true) { while ($true) { break  $label } }
+while ($true) {
+    break
+}
+:outer while ($true) {
+    while ($true) {
+        break outer
+    }
+}
+:outer while ($true) {
+    while ($true) {
+        break $label
+    }
+}

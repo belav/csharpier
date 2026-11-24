@@ -1,26 +1,56 @@
-$x=1; $a.b( # after the parenthesis
-    1, 2)
-$x=1; [System.IO.Path]::Combine( # after the parenthesis
-    'a', 'b')
-$x=1; $a.b( # no arguments
+$x = 1
+$a.b(
+    # after the parenthesis
+    1,
+    2
 )
-$x=1; $a.b(<# block #> 1)
-$x=1; $a.b(1
+$x = 1
+[System.IO.Path]::Combine(
+    # after the parenthesis
+    'a',
+    'b'
+)
+$x = 1
+$a.b(
+    # no arguments
+)
+$x = 1
+$a.b(
+    <# block #>
+    1
+)
+$x = 1
+$a.b(
+    1
     # after the last argument
 )
-$x=1; $a?.c( # null-conditional
-    1)
-$x=1; $a.Invoke( # before a script block
-    { $_ })
-$x=1; $y = $a[ # after the bracket
-    0]
-$x=1; $y = $a[0
+$x = 1
+$a?.c(
+    # null-conditional
+    1
+)
+$x = 1
+$a.Invoke(
+    # before a script block
+    { $_ }
+)
+$x = 1
+$y = $a[
+    # after the bracket
+    0
+]
+$x = 1
+$y = $a[
+    0
     # before the bracket
 ]
 function Get-A {
-    [CmdletBinding(<# empty #>)]
+    [CmdletBinding(
+        <# empty #>
+    )]
     param(
-        [ValidateSet('a',
+        [ValidateSet(
+            'a',
             'b'
             # after the last value
         )]

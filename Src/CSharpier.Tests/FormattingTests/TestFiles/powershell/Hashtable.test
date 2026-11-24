@@ -1,21 +1,23 @@
 $a = @{}
-$a = @{ }
-$a = @{a=1}
-$a = @{a=1;b=2}
+$a = @{}
+$a = @{ a = 1 }
 $a = @{ a = 1; b = 2 }
-$a = @{ a = 1; b = 2; }
+$a = @{ a = 1; b = 2 }
+$a = @{ a = 1; b = 2 }
 $a = @{
-a = 1;
-  b = 2
+    a = 1
+    b = 2
 
-  c = @{ nested = $true }
+    c = @{ nested = $true }
 
-
-  d = 3
+    d = 3
 }
-$a = @{ a = 1
-  b = 2 }
-$a = @{ someVeryLongKeyName = $someVeryLongVariableName; anotherVeryLongKeyName = $anotherVeryLongVariableName; third = 3 }
+$a = @{ a = 1; b = 2 }
+$a = @{
+    someVeryLongKeyName = $someVeryLongVariableName
+    anotherVeryLongKeyName = $anotherVeryLongVariableName
+    third = 3
+}
 $a = @{
     "quoted key" = 1
     'single' = 2
@@ -27,7 +29,7 @@ $a = @{
 $a = @{
     # leading comment
     One = 1 # trailing comment
-    Two = 2; # after semicolon
+    Two = 2 # after semicolon
 
     # before three
     Three = 3
@@ -45,7 +47,11 @@ $a = @{
     Array = @(1, 2, 3)
     List = 'a', 'b'
     Pipeline = Get-ChildItem | Sort-Object
-    Condition = if ($b) { 1 } else { 2 }
+    Condition = if ($b) {
+        1
+    } else {
+        2
+    }
     Nested = @{
         Deep = @{
             Deeper = 1
@@ -57,7 +63,7 @@ Invoke-Thing @{ a = 1 } -Other @{
 }
 $a = @{ a = 1 }.a
 $a = @{
-    Name       = "aligned"
-    Value      = 1
+    Name = "aligned"
+    Value = 1
     LongerName = 2
 }

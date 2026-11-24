@@ -4,23 +4,28 @@
 #>
 # before attribute
 [CmdletBinding()] # after attribute
-# between
 param(
+    # between
+
     # the name
     [Parameter(Mandatory)] # after parameter attribute
     # before type
     [string]$Name, # after name
 
     <# block #> [int]$Count,
+
     [switch]$Force # last
     # dangling
 )
+
 function a {
     param(
         # nothing here
     )
 }
 function b {
-    param($a, # first
-        $b)
+    param(
+        $a, # first
+        $b
+    )
 }

@@ -1,0 +1,5 @@
+class A {
+    hidden static [int]$Count
+
+    hidden static [void] M() { }
+}

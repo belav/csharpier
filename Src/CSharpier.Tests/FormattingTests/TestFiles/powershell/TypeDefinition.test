@@ -1,9 +1,8 @@
-class Empty{}
-Class Animal
-{
+class Empty { }
+class Animal {
     [string]$Name
 }
-class Dog:Animal,System.IDisposable {
+class Dog : Animal, System.IDisposable {
     [void] Dispose() { }
 }
 [SuppressMessage('a', 'b')]

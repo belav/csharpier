@@ -1,9 +1,9 @@
 $a = [int]$b
-$a = [int] $b
+$a = [int]$b
 $a = [int][string]$b
 $a = [string[]]('a', 'b')
 $a = [ordered]@{ a = 1 }
-$a = [ordered] @{
+$a = [ordered]@{
     a = 1
 }
 $a = [pscustomobject]@{

@@ -1,5 +1,5 @@
 function Get-Foo {
-    param($a,$b)
+    param($a, $b)
 
     if ($a) {
         Write-Host $a

@@ -1,15 +1,18 @@
 [System.Management.Automation.CommandCompletion]::CompleteInput(
-        <#inputScript#>  $InputScript,
-        <#cursorColumn#> $CursorColumn,
-        <#options#>      $Options)
+    <#inputScript#> $InputScript,
+    <#cursorColumn#> $CursorColumn,
+    <#options#> $Options
+)
 $instance.Modify(
     # the properties not in desired state
     @{
         MaximumFileSize = 20
     }
 )
-$a.Foo($b, # first
-    $c).Bar()
+$a.Foo(
+    $b, # first
+    $c
+).Bar()
 function a {
     param(
         [ValidateSet(

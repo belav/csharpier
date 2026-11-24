@@ -72,4 +72,31 @@ public class PowerShellFormattingValidatorTests
         result.Failed.Should().BeTrue();
         result.FailureMessage.Should().NotBeNullOrEmpty();
     }
+
+    [Test]
+    public async Task Should_Pass_When_Only_Spacing_Changed_In_A_Deep_Chain()
+    {
+        var original = "$a = " + string.Join("+", Enumerable.Repeat("1", 2000)) + "\n";
+        var formatted = "$a = " + string.Join(" + ", Enumerable.Repeat("1", 2000)) + "\n";
+
+        var result = await new PowerShellFormattingValidator(original, formatted).ValidateAsync(
+            CancellationToken.None
+        );
+
+        result.FailureMessage.Should().BeNullOrEmpty();
+        result.Failed.Should().BeFalse();
+    }
+
+    [Test]
+    public async Task Should_Fail_When_A_Deep_Chain_Changed()
+    {
+        var original = "$a = " + string.Join(" + ", Enumerable.Repeat("1", 2000)) + "\n";
+        var formatted = original.Replace("1\n", "2\n");
+
+        var result = await new PowerShellFormattingValidator(original, formatted).ValidateAsync(
+            CancellationToken.None
+        );
+
+        result.Failed.Should().BeTrue();
+    }
 }

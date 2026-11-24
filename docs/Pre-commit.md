@@ -42,12 +42,11 @@ repos:
           - post-rewrite
         description: Install the .NET tools listed at .config/dotnet-tools.json.
       - id: csharpier
-        name: Run CSharpier on C# files
+        name: Run CSharpier on C# and PowerShell files
         entry: dotnet tool run CSharpier format
         language: system
-        types:
-          - c#
-        description: CSharpier is an opinionated C# formatter inspired by Prettier.
+        files: \.(cs|csx|ps1|psm1|psd1)$
+        description: CSharpier is an opinionated C#, XML and PowerShell formatter inspired by Prettier.
 ```
 
 ## [Husky.Net](https://github.com/alirezanet/husky.net)

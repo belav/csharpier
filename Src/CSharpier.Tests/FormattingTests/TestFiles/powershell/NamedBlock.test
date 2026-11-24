@@ -1,6 +1,11 @@
 param($a)
-Begin{$x = 1}
-Process{
+
+begin {
+    $x = 1
+}
+
+process {
     $_
 }
-End{}
+
+end { }

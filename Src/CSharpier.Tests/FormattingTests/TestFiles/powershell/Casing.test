@@ -1,3 +1,5 @@
+USING NAMESPACE System.IO
+
 FUNCTION Get-Value { PARAM($a) BEGIN { } PROCESS { IF ($a) { RETURN } ELSEIF ($b) { THROW "x" } ELSE { EXIT 1 } } END { } }
 FOREACH ($a IN $b) { CONTINUE }
 WHILE ($true) { BREAK }
@@ -7,3 +9,11 @@ TRY { } CATCH { } FINALLY { }
 SWITCH ($x) { DEFAULT { } }
 CLASS Foo { HIDDEN STATIC [int]$x }
 ENUM Bar { A }
+FILTER Get-Filtered { $_ }
+FUNCTION Get-Other { DYNAMICPARAM { } CLEAN { } }
+DATA { 'a' }
+TRAP { CONTINUE }
+$x = $a -AND $b -OR -NOT $c
+$x = $a -iLike $b -CEQ $c
+$x = $a -IS [string]
+$x = -Split $text

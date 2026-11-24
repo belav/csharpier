@@ -131,7 +131,7 @@ CSharpier will never insert a new line between adjacent elements unless there is
 ```
 
 ### Configuration Overrides ###
-Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options will apply to `**/*.{cs,csx}`
+Overrides allows you to specify different configuration options based on glob patterns. This can be used to format non-standard extensions, or to change options based on file path. Top level options apply to every file CSharpier formats that does not match an override.
 
 Valid values for `formatter` are `csharp`, `csharpscript`, `xml` and `powershell`.
 
@@ -209,4 +209,4 @@ CSharpier formats `.ps1`, `.psm1` and `.psd1` files. The same options apply as f
 - Files with a DSC `configuration` block depend on the machine. Where DSC is installed (Windows by default), the `configuration` block is left as written and the rest of the file is formatted. Where it is not (Linux and macOS by default), PowerShell cannot parse the block, so the whole file is left unchanged with a warning. `csharpier check` can report such a file as unformatted on Windows and only warn about it on Linux or macOS. Format these files on a machine with DSC, or add them to `.csharpierignore` to get the same result everywhere. They also take longer to format, because PowerShell loads the DSC resources to parse them.
 - A signed script (one with a `# SIG # Begin signature block` comment) is left unchanged with a warning, because formatting would invalidate the signature.
 - `csharpier-ignore` comments are not supported in PowerShell files. Use a `.csharpierignore` file to exclude a file.
-- When using [CSharpier.Core](API.md), PowerShell formatting is not part of the `netstandard2.0` build.
+- PowerShell formatting is only available through the CLI and the editor extensions. [CSharpier.Core](API.md) has no public API for it.

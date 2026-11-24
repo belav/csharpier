@@ -1,7 +1,7 @@
 class A {
-    [string]$Name
+	[string]$Name
 
-    A([string]$name) : base() {
-        $this.Name = $name
-    }
+	A([string]$name) : base() {
+		$this.Name = $name
+	}
 }

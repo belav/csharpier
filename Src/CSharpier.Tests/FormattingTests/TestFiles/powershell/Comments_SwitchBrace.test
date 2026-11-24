@@ -1,21 +1,25 @@
-switch ($a) { # after the brace
-    1 { $x=1 }
+switch ($a) {
+    # after the brace
+    1 { $x = 1 }
 }
-switch -Regex ($a) { # after the brace
+switch -Regex ($a) {
+    # after the brace
     # before the first clause
-    'b' { $x=2 }
+    'b' { $x = 2 }
 }
-switch ($a) # before the brace
-{
-    1 { $x=1 }
+switch ($a) {
+    # before the brace
+    1 { $x = 1 }
 }
-switch ($a) <# before the brace #> {
-    1 { $x=1 }
+switch ($a) {
+    <# before the brace #>
+    1 { $x = 1 }
 }
-switch ($a) { <# after the brace #>
-    1 { $x=1 }
+switch ($a) {
+    <# after the brace #>
+    1 { $x = 1 }
 }
-switch -File $path # before the brace
-{
-    'c' { $x=3 }
+switch -File $path {
+    # before the brace
+    'c' { $x = 3 }
 }

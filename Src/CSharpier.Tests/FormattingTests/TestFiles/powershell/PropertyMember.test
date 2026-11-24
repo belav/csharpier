@@ -1,14 +1,16 @@
 class A {
     $Plain
     [string]$Typed
-    [string] $Spaced = 'x'
+    [string]$Spaced = 'x'
     hidden [int]$Hidden
     static [int]$Static = 5
-    static hidden [int]$Both
-    hidden static [int] $BothAgain
-    [ValidateNotNull()][string]$Validated
+    hidden static [int]$Both
+    hidden static [int]$BothAgain
     [ValidateNotNull()]
-    [ValidateSet('a','b')]
-    hidden [string] $Many = 'a'
-    [hashtable]$Table = @{ a = 1; b = 2 }; [int]$SameLine
+    [string]$Validated
+    [ValidateNotNull()]
+    [ValidateSet('a', 'b')]
+    hidden [string]$Many = 'a'
+    [hashtable]$Table = @{ a = 1; b = 2 }
+    [int]$SameLine
 }

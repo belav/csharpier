@@ -1,3 +1,5 @@
+using namespace System.IO
+
 function Get-Value {
     param($a)
 
@@ -33,3 +35,21 @@ class Foo {
 enum Bar {
     A
 }
+filter Get-Filtered {
+    $_
+}
+function Get-Other {
+    dynamicparam { }
+
+    clean { }
+}
+data {
+    'a'
+}
+trap {
+    continue
+}
+$x = $a -and $b -or -not $c
+$x = $a -ilike $b -ceq $c
+$x = $a -is [string]
+$x = -split $text

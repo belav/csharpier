@@ -72,7 +72,7 @@ Everything that parses gets formatted; anything with parse errors is returned un
 
 ## Status after the POC (2026-11-11)
 
-Done: `Formatter.PowerShell` enum + extension map, `CodeFormatter` dispatch, `System.Management.Automation` 7.4.6 referenced for non-netstandard2.0 targets with `PowerShell/**` compiled out of netstandard2.0, `PowerShellFormatter.FormatAsync` (parse errors returned as diagnostics, source unchanged), a source generator that builds `Node.Print` from the file names in `PowerShell/AstPrinters/`, printers for 17 AST types, a `powershell` folder in the formatting test harness, Playground support.
+Done: `Formatter.PowerShell` enum + extension map, `CodeFormatter` dispatch, `System.Management.Automation` 7.6.10 referenced for non-netstandard2.0 targets with `PowerShell/**` compiled out of netstandard2.0, `PowerShellFormatter.FormatAsync` (parse errors returned as diagnostics, source unchanged), a source generator that builds `Node.Print` from the file names in `PowerShell/AstPrinters/`, printers for 17 AST types, a `powershell` folder in the formatting test harness, Playground support.
 
 Not done or wrong in the POC:
 - Unknown AST types print their .NET type name instead of source text (corrupts output).
@@ -165,9 +165,9 @@ The validator runs for PowerShell in every mode, not only for files on disk. `pi
 
 - Dependency: keep `System.Management.Automation`; record the measured package size delta here. If it is large, that is reported to the maintainer, not solved in this change.
   - Measured 2026-11-11, Release pack of this branch against the published 1.4.0 packages:
-    - `csharpier` tool nupkg: 13.5 MB -> 28.1 MB. Unpacked `tools/net10.0/any`: 19.9 MB -> 42.5 MB; `tools/net11.0/any`: 19.6 MB -> 42.2 MB. 53 new files per target framework, 22.5 MB.
-    - Largest additions: `runtimes/win/lib/net8.0/System.Management.Automation.dll` (7.6 MB), `runtimes/unix/lib/net8.0/System.Management.Automation.dll` (7.1 MB), `System.Diagnostics.EventLog.Messages.dll`, `Newtonsoft.Json.dll`, `System.Configuration.ConfigurationManager.dll`, `System.DirectoryServices.dll`, `Microsoft.ApplicationInsights.dll`, `System.Security.Cryptography.Pkcs.dll`, `System.Management.dll`, `Microsoft.Management.Infrastructure` (per runtime), native `libpsl-native` and `pwrshplugin` binaries, `Microsoft.PowerShell.CoreCLR.Eventing.dll`, `System.CodeDom.dll`.
-    - `CSharpier.Core` nupkg: 526 KB -> 558 KB. The `net10.0` and `net11.0` dependency groups gain `System.Management.Automation` 7.6.10 (measured with 7.4.6), so consumers restore that package and its dependencies. The `netstandard2.0` group is unchanged.
+    - Measured on 1.4.1 against `main` with `System.Management.Automation` 7.6.10. `csharpier` tool nupkg: 12.9 MB -> 27.2 MB. Unpacked `tools/net10.0/any`: 19.0 MB -> 41.3 MB; `tools/net11.0/any`: 18.7 MB -> 41.0 MB. 63 new files per target framework, 22.3 MB.
+    - Largest additions: `runtimes/win/lib/net10.0/System.Management.Automation.dll` (7.4 MB), `runtimes/unix/lib/net10.0/System.Management.Automation.dll` (6.9 MB), `System.Diagnostics.EventLog.Messages.dll`, `Newtonsoft.Json.dll`, `System.Configuration.ConfigurationManager.dll`, `System.DirectoryServices.dll`, `Microsoft.ApplicationInsights.dll`, `System.Security.Cryptography.Pkcs.dll`, `System.Management.dll`, `Microsoft.Management.Infrastructure` (per runtime), native `libpsl-native` and `pwrshplugin` binaries, `Microsoft.PowerShell.CoreCLR.Eventing.dll`, `System.CodeDom.dll`.
+    - `CSharpier.Core` nupkg: 503 KB -> 562 KB. The `net10.0` and `net11.0` dependency groups gain `System.Management.Automation` 7.6.10, so consumers restore that package and its dependencies. The `netstandard2.0` group is unchanged.
     - `CSharpier.MsBuild` copies the CLI build output into `tools/csharpier`, so it grows by the same files.
     - The packed tool installed into a temporary tool path formatted a `.ps1` file on Windows. Linux and macOS were not tried.
 - Block comments: a multi-line `<# #>` comment that starts its line moves as a whole. Lines after the first that begin with the first line's source indentation are printed at the new indentation; other lines are kept as written. Trailing whitespace on re-indented lines is removed.

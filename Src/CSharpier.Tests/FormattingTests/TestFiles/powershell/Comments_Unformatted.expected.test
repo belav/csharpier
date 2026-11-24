@@ -18,3 +18,8 @@ function Get-Value {
          block #>
 }
 Write-Host "four" # after semicolon
+[System.Management.Automation.CommandCompletion]::CompleteInput(
+    <#inputScript#> $InputScript,
+    <#cursorColumn#> $CursorColumn,
+    <#options#> $Options
+)

@@ -1,7 +1,0 @@
-class A {
-	[string]$Name
-
-	A([string]$name) : base() {
-		$this.Name = $name
-	}
-}

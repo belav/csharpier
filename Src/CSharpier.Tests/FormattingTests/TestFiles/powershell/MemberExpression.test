@@ -9,8 +9,7 @@ $a.$b
 $a."quoted name"
 $a.'single quoted'
 $a.("computed" + "name")
-$a.b.
-    c
+$a.b.c
 (Get-Item a).Name
 (Get-Item a).Name.Length
 $env:PATH.Split(';')

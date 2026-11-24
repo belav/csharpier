@@ -1,18 +1,27 @@
 param()
-function a { Param ( ) }
-function b { param($a,$b) }
-function c { param([string]$Name, [int]$Count = 5) }
-function d { param([Parameter(Mandatory)][string]$Name, [int]$Count = 5) }
+
+function a {
+    param()
+}
+function b {
+    param($a, $b)
+}
+function c {
+    param([string]$Name, [int]$Count = 5)
+}
+function d {
+    param([Parameter(Mandatory)] [string]$Name, [int]$Count = 5)
+}
 function e {
-    [CmdletBinding(SupportsShouldProcess=$true,ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     [OutputType([string])]
-    Param
-    (
-        [Parameter(Mandatory=$true,Position=0,ValueFromPipeline=$true)]
+    param(
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [ValidateNotNullOrEmpty()]
-        [string]
-        $Name,
-        [int] $Count=5,
+        [string]$Name,
+
+        [int]$Count = 5,
+
         [switch]$Force
     )
 }
@@ -25,6 +34,12 @@ function f {
     )
 }
 function g {
-    param([Parameter(Mandatory = $true, HelpMessage = "A very long help message that will not fit")][ValidateSet('one', 'two', 'three')][string]$Name)
+    param(
+        [Parameter(Mandatory = $true, HelpMessage = "A very long help message that will not fit")]
+        [ValidateSet('one', 'two', 'three')]
+        [string]$Name
+    )
 }
-function h { param([string]$aVeryLongParameterName, [string]$anotherVeryLongParameterName, [string]$third) }
+function h {
+    param([string]$aVeryLongParameterName, [string]$anotherVeryLongParameterName, [string]$third)
+}

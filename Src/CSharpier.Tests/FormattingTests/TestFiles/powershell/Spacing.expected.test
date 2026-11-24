@@ -1,0 +1,51 @@
+$a = 1
+$a = 1
+$a, $b = $b, $a
+$x = 1 + 2 * 3
+$r = 1..10
+$a = 1, 2, 3
+$a = @(1, 2, 3)
+$a = @()
+$a = @{ a = 1; b = 2 }
+$a = @{}
+$a = { $_.Name }
+$a = { $_.Name }
+$a = { }
+$a = ($b + $c) * $d
+$a = $(1)
+$a = $b[1, 2]
+$a = $b.Method(1, 2, 3)
+$a = [int]$b
+[int]$a = 1
+[ValidateNotNull()][int]$a = 5
+$a = !$b
+$a = ,$b
+$a = -not ($b)
+$i++
+Write-Host "value" -ForegroundColor Red
+Write-Host a, b, c
+& $cmd
+Get-Item -Path:$path
+Get-Item a > out.txt 2> $null
+Get-ChildItem | Where-Object { $_.Length -gt 5 } | Sort-Object Name
+Get-Item a && Get-Item b || Write-Error "failed"
+exit 1
+:outer while ($true) { }
+if ($a) { } elseif ($b) { } else { }
+foreach ($item in $items) { }
+for ($i = 0; $i -lt 10; $i++) { }
+do { } until ($true)
+try { } catch { } finally { }
+function Get-Value($a, [int]$b = 2) { }
+function Get-Other {
+    param([Parameter(Mandatory = $true)] [string]$Name, [int]$Count = 5)
+}
+class Dog : Animal, System.IDisposable {
+    [string]$Name
+
+    Dog() : base() { }
+}
+$a = @{
+    Name = "aligned"
+    LongerName = 2
+}

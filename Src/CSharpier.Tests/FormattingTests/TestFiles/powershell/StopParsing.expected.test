@@ -1,5 +1,0 @@
-git --% log --pretty=format:"%h %s"   --graph
-icacls X:\VMS --% /grant Dept:(CI)(OI)F   /T
-if ($true) {
-    cmd --%   /c dir   "C:\Program Files"
-}

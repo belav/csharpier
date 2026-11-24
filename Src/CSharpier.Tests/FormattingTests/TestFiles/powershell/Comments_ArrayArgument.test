@@ -1,19 +1,25 @@
 Get-Thing -Names 1, <# c #> 2, 3
-Get-Thing -Names 1 <# c #>, 2, 3
-Get-Thing -Names 1,<# c #>2,3
-Get-Thing -Names 1, 2 <# c #>, 3
+Get-Thing -Names 1, <# c #> 2, 3
+Get-Thing -Names 1, <# c #> 2, 3
+Get-Thing -Names 1, 2, <# c #> 3
 Get-Thing -Names:1, <# c #> 2, 3
 Get-Thing 1, <# c #> 2, 3
 Get-Thing -Names 'aaaaaaaaaaaaaaaaaaaa', <# c #> 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'cccccccccccccccccccccccccccc', 'ddddddddddddddddd'
-Get-Thing -Names 'aaaaaaaaaaaaaaaaaaaa' <# c #>, 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'cccccccccccccccccccccccccccc', 'ddddddddddddddddd'
+Get-Thing -Names 'aaaaaaaaaaaaaaaaaaaa', <# c #> 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'cccccccccccccccccccccccccccc', 'ddddddddddddddddd'
 Get-Thing -Names 'aaaaaaaaaaaaaaaaaaaa', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbb', 'cccccccccccccccccccccccccccc', <# c #> 'ddddddddddddddddd'
 Get-Thing -Names 1, <# c #>
-    2, 3
+    2,
+    3
 Get-Thing -Names 1,
-    <# c #> 2, 3
-Get-Thing -Names 1 `
-    <# c #>, 2, 3
+    <# c #> 2,
+    3
+Get-Thing -Names 1,
+    <# c #> 2,
+    3
 Get-Thing -Names 1, # c
-    2, 3
+    2,
+    3
 Get-Thing -Names 1, <# c
-d #> 2, 3
+d #>
+    2,
+    3

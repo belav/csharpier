@@ -1,2 +1,8 @@
-while ($true) { Continue }
-:outer while ($true) { while ($true) { continue outer } }
+while ($true) {
+    continue
+}
+:outer while ($true) {
+    while ($true) {
+        continue outer
+    }
+}

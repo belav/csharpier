@@ -1,0 +1,16 @@
+while ($true) { break }
+function Get-Value { 1 }
+$a = if ($b) { 1 } else { 2 }
+$a = @(if ($b) { 1 })
+switch ($x) { 1 { 'one' } default { 'other' } }
+class A { [string]$Name }
+enum Color { Red }
+[Flags()] enum Access { Read = 1 }
+class B {
+    [ValidateNotNull()][string]$Name
+}
+function Get-Other {
+    param(
+        [ValidateSet('a', 'b')] [string]$One
+    )
+}

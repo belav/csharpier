@@ -133,12 +133,12 @@ The reviewer would fix 12.1-12.3 before release. Examples for each are in the re
 ## 14. Review: minor
 
 - [x] 14.2 `PowershellNodeGenerator` naming vs `PowerShell` elsewhere; it duplicates `GetContent` from `NodePrinterGenerator`
-- [ ] 14.3 `FunctionMember.cs:4-10` walks the method with `FindAll`; `node.Body.Parent` is the node
-- [ ] 14.4 `Pipeline.cs:39` index math depends on exactly five `Add` calls per iteration
+- [x] 14.3 `FunctionMember.cs:4-10` walks the method with `FindAll`; `node.Body.Parent` is the node
+- [x] 14.4 `Pipeline.cs:39` index math depends on exactly five `Add` calls per iteration
 - [x] 14.5 `ErrorStatement.cs` and `ErrorExpression.cs` cannot be reached. Decision: keep both; they state what happens to error nodes and cost nothing
-- [ ] 14.6 Validator: text comparison past depth 500 gives false failures; `catch { continue; }` on property getters hides errors
+- [x] 14.6 Validator: text comparison past depth 500 gives false failures; `catch { continue; }` on property getters hides errors. Done: the tree comparison is a loop with an explicit stack, so there is no depth limit or text fallback; property getters are no longer wrapped in `catch { continue; }` (none threw on the 4,538 downloaded files)
 - [x] 14.7 Playground "Show Doc" is empty for PowerShell (`DocTree` never set)
-- [ ] 14.8 Docs: `Configuration.md` says top-level options apply to `**/*.{cs,csx}` and implies a public PowerShell API; `Nuget/README.md`, `Nuget/Build.props` description, `Src/Website/src/pages/index.js`, and the pre-commit sample are not updated; `design.md` still mentions 7.4.6; package sizes not re-measured on 7.6.10
+- [x] 14.8 Docs: `Configuration.md` says top-level options apply to `**/*.{cs,csx}` and implies a public PowerShell API; `Nuget/README.md`, `Nuget/Build.props` description, `Src/Website/src/pages/index.js`, and the pre-commit sample are not updated; `design.md` still mentions 7.4.6; package sizes not re-measured on 7.6.10. Done; sizes re-measured on 1.4.1 with 7.6.10
 - [x] 14.9 Decide whether `openspec/changes/add-powershell-formatting/` belongs in the PR
 
 ## 15. Review: follow-ups from the section 10 fixes

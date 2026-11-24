@@ -221,7 +221,13 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
 
                 for (var index = originalTuple.Length - 1; index >= 0; index--)
                 {
-                    pending.Push(pair with { Original = originalTuple[index], Formatted = formattedTuple[index] });
+                    pending.Push(
+                        pair with
+                        {
+                            Original = originalTuple[index],
+                            Formatted = formattedTuple[index],
+                        }
+                    );
                 }
 
                 return null;
@@ -244,7 +250,13 @@ internal class PowerShellFormattingValidator(string originalCode, string formatt
 
                 for (var index = originalItems.Count - 1; index >= 0; index--)
                 {
-                    pending.Push(pair with { Original = originalItems[index], Formatted = formattedItems[index] });
+                    pending.Push(
+                        pair with
+                        {
+                            Original = originalItems[index],
+                            Formatted = formattedItems[index],
+                        }
+                    );
                 }
 
                 return null;

@@ -1,18 +1,15 @@
-try{Get-Item}catch{Write-Host "failed"}
-Try
-{
+try {
     Get-Item
+} catch {
+    Write-Host "failed"
 }
-Catch [System.IO.IOException],[System.ArgumentException]
-{
+try {
+    Get-Item
+} catch [System.IO.IOException], [System.ArgumentException] {
     Write-Host "io"
-}
-Catch
-{
+} catch {
     Write-Host "other"
-}
-Finally
-{
+} finally {
     Write-Host "done"
 }
 try { } finally { }
@@ -29,7 +26,7 @@ finally {
 }
 try {
     Get-Item
-} catch [System.Exception] # after type
-{
+} catch [System.Exception] {
+    # after type
     throw
 }
