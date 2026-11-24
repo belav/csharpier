@@ -1,0 +1,8 @@
+using System;
+
+#if KEEP_COMMENT_WITH_ATTRIBUTE
+[assembly: SomeAttribute]
+// comment
+#endif
+
+class ClassName { }

@@ -86,42 +86,71 @@ internal static class NamespaceLikePrinter
             return;
         }
 
-        if (usings.Any() || (!usings.Any() && externs.Any()))
-        {
-            var directiveTrivia = members[0].GetLeadingTrivia().Where(o => o.IsDirective).ToArray();
+        var skipFirstHardLine = !usings.Any() && !externs.Any() && !isCompilationUnitWithAttributes;
+        var leadingTrivia = members[0].GetLeadingTrivia();
 
-            if (directiveTrivia.Length != 0)
+        if (isCompilationUnitWithAttributes)
+        {
+            if (FirstDirectiveIsClosing(leadingTrivia))
             {
-                if (
-                    (
-                        node is not CompilationUnitSyntax { AttributeLists.Count: > 0 }
-                        && directiveTrivia.All(o =>
-                            o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
-                        )
-                    )
-                    || !directiveTrivia.All(o =>
-                        o.RawSyntaxKind() is SyntaxKind.EndIfDirectiveTrivia
-                    )
-                )
+                docs.Add(ExtraNewLines.Print(members[0]));
+                skipFirstHardLine = true;
+
+                if (NeedsLineAfterClosingDirective(leadingTrivia))
                 {
-                    docs.Add(ExtraNewLines.Print(members[0]));
+                    context.State.NextTriviaNeedsLine = true;
                 }
             }
-            else if (node is not CompilationUnitSyntax { AttributeLists.Count: > 0 })
+        }
+        else if (usings.Any() || externs.Any())
+        {
+            docs.Add(
+                leadingTrivia.Any(o => o.IsDirective)
+                    ? ExtraNewLines.Print(members[0])
+                    : Doc.HardLine
+            );
+        }
+
+        docs.AddRange(MembersWithForcedLines.Print(node, members, context, skipFirstHardLine));
+    }
+
+    private static bool FirstDirectiveIsClosing(SyntaxTriviaList leadingTrivia)
+    {
+        foreach (var trivia in leadingTrivia)
+        {
+            if (trivia.IsDirective)
             {
-                docs.Add(Doc.HardLine);
+                return trivia.RawSyntaxKind()
+                    is SyntaxKind.ElifDirectiveTrivia
+                        or SyntaxKind.ElseDirectiveTrivia
+                        or SyntaxKind.EndIfDirectiveTrivia
+                        or SyntaxKind.EndRegionDirectiveTrivia;
             }
         }
 
-        docs.AddRange(
-            MembersWithForcedLines.Print(
-                node,
-                members,
-                context,
-                skipFirstHardLine: !usings.Any()
-                    && !externs.Any()
-                    && !isCompilationUnitWithAttributes
-            )
-        );
+        return false;
+    }
+
+    private static bool NeedsLineAfterClosingDirective(SyntaxTriviaList leadingTrivia)
+    {
+        var lastDirectiveIndex = -1;
+        for (var index = 0; index < leadingTrivia.Count; index++)
+        {
+            if (leadingTrivia[index].RawSyntaxKind() is SyntaxKind.IfDirectiveTrivia)
+            {
+                return false;
+            }
+
+            if (leadingTrivia[index].IsDirective)
+            {
+                lastDirectiveIndex = index;
+            }
+        }
+
+        return lastDirectiveIndex >= 0
+            && leadingTrivia[lastDirectiveIndex].RawSyntaxKind()
+                is SyntaxKind.EndIfDirectiveTrivia
+                    or SyntaxKind.EndRegionDirectiveTrivia
+            && leadingTrivia.IndexOfNextEndOfLine(lastDirectiveIndex) < 0;
     }
 }
