@@ -4,6 +4,7 @@ using System.Text;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
 using CSharpier.Core.CSharp;
+using CSharpier.Core.PowerShell;
 using CSharpier.Core.Utilities;
 using CSharpier.Core.Xml;
 using Microsoft.CodeAnalysis;
@@ -296,6 +297,16 @@ internal class FormattingEngine(
 
         Interlocked.Increment(ref result.Files);
 
+        // Windows PowerShell reads a file without a byte order mark as ANSI, so such files are
+        // common. Decoding one as UTF-8 loses characters, and the loss cannot be seen afterwards.
+        if (printerOptions.Formatter is Formatter.PowerShell && fileToFormatInfo.HasInvalidBytes)
+        {
+            fileIssueLogger.WriteWarning(
+                "Is not valid UTF-8 and has no byte order mark, so was not formatted."
+            );
+            return;
+        }
+
         if (formattingCache.CanSkipFormatting(fileToFormatInfo, printerOptions))
         {
             Interlocked.Increment(ref result.CachedFiles);
@@ -349,7 +360,11 @@ internal class FormattingEngine(
 
         if (!string.IsNullOrEmpty(codeFormattingResult.WarningMessage))
         {
-            fileIssueLogger.WriteWarning(codeFormattingResult.WarningMessage);
+            fileIssueLogger.WriteWarning(
+                codeFormattingResult.WarningMessage,
+                toStandardError: commandLineOptions.WriteStdout
+            );
+            this.WriteUnchangedToStandardOutput(fileToFormatInfo);
             return;
         }
 
@@ -359,15 +374,27 @@ internal class FormattingEngine(
             return;
         }
 
-        if (!commandLineOptions.SkipValidation)
+        if (
+            !commandLineOptions.SkipValidation
+            || (
+                commandLineOptions.AlwaysValidatePowerShell
+                && printerOptions.Formatter is Formatter.PowerShell
+            )
+        )
         {
-            await this.ValidateFormatting(
+            var failedValidation = await this.ValidateFormatting(
                 fileToFormatInfo,
                 codeFormattingResult,
                 printerOptions,
                 fileIssueLogger,
                 cancellationToken
             );
+
+            if (failedValidation && printerOptions.Formatter is Formatter.PowerShell)
+            {
+                this.WriteUnchangedToStandardOutput(fileToFormatInfo);
+                return;
+            }
         }
 
         if (
@@ -405,7 +432,21 @@ internal class FormattingEngine(
         formattingCache.CacheResult(codeFormattingResult.Code, fileToFormatInfo, printerOptions);
     }
 
-    private async Task ValidateFormatting(
+    // When the result goes to standard output, the caller (a redirect or an editor using
+    // pipe-files) takes that output as the new text of the file, so a file that is not formatted
+    // is written out unchanged. Warnings for it go to standard error.
+    private void WriteUnchangedToStandardOutput(FileToFormatInfo fileToFormatInfo)
+    {
+        if (commandLineOptions.WriteStdout)
+        {
+            writer.WriteResult(
+                new CodeFormatterResult { Code = fileToFormatInfo.FileContents },
+                fileToFormatInfo
+            );
+        }
+    }
+
+    private async Task<bool> ValidateFormatting(
         FileToFormatInfo fileToFormatInfo,
         CodeFormatterResult codeFormattingResult,
         PrinterOptions printerOptions,
@@ -444,6 +485,16 @@ internal class FormattingEngine(
                 codeFormattingResult.Code
             );
         }
+        else if (
+            printerOptions.Formatter is Formatter.PowerShell
+            && fileToFormatInfo.FileContents != codeFormattingResult.Code
+        )
+        {
+            formattingValidator = new PowerShellFormattingValidator(
+                fileToFormatInfo.FileContents,
+                codeFormattingResult.Code
+            );
+        }
         else
         {
             // TODO log error?
@@ -460,6 +511,7 @@ internal class FormattingEngine(
                     fileIssueLogger.WriteError(
                         $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "\n" + validatorResult.FailureMessage)}"
                     );
+                    return true;
                 }
             }
             catch (Exception ex)
@@ -470,8 +522,11 @@ internal class FormattingEngine(
                     "Failed with exception during syntax tree validation.",
                     ex
                 );
+                return true;
             }
         }
+
+        return false;
     }
 
     private sealed record PhysicalFile(

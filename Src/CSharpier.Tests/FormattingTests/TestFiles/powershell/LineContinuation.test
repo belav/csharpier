@@ -1,0 +1,22 @@
+$a = `
+    5
+$x = $a `
+    -and $b
+$normalized = $sb.ToString() `
+    -replace 'Pester v\S+', 'Pester v<version>' `
+    -replace ([regex]::Escape($folder + [IO.Path]::DirectorySeparatorChar)), '' `
+    -replace '\d+(.\d+)?m?s', '<time>'
+New-Item -Path $path `
+   -ItemType Directory `
+       -Force | Out-Null
+Get-Process
+    | Where-Object CPU
+    | Sort-Object CPU
+Get-Process |
+Where-Object CPU |
+  Sort-Object CPU
+Get-Item a &&
+  Get-Item b
+Get-Thing -Names 'a',
+                 'b',
+    'c' -Force

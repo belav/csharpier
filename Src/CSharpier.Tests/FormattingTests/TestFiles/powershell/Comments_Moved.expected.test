@@ -1,0 +1,59 @@
+if ($a) {
+    # after the condition
+    $b
+}
+for (;;) {
+    <# after the header #>
+    break
+}
+switch ($a) {
+    # before the brace
+    1 { $b }
+}
+switch ($a) {
+    14 {
+        # after the value
+        'a'
+    }
+}
+switch (<# -Regex #> $x) {
+    1 { 2 }
+}
+data {
+    <# c #>
+    'a'
+}
+try {
+    $a
+} catch [System.Exception] {
+    # after the type
+    throw
+}
+try {
+    $a
+} catch {
+    $b
+} <# after the catch #>
+finally {
+    $c
+}
+$a.b(
+    # after the parenthesis
+    1,
+    2
+)
+Get-Thing -Names 1, <# c #> 2, 3
+foo | <# x #> bar
+class A : Base {
+    A([long]$l) : <# before the colon #> base() {
+        $x = 1
+    }
+}
+function Get-Value {
+    [CmdletBinding()]
+    param(
+        # between the attribute and param
+
+        [string]$Name
+    )
+}

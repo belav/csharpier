@@ -1,0 +1,23 @@
+while ($true) {
+    break
+}
+while ($x -lt 10) {
+    $x++
+}
+while ($true) { }
+:retry while ($attempts -lt 3) {
+    $attempts++
+}
+while (
+    $someVeryLongVariableName -eq $anotherVeryLongVariableName -and
+    $yetAnotherLongVariableName -ne $theLastOne
+) {
+    $x++
+}
+while (Get-Process -Name foo -ErrorAction SilentlyContinue) {
+    Start-Sleep 1
+}
+while ($x) {
+    # comment
+    $x--
+}

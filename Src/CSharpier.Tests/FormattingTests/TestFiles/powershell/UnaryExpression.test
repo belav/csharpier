@@ -1,0 +1,26 @@
+$a = !$b
+$a = !$b
+$a = -not $b
+$a = -not $b
+$a = -not ($b)
+$a = -bnot $b
+$a = -$b
+$a = - $b
+$a = - -$b
+$a = -(-$b)
+$a = +$b
+$a = -join $chars
+$a = -split $text
+$a = -split $text
+$i++
+$i--
+++$i
+--$i
+$i++
+$a[$i++] = 1
+$a = !(Test-Path $path)
+$a = -not (Test-Path $path) -and !$b
+$a = ,1
+$a = ,$b
+$a = ,(1, 2)
+[void]$list.Add(1)

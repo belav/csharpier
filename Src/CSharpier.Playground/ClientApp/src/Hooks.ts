@@ -1,11 +1,22 @@
 import { useAppContext } from "./AppContext";
 
+const modeForFormatter = (formatter: string) => {
+    switch (formatter) {
+        case "XML":
+            return "xml";
+        case "PowerShell":
+            return "powershell";
+        default:
+            return "text/x-java";
+    }
+};
+
 export const useOptions = () => {
-    const { formatCode, setEmptyMethod, setEmptyClass, copyLeft } = useAppContext();
+    const { formatCode, setEmptyMethod, setEmptyClass, copyLeft, formatter } = useAppContext();
 
     return {
         matchBrackets: true,
-        mode: "text/x-java",
+        mode: modeForFormatter(formatter),
         indentWithTabs: false,
         smartIndent: false,
         tabSize: 4,

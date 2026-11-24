@@ -1,0 +1,18 @@
+function Get-Value {
+    $a = 1
+    if ($a) {
+        Write-Host $a
+    }
+    $b = 2
+}
+$a = @{
+    a = 1
+    b = 2
+}
+$a = @(
+    'a'
+    'b'
+)
+if ($true) {
+    cmd --%   /c dir   "C:\Program Files"
+}

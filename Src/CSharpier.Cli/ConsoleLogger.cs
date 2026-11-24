@@ -9,6 +9,9 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
 {
     private static readonly Lock ConsoleLock = new();
 
+    // A message logged with this event goes to standard error whatever its level.
+    internal static readonly EventId StandardErrorEvent = new(1, nameof(StandardErrorEvent));
+
     public virtual void Log<TState>(
         LogLevel logLevel,
         EventId eventId,
@@ -22,9 +25,11 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
             return;
         }
 
+        var toStandardError = logLevel >= LogLevel.Error || eventId == StandardErrorEvent;
+
         void Write(string value)
         {
-            if (logLevel >= LogLevel.Error)
+            if (toStandardError)
             {
                 console.WriteError(value);
             }
@@ -36,7 +41,7 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
 
         void WriteLine(string? value = null)
         {
-            if (logLevel >= LogLevel.Error)
+            if (toStandardError)
             {
                 console.WriteErrorLine(value);
             }
@@ -89,14 +94,16 @@ internal class ConsoleLogger(IConsole console, LogLevel loggingLevel, LogFormat 
         }
     }
 
-    private static ConsoleColor GetColorLevel(LogLevel logLevel) =>
-        logLevel switch
+    private static ConsoleColor GetColorLevel(LogLevel logLevel)
+    {
+        return logLevel switch
         {
             LogLevel.Critical => ConsoleColor.DarkRed,
             LogLevel.Error => ConsoleColor.DarkRed,
             LogLevel.Warning => ConsoleColor.DarkYellow,
             _ => ConsoleColor.White,
         };
+    }
 
     public bool IsEnabled(LogLevel logLevel)
     {

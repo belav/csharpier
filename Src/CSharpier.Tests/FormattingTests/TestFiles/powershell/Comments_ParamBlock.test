@@ -1,0 +1,7 @@
+param(
+    # the first parameter
+    [string]$First,
+    [int]$Second # trailing comment
+)
+
+Write-Host $First

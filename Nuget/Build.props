@@ -4,7 +4,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/belav/csharpier</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Description>CSharpier is an opinionated code formatter for c#.</Description>
+    <Description>CSharpier is an opinionated code formatter for c#, XML and PowerShell.</Description>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>

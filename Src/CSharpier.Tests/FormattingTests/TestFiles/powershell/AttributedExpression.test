@@ -1,0 +1,5 @@
+[ValidateNotNull()]$a = 1
+[ValidateNotNull()]$a = 1
+[ValidateSet('a', 'b')][string]$a = 'a'
+[ValidateRange(1, 10)][int]$a = 5
+[Parameter(Mandatory = $true)]$b

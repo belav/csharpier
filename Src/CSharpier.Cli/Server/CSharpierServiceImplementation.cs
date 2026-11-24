@@ -1,6 +1,7 @@
 using System.IO.Abstractions;
 using CSharpier.Cli.Options;
 using CSharpier.Core;
+using CSharpier.Core.PowerShell;
 using Microsoft.Extensions.Logging;
 
 namespace CSharpier.Cli.Server;
@@ -82,21 +83,33 @@ internal class CSharpierServiceImplementation(ILogger logger)
                 };
             }
 
-            if (string.IsNullOrEmpty(result.Code))
+            // The editors replace the document with formattedFile on Formatted and only log
+            // errorMessage on Failed, so code returned unchanged with a message is a failure.
+            if (!string.IsNullOrEmpty(result.WarningMessage))
             {
-                if (!string.IsNullOrEmpty(result.WarningMessage))
-                {
-                    return new FormatFileResult(Status.Failed)
-                    {
-                        errorMessage = result.WarningMessage,
-                    };
-                }
+                return new FormatFileResult(Status.Failed) { errorMessage = result.WarningMessage };
+            }
 
-                if (!string.IsNullOrEmpty(result.FailureMessage))
+            if (!string.IsNullOrEmpty(result.FailureMessage))
+            {
+                return new FormatFileResult(Status.Failed) { errorMessage = result.FailureMessage };
+            }
+
+            if (
+                printerOptions.Formatter is Formatter.PowerShell
+                && result.Code != formatFileParameter.fileContents
+            )
+            {
+                var validatorResult = await new PowerShellFormattingValidator(
+                    formatFileParameter.fileContents,
+                    result.Code
+                ).ValidateAsync(cancellationToken);
+                if (validatorResult.Failed)
                 {
                     return new FormatFileResult(Status.Failed)
                     {
-                        errorMessage = result.FailureMessage,
+                        errorMessage =
+                            $"Failed formatting validation.{(string.IsNullOrEmpty(validatorResult.FailureMessage) ? null : "\n" + validatorResult.FailureMessage)}",
                     };
                 }
             }

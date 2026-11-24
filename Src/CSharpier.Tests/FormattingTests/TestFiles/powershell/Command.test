@@ -1,0 +1,57 @@
+Write-Host "value"
+Write-Host "value" -ForegroundColor Red
+& $cmd -Name:$value -Force:$false @splat
+& $cmd
+& "$PSScriptRoot/other.ps1" "value"
+. ./other.ps1
+. "$PSScriptRoot\file.ps1"
+& { Write-Host "inline" }
+Write-Host("hi")
+Write-Host ("hi")
+Write-Host $a.b $c[0] -Param 1, 2, 3
+Write-Host -1 - 1
+Write-Host $x [0]
+Write-Host a, b, c
+git log --pretty=format:"%h %s" --graph
+git commit -m "message" --author="$name <$email>"
+./build.ps1 -Configuration Release
+C:\tools\thing.exe /flag:value /other
+New-Item -Path $path `
+    -ItemType Directory `
+    -Force | Out-Null
+New-Item -Path $path -Name "file" `
+    -ItemType File -Force
+Invoke-Command -ComputerName $server -ScriptBlock { Get-Item $using:path } -ArgumentList $a, $b
+Invoke-Command -ScriptBlock {
+    Get-Item a
+    Get-Item b
+} -ComputerName $server
+New-Object -TypeName PSObject -Property @{
+    Name = "a"
+    Value = 1
+}
+New-Object -TypeName PSObject -Property @{
+    Name = "a"
+    Value = 1
+    Other = "a long value to make this break"
+    Another = 5
+}
+Get-Thing -Filter { Name -eq "a" } -Properties *
+$TaskPrincipal = New-ScheduledTaskPrincipal -UserId $(
+    Get-WMIObject -class Win32_ComputerSystem | select UserName
+).username -RunLevel Highest
+$credsFromFile = New-Object System.Management.Automation.PSCredential(
+    $credsFromUser.UserName,
+    $secureString,
+    $somethingElse
+)
+New-Item -Path $path `
+    -Value @{
+        a = 1
+    } `
+    -Force
+Set-Thing -Value @{
+    a = 1
+} `
+    -Force
+Write-Output $(Get-Item a) (Get-Item b) @(1, 2)

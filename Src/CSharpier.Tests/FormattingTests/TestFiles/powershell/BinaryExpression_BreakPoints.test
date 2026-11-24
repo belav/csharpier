@@ -1,0 +1,60 @@
+$hasServers =
+    $script:configuration.Settings.Deployment.Environments[$environmentName].Servers.Count -gt 0
+
+if (
+    $script:configuration.Settings.Deployment.Environments[$environmentName].Servers.Count -gt 0 -and
+    $force
+) {
+    Deploy-Servers
+}
+
+$connectionString =
+    $script:moduleConfiguration.ConnectionStrings[$databaseServerName + '_' + $databaseName]
+
+$isLatest =
+    $publishedModuleVersions[$moduleName] -eq $installedModuleVersions[$moduleName].Version.ToString()
+
+$serverCount =
+    $script:configuration.Settings.Deployment.Environments[$environmentName].Servers.Count.ToString()
+
+$cell =
+    $worksheetCellValues[$currentRowIndexForTheWorksheet, $currentColumnIndexForTheWorksheet + 1]
+
+if (
+    $extension -in '.ps1',
+        '.psm1',
+        '.psd1',
+        '.ps1xml',
+        '.pssc',
+        '.psrc',
+        '.cdxml',
+        '.mof',
+        '.json',
+        '.xml',
+        '.config'
+) {
+    $isPowerShellFile = $true
+}
+
+$message = "Copied {0} of {1} files to {2} in {3} seconds" -f @(
+    $copiedCount
+    $totalCount
+)
+
+$normalized = $output.ToString() -replace
+    'Pester v\S+', 'Pester v<version>' -replace
+    '\d+(.\d+)?m?s', '<time>'
+
+$fullName = $firstNameOfTheCurrentUserFromDirectory +
+    ' ' +
+    $middleInitialOfTheCurrentUser +
+    ' ' +
+    $lastNameOfTheCurrentUser
+
+$isValid = $configuration.Settings.Enabled -and
+    $configuration.Settings.Environment -eq 'Production' -and
+    $force
+
+$template = @"
+A here-string that is long enough to go past the print width when the assignment is on one line
+"@

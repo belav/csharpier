@@ -10,6 +10,7 @@ internal class FileToFormatInfo
     public string FileContents { get; init; } = string.Empty;
     public string Path { get; init; } = string.Empty;
     public Encoding Encoding { get; init; } = Encoding.Default;
+    public bool HasInvalidBytes { get; init; }
 
     public static async Task<FileToFormatInfo> CreateFromFileSystem(
         string path,
@@ -19,17 +20,14 @@ internal class FileToFormatInfo
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var (encoding, fileContents) = await FileReader.ReadFileAsync(
-            path,
-            fileSystem,
-            cancellationToken
-        );
+        var fileReaderResult = await FileReader.ReadFileAsync(path, fileSystem, cancellationToken);
 
         return new FileToFormatInfo
         {
             Path = path,
-            FileContents = fileContents,
-            Encoding = encoding,
+            FileContents = fileReaderResult.FileContents,
+            Encoding = fileReaderResult.Encoding,
+            HasInvalidBytes = fileReaderResult.HasInvalidBytes,
         };
     }
 

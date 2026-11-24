@@ -26,6 +26,7 @@ If a list of paths is not supplied, then stdin is read as a file, formatted and 
   - No ignore files are considered.
   - The current directory is considered when locating options
   - The file is assumed to be c# unless the first non-whitespace character is `<` in which case it is assumed to be xml.
+  - PowerShell is only formatted from stdin when `stdin-path` is supplied with a `.ps1`, `.psm1` or `.psd1` extension.
 
 
 #### Options

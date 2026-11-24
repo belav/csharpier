@@ -1,0 +1,70 @@
+$a = 1,
+    2,
+    3
+$x = $a -and
+    $b
+$a = $b ?
+    1 :
+    2
+$a = (
+    $b
+)
+$a = (
+    'a',
+    'b'
+)
+$a[
+    0
+]
+$a.b.
+    c
+$a.Method(
+    1,
+    2
+)
+$a = @{ a = 1
+    b = 2 }
+for ($i = 0
+    $i -lt 10
+    $i++) { }
+function Get-Value {
+    param(
+        [string]
+        $Name
+    )
+}
+if ($a)
+{
+    $b
+}
+elseif ($c)
+{
+    $d
+}
+else
+{
+    $e
+}
+do
+{
+    $x++
+}
+until ($x -gt 10)
+function Get-Other
+{
+    param
+    (
+        $a
+    )
+}
+class A
+{
+    [string]$Name
+}
+class B : A {
+    B([int]$a)
+        : base($a)
+    {
+        $this.x = 1
+    }
+}

@@ -1,0 +1,57 @@
+
+
+using namespace System.IO
+[CmdletBinding()]
+param($a)
+Write-Host $a
+
+
+Write-Host $a
+if ($a) {
+
+
+    Write-Host "a"
+
+
+    Write-Host "b"
+
+}
+$a = @(
+
+    'a'
+
+
+    'b'
+
+)
+$a = @{
+
+    a = 1
+
+
+    b = 2
+
+}
+function Get-Value {
+    param($a)
+    begin { }
+    process { }
+    end { }
+}
+function Get-Other {
+    param(
+        [Parameter(Mandatory)]
+        [string]$Name,
+        [int]$Count
+    )
+}
+class A {
+    [string]$Name
+    [int]$Count
+    A() { }
+    [void] M() { }
+}
+$a = {
+    param($x)
+    $x
+}

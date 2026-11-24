@@ -27,6 +27,13 @@ internal static class CodeFormatter
                 cancellationToken
             ),
             Formatter.XML => await XmlFormatter.FormatAsync(fileContents, options),
+#if !NETSTANDARD2_0
+            Formatter.PowerShell => await PowerShell.PowerShellFormatter.FormatAsync(
+                fileContents,
+                options,
+                cancellationToken
+            ),
+#endif
             _ => new CodeFormatterResult { FailureMessage = "Is an unsupported file type." },
         };
     }

@@ -48,6 +48,22 @@ public class ServerTests
         result.formattedFile!.TrimEnd().Should().Be("public class TestClass { }");
     }
 
+    [Test]
+    public async Task Server_Should_Format_PowerShell()
+    {
+        var data = new FormatFileParameter
+        {
+            fileName = "/tmp/test.ps1",
+            fileContents = "if($a){Write-Host 1}",
+        };
+
+        var result = await RunServer(data);
+
+        result.errorMessage.Should().BeNullOrEmpty();
+        result.status.Should().Be(Status.Formatted);
+        result.formattedFile.Should().Be("if ($a) {\n    Write-Host 1\n}\n");
+    }
+
     private static async Task<FormatFileResult> RunServer(
         FormatFileParameter data,
         string? arguments = null

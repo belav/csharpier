@@ -1,0 +1,16 @@
+for ($i = 0; $i -lt 10; $i++) {
+    Write-Host $i
+}
+for ($i = 0; $i -lt 10; $i++) {
+    Write-Host $i
+}
+for (;;) {
+    break
+}
+for (; $i -lt 10;) {
+    $i++
+}
+:loop for ($i = 0; $i -lt 10; $i++) {
+    continue loop
+}
+for ($i = 0; $i -lt 10; $i++) { }

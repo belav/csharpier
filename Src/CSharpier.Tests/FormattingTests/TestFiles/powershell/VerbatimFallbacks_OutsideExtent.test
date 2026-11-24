@@ -1,0 +1,22 @@
+$j <# c #> = Write-Output Hi &
+$k = # why
+  Write-Output Hi &
+foo | <# x #> bar &
+foo.exe --% raw args | here
+foo.exe --% raw args
+bar
+function a` b {
+    1
+}
+function xyzzy`u{2195} {
+    2
+}
+function f`2 {
+    3
+}
+filter global:G {
+    4
+}
+function h() {
+    5
+}
