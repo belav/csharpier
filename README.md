@@ -52,8 +52,6 @@ public class ClassName
 ## Contributing
 See [Development Readme](CONTRIBUTING.md)  
 
-Join Us [![Discord](https://img.shields.io/badge/Discord-chat?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/HfAKGEZQcX)
-
 ## Sponsors
 
 Thanks to the following companies for sponsoring the ongoing development of CSharpier.
