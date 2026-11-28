@@ -1,0 +1,93 @@
+public struct BaseListDoesNotBreak : IComparable, IConvertible
+#if BASE_LIST_DOES_NOT_BREAK
+        , IComparable<BaseListDoesNotBreak>
+#endif
+{
+    private int someField;
+}
+
+class ClassName
+{
+    void MethodName(
+        int someParameter,
+#if PARAMETERS_BREAK
+        int otherParameter,
+#endif
+        int lastParameter
+    )
+    {
+        CallMethod(
+            someArgument,
+#if ARGUMENTS_BREAK
+            otherArgument,
+#endif
+            lastArgument
+        );
+
+        CallMethod(
+            someArgument
+#if DIRECTIVE_BEFORE_CLOSING_TOKEN_BREAKS
+#endif
+        );
+
+        var someObject = new SomeObject(
+            someArgument,
+#if CONSTRUCTOR_ARGUMENTS_BREAK
+            otherArgument,
+#endif
+            lastArgument
+        );
+
+        var someList = new List<int>
+        {
+            1,
+#if COLLECTION_INITIALIZER_BREAKS
+            2,
+#endif
+            3,
+        };
+
+        int[] someArray =
+        [
+            1,
+#if COLLECTION_EXPRESSION_BREAKS
+            2,
+#endif
+            3,
+        ];
+
+        var someTuple = (
+            1,
+#if TUPLE_BREAKS
+            2,
+#endif
+            3
+        );
+
+        await SomeMethod()
+            .ConfigureAwait(
+#if ARGUMENTS_IN_CHAIN_BREAK_LIKE_COMMENTS
+                ConfigureAwaitOptions.SuppressThrowing
+#else
+                false
+#endif
+            );
+    }
+
+    void LeadingComma(
+        int someParameter
+#if LEADING_COMMA_PARAMETER_ON_OWN_LINE
+        ,
+        int otherParameter
+#endif
+    )
+    {
+        CallMethod(
+            someArgument
+#if LEADING_COMMA_ARGUMENT_ON_OWN_LINE
+            ,
+            otherArgument
+#endif
+        );
+    }
+}

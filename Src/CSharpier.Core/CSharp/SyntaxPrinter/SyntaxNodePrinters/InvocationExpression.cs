@@ -36,6 +36,10 @@ internal static class InvocationExpression
 
         var oneLine = SelectManyDocsToArray(groups);
 
+        var hasCommentOrDirectiveBetweenGroups = groups
+            .Skip(1)
+            .Any(o => o.Any(HasCommentOrDirectiveBefore));
+
         var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups, parent);
 
         var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
@@ -87,7 +91,7 @@ internal static class InvocationExpression
                         && literalExpressionSyntax.Token.Text.Contains('\n')
                 );
 
-        if (forceOneLine)
+        if (forceOneLine && !hasCommentOrDirectiveBetweenGroups)
         {
             return Doc.Group(oneLine);
         }
@@ -96,7 +100,8 @@ internal static class InvocationExpression
             Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
             shouldMergeFirstTwoGroups
                 ? Doc.IndentIf(
-                    groups.Count > 2 && groups[1].Last().Doc is not Group { Contents: IndentDoc },
+                    (groups.Count > 2 || hasCommentOrDirectiveBetweenGroups)
+                        && groups[1].Last().Doc is not Group { Contents: IndentDoc },
                     Doc.Concat(groups[1].Select(o => o.Doc).ToArray())
                 )
                 : Doc.Null,
@@ -104,7 +109,8 @@ internal static class InvocationExpression
         );
 
         return
-            oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
+            hasCommentOrDirectiveBetweenGroups
+            || oneLine.Skip(1).Any(DocUtilities.ContainsBreak)
             || groups[0]
                 .Any(o =>
                     o.Node
@@ -124,6 +130,23 @@ internal static class InvocationExpression
             || groups.Count == 1
             ? expanded
             : Doc.ConditionalGroup(Doc.Concat(oneLine), expanded);
+    }
+
+    private static bool HasCommentOrDirectiveBefore(PrintedNode printedNode)
+    {
+        SyntaxToken? operatorToken = printedNode.Node switch
+        {
+            MemberAccessExpressionSyntax memberAccess => memberAccess.OperatorToken,
+            ConditionalAccessExpressionSyntax conditionalAccess => conditionalAccess.OperatorToken,
+            MemberBindingExpressionSyntax memberBinding => memberBinding.OperatorToken,
+            _ => null,
+        };
+
+        return operatorToken is { } token
+            && (
+                token.LeadingTrivia.Any(o => o.IsDirective || o.IsComment())
+                || token.GetPreviousToken().TrailingTrivia.Any(o => o.IsComment())
+            );
     }
 
     private static bool ParenthesizedExpressionContainsBreak(PrintedNode printedNode)
@@ -458,7 +481,7 @@ internal static class InvocationExpression
         SyntaxNode? parent
     )
     {
-        if (groups.Count < 2 || groups[0].Count != 1)
+        if (groups.Count < 2 || groups[0].Count != 1 || HasCommentOrDirectiveBefore(groups[1][0]))
         {
             return false;
         }

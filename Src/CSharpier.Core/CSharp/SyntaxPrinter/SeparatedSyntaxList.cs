@@ -3,6 +3,8 @@ using System.Text;
 using CSharpier.Core.DocTypes;
 using CSharpier.Core.Utilities;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CSharpier.Core.CSharp.SyntaxPrinter;
 
@@ -48,6 +50,12 @@ internal static class SeparatedSyntaxList
     {
         using var docs =
             list.Count <= 3 ? new DocListBuilder(8) : new DocListBuilder(list.Count * 3);
+
+        if (HasDirectiveBetweenItems(list, startingIndex))
+        {
+            docs.Add(Doc.BreakParent);
+        }
+
         StringBuilder? unFormattedCode = null;
         var printUnformatted = false;
         for (var x = startingIndex; x < list.Count; x++)
@@ -151,5 +159,46 @@ internal static class SeparatedSyntaxList
         }
 
         return Doc.Concat(docs);
+    }
+
+    private static bool HasDirectiveBetweenItems<T>(
+        in SeparatedSyntaxList<T> list,
+        int startingIndex
+    )
+        where T : SyntaxNode
+    {
+        if (list.Count == 0 || list[0].Parent is BaseListSyntax)
+        {
+            return false;
+        }
+
+        for (var x = startingIndex; x < list.Count; x++)
+        {
+            if (list[x].GetLeadingTrivia().AnyDirective())
+            {
+                return true;
+            }
+        }
+
+        for (var x = startingIndex; x < list.SeparatorCount; x++)
+        {
+            if (list.GetSeparator(x).LeadingTrivia.AnyDirective())
+            {
+                return true;
+            }
+        }
+
+        var lastToken =
+            list.SeparatorCount == list.Count
+                ? list.GetSeparator(list.SeparatorCount - 1)
+                : list[list.Count - 1].GetLastToken();
+        var closingToken = lastToken.GetNextToken();
+
+        return closingToken.RawSyntaxKind()
+                is SyntaxKind.CloseParenToken
+                    or SyntaxKind.CloseBracketToken
+                    or SyntaxKind.CloseBraceToken
+                    or SyntaxKind.GreaterThanToken
+            && closingToken.LeadingTrivia.AnyDirective();
     }
 }
