@@ -1,3 +1,155 @@
+# 1.4.2
+## What's Changed
+### Feature: Show how many files `format` changed and list them with `--list-formatted` [#1931](https://github.com/belav/csharpier/issues/1931)
+The summary printed by `format` counted every file it read, so a second run printed the same count even when it changed nothing. The summary now also shows how many files were changed.
+```bash
+$ dotnet csharpier format .
+
+# 1.4.1
+Formatted 2 files in 120ms.
+
+# 1.4.2
+Formatted 2 files in 120ms (1 changed).
+```
+
+The new `--list-formatted` option prints the paths of the changed files, one per line, instead of the summary. Only errors are logged, and they go to stderr, so stdout contains nothing but the paths. It cannot be used with `--write-stdout` or when piping input to CSharpier.
+```bash
+$ dotnet csharpier format . --list-formatted
+./src/Bar.cs
+./src/Foo.cs
+```
+
+### Fix: Extra blank lines around assembly attributes inside `#if` or `#region` [#1949](https://github.com/belav/csharpier/issues/1949)
+CSharpier added a blank line after an assembly attribute when a directive came next. In a file that also had a using directive and a type, the next run added a second blank line before `#else`, so `check` failed on the output of `format`.
+```c#
+// input & expected output
+using System;
+
+#if A
+[assembly: SomeAttribute]
+#else
+[assembly: OtherAttribute]
+#endif
+
+class ClassName { }
+
+// 1.4.1
+using System;
+
+#if A
+[assembly: SomeAttribute]
+
+#else
+[assembly: OtherAttribute]
+
+#endif
+
+class ClassName { }
+```
+
+### Fix: `#else` branch in a member chain loses its indentation [#1853](https://github.com/belav/csharpier/issues/1853)
+```c#
+// input & expected output
+var longVariableName = await response
+    .Content
+#if NET
+    .ReadAsStringAsync(cancellationToken)
+#else
+    .ReadAsStringAsync()
+#endif
+    .ConfigureAwait(false);
+
+// 1.4.1
+var longVariableName = await response
+    .Content
+#if NET
+    .ReadAsStringAsync(cancellationToken)
+#else
+.ReadAsStringAsync()
+#endif
+    .ConfigureAwait(false);
+```
+
+### Fix: List with a directive between its items is not broken onto separate lines [#1951](https://github.com/belav/csharpier/pull/1951)
+Parameter lists, argument lists, collection initializers, collection expressions and tuples with a directive between their items now break the same way they do when a comment is between their items.
+```c#
+// input & expected output
+void MethodName(
+    int someParameter,
+#if DEBUG
+    int otherParameter,
+#endif
+    int lastParameter
+)
+{
+    CallMethod(
+        someArgument,
+#if DEBUG
+        otherArgument,
+#endif
+        lastArgument
+    );
+
+    var someList = new List<int>
+    {
+        1,
+#if DEBUG
+        2,
+#endif
+        3,
+    };
+}
+
+// 1.4.1
+void MethodName(int someParameter,
+#if DEBUG
+    int otherParameter,
+#endif
+    int lastParameter)
+{
+    CallMethod(someArgument,
+#if DEBUG
+        otherArgument,
+#endif
+        lastArgument);
+
+    var someList = new List<int> { 1,
+#if DEBUG
+        2,
+#endif
+        3 };
+}
+```
+
+### Fix: Comment in a short member chain removes the indentation of the members after it [#1951](https://github.com/belav/csharpier/pull/1951)
+```c#
+// input & expected output
+someObject
+    // comment
+    .CallMethod();
+
+someObject
+    .Property // trailing comment
+    .CallMethod();
+
+this.Property
+    // comment
+    .CallMethod();
+
+// 1.4.1
+someObject
+// comment
+.CallMethod();
+
+someObject.Property // trailing comment
+.CallMethod();
+
+this.Property
+// comment
+.CallMethod();
+```
+
+**Full Changelog**: https://github.com/belav/csharpier/compare/1.4.1...1.4.2
 # 1.4.1
 ## What's Changed
 ### Fix: Trailing lambda with an expression body that breaks is formatted badly [#1941](https://github.com/belav/csharpier/issues/1941)
@@ -4434,6 +4586,7 @@ Thanks go to @pingzing
 - Implement Formatting Options with Configuration File [#10](https://github.com/belav/csharpier/issues/10)
 
 **Full Changelog**: https://github.com/belav/csharpier/compare/0.9.0...0.9.1
+
 
 
 
