@@ -189,7 +189,7 @@ withLineEnding"
         var someValue =
             // Some Comment
             (x + y)
-            // Ideally this would be consistent with the previous example, but this is fairly edge case
-            .CallSomeMethod();
+                // Another Comment
+                .CallSomeMethod();
     }
 }

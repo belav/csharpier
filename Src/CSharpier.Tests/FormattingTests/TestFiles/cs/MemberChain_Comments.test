@@ -1,0 +1,32 @@
+class ClassName
+{
+    void MethodName()
+    {
+        var someVariable = someObject
+            // comment
+            .CallMethod();
+
+        var someVariable = someObject
+            .Property
+            // comment
+            .CallMethod();
+
+        var someVariable = someObject
+            .Property
+            // comment
+            .OtherProperty;
+
+        s
+            // comment
+            .AsSpan()
+            .CopyTo(someSpan);
+
+        this.Property
+            // comment
+            .CallMethod();
+
+        var someVariable = someObject
+            .Property // trailing comment
+            .CallMethod();
+    }
+}

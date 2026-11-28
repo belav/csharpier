@@ -1,0 +1,61 @@
+class ClassName
+{
+    async void MethodName()
+    {
+        var someVariable = await someObject
+            .Property
+#if ELSE_BRANCH_INDENTS_LIKE_IF_BRANCH
+            .CallMethod(someParameter)
+#else
+            .CallOtherMethod()
+#endif
+            .CallFinalMethod();
+
+        var someVariable = someObject
+            .Property
+#if DEBUG
+#endif
+            .CallMethod()
+            .CallFinalMethod();
+
+        var someVariable = someObject
+            .CallMethod()
+#if DIRECTIVE_BEFORE_LAST_CALL_KEEPS_INDENT
+            .CallOtherMethod()
+#endif
+            .CallFinalMethod();
+
+        var someVariable = someObject
+            .Property
+#if SHORT_CHAIN_KEEPS_INDENT
+            .CallMethod()
+#endif
+            .CallFinalMethod();
+
+        s
+#if SHORT_FIRST_GROUP_KEEPS_INDENT
+            .AsSpan()
+#endif
+            .CopyTo(someSpan);
+
+        this.Property
+#if MERGED_FIRST_GROUPS_INDENT_AFTER_DIRECTIVE
+            .CallMethod()
+#endif
+            .CallOtherMethod();
+
+        app.MapRazorComponents<App>()
+            .AddInteractiveServerRenderMode()
+#if MERGED_FIRST_GROUPS_STAY_MERGED
+            .AddInteractiveWebAssemblyRenderMode()
+#endif
+            .AddAdditionalAssemblies(someAssembly);
+
+        var someVariable = someObject
+            ?.Property
+#if CONDITIONAL_ACCESS_KEEPS_INDENT
+            ?.CallMethod()
+#endif
+            ?.CallFinalMethod();
+    }
+}
