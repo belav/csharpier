@@ -1,0 +1,7 @@
+using System;
+
+#if ADD_LINE_AFTER_ENDIF
+[assembly: SomeAttribute]
+#endif
+
+class ClassName { }

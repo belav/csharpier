@@ -1,0 +1,9 @@
+using System;
+
+#if NO_LINE_BEFORE_ELSE_OR_ENDIF
+[assembly: SomeAttribute]
+#else
+[assembly: OtherAttribute]
+#endif
+
+class ClassName { }
