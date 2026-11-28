@@ -1,0 +1,7 @@
+using System;
+
+[assembly: SomeAttribute]
+
+#if NO_DOUBLE_LINE_BEFORE_IF
+class ClassName { }
+#endif
